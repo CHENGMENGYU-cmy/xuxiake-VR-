@@ -10,6 +10,7 @@ import { mockConversations } from '@/lib/mock-data';
 import { useAuthStore } from '@/stores/auth-store';
 
 export default function ChatPage({ params }: { params: Promise<{ conversationId: string }> }) {
+  const { user: currentUser } = useAuthStore();
   const conv = mockConversations[0];
   if (!conv) {
     return (
@@ -19,12 +20,15 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
 
   const otherMember = conv.type === 'GROUP' ? null : conv.members[0];
 
+  // 使用当前用户的最新数据
+  const currentUserData = currentUser || { id: 'u1', username: 'xuxiake', displayName: '徐霞客', avatarUrl: '' };
+
   // 模拟消息列表
   const messages = [
     { id: '1', sender: otherMember, content: '你好！看了你拍的黄山VR视频，真的太震撼了！', time: '10:30', isMine: false },
-    { id: '2', sender: mockCurrentUser, content: '谢谢！那天天气特别好，云海效果很棒', time: '10:32', isMine: true },
+    { id: '2', sender: currentUserData, content: '谢谢！那天天气特别好，云海效果很棒', time: '10:32', isMine: true },
     { id: '3', sender: otherMember, content: '是用什么设备拍的？我也想去试试VR拍摄', time: '10:33', isMine: false },
-    { id: '4', sender: mockCurrentUser, content: '用的是Apple Vision Pro，空间视频效果特别好。下次可以一起去拍！', time: '10:35', isMine: true },
+    { id: '4', sender: currentUserData, content: '用的是Apple Vision Pro，空间视频效果特别好。下次可以一起去拍！', time: '10:35', isMine: true },
     { id: '5', sender: otherMember, content: '太好了！我也刚买了Vision Pro，正愁找不到人一起玩VR摄影呢', time: '10:36', isMine: false },
   ];
 
