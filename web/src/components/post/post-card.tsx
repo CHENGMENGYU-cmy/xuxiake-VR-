@@ -59,7 +59,7 @@ export function PostCard({ post }: PostCardProps) {
       <div className="flex items-center gap-3 p-4">
         <Link href={`/profile/${post.author.username}`}>
           <Avatar className="h-10 w-10">
-            <AvatarImage src={post.author.avatarUrl} alt={post.author.displayName} />
+            <AvatarImage src={authorAvatarUrl} alt={post.author.displayName} />
             <AvatarFallback>{post.author.displayName[0]}</AvatarFallback>
           </Avatar>
         </Link>
