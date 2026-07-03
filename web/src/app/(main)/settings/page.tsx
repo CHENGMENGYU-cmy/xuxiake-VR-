@@ -44,9 +44,15 @@ export default function SettingsPage() {
       });
 
       if (res.data.success) {
-        const newUrl = BACKEND_BASE + res.data.data.url;
+        const newUrl = BACKEND_BASE + res.data.data.url + '?v=' + Date.now();
         setAvatarUrl(newUrl);
-        updateUser({ avatarUrl: newUrl });
+        // Persist to database immediately so re-login picks up the new avatar
+        const profileRes = await apiClient.put('/users/profile', { avatarUrl: newUrl });
+        if (profileRes.data.success) {
+          updateUser(profileRes.data.data);
+        } else {
+          updateUser({ avatarUrl: newUrl });
+        }
       }
     } catch (err: any) {
       const message = err.response?.data?.message || '头像上传失败';
