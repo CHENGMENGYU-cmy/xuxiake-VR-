@@ -22,6 +22,9 @@ export class User {
   @Column({ name: 'display_name', type: 'varchar', length: 100 })
   displayName: string;
 
+  @Column({ name: 'xxk_number', type: 'varchar', length: 11, unique: true })
+  xxkNumber: string;
+
   @Column({ type: 'text', nullable: true })
   bio: string | null;
 
@@ -30,6 +33,18 @@ export class User {
 
   @Column({ type: 'varchar', length: 500, nullable: true })
   website: string | null;
+
+  @Column({ type: 'enum', enum: ['MALE', 'FEMALE', 'OTHER', 'PRIVATE'], default: 'PRIVATE', nullable: true })
+  gender: string | null;
+
+  @Column({ type: 'date', nullable: true })
+  birthday: string | null;
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  region: string | null;
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  occupation: string | null;
 
   @Column({ name: 'vr_device_model', type: 'varchar', length: 100, nullable: true })
   vrDeviceModel: string | null;
