@@ -156,7 +156,7 @@ export default function SettingsPage() {
 
       <Tabs defaultValue="profile" orientation="vertical" className="gap-0">
         {/* 左侧标签导航 */}
-        <TabsList variant="line" className="h-auto min-w-[120px] flex-col items-start justify-start bg-transparent p-0 rounded-none">
+        <TabsList className="h-auto min-w-[120px] flex-col items-start justify-start bg-transparent p-0 rounded-none">
           <TabsTrigger value="profile" className="w-full justify-start gap-2 data-active:bg-blue-50 data-active:text-blue-600">
             <User className="h-4 w-4" />
             个人资料
