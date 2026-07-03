@@ -25,6 +25,26 @@ export class UsersController {
     }
   }
 
+  @Get('profile')
+  async getProfile(@Headers('authorization') auth: string) {
+    const userId = this.getUserId(auth);
+    if (!userId) throw new UnauthorizedException('请先登录');
+
+    const user = await this.userRepo.findOne({ where: { id: userId } });
+    if (!user) throw new UnauthorizedException('用户不存在');
+
+    const { passwordHash, ...userDto } = user;
+    return {
+      success: true,
+      data: {
+        ...userDto,
+        vrDeviceInfo: user.vrDeviceModel
+          ? { model: user.vrDeviceModel, version: user.vrDeviceVersion || '' }
+          : null,
+      },
+    };
+  }
+
   @Get(':username')
   async getUser(@Param('username') username: string) {
     const user = await this.userRepo.findOne({ where: { username } });
