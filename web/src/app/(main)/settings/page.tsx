@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Settings, User, Lock, Bell, Palette, Save, Upload, Check, Camera, MapPin, Briefcase, Calendar, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -62,6 +62,8 @@ const REGION_OPTIONS = [
 
 export default function SettingsPage() {
   const { user, updateUser } = useAuthStore();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const [displayName, setDisplayName] = useState(user?.displayName || '');
   const [bio, setBio] = useState(user?.bio || '');
   const [website, setWebsite] = useState(user?.website || '');
@@ -154,7 +156,7 @@ export default function SettingsPage() {
 
       <Tabs defaultValue="profile" orientation="vertical" className="gap-0">
         {/* 左侧标签导航 */}
-        <TabsList variant="line" className="h-auto min-w-[120px] flex-col items-start justify-start border-r bg-transparent p-0 rounded-none">
+        <TabsList variant="line" className="h-auto min-w-[120px] flex-col items-start justify-start bg-transparent p-0 rounded-none">
           <TabsTrigger value="profile" className="w-full justify-start gap-2 data-active:bg-blue-50 data-active:text-blue-600">
             <User className="h-4 w-4" />
             个人资料
@@ -176,7 +178,7 @@ export default function SettingsPage() {
         {/* 右侧内容 */}
         <div className="flex-1">
           <TabsContent value="profile" className="mt-0">
-            {user ? (
+            {mounted && user ? (
               <div className="space-y-6">
                 {/* 头像卡片 - 居中设计 */}
                 <Card>
