@@ -131,19 +131,19 @@ export const useAuthStore = create<AuthState>((set) => ({
       return;
     }
     set({ user, isAuthenticated: true });
-    // Refresh user data from server in background
+    // Refresh user data from server so avatar and profile stay up to date
     try {
       const { data } = await apiClient.get('/users/profile');
       if (data.success && data.data) {
         localStorage.setItem('user', JSON.stringify(data.data));
         set({ user: data.data });
       }
-    } catch {
-      // If token is invalid, log out
-      if ((arguments[0] as any)?.status === 401) {
+    } catch (err: any) {
+      if (err.response?.status === 401) {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('user');
+        removeCookie('auth_token');
         set({ user: null, isAuthenticated: false });
       }
     }
