@@ -28,17 +28,17 @@ function ProfileContent({ username }: { username: string }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // First, try to find in mock data
-    const mockUser = mockUsers.find((u) => u.username === username);
-    if (mockUser) {
-      setProfileUser(mockUser);
+    // If current user's own profile, always use store data (most up-to-date)
+    if (currentUser && currentUser.username === username) {
+      setProfileUser(currentUser);
       setLoading(false);
       return;
     }
 
-    // If current user's own profile, use store data
-    if (currentUser && currentUser.username === username) {
-      setProfileUser(currentUser);
+    // Otherwise, try to find in mock data
+    const mockUser = mockUsers.find((u) => u.username === username);
+    if (mockUser) {
+      setProfileUser(mockUser);
       setLoading(false);
       return;
     }
