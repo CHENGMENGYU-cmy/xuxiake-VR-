@@ -106,7 +106,7 @@ export class UsersController {
   @Put('profile')
   async updateProfile(
     @Headers('authorization') auth: string,
-    @Body() body: { displayName?: string; bio?: string; website?: string; avatarUrl?: string },
+    @Body() body: { displayName?: string; bio?: string; website?: string; avatarUrl?: string; gender?: string; birthday?: string; region?: string; occupation?: string },
   ) {
     const userId = this.getUserId(auth);
     if (!userId) throw new UnauthorizedException('请先登录');
@@ -118,6 +118,10 @@ export class UsersController {
     if (body.bio !== undefined) user.bio = body.bio;
     if (body.website !== undefined) user.website = body.website;
     if (body.avatarUrl !== undefined) user.avatarUrl = body.avatarUrl;
+    if (body.gender !== undefined) user.gender = body.gender;
+    if (body.birthday !== undefined) user.birthday = body.birthday;
+    if (body.region !== undefined) user.region = body.region;
+    if (body.occupation !== undefined) user.occupation = body.occupation;
     user.updatedAt = new Date();
 
     await this.userRepo.save(user);
