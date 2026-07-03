@@ -1,14 +1,11 @@
 const http = require('http');
 const url = 'http://localhost:3000';
 
-async function checkAndOpen() {
+function checkAndOpen() {
   const req = http.get(url, (res) => {
+    req.destroy();
     if (res.statusCode === 200 || res.statusCode === 304) {
-      req.destroy();
-      import('open').then(({ default: open }) => {
-        open(url);
-        console.log('Browser opened: ' + url);
-      });
+      import('open').then(mod => mod.default(url));
     } else {
       setTimeout(checkAndOpen, 1000);
     }
