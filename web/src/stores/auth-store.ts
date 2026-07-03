@@ -123,13 +123,29 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ user: null, isAuthenticated: false, error: null });
   },
 
-  checkAuth: () => {
+  checkAuth: async () => {
     const token = getSavedToken();
     const user = getSavedUser();
     if (!token || !user) {
       set({ user: null, isAuthenticated: false });
-    } else {
-      set({ user, isAuthenticated: true });
+      return;
+    }
+    set({ user, isAuthenticated: true });
+    // Refresh user data from server in background
+    try {
+      const { data } = await apiClient.get('/users/profile');
+      if (data.success && data.data) {
+        localStorage.setItem('user', JSON.stringify(data.data));
+        set({ user: data.data });
+      }
+    } catch {
+      // If token is invalid, log out
+      if ((arguments[0] as any)?.status === 401) {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('user');
+        set({ user: null, isAuthenticated: false });
+      }
     }
   },
 
