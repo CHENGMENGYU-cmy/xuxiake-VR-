@@ -23,7 +23,7 @@ interface AuthState {
   login: (account: string, password: string, captchaKey: string, captchaCode: string) => Promise<void>;
   register: (email: string, username: string, password: string) => Promise<void>;
   logout: () => void;
-  checkAuth: () => void;
+  checkAuth: () => Promise<void>;
   clearError: () => void;
   updateUser: (updates: Partial<User>) => void;
 }
