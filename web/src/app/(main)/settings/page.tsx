@@ -360,7 +360,7 @@ export default function SettingsPage() {
                 </Card>
 
                 {/* 保存按钮 */}
-                <div className="flex items-center justify-end gap-3 sticky bottom-4 bg-white/80 backdrop-blur-sm p-4 rounded-lg border shadow-sm">
+                <div className="flex items-center justify-end gap-3 sticky bottom-4 py-4">
                   {saved && (
                     <span className="flex items-center gap-1 text-sm text-green-600">
                       <Check className="h-4 w-4" />
