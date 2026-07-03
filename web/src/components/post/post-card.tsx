@@ -16,6 +16,7 @@ import {
 import { MediaViewer } from './media-viewer';
 import { Post } from '@/types';
 import { cn } from '@/lib/utils';
+import { useAuthStore } from '@/stores/auth-store';
 
 const vrFormatLabels: Record<string, string> = {
   VR360: 'VR 360°',
