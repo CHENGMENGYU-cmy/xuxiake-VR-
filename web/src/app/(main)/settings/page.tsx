@@ -152,9 +152,9 @@ export default function SettingsPage() {
         <h1 className="text-2xl font-bold">设置</h1>
       </div>
 
-      <Tabs defaultValue="profile" orientation="vertical" className="!gap-0">
+      <Tabs defaultValue="profile" orientation="vertical" className="gap-0">
         {/* 左侧标签导航 */}
-        <TabsList className="!h-auto !min-w-[120px] !flex-col !items-start !justify-start !border-r !bg-transparent !p-0 !rounded-none">
+        <TabsList variant="line" className="h-auto min-w-[120px] flex-col items-start justify-start border-r bg-transparent p-0 rounded-none">
           <TabsTrigger value="profile" className="w-full justify-start gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600">
             <User className="h-4 w-4" />
             个人资料
