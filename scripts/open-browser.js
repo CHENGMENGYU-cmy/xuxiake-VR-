@@ -3,13 +3,19 @@ const url = 'http://localhost:3000';
 
 function checkAndOpen() {
   const http = require('http');
-  http.get(url, (res) => {
+  const req = http.get(url, (res) => {
     if (res.statusCode === 200 || res.statusCode === 304) {
-      exec(`explorer "${url}"`);
+      exec('cmd /c start "" "http://localhost:3000"');
+      req.destroy();
     } else {
       setTimeout(checkAndOpen, 1000);
     }
-  }).on('error', () => {
+  });
+  req.on('error', () => {
+    setTimeout(checkAndOpen, 1000);
+  });
+  req.setTimeout(2000, () => {
+    req.destroy();
     setTimeout(checkAndOpen, 1000);
   });
 }
