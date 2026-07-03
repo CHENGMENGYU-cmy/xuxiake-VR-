@@ -154,21 +154,21 @@ export default function SettingsPage() {
 
       <Tabs defaultValue="profile" orientation="vertical" className="flex gap-6">
         {/* 左侧标签导航 */}
-        <TabsList className="h-auto min-w-[160px] flex-col items-start justify-start border-r bg-transparent p-0">
-          <TabsTrigger value="profile" className="w-full justify-start gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600">
-            <User className="h-4 w-4" />
+        <TabsList className="h-auto min-w-[120px] flex-col items-start justify-start border-r bg-transparent p-0">
+          <TabsTrigger value="profile" className="w-full justify-start gap-1.5 text-xs data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600">
+            <User className="h-3.5 w-3.5" />
             个人资料
           </TabsTrigger>
-          <TabsTrigger value="privacy" className="w-full justify-start gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600">
-            <Lock className="h-4 w-4" />
+          <TabsTrigger value="privacy" className="w-full justify-start gap-1.5 text-xs data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600">
+            <Lock className="h-3.5 w-3.5" />
             隐私设置
           </TabsTrigger>
-          <TabsTrigger value="notifications" className="w-full justify-start gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600">
-            <Bell className="h-4 w-4" />
+          <TabsTrigger value="notifications" className="w-full justify-start gap-1.5 text-xs data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600">
+            <Bell className="h-3.5 w-3.5" />
             通知设置
           </TabsTrigger>
-          <TabsTrigger value="appearance" className="w-full justify-start gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600">
-            <Palette className="h-4 w-4" />
+          <TabsTrigger value="appearance" className="w-full justify-start gap-1.5 text-xs data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600">
+            <Palette className="h-3.5 w-3.5" />
             外观设置
           </TabsTrigger>
         </TabsList>
