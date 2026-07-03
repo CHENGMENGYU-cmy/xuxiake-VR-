@@ -10,7 +10,7 @@
     "build:server": "cd server && npm run build",
     "build:web": "cd web && npm run build",
     "start:server": "cd server && node dist/main.js",
-    "dev": "concurrently \"npm run dev:server\" \"npm run dev:web\" \"npx wait-on http://localhost:3000 && start http://localhost:3000\"",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:web\" \"node scripts/open-browser.js\"",
     "start": "concurrently \"npm run start:server\" \"npm run dev:web\""
   },
   "devDependencies": {
