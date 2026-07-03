@@ -1,0 +1,19 @@
+{
+  "name": "xuxiake",
+  "version": "1.0.0",
+  "description": "徐霞客系统 — VR旅行记录平台",
+  "private": true,
+  "scripts": {
+    "install:all": "cd web && npm install && cd ../server && npm install",
+    "dev:web": "cd web && npm run dev",
+    "dev:server": "cd server && npm run start:dev",
+    "build:server": "cd server && npm run build",
+    "build:web": "cd web && npm run build",
+    "start:server": "cd server && node dist/main.js",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:web\"",
+    "start": "concurrently \"npm run start:server\" \"npm run dev:web\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
+}

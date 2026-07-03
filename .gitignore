@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.next/
+out/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+hs_err_pid*.log
+replay_pid*.log
+
+# Uploads
+server/uploads/
+
+# TypeScript
+*.tsbuildinfo
+
+# Debug
+npm-debug.log*
+
+# Testing
+coverage/
+
+# Misc
+query
