@@ -28,7 +28,7 @@ export default function SettingsPage() {
   const [displayName, setDisplayName] = useState(user?.displayName || '');
   const [bio, setBio] = useState(user?.bio || '');
   const [website, setWebsite] = useState(user?.website || '');
-  const [gender, setGender] = useState(user?.gender || 'PRIVATE');
+  const [gender, setGender] = useState<'MALE' | 'FEMALE' | 'OTHER' | 'PRIVATE'>(user?.gender || 'PRIVATE');
   const [birthday, setBirthday] = useState(user?.birthday || '');
   const [region, setRegion] = useState(user?.region || '');
   const [occupation, setOccupation] = useState(user?.occupation || '');
