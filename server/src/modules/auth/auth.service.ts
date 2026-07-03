@@ -83,11 +83,21 @@ export class AuthService {
     }
 
     const passwordHash = await bcrypt.hash(dto.password, 10);
+
+    // 生成唯一的徐霞客号
+    let xxkNumber: string;
+    let exists: boolean;
+    do {
+      xxkNumber = this.generateXxkNumber();
+      exists = !!(await this.userRepo.findOne({ where: { xxkNumber } }));
+    } while (exists);
+
     const user = this.userRepo.create({
       id: uuidv4(),
       email: dto.email,
       username: dto.username,
       displayName: dto.displayName || dto.username,
+      xxkNumber,
       passwordHash,
       avatarUrl: `https://api.dicebear.com/9.x/avataaars/svg?seed=${dto.username}`,
     });
