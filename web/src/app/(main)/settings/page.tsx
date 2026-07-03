@@ -155,19 +155,19 @@ export default function SettingsPage() {
       <Tabs defaultValue="profile" orientation="vertical" className="gap-0">
         {/* 左侧标签导航 */}
         <TabsList variant="line" className="h-auto min-w-[120px] flex-col items-start justify-start border-r bg-transparent p-0 rounded-none">
-          <TabsTrigger value="profile" className="w-full justify-start gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600">
+          <TabsTrigger value="profile" className="w-full justify-start gap-2 data-active:bg-blue-50 data-active:text-blue-600">
             <User className="h-4 w-4" />
             个人资料
           </TabsTrigger>
-          <TabsTrigger value="privacy" className="w-full justify-start gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600">
+          <TabsTrigger value="privacy" className="w-full justify-start gap-2 data-active:bg-blue-50 data-active:text-blue-600">
             <Lock className="h-4 w-4" />
             隐私设置
           </TabsTrigger>
-          <TabsTrigger value="notifications" className="w-full justify-start gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600">
+          <TabsTrigger value="notifications" className="w-full justify-start gap-2 data-active:bg-blue-50 data-active:text-blue-600">
             <Bell className="h-4 w-4" />
             通知设置
           </TabsTrigger>
-          <TabsTrigger value="appearance" className="w-full justify-start gap-2 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600">
+          <TabsTrigger value="appearance" className="w-full justify-start gap-2 data-active:bg-blue-50 data-active:text-blue-600">
             <Palette className="h-4 w-4" />
             外观设置
           </TabsTrigger>
