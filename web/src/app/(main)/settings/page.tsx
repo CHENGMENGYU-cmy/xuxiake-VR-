@@ -309,11 +309,17 @@ export default function SettingsPage() {
                           <MapPin className="h-4 w-4" />
                           地区
                         </label>
-                        <Input
+                        <select
                           value={region}
                           onChange={(e) => setRegion(e.target.value)}
-                          placeholder="例如：北京"
-                        />
+                          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                        >
+                          {REGION_OPTIONS.map((opt) => (
+                            <option key={opt.value} value={opt.value}>
+                              {opt.label}
+                            </option>
+                          ))}
+                        </select>
                       </div>
 
                       <div className="space-y-2">
