@@ -21,15 +21,21 @@ CREATE TABLE IF NOT EXISTS users (
   username          VARCHAR(50)  NOT NULL,
   password_hash     VARCHAR(255) NOT NULL,
   display_name      VARCHAR(100) NOT NULL,
+  xxk_number        VARCHAR(11)  NOT NULL COMMENT '徐霞客号，11位随机数字',
   bio               TEXT,
   avatar_url        VARCHAR(500),
   website           VARCHAR(500),
+  gender            ENUM('MALE','FEMALE','OTHER','PRIVATE') DEFAULT 'PRIVATE' COMMENT '性别',
+  birthday          DATE         COMMENT '生日',
+  region            VARCHAR(100) COMMENT '地区',
+  occupation        VARCHAR(100) COMMENT '职业',
   vr_device_model   VARCHAR(100),
   vr_device_version VARCHAR(50),
   created_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at        TIMESTAMP NULL DEFAULT NULL,
   UNIQUE INDEX idx_users_email (email),
-  UNIQUE INDEX idx_users_username (username)
+  UNIQUE INDEX idx_users_username (username),
+  UNIQUE INDEX idx_users_xxk_number (xxk_number)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
