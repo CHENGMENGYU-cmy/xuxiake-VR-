@@ -1,9 +1,13 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Send, Smile, Image } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { mockConversations, mockCurrentUser } from '@/lib/mock-data';
+import { mockConversations } from '@/lib/mock-data';
+import { useAuthStore } from '@/stores/auth-store';
 
 export default function ChatPage({ params }: { params: Promise<{ conversationId: string }> }) {
   const conv = mockConversations[0];
