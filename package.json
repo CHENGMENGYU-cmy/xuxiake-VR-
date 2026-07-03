@@ -11,6 +11,7 @@
     "build:web": "cd web && npm run build",
     "start:server": "cd server && node dist/main.js",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:web\"",
+    "dev:open": "concurrently \"npm run dev:server\" \"npm run dev:web\" -n server,web --kill-others && start chrome http://localhost:3000",
     "start": "concurrently \"npm run start:server\" \"npm run dev:web\""
   },
   "devDependencies": {
