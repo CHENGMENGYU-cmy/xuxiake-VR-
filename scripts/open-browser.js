@@ -5,7 +5,7 @@ function checkAndOpen() {
   const req = http.get(url, (res) => {
     req.destroy();
     if (res.statusCode === 200 || res.statusCode === 304) {
-      import('open').then(mod => mod.default(url));
+      import('open').then(mod => mod.default(url, { app: { name: 'chrome' } }));
     } else {
       setTimeout(checkAndOpen, 1000);
     }
