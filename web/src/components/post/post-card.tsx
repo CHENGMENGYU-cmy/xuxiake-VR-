@@ -35,8 +35,14 @@ interface PostCardProps {
 }
 
 export function PostCard({ post }: PostCardProps) {
+  const { user: currentUser } = useAuthStore();
   const [isLiked, setIsLiked] = useState(post.isLiked);
   const [likeCount, setLikeCount] = useState(post.likeCount);
+
+  // 如果帖子作者是当前用户，使用 authStore 中的最新头像
+  const authorAvatarUrl = currentUser && post.author.username === currentUser.username
+    ? currentUser.avatarUrl
+    : post.author.avatarUrl;
 
   const handleLike = () => {
     if (isLiked) {
