@@ -1,12 +1,14 @@
-const { exec } = require('child_process');
+const http = require('http');
 const url = 'http://localhost:3000';
 
-function checkAndOpen() {
-  const http = require('http');
+async function checkAndOpen() {
   const req = http.get(url, (res) => {
     if (res.statusCode === 200 || res.statusCode === 304) {
-      exec('cmd /c start "" "http://localhost:3000"');
       req.destroy();
+      import('open').then(({ default: open }) => {
+        open(url);
+        console.log('Browser opened: ' + url);
+      });
     } else {
       setTimeout(checkAndOpen, 1000);
     }
