@@ -4,9 +4,14 @@ export interface User {
   email: string;
   username: string;
   displayName: string;
+  xxkNumber: string;
   bio?: string | null;
   avatarUrl: string;
   website?: string | null;
+  gender?: 'MALE' | 'FEMALE' | 'OTHER' | 'PRIVATE' | null;
+  birthday?: string | null;
+  region?: string | null;
+  occupation?: string | null;
   vrDeviceInfo?: {
     model: string;
     version: string;
