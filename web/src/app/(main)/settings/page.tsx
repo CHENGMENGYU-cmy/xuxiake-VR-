@@ -179,10 +179,9 @@ export default function SettingsPage() {
             {user ? (
               <div className="space-y-6">
                 {/* 头像卡片 - 居中设计 */}
-                <Card className="overflow-hidden">
-                  <div className="h-24 bg-gradient-to-r from-blue-500 to-purple-500" />
-                  <CardContent className="relative pb-6">
-                    <div className="flex flex-col items-center -mt-16">
+                <Card>
+                  <CardContent className="pb-6">
+                    <div className="flex flex-col items-center">
                       <div className="relative group">
                         <Avatar className="h-28 w-28 border-4 border-white shadow-lg">
                           <AvatarImage src={avatarUrl} alt={user.displayName} />
@@ -209,16 +208,7 @@ export default function SettingsPage() {
                           )}
                         </button>
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={handleAvatarClick}
-                        disabled={avatarUploading}
-                        className="mt-2 text-blue-600 hover:text-blue-700"
-                      >
-                        {avatarUploading ? '上传中...' : '更换头像'}
-                      </Button>
-                      <h2 className="text-xl font-bold mt-2">{user.displayName}</h2>
+                      <h2 className="text-xl font-bold mt-4">{user.displayName}</h2>
                       <p className="text-sm text-gray-500">@{user.username}</p>
                       <Badge variant="secondary" className="mt-2">
                         徐霞客号: {user.xxkNumber}
