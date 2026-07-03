@@ -17,6 +17,13 @@ export class AuthService {
     private readonly captchaService: CaptchaService,
   ) {}
 
+  private generateXxkNumber(): string {
+    // 生成11位随机数字，第一位不为0
+    const first = Math.floor(Math.random() * 9) + 1;
+    const rest = Array.from({ length: 10 }, () => Math.floor(Math.random() * 10)).join('');
+    return first + rest;
+  }
+
   private generateTokens(userId: string): TokenPair {
     const payload = { sub: userId };
     return {
