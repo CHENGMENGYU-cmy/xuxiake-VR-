@@ -415,11 +415,242 @@ export default function SettingsPage() {
           </TabsContent>
 
           <TabsContent value="privacy" className="mt-0">
-            <Card>
-              <CardContent className="p-6">
-                <p className="text-sm text-gray-500">隐私设置即将上线</p>
-              </CardContent>
-            </Card>
+            <div className="space-y-6">
+              {/* 个人资料可见性 */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Eye className="h-5 w-5 text-blue-600" />
+                    资料可见性
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {PRIVACY_OPTIONS.profileVisibility.map((option) => (
+                    <label
+                      key={option.value}
+                      className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-colors ${
+                        profileVisibility === option.value
+                          ? 'border-blue-500 bg-blue-50'
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      <div>
+                        <p className="font-medium text-sm">{option.label}</p>
+                        <p className="text-xs text-gray-500">{option.description}</p>
+                      </div>
+                      <div
+                        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                          profileVisibility === option.value
+                            ? 'border-blue-500 bg-blue-500'
+                            : 'border-gray-300'
+                        }`}
+                      >
+                        {profileVisibility === option.value && (
+                          <div className="w-2 h-2 rounded-full bg-white" />
+                        )}
+                      </div>
+                    </label>
+                  ))}
+                </CardContent>
+              </Card>
+
+              {/* 帖子默认可见性 */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Globe className="h-5 w-5 text-purple-600" />
+                    帖子默认可见性
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {PRIVACY_OPTIONS.defaultPostVisibility.map((option) => (
+                    <label
+                      key={option.value}
+                      className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-colors ${
+                        defaultPostVisibility === option.value
+                          ? 'border-purple-500 bg-purple-50'
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      <div>
+                        <p className="font-medium text-sm">{option.label}</p>
+                        <p className="text-xs text-gray-500">{option.description}</p>
+                      </div>
+                      <div
+                        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                          defaultPostVisibility === option.value
+                            ? 'border-purple-500 bg-purple-500'
+                            : 'border-gray-300'
+                        }`}
+                      >
+                        {defaultPostVisibility === option.value && (
+                          <div className="w-2 h-2 rounded-full bg-white" />
+                        )}
+                      </div>
+                    </label>
+                  ))}
+                </CardContent>
+              </Card>
+
+              {/* 消息权限 */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <MessageCircle className="h-5 w-5 text-green-600" />
+                    私信权限
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {PRIVACY_OPTIONS.messagePermission.map((option) => (
+                    <label
+                      key={option.value}
+                      className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-colors ${
+                        messagePermission === option.value
+                          ? 'border-green-500 bg-green-50'
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      <div>
+                        <p className="font-medium text-sm">{option.label}</p>
+                        <p className="text-xs text-gray-500">{option.description}</p>
+                      </div>
+                      <div
+                        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                          messagePermission === option.value
+                            ? 'border-green-500 bg-green-500'
+                            : 'border-gray-300'
+                        }`}
+                      >
+                        {messagePermission === option.value && (
+                          <div className="w-2 h-2 rounded-full bg-white" />
+                        )}
+                      </div>
+                    </label>
+                  ))}
+                </CardContent>
+              </Card>
+
+              {/* 其他隐私选项 */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Shield className="h-5 w-5 text-orange-600" />
+                    其他设置
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium text-sm">显示在线状态</p>
+                      <p className="text-xs text-gray-500">其他用户可以看到你是否在线</p>
+                    </div>
+                    <button
+                      onClick={() => setShowOnlineStatus(!showOnlineStatus)}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                        showOnlineStatus ? 'bg-blue-600' : 'bg-gray-200'
+                      }`}
+                    >
+                      <span
+                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                          showOnlineStatus ? 'translate-x-6' : 'translate-x-1'
+                        }`}
+                      />
+                    </button>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium text-sm">允许搜索发现</p>
+                      <p className="text-xs text-gray-500">其他用户可以通过搜索找到你</p>
+                    </div>
+                    <button
+                      onClick={() => setAllowSearchDiscovery(!allowSearchDiscovery)}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                        allowSearchDiscovery ? 'bg-blue-600' : 'bg-gray-200'
+                      }`}
+                    >
+                      <span
+                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                          allowSearchDiscovery ? 'translate-x-6' : 'translate-x-1'
+                        }`}
+                      />
+                    </button>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium text-sm">允许推荐</p>
+                      <p className="text-xs text-gray-500">在探索页面向其他用户推荐你的内容</p>
+                    </div>
+                    <button
+                      onClick={() => setAllowRecommendations(!allowRecommendations)}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                        allowRecommendations ? 'bg-blue-600' : 'bg-gray-200'
+                      }`}
+                    >
+                      <span
+                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                          allowRecommendations ? 'translate-x-6' : 'translate-x-1'
+                        }`}
+                      />
+                    </button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* 数据与安全 */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Lock className="h-5 w-5 text-red-600" />
+                    数据与安全
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <button className="flex items-center justify-between w-full p-3 rounded-lg border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors">
+                    <div className="text-left">
+                      <p className="font-medium text-sm">修改密码</p>
+                      <p className="text-xs text-gray-500">更新你的账户密码</p>
+                    </div>
+                    <ChevronRight className="h-5 w-5 text-gray-400" />
+                  </button>
+
+                  <button className="flex items-center justify-between w-full p-3 rounded-lg border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors">
+                    <div className="text-left">
+                      <p className="font-medium text-sm">两步验证</p>
+                      <p className="text-xs text-gray-500">增强账户安全性</p>
+                    </div>
+                    <ChevronRight className="h-5 w-5 text-gray-400" />
+                  </button>
+
+                  <button className="flex items-center justify-between w-full p-3 rounded-lg border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors">
+                    <div className="text-left">
+                      <p className="font-medium text-sm">登录活动</p>
+                      <p className="text-xs text-gray-500">查看和管理登录设备</p>
+                    </div>
+                    <ChevronRight className="h-5 w-5 text-gray-400" />
+                  </button>
+                </CardContent>
+              </Card>
+
+              {/* 保存按钮 */}
+              <div className="flex items-center justify-end gap-3 sticky bottom-4 py-4">
+                {saved && (
+                  <span className="flex items-center gap-1 text-sm text-green-600">
+                    <Check className="h-4 w-4" />
+                    已保存
+                  </span>
+                )}
+                <Button
+                  className="gap-1.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg"
+                  onClick={handleSave}
+                  disabled={saving}
+                >
+                  <Save className="h-4 w-4" />
+                  {saving ? '保存中...' : '保存设置'}
+                </Button>
+              </div>
+            </div>
           </TabsContent>
 
           <TabsContent value="notifications" className="mt-0">
