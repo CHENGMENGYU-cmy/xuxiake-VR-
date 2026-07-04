@@ -25,7 +25,9 @@ export default function ProfilePage() {
 
 function ProfileContent({ username }: { username: string }) {
   const { user: currentUser } = useAuthStore();
+  const { posts: storePosts, fetchPosts } = usePostStore();
   const [profileUser, setProfileUser] = useState<User | null>(null);
+  const [userPosts, setUserPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -47,6 +49,22 @@ function ProfileContent({ username }: { username: string }) {
     setLoading(false);
   }, [username, currentUser]);
 
+  // 获取用户的帖子
+  useEffect(() => {
+    if (profileUser) {
+      // 如果是当前用户，从store获取帖子
+      if (currentUser && currentUser.id === profileUser.id) {
+        if (storePosts.length === 0) {
+          fetchPosts();
+        }
+        setUserPosts(storePosts.filter((p) => p.author.id === profileUser.id));
+      } else {
+        // 其他用户的帖子也从store过滤
+        setUserPosts(storePosts.filter((p) => p.author.id === profileUser.id));
+      }
+    }
+  }, [profileUser, storePosts, currentUser, fetchPosts]);
+
   if (loading) {
     return (
       <div className="py-12 text-center text-gray-400">加载中...</div>
@@ -58,7 +76,6 @@ function ProfileContent({ username }: { username: string }) {
   }
 
   const user = profileUser;
-  const userPosts = mockPosts.filter((p) => p.author.id === user.id);
   const isOwnProfile = currentUser?.username === username;
 
   return (
