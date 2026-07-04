@@ -275,7 +275,41 @@ export default function SettingsPage() {
           </TabsContent>
 
           <TabsContent value="notifications" className="mt-0">
-            <NotificationsTab />
+            <NotificationsTab
+              settings={{
+                likeNotifications,
+                commentNotifications,
+                followNotifications,
+                systemNotifications,
+                messageNotifications,
+                mentionNotifications,
+                inAppNotifications,
+                emailNotifications,
+                browserPush,
+                doNotDisturb,
+                dndStart,
+                dndEnd,
+                emailFrequency,
+              }}
+              onUpdate={(updates) => {
+                if ('likeNotifications' in updates) setLikeNotifications(updates.likeNotifications!);
+                if ('commentNotifications' in updates) setCommentNotifications(updates.commentNotifications!);
+                if ('followNotifications' in updates) setFollowNotifications(updates.followNotifications!);
+                if ('systemNotifications' in updates) setSystemNotifications(updates.systemNotifications!);
+                if ('messageNotifications' in updates) setMessageNotifications(updates.messageNotifications!);
+                if ('mentionNotifications' in updates) setMentionNotifications(updates.mentionNotifications!);
+                if ('inAppNotifications' in updates) setInAppNotifications(updates.inAppNotifications!);
+                if ('emailNotifications' in updates) setEmailNotifications(updates.emailNotifications!);
+                if ('browserPush' in updates) setBrowserPush(updates.browserPush!);
+                if ('doNotDisturb' in updates) setDoNotDisturb(updates.doNotDisturb!);
+                if ('dndStart' in updates) setDndStart(updates.dndStart!);
+                if ('dndEnd' in updates) setDndEnd(updates.dndEnd!);
+                if ('emailFrequency' in updates) setEmailFrequency(updates.emailFrequency!);
+              }}
+              onSave={handleSaveNotifications}
+              saving={notifSaving}
+              saved={notifSaved}
+            />
           </TabsContent>
 
           <TabsContent value="appearance" className="mt-0">
