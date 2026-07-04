@@ -161,32 +161,6 @@ export default function SettingsPage() {
     }
   };
 
-  // 保存隐私设置
-  const handleSavePrivacy = async () => {
-    setSaving(true);
-    setSaved(false);
-    try {
-      const res = await apiClient.put('/users/privacy', {
-        profileVisibility,
-        defaultPostVisibility,
-        messagePermission,
-        showOnlineStatus,
-        allowSearchDiscovery,
-        allowRecommendations,
-      });
-
-      if (res.data.success) {
-        setSaved(true);
-        setTimeout(() => setSaved(false), 3000);
-      }
-    } catch (err: any) {
-      const message = err.response?.data?.message || '保存失败';
-      alert(message);
-    } finally {
-      setSaving(false);
-    }
-  };
-
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2">
