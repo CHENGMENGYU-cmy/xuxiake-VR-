@@ -1,110 +1,28 @@
 'use client';
 
-import { Sun, Moon, Monitor, Type, Layout, Square, Check } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Sun, Type, Layout, Square } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 import { useAppearance } from '@/hooks/use-appearance';
-import type { BorderRadius } from '@/stores/ui-store';
+import type { Theme, FontSize, BorderRadius } from '@/stores/ui-store';
 
-function ThemeOption({
-  label,
-  icon: Icon,
-  selected,
-  onClick,
-}: {
-  label: string;
-  icon: typeof Sun;
-  selected: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className={`flex flex-col items-center gap-2 p-4 rounded-lg border-2 transition-all ${
-        selected
-          ? 'border-primary bg-primary/5'
-          : 'border-transparent bg-muted hover:bg-muted/80'
-      }`}
-    >
-      <Icon className={`h-6 w-6 ${selected ? 'text-primary' : 'text-muted-foreground'}`} />
-      <span className={`text-sm font-medium ${selected ? 'text-primary' : 'text-foreground'}`}>
-        {label}
-      </span>
-      {selected && (
-        <div className="absolute top-2 right-2">
-          <Check className="h-4 w-4 text-primary" />
-        </div>
-      )}
-    </button>
-  );
-}
+const THEME_OPTIONS = [
+  { value: 'light', label: '浅色' },
+  { value: 'dark', label: '深色' },
+  { value: 'system', label: '跟随系统' },
+];
 
-function FontSizeOption({
-  label,
-  preview,
-  selected,
-  onClick,
-}: {
-  label: string;
-  preview: string;
-  selected: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className={`flex items-center gap-3 p-3 rounded-lg border-2 transition-all ${
-        selected
-          ? 'border-primary bg-primary/5'
-          : 'border-transparent bg-muted hover:bg-muted/80'
-      }`}
-    >
-      <span className={`font-medium ${selected ? 'text-primary' : 'text-foreground'}`}>
-        {preview}
-      </span>
-      <span className={`text-sm ${selected ? 'text-primary' : 'text-muted-foreground'}`}>
-        {label}
-      </span>
-    </button>
-  );
-}
+const FONT_SIZE_OPTIONS = [
+  { value: 'small', label: '小' },
+  { value: 'medium', label: '中' },
+  { value: 'large', label: '大' },
+];
 
-function BorderRadiusOption({
-  value,
-  label,
-  selected,
-  onClick,
-}: {
-  value: BorderRadius;
-  label: string;
-  selected: boolean;
-  onClick: () => void;
-}) {
-  const radiusMap: Record<BorderRadius, string> = {
-    none: '0px',
-    small: '4px',
-    medium: '8px',
-    large: '12px',
-  };
-
-  return (
-    <button
-      onClick={onClick}
-      className={`flex flex-col items-center gap-2 p-4 rounded-lg border-2 transition-all ${
-        selected
-          ? 'border-primary bg-primary/5'
-          : 'border-transparent bg-muted hover:bg-muted/80'
-      }`}
-    >
-      <div
-        className="w-12 h-12 bg-primary/20 border-2 border-primary"
-        style={{ borderRadius: radiusMap[value] }}
-      />
-      <span className={`text-sm font-medium ${selected ? 'text-primary' : 'text-foreground'}`}>
-        {label}
-      </span>
-    </button>
-  );
-}
+const BORDER_RADIUS_OPTIONS = [
+  { value: 'none', label: '无' },
+  { value: 'small', label: '小' },
+  { value: 'medium', label: '中' },
+  { value: 'large', label: '大' },
+];
 
 function ToggleSwitch({
   enabled,
@@ -133,67 +51,51 @@ export function AppearanceTab() {
   const { appearance, setTheme, setFontSize, setCompactMode, setBorderRadius } = useAppearance();
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* 主题模式 */}
       <Card>
-        <CardHeader>
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Sun className="h-5 w-5 text-yellow-600" />
-            主题模式
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-3 gap-4">
-            <ThemeOption
-              label="浅色"
-              icon={Sun}
-              selected={appearance.theme === 'light'}
-              onClick={() => setTheme('light')}
-            />
-            <ThemeOption
-              label="深色"
-              icon={Moon}
-              selected={appearance.theme === 'dark'}
-              onClick={() => setTheme('dark')}
-            />
-            <ThemeOption
-              label="跟随系统"
-              icon={Monitor}
-              selected={appearance.theme === 'system'}
-              onClick={() => setTheme('system')}
-            />
+        <CardContent className="py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Sun className="h-5 w-5 text-yellow-600 shrink-0" />
+              <div>
+                <p className="font-medium text-sm">主题模式</p>
+                <p className="text-xs text-muted-foreground">选择界面显示主题</p>
+              </div>
+            </div>
+            <select
+              value={appearance.theme}
+              onChange={(e) => setTheme(e.target.value as Theme)}
+              className="rounded-md border border-input bg-background px-3 py-1.5 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            >
+              {THEME_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>{option.label}</option>
+              ))}
+            </select>
           </div>
         </CardContent>
       </Card>
 
       {/* 字体大小 */}
       <Card>
-        <CardHeader>
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Type className="h-5 w-5 text-blue-600" />
-            字体大小
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-3 gap-4">
-            <FontSizeOption
-              label="小"
-              preview="A"
-              selected={appearance.fontSize === 'small'}
-              onClick={() => setFontSize('small')}
-            />
-            <FontSizeOption
-              label="中"
-              preview="A"
-              selected={appearance.fontSize === 'medium'}
-              onClick={() => setFontSize('medium')}
-            />
-            <FontSizeOption
-              label="大"
-              preview="A"
-              selected={appearance.fontSize === 'large'}
-              onClick={() => setFontSize('large')}
-            />
+        <CardContent className="py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Type className="h-5 w-5 text-blue-600 shrink-0" />
+              <div>
+                <p className="font-medium text-sm">字体大小</p>
+                <p className="text-xs text-muted-foreground">调整界面文字大小</p>
+              </div>
+            </div>
+            <select
+              value={appearance.fontSize}
+              onChange={(e) => setFontSize(e.target.value as FontSize)}
+              className="rounded-md border border-input bg-background px-3 py-1.5 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            >
+              {FONT_SIZE_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>{option.label}</option>
+              ))}
+            </select>
           </div>
         </CardContent>
       </Card>
@@ -206,7 +108,7 @@ export function AppearanceTab() {
               <Layout className="h-5 w-5 text-green-600 shrink-0" />
               <div>
                 <p className="font-medium text-sm">紧凑模式</p>
-                <p className="text-xs text-muted-foreground">减少界面元素间距，显示更多内容</p>
+                <p className="text-xs text-muted-foreground">减少界面间距，显示更多内容</p>
               </div>
             </div>
             <ToggleSwitch
@@ -219,69 +121,24 @@ export function AppearanceTab() {
 
       {/* 圆角大小 */}
       <Card>
-        <CardHeader>
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Square className="h-5 w-5 text-purple-600" />
-            圆角大小
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-4 gap-4">
-            <BorderRadiusOption
-              value="none"
-              label="无"
-              selected={appearance.borderRadius === 'none'}
-              onClick={() => setBorderRadius('none')}
-            />
-            <BorderRadiusOption
-              value="small"
-              label="小"
-              selected={appearance.borderRadius === 'small'}
-              onClick={() => setBorderRadius('small')}
-            />
-            <BorderRadiusOption
-              value="medium"
-              label="中"
-              selected={appearance.borderRadius === 'medium'}
-              onClick={() => setBorderRadius('medium')}
-            />
-            <BorderRadiusOption
-              value="large"
-              label="大"
-              selected={appearance.borderRadius === 'large'}
-              onClick={() => setBorderRadius('large')}
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* 预览区域 */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">预览</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="p-4 rounded-lg bg-muted">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                <span className="text-primary font-medium">徐</span>
-              </div>
+        <CardContent className="py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Square className="h-5 w-5 text-purple-600 shrink-0" />
               <div>
-                <p className="font-medium text-sm">徐霞客</p>
-                <p className="text-xs text-muted-foreground">旅行家</p>
+                <p className="font-medium text-sm">圆角大小</p>
+                <p className="text-xs text-muted-foreground">调整卡片和按钮的圆角</p>
               </div>
             </div>
-            <p className="text-sm text-foreground mb-3">
-              这是一段示例文本，用于预览当前的外观设置效果。您可以调整主题、字体大小和圆角来查看变化。
-            </p>
-            <div className="flex gap-2">
-              <button className="px-3 py-1.5 text-sm font-medium bg-primary text-primary-foreground rounded-md">
-                主要按钮
-              </button>
-              <button className="px-3 py-1.5 text-sm font-medium bg-secondary text-secondary-foreground rounded-md">
-                次要按钮
-              </button>
-            </div>
+            <select
+              value={appearance.borderRadius}
+              onChange={(e) => setBorderRadius(e.target.value as BorderRadius)}
+              className="rounded-md border border-input bg-background px-3 py-1.5 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            >
+              {BORDER_RADIUS_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>{option.label}</option>
+              ))}
+            </select>
           </div>
         </CardContent>
       </Card>
