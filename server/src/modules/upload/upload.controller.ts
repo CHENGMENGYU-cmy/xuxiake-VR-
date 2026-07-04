@@ -108,4 +108,111 @@ export class UploadController {
     const userId = this.getUserId(auth);
     return { success: true, message: '上传完成，正在处理中...' };
   }
+
+  @Post('image')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: (_req, _file, cb) => cb(null, IMAGE_DIR),
+        filename: (_req, file, cb) => {
+          const uniqueName = `${uuidv4()}${extname(file.originalname)}`;
+          cb(null, uniqueName);
+        },
+      }),
+      limits: {
+        fileSize: 50 * 1024 * 1024, // 50MB
+      },
+      fileFilter: (_req, file, cb) => {
+        const allowed = ['image/jpeg', 'image/png', 'image/webp'];
+        if (allowed.includes(file.mimetype)) {
+          cb(null, true);
+        } else {
+          cb(new Error('仅支持 JPG、PNG、WebP 格式的图片'), false);
+        }
+      },
+    }),
+  )
+  async uploadImage(
+    @Headers('authorization') auth: string,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    this.getUserId(auth);
+
+    if (!file) {
+      return { success: false, message: '请选择要上传的图片' };
+    }
+
+    const url = `/uploads/images/${file.filename}`;
+
+    return {
+      success: true,
+      data: {
+        url,
+        width: 0,
+        height: 0,
+        originalName: file.originalname,
+        size: file.size,
+      },
+    };
+  }
+
+  @Post('links/preview')
+  async getLinkPreview(
+    @Headers('authorization') auth: string,
+    @Body() body: { url: string },
+  ) {
+    this.getUserId(auth);
+
+    if (!body.url) {
+      return { success: false, message: '请提供链接地址' };
+    }
+
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 5000);
+
+      const response = await fetch(body.url, {
+        signal: controller.signal,
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        },
+      });
+      clearTimeout(timeout);
+
+      const html = await response.text();
+
+      // Extract title
+      const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
+      const ogTitleMatch = html.match(/<meta[^>]*property="og:title"[^>]*content="([^"]+)"/i);
+      const title = ogTitleMatch?.[1] || titleMatch?.[1] || '';
+
+      // Extract description
+      const descMatch = html.match(/<meta[^>]*name="description"[^>]*content="([^"]+)"/i);
+      const ogDescMatch = html.match(/<meta[^>]*property="og:description"[^>]*content="([^"]+)"/i);
+      const description = ogDescMatch?.[1] || descMatch?.[1] || '';
+
+      // Extract image
+      const ogImageMatch = html.match(/<meta[^>]*property="og:image"[^>]*content="([^"]+)"/i);
+      const image = ogImageMatch?.[1] || '';
+
+      // Construct favicon URL
+      const urlObj = new URL(body.url);
+      const favicon = `${urlObj.origin}/favicon.ico`;
+
+      return {
+        success: true,
+        data: {
+          title: title.trim(),
+          description: description.trim(),
+          favicon,
+          image,
+        },
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: '无法获取链接信息，请检查URL是否正确',
+      };
+    }
+  }
 }
