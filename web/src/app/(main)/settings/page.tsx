@@ -418,73 +418,79 @@ export default function SettingsPage() {
             <div className="space-y-6">
               {/* 个人资料可见性 */}
               <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <Eye className="h-5 w-5 text-blue-600" />
-                    资料可见性
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-500 mb-3">控制谁可以查看你的个人资料</p>
-                  <select
-                    value={profileVisibility}
-                    onChange={(e) => setProfileVisibility(e.target.value)}
-                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                  >
-                    {PRIVACY_OPTIONS.profileVisibility.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label} - {option.description}
-                      </option>
-                    ))}
-                  </select>
+                <CardContent className="py-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <Eye className="h-5 w-5 text-blue-600 shrink-0" />
+                      <div>
+                        <p className="font-medium text-sm">资料可见性</p>
+                        <p className="text-xs text-gray-500">控制谁可以查看你的个人资料</p>
+                      </div>
+                    </div>
+                    <select
+                      value={profileVisibility}
+                      onChange={(e) => setProfileVisibility(e.target.value)}
+                      className="rounded-md border border-input bg-background px-3 py-1.5 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ml-4"
+                    >
+                      {PRIVACY_OPTIONS.profileVisibility.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </CardContent>
               </Card>
 
               {/* 帖子默认可见性 */}
               <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <Globe className="h-5 w-5 text-purple-600" />
-                    帖子默认可见性
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-500 mb-3">发布新帖子时的默认隐私级别</p>
-                  <select
-                    value={defaultPostVisibility}
-                    onChange={(e) => setDefaultPostVisibility(e.target.value)}
-                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                  >
-                    {PRIVACY_OPTIONS.defaultPostVisibility.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label} - {option.description}
-                      </option>
-                    ))}
-                  </select>
+                <CardContent className="py-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <Globe className="h-5 w-5 text-purple-600 shrink-0" />
+                      <div>
+                        <p className="font-medium text-sm">帖子默认可见性</p>
+                        <p className="text-xs text-gray-500">发布新帖子时的默认隐私级别</p>
+                      </div>
+                    </div>
+                    <select
+                      value={defaultPostVisibility}
+                      onChange={(e) => setDefaultPostVisibility(e.target.value)}
+                      className="rounded-md border border-input bg-background px-3 py-1.5 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ml-4"
+                    >
+                      {PRIVACY_OPTIONS.defaultPostVisibility.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </CardContent>
               </Card>
 
               {/* 消息权限 */}
               <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <MessageCircle className="h-5 w-5 text-green-600" />
-                    私信权限
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-500 mb-3">控制谁可以给你发送私信</p>
-                  <select
-                    value={messagePermission}
-                    onChange={(e) => setMessagePermission(e.target.value)}
-                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                  >
-                    {PRIVACY_OPTIONS.messagePermission.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label} - {option.description}
-                      </option>
-                    ))}
-                  </select>
+                <CardContent className="py-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <MessageCircle className="h-5 w-5 text-green-600 shrink-0" />
+                      <div>
+                        <p className="font-medium text-sm">私信权限</p>
+                        <p className="text-xs text-gray-500">控制谁可以给你发送私信</p>
+                      </div>
+                    </div>
+                    <select
+                      value={messagePermission}
+                      onChange={(e) => setMessagePermission(e.target.value)}
+                      className="rounded-md border border-input bg-background px-3 py-1.5 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ml-4"
+                    >
+                      {PRIVACY_OPTIONS.messagePermission.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </CardContent>
               </Card>
 
