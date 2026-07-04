@@ -31,8 +31,8 @@ export const usePostStore = create<PostState>((set) => ({
   fetchPosts: async () => {
     set({ isLoading: true, error: null });
     try {
-      const data = await getPosts();
-      set({ posts: data?.posts ?? [], isLoading: false });
+      const result = await getPosts();
+      set({ posts: result.posts ?? [], isLoading: false });
     } catch (err: any) {
       const message =
         err.response?.data?.message ||
