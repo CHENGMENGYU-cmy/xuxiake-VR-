@@ -100,7 +100,7 @@ export function Sidebar() {
                     variant="ghost"
                     className={cn(
                       'w-full justify-start gap-3',
-                      isActive && 'bg-blue-50 text-blue-600 hover:bg-blue-50'
+                      isActive && 'bg-primary/10 text-primary hover:bg-primary/10'
                     )}
                   >
                     <Icon className={cn('h-5 w-5', isActive && 'text-blue-600')} />
