@@ -89,11 +89,11 @@ export function Navbar() {
         {/* 中间：搜索框 */}
         <form onSubmit={handleSearch} className="hidden flex-1 justify-center px-6 md:flex">
           <div className="relative w-full max-w-md">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="search"
               placeholder="搜索徐霞客系统..."
-              className="w-full rounded-full border-gray-200 bg-gray-100 pl-10 focus:bg-white"
+              className="w-full rounded-full border-muted bg-muted pl-10 focus:bg-background"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
