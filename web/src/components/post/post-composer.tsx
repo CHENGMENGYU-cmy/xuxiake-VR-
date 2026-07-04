@@ -1,12 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Video, Image, Mic, Link2, Languages, Send } from 'lucide-react';
+import { Video, Image, Mic, Link2, Languages, Send, AlertCircle, X, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
 import { useAuthStore } from '@/stores/auth-store';
+import { usePostStore } from '@/stores/post-store';
+
+const MAX_CONTENT_LENGTH = 500;
 
 const mediaButtons = [
   { type: 'VIDEO', label: 'VR视频', icon: Video, color: 'text-blue-500 hover:bg-blue-50' },
@@ -18,6 +22,7 @@ const mediaButtons = [
 
 export function PostComposer() {
   const { user } = useAuthStore();
+  const { isPublishing, publishError, publishPost, clearPublishError } = usePostStore();
   const [mounted, setMounted] = useState(false);
   const [content, setContent] = useState('');
   const [expanded, setExpanded] = useState(false);
@@ -26,13 +31,55 @@ export function PostComposer() {
     setMounted(true);
   }, []);
 
-  const handleSubmit = () => {
-    // 模拟发布
-    setContent('');
-    setExpanded(false);
+  const charCount = content.length;
+  const isOverLimit = charCount > MAX_CONTENT_LENGTH;
+  const charCountColor = charCount > 450 ? 'text-orange-500' : 'text-gray-400';
+  const canPublish = content.trim().length > 0 && !isOverLimit && !isPublishing;
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newValue = e.target.value;
+    if (newValue.length <= MAX_CONTENT_LENGTH) {
+      setContent(newValue);
+    }
   };
 
-  // SSR 和首次客户端渲染均显示骨架屏，避免 hydration 不匹配
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && canPublish) {
+      e.preventDefault();
+      handleSubmit();
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!canPublish) return;
+
+    try {
+      await publishPost({
+        content: content.trim(),
+        visibility: 'PUBLIC',
+      });
+      setContent('');
+      setExpanded(false);
+      toast.success('发布成功');
+    } catch {
+      toast.error(publishError || '发布失败，请重试');
+    }
+  };
+
+  const handleBlur = () => {
+    setTimeout(() => {
+      if (!content.trim() && !isPublishing) {
+        setExpanded(false);
+        clearPublishError();
+      }
+    }, 150);
+  };
+
+  const handleMediaClick = (type: string) => {
+    toast.info(`${type} 上传功能即将上线`);
+  };
+
+  // SSR和首次客户端渲染均显示骨架屏，避免hydration不匹配
   if (!mounted || !user) {
     return (
       <Card className="shadow-sm">
@@ -56,8 +103,11 @@ export function PostComposer() {
               placeholder={`${user.displayName}，今天用VR眼镜记录了什么？`}
               className="min-h-[40px] resize-none border-0 bg-gray-100 p-3 text-sm focus-visible:ring-0"
               value={content}
-              onChange={(e) => setContent(e.target.value)}
+              onChange={handleChange}
               onFocus={() => setExpanded(true)}
+              onBlur={handleBlur}
+              onKeyDown={handleKeyDown}
+              disabled={isPublishing}
             />
             {expanded && (
               <div className="space-y-3">
@@ -70,6 +120,8 @@ export function PostComposer() {
                         variant="ghost"
                         size="sm"
                         className={`gap-1.5 text-xs ${btn.color}`}
+                        onClick={() => handleMediaClick(btn.type)}
+                        disabled={isPublishing}
                       >
                         <Icon className="h-4 w-4" />
                         {btn.label}
@@ -77,15 +129,41 @@ export function PostComposer() {
                     );
                   })}
                 </div>
-                <div className="flex justify-end">
+
+                {publishError && (
+                  <div className="flex items-center gap-2 text-xs text-red-500">
+                    <AlertCircle className="h-3.5 w-3.5" />
+                    <span>{publishError}</span>
+                    <button
+                      onClick={clearPublishError}
+                      className="ml-auto text-gray-400 hover:text-gray-600"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between">
+                  <span className={`text-xs ${charCountColor}`}>
+                    {charCount}/{MAX_CONTENT_LENGTH}
+                  </span>
                   <Button
                     size="sm"
                     className="gap-1.5 bg-blue-600 hover:bg-blue-700"
-                    disabled={!content.trim()}
+                    disabled={!canPublish}
                     onClick={handleSubmit}
                   >
-                    <Send className="h-4 w-4" />
-                    发布
+                    {isPublishing ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        发布中...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="h-4 w-4" />
+                        发布
+                      </>
+                    )}
                   </Button>
                 </div>
               </div>
