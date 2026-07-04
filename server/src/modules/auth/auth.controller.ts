@@ -1,7 +1,9 @@
-import { Controller, Post, Get, Body, Headers, UnauthorizedException } from '@nestjs/common';
+import { Controller, Post, Get, Body, Headers, UnauthorizedException, UseGuards, Req } from '@nestjs/common';
 import { AuthService } from './auth.service.js';
 import { CaptchaService } from './captcha.service.js';
-import type { LoginDto, RegisterDto } from '../../common/interfaces.js';
+import { JwtAuthGuard } from '../../common/auth.guard.js';
+import type { LoginDto, RegisterDto, ChangePasswordDto } from '../../common/interfaces.js';
+import { Request } from 'express';
 
 @Controller('api/auth')
 export class AuthController {
