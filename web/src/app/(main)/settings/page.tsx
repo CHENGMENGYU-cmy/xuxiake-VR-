@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Settings, User, Lock, Bell, Palette, Save, Upload, Check, Camera, MapPin, Briefcase, Calendar, Users } from 'lucide-react';
+import { Settings, User, Lock, Bell, Palette, Save, Upload, Check, Camera, MapPin, Briefcase, Calendar, Users, Shield, Eye, MessageCircle, Search, Globe, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
