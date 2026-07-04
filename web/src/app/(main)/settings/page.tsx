@@ -95,6 +95,21 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
+  // 修改密码状态
+  const [showPasswordDialog, setShowPasswordDialog] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [passwordChanging, setPasswordChanging] = useState(false);
+  const [passwordError, setPasswordError] = useState('');
+  const [passwordSuccess, setPasswordSuccess] = useState(false);
+  const [passwordValidationErrors, setPasswordValidationErrors] = useState<{
+    currentPassword?: string;
+    newPassword?: string;
+    confirmNewPassword?: string;
+  }>({});
 
   // 隐私设置状态
   const [profileVisibility, setProfileVisibility] = useState('PUBLIC');
