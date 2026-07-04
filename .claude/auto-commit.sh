@@ -44,6 +44,31 @@ ENTRY+="\n---\n"
 # Append to CHANGELOG.md (after the header)
 sed -i '/^---$/a\'"$ENTRY" CHANGELOG.md
 
+# Auto-cleanup: keep only latest MAX_ENTRIES
+ENTRY_COUNT=$(grep -c "^## \[" CHANGELOG.md || echo "0")
+if [ "$ENTRY_COUNT" -gt "$MAX_ENTRIES" ]; then
+    HEADER=$(head -1 CHANGELOG.md)
+    TEMP_FILE=$(mktemp)
+    echo "$HEADER" > "$TEMP_FILE"
+    echo "" >> "$TEMP_FILE"
+
+    awk -v max="$MAX_ENTRIES" -v total="$ENTRY_COUNT" '
+    BEGIN { count = 0; in_entry = 0 }
+    /^## \[/ {
+        count++
+        if (count > (total - max)) {
+            in_entry = 1
+            if (count > (total - max + 1)) print "---"
+        } else {
+            in_entry = 0
+        }
+    }
+    in_entry { print }
+    ' CHANGELOG.md >> "$TEMP_FILE"
+
+    mv "$TEMP_FILE" CHANGELOG.md
+fi
+
 # Re-stage CHANGELOG.md and commit
 git add CHANGELOG.md
 git commit -m "auto: update $(echo "$CHANGED_FILES" | head -1)"
