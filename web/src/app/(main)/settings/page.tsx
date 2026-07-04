@@ -120,6 +120,97 @@ export default function SettingsPage() {
   const [allowRecommendations, setAllowRecommendations] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // 密码强度计算
+  const getPasswordStrength = (password: string): { level: number; label: string; color: string } => {
+    if (!password) return { level: 0, label: '', color: 'bg-gray-200' };
+    let score = 0;
+    if (password.length >= 6) score++;
+    if (password.length >= 8) score++;
+    if (/[a-zA-Z]/.test(password) && /[0-9]/.test(password)) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[^a-zA-Z0-9]/.test(password)) score++;
+
+    if (score <= 1) return { level: 1, label: '弱', color: 'bg-red-500' };
+    if (score <= 3) return { level: 2, label: '中', color: 'bg-yellow-500' };
+    return { level: 3, label: '强', color: 'bg-green-500' };
+  };
+
+  const passwordStrength = getPasswordStrength(newPassword);
+
+  // 验证修改密码表单
+  const validatePasswordForm = (): boolean => {
+    const errors: { currentPassword?: string; newPassword?: string; confirmNewPassword?: string } = {};
+
+    if (!currentPassword) {
+      errors.currentPassword = '请输入当前密码';
+    }
+
+    if (!newPassword) {
+      errors.newPassword = '请输入新密码';
+    } else if (newPassword.length < 6) {
+      errors.newPassword = '密码长度至少6位';
+    } else if (!/[a-zA-Z]/.test(newPassword) || !/[0-9]/.test(newPassword)) {
+      errors.newPassword = '密码必须包含字母和数字';
+    } else if (newPassword === currentPassword) {
+      errors.newPassword = '新密码不能与当前密码相同';
+    }
+
+    if (!confirmNewPassword) {
+      errors.confirmNewPassword = '请确认新密码';
+    } else if (newPassword !== confirmNewPassword) {
+      errors.confirmNewPassword = '两次密码输入不一致';
+    }
+
+    setPasswordValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  // 处理修改密码
+  const handleChangePassword = async () => {
+    setPasswordError('');
+    setPasswordSuccess(false);
+    if (!validatePasswordForm()) return;
+
+    setPasswordChanging(true);
+    try {
+      const { data } = await apiClient.post('/auth/change-password', {
+        currentPassword,
+        newPassword,
+      });
+
+      if (data.success) {
+        setPasswordSuccess(true);
+        setTimeout(() => {
+          setShowPasswordDialog(false);
+          setPasswordSuccess(false);
+          setCurrentPassword('');
+          setNewPassword('');
+          setConfirmNewPassword('');
+          setPasswordValidationErrors({});
+        }, 1500);
+      } else {
+        setPasswordError(data.message || '修改密码失败');
+      }
+    } catch (err: any) {
+      const message = err.response?.data?.message || '修改密码失败，请重试';
+      setPasswordError(message);
+    } finally {
+      setPasswordChanging(false);
+    }
+  };
+
+  // 重置密码对话框状态
+  const resetPasswordDialog = () => {
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmNewPassword('');
+    setPasswordError('');
+    setPasswordSuccess(false);
+    setPasswordValidationErrors({});
+    setShowCurrentPassword(false);
+    setShowNewPassword(false);
+  };
+
   const handleAvatarClick = () => {
     fileInputRef.current?.click();
   };
