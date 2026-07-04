@@ -40,3 +40,6 @@ coverage/
 
 # Misc
 query
+
+# Large files
+CHANGELOG.md
