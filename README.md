@@ -111,12 +111,6 @@ npm run dev
 
 ---
 
-## 🖥️ VSCode 一键启动
-
-在 VSCode 中按 `Ctrl+Shift+P` → 输入 `Tasks: Run Task` → 选择 **🟢 一键启动全部**
-
----
-
 ## 📡 端口说明
 
 | 服务 | 端口 | 地址 |
