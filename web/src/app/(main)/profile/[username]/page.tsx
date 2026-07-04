@@ -52,15 +52,16 @@ function ProfileContent({ username }: { username: string }) {
   // 获取用户的帖子
   useEffect(() => {
     if (profileUser) {
+      const safePosts = storePosts ?? [];
       // 如果是当前用户，从store获取帖子
       if (currentUser && currentUser.id === profileUser.id) {
-        if (storePosts.length === 0) {
+        if (safePosts.length === 0) {
           fetchPosts();
         }
-        setUserPosts(storePosts.filter((p) => p.author.id === profileUser.id));
+        setUserPosts(safePosts.filter((p) => p.author.id === profileUser.id));
       } else {
         // 其他用户的帖子也从store过滤
-        setUserPosts(storePosts.filter((p) => p.author.id === profileUser.id));
+        setUserPosts(safePosts.filter((p) => p.author.id === profileUser.id));
       }
     }
   }, [profileUser, storePosts, currentUser, fetchPosts]);
