@@ -164,7 +164,7 @@ export function Navbar() {
                   <DropdownMenuLabel>
                     <div className="flex flex-col gap-1">
                       <span className="font-semibold">{user.displayName}</span>
-                      <span className="text-xs text-gray-500">@{user.username}</span>
+                      <span className="text-xs text-muted-foreground">@{user.username}</span>
                     </div>
                   </DropdownMenuLabel>
                 </DropdownMenuGroup>
