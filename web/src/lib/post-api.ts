@@ -30,9 +30,14 @@ export async function createPost(payload: CreatePostPayload): Promise<Post> {
 export async function getPosts(params?: {
   page?: number;
   limit?: number;
-}): Promise<{ posts: Post[]; total: number }> {
+  cursor?: string;
+}): Promise<{ posts: Post[]; nextCursor: string | null; hasMore: boolean }> {
   const { data } = await apiClient.get('/posts', { params });
-  return data.data;
+  return {
+    posts: data.data ?? [],
+    nextCursor: data.nextCursor ?? null,
+    hasMore: data.hasMore ?? false,
+  };
 }
 
 export async function getPostById(postId: string): Promise<Post> {
