@@ -63,7 +63,7 @@ export function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 z-50 w-full border-b bg-white shadow-sm">
+    <nav className="fixed top-0 z-50 w-full border-b bg-card shadow-sm">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
         {/* 左侧：Logo + 菜单按钮 */}
         <div className="flex items-center gap-3">
