@@ -149,7 +149,7 @@ export function Navbar() {
           {user && mounted && (
             <DropdownMenu>
               <DropdownMenuTrigger
-                className="ml-1 inline-flex h-8 w-8 items-center justify-center rounded-full hover:bg-gray-100"
+                className="ml-1 inline-flex h-8 w-8 items-center justify-center rounded-full hover:bg-accent"
                 openOnHover
                 delay={200}
                 closeDelay={150}
