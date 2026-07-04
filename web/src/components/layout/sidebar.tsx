@@ -62,7 +62,7 @@ export function Sidebar() {
       {/* 侧边栏 */}
       <aside
         className={cn(
-          'fixed left-0 top-14 z-40 h-[calc(100vh-3.5rem)] w-64 transform border-r bg-white transition-transform duration-200 ease-in-out',
+          'fixed left-0 top-14 z-40 h-[calc(100vh-3.5rem)] w-64 transform border-r bg-card transition-transform duration-200 ease-in-out',
           'lg:sticky lg:translate-x-0',
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         )}
