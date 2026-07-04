@@ -47,7 +47,16 @@ ENTRY+="\n**变更统计:** $DIFF_STATS\n"
 ENTRY+="\n---\n"
 
 # Append to CHANGELOG.md (after the header line)
-sed -i '/^# 项目修改记录/a\'"$ENTRY" CHANGELOG.md
+# Use temporary file approach to avoid sed -i backup file issues on Windows
+TEMP_FILE=$(mktemp)
+awk -v entry="$(echo -e "$ENTRY")" '
+/^# 项目修改记录/ {
+    print
+    print entry
+    next
+}
+{ print }
+' CHANGELOG.md > "$TEMP_FILE" && mv "$TEMP_FILE" CHANGELOG.md
 
 # Auto-cleanup: keep only latest MAX_ENTRIES
 ENTRY_COUNT=$(grep -c "^## \[" CHANGELOG.md || echo "0")
