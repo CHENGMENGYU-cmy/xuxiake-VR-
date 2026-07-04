@@ -22,6 +22,24 @@ const GENDER_OPTIONS = [
   { value: 'OTHER', label: '其他' },
 ];
 
+const PRIVACY_OPTIONS = {
+  profileVisibility: [
+    { value: 'PUBLIC', label: '所有人', description: '任何人都可以查看你的个人资料' },
+    { value: 'FOLLOWERS', label: '仅关注者', description: '只有关注你的人可以查看' },
+    { value: 'PRIVATE', label: '仅自己', description: '只有你自己可以查看' },
+  ],
+  defaultPostVisibility: [
+    { value: 'PUBLIC', label: '公开', description: '所有人可见' },
+    { value: 'FOLLOWERS', label: '仅关注者', description: '仅关注者可见' },
+    { value: 'PRIVATE', label: '私密', description: '仅自己可见' },
+  ],
+  messagePermission: [
+    { value: 'EVERYONE', label: '所有人', description: '任何人都可以给你发私信' },
+    { value: 'FOLLOWERS', label: '仅关注者', description: '只有关注你的人可以发私信' },
+    { value: 'NOBODY', label: '无人', description: '不允许任何人发私信' },
+  ],
+};
+
 const REGION_OPTIONS = [
   { value: '', label: '请选择地区' },
   { value: '北京', label: '北京' },
