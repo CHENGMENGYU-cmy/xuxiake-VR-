@@ -11,9 +11,10 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { PostCard } from '@/components/post/post-card';
-import { mockUsers, mockPosts } from '@/lib/mock-data';
+import { mockUsers } from '@/lib/mock-data';
 import { useAuthStore } from '@/stores/auth-store';
-import type { User } from '@/types';
+import { usePostStore } from '@/stores/post-store';
+import type { User, Post } from '@/types';
 
 export default function ProfilePage() {
   const params = useParams();
