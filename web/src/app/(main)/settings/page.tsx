@@ -745,6 +745,161 @@ export default function SettingsPage() {
           </TabsContent>
         </div>
       </Tabs>
+
+      {/* 修改密码对话框 */}
+      <Dialog open={showPasswordDialog} onOpenChange={(open) => {
+        if (!open) resetPasswordDialog();
+        setShowPasswordDialog(open);
+      }}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>修改密码</DialogTitle>
+            <DialogDescription>请输入当前密码和新密码来更新你的账户密码</DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            {/* 错误提示 */}
+            {passwordError && (
+              <div className="flex items-center gap-2 rounded-md bg-red-50 p-3 text-sm text-red-600">
+                <AlertCircle className="h-4 w-4 flex-shrink-0" />
+                <span>{passwordError}</span>
+              </div>
+            )}
+
+            {/* 成功提示 */}
+            {passwordSuccess && (
+              <div className="flex items-center gap-2 rounded-md bg-green-50 p-3 text-sm text-green-600">
+                <Check className="h-4 w-4 flex-shrink-0" />
+                <span>密码修改成功！</span>
+              </div>
+            )}
+
+            {/* 当前密码 */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">当前密码</label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                <Input
+                  type={showCurrentPassword ? 'text' : 'password'}
+                  placeholder="输入当前密码"
+                  className={`pl-10 pr-10 ${passwordValidationErrors.currentPassword ? 'border-red-400 focus-visible:ring-red-400' : ''}`}
+                  value={currentPassword}
+                  onChange={(e) => {
+                    setCurrentPassword(e.target.value);
+                    if (passwordValidationErrors.currentPassword) {
+                      setPasswordValidationErrors((prev) => ({ ...prev, currentPassword: undefined }));
+                    }
+                  }}
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                >
+                  {showCurrentPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+              {passwordValidationErrors.currentPassword && (
+                <p className="text-xs text-red-500">{passwordValidationErrors.currentPassword}</p>
+              )}
+            </div>
+
+            {/* 新密码 */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">新密码</label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                <Input
+                  type={showNewPassword ? 'text' : 'password'}
+                  placeholder="输入新密码（字母+数字，至少6位）"
+                  className={`pl-10 pr-10 ${passwordValidationErrors.newPassword ? 'border-red-400 focus-visible:ring-red-400' : ''}`}
+                  value={newPassword}
+                  onChange={(e) => {
+                    setNewPassword(e.target.value);
+                    if (passwordValidationErrors.newPassword) {
+                      setPasswordValidationErrors((prev) => ({ ...prev, newPassword: undefined }));
+                    }
+                  }}
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  onClick={() => setShowNewPassword(!showNewPassword)}
+                >
+                  {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+              {passwordValidationErrors.newPassword && (
+                <p className="text-xs text-red-500">{passwordValidationErrors.newPassword}</p>
+              )}
+              {/* 密码强度指示器 */}
+              {newPassword && (
+                <div className="space-y-1">
+                  <div className="flex gap-1">
+                    {[1, 2, 3].map((level) => (
+                      <div
+                        key={level}
+                        className={`h-1.5 flex-1 rounded-full transition-colors ${
+                          passwordStrength.level >= level ? passwordStrength.color : 'bg-gray-200'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <p className="text-xs text-gray-500">密码强度: {passwordStrength.label}</p>
+                </div>
+              )}
+            </div>
+
+            {/* 确认新密码 */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">确认新密码</label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                <Input
+                  type="password"
+                  placeholder="再次输入新密码"
+                  className={`pl-10 ${passwordValidationErrors.confirmNewPassword ? 'border-red-400 focus-visible:ring-red-400' : ''}`}
+                  value={confirmNewPassword}
+                  onChange={(e) => {
+                    setConfirmNewPassword(e.target.value);
+                    if (passwordValidationErrors.confirmNewPassword) {
+                      setPasswordValidationErrors((prev) => ({ ...prev, confirmNewPassword: undefined }));
+                    }
+                  }}
+                />
+              </div>
+              {passwordValidationErrors.confirmNewPassword && (
+                <p className="text-xs text-red-500">{passwordValidationErrors.confirmNewPassword}</p>
+              )}
+            </div>
+          </div>
+
+          <DialogFooter>
+            <DialogClose render={<Button variant="outline" />}>
+              取消
+            </DialogClose>
+            <Button
+              onClick={handleChangePassword}
+              disabled={passwordChanging || passwordSuccess}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
+              {passwordChanging ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  修改中...
+                </>
+              ) : passwordSuccess ? (
+                <>
+                  <Check className="mr-2 h-4 w-4" />
+                  已修改
+                </>
+              ) : (
+                '确认修改'
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
