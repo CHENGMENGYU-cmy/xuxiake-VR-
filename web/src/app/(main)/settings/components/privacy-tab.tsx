@@ -1,6 +1,6 @@
 'use client';
 
-import { Eye, Globe, MessageCircle, Shield, Lock, ChevronRight, Save, Check, EyeOff, Loader2, AlertCircle } from 'lucide-react';
+import { Eye, Globe, MessageCircle, Shield, Lock, ChevronRight, Check, EyeOff, Loader2, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
