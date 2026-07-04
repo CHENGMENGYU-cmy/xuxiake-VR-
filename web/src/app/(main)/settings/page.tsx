@@ -261,9 +261,6 @@ export default function SettingsPage() {
               setAllowSearchDiscovery={setAllowSearchDiscovery}
               allowRecommendations={allowRecommendations}
               setAllowRecommendations={setAllowRecommendations}
-              saving={saving}
-              saved={saved}
-              onSave={handleSavePrivacy}
               showPasswordDialog={showPasswordDialog}
               setShowPasswordDialog={setShowPasswordDialog}
               currentPassword={currentPassword}
