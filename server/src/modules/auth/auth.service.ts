@@ -124,6 +124,43 @@ export class AuthService {
     };
   }
 
+  // 修改密码
+  async changePassword(userId: string, dto: ChangePasswordDto) {
+    // 验证新密码格式
+    if (!/[a-zA-Z]/.test(dto.newPassword) || !/[0-9]/.test(dto.newPassword)) {
+      throw new BadRequestException('新密码必须同时包含字母和数字');
+    }
+    if (dto.newPassword.length < 6) {
+      throw new BadRequestException('新密码长度至少6位');
+    }
+
+    const user = await this.userRepo.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new UnauthorizedException('用户不存在');
+    }
+
+    if (!user.passwordHash) {
+      throw new BadRequestException('该账号未设置密码');
+    }
+
+    // 验证当前密码
+    const valid = await bcrypt.compare(dto.currentPassword, user.passwordHash);
+    if (!valid) {
+      throw new BadRequestException('当前密码错误');
+    }
+
+    // 检查新密码不能与当前密码相同
+    if (dto.currentPassword === dto.newPassword) {
+      throw new BadRequestException('新密码不能与当前密码相同');
+    }
+
+    // 更新密码
+    user.passwordHash = await bcrypt.hash(dto.newPassword, 10);
+    await this.userRepo.save(user);
+
+    return { success: true, message: '密码修改成功' };
+  }
+
   async refreshToken(refreshToken: string): Promise<TokenPair> {
     try {
       const payload = this.jwtService.verify(refreshToken);
