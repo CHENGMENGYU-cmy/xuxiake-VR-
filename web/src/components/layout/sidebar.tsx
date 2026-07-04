@@ -81,7 +81,7 @@ export function Sidebar() {
                 </Avatar>
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold">{user.displayName}</p>
-                  <p className="truncate text-xs text-gray-500">@{user.username}</p>
+                  <p className="truncate text-xs text-muted-foreground">@{user.username}</p>
                 </div>
               </Link>
             </div>
