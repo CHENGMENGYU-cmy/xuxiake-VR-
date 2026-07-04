@@ -93,6 +93,14 @@ export default function SettingsPage() {
   const [avatarUploading, setAvatarUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  // 隐私设置状态
+  const [profileVisibility, setProfileVisibility] = useState('PUBLIC');
+  const [defaultPostVisibility, setDefaultPostVisibility] = useState('PUBLIC');
+  const [messagePermission, setMessagePermission] = useState('EVERYONE');
+  const [showOnlineStatus, setShowOnlineStatus] = useState(true);
+  const [allowSearchDiscovery, setAllowSearchDiscovery] = useState(true);
+  const [allowRecommendations, setAllowRecommendations] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleAvatarClick = () => {
