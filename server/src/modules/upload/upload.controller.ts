@@ -62,7 +62,7 @@ export class UploadController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: (_req, _file, cb) => cb(null, UPLOAD_DIR),
+        destination: (_req, _file, cb) => cb(null, AVATAR_DIR),
         filename: (_req, file, cb) => {
           const uniqueName = `${uuidv4()}${extname(file.originalname)}`;
           cb(null, uniqueName);
