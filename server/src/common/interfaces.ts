@@ -113,6 +113,11 @@ export interface RegisterDto {
   displayName?: string;
 }
 
+export interface ChangePasswordDto {
+  currentPassword: string;
+  newPassword: string;
+}
+
 export interface TokenPair {
   accessToken: string;
   refreshToken: string;
