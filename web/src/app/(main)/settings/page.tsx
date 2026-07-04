@@ -28,6 +28,23 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
+  // 通知设置状态
+  const [likeNotifications, setLikeNotifications] = useState(true);
+  const [commentNotifications, setCommentNotifications] = useState(true);
+  const [followNotifications, setFollowNotifications] = useState(true);
+  const [systemNotifications, setSystemNotifications] = useState(true);
+  const [messageNotifications, setMessageNotifications] = useState(true);
+  const [mentionNotifications, setMentionNotifications] = useState(true);
+  const [inAppNotifications, setInAppNotifications] = useState(true);
+  const [emailNotifications, setEmailNotifications] = useState(false);
+  const [browserPush, setBrowserPush] = useState(false);
+  const [doNotDisturb, setDoNotDisturb] = useState(false);
+  const [dndStart, setDndStart] = useState('22:00');
+  const [dndEnd, setDndEnd] = useState('08:00');
+  const [emailFrequency, setEmailFrequency] = useState<'REALTIME' | 'DAILY' | 'WEEKLY' | 'NEVER'>('DAILY');
+  const [notifSaving, setNotifSaving] = useState(false);
+  const [notifSaved, setNotifSaved] = useState(false);
+
   // 隐私设置状态
   const [profileVisibility, setProfileVisibility] = useState('PUBLIC');
   const [defaultPostVisibility, setDefaultPostVisibility] = useState('PUBLIC');
