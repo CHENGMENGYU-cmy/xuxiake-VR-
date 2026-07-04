@@ -115,7 +115,7 @@ export function Sidebar() {
 
           {/* 媒体类型快捷入口 */}
           <div className="space-y-1 p-3">
-            <p className="px-2 text-xs font-medium uppercase text-gray-400">
+            <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
               内容分类
             </p>
             {mediaTypes.map((item) => {
@@ -136,7 +136,7 @@ export function Sidebar() {
           {/* 推荐关注 */}
           {mounted && user && (
             <div className="space-y-1 p-3">
-              <p className="px-2 text-xs font-medium uppercase text-gray-400">
+              <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
                 推荐关注
               </p>
               {mockUsers.filter((u) => u.id !== user.id).map((u) => (
