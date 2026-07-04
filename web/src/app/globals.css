@@ -128,3 +128,33 @@
     @apply font-sans;
   }
 }
+
+/* 紧凑模式 */
+.compact {
+  --spacing-compact: 0.75;
+}
+
+.compact .space-y-4 > * + * {
+  margin-top: calc(1rem * var(--spacing-compact));
+}
+
+.compact .space-y-6 > * + * {
+  margin-top: calc(1.5rem * var(--spacing-compact));
+}
+
+.compact .p-4 {
+  padding: calc(1rem * var(--spacing-compact));
+}
+
+.compact .p-6 {
+  padding: calc(1.5rem * var(--spacing-compact));
+}
+
+.compact .gap-4 {
+  gap: calc(1rem * var(--spacing-compact));
+}
+
+.compact .py-4 {
+  padding-top: calc(1rem * var(--spacing-compact));
+  padding-bottom: calc(1rem * var(--spacing-compact));
+}
