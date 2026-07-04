@@ -19,7 +19,7 @@ export function MobileNav() {
   const unreadNotif = mockNotifications.filter((n) => !n.isRead).length;
 
   return (
-    <nav className="fixed bottom-0 z-50 w-full border-t bg-white lg:hidden">
+    <nav className="fixed bottom-0 z-50 w-full border-t bg-card lg:hidden">
       <div className="flex h-14 items-center justify-around">
         {navItems.map((item) => {
           const Icon = item.icon;
