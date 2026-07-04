@@ -1,7 +1,9 @@
 #!/bin/bash
 # Auto-commit script for Claude Code modifications
 # Records changes to CHANGELOG.md and commits
+# Keeps only the latest 30 entries to prevent file bloat
 
+MAX_ENTRIES=30
 cd "$(git rev-parse --show-toplevel)" || exit 0
 
 # Stage all changes first
