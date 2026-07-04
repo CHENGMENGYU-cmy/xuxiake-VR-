@@ -14,11 +14,15 @@ import { diskStorage } from 'multer';
 import { extname, join } from 'path';
 import { existsSync, mkdirSync } from 'fs';
 
-const UPLOAD_DIR = join(process.cwd(), 'uploads', 'avatars');
+const AVATAR_DIR = join(process.cwd(), 'uploads', 'avatars');
+const IMAGE_DIR = join(process.cwd(), 'uploads', 'images');
 
-// Ensure avatar upload directory exists
-if (!existsSync(UPLOAD_DIR)) {
-  mkdirSync(UPLOAD_DIR, { recursive: true });
+// Ensure upload directories exist
+if (!existsSync(AVATAR_DIR)) {
+  mkdirSync(AVATAR_DIR, { recursive: true });
+}
+if (!existsSync(IMAGE_DIR)) {
+  mkdirSync(IMAGE_DIR, { recursive: true });
 }
 
 @Controller('api/upload')
