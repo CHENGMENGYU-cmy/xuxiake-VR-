@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Settings, User, Lock, Bell, Palette, Save, Upload, Check, Camera, MapPin, Briefcase, Calendar, Users, Shield, Eye, MessageCircle, Search, Globe, ChevronRight } from 'lucide-react';
+import { Settings, User, Lock, Bell, Palette, Save, Upload, Check, Camera, MapPin, Briefcase, Calendar, Users, Shield, Eye, EyeOff, MessageCircle, Search, Globe, ChevronRight, Loader2, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { useAuthStore } from '@/stores/auth-store';
 import apiClient from '@/lib/api-client';
 
@@ -93,6 +94,7 @@ export default function SettingsPage() {
   const [avatarUploading, setAvatarUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+
 
   // 隐私设置状态
   const [profileVisibility, setProfileVisibility] = useState('PUBLIC');
