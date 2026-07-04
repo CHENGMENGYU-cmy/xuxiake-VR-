@@ -271,24 +271,6 @@ export function PrivacyTab({
         </CardContent>
       </Card>
 
-      {/* 保存按钮 */}
-      <div className="flex items-center justify-end gap-3 sticky bottom-4 py-4">
-        {saved && (
-          <span className="flex items-center gap-1 text-sm text-green-600">
-            <Check className="h-4 w-4" />
-            已保存
-          </span>
-        )}
-        <Button
-          className="gap-1.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg"
-          onClick={onSave}
-          disabled={saving}
-        >
-          <Save className="h-4 w-4" />
-          {saving ? '保存中...' : '保存设置'}
-        </Button>
-      </div>
-
       {/* 修改密码对话框 */}
       <Dialog open={showPasswordDialog} onOpenChange={(open) => {
         if (!open) onResetPasswordDialog();

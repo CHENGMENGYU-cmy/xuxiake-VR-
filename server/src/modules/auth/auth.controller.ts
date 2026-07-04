@@ -3,7 +3,7 @@ import { AuthService } from './auth.service.js';
 import { CaptchaService } from './captcha.service.js';
 import { JwtAuthGuard } from '../../common/auth.guard.js';
 import type { LoginDto, RegisterDto, ChangePasswordDto } from '../../common/interfaces.js';
-import { Request } from 'express';
+import type { Request } from 'express';
 
 @Controller('api/auth')
 export class AuthController {
@@ -53,8 +53,8 @@ export class AuthController {
   // 修改密码
   @Post('change-password')
   @UseGuards(JwtAuthGuard)
-  async changePassword(@Req() req: Request, @Body() dto: ChangePasswordDto) {
-    const userId = (req as any).userId;
+  async changePassword(@Req() req: any, @Body() dto: ChangePasswordDto) {
+    const userId = req.userId;
     if (!userId) throw new UnauthorizedException('请先登录');
     return this.authService.changePassword(userId, dto);
   }
