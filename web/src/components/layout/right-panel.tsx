@@ -50,10 +50,10 @@ export function RightPanel() {
                 <Link
                   key={topic.tag}
                   href={`/search?q=${encodeURIComponent(topic.tag)}`}
-                  className="flex items-center justify-between rounded-lg px-2 py-1.5 text-sm hover:bg-gray-100"
+                  className="flex items-center justify-between rounded-lg px-2 py-1.5 text-sm hover:bg-accent"
                 >
-                  <span className="text-gray-700"># {topic.tag}</span>
-                  <span className="text-xs text-gray-400">{topic.count}次浏览</span>
+                  <span className="text-foreground"># {topic.tag}</span>
+                  <span className="text-xs text-muted-foreground">{topic.count}次浏览</span>
                 </Link>
               ))}
             </div>
