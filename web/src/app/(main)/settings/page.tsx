@@ -143,6 +143,38 @@ export default function SettingsPage() {
     setShowNewPassword(false);
   };
 
+  // 保存通知设置
+  const handleSaveNotifications = async () => {
+    setNotifSaving(true);
+    setNotifSaved(false);
+    try {
+      const res = await apiClient.put('/users/notifications', {
+        likeNotifications,
+        commentNotifications,
+        followNotifications,
+        systemNotifications,
+        messageNotifications,
+        mentionNotifications,
+        inAppNotifications,
+        emailNotifications,
+        browserPush,
+        doNotDisturb,
+        dndStart,
+        dndEnd,
+        emailFrequency,
+      });
+      if (res.data.success) {
+        setNotifSaved(true);
+        setTimeout(() => setNotifSaved(false), 3000);
+      }
+    } catch (err: any) {
+      const message = err.response?.data?.message || '保存失败';
+      alert(message);
+    } finally {
+      setNotifSaving(false);
+    }
+  };
+
   // 保存个人资料
   const handleSaveProfile = async () => {
     setSaving(true);
