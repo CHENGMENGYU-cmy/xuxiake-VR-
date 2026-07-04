@@ -37,9 +37,6 @@ interface PrivacyTabProps {
   setAllowSearchDiscovery: (v: boolean) => void;
   allowRecommendations: boolean;
   setAllowRecommendations: (v: boolean) => void;
-  saving: boolean;
-  saved: boolean;
-  onSave: () => void;
   // 密码对话框
   showPasswordDialog: boolean;
   setShowPasswordDialog: (v: boolean) => void;
@@ -75,9 +72,6 @@ export function PrivacyTab({
   setAllowSearchDiscovery,
   allowRecommendations,
   setAllowRecommendations,
-  saving,
-  saved,
-  onSave,
   showPasswordDialog,
   setShowPasswordDialog,
   currentPassword,
