@@ -15,15 +15,14 @@ interface FeedListProps {
 }
 
 export function FeedList({ initialPosts, showComposer = true }: FeedListProps) {
-  const { posts, isLoading, fetchPosts } = usePostStore();
+  const { posts = [], isLoading, fetchPosts } = usePostStore();
 
   // 组件挂载时加载数据，如果store为空则使用initialPosts
   useEffect(() => {
-    if (posts.length === 0 && initialPosts.length > 0) {
-      // 如果store为空但有initialPosts，直接使用initialPosts
+    const currentPosts = usePostStore.getState().posts ?? [];
+    if (currentPosts.length === 0 && initialPosts?.length > 0) {
       usePostStore.setState({ posts: initialPosts });
-    } else if (posts.length === 0) {
-      // 如果都没有数据，从API获取
+    } else if (currentPosts.length === 0) {
       fetchPosts();
     }
   }, []);
