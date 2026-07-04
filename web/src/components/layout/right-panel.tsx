@@ -76,7 +76,7 @@ export function RightPanel() {
                   <Link
                     key={user.id}
                     href={`/profile/${user.username}`}
-                    className="flex items-center gap-3 rounded-lg p-1 hover:bg-gray-100"
+                    className="flex items-center gap-3 rounded-lg p-1 hover:bg-accent"
                   >
                     <Avatar className="h-8 w-8">
                       <AvatarImage src={user.avatarUrl} alt={user.displayName} />
@@ -84,7 +84,7 @@ export function RightPanel() {
                     </Avatar>
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-medium">{user.displayName}</p>
-                      <p className="truncate text-xs text-gray-500">{user.bio}</p>
+                      <p className="truncate text-xs text-muted-foreground">{user.bio}</p>
                     </div>
                   </Link>
                 ))}
