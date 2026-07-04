@@ -73,7 +73,7 @@ export function Sidebar() {
             <div className="space-y-1 p-3">
               <Link
                 href={`/profile/${user.username}`}
-                className="flex items-center gap-3 rounded-lg p-2 hover:bg-gray-100"
+                className="flex items-center gap-3 rounded-lg p-2 hover:bg-accent"
               >
                 <Avatar className="h-10 w-10">
                   <AvatarImage src={user.avatarUrl} alt={user.displayName} />
