@@ -50,6 +50,15 @@ export class AuthController {
     return { success: true, data: user };
   }
 
+  // 修改密码
+  @Post('change-password')
+  @UseGuards(JwtAuthGuard)
+  async changePassword(@Req() req: Request, @Body() dto: ChangePasswordDto) {
+    const userId = (req as any).userId;
+    if (!userId) throw new UnauthorizedException('请先登录');
+    return this.authService.changePassword(userId, dto);
+  }
+
   @Post('logout')
   async logout() {
     return { success: true, message: '已退出登录' };
