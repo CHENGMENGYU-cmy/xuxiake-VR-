@@ -679,7 +679,10 @@ export default function SettingsPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <button className="flex items-center justify-between w-full p-3 rounded-lg border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors">
+                  <button
+                    onClick={() => setShowPasswordDialog(true)}
+                    className="flex items-center justify-between w-full p-3 rounded-lg border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors"
+                  >
                     <div className="text-left">
                       <p className="font-medium text-sm">修改密码</p>
                       <p className="text-xs text-gray-500">更新你的账户密码</p>
