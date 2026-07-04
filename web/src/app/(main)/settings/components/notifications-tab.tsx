@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import {
   Bell, Heart, MessageCircle, UserPlus, Megaphone, Mail,
   Globe, Clock, Save, Loader2, Check,
