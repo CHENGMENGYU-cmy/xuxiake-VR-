@@ -24,11 +24,11 @@ DELETE FROM users;
 -- ============================================================
 -- 用户（密码均为 password123，bcrypt 哈希）
 -- ============================================================
-INSERT INTO users (id, email, username, password_hash, display_name, bio, avatar_url, website, vr_device_model, vr_device_version) VALUES
-('u1', 'xuxiake@example.com', 'xuxiake', '$2b$10$EF2qoFpwK6CnqrcHcySFv.2WT7mpqkIS1kbjXpDPgERX16htd3QQe', '徐霞客', '带着VR眼镜看世界 🌍 记录每一段旅程', 'https://api.dicebear.com/9.x/avataaars/svg?seed=xuxiake', 'https://xuxiake.com', 'Apple Vision Pro', '2.0'),
-('u2', 'zhangshan@example.com', 'zhangshan', '$2b$10$EF2qoFpwK6CnqrcHcySFv.2WT7mpqkIS1kbjXpDPgERX16htd3QQe', '张三', 'VR摄影师 | 旅行爱好者', 'https://api.dicebear.com/9.x/avataaars/svg?seed=zhangshan', NULL, NULL, NULL),
-('u3', 'lisi@example.com', 'lisi', '$2b$10$EF2qoFpwK6CnqrcHcySFv.2WT7mpqkIS1kbjXpDPgERX16htd3QQe', '李四', '科技评测 | VR内容创作者', 'https://api.dicebear.com/9.x/avataaars/svg?seed=lisi', NULL, NULL, NULL),
-('u4', 'wangwu@example.com', 'wangwu', '$2b$10$EF2qoFpwK6CnqrcHcySFv.2WT7mpqkIS1kbjXpDPgERX16htd3QQe', '王五', '环球旅行者 🌏 用VR记录世界', 'https://api.dicebear.com/9.x/avataaars/svg?seed=wangwu', NULL, NULL, NULL);
+INSERT INTO users (id, email, username, password_hash, display_name, xxk_number, bio, avatar_url, website, vr_device_model, vr_device_version) VALUES
+('u1', 'xuxiake@example.com', 'xuxiake', '$2b$10$EF2qoFpwK6CnqrcHcySFv.2WT7mpqkIS1kbjXpDPgERX16htd3QQe', '徐霞客', '10000000001', '带着VR眼镜看世界 🌍 记录每一段旅程', 'https://api.dicebear.com/9.x/avataaars/svg?seed=xuxiake', 'https://xuxiake.com', 'Apple Vision Pro', '2.0'),
+('u2', 'zhangshan@example.com', 'zhangshan', '$2b$10$EF2qoFpwK6CnqrcHcySFv.2WT7mpqkIS1kbjXpDPgERX16htd3QQe', '张三', '10000000002', 'VR摄影师 | 旅行爱好者', 'https://api.dicebear.com/9.x/avataaars/svg?seed=zhangshan', NULL, NULL, NULL),
+('u3', 'lisi@example.com', 'lisi', '$2b$10$EF2qoFpwK6CnqrcHcySFv.2WT7mpqkIS1kbjXpDPgERX16htd3QQe', '李四', '10000000003', '科技评测 | VR内容创作者', 'https://api.dicebear.com/9.x/avataaars/svg?seed=lisi', NULL, NULL, NULL),
+('u4', 'wangwu@example.com', 'wangwu', '$2b$10$EF2qoFpwK6CnqrcHcySFv.2WT7mpqkIS1kbjXpDPgERX16htd3QQe', '王五', '10000000004', '环球旅行者 🌏 用VR记录世界', 'https://api.dicebear.com/9.x/avataaars/svg?seed=wangwu', NULL, NULL, NULL);
 
 -- ============================================================
 -- 关注关系
