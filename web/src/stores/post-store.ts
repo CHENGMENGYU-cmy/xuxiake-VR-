@@ -32,7 +32,7 @@ export const usePostStore = create<PostState>((set) => ({
     set({ isLoading: true, error: null });
     try {
       const data = await getPosts();
-      set({ posts: data.posts, isLoading: false });
+      set({ posts: data?.posts ?? [], isLoading: false });
     } catch (err: any) {
       const message =
         err.response?.data?.message ||
