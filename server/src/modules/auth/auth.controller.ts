@@ -28,10 +28,31 @@ export class AuthController {
     return { success: true, data: result };
   }
 
-  // 注册
+  // 注册（邮箱）
   @Post('register')
   async register(@Body() dto: RegisterDto) {
     const result = await this.authService.register(dto);
+    return { success: true, data: result };
+  }
+
+  // 发送短信验证码
+  @Post('send-sms-code')
+  async sendSmsCode(@Body() dto: SendSmsCodeDto) {
+    await this.smsService.sendCode(dto.phone);
+    return { success: true, message: '验证码已发送' };
+  }
+
+  // 手机号验证码登录
+  @Post('login-sms')
+  async loginBySms(@Body() dto: LoginSmsDto) {
+    const result = await this.authService.loginBySms(dto);
+    return { success: true, data: result };
+  }
+
+  // 手机号注册
+  @Post('register-phone')
+  async registerByPhone(@Body() dto: RegisterPhoneDto) {
+    const result = await this.authService.registerByPhone(dto);
     return { success: true, data: result };
   }
 
