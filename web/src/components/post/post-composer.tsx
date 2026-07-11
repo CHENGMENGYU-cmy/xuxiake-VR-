@@ -266,7 +266,7 @@ export function PostComposer() {
                         <span className="max-w-[200px] truncate text-xs">{item.linkTitle}</span>
                         <button
                           onClick={() => removeMediaItem(index)}
-                          className="absolute right-1 top-1/2 -translate-y-1/2 hidden h-5 w-5 items-center justify-center rounded-full text-gray-400 hover:text-red-500 group-hover:flex"
+                          className="absolute right-1 top-1/2 -translate-y-1/2 hidden h-5 w-5 items-center justify-center rounded-full text-muted-foreground hover:text-destructive group-hover:flex"
                         >
                           <X className="h-3 w-3" />
                         </button>
