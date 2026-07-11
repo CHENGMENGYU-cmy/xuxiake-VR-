@@ -259,7 +259,7 @@ export function PostComposer() {
                       </div>
                     )}
                     {item.type === 'LINK' && (
-                      <div className="flex items-center gap-2 rounded-lg border bg-gray-50 px-3 py-2 pr-8">
+                      <div className="flex items-center gap-2 rounded-lg border bg-muted/50 px-3 py-2 pr-8">
                         {item.linkFavicon && (
                           <img src={item.linkFavicon} alt="" className="h-4 w-4" />
                         )}
