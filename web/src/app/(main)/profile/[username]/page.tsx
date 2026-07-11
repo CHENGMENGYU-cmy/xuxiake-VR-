@@ -122,7 +122,7 @@ function ProfileContent({ username }: { username: string }) {
               )}
             </div>
             <p className="text-sm text-muted-foreground">@{user.username}</p>
-            {user.bio && <p className="text-sm text-gray-700">{user.bio}</p>}
+            {user.bio && <p className="text-sm text-foreground">{user.bio}</p>}
 
             {/* 额外信息 */}
             <div className="flex flex-wrap items-center gap-3 pt-2 text-xs text-muted-foreground">
