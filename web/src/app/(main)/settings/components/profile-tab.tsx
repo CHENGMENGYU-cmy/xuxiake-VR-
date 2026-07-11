@@ -298,7 +298,7 @@ export function ProfileTab({
       <Card>
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
-            <svg className="h-5 w-5 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg className="h-5 w-5 text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M2 8a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
               <circle cx="8" cy="12" r="2" />
               <circle cx="16" cy="12" r="2" />
@@ -315,7 +315,7 @@ export function ProfileTab({
       {/* 保存按钮 */}
       <div className="flex items-center justify-end gap-3 sticky bottom-4 py-4">
         {saved && (
-          <span className="flex items-center gap-1 text-sm text-green-600">
+          <span className="flex items-center gap-1 text-sm text-teal-600">
             <Check className="h-4 w-4" />
             已保存
           </span>
