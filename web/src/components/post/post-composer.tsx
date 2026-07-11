@@ -349,10 +349,10 @@ export function PostComposer() {
                 </div>
 
                 {publishError && (
-                  <div className="flex items-center gap-2 text-xs text-red-500">
+                  <div className="flex items-center gap-2 text-xs text-destructive">
                     <AlertCircle className="h-3.5 w-3.5" />
                     <span>{publishError}</span>
-                    <button onClick={clearPublishError} className="ml-auto text-gray-400 hover:text-gray-600">
+                    <button onClick={clearPublishError} className="ml-auto text-muted-foreground hover:text-foreground">
                       <X className="h-3.5 w-3.5" />
                     </button>
                   </div>
