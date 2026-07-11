@@ -130,7 +130,7 @@ export function NotificationsTab({
                 <Icon className={`h-5 w-5 ${color} shrink-0`} />
                 <div>
                   <p className="font-medium text-sm">{label}</p>
-                  <p className="text-xs text-gray-500">{description}</p>
+                  <p className="text-xs text-muted-foreground">{description}</p>
                 </div>
               </div>
               <ToggleSwitch
@@ -154,7 +154,7 @@ export function NotificationsTab({
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium text-sm">应用内通知</p>
-              <p className="text-xs text-gray-500">在应用内显示通知弹窗和角标</p>
+              <p className="text-xs text-muted-foreground">在应用内显示通知弹窗和角标</p>
             </div>
             <ToggleSwitch
               enabled={settings.inAppNotifications}
@@ -164,7 +164,7 @@ export function NotificationsTab({
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium text-sm">邮件通知</p>
-              <p className="text-xs text-gray-500">将通知发送到你的注册邮箱</p>
+              <p className="text-xs text-muted-foreground">将通知发送到你的注册邮箱</p>
             </div>
             <ToggleSwitch
               enabled={settings.emailNotifications}
@@ -174,7 +174,7 @@ export function NotificationsTab({
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium text-sm">浏览器推送</p>
-              <p className="text-xs text-gray-500">通过浏览器发送桌面推送通知</p>
+              <p className="text-xs text-muted-foreground">通过浏览器发送桌面推送通知</p>
             </div>
             <ToggleSwitch
               enabled={settings.browserPush}
@@ -192,7 +192,7 @@ export function NotificationsTab({
               <Clock className="h-5 w-5 text-indigo-600 shrink-0" />
               <div>
                 <p className="font-medium text-sm">邮件通知频率</p>
-                <p className="text-xs text-gray-500">设置接收邮件通知的频率</p>
+                <p className="text-xs text-muted-foreground">设置接收邮件通知的频率</p>
               </div>
             </div>
             <select
@@ -220,7 +220,7 @@ export function NotificationsTab({
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium text-sm">免打扰模式</p>
-              <p className="text-xs text-gray-500">在指定时间段内静音所有通知</p>
+              <p className="text-xs text-muted-foreground">在指定时间段内静音所有通知</p>
             </div>
             <ToggleSwitch
               enabled={settings.doNotDisturb}
