@@ -215,9 +215,9 @@ export default function LoginPage() {
         </form>
       </CardContent>
       <CardFooter className="justify-center">
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-muted-foreground">
           还没有账号？{' '}
-          <Link href="/register" className="font-medium text-blue-600 hover:underline">
+          <Link href="/register" className="font-medium text-primary hover:underline">
             立即注册
           </Link>
         </p>
