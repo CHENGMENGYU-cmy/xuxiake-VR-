@@ -154,7 +154,7 @@ export function MediaViewer({ items }: MediaViewerProps) {
               />
             )}
             <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-1 text-sm font-medium text-blue-600">
+              <div className="flex items-center gap-1 text-sm font-medium text-primary">
                 <Link2 className="h-3.5 w-3.5 flex-shrink-0" />
                 <span className="truncate">{link.linkTitle || link.linkUrl}</span>
                 <ExternalLink className="h-3 w-3 flex-shrink-0" />
