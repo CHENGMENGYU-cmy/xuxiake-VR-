@@ -1,7 +1,8 @@
 import Link from 'next/link';
 
+// VR第一视角沉浸式体验 - 虚拟世界的壮丽景观
 const BG_IMAGE_URL =
-  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80&auto=format&fit=crop';
+  'https://images.unsplash.com/photo-1626379953822-baec19c3accd?w=1920&q=80&auto=format&fit=crop';
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,8 +10,8 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       className="relative flex min-h-screen bg-cover bg-center bg-fixed"
       style={{ backgroundImage: `url(${BG_IMAGE_URL})` }}
     >
-      {/* 全屏遮罩 — 山水青渐变 */}
-      <div className="absolute inset-0 bg-gradient-to-br from-teal-900/90 via-teal-950/85 to-orange-950/80" />
+      {/* 全屏遮罩 — 深色渐变保留VR沉浸感 */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900/80 via-indigo-950/75 to-purple-950/80" />
 
       {/* 内容层 */}
       <div className="relative z-10 flex w-full min-h-screen items-center justify-center p-4">
@@ -23,7 +24,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
               </div>
               <span className="text-3xl font-bold text-white">徐霞客</span>
             </Link>
-            <p className="mt-3 text-sm text-white/60">用VR记录旅程，让世界触手可及 🌍</p>
+            <p className="mt-3 text-sm text-white/60">第一视角沉浸式VR旅行体验</p>
           </div>
 
           {children}
