@@ -75,7 +75,7 @@ export default function SearchPage() {
           <TabsContent value="all" className="mt-4 space-y-4">
             {filteredUsers.length > 0 && (
               <div>
-                <h3 className="mb-2 text-sm font-semibold text-gray-500">用户</h3>
+                <h3 className="mb-2 text-sm font-semibold text-muted-foreground">用户</h3>
                 <div className="rounded-lg border bg-white">
                   {filteredUsers.map((user, i) => (
                     <div key={user.id}>
@@ -90,7 +90,7 @@ export default function SearchPage() {
                         </Avatar>
                         <div>
                           <p className="text-sm font-semibold">{user.displayName}</p>
-                          <p className="text-xs text-gray-500">@{user.username}</p>
+                          <p className="text-xs text-muted-foreground">@{user.username}</p>
                         </div>
                       </a>
                     </div>
@@ -101,7 +101,7 @@ export default function SearchPage() {
 
             {filteredPosts.length > 0 && (
               <div>
-                <h3 className="mb-2 text-sm font-semibold text-gray-500">内容</h3>
+                <h3 className="mb-2 text-sm font-semibold text-muted-foreground">内容</h3>
                 <div className="space-y-4">
                   {filteredPosts.map((post) => (
                     <PostCard key={post.id} post={post} />
@@ -133,7 +133,7 @@ export default function SearchPage() {
                       </Avatar>
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-semibold">{user.displayName}</p>
-                        <p className="text-xs text-gray-500">@{user.username}</p>
+                        <p className="text-xs text-muted-foreground">@{user.username}</p>
                         <p className="mt-0.5 text-xs text-muted-foreground line-clamp-1">{user.bio}</p>
                       </div>
                     </a>
@@ -162,7 +162,7 @@ export default function SearchPage() {
       {!searched && (
         <div className="py-16 text-center">
           <Search className="mx-auto h-12 w-12 text-gray-300" />
-          <p className="mt-4 text-gray-500">输入关键词搜索徐霞客系统中的内容和用户</p>
+          <p className="mt-4 text-muted-foreground">输入关键词搜索徐霞客系统中的内容和用户</p>
         </div>
       )}
     </div>
