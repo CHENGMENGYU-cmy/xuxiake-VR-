@@ -9,7 +9,7 @@ export default function ExplorePage() {
     <div className="space-y-4">
       {/* 页面标题 */}
       <div className="flex items-center gap-2">
-        <Compass className="h-6 w-6 text-blue-600" />
+        <Compass className="h-6 w-6 text-primary" />
         <h1 className="text-xl font-bold">探索发现</h1>
       </div>
 
