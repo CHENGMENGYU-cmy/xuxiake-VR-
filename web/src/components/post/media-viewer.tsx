@@ -111,7 +111,7 @@ export function MediaViewer({ items }: MediaViewerProps) {
             <Volume2 className="h-4 w-4 text-accent" />
             <span>音频记录</span>
             {audio.duration && (
-              <span className="text-xs text-gray-400">
+              <span className="text-xs text-muted-foreground">
                 {Math.floor(audio.duration / 60)}:{(audio.duration % 60).toString().padStart(2, '0')}
               </span>
             )}
