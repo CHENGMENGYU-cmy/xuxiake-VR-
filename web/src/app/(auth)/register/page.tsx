@@ -95,7 +95,7 @@ export default function RegisterPage() {
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-foreground">用户名</label>
             <div className="relative">
-              <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 type="text"
                 placeholder="你的用户名"
@@ -116,7 +116,7 @@ export default function RegisterPage() {
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-foreground">邮箱地址</label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 type="email"
                 placeholder="your@email.com"
@@ -137,7 +137,7 @@ export default function RegisterPage() {
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-foreground">密码</label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 type={showPassword ? 'text' : 'password'}
                 placeholder="设置密码（至少3位）"
@@ -150,7 +150,7 @@ export default function RegisterPage() {
               />
               <button
                 type="button"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-gray-600"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -165,7 +165,7 @@ export default function RegisterPage() {
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-foreground">确认密码</label>
             <div className="relative">
-              <Check className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <Check className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 type="password"
                 placeholder="再次输入密码"
