@@ -212,7 +212,7 @@ export function PostComposer() {
     return (
       <Card className="shadow-sm">
         <CardContent className="p-4">
-          <div className="h-10 animate-pulse rounded-md bg-gray-100" />
+          <div className="h-10 animate-pulse rounded-md bg-muted" />
         </CardContent>
       </Card>
     );
