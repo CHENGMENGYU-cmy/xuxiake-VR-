@@ -290,7 +290,7 @@ export function PrivacyTab({
             )}
             {/* 当前密码 */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">当前密码</label>
+              <label className="text-sm font-medium text-foreground">当前密码</label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
@@ -319,7 +319,7 @@ export function PrivacyTab({
             </div>
             {/* 新密码 */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">新密码</label>
+              <label className="text-sm font-medium text-foreground">新密码</label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
@@ -361,7 +361,7 @@ export function PrivacyTab({
             </div>
             {/* 确认新密码 */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">确认新密码</label>
+              <label className="text-sm font-medium text-foreground">确认新密码</label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
