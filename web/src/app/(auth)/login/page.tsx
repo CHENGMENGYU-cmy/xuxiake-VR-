@@ -123,7 +123,7 @@ export default function LoginPage() {
               />
             </div>
             {validationErrors.account && (
-              <p className="text-xs text-red-500">{validationErrors.account}</p>
+              <p className="text-xs text-destructive">{validationErrors.account}</p>
             )}
           </div>
 
