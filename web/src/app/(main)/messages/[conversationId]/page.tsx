@@ -14,7 +14,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
   const conv = mockConversations[0];
   if (!conv) {
     return (
-      <div className="py-12 text-center text-gray-400">会话不存在</div>
+      <div className="py-12 text-center text-muted-foreground">会话不存在</div>
     );
   }
 
@@ -84,7 +84,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
                 >
                   {msg.content}
                 </div>
-                <p className={`mt-0.5 text-[10px] text-gray-400 ${msg.isMine ? 'text-right' : 'text-left'}`}>
+                <p className={`mt-0.5 text-[10px] text-muted-foreground ${msg.isMine ? 'text-right' : 'text-left'}`}>
                   {msg.time}
                 </p>
               </div>
@@ -95,10 +95,10 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
 
       {/* 输入框 */}
       <div className="flex items-center gap-2 border-t p-3">
-        <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400">
+        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground">
           <Image className="h-4 w-4" />
         </Button>
-        <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400">
+        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground">
           <Smile className="h-4 w-4" />
         </Button>
         <Input
