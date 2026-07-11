@@ -56,8 +56,8 @@ export default function NotificationsPage() {
                   <Link
                     href={link}
                     className={cn(
-                      'flex items-start gap-3 p-4 transition-colors hover:bg-gray-50',
-                      !notif.isRead && 'bg-blue-50/50'
+                      'flex items-start gap-3 p-4 transition-colors hover:bg-muted/50',
+                      !notif.isRead && 'bg-primary/5'
                     )}
                   >
                     {/* 图标 */}
