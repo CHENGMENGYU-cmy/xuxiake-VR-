@@ -7,7 +7,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
   return (
     <div
       className="relative flex min-h-screen bg-cover bg-center bg-fixed"
-      style={{ backgroundImage: `url(${VR_IMAGE_URL})` }}
+      style={{ backgroundImage: `url(${BG_IMAGE_URL})` }}
     >
       {/* 全屏遮罩 — 山水青渐变 */}
       <div className="absolute inset-0 bg-gradient-to-br from-teal-900/90 via-teal-950/85 to-orange-950/80" />
