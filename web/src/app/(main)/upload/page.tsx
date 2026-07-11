@@ -77,8 +77,8 @@ export default function UploadPage() {
                 <Video className="h-10 w-10 text-primary" />
                 <div>
                   <p className="text-sm font-medium">拖拽VR视频到此处，或点击上传</p>
-                  <p className="text-xs text-gray-500 mt-1">支持 MP4、MOV、WebM 格式，最大 2GB</p>
-                  <p className="text-xs text-gray-400">支持 VR180、VR360、空间视频格式</p>
+                  <p className="text-xs text-muted-foreground mt-1">支持 MP4、MOV、WebM 格式，最大 2GB</p>
+                  <p className="text-xs text-muted-foreground/70">支持 VR180、VR360、空间视频格式</p>
                 </div>
                 <Button variant="outline" size="sm">
                   <FileUp className="mr-1.5 h-4 w-4" />
