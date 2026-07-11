@@ -93,7 +93,7 @@ export function PrivacyTab({
   onResetPasswordDialog,
 }: PrivacyTabProps) {
   const getPasswordStrength = (password: string): { level: number; label: string; color: string } => {
-    if (!password) return { level: 0, label: '', color: 'bg-gray-200' };
+    if (!password) return { level: 0, label: '', color: 'bg-border' };
     let score = 0;
     if (password.length >= 6) score++;
     if (password.length >= 8) score++;
@@ -197,7 +197,7 @@ export function PrivacyTab({
             </div>
             <button
               onClick={() => setShowOnlineStatus(!showOnlineStatus)}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${showOnlineStatus ? 'bg-blue-600' : 'bg-gray-200'}`}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${showOnlineStatus ? 'bg-blue-600' : 'bg-border'}`}
             >
               <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${showOnlineStatus ? 'translate-x-6' : 'translate-x-1'}`} />
             </button>
@@ -209,7 +209,7 @@ export function PrivacyTab({
             </div>
             <button
               onClick={() => setAllowSearchDiscovery(!allowSearchDiscovery)}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${allowSearchDiscovery ? 'bg-blue-600' : 'bg-gray-200'}`}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${allowSearchDiscovery ? 'bg-blue-600' : 'bg-border'}`}
             >
               <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${allowSearchDiscovery ? 'translate-x-6' : 'translate-x-1'}`} />
             </button>
@@ -221,7 +221,7 @@ export function PrivacyTab({
             </div>
             <button
               onClick={() => setAllowRecommendations(!allowRecommendations)}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${allowRecommendations ? 'bg-blue-600' : 'bg-gray-200'}`}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${allowRecommendations ? 'bg-blue-600' : 'bg-border'}`}
             >
               <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${allowRecommendations ? 'translate-x-6' : 'translate-x-1'}`} />
             </button>
@@ -351,7 +351,7 @@ export function PrivacyTab({
                     {[1, 2, 3].map((level) => (
                       <div
                         key={level}
-                        className={`h-1.5 flex-1 rounded-full transition-colors ${passwordStrength.level >= level ? passwordStrength.color : 'bg-gray-200'}`}
+                        className={`h-1.5 flex-1 rounded-full transition-colors ${passwordStrength.level >= level ? passwordStrength.color : 'bg-border'}`}
                       />
                     ))}
                   </div>
