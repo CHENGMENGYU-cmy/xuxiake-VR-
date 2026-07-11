@@ -174,7 +174,7 @@ export default function UploadPage() {
           <div className="mt-4 space-y-2">
             <label className="text-sm font-medium">位置信息（可选）</label>
             <div className="relative">
-              <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input type="text" placeholder="添加拍摄地点..." className="pl-10" />
             </div>
           </div>
