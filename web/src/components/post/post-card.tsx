@@ -139,8 +139,8 @@ export function PostCard({ post }: PostCardProps) {
         <Button
           variant="ghost"
           className={cn(
-            'flex-1 gap-2 text-sm text-gray-600 hover:bg-red-50',
-            isLiked && 'text-red-500 hover:text-red-600'
+            'flex-1 gap-2 text-sm text-muted-foreground hover:bg-accent/10',
+            isLiked && 'text-accent hover:text-accent'
           )}
           onClick={handleLike}
         >
@@ -148,12 +148,12 @@ export function PostCard({ post }: PostCardProps) {
           赞
         </Button>
         <Link href={`/post/${post.id}`} className="flex-1">
-          <Button variant="ghost" className="w-full gap-2 text-sm text-gray-600 hover:bg-blue-50">
+          <Button variant="ghost" className="w-full gap-2 text-sm text-muted-foreground hover:bg-primary/10">
             <MessageCircle className="h-4 w-4" />
             评论
           </Button>
         </Link>
-        <Button variant="ghost" className="flex-1 gap-2 text-sm text-gray-600 hover:bg-green-50">
+        <Button variant="ghost" className="flex-1 gap-2 text-sm text-muted-foreground hover:bg-teal-50 dark:hover:bg-teal-900/20">
           <Share2 className="h-4 w-4" />
           分享
         </Button>
