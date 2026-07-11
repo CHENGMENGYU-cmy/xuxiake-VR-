@@ -39,6 +39,7 @@ export const mockUsers: User[] = [
     email: 'wangwu@example.com',
     username: 'wangwu',
     displayName: '王五',
+    xxkNumber: 'XXK004',
     bio: '环球旅行者 🌏 用VR记录世界',
     avatarUrl: 'https://api.dicebear.com/9.x/avataaars/svg?seed=wangwu',
     createdAt: '2025-04-05T09:15:00Z',

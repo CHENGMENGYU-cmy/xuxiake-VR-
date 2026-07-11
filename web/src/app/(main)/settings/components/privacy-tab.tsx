@@ -117,7 +117,7 @@ export function PrivacyTab({
               <Eye className="h-5 w-5 text-blue-600 shrink-0" />
               <div>
                 <p className="font-medium text-sm">资料可见性</p>
-                <p className="text-xs text-gray-500">控制谁可以查看你的个人资料</p>
+                <p className="text-xs text-muted-foreground">控制谁可以查看你的个人资料</p>
               </div>
             </div>
             <select
@@ -141,7 +141,7 @@ export function PrivacyTab({
               <Globe className="h-5 w-5 text-purple-600 shrink-0" />
               <div>
                 <p className="font-medium text-sm">帖子默认可见性</p>
-                <p className="text-xs text-gray-500">发布新帖子时的默认隐私级别</p>
+                <p className="text-xs text-muted-foreground">发布新帖子时的默认隐私级别</p>
               </div>
             </div>
             <select
@@ -165,7 +165,7 @@ export function PrivacyTab({
               <MessageCircle className="h-5 w-5 text-green-600 shrink-0" />
               <div>
                 <p className="font-medium text-sm">私信权限</p>
-                <p className="text-xs text-gray-500">控制谁可以给你发送私信</p>
+                <p className="text-xs text-muted-foreground">控制谁可以给你发送私信</p>
               </div>
             </div>
             <select
@@ -193,7 +193,7 @@ export function PrivacyTab({
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium text-sm">显示在线状态</p>
-              <p className="text-xs text-gray-500">其他用户可以看到你是否在线</p>
+              <p className="text-xs text-muted-foreground">其他用户可以看到你是否在线</p>
             </div>
             <button
               onClick={() => setShowOnlineStatus(!showOnlineStatus)}
@@ -205,7 +205,7 @@ export function PrivacyTab({
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium text-sm">允许搜索发现</p>
-              <p className="text-xs text-gray-500">其他用户可以通过搜索找到你</p>
+              <p className="text-xs text-muted-foreground">其他用户可以通过搜索找到你</p>
             </div>
             <button
               onClick={() => setAllowSearchDiscovery(!allowSearchDiscovery)}
@@ -217,7 +217,7 @@ export function PrivacyTab({
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium text-sm">允许推荐</p>
-              <p className="text-xs text-gray-500">在探索页面向其他用户推荐你的内容</p>
+              <p className="text-xs text-muted-foreground">在探索页面向其他用户推荐你的内容</p>
             </div>
             <button
               onClick={() => setAllowRecommendations(!allowRecommendations)}
@@ -244,21 +244,21 @@ export function PrivacyTab({
           >
             <div className="text-left">
               <p className="font-medium text-sm">修改密码</p>
-              <p className="text-xs text-gray-500">更新你的账户密码</p>
+              <p className="text-xs text-muted-foreground">更新你的账户密码</p>
             </div>
             <ChevronRight className="h-5 w-5 text-muted-foreground" />
           </button>
           <button className="flex items-center justify-between w-full p-3 rounded-lg border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors">
             <div className="text-left">
               <p className="font-medium text-sm">两步验证</p>
-              <p className="text-xs text-gray-500">增强账户安全性</p>
+              <p className="text-xs text-muted-foreground">增强账户安全性</p>
             </div>
             <ChevronRight className="h-5 w-5 text-muted-foreground" />
           </button>
           <button className="flex items-center justify-between w-full p-3 rounded-lg border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors">
             <div className="text-left">
               <p className="font-medium text-sm">登录活动</p>
-              <p className="text-xs text-gray-500">查看和管理登录设备</p>
+              <p className="text-xs text-muted-foreground">查看和管理登录设备</p>
             </div>
             <ChevronRight className="h-5 w-5 text-muted-foreground" />
           </button>
@@ -355,7 +355,7 @@ export function PrivacyTab({
                       />
                     ))}
                   </div>
-                  <p className="text-xs text-gray-500">密码强度: {passwordStrength.label}</p>
+                  <p className="text-xs text-muted-foreground">密码强度: {passwordStrength.label}</p>
                 </div>
               )}
             </div>
