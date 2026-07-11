@@ -160,7 +160,7 @@ export function MediaViewer({ items }: MediaViewerProps) {
                 <ExternalLink className="h-3 w-3 flex-shrink-0" />
               </div>
               {link.linkDescription && (
-                <p className="mt-1 text-xs text-gray-500 line-clamp-2">{link.linkDescription}</p>
+                <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{link.linkDescription}</p>
               )}
             </div>
           </div>
