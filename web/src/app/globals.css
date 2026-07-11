@@ -46,75 +46,96 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* 徐霞客品牌色 */
+  --color-teal-50: oklch(0.97 0.01 175);
+  --color-teal-100: oklch(0.93 0.02 175);
+  --color-teal-200: oklch(0.87 0.04 175);
+  --color-teal-300: oklch(0.77 0.06 175);
+  --color-teal-400: oklch(0.67 0.08 175);
+  --color-teal-500: oklch(0.55 0.10 175);
+  --color-teal-600: oklch(0.47 0.10 175);
+  --color-teal-700: oklch(0.40 0.08 175);
+  --color-teal-800: oklch(0.33 0.06 175);
+  --color-teal-900: oklch(0.26 0.04 175);
+  --color-orange-50: oklch(0.97 0.01 55);
+  --color-orange-100: oklch(0.93 0.03 55);
+  --color-orange-200: oklch(0.87 0.06 55);
+  --color-orange-300: oklch(0.79 0.10 55);
+  --color-orange-400: oklch(0.71 0.14 55);
+  --color-orange-500: oklch(0.63 0.16 55);
+  --color-orange-600: oklch(0.55 0.14 55);
 }
 
+/* ========= 亮色主题 — 山水青 + 日落橙 ========= */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --background: oklch(0.985 0.003 175);
+  --foreground: oklch(0.18 0.02 175);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.18 0.02 175);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.18 0.02 175);
+  --primary: oklch(0.47 0.10 175);
+  --primary-foreground: oklch(0.99 0.003 175);
+  --secondary: oklch(0.95 0.01 175);
+  --secondary-foreground: oklch(0.30 0.04 175);
+  --muted: oklch(0.95 0.008 175);
+  --muted-foreground: oklch(0.50 0.02 175);
+  --accent: oklch(0.63 0.16 55);
+  --accent-foreground: oklch(0.99 0.003 55);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --border: oklch(0.90 0.015 175);
+  --input: oklch(0.90 0.015 175);
+  --ring: oklch(0.55 0.10 175);
+  --chart-1: oklch(0.55 0.10 175);
+  --chart-2: oklch(0.63 0.16 55);
+  --chart-3: oklch(0.67 0.08 175);
+  --chart-4: oklch(0.71 0.14 55);
+  --chart-5: oklch(0.47 0.10 175);
+  --radius: 0.75rem;
+  --sidebar: oklch(0.98 0.005 175);
+  --sidebar-foreground: oklch(0.18 0.02 175);
+  --sidebar-primary: oklch(0.47 0.10 175);
+  --sidebar-primary-foreground: oklch(0.99 0.003 175);
+  --sidebar-accent: oklch(0.95 0.01 175);
+  --sidebar-accent-foreground: oklch(0.30 0.04 175);
+  --sidebar-border: oklch(0.90 0.015 175);
+  --sidebar-ring: oklch(0.55 0.10 175);
 }
 
+/* ========= 暗色主题 ========= */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --background: oklch(0.13 0.015 175);
+  --foreground: oklch(0.95 0.008 175);
+  --card: oklch(0.18 0.015 175);
+  --card-foreground: oklch(0.95 0.008 175);
+  --popover: oklch(0.18 0.015 175);
+  --popover-foreground: oklch(0.95 0.008 175);
+  --primary: oklch(0.67 0.08 175);
+  --primary-foreground: oklch(0.13 0.015 175);
+  --secondary: oklch(0.22 0.015 175);
+  --secondary-foreground: oklch(0.90 0.01 175);
+  --muted: oklch(0.22 0.015 175);
+  --muted-foreground: oklch(0.65 0.02 175);
+  --accent: oklch(0.71 0.14 55);
+  --accent-foreground: oklch(0.13 0.015 55);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --border: oklch(0.28 0.015 175);
+  --input: oklch(0.28 0.015 175);
+  --ring: oklch(0.67 0.08 175);
+  --chart-1: oklch(0.67 0.08 175);
+  --chart-2: oklch(0.71 0.14 55);
+  --chart-3: oklch(0.55 0.10 175);
+  --chart-4: oklch(0.63 0.16 55);
+  --chart-5: oklch(0.47 0.10 175);
+  --sidebar: oklch(0.16 0.015 175);
+  --sidebar-foreground: oklch(0.95 0.008 175);
+  --sidebar-primary: oklch(0.67 0.08 175);
+  --sidebar-primary-foreground: oklch(0.13 0.015 175);
+  --sidebar-accent: oklch(0.22 0.015 175);
+  --sidebar-accent-foreground: oklch(0.90 0.01 175);
+  --sidebar-border: oklch(0.28 0.015 175);
+  --sidebar-ring: oklch(0.67 0.08 175);
 }
 
 @layer base {
@@ -129,7 +150,51 @@
   }
 }
 
-/* 紧凑模式 */
+/* ========= 徐霞客品牌工具类 ========= */
+@layer utilities {
+  .bg-gradient-brand {
+    background: linear-gradient(135deg, var(--primary) 0%, oklch(0.55 0.10 175) 50%, var(--accent) 100%);
+  }
+  .bg-gradient-brand-subtle {
+    background: linear-gradient(135deg, oklch(0.97 0.01 175) 0%, oklch(0.95 0.01 175) 50%, oklch(0.97 0.01 55) 100%);
+  }
+  .dark .bg-gradient-brand-subtle {
+    background: linear-gradient(135deg, oklch(0.20 0.02 175) 0%, oklch(0.18 0.015 175) 50%, oklch(0.20 0.02 55) 100%);
+  }
+  .text-gradient-brand {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+/* ========= 流畅动效 ========= */
+@layer base {
+  /* 全局过渡 — 柔和自然 */
+  a, button, input, textarea, select {
+    transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  }
+
+  /* 卡片悬浮 — 微升起 + 柔和阴影 */
+  [data-slot="card"]:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 25px -5px oklch(0.47 0.10 175 / 0.1), 0 4px 10px -6px oklch(0.47 0.10 175 / 0.08);
+  }
+
+  /* 按钮点击 — 自然回弹 */
+  button:active:not(:disabled) {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+
+  /* 链接悬浮 — 平滑下划线 */
+  a:not([data-slot]) {
+    position: relative;
+  }
+}
+
+/* ========= 紧凑模式 ========= */
 .compact {
   --spacing-compact: 0.75;
 }
