@@ -36,12 +36,12 @@ export function MobileNav() {
               <Icon className="h-5 w-5" />
               <span className="text-[10px]">{item.label}</span>
               {item.label === '消息' && (
-                <span className="absolute -right-1 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 text-[9px] text-white">
+                <span className="absolute -right-1 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent text-[9px] text-white">
                   2
                 </span>
               )}
               {item.label === '通知' && unreadNotif > 0 && (
-                <span className="absolute -right-1 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 text-[9px] text-white">
+                <span className="absolute -right-1 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent text-[9px] text-white">
                   {unreadNotif}
                 </span>
               )}
