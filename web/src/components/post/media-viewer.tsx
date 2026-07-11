@@ -140,7 +140,7 @@ export function MediaViewer({ items }: MediaViewerProps) {
           href={link.linkUrl ?? '#'}
           target="_blank"
           rel="noopener noreferrer"
-          className="block rounded-lg border bg-gray-50 p-4 transition-colors hover:bg-gray-100"
+          className="block rounded-lg border bg-muted/50 p-4 transition-colors hover:bg-muted"
         >
           <div className="flex items-start gap-3">
             {link.linkFavicon && (
