@@ -129,7 +129,7 @@ function ProfileContent({ username }: { username: string }) {
               {user.website && (
                 <span className="flex items-center gap-1">
                   <Link2 className="h-3 w-3" />
-                  <a href={user.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                  <a href={user.website} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
                     {user.website}
                   </a>
                 </span>
@@ -153,13 +153,13 @@ function ProfileContent({ username }: { username: string }) {
       {/* 内容标签页 */}
       <Tabs defaultValue="posts" className="w-full">
         <TabsList className="w-full justify-start border-b bg-transparent p-0">
-          <TabsTrigger value="posts" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-blue-600">
+          <TabsTrigger value="posts" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-primary">
             发布内容
           </TabsTrigger>
-          <TabsTrigger value="media" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-blue-600">
+          <TabsTrigger value="media" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-primary">
             媒体库
           </TabsTrigger>
-          <TabsTrigger value="likes" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-blue-600">
+          <TabsTrigger value="likes" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-primary">
             赞过的
           </TabsTrigger>
         </TabsList>
