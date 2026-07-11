@@ -81,7 +81,7 @@ export function AppearanceTab() {
         <CardContent className="py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Type className="h-5 w-5 text-blue-600 shrink-0" />
+              <Type className="h-5 w-5 text-primary shrink-0" />
               <div>
                 <p className="font-medium text-sm">字体大小</p>
                 <p className="text-xs text-muted-foreground">调整界面文字大小</p>
