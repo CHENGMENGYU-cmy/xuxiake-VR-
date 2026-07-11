@@ -86,7 +86,7 @@ export function NotificationsTab({
     {
       key: 'followNotifications' as const,
       icon: UserPlus,
-      color: 'text-green-500',
+      color: 'text-teal-500',
       label: '关注通知',
       description: '当有新用户关注你时通知你',
     },
