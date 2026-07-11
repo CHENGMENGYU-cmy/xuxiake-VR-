@@ -59,14 +59,14 @@ export default function SearchPage() {
       {searched && (
         <Tabs defaultValue="all" className="w-full">
           <TabsList className="w-full justify-start border-b bg-transparent p-0">
-            <TabsTrigger value="all" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-blue-600">
+            <TabsTrigger value="all" className="data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary">
               全部
             </TabsTrigger>
-            <TabsTrigger value="users" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-blue-600">
+            <TabsTrigger value="users" className="data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary">
               <Users className="mr-1 h-3.5 w-3.5" />
               用户 ({filteredUsers.length})
             </TabsTrigger>
-            <TabsTrigger value="posts" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-blue-600">
+            <TabsTrigger value="posts" className="data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary">
               <FileText className="mr-1 h-3.5 w-3.5" />
               内容 ({filteredPosts.length})
             </TabsTrigger>
