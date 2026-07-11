@@ -64,7 +64,7 @@ export function RightPanel() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-sm">
-              <Users className="h-4 w-4 text-green-500" />
+              <Users className="h-4 w-4 text-teal-500" />
               推荐用户
             </CardTitle>
           </CardHeader>
