@@ -79,7 +79,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
                   className={`rounded-2xl px-4 py-2 text-sm ${
                     msg.isMine
                       ? 'rounded-tr-md bg-blue-600 text-white'
-                      : 'rounded-tl-md bg-gray-100 text-gray-800'
+                      : 'rounded-tl-md bg-gray-100 text-foreground'
                   }`}
                 >
                   {msg.content}
