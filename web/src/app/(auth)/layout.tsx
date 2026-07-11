@@ -1,30 +1,25 @@
 import Link from 'next/link';
 
-// 有人戴着轻便VR眼镜旅行的场景
-const BG_IMAGE_URL =
-  'https://images.unsplash.com/photo-1622048982661-af7d1bdff6c3?w=1920&q=80&auto=format&fit=crop';
-
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <div
       className="relative flex min-h-screen bg-cover bg-center bg-fixed"
-      style={{ backgroundImage: `url(${BG_IMAGE_URL})` }}
+      style={{ backgroundImage: 'url(/images/login-bg.svg)' }}
     >
-      {/* 全屏遮罩 — 深色渐变保留VR沉浸感 */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900/80 via-indigo-950/75 to-purple-950/80" />
-
       {/* 内容层 */}
       <div className="relative z-10 flex w-full min-h-screen items-center justify-center p-4">
         <div className="w-full max-w-md">
           {/* Logo */}
           <div className="mb-8 text-center">
             <Link href="/" className="inline-flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm shadow-lg">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/15 backdrop-blur-sm shadow-lg ring-1 ring-white/20">
                 <span className="text-2xl font-bold text-white">徐</span>
               </div>
-              <span className="text-3xl font-bold text-white">徐霞客</span>
+              <span className="text-3xl font-bold text-white tracking-wide">徐霞客</span>
             </Link>
-            <p className="mt-3 text-sm text-white/60">第一视角沉浸式VR旅行体验</p>
+            <p className="mt-3 text-sm text-white/50">
+              戴智能眼镜，连接志同道合的探索者
+            </p>
           </div>
 
           {children}
