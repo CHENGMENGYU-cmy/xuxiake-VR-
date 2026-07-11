@@ -127,7 +127,7 @@ export function Navbar() {
           <Link href="/messages">
             <Button variant="ghost" size="icon" className="relative">
               <MessageCircle className="h-5 w-5" />
-              <Badge className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center bg-red-500 px-0.5 text-[10px]">
+              <Badge className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center bg-accent px-0.5 text-[10px]">
                 2
               </Badge>
             </Button>
@@ -138,7 +138,7 @@ export function Navbar() {
             <Button variant="ghost" size="icon" className="relative">
               <Bell className="h-5 w-5" />
               {unreadCount > 0 && (
-                <Badge className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center bg-red-500 px-0.5 text-[10px]">
+                <Badge className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center bg-accent px-0.5 text-[10px]">
                   {unreadCount}
                 </Badge>
               )}
