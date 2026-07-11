@@ -38,7 +38,7 @@ export default function NotificationsPage() {
 
       <div className="rounded-lg border bg-card">
         {mockNotifications.length === 0 ? (
-          <div className="py-12 text-center text-gray-400">暂无通知</div>
+          <div className="py-12 text-center text-muted-foreground">暂无通知</div>
         ) : (
           <div>
             {mockNotifications.map((notif: Notification, idx: number) => {
