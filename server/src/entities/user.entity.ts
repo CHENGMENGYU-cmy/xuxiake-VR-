@@ -10,11 +10,14 @@ export class User {
   @PrimaryColumn({ type: 'varchar', length: 36 })
   id: string;
 
-  @Column({ type: 'varchar', length: 190, unique: true })
-  email: string;
+  @Column({ type: 'varchar', length: 190, unique: true, nullable: true })
+  email: string | null;
 
   @Column({ type: 'varchar', length: 50, unique: true })
   username: string;
+
+  @Column({ type: 'varchar', length: 20, unique: true, nullable: true })
+  phone: string | null;
 
   @Column({ name: 'password_hash', type: 'varchar', length: 255 })
   passwordHash: string;
