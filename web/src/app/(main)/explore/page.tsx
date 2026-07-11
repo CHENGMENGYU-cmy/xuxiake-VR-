@@ -16,15 +16,15 @@ export default function ExplorePage() {
       {/* 标签切换 */}
       <Tabs defaultValue="trending" className="w-full">
         <TabsList className="w-full justify-start border-b bg-transparent p-0">
-          <TabsTrigger value="trending" className="gap-1.5 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-blue-600">
+          <TabsTrigger value="trending" className="gap-1.5 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary">
             <TrendingUp className="h-4 w-4" />
             热门内容
           </TabsTrigger>
-          <TabsTrigger value="latest" className="gap-1.5 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-blue-600">
+          <TabsTrigger value="latest" className="gap-1.5 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary">
             <Clock className="h-4 w-4" />
             最新发布
           </TabsTrigger>
-          <TabsTrigger value="hot" className="gap-1.5 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-blue-600">
+          <TabsTrigger value="hot" className="gap-1.5 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary">
             <Flame className="h-4 w-4" />
             精选推荐
           </TabsTrigger>
