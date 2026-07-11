@@ -121,11 +121,11 @@ function ProfileContent({ username }: { username: string }) {
                 </Badge>
               )}
             </div>
-            <p className="text-sm text-gray-500">@{user.username}</p>
+            <p className="text-sm text-muted-foreground">@{user.username}</p>
             {user.bio && <p className="text-sm text-gray-700">{user.bio}</p>}
 
             {/* 额外信息 */}
-            <div className="flex flex-wrap items-center gap-3 pt-2 text-xs text-gray-500">
+            <div className="flex flex-wrap items-center gap-3 pt-2 text-xs text-muted-foreground">
               {user.website && (
                 <span className="flex items-center gap-1">
                   <Link2 className="h-3 w-3" />
@@ -142,9 +142,9 @@ function ProfileContent({ username }: { username: string }) {
 
             {/* 统计数据 */}
             <div className="flex gap-4 pt-2 text-sm">
-              <span><strong>{userPosts.length}</strong> <span className="text-gray-500">内容</span></span>
-              <span><strong>128</strong> <span className="text-gray-500">粉丝</span></span>
-              <span><strong>64</strong> <span className="text-gray-500">关注</span></span>
+              <span><strong>{userPosts.length}</strong> <span className="text-muted-foreground">内容</span></span>
+              <span><strong>128</strong> <span className="text-muted-foreground">粉丝</span></span>
+              <span><strong>64</strong> <span className="text-muted-foreground">关注</span></span>
             </div>
           </div>
         </CardContent>
