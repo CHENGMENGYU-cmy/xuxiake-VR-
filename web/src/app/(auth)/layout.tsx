@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
-const VR_IMAGE_URL =
-  'https://images.unsplash.com/photo-1548131089-d5d36b219767?w=1920&q=80&auto=format&fit=crop';
+const BG_IMAGE_URL =
+  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80&auto=format&fit=crop';
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
