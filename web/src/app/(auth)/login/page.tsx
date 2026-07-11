@@ -180,7 +180,7 @@ export default function LoginPage() {
               >
                 {captchaLoading ? (
                   <div className="flex h-11 w-[140px] items-center justify-center">
-                    <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+                    <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
                   </div>
                 ) : captchaImageSrc ? (
                   <>
