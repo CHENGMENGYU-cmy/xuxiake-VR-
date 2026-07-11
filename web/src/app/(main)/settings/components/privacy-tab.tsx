@@ -233,7 +233,7 @@ export function PrivacyTab({
       <Card>
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
-            <Lock className="h-5 w-5 text-red-600" />
+            <Lock className="h-5 w-5 text-destructive" />
             数据与安全
           </CardTitle>
         </CardHeader>
@@ -277,7 +277,7 @@ export function PrivacyTab({
           </DialogHeader>
           <div className="space-y-4 py-4">
             {passwordError && (
-              <div className="flex items-center gap-2 rounded-md bg-red-50 p-3 text-sm text-red-600">
+              <div className="flex items-center gap-2 rounded-md bg-red-50 p-3 text-sm text-destructive">
                 <AlertCircle className="h-4 w-4 flex-shrink-0" />
                 <span>{passwordError}</span>
               </div>
