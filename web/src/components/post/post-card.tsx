@@ -123,9 +123,9 @@ export function PostCard({ post }: PostCardProps) {
       )}
 
       {/* 互动数据行 */}
-      <div className="flex items-center justify-between px-4 py-2 text-xs text-gray-500">
+      <div className="flex items-center justify-between px-4 py-2 text-xs text-muted-foreground">
         <div className="flex items-center gap-1">
-          <Heart className="h-3.5 w-3.5 text-red-500" />
+          <Heart className="h-3.5 w-3.5 text-accent" />
           <span>{likeCount}</span>
         </div>
         <div className="flex items-center gap-3">
