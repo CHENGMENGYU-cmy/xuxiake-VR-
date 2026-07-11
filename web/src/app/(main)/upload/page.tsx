@@ -128,8 +128,8 @@ export default function UploadPage() {
                   <label className="text-sm font-medium">网页链接</label>
                   <Input type="url" placeholder="https://example.com" />
                 </div>
-                <div className="rounded-lg bg-gray-50 p-4">
-                  <p className="text-xs text-gray-500">
+                <div className="rounded-lg bg-muted/50 p-4">
+                  <p className="text-xs text-muted-foreground">
                     输入链接后，系统会自动抓取网页标题、描述和图标
                   </p>
                 </div>
