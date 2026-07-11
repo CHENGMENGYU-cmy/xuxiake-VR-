@@ -83,7 +83,7 @@ export default function NotificationsPage() {
 
                     {/* 未读标记 */}
                     {!notif.isRead && (
-                      <div className="h-2 w-2 flex-shrink-0 rounded-full bg-blue-600" />
+                      <div className="h-2 w-2 flex-shrink-0 rounded-full bg-primary" />
                     )}
                   </Link>
                 </div>
