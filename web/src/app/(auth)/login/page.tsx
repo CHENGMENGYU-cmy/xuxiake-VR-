@@ -174,7 +174,7 @@ export default function LoginPage() {
               </div>
               <button
                 type="button"
-                className="group relative flex-shrink-0 overflow-hidden rounded-lg border-2 border-gray-200 bg-gray-50 transition-colors hover:border-blue-400 hover:bg-blue-50"
+                className="group relative flex-shrink-0 overflow-hidden rounded-lg border-2 border-border bg-muted transition-colors hover:border-primary hover:bg-primary/5"
                 onClick={fetchCaptcha}
                 title="看不清？点击刷新"
               >
