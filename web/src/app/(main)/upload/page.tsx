@@ -182,7 +182,7 @@ export default function UploadPage() {
           {/* 发布按钮 */}
           <div className="mt-6 flex justify-end gap-3">
             <Button variant="outline">保存草稿</Button>
-            <Button className="gap-2 bg-blue-600 hover:bg-blue-700">
+            <Button className="gap-2">
               <Upload className="h-4 w-4" />
               发布内容
             </Button>
