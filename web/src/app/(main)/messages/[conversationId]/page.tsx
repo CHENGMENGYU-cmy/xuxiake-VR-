@@ -44,7 +44,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
         {conv.type === 'GROUP' ? (
           <div>
             <p className="text-sm font-semibold">{conv.title}</p>
-            <p className="text-xs text-gray-500">{conv.members.length} 人</p>
+            <p className="text-xs text-muted-foreground">{conv.members.length} 人</p>
           </div>
         ) : (
           <Link href={`/profile/${otherMember?.username}`} className="flex items-center gap-2">
