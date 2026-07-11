@@ -114,7 +114,7 @@ export default function LoginPage() {
               <Input
                 type="text"
                 placeholder="输入邮箱或用户名"
-                className={`pl-10 ${validationErrors.account ? 'border-red-400 focus-visible:ring-red-400' : ''}`}
+                className={`pl-10 ${validationErrors.account ? 'border-destructive focus-visible:ring-destructive' : ''}`}
                 value={account}
                 onChange={(e) => {
                   setAccount(e.target.value);
