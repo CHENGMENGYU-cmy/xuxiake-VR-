@@ -28,7 +28,7 @@ export default function MessagesPage() {
                   {idx > 0 && <Separator />}
                   <Link
                     href={`/messages/${conv.id}`}
-                    className="flex items-center gap-3 p-4 transition-colors hover:bg-gray-50"
+                    className="flex items-center gap-3 p-4 transition-colors hover:bg-muted/50"
                   >
                     {/* 头像 */}
                     {conv.type === 'GROUP' ? (
