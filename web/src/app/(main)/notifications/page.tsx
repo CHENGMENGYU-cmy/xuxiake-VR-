@@ -75,8 +75,8 @@ export default function NotificationsPage() {
                           </Avatar>
                         )}
                         <div>
-                          <p className="text-sm text-gray-800">{notif.message}</p>
-                          <p className="mt-0.5 text-xs text-gray-400">{notif.createdAt}</p>
+                          <p className="text-sm text-foreground">{notif.message}</p>
+                          <p className="mt-0.5 text-xs text-muted-foreground">{notif.createdAt}</p>
                         </div>
                       </div>
                     </div>
