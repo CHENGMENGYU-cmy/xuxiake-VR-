@@ -103,7 +103,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
         </Button>
         <Input
           placeholder="输入消息..."
-          className="flex-1 rounded-full border-gray-200 bg-gray-100"
+          className="flex-1 rounded-full border-border bg-muted"
         />
         <Button size="icon" className="h-8 w-8 rounded-full bg-blue-600 hover:bg-blue-700">
           <Send className="h-4 w-4" />
