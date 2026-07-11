@@ -73,7 +73,7 @@ export default function UploadPage() {
           {/* 根据类型显示不同的上传区域 */}
           <div className="mt-4">
             {activeTab === 'VIDEO' && (
-              <div className="flex flex-col items-center gap-3 rounded-lg border-2 border-dashed border-gray-300 p-8 text-center transition-colors hover:border-blue-400">
+              <div className="flex flex-col items-center gap-3 rounded-lg border-2 border-dashed border-border p-8 text-center transition-colors hover:border-blue-400">
                 <Video className="h-10 w-10 text-blue-400" />
                 <div>
                   <p className="text-sm font-medium">拖拽VR视频到此处，或点击上传</p>
@@ -88,7 +88,7 @@ export default function UploadPage() {
             )}
 
             {activeTab === 'IMAGE' && (
-              <div className="flex flex-col items-center gap-3 rounded-lg border-2 border-dashed border-gray-300 p-8 text-center transition-colors hover:border-green-400">
+              <div className="flex flex-col items-center gap-3 rounded-lg border-2 border-dashed border-border p-8 text-center transition-colors hover:border-green-400">
                 <Image className="h-10 w-10 text-green-400" />
                 <div>
                   <p className="text-sm font-medium">拖拽VR全景图片到此处，或点击上传</p>
@@ -103,7 +103,7 @@ export default function UploadPage() {
             )}
 
             {activeTab === 'AUDIO' && (
-              <div className="flex flex-col items-center gap-3 rounded-lg border-2 border-dashed border-gray-300 p-8 text-center transition-colors hover:border-purple-400">
+              <div className="flex flex-col items-center gap-3 rounded-lg border-2 border-dashed border-border p-8 text-center transition-colors hover:border-purple-400">
                 <Mic className="h-10 w-10 text-purple-400" />
                 <div>
                   <p className="text-sm font-medium">上传音频文件</p>
