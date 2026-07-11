@@ -111,7 +111,7 @@ export function PostCard({ post }: PostCardProps) {
       {/* 文字内容 */}
       {post.content && (
         <div className="px-4 pb-3">
-          <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-800">
+          <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground">
             {post.content}
           </p>
         </div>
