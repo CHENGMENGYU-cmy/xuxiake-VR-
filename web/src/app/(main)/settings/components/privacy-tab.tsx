@@ -314,7 +314,7 @@ export function PrivacyTab({
                 </button>
               </div>
               {passwordValidationErrors.currentPassword && (
-                <p className="text-xs text-red-500">{passwordValidationErrors.currentPassword}</p>
+                <p className="text-xs text-destructive">{passwordValidationErrors.currentPassword}</p>
               )}
             </div>
             {/* 新密码 */}
@@ -343,7 +343,7 @@ export function PrivacyTab({
                 </button>
               </div>
               {passwordValidationErrors.newPassword && (
-                <p className="text-xs text-red-500">{passwordValidationErrors.newPassword}</p>
+                <p className="text-xs text-destructive">{passwordValidationErrors.newPassword}</p>
               )}
               {newPassword && (
                 <div className="space-y-1">
@@ -378,7 +378,7 @@ export function PrivacyTab({
                 />
               </div>
               {passwordValidationErrors.confirmNewPassword && (
-                <p className="text-xs text-red-500">{passwordValidationErrors.confirmNewPassword}</p>
+                <p className="text-xs text-destructive">{passwordValidationErrors.confirmNewPassword}</p>
               )}
             </div>
           </div>
