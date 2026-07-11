@@ -98,7 +98,7 @@ export interface IMessage {
 }
 
 // ===== 认证接口 =====
-//登录
+// 登录（邮箱/用户名 + 密码）
 export interface LoginDto {
   account: string; // 邮箱或用户名
   password: string;
@@ -106,11 +106,31 @@ export interface LoginDto {
   captchaCode: string;
 }
 
+// 手机号验证码登录
+export interface LoginSmsDto {
+  phone: string;
+  smsCode: string;
+}
+
+// 发送短信验证码
+export interface SendSmsCodeDto {
+  phone: string;
+}
+
+// 邮箱注册
 export interface RegisterDto {
   email: string;
   username: string;
   password: string;
   displayName?: string;
+}
+
+// 手机号注册
+export interface RegisterPhoneDto {
+  phone: string;
+  smsCode: string;
+  username: string;
+  password: string;
 }
 
 export interface ChangePasswordDto {
