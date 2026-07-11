@@ -16,6 +16,7 @@ export class AuthService {
     private readonly userRepo: Repository<User>,
     private readonly jwtService: JwtService,
     private readonly captchaService: CaptchaService,
+    private readonly smsService: SmsService,
   ) {}
 
   private generateXxkNumber(): string {
