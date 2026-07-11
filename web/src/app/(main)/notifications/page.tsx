@@ -16,11 +16,11 @@ const iconMap: Record<string, React.ElementType> = {
 };
 
 const iconColors: Record<string, string> = {
-  LIKE: 'text-red-500 bg-red-50',
-  COMMENT: 'text-blue-500 bg-blue-50',
-  FOLLOW: 'text-green-500 bg-green-50',
-  SYSTEM: 'text-yellow-500 bg-yellow-50',
-  MESSAGE: 'text-purple-500 bg-purple-50',
+  LIKE: 'text-accent bg-accent/10',
+  COMMENT: 'text-primary bg-primary/10',
+  FOLLOW: 'text-teal-500 bg-teal-50 dark:bg-teal-900/20',
+  SYSTEM: 'text-orange-500 bg-orange-50 dark:bg-orange-900/20',
+  MESSAGE: 'text-accent bg-accent/10',
 };
 
 export default function NotificationsPage() {
