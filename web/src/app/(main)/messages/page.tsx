@@ -55,7 +55,7 @@ export default function MessagesPage() {
                           {conv.lastMessage?.content || '暂无消息'}
                         </p>
                         {conv.unreadCount > 0 && (
-                          <Badge className="ml-2 h-5 min-w-5 bg-blue-600 px-1.5 text-xs">
+                          <Badge className="ml-2 h-5 min-w-5 bg-primary px-1.5 text-xs">
                             {conv.unreadCount}
                           </Badge>
                         )}
