@@ -190,7 +190,7 @@ export default function LoginPage() {
                     </div>
                   </>
                 ) : (
-                  <div className="flex h-11 w-[140px] items-center justify-center text-gray-400">
+                  <div className="flex h-11 w-[140px] items-center justify-center text-muted-foreground">
                     <RefreshCw className="h-5 w-5" />
                   </div>
                 )}
