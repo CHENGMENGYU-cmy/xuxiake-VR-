@@ -19,11 +19,11 @@ const MAX_IMAGES = 9;
 type MediaItem = NonNullable<CreatePostPayload['mediaItems']>[number];
 
 const mediaButtons = [
-  { type: 'VIDEO', label: 'VR视频', icon: Video, color: 'text-blue-500 hover:bg-blue-50' },
-  { type: 'IMAGE', label: 'VR图片', icon: Image, color: 'text-green-500 hover:bg-green-50' },
-  { type: 'AUDIO', label: '音频', icon: Mic, color: 'text-purple-500 hover:bg-purple-50' },
-  { type: 'LINK', label: '链接', icon: Link2, color: 'text-orange-500 hover:bg-orange-50' },
-  { type: 'TRANSLATION', label: '翻译', icon: Languages, color: 'text-cyan-500 hover:bg-cyan-50' },
+  { type: 'VIDEO', label: 'VR视频', icon: Video, color: 'text-primary hover:bg-primary/10' },
+  { type: 'IMAGE', label: 'VR图片', icon: Image, color: 'text-teal-500 hover:bg-teal-50 dark:hover:bg-teal-900/20' },
+  { type: 'AUDIO', label: '音频', icon: Mic, color: 'text-accent hover:bg-accent/10' },
+  { type: 'LINK', label: '链接', icon: Link2, color: 'text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/20' },
+  { type: 'TRANSLATION', label: '翻译', icon: Languages, color: 'text-teal-400 hover:bg-teal-50 dark:hover:bg-teal-900/20' },
 ];
 
 export function PostComposer() {
