@@ -230,7 +230,7 @@ export function NotificationsTab({
           {settings.doNotDisturb && (
             <div className="flex items-center gap-4 pl-0 pt-2">
               <div className="flex items-center gap-2">
-                <label className="text-sm text-gray-600">开始</label>
+                <label className="text-sm text-foreground">开始</label>
                 <input
                   type="time"
                   value={settings.dndStart}
@@ -239,7 +239,7 @@ export function NotificationsTab({
                 />
               </div>
               <div className="flex items-center gap-2">
-                <label className="text-sm text-gray-600">结束</label>
+                <label className="text-sm text-foreground">结束</label>
                 <input
                   type="time"
                   value={settings.dndEnd}
