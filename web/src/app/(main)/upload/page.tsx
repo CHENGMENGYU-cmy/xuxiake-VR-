@@ -141,7 +141,7 @@ export default function UploadPage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="text-sm font-medium">源语言</label>
-                    <select className="w-full rounded-md border border-gray-200 p-2 text-sm">
+                    <select className="w-full rounded-md border border-border p-2 text-sm">
                       <option value="zh-CN">中文（简体）</option>
                       <option value="en">English</option>
                       <option value="ja">日本語</option>
@@ -150,7 +150,7 @@ export default function UploadPage() {
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">目标语言</label>
-                    <select className="w-full rounded-md border border-gray-200 p-2 text-sm">
+                    <select className="w-full rounded-md border border-border p-2 text-sm">
                       <option value="en">English</option>
                       <option value="zh-CN">中文（简体）</option>
                       <option value="ja">日本語</option>
