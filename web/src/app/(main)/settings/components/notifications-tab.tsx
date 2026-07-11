@@ -79,7 +79,7 @@ export function NotificationsTab({
     {
       key: 'commentNotifications' as const,
       icon: MessageCircle,
-      color: 'text-blue-500',
+      color: 'text-primary',
       label: '评论通知',
       description: '当有人评论你的帖子时通知你',
     },
