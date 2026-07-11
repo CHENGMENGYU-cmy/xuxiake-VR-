@@ -77,10 +77,10 @@ export function Navbar() {
           </Button>
 
           <Link href="/feed" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-cyan-500">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-brand">
               <span className="text-lg font-bold text-white">徐</span>
             </div>
-            <span className="hidden text-xl font-bold text-blue-600 sm:block">
+            <span className="hidden text-xl font-bold text-gradient-brand sm:block">
               徐霞客
             </span>
           </Link>
