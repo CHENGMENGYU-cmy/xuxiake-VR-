@@ -14,7 +14,7 @@ export default function MessagesPage() {
         <h1 className="text-xl font-bold">消息</h1>
       </div>
 
-      <div className="rounded-lg border bg-white">
+      <div className="rounded-lg border bg-card">
         {mockConversations.length === 0 ? (
           <div className="py-12 text-center text-gray-400">暂无消息</div>
         ) : (
