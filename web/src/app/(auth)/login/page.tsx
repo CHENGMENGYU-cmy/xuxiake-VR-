@@ -129,9 +129,9 @@ export default function LoginPage() {
 
           {/* 密码 */}
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-gray-700">密码</label>
+            <label className="text-sm font-medium text-foreground">密码</label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 type={showPassword ? 'text' : 'password'}
                 placeholder="输入密码"
