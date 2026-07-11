@@ -32,8 +32,8 @@ export default function MessagesPage() {
                   >
                     {/* 头像 */}
                     {conv.type === 'GROUP' ? (
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100">
-                        <Users className="h-6 w-6 text-blue-500" />
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                        <Users className="h-6 w-6 text-primary" />
                       </div>
                     ) : (
                       <Avatar className="h-12 w-12">
