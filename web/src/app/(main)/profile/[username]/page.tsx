@@ -84,7 +84,7 @@ function ProfileContent({ username }: { username: string }) {
       {/* 封面图 + 头像区 */}
       <Card className="overflow-hidden">
         {/* 封面 */}
-        <div className="h-32 bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-600 sm:h-48" />
+        <div className="h-32 bg-gradient-brand sm:h-48" />
 
         <CardContent className="relative px-4 pb-4 pt-0">
           {/* 头像 */}
