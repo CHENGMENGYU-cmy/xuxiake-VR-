@@ -107,7 +107,7 @@ export default function UploadPage() {
                 <Mic className="h-10 w-10 text-accent" />
                 <div>
                   <p className="text-sm font-medium">上传音频文件</p>
-                  <p className="text-xs text-gray-500 mt-1">支持 MP3、WAV、AAC、OGG 格式，最大 100MB</p>
+                  <p className="text-xs text-muted-foreground mt-1">支持 MP3、WAV、AAC、OGG 格式，最大 100MB</p>
                 </div>
                 <div className="flex gap-2">
                   <Button variant="outline" size="sm">
