@@ -185,7 +185,7 @@ export function PrivacyTab({
       <Card>
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
-            <Shield className="h-5 w-5 text-orange-600" />
+            <Shield className="h-5 w-5 text-orange-500" />
             其他设置
           </CardTitle>
         </CardHeader>
