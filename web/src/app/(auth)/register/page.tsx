@@ -198,7 +198,7 @@ export default function RegisterPage() {
       <CardFooter className="justify-center">
         <p className="text-sm text-muted-foreground">
           已有账号？{' '}
-          <Link href="/login" className="font-medium text-blue-600 hover:underline">
+          <Link href="/login" className="font-medium text-primary hover:underline">
             立即登录
           </Link>
         </p>
