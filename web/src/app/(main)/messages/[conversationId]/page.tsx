@@ -54,7 +54,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
             </Avatar>
             <div>
               <p className="text-sm font-semibold">{otherMember?.displayName}</p>
-              <p className="text-xs text-green-500">在线</p>
+              <p className="text-xs text-teal-500">在线</p>
             </div>
           </Link>
         )}
