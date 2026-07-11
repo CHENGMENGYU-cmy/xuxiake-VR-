@@ -246,21 +246,21 @@ export function PrivacyTab({
               <p className="font-medium text-sm">修改密码</p>
               <p className="text-xs text-gray-500">更新你的账户密码</p>
             </div>
-            <ChevronRight className="h-5 w-5 text-gray-400" />
+            <ChevronRight className="h-5 w-5 text-muted-foreground" />
           </button>
           <button className="flex items-center justify-between w-full p-3 rounded-lg border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors">
             <div className="text-left">
               <p className="font-medium text-sm">两步验证</p>
               <p className="text-xs text-gray-500">增强账户安全性</p>
             </div>
-            <ChevronRight className="h-5 w-5 text-gray-400" />
+            <ChevronRight className="h-5 w-5 text-muted-foreground" />
           </button>
           <button className="flex items-center justify-between w-full p-3 rounded-lg border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors">
             <div className="text-left">
               <p className="font-medium text-sm">登录活动</p>
               <p className="text-xs text-gray-500">查看和管理登录设备</p>
             </div>
-            <ChevronRight className="h-5 w-5 text-gray-400" />
+            <ChevronRight className="h-5 w-5 text-muted-foreground" />
           </button>
         </CardContent>
       </Card>
@@ -292,7 +292,7 @@ export function PrivacyTab({
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">当前密码</label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   type={showCurrentPassword ? 'text' : 'password'}
                   placeholder="输入当前密码"
@@ -307,7 +307,7 @@ export function PrivacyTab({
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-gray-600"
                   onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                 >
                   {showCurrentPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -321,7 +321,7 @@ export function PrivacyTab({
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">新密码</label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   type={showNewPassword ? 'text' : 'password'}
                   placeholder="输入新密码（字母+数字，至少6位）"
@@ -336,7 +336,7 @@ export function PrivacyTab({
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-gray-600"
                   onClick={() => setShowNewPassword(!showNewPassword)}
                 >
                   {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -363,7 +363,7 @@ export function PrivacyTab({
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">确认新密码</label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   type="password"
                   placeholder="再次输入新密码"
