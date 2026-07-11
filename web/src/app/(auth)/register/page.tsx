@@ -196,7 +196,7 @@ export default function RegisterPage() {
         </form>
       </CardContent>
       <CardFooter className="justify-center">
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-muted-foreground">
           已有账号？{' '}
           <Link href="/login" className="font-medium text-blue-600 hover:underline">
             立即登录
