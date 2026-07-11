@@ -103,7 +103,7 @@ function ProfileContent({ username }: { username: string }) {
                   </Button>
                 </Link>
               ) : (
-                <Button size="sm" className="gap-1.5 bg-blue-600 hover:bg-blue-700">
+                <Button size="sm" className="gap-1.5">
                   <UserPlus className="h-4 w-4" />
                   关注
                 </Button>
