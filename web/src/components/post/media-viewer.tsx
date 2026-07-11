@@ -73,7 +73,7 @@ export function MediaViewer({ items }: MediaViewerProps) {
             <div
               key={img.id}
               className={cn(
-                'relative cursor-pointer overflow-hidden bg-gray-100',
+                'relative cursor-pointer overflow-hidden bg-muted',
                 images.length === 3 && idx === 0 && 'row-span-2'
               )}
               onClick={() => {
