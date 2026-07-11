@@ -73,8 +73,8 @@ export default function UploadPage() {
           {/* 根据类型显示不同的上传区域 */}
           <div className="mt-4">
             {activeTab === 'VIDEO' && (
-              <div className="flex flex-col items-center gap-3 rounded-lg border-2 border-dashed border-border p-8 text-center transition-colors hover:border-blue-400">
-                <Video className="h-10 w-10 text-blue-400" />
+              <div className="flex flex-col items-center gap-3 rounded-lg border-2 border-dashed border-border p-8 text-center transition-colors hover:border-primary">
+                <Video className="h-10 w-10 text-primary" />
                 <div>
                   <p className="text-sm font-medium">拖拽VR视频到此处，或点击上传</p>
                   <p className="text-xs text-gray-500 mt-1">支持 MP4、MOV、WebM 格式，最大 2GB</p>
