@@ -105,7 +105,7 @@ export function AppearanceTab() {
         <CardContent className="py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Layout className="h-5 w-5 text-green-600 shrink-0" />
+              <Layout className="h-5 w-5 text-teal-600 shrink-0" />
               <div>
                 <p className="font-medium text-sm">紧凑模式</p>
                 <p className="text-xs text-muted-foreground">减少界面间距，显示更多内容</p>
