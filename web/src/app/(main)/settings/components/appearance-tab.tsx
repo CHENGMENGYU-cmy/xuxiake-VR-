@@ -124,7 +124,7 @@ export function AppearanceTab() {
         <CardContent className="py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Square className="h-5 w-5 text-purple-600 shrink-0" />
+              <Square className="h-5 w-5 text-accent shrink-0" />
               <div>
                 <p className="font-medium text-sm">圆角大小</p>
                 <p className="text-xs text-muted-foreground">调整卡片和按钮的圆角</p>
