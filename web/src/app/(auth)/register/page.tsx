@@ -108,7 +108,7 @@ export default function RegisterPage() {
               />
             </div>
             {validationErrors.username && (
-              <p className="text-xs text-red-500">{validationErrors.username}</p>
+              <p className="text-xs text-destructive">{validationErrors.username}</p>
             )}
           </div>
 
@@ -129,7 +129,7 @@ export default function RegisterPage() {
               />
             </div>
             {validationErrors.email && (
-              <p className="text-xs text-red-500">{validationErrors.email}</p>
+              <p className="text-xs text-destructive">{validationErrors.email}</p>
             )}
           </div>
 
@@ -157,7 +157,7 @@ export default function RegisterPage() {
               </button>
             </div>
             {validationErrors.password && (
-              <p className="text-xs text-red-500">{validationErrors.password}</p>
+              <p className="text-xs text-destructive">{validationErrors.password}</p>
             )}
           </div>
 
@@ -179,7 +179,7 @@ export default function RegisterPage() {
               />
             </div>
             {validationErrors.confirmPassword && (
-              <p className="text-xs text-red-500">{validationErrors.confirmPassword}</p>
+              <p className="text-xs text-destructive">{validationErrors.confirmPassword}</p>
             )}
           </div>
 
