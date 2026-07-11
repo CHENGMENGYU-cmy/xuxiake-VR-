@@ -229,7 +229,7 @@ export function PostComposer() {
           <div className="flex-1 space-y-3">
             <Textarea
               placeholder={`${user.displayName}，今天用VR眼镜记录了什么？`}
-              className="min-h-[40px] resize-none border-0 bg-gray-100 p-3 text-sm focus-visible:ring-0"
+              className="min-h-[40px] resize-none border-0 bg-muted p-3 text-sm focus-visible:ring-0"
               value={content}
               onChange={handleChange}
               onFocus={() => setExpanded(true)}
