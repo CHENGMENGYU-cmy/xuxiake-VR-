@@ -102,7 +102,7 @@ export function PrivacyTab({
     if (/[^a-zA-Z0-9]/.test(password)) score++;
     if (score <= 1) return { level: 1, label: '弱', color: 'bg-destructive' };
     if (score <= 3) return { level: 2, label: '中', color: 'bg-yellow-500' };
-    return { level: 3, label: '强', color: 'bg-teal-50 dark:bg-teal-900/200' };
+    return { level: 3, label: '强', color: 'bg-teal-500' };
   };
 
   const passwordStrength = getPasswordStrength(newPassword);
