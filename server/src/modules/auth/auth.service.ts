@@ -116,6 +116,89 @@ export class AuthService {
     };
   }
 
+  // 手机号验证码登录
+  async loginBySms(dto: LoginSmsDto) {
+    // 验证短信验证码
+    this.smsService.verify(dto.phone, dto.smsCode);
+
+    // 按手机号查找用户
+    const user = await this.userRepo.findOne({
+      where: { phone: dto.phone },
+    });
+    if (!user) {
+      throw new UnauthorizedException('该手机号未注册');
+    }
+
+    const tokens = this.generateTokens(user.id);
+    const { passwordHash, ...userDto } = user;
+    return {
+      user: {
+        ...userDto,
+        vrDeviceInfo: user.vrDeviceModel ? { model: user.vrDeviceModel, version: user.vrDeviceVersion || '' } : null,
+      },
+      tokens,
+    };
+  }
+
+  // 手机号注册
+  async registerByPhone(dto: RegisterPhoneDto) {
+    // 验证短信验证码
+    this.smsService.verify(dto.phone, dto.smsCode);
+
+    // 验证密码格式
+    if (!/[a-zA-Z]/.test(dto.password) || !/[0-9]/.test(dto.password)) {
+      throw new BadRequestException('密码必须同时包含字母和数字');
+    }
+
+    // 检查手机号是否已注册
+    const existingPhone = await this.userRepo.findOne({
+      where: { phone: dto.phone },
+    });
+    if (existingPhone) {
+      throw new ConflictException('该手机号已被注册');
+    }
+
+    // 检查用户名是否已存在
+    const existingUsername = await this.userRepo.findOne({
+      where: { username: dto.username },
+    });
+    if (existingUsername) {
+      throw new ConflictException('该用户名已被使用');
+    }
+
+    const passwordHash = await bcrypt.hash(dto.password, 10);
+
+    // 生成唯一的徐霞客号
+    let xxkNumber: string;
+    let exists: boolean;
+    do {
+      xxkNumber = this.generateXxkNumber();
+      exists = !!(await this.userRepo.findOne({ where: { xxkNumber } }));
+    } while (exists);
+
+    const user = this.userRepo.create({
+      id: uuidv4(),
+      phone: dto.phone,
+      email: null,
+      username: dto.username,
+      displayName: dto.username,
+      xxkNumber,
+      passwordHash,
+      avatarUrl: `https://api.dicebear.com/9.x/avataaars/svg?seed=${dto.username}`,
+    });
+    await this.userRepo.save(user);
+
+    const tokens = this.generateTokens(user.id);
+    const { passwordHash: _, ...userDto } = user;
+    return {
+      user: {
+        ...userDto,
+        vrDeviceInfo: null,
+      },
+      tokens,
+    };
+  }
+
   async getProfile(userId: string) {
     const user = await this.userRepo.findOne({ where: { id: userId } });
     if (!user) return null;
