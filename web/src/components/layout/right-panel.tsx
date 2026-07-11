@@ -96,7 +96,7 @@ export function RightPanel() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-sm">
-              <ExternalLink className="h-4 w-4 text-purple-500" />
+              <ExternalLink className="h-4 w-4 text-accent" />
               推荐链接
             </CardTitle>
           </CardHeader>
