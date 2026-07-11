@@ -100,7 +100,7 @@ export function PrivacyTab({
     if (/[a-zA-Z]/.test(password) && /[0-9]/.test(password)) score++;
     if (/[A-Z]/.test(password)) score++;
     if (/[^a-zA-Z0-9]/.test(password)) score++;
-    if (score <= 1) return { level: 1, label: '弱', color: 'bg-red-500' };
+    if (score <= 1) return { level: 1, label: '弱', color: 'bg-destructive/100' };
     if (score <= 3) return { level: 2, label: '中', color: 'bg-yellow-500' };
     return { level: 3, label: '强', color: 'bg-green-500' };
   };
@@ -277,7 +277,7 @@ export function PrivacyTab({
           </DialogHeader>
           <div className="space-y-4 py-4">
             {passwordError && (
-              <div className="flex items-center gap-2 rounded-md bg-red-50 p-3 text-sm text-destructive">
+              <div className="flex items-center gap-2 rounded-md bg-destructive/10 p-3 text-sm text-destructive">
                 <AlertCircle className="h-4 w-4 flex-shrink-0" />
                 <span>{passwordError}</span>
               </div>
