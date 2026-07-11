@@ -200,7 +200,7 @@ export function ProfileTab({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">用户名</label>
-              <Input value={user.username} disabled className="bg-gray-50" />
+              <Input value={user.username} disabled className="bg-muted/50" />
               <p className="text-xs text-muted-foreground">用户名不可修改</p>
             </div>
             <div className="space-y-2">
@@ -308,7 +308,7 @@ export function ProfileTab({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <Input value={user.vrDeviceInfo?.model || '未绑定设备'} disabled className="bg-gray-50" />
+          <Input value={user.vrDeviceInfo?.model || '未绑定设备'} disabled className="bg-muted/50" />
         </CardContent>
       </Card>
 
