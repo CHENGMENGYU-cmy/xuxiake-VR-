@@ -78,7 +78,7 @@ export function PostCard({ post }: PostCardProps) {
               </Badge>
             )}
           </div>
-          <div className="flex items-center gap-1 text-xs text-gray-500">
+          <div className="flex items-center gap-1 text-xs text-muted-foreground">
             <span>{formatRelativeTime(post.createdAt)}</span>
             {post.visibility === 'PUBLIC' && (
               <>
