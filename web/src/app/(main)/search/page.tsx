@@ -50,7 +50,7 @@ export default function SearchPage() {
             onChange={(e) => setQuery(e.target.value)}
           />
         </div>
-        <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
+        <Button type="submit">
           搜索
         </Button>
       </form>
