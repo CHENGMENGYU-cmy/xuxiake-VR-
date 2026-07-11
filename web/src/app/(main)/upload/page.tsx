@@ -92,8 +92,8 @@ export default function UploadPage() {
                 <Image className="h-10 w-10 text-teal-400" />
                 <div>
                   <p className="text-sm font-medium">拖拽VR全景图片到此处，或点击上传</p>
-                  <p className="text-xs text-gray-500 mt-1">支持 JPG、PNG、WebP、HEIC 格式，最大 50MB</p>
-                  <p className="text-xs text-gray-400">支持 360° 全景图片</p>
+                  <p className="text-xs text-muted-foreground mt-1">支持 JPG、PNG、WebP、HEIC 格式，最大 50MB</p>
+                  <p className="text-xs text-muted-foreground/70">支持 360° 全景图片</p>
                 </div>
                 <Button variant="outline" size="sm">
                   <FileUp className="mr-1.5 h-4 w-4" />
