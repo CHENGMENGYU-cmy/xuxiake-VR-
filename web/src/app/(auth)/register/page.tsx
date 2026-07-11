@@ -99,7 +99,7 @@ export default function RegisterPage() {
               <Input
                 type="text"
                 placeholder="你的用户名"
-                className={`pl-10 ${validationErrors.username ? 'border-red-400 focus-visible:ring-red-400' : ''}`}
+                className={`pl-10 ${validationErrors.username ? 'border-destructive focus-visible:ring-destructive' : ''}`}
                 value={username}
                 onChange={(e) => {
                   setUsername(e.target.value);
@@ -120,7 +120,7 @@ export default function RegisterPage() {
               <Input
                 type="email"
                 placeholder="your@email.com"
-                className={`pl-10 ${validationErrors.email ? 'border-red-400 focus-visible:ring-red-400' : ''}`}
+                className={`pl-10 ${validationErrors.email ? 'border-destructive focus-visible:ring-destructive' : ''}`}
                 value={email}
                 onChange={(e) => {
                   setEmail(e.target.value);
@@ -141,7 +141,7 @@ export default function RegisterPage() {
               <Input
                 type={showPassword ? 'text' : 'password'}
                 placeholder="设置密码（至少3位）"
-                className={`pl-10 pr-10 ${validationErrors.password ? 'border-red-400 focus-visible:ring-red-400' : ''}`}
+                className={`pl-10 pr-10 ${validationErrors.password ? 'border-destructive focus-visible:ring-destructive' : ''}`}
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
@@ -169,7 +169,7 @@ export default function RegisterPage() {
               <Input
                 type="password"
                 placeholder="再次输入密码"
-                className={`pl-10 ${validationErrors.confirmPassword ? 'border-red-400 focus-visible:ring-red-400' : ''}`}
+                className={`pl-10 ${validationErrors.confirmPassword ? 'border-destructive focus-visible:ring-destructive' : ''}`}
                 value={confirmPassword}
                 onChange={(e) => {
                   setConfirmPassword(e.target.value);
