@@ -240,7 +240,7 @@ export function PrivacyTab({
         <CardContent className="space-y-3">
           <button
             onClick={() => setShowPasswordDialog(true)}
-            className="flex items-center justify-between w-full p-3 rounded-lg border border-border hover:border-gray-300 hover:bg-muted/50 transition-colors"
+            className="flex items-center justify-between w-full p-3 rounded-lg border border-border hover:border-border hover:bg-muted/50 transition-colors"
           >
             <div className="text-left">
               <p className="font-medium text-sm">修改密码</p>
@@ -248,14 +248,14 @@ export function PrivacyTab({
             </div>
             <ChevronRight className="h-5 w-5 text-muted-foreground" />
           </button>
-          <button className="flex items-center justify-between w-full p-3 rounded-lg border border-border hover:border-gray-300 hover:bg-muted/50 transition-colors">
+          <button className="flex items-center justify-between w-full p-3 rounded-lg border border-border hover:border-border hover:bg-muted/50 transition-colors">
             <div className="text-left">
               <p className="font-medium text-sm">两步验证</p>
               <p className="text-xs text-muted-foreground">增强账户安全性</p>
             </div>
             <ChevronRight className="h-5 w-5 text-muted-foreground" />
           </button>
-          <button className="flex items-center justify-between w-full p-3 rounded-lg border border-border hover:border-gray-300 hover:bg-muted/50 transition-colors">
+          <button className="flex items-center justify-between w-full p-3 rounded-lg border border-border hover:border-border hover:bg-muted/50 transition-colors">
             <div className="text-left">
               <p className="font-medium text-sm">登录活动</p>
               <p className="text-xs text-muted-foreground">查看和管理登录设备</p>
