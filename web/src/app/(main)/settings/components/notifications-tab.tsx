@@ -212,7 +212,7 @@ export function NotificationsTab({
       <Card>
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
-            <Clock className="h-5 w-5 text-yellow-600" />
+            <Clock className="h-5 w-5 text-orange-500" />
             免打扰
           </CardTitle>
         </CardHeader>
