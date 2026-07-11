@@ -135,7 +135,7 @@ export default function LoginPage() {
               <Input
                 type={showPassword ? 'text' : 'password'}
                 placeholder="输入密码"
-                className={`pl-10 pr-10 ${validationErrors.password ? 'border-red-400 focus-visible:ring-red-400' : ''}`}
+                className={`pl-10 pr-10 ${validationErrors.password ? 'border-destructive focus-visible:ring-destructive' : ''}`}
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
@@ -164,7 +164,7 @@ export default function LoginPage() {
                 <Input
                   type="text"
                   placeholder="请输入4位验证码"
-                  className={`h-11 pl-10 ${validationErrors.captchaCode ? 'border-red-400 focus-visible:ring-red-400' : ''}`}
+                  className={`h-11 pl-10 ${validationErrors.captchaCode ? 'border-destructive focus-visible:ring-destructive' : ''}`}
                   value={captchaCode}
                   onChange={(e) => {
                     setCaptchaCode(e.target.value);
