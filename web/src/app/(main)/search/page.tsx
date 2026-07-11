@@ -76,7 +76,7 @@ export default function SearchPage() {
             {filteredUsers.length > 0 && (
               <div>
                 <h3 className="mb-2 text-sm font-semibold text-muted-foreground">用户</h3>
-                <div className="rounded-lg border bg-white">
+                <div className="rounded-lg border bg-card">
                   {filteredUsers.map((user, i) => (
                     <div key={user.id}>
                       {i > 0 && <Separator />}
@@ -119,7 +119,7 @@ export default function SearchPage() {
 
           <TabsContent value="users" className="mt-4">
             {filteredUsers.length > 0 ? (
-              <div className="rounded-lg border bg-white">
+              <div className="rounded-lg border bg-card">
                 {filteredUsers.map((user, i) => (
                   <div key={user.id}>
                     {i > 0 && <Separator />}
