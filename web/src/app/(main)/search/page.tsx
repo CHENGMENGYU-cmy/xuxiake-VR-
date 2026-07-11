@@ -82,7 +82,7 @@ export default function SearchPage() {
                       {i > 0 && <Separator />}
                       <a
                         href={`/profile/${user.username}`}
-                        className="flex items-center gap-3 p-3 hover:bg-gray-50"
+                        className="flex items-center gap-3 p-3 hover:bg-muted/50"
                       >
                         <Avatar className="h-10 w-10">
                           <AvatarImage src={user.avatarUrl} alt={user.displayName} />
@@ -125,7 +125,7 @@ export default function SearchPage() {
                     {i > 0 && <Separator />}
                     <a
                       href={`/profile/${user.username}`}
-                      className="flex items-center gap-3 p-3 hover:bg-gray-50"
+                      className="flex items-center gap-3 p-3 hover:bg-muted/50"
                     >
                       <Avatar className="h-10 w-10">
                         <AvatarImage src={user.avatarUrl} alt={user.displayName} />
