@@ -197,7 +197,7 @@ export function PrivacyTab({
             </div>
             <button
               onClick={() => setShowOnlineStatus(!showOnlineStatus)}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${showOnlineStatus ? 'bg-blue-600' : 'bg-border'}`}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${showOnlineStatus ? 'bg-primary' : 'bg-border'}`}
             >
               <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${showOnlineStatus ? 'translate-x-6' : 'translate-x-1'}`} />
             </button>
@@ -209,7 +209,7 @@ export function PrivacyTab({
             </div>
             <button
               onClick={() => setAllowSearchDiscovery(!allowSearchDiscovery)}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${allowSearchDiscovery ? 'bg-blue-600' : 'bg-border'}`}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${allowSearchDiscovery ? 'bg-primary' : 'bg-border'}`}
             >
               <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${allowSearchDiscovery ? 'translate-x-6' : 'translate-x-1'}`} />
             </button>
@@ -221,7 +221,7 @@ export function PrivacyTab({
             </div>
             <button
               onClick={() => setAllowRecommendations(!allowRecommendations)}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${allowRecommendations ? 'bg-blue-600' : 'bg-border'}`}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${allowRecommendations ? 'bg-primary' : 'bg-border'}`}
             >
               <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${allowRecommendations ? 'translate-x-6' : 'translate-x-1'}`} />
             </button>
@@ -387,7 +387,7 @@ export function PrivacyTab({
             <Button
               onClick={onChangePassword}
               disabled={passwordChanging || passwordSuccess}
-              className="bg-blue-600 hover:bg-blue-700"
+              className="bg-primary hover:bg-blue-700"
             >
               {passwordChanging ? (
                 <><Loader2 className="mr-2 h-4 w-4 animate-spin" />修改中...</>
