@@ -236,7 +236,7 @@ export function ProfileTab({
       <Card>
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
-            <Users className="h-5 w-5 text-purple-600" />
+            <Users className="h-5 w-5 text-accent" />
             个人信息
           </CardTitle>
         </CardHeader>
