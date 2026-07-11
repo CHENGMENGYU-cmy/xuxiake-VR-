@@ -178,7 +178,7 @@ export function Navbar() {
                   设置
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout} className="text-red-600">
+                <DropdownMenuItem onClick={handleLogout} className="text-destructive">
                   <LogOut className="mr-2 h-4 w-4" />
                   退出登录
                 </DropdownMenuItem>
