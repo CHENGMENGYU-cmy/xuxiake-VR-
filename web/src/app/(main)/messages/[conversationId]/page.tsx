@@ -33,7 +33,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
   ];
 
   return (
-    <div className="flex h-[calc(100vh-8rem)] flex-col rounded-lg border bg-white">
+    <div className="flex h-[calc(100vh-8rem)] flex-col rounded-lg border bg-card">
       {/* 聊天头部 */}
       <div className="flex items-center gap-3 border-b p-3">
         <Link href="/messages">
