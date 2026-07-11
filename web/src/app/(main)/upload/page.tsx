@@ -14,11 +14,11 @@ import { cn } from '@/lib/utils';
 type UploadTab = 'VIDEO' | 'IMAGE' | 'AUDIO' | 'LINK' | 'TRANSLATION';
 
 const tabs: { key: UploadTab; label: string; icon: React.ElementType; color: string }[] = [
-  { key: 'VIDEO', label: 'VR视频', icon: Video, color: 'text-blue-500' },
-  { key: 'IMAGE', label: 'VR图片', icon: Image, color: 'text-green-500' },
-  { key: 'AUDIO', label: '音频', icon: Mic, color: 'text-purple-500' },
+  { key: 'VIDEO', label: 'VR视频', icon: Video, color: 'text-primary' },
+  { key: 'IMAGE', label: 'VR图片', icon: Image, color: 'text-teal-500' },
+  { key: 'AUDIO', label: '音频', icon: Mic, color: 'text-accent' },
   { key: 'LINK', label: '链接', icon: Link2, color: 'text-orange-500' },
-  { key: 'TRANSLATION', label: '翻译', icon: Languages, color: 'text-cyan-500' },
+  { key: 'TRANSLATION', label: '翻译', icon: Languages, color: 'text-teal-400' },
 ];
 
 export default function UploadPage() {
