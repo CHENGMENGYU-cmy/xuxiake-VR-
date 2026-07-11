@@ -157,10 +157,10 @@ export default function LoginPage() {
 
           {/* 图形验证码 */}
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-gray-700">验证码</label>
+            <label className="text-sm font-medium text-foreground">验证码</label>
             <div className="flex gap-2.5">
               <div className="relative flex-1">
-                <Shield className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                <Shield className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   type="text"
                   placeholder="请输入4位验证码"
