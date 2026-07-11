@@ -364,7 +364,7 @@ export function PostComposer() {
                   </span>
                   <Button
                     size="sm"
-                    className="gap-1.5 bg-blue-600 hover:bg-blue-700"
+                    className="gap-1.5"
                     disabled={!canPublish}
                     onClick={handleSubmit}
                   >
