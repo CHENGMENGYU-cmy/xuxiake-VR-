@@ -1,8 +1,8 @@
 import Link from 'next/link';
 
-// VR第一视角沉浸式体验 - 虚拟世界的壮丽景观
+// 有人戴着轻便VR眼镜旅行的场景
 const BG_IMAGE_URL =
-  'https://images.unsplash.com/photo-1626379953822-baec19c3accd?w=1920&q=80&auto=format&fit=crop';
+  'https://images.unsplash.com/photo-1622048982661-af7d1bdff6c3?w=1920&q=80&auto=format&fit=crop';
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
