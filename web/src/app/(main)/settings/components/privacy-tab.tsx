@@ -296,7 +296,7 @@ export function PrivacyTab({
                 <Input
                   type={showCurrentPassword ? 'text' : 'password'}
                   placeholder="输入当前密码"
-                  className={`pl-10 pr-10 ${passwordValidationErrors.currentPassword ? 'border-destructive focus-visible:ring-red-400' : ''}`}
+                  className={`pl-10 pr-10 ${passwordValidationErrors.currentPassword ? 'border-destructive focus-visible:ring-destructive' : ''}`}
                   value={currentPassword}
                   onChange={(e) => {
                     setCurrentPassword(e.target.value);
@@ -325,7 +325,7 @@ export function PrivacyTab({
                 <Input
                   type={showNewPassword ? 'text' : 'password'}
                   placeholder="输入新密码（字母+数字，至少6位）"
-                  className={`pl-10 pr-10 ${passwordValidationErrors.newPassword ? 'border-destructive focus-visible:ring-red-400' : ''}`}
+                  className={`pl-10 pr-10 ${passwordValidationErrors.newPassword ? 'border-destructive focus-visible:ring-destructive' : ''}`}
                   value={newPassword}
                   onChange={(e) => {
                     setNewPassword(e.target.value);
@@ -367,7 +367,7 @@ export function PrivacyTab({
                 <Input
                   type="password"
                   placeholder="再次输入新密码"
-                  className={`pl-10 ${passwordValidationErrors.confirmNewPassword ? 'border-destructive focus-visible:ring-red-400' : ''}`}
+                  className={`pl-10 ${passwordValidationErrors.confirmNewPassword ? 'border-destructive focus-visible:ring-destructive' : ''}`}
                   value={confirmNewPassword}
                   onChange={(e) => {
                     setConfirmNewPassword(e.target.value);
