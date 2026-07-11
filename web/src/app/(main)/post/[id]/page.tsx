@@ -12,9 +12,9 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
       <PostCard post={post} />
 
       {/* 评论区占位 */}
-      <div className="rounded-lg border bg-white p-8 text-center">
-        <p className="text-sm text-gray-500">评论功能即将上线</p>
-        <p className="mt-1 text-xs text-gray-400">你可以在这里看到和发表评论</p>
+      <div className="rounded-lg border bg-card p-8 text-center">
+        <p className="text-sm text-muted-foreground">评论功能即将上线</p>
+        <p className="mt-1 text-xs text-muted-foreground/70">你可以在这里看到和发表评论</p>
       </div>
     </div>
   );
