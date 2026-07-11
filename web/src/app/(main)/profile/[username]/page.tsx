@@ -68,7 +68,7 @@ function ProfileContent({ username }: { username: string }) {
 
   if (loading) {
     return (
-      <div className="py-12 text-center text-gray-400">加载中...</div>
+      <div className="py-12 text-center text-muted-foreground">加载中...</div>
     );
   }
 
