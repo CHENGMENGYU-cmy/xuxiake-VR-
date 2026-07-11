@@ -180,7 +180,7 @@ export function ProfileTab({
               </button>
             </div>
             <h2 className="text-xl font-bold mt-4">{user.displayName}</h2>
-            <p className="text-sm text-gray-500">@{user.username}</p>
+            <p className="text-sm text-muted-foreground">@{user.username}</p>
             <Badge variant="secondary" className="mt-2">
               徐霞客号: {user.xxkNumber}
             </Badge>

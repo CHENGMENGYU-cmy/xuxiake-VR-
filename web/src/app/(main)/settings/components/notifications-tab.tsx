@@ -257,7 +257,7 @@ export function NotificationsTab({
         <Button
           onClick={onSave}
           disabled={saving}
-          className="bg-primary hover:bg-blue-700"
+          className="bg-primary "
         >
           {saving ? (
             <><Loader2 className="mr-2 h-4 w-4 animate-spin" />保存中...</>
