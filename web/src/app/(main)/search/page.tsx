@@ -161,7 +161,7 @@ export default function SearchPage() {
 
       {!searched && (
         <div className="py-16 text-center">
-          <Search className="mx-auto h-12 w-12 text-gray-300" />
+          <Search className="mx-auto h-12 w-12 text-muted-foreground/50" />
           <p className="mt-4 text-muted-foreground">输入关键词搜索徐霞客系统中的内容和用户</p>
         </div>
       )}
