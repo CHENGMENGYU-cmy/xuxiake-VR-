@@ -43,7 +43,7 @@ export default function NotificationsPage() {
           <div>
             {mockNotifications.map((notif: Notification, idx: number) => {
               const Icon = iconMap[notif.type] || Info;
-              const colorClass = iconColors[notif.type] || 'text-gray-500 bg-gray-50';
+              const colorClass = iconColors[notif.type] || 'text-muted-foreground bg-muted';
               const link = notif.postId
                 ? `/post/${notif.postId}`
                 : notif.sender
