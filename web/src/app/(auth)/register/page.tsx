@@ -93,7 +93,7 @@ export default function RegisterPage() {
 
           {/* 用户名 */}
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-gray-700">用户名</label>
+            <label className="text-sm font-medium text-foreground">用户名</label>
             <div className="relative">
               <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
               <Input
@@ -114,7 +114,7 @@ export default function RegisterPage() {
 
           {/* 邮箱 */}
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-gray-700">邮箱地址</label>
+            <label className="text-sm font-medium text-foreground">邮箱地址</label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
               <Input
@@ -135,7 +135,7 @@ export default function RegisterPage() {
 
           {/* 密码 */}
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-gray-700">密码</label>
+            <label className="text-sm font-medium text-foreground">密码</label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
               <Input
@@ -163,7 +163,7 @@ export default function RegisterPage() {
 
           {/* 确认密码 */}
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-gray-700">确认密码</label>
+            <label className="text-sm font-medium text-foreground">确认密码</label>
             <div className="relative">
               <Check className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
               <Input
