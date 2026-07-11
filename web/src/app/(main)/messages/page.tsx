@@ -51,7 +51,7 @@ export default function MessagesPage() {
                         <span className="text-xs text-muted-foreground">{conv.updatedAt}</span>
                       </div>
                       <div className="flex items-center justify-between">
-                        <p className="truncate text-sm text-gray-500">
+                        <p className="truncate text-sm text-muted-foreground">
                           {conv.lastMessage?.content || '暂无消息'}
                         </p>
                         {conv.unreadCount > 0 && (
