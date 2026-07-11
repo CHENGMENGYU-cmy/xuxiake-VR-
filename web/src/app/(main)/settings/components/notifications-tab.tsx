@@ -72,7 +72,7 @@ export function NotificationsTab({
     {
       key: 'likeNotifications' as const,
       icon: Heart,
-      color: 'text-red-500',
+      color: 'text-destructive',
       label: '点赞通知',
       description: '当有人点赞你的帖子时通知你',
     },
