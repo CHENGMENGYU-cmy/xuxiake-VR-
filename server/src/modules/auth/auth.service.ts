@@ -5,8 +5,9 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from '../../entities/user.entity.js';
-import { LoginDto, RegisterDto, ChangePasswordDto, TokenPair } from '../../common/interfaces.js';
+import { LoginDto, LoginSmsDto, RegisterDto, RegisterPhoneDto, ChangePasswordDto, TokenPair } from '../../common/interfaces.js';
 import { CaptchaService } from './captcha.service.js';
+import { SmsService } from './sms.service.js';
 
 @Injectable()
 export class AuthService {
