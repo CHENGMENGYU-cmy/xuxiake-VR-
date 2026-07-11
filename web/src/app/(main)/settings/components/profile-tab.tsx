@@ -199,12 +199,12 @@ export function ProfileTab({
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">用户名</label>
+              <label className="text-sm font-medium text-foreground">用户名</label>
               <Input value={user.username} disabled className="bg-gray-50" />
               <p className="text-xs text-gray-400">用户名不可修改</p>
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">显示名称</label>
+              <label className="text-sm font-medium text-foreground">显示名称</label>
               <Input
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
@@ -213,7 +213,7 @@ export function ProfileTab({
             </div>
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">个人简介</label>
+            <label className="text-sm font-medium text-foreground">个人简介</label>
             <Textarea
               value={bio}
               onChange={(e) => setBio(e.target.value)}
@@ -222,7 +222,7 @@ export function ProfileTab({
             />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">个人网站</label>
+            <label className="text-sm font-medium text-foreground">个人网站</label>
             <Input
               value={website}
               onChange={(e) => setWebsite(e.target.value)}
@@ -243,7 +243,7 @@ export function ProfileTab({
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700 flex items-center gap-1">
+              <label className="text-sm font-medium text-foreground flex items-center gap-1">
                 <Users className="h-4 w-4" />
                 性别
               </label>
@@ -258,14 +258,14 @@ export function ProfileTab({
               </select>
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700 flex items-center gap-1">
+              <label className="text-sm font-medium text-foreground flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
                 生日
               </label>
               <Input type="date" value={birthday} onChange={(e) => setBirthday(e.target.value)} />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700 flex items-center gap-1">
+              <label className="text-sm font-medium text-foreground flex items-center gap-1">
                 <MapPin className="h-4 w-4" />
                 地区
               </label>
@@ -280,7 +280,7 @@ export function ProfileTab({
               </select>
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700 flex items-center gap-1">
+              <label className="text-sm font-medium text-foreground flex items-center gap-1">
                 <Briefcase className="h-4 w-4" />
                 职业
               </label>
