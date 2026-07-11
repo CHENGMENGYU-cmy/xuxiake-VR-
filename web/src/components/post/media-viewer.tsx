@@ -106,9 +106,9 @@ export function MediaViewer({ items }: MediaViewerProps) {
 
       {/* 音频 */}
       {audios.map((audio) => (
-        <div key={audio.id} className="rounded-lg bg-gray-50 p-4">
-          <div className="mb-2 flex items-center gap-2 text-sm text-gray-600">
-            <Volume2 className="h-4 w-4 text-purple-500" />
+        <div key={audio.id} className="rounded-lg bg-muted/50 p-4">
+          <div className="mb-2 flex items-center gap-2 text-sm text-foreground">
+            <Volume2 className="h-4 w-4 text-accent" />
             <span>音频记录</span>
             {audio.duration && (
               <span className="text-xs text-gray-400">
