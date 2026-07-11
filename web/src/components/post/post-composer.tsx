@@ -252,7 +252,7 @@ export function PostComposer() {
                         />
                         <button
                           onClick={() => removeMediaItem(index)}
-                          className="absolute -right-1 -top-1 hidden h-5 w-5 items-center justify-center rounded-full bg-red-500 text-white group-hover:flex"
+                          className="absolute -right-1 -top-1 hidden h-5 w-5 items-center justify-center rounded-full bg-destructive text-white group-hover:flex"
                         >
                           <X className="h-3 w-3" />
                         </button>
