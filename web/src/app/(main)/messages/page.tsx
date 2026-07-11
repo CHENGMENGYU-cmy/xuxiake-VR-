@@ -16,7 +16,7 @@ export default function MessagesPage() {
 
       <div className="rounded-lg border bg-card">
         {mockConversations.length === 0 ? (
-          <div className="py-12 text-center text-gray-400">暂无消息</div>
+          <div className="py-12 text-center text-muted-foreground">暂无消息</div>
         ) : (
           <div>
             {mockConversations.map((conv, idx) => {
