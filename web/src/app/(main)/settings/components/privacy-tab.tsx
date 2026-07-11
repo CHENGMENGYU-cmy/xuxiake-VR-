@@ -162,7 +162,7 @@ export function PrivacyTab({
         <CardContent className="py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <MessageCircle className="h-5 w-5 text-green-600 shrink-0" />
+              <MessageCircle className="h-5 w-5 text-teal-600 shrink-0" />
               <div>
                 <p className="font-medium text-sm">私信权限</p>
                 <p className="text-xs text-muted-foreground">控制谁可以给你发送私信</p>
@@ -283,7 +283,7 @@ export function PrivacyTab({
               </div>
             )}
             {passwordSuccess && (
-              <div className="flex items-center gap-2 rounded-md bg-green-50 p-3 text-sm text-green-600">
+              <div className="flex items-center gap-2 rounded-md bg-green-50 p-3 text-sm text-teal-600">
                 <Check className="h-4 w-4 flex-shrink-0" />
                 <span>密码修改成功！</span>
               </div>
