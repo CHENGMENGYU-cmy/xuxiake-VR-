@@ -114,7 +114,7 @@ export function PrivacyTab({
         <CardContent className="py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Eye className="h-5 w-5 text-blue-600 shrink-0" />
+              <Eye className="h-5 w-5 text-primary shrink-0" />
               <div>
                 <p className="font-medium text-sm">资料可见性</p>
                 <p className="text-xs text-muted-foreground">控制谁可以查看你的个人资料</p>
