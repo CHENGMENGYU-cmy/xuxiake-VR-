@@ -103,8 +103,8 @@ export default function UploadPage() {
             )}
 
             {activeTab === 'AUDIO' && (
-              <div className="flex flex-col items-center gap-3 rounded-lg border-2 border-dashed border-border p-8 text-center transition-colors hover:border-purple-400">
-                <Mic className="h-10 w-10 text-purple-400" />
+              <div className="flex flex-col items-center gap-3 rounded-lg border-2 border-dashed border-border p-8 text-center transition-colors hover:border-accent">
+                <Mic className="h-10 w-10 text-accent" />
                 <div>
                   <p className="text-sm font-medium">上传音频文件</p>
                   <p className="text-xs text-gray-500 mt-1">支持 MP3、WAV、AAC、OGG 格式，最大 100MB</p>
