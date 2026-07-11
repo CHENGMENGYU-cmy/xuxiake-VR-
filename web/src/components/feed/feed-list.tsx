@@ -41,7 +41,7 @@ export function FeedList({ initialPosts, showComposer = true }: FeedListProps) {
         <Button
           variant="ghost"
           size="sm"
-          className="gap-1.5 text-sm text-gray-500"
+          className="gap-1.5 text-sm text-muted-foreground"
           onClick={handleRefresh}
           disabled={isLoading}
         >
@@ -63,7 +63,7 @@ export function FeedList({ initialPosts, showComposer = true }: FeedListProps) {
 
       {/* 加载更多 */}
       <div className="flex justify-center py-4">
-        <Button variant="outline" className="text-sm text-gray-500">
+        <Button variant="outline" className="text-sm text-muted-foreground">
           加载更多...
         </Button>
       </div>
