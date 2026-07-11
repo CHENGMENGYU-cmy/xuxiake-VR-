@@ -1,0 +1,333 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080">
+  <defs>
+    <!-- 主背景渐变 -->
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#060918"/>
+      <stop offset="35%" stop-color="#0b1035"/>
+      <stop offset="65%" stop-color="#121048"/>
+      <stop offset="100%" stop-color="#0a0c28"/>
+    </linearGradient>
+
+    <!-- 远山雾渐变 -->
+    <linearGradient id="fogGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a4e" stop-opacity="0"/>
+      <stop offset="60%" stop-color="#1a1a4e" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#121040" stop-opacity="0.9"/>
+    </linearGradient>
+
+    <!-- 金光渐变（路径/探索） -->
+    <linearGradient id="goldPath" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ff9944" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#ffaa55" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#ff9944" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- 社交节点光晕 -->
+    <radialGradient id="nodeGlow">
+      <stop offset="0%" stop-color="#4fc3f7" stop-opacity="0.8"/>
+      <stop offset="40%" stop-color="#4fc3f7" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#4fc3f7" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="nodeGlowWarm">
+      <stop offset="0%" stop-color="#ff9944" stop-opacity="0.8"/>
+      <stop offset="40%" stop-color="#ff9944" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#ff9944" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- VR 镜框发光 -->
+    <linearGradient id="vrFrameGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4466aa" stop-opacity="0.15"/>
+      <stop offset="50%" stop-color="#6688cc" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#3355aa" stop-opacity="0.1"/>
+    </linearGradient>
+
+    <!-- 扫描线图案 -->
+    <pattern id="scanlines" patternUnits="userSpaceOnUse" width="1920" height="4">
+      <rect width="1920" height="2" fill="transparent"/>
+      <rect y="2" width="1920" height="2" fill="rgba(255,255,255,0.015)"/>
+    </pattern>
+
+    <!-- 网格图案（HUD元素） -->
+    <pattern id="hudGrid" patternUnits="userSpaceOnUse" width="80" height="80">
+      <line x1="80" y1="0" x2="80" y2="80" stroke="rgba(100,140,200,0.03)" stroke-width="0.5"/>
+      <line x1="0" y1="80" x2="80" y2="80" stroke="rgba(100,140,200,0.03)" stroke-width="0.5"/>
+    </pattern>
+
+    <!-- 水墨晕染滤镜 -->
+    <filter id="inkBlur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+
+    <filter id="softBlur" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="2"/>
+    </filter>
+
+    <filter id="glowFilter" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="strongGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="15" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- ===== 1. 基础背景 ===== -->
+  <rect width="1920" height="1080" fill="url(#skyGrad)"/>
+
+  <!-- ===== 2. 星空（探索精神的象征） ===== -->
+  <g fill="white">
+    <circle cx="120" cy="80" r="1.5" opacity="0.9"/>
+    <circle cx="340" cy="45" r="1" opacity="0.6"/>
+    <circle cx="560" cy="120" r="1.2" opacity="0.7"/>
+    <circle cx="780" cy="60" r="0.8" opacity="0.5"/>
+    <circle cx="920" cy="95" r="1.8" opacity="0.85"/>
+    <circle cx="1050" cy="35" r="1" opacity="0.55"/>
+    <circle cx="1180" cy="140" r="1.3" opacity="0.7"/>
+    <circle cx="1350" cy="75" r="0.9" opacity="0.5"/>
+    <circle cx="1500" cy="50" r="1.5" opacity="0.8"/>
+    <circle cx="1680" cy="110" r="1.1" opacity="0.65"/>
+    <circle cx="1800" cy="30" r="0.7" opacity="0.45"/>
+    <circle cx="220" cy="180" r="0.8" opacity="0.4"/>
+    <circle cx="680" cy="170" r="1.4" opacity="0.6"/>
+    <circle cx="1100" cy="200" r="1" opacity="0.5"/>
+    <circle cx="1420" cy="160" r="1.6" opacity="0.75"/>
+    <circle cx="1600" cy="190" r="0.9" opacity="0.5"/>
+    <circle cx="1750" cy="145" r="1.2" opacity="0.6"/>
+    <circle cx="80" cy="250" r="0.7" opacity="0.35"/>
+    <circle cx="450" cy="230" r="1.1" opacity="0.55"/>
+    <circle cx="870" cy="220" r="0.8" opacity="0.4"/>
+    <circle cx="1280" cy="240" r="1.0" opacity="0.5"/>
+    <circle cx="1550" cy="260" r="0.6" opacity="0.3"/>
+  </g>
+
+  <!-- ===== 3. 北极星/指南星（徐霞客导航精神） ===== -->
+  <g transform="translate(1480, 80)" filter="url(#strongGlow)">
+    <line x1="-12" y1="0" x2="12" y2="0" stroke="white" stroke-width="0.5" opacity="0.8"/>
+    <line x1="0" y1="-12" x2="0" y2="12" stroke="white" stroke-width="0.5" opacity="0.8"/>
+    <circle cx="0" cy="0" r="4" fill="white" opacity="0.9"/>
+    <circle cx="0" cy="0" r="10" fill="white" opacity="0.15"/>
+  </g>
+
+  <!-- 环形星轨装饰 -->
+  <circle cx="1480" cy="80" r="60" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+  <circle cx="1480" cy="80" r="120" fill="none" stroke="rgba(255,255,255,0.02)" stroke-width="0.3" stroke-dasharray="4 8"/>
+
+  <!-- ===== 4. 远山第一层（水墨风格） ===== -->
+  <g opacity="0.35" filter="url(#inkBlur)">
+    <path d="M0 750 Q80 680 180 710 Q280 660 380 690 Q480 640 580 670 Q680 620 780 660
+             Q880 610 980 650 Q1080 600 1180 640 Q1280 590 1380 630 Q1480 580 1580 620
+             Q1680 590 1780 630 Q1850 610 1920 640 L1920 1080 L0 1080Z"
+          fill="#1a1a4e"/>
+  </g>
+
+  <!-- ===== 5. 远山第二层 ===== -->
+  <g opacity="0.45" filter="url(#inkBlur)">
+    <path d="M0 800 Q100 740 220 780 Q350 720 480 770 Q600 700 720 760
+             Q860 690 980 750 Q1100 690 1220 740 Q1340 680 1460 730
+             Q1580 670 1700 720 Q1820 680 1920 710 L1920 1080 L0 1080Z"
+          fill="#161650"/>
+  </g>
+
+  <!-- ===== 6. 近山第三层（最浓） ===== -->
+  <g opacity="0.6" filter="url(#inkBlur)">
+    <path d="M0 880 Q120 820 260 860 Q400 790 540 850 Q680 780 820 840
+             Q960 770 1100 830 Q1240 760 1380 820 Q1520 750 1660 810
+             Q1800 770 1920 800 L1920 1080 L0 1080Z"
+          fill="#0d0d30"/>
+  </g>
+
+  <!-- ===== 7. 前景山脚 ===== -->
+  <g opacity="0.75">
+    <path d="M0 960 Q180 920 380 950 Q560 900 750 940
+             Q940 890 1140 930 Q1320 880 1520 920
+             Q1700 890 1920 910 L1920 1080 L0 1080Z"
+          fill="#080818"/>
+  </g>
+
+  <!-- ===== 8. 探索之路（金色蜿蜒小径——徐霞客足迹） ===== -->
+  <g filter="url(#glowFilter)">
+    <path d="M0 1050 Q120 1000 280 980 Q440 930 600 950 Q760 910 900 930
+             Q1040 900 1180 920 Q1300 890 1440 900 Q1580 870 1700 880
+             Q1820 860 1920 870"
+          fill="none" stroke="#ff9944" stroke-width="2" opacity="0.5"
+          stroke-dasharray="8 4"/>
+    <path d="M0 1050 Q120 1000 280 980 Q440 930 600 950 Q760 910 900 930
+             Q1040 900 1180 920 Q1300 890 1440 900 Q1580 870 1700 880
+             Q1820 860 1920 870"
+          fill="none" stroke="#ffaa66" stroke-width="6" opacity="0.15"/>
+  </g>
+
+  <!-- 路径上的足迹点 -->
+  <g fill="#ffaa55" opacity="0.6">
+    <circle cx="180" cy="1008" r="2.5"/>
+    <circle cx="380" cy="968" r="2"/>
+    <circle cx="580" cy="945" r="2.5"/>
+    <circle cx="760" cy="928" r="2"/>
+    <circle cx="940" cy="915" r="2.5"/>
+    <circle cx="1140" cy="912" r="2"/>
+    <circle cx="1340" cy="898" r="2.5"/>
+    <circle cx="1540" cy="888" r="2"/>
+    <circle cx="1740" cy="878" r="2.5"/>
+  </g>
+
+  <!-- ===== 9. 社交连接网络（人与人之间的连接线） ===== -->
+  <g opacity="0.35">
+    <!-- 连接线 -->
+    <line x1="320" y1="580" x2="480" y2="520" stroke="#4fc3f7" stroke-width="0.8"/>
+    <line x1="480" y1="520" x2="620" y2="560" stroke="#4fc3f7" stroke-width="0.8"/>
+    <line x1="620" y1="560" x2="780" y2="500" stroke="#4fc3f7" stroke-width="0.8"/>
+    <line x1="480" y1="520" x2="560" y2="440" stroke="#4fc3f7" stroke-width="0.6"/>
+    <line x1="780" y1="500" x2="920" y2="540" stroke="#4fc3f7" stroke-width="0.8"/>
+    <line x1="920" y1="540" x2="1060" y2="480" stroke="#4fc3f7" stroke-width="0.8"/>
+    <line x1="1060" y1="480" x2="1200" y2="520" stroke="#4fc3f7" stroke-width="0.8"/>
+    <line x1="1200" y1="520" x2="1360" y2="460" stroke="#4fc3f7" stroke-width="0.8"/>
+    <line x1="920" y1="540" x2="1060" y2="620" stroke="#4fc3f7" stroke-width="0.6"/>
+    <line x1="1360" y1="460" x2="1520" y2="500" stroke="#4fc3f7" stroke-width="0.8"/>
+    <line x1="1520" y1="500" x2="1680" y2="450" stroke="#4fc3f7" stroke-width="0.8"/>
+
+    <!-- 金色连接线（更深层的社交关系） -->
+    <line x1="400" y1="600" x2="560" y2="440" stroke="#ff9944" stroke-width="0.5" opacity="0.5"/>
+    <line x1="780" y1="500" x2="1060" y2="620" stroke="#ff9944" stroke-width="0.5" opacity="0.5"/>
+    <line x1="1060" y1="480" x2="1360" y2="580" stroke="#ff9944" stroke-width="0.5" opacity="0.5"/>
+  </g>
+
+  <!-- 社交节点（人——探索者社区） -->
+  <g>
+    <!-- 节点光晕 -->
+    <circle cx="320" cy="580" r="20" fill="url(#nodeGlow)"/>
+    <circle cx="480" cy="520" r="25" fill="url(#nodeGlow)"/>
+    <circle cx="620" cy="560" r="18" fill="url(#nodeGlowWarm)"/>
+    <circle cx="560" cy="440" r="15" fill="url(#nodeGlow)"/>
+    <circle cx="780" cy="500" r="28" fill="url(#nodeGlow)"/>
+    <circle cx="920" cy="540" r="22" fill="url(#nodeGlowWarm)"/>
+    <circle cx="1060" cy="480" r="20" fill="url(#nodeGlow)"/>
+    <circle cx="1060" cy="620" r="16" fill="url(#nodeGlow)"/>
+    <circle cx="1200" cy="520" r="24" fill="url(#nodeGlowWarm)"/>
+    <circle cx="1360" cy="460" r="18" fill="url(#nodeGlow)"/>
+    <circle cx="1360" cy="580" r="14" fill="url(#nodeGlow)"/>
+    <circle cx="1520" cy="500" r="22" fill="url(#nodeGlowWarm)"/>
+    <circle cx="1680" cy="450" r="16" fill="url(#nodeGlow)"/>
+
+    <!-- 节点核心 -->
+    <circle cx="320" cy="580" r="3" fill="white" opacity="0.9"/>
+    <circle cx="480" cy="520" r="4" fill="white" opacity="0.9"/>
+    <circle cx="620" cy="560" r="3" fill="#ffcc88" opacity="0.9"/>
+    <circle cx="560" cy="440" r="2.5" fill="white" opacity="0.8"/>
+    <circle cx="780" cy="500" r="4.5" fill="white" opacity="0.95"/>
+    <circle cx="920" cy="540" r="3.5" fill="#ffcc88" opacity="0.9"/>
+    <circle cx="1060" cy="480" r="3" fill="white" opacity="0.85"/>
+    <circle cx="1060" cy="620" r="2.5" fill="white" opacity="0.75"/>
+    <circle cx="1200" cy="520" r="4" fill="#ffcc88" opacity="0.9"/>
+    <circle cx="1360" cy="460" r="3" fill="white" opacity="0.85"/>
+    <circle cx="1360" cy="580" r="2" fill="white" opacity="0.7"/>
+    <circle cx="1520" cy="500" r="3.5" fill="#ffcc88" opacity="0.9"/>
+    <circle cx="1680" cy="450" r="2.5" fill="white" opacity="0.8"/>
+  </g>
+
+  <!-- ===== 10. VR 智能眼镜框架（第一视角沉浸边框） ===== -->
+  <g opacity="0.15">
+    <!-- 镜框左上角 -->
+    <path d="M60 400 Q60 300 160 300 L240 300" fill="none" stroke="#6688cc" stroke-width="1.5"/>
+    <path d="M60 400 Q60 320 140 300" fill="none" stroke="#7799dd" stroke-width="3"/>
+    <!-- 镜框右上角 -->
+    <path d="M1860 400 Q1860 300 1760 300 L1680 300" fill="none" stroke="#6688cc" stroke-width="1.5"/>
+    <path d="M1860 400 Q1860 320 1780 300" fill="none" stroke="#7799dd" stroke-width="3"/>
+    <!-- 镜框左下角 -->
+    <path d="M60 700 Q60 800 160 800 L240 800" fill="none" stroke="#6688cc" stroke-width="1.5"/>
+    <path d="M60 700 Q60 780 140 800" fill="none" stroke="#7799dd" stroke-width="2"/>
+    <!-- 镜框右下角 -->
+    <path d="M1860 700 Q1860 800 1760 800 L1680 800" fill="none" stroke="#6688cc" stroke-width="1.5"/>
+    <path d="M1860 700 Q1860 780 1780 800" fill="none" stroke="#7799dd" stroke-width="2"/>
+  </g>
+
+  <!-- 眼镜腿装饰线 -->
+  <g opacity="0.1">
+    <line x1="60" y1="420" x2="60" y2="680" stroke="#4466aa" stroke-width="0.5"/>
+    <line x1="1860" y1="420" x2="1860" y2="680" stroke="#4466aa" stroke-width="0.5"/>
+  </g>
+
+  <!-- VR 视野中央聚焦环 -->
+  <g opacity="0.06">
+    <ellipse cx="960" cy="500" rx="650" ry="380" fill="none" stroke="#6688cc" stroke-width="0.8"/>
+    <ellipse cx="960" cy="500" rx="400" ry="250" fill="none" stroke="#6688cc" stroke-width="0.5" stroke-dasharray="3 12"/>
+  </g>
+
+  <!-- ===== 11. 罗盘/指南针（徐霞客探索精神的标志） ===== -->
+  <g transform="translate(350, 200)" opacity="0.25">
+    <circle cx="0" cy="0" r="35" fill="none" stroke="#8899bb" stroke-width="0.8"/>
+    <circle cx="0" cy="0" r="30" fill="none" stroke="#8899bb" stroke-width="0.4"/>
+    <!-- 指北针 -->
+    <polygon points="0,-28 -5,0 0,-8 5,0" fill="#ff6644" opacity="0.8"/>
+    <polygon points="0,28 -5,0 0,8 5,0" fill="#8899bb" opacity="0.6"/>
+    <!-- 方位标记 -->
+    <text x="0" y="-38" text-anchor="middle" fill="#8899bb" font-size="8" font-family="serif">N</text>
+    <text x="0" y="48" text-anchor="middle" fill="#8899bb" font-size="8" font-family="serif">S</text>
+    <text x="42" y="4" text-anchor="middle" fill="#8899bb" font-size="8" font-family="serif">E</text>
+    <text x="-42" y="4" text-anchor="middle" fill="#8899bb" font-size="8" font-family="serif">W</text>
+  </g>
+
+  <!-- ===== 12. 旅行日志元素（书写/记录） ===== -->
+  <g transform="translate(1520, 750)" opacity="0.15">
+    <!-- 展开的书卷 -->
+    <rect x="-60" y="-35" width="120" height="70" rx="3" fill="#1a2040" stroke="#446688" stroke-width="0.5"/>
+    <!-- 文字行 -->
+    <line x1="-45" y1="-15" x2="45" y2="-15" stroke="#8899bb" stroke-width="0.5"/>
+    <line x1="-45" y1="0" x2="35" y2="0" stroke="#8899bb" stroke-width="0.5"/>
+    <line x1="-45" y1="15" x2="40" y2="15" stroke="#8899bb" stroke-width="0.5"/>
+    <line x1="-45" y1="30" x2="25" y2="30" stroke="#8899bb" stroke-width="0.5"/>
+    <!-- 毛笔 -->
+    <line x1="55" y1="-25" x2="70" y2="-45" stroke="#667799" stroke-width="1.5"/>
+    <circle cx="71" cy="-47" r="3" fill="#667799"/>
+  </g>
+
+  <!-- 第二处旅行日志 -->
+  <g transform="translate(250, 850)" opacity="0.12">
+    <rect x="-50" y="-30" width="100" height="60" rx="3" fill="#1a2040" stroke="#446688" stroke-width="0.5"/>
+    <line x1="-38" y1="-12" x2="38" y2="-12" stroke="#8899bb" stroke-width="0.5"/>
+    <line x1="-38" y1="0" x2="30" y2="0" stroke="#8899bb" stroke-width="0.5"/>
+    <line x1="-38" y1="12" x2="35" y2="12" stroke="#8899bb" stroke-width="0.5"/>
+    <line x1="-38" y1="24" x2="20" y2="24" stroke="#8899bb" stroke-width="0.5"/>
+  </g>
+
+  <!-- ===== 13. 云/雾层（水墨渲染效果） ===== -->
+  <g opacity="0.12" filter="url(#inkBlur)">
+    <ellipse cx="300" cy="650" rx="180" ry="30" fill="white"/>
+    <ellipse cx="700" cy="620" rx="150" ry="25" fill="white"/>
+    <ellipse cx="1100" cy="640" rx="200" ry="35" fill="white"/>
+    <ellipse cx="1500" cy="610" rx="160" ry="28" fill="white"/>
+    <ellipse cx="1800" cy="630" rx="140" ry="30" fill="white"/>
+  </g>
+
+  <!-- ===== 14. 前景VR扫描线覆盖 ===== -->
+  <rect width="1920" height="1080" fill="url(#scanlines)"/>
+
+  <!-- ===== 15. HUD网格覆盖 ===== -->
+  <rect width="1920" height="1080" fill="url(#hudGrid)"/>
+
+  <!-- ===== 16. 四角暗角（VR沉浸感） ===== -->
+  <radialGradient id="vignette" cx="50%" cy="50%" r="70%">
+    <stop offset="60%" stop-color="transparent"/>
+    <stop offset="100%" stop-color="#000000" stop-opacity="0.5"/>
+  </radialGradient>
+  <rect width="1920" height="1080" fill="url(#vignette)"/>
+
+  <!-- ===== 17. 底部文字装饰 ===== -->
+  <g opacity="0.08">
+    <text x="960" y="1040" text-anchor="middle" fill="white" font-size="14" font-family="serif" letter-spacing="12">
+      丈夫当朝碧海而暮苍梧
+    </text>
+    <text x="960" y="1062" text-anchor="middle" fill="white" font-size="11" font-family="serif" letter-spacing="8" opacity="0.6">
+      —— 徐霞客
+    </text>
+  </g>
+</svg>
