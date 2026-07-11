@@ -41,7 +41,7 @@ export default function SearchPage() {
       {/* 搜索框 */}
       <form onSubmit={handleSearch} className="flex gap-2">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             type="search"
             placeholder="搜索用户、内容..."
@@ -111,7 +111,7 @@ export default function SearchPage() {
             )}
 
             {filteredUsers.length === 0 && filteredPosts.length === 0 && (
-              <div className="py-12 text-center text-gray-400">
+              <div className="py-12 text-center text-muted-foreground">
                 没有找到 &quot;{query}&quot; 相关的结果
               </div>
             )}
@@ -134,14 +134,14 @@ export default function SearchPage() {
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-semibold">{user.displayName}</p>
                         <p className="text-xs text-gray-500">@{user.username}</p>
-                        <p className="mt-0.5 text-xs text-gray-400 line-clamp-1">{user.bio}</p>
+                        <p className="mt-0.5 text-xs text-muted-foreground line-clamp-1">{user.bio}</p>
                       </div>
                     </a>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="py-12 text-center text-gray-400">没有找到相关用户</div>
+              <div className="py-12 text-center text-muted-foreground">没有找到相关用户</div>
             )}
           </TabsContent>
 
@@ -153,7 +153,7 @@ export default function SearchPage() {
                 ))}
               </div>
             ) : (
-              <div className="py-12 text-center text-gray-400">没有找到相关内容</div>
+              <div className="py-12 text-center text-muted-foreground">没有找到相关内容</div>
             )}
           </TabsContent>
         </Tabs>
