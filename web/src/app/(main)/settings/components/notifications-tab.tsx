@@ -45,7 +45,7 @@ function ToggleSwitch({
   return (
     <button
       onClick={() => onChange(!enabled)}
-      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${enabled ? 'bg-blue-600' : 'bg-border'}`}
+      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${enabled ? 'bg-primary' : 'bg-border'}`}
     >
       <span
         className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${enabled ? 'translate-x-6' : 'translate-x-1'}`}
@@ -257,7 +257,7 @@ export function NotificationsTab({
         <Button
           onClick={onSave}
           disabled={saving}
-          className="bg-blue-600 hover:bg-blue-700"
+          className="bg-primary hover:bg-blue-700"
         >
           {saving ? (
             <><Loader2 className="mr-2 h-4 w-4 animate-spin" />保存中...</>
