@@ -201,7 +201,7 @@ export function ProfileTab({
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">用户名</label>
               <Input value={user.username} disabled className="bg-gray-50" />
-              <p className="text-xs text-gray-400">用户名不可修改</p>
+              <p className="text-xs text-muted-foreground">用户名不可修改</p>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">显示名称</label>
