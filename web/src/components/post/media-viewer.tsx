@@ -129,7 +129,7 @@ export function MediaViewer({ items }: MediaViewerProps) {
             <Languages className="h-4 w-4" />
             <span>翻译内容 {trans.language && `(${trans.language})`}</span>
           </div>
-          <p className="text-sm leading-relaxed text-gray-700">{trans.translatedText}</p>
+          <p className="text-sm leading-relaxed text-foreground">{trans.translatedText}</p>
         </Card>
       ))}
 
