@@ -119,7 +119,7 @@ export function NotificationsTab({
       <Card>
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
-            <Bell className="h-5 w-5 text-blue-600" />
+            <Bell className="h-5 w-5 text-primary" />
             通知类型
           </CardTitle>
         </CardHeader>
