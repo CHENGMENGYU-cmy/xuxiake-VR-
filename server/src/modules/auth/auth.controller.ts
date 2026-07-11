@@ -1,8 +1,9 @@
 import { Controller, Post, Get, Body, Headers, UnauthorizedException, UseGuards, Req } from '@nestjs/common';
 import { AuthService } from './auth.service.js';
 import { CaptchaService } from './captcha.service.js';
+import { SmsService } from './sms.service.js';
 import { JwtAuthGuard } from '../../common/auth.guard.js';
-import type { LoginDto, RegisterDto, ChangePasswordDto } from '../../common/interfaces.js';
+import type { LoginDto, LoginSmsDto, RegisterDto, RegisterPhoneDto, SendSmsCodeDto, ChangePasswordDto } from '../../common/interfaces.js';
 import type { Request } from 'express';
 
 @Controller('api/auth')
@@ -10,6 +11,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly captchaService: CaptchaService,
+    private readonly smsService: SmsService,
   ) {}
 
   // 获取图形验证码
