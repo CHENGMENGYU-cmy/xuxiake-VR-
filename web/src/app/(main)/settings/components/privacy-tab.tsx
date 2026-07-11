@@ -138,7 +138,7 @@ export function PrivacyTab({
         <CardContent className="py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Globe className="h-5 w-5 text-purple-600 shrink-0" />
+              <Globe className="h-5 w-5 text-accent shrink-0" />
               <div>
                 <p className="font-medium text-sm">帖子默认可见性</p>
                 <p className="text-xs text-muted-foreground">发布新帖子时的默认隐私级别</p>
