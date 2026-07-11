@@ -29,7 +29,7 @@ export default function UploadPage() {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2">
-        <Upload className="h-6 w-6 text-blue-600" />
+        <Upload className="h-6 w-6 text-primary" />
         <h1 className="text-xl font-bold">上传内容</h1>
       </div>
 
