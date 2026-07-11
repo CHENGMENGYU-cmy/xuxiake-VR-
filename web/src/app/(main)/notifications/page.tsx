@@ -36,7 +36,7 @@ export default function NotificationsPage() {
         </Button>
       </div>
 
-      <div className="rounded-lg border bg-white">
+      <div className="rounded-lg border bg-card">
         {mockNotifications.length === 0 ? (
           <div className="py-12 text-center text-gray-400">暂无通知</div>
         ) : (
