@@ -93,7 +93,7 @@ export function NotificationsTab({
     {
       key: 'mentionNotifications' as const,
       icon: Globe,
-      color: 'text-purple-500',
+      color: 'text-accent',
       label: '提及通知',
       description: '当有人在帖子中提及你时通知你',
     },
