@@ -124,8 +124,8 @@ export function MediaViewer({ items }: MediaViewerProps) {
 
       {/* 翻译 */}
       {translations.map((trans) => (
-        <Card key={trans.id} className="border-l-4 border-l-blue-500 bg-blue-50/50 p-4">
-          <div className="mb-2 flex items-center gap-2 text-sm text-blue-600">
+        <Card key={trans.id} className="border-l-4 border-l-primary bg-primary/5 p-4">
+          <div className="mb-2 flex items-center gap-2 text-sm text-primary">
             <Languages className="h-4 w-4" />
             <span>翻译内容 {trans.language && `(${trans.language})`}</span>
           </div>
