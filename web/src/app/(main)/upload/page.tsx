@@ -46,7 +46,7 @@ export default function UploadPage() {
                   variant={isActive ? 'default' : 'outline'}
                   className={cn(
                     'gap-2',
-                    isActive && 'bg-blue-600 hover:bg-blue-700'
+                    isActive && ''
                   )}
                   onClick={() => setActiveTab(tab.key)}
                 >
