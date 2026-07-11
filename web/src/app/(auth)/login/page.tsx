@@ -108,9 +108,9 @@ export default function LoginPage() {
 
           {/* 邮箱或用户名 */}
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-gray-700">邮箱或用户名</label>
+            <label className="text-sm font-medium text-foreground">邮箱或用户名</label>
             <div className="relative">
-              <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 type="text"
                 placeholder="输入邮箱或用户名"
