@@ -151,7 +151,7 @@ export default function LoginPage() {
               </button>
             </div>
             {validationErrors.password && (
-              <p className="text-xs text-red-500">{validationErrors.password}</p>
+              <p className="text-xs text-destructive">{validationErrors.password}</p>
             )}
           </div>
 
@@ -197,7 +197,7 @@ export default function LoginPage() {
               </button>
             </div>
             {validationErrors.captchaCode && (
-              <p className="text-xs text-red-500">{validationErrors.captchaCode}</p>
+              <p className="text-xs text-destructive">{validationErrors.captchaCode}</p>
             )}
           </div>
 
