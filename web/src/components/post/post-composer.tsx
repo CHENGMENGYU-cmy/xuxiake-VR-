@@ -46,7 +46,7 @@ export function PostComposer() {
 
   const charCount = content.length;
   const isOverLimit = charCount > MAX_CONTENT_LENGTH;
-  const charCountColor = charCount > 450 ? 'text-orange-500' : 'text-gray-400';
+  const charCountColor = charCount > 450 ? 'text-orange-500' : 'text-muted-foreground';
   const imageCount = mediaItems.filter((m) => m.type === 'IMAGE').length;
   const hasLink = mediaItems.some((m) => m.type === 'LINK');
   const canPublish = (content.trim().length > 0 || mediaItems.length > 0) && !isOverLimit && !isPublishing;
