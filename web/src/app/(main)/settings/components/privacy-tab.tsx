@@ -387,7 +387,7 @@ export function PrivacyTab({
             <Button
               onClick={onChangePassword}
               disabled={passwordChanging || passwordSuccess}
-              className="bg-primary hover:bg-blue-700"
+              className="bg-primary "
             >
               {passwordChanging ? (
                 <><Loader2 className="mr-2 h-4 w-4 animate-spin" />修改中...</>
