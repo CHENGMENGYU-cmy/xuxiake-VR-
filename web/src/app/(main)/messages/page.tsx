@@ -48,7 +48,7 @@ export default function MessagesPage() {
                         <span className="text-sm font-semibold">
                           {conv.type === 'GROUP' ? conv.title : otherMember?.displayName}
                         </span>
-                        <span className="text-xs text-gray-400">{conv.updatedAt}</span>
+                        <span className="text-xs text-muted-foreground">{conv.updatedAt}</span>
                       </div>
                       <div className="flex items-center justify-between">
                         <p className="truncate text-sm text-gray-500">
