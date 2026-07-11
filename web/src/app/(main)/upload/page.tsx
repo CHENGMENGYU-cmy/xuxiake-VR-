@@ -88,8 +88,8 @@ export default function UploadPage() {
             )}
 
             {activeTab === 'IMAGE' && (
-              <div className="flex flex-col items-center gap-3 rounded-lg border-2 border-dashed border-border p-8 text-center transition-colors hover:border-green-400">
-                <Image className="h-10 w-10 text-green-400" />
+              <div className="flex flex-col items-center gap-3 rounded-lg border-2 border-dashed border-border p-8 text-center transition-colors hover:border-teal-400">
+                <Image className="h-10 w-10 text-teal-400" />
                 <div>
                   <p className="text-sm font-medium">拖拽VR全景图片到此处，或点击上传</p>
                   <p className="text-xs text-gray-500 mt-1">支持 JPG、PNG、WebP、HEIC 格式，最大 50MB</p>
