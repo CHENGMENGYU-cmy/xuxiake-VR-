@@ -6,15 +6,15 @@
 --------------------------------------------------------------------------------
 第1条
 
-  修改时间：2026-07-14 17:50 ~ 18:07
-  修改位置：server/src/modules/users/users.controller.ts, web/src/components/layout/sidebar.tsx
-  修改原因：推荐关注列表显示的是静态mock数据，头像更新后不会同步；且不应排除已关注用户
+  修改时间：2026-07-14 17:50 ~ 18:20
+  修改位置：server/src/modules/users/users.controller.ts, web/src/components/layout/sidebar.tsx, web/src/stores/post-store.ts, web/src/stores/auth-store.ts
+  修改原因：头像更新后，项目中所有显示该用户的地方都需要同步更新
   修改内容：
-    - 后端新增 GET /api/users/suggested/list 接口，返回最新注册的5个用户（仅排除自己）
-    - 返回数据包含 isFollowing 字段，标识是否已关注
+    - 后端新增 GET /api/users/suggested/list 接口，返回最新用户（仅排除自己），包含 isFollowing 字段
     - 前端 sidebar 组件改为从后端获取推荐用户，不再使用 mockUsers 静态数据
-    - 推荐列表实时反映用户最新头像，已关注用户也会显示
-  修改效果：头像更新后推荐关注列表立即显示最新头像，已关注用户正常展示
+    - post-store 新增 updateUserAvatar 方法，更新帖子列表中指定用户的头像
+    - auth-store 的 updateUser 方法在更新头像时，同步调用 post-store 更新帖子中的用户头像
+  修改效果：头像更新后，推荐关注和帖子列表中的头像立即同步更新
 
 【2026-07-11】
 
