@@ -48,7 +48,7 @@ export class ConversationsController {
     const convIds = participations.map((p) => p.conversationId);
     const conversations = await this.convRepo.find({
       where: { id: In(convIds) },
-      relations: ['messages'],
+      relations: { messages: true },
       order: { updatedAt: 'DESC' },
     });
 
