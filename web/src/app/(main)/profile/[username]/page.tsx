@@ -38,15 +38,21 @@ function ProfileContent({ username }: { username: string }) {
       return;
     }
 
-    // Otherwise, try to find in mock data
-    const mockUser = mockUsers.find((u) => u.username === username);
-    if (mockUser) {
-      setProfileUser(mockUser);
-      setLoading(false);
-      return;
-    }
+    // Otherwise, fetch from backend
+    const fetchUser = async () => {
+      try {
+        const res = await apiClient.get(`/users/${username}`);
+        if (res.data.success) {
+          setProfileUser(res.data.data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch user:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    setLoading(false);
+    fetchUser();
   }, [username, currentUser]);
 
   // 获取用户的帖子
