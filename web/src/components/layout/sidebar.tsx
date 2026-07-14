@@ -32,6 +32,7 @@ const navItems = [
   { href: '/messages', label: '消息', icon: Users },
   { href: '/notifications', label: '通知', icon: Bookmark },
   { href: '/settings', label: '设置', icon: Settings },
+  { href: '/about', label: '关于徐霞客', icon: Info },
 ];
 
 const mediaTypes = [
