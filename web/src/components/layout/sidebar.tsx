@@ -145,12 +145,12 @@ export function Sidebar() {
           <Separator />
 
           {/* 推荐关注 */}
-          {mounted && user && (
+          {mounted && user && suggestedUsers.length > 0 && (
             <div className="space-y-1 p-3">
               <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
                 推荐关注
               </p>
-              {mockUsers.filter((u) => u.id !== user.id).map((u) => (
+              {suggestedUsers.map((u) => (
                 <Link key={u.id} href={`/profile/${u.username}`}>
                   <Button variant="ghost" className="w-full justify-start gap-3">
                     <Avatar className="h-7 w-7">
