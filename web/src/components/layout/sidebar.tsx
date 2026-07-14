@@ -44,10 +44,21 @@ export function Sidebar() {
   const { user } = useAuthStore();
   const { sidebarOpen } = useUIStore();
   const [mounted, setMounted] = useState(false);
+  const [suggestedUsers, setSuggestedUsers] = useState<any[]>([]);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      userApi.getSuggested().then((res) => {
+        if (res.data?.success) {
+          setSuggestedUsers(res.data.data || []);
+        }
+      }).catch(() => {});
+    }
+  }, [user]);
 
   return (
     <>
