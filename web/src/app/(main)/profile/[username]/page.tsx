@@ -11,9 +11,9 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { PostCard } from '@/components/post/post-card';
-import { mockUsers } from '@/lib/mock-data';
 import { useAuthStore } from '@/stores/auth-store';
 import { usePostStore } from '@/stores/post-store';
+import apiClient from '@/lib/api-client';
 import type { User, Post } from '@/types';
 
 export default function ProfilePage() {
