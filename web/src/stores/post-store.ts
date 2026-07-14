@@ -69,4 +69,18 @@ export const usePostStore = create<PostState>((set) => ({
   clearPublishError: () => {
     set({ publishError: null });
   },
+
+  updateUserAvatar: (username: string, avatarUrl: string) => {
+    set((state) => ({
+      posts: state.posts.map((post) => {
+        if (post.author.username === username) {
+          return {
+            ...post,
+            author: { ...post.author, avatarUrl },
+          };
+        }
+        return post;
+      }),
+    }));
+  },
 }));
