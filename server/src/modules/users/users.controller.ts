@@ -162,4 +162,40 @@ export class UsersController {
     await this.followRepo.delete({ followerId: userId, followingId: targetId });
     return { success: true, message: '已取消关注' };
   }
+
+  @Get('suggested/list')
+  async getSuggestedUsers(@Headers('authorization') auth: string) {
+    const userId = this.getUserId(auth);
+
+    // 获取已关注的用户ID
+    const following = userId
+      ? await this.followRepo.find({ where: { followerId: userId } })
+      : [];
+    const followingIds = following.map((f) => f.followingId);
+
+    // 推荐用户：排除自己和已关注的，取最新的几个
+    const query = this.userRepo.createQueryBuilder('user');
+    if (userId) {
+      query.where('user.id != :userId', { userId });
+      if (followingIds.length > 0) {
+        query.andWhere('user.id NOT IN (:...followingIds)', { followingIds });
+      }
+    }
+    query.orderBy('user.created_at', 'DESC').limit(5);
+
+    const users = await query.getMany();
+
+    return {
+      success: true,
+      data: users.map((u) => {
+        const { passwordHash, ...uDto } = u;
+        return {
+          ...uDto,
+          vrDeviceInfo: u.vrDeviceModel
+            ? { model: u.vrDeviceModel, version: u.vrDeviceVersion || '' }
+            : null,
+        };
+      }),
+    };
+  }
 }
