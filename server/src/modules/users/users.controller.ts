@@ -167,23 +167,23 @@ export class UsersController {
   async getSuggestedUsers(@Headers('authorization') auth: string) {
     const userId = this.getUserId(auth);
 
-    // 获取已关注的用户ID
-    const following = userId
-      ? await this.followRepo.find({ where: { followerId: userId } })
-      : [];
-    const followingIds = following.map((f) => f.followingId);
-
-    // 推荐用户：排除自己和已关注的，取最新的几个
+    // 推荐用户：排除自己，取最新的几个
     const query = this.userRepo.createQueryBuilder('user');
     if (userId) {
       query.where('user.id != :userId', { userId });
-      if (followingIds.length > 0) {
-        query.andWhere('user.id NOT IN (:...followingIds)', { followingIds });
-      }
     }
     query.orderBy('user.created_at', 'DESC').limit(5);
 
     const users = await query.getMany();
+
+    // 如果登录了，获取已关注状态
+    let followingIds: string[] = [];
+    if (userId && users.length > 0) {
+      const follows = await this.followRepo.find({
+        where: { followerId: userId, followingId: In(users.map((u) => u.id)) },
+      });
+      followingIds = follows.map((f) => f.followingId);
+    }
 
     return {
       success: true,
@@ -191,6 +191,7 @@ export class UsersController {
         const { passwordHash, ...uDto } = u;
         return {
           ...uDto,
+          isFollowing: followingIds.includes(u.id),
           vrDeviceInfo: u.vrDeviceModel
             ? { model: u.vrDeviceModel, version: u.vrDeviceVersion || '' }
             : null,
