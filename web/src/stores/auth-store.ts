@@ -158,6 +158,11 @@ export const useAuthStore = create<AuthState>((set) => ({
       const updated = { ...current, ...updates };
       localStorage.setItem('user', JSON.stringify(updated));
       set({ user: updated });
+
+      // 同步更新帖子列表中的用户头像
+      if (updates.avatarUrl && updated.username) {
+        usePostStore.getState().updateUserAvatar(updated.username, updates.avatarUrl);
+      }
     }
   },
 }));
