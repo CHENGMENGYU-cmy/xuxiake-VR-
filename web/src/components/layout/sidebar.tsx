@@ -52,7 +52,7 @@ export function Sidebar() {
 
   useEffect(() => {
     if (user) {
-      userApi.getSuggested().then((res) => {
+      apiClient.get('/users/suggested/list').then((res) => {
         if (res.data?.success) {
           setSuggestedUsers(res.data.data || []);
         }
