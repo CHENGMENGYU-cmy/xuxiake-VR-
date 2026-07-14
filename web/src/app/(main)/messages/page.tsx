@@ -1,12 +1,46 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { MessageCircle, Users } from 'lucide-react';
+import { MessageCircle, Users, Loader2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { mockConversations } from '@/lib/mock-data';
-import { mockCurrentUser } from '@/lib/mock-data';
+import { useAuthStore } from '@/stores/auth-store';
+import apiClient from '@/lib/api-client';
 
 export default function MessagesPage() {
+  const { user } = useAuthStore();
+  const [conversations, setConversations] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchConversations = async () => {
+      try {
+        const res = await apiClient.get('/conversations');
+        if (res.data.success) {
+          setConversations(res.data.data || []);
+        }
+      } catch (err) {
+        console.error('Failed to fetch conversations:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchConversations();
+  }, [user]);
+
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <p className="text-muted-foreground">请先登录</p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2">
@@ -15,14 +49,18 @@ export default function MessagesPage() {
       </div>
 
       <div className="rounded-lg border bg-card">
-        {mockConversations.length === 0 ? (
+        {isLoading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+          </div>
+        ) : conversations.length === 0 ? (
           <div className="py-12 text-center text-muted-foreground">暂无消息</div>
         ) : (
           <div>
-            {mockConversations.map((conv, idx) => {
+            {conversations.map((conv: any, idx: number) => {
               const otherMember = conv.type === 'GROUP'
                 ? null
-                : conv.members[0];
+                : conv.members?.[0];
               return (
                 <div key={conv.id}>
                   {idx > 0 && <Separator />}
@@ -48,7 +86,16 @@ export default function MessagesPage() {
                         <span className="text-sm font-semibold">
                           {conv.type === 'GROUP' ? conv.title : otherMember?.displayName}
                         </span>
-                        <span className="text-xs text-muted-foreground">{conv.updatedAt}</span>
+                        <span className="text-xs text-muted-foreground">
+                          {conv.lastMessage?.createdAt
+                            ? new Date(conv.lastMessage.createdAt).toLocaleString('zh-CN', {
+                                month: 'numeric',
+                                day: 'numeric',
+                                hour: 'numeric',
+                                minute: 'numeric',
+                              })
+                            : ''}
+                        </span>
                       </div>
                       <div className="flex items-center justify-between">
                         <p className="truncate text-sm text-muted-foreground">
