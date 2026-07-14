@@ -22,7 +22,7 @@ import { Separator } from '@/components/ui/separator';
 import { useAuthStore } from '@/stores/auth-store';
 import { useUIStore } from '@/stores/ui-store';
 import { cn } from '@/lib/utils';
-import { userApi } from '@/lib/api';
+import apiClient from '@/lib/api-client';
 
 const navItems = [
   { href: '/feed', label: '首页', icon: Home },
