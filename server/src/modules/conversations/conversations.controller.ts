@@ -128,7 +128,7 @@ export class ConversationsController {
 
     const [messages, total] = await this.msgRepo.findAndCount({
       where: { conversationId: convId },
-      relations: ['sender'],
+      relations: { sender: true },
       order: { createdAt: 'ASC' },
       skip,
       take: limitNum,
