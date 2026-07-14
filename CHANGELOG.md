@@ -6,15 +6,18 @@
 --------------------------------------------------------------------------------
 第1条
 
-  修改时间：2026-07-14 17:50 ~ 18:20
-  修改位置：server/src/modules/users/users.controller.ts, web/src/components/layout/sidebar.tsx, web/src/stores/post-store.ts, web/src/stores/auth-store.ts
-  修改原因：头像更新后，项目中所有显示该用户的地方都需要同步更新
+  修改时间：2026-07-14 17:50 ~ 18:25
+  修改位置：server/src/modules/, web/src/stores/, web/src/app/(main)/notifications/, web/src/app/(main)/messages/
+  修改原因：头像更新后，项目中所有显示该用户的地方都需要同步更新；通知和消息页面使用mock数据需改为真实数据
   修改内容：
     - 后端新增 GET /api/users/suggested/list 接口，返回最新用户（仅排除自己），包含 isFollowing 字段
+    - 后端新增会话API：GET /api/conversations（会话列表）、GET/POST /api/conversations/:id/messages（消息）
     - 前端 sidebar 组件改为从后端获取推荐用户，不再使用 mockUsers 静态数据
     - post-store 新增 updateUserAvatar 方法，更新帖子列表中指定用户的头像
     - auth-store 的 updateUser 方法在更新头像时，同步调用 post-store 更新帖子中的用户头像
-  修改效果：头像更新后，推荐关注和帖子列表中的头像立即同步更新
+    - 通知页面改为从后端 /api/notifications 获取真实数据，支持标记已读
+    - 消息页面改为从后端 /api/conversations 获取真实会话列表
+  修改效果：头像更新后全局同步；通知和消息页面显示真实数据，头像实时更新
 
 【2026-07-11】
 
