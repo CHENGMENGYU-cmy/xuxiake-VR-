@@ -1,11 +1,15 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Bell, Heart, MessageCircle, UserPlus, Info, MessageSquare } from 'lucide-react';
+import { Bell, Heart, MessageCircle, UserPlus, Info, MessageSquare, Loader2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { mockNotifications } from '@/lib/mock-data';
 import { Notification } from '@/types';
 import { cn } from '@/lib/utils';
+import apiClient from '@/lib/api-client';
+import { useAuthStore } from '@/stores/auth-store';
 
 const iconMap: Record<string, React.ElementType> = {
   LIKE: Heart,
@@ -24,6 +28,57 @@ const iconColors: Record<string, string> = {
 };
 
 export default function NotificationsPage() {
+  const { user } = useAuthStore();
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchNotifications = async () => {
+      try {
+        const res = await apiClient.get('/notifications');
+        if (res.data.success) {
+          setNotifications(res.data.data || []);
+        }
+      } catch (err) {
+        console.error('Failed to fetch notifications:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchNotifications();
+  }, [user]);
+
+  const handleMarkAllRead = async () => {
+    try {
+      await apiClient.post('/notifications/read-all');
+      setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+    } catch (err) {
+      console.error('Failed to mark all as read:', err);
+    }
+  };
+
+  const handleMarkRead = async (id: string) => {
+    try {
+      await apiClient.patch(`/notifications/${id}/read`);
+      setNotifications((prev) =>
+        prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
+      );
+    } catch (err) {
+      console.error('Failed to mark as read:', err);
+    }
+  };
+
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <p className="text-muted-foreground">请先登录</p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -31,17 +86,21 @@ export default function NotificationsPage() {
           <Bell className="h-6 w-6 text-primary" />
           <h1 className="text-xl font-bold">通知</h1>
         </div>
-        <Button variant="outline" size="sm">
+        <Button variant="outline" size="sm" onClick={handleMarkAllRead}>
           全部标为已读
         </Button>
       </div>
 
       <div className="rounded-lg border bg-card">
-        {mockNotifications.length === 0 ? (
+        {isLoading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+          </div>
+        ) : notifications.length === 0 ? (
           <div className="py-12 text-center text-muted-foreground">暂无通知</div>
         ) : (
           <div>
-            {mockNotifications.map((notif: Notification, idx: number) => {
+            {notifications.map((notif: any, idx: number) => {
               const Icon = iconMap[notif.type] || Info;
               const colorClass = iconColors[notif.type] || 'text-muted-foreground bg-muted';
               const link = notif.postId
@@ -59,6 +118,7 @@ export default function NotificationsPage() {
                       'flex items-start gap-3 p-4 transition-colors hover:bg-muted/50',
                       !notif.isRead && 'bg-primary/5'
                     )}
+                    onClick={() => !notif.isRead && handleMarkRead(notif.id)}
                   >
                     {/* 图标 */}
                     <div className={cn('flex h-9 w-9 items-center justify-center rounded-full', colorClass)}>
@@ -76,7 +136,9 @@ export default function NotificationsPage() {
                         )}
                         <div>
                           <p className="text-sm text-foreground">{notif.message}</p>
-                          <p className="mt-0.5 text-xs text-muted-foreground">{notif.createdAt}</p>
+                          <p className="mt-0.5 text-xs text-muted-foreground">
+                            {new Date(notif.createdAt).toLocaleString('zh-CN')}
+                          </p>
                         </div>
                       </div>
                     </div>
