@@ -6,6 +6,7 @@ import { PostsModule } from './modules/posts/posts.module.js';
 import { ChatGateway } from './modules/chat/chat.gateway.js';
 import { ChatController } from './modules/chat/chat.controller.js';
 import { NotificationsController } from './modules/notifications/notifications.controller.js';
+import { ConversationsController } from './modules/conversations/conversations.controller.js';
 import { FeedController } from './modules/feed/feed.controller.js';
 import { UploadController } from './modules/upload/upload.controller.js';
 import { UsersController } from './modules/users/users.controller.js';
