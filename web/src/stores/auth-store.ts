@@ -3,6 +3,7 @@
 import { create } from 'zustand';
 import { User } from '@/types';
 import apiClient from '@/lib/api-client';
+import { usePostStore } from './post-store';
 
 function setCookie(name: string, value: string, days = 7) {
   if (typeof document === 'undefined') return;
