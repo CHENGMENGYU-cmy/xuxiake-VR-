@@ -50,6 +50,7 @@ import { JwtModule } from '@nestjs/jwt';
   controllers: [
     ChatController,
     NotificationsController,
+    ConversationsController,
     FeedController,
     UploadController,
     UsersController,
