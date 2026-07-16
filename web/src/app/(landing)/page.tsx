@@ -120,20 +120,31 @@ export default function LandingPage() {
           </p>
 
           <div className="mt-12 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            <Link
-              href={registerHref}
-              className="group inline-flex items-center gap-2.5 rounded-2xl bg-white px-10 py-4 text-base font-semibold text-primary shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all hover:-translate-y-0.5"
-            >
-              {isAuthenticated ? '进入社区' : '立即加入'}
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-            <a
-              href="#about"
-              className="inline-flex items-center gap-2 rounded-2xl border border-white/20 px-10 py-4 text-base font-semibold text-white hover:bg-white/10 transition-all backdrop-blur-sm"
-            >
-              <Play className="h-4 w-4" />
-              观看示例
-            </a>
+            {isAuthenticated ? (
+              <Link
+                href="/feed"
+                className="group inline-flex items-center gap-2.5 rounded-2xl bg-white px-10 py-4 text-base font-semibold text-primary shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all hover:-translate-y-0.5"
+              >
+                进入社区
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/register"
+                  className="group inline-flex items-center gap-2.5 rounded-2xl bg-white px-10 py-4 text-base font-semibold text-primary shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all hover:-translate-y-0.5"
+                >
+                  立即加入
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+                <Link
+                  href="/login"
+                  className="inline-flex items-center gap-2 rounded-2xl border border-white/20 px-10 py-4 text-base font-semibold text-white hover:bg-white/10 transition-all backdrop-blur-sm"
+                >
+                  已有账号？登录
+                </Link>
+              </>
+            )}
           </div>
         </div>
 
