@@ -225,6 +225,10 @@ export default function SettingsPage() {
             <User className="h-4 w-4" />
             个人资料
           </TabsTrigger>
+          <TabsTrigger value="interests" className="w-full justify-start gap-2 data-active:bg-primary/10 data-active:text-primary">
+            <Heart className="h-4 w-4" />
+            兴趣标签
+          </TabsTrigger>
           <TabsTrigger value="privacy" className="w-full justify-start gap-2 data-active:bg-primary/10 data-active:text-primary">
             <Lock className="h-4 w-4" />
             隐私设置
