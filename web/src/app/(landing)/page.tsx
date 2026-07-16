@@ -10,17 +10,24 @@ import {
   Play,
   MessageCircle,
   Route,
-  Glasses,
   Globe,
   Sparkles,
   ChevronDown,
-  Share2,
-  Zap,
   Camera,
-  Compass,
   Heart,
   Shield,
-  Wifi,
+  Smartphone,
+  Trophy,
+  Languages,
+  Gift,
+  Video,
+  FileText,
+  Map,
+  Film,
+  UserPlus,
+  Star,
+  Quote,
+  Zap,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useAuthStore } from '@/stores/auth-store';
@@ -28,10 +35,8 @@ import { useAuthStore } from '@/stores/auth-store';
 export default function LandingPage() {
   const { isAuthenticated } = useAuthStore();
 
-  // 根据登录状态决定跳转目标
   const exploreHref = isAuthenticated ? '/feed' : '/login';
   const registerHref = isAuthenticated ? '/feed' : '/register';
-  const loginHref = isAuthenticated ? '/feed' : '/login';
 
   return (
     <div className="min-h-screen bg-background">
@@ -45,9 +50,10 @@ export default function LandingPage() {
             <span className="text-xl font-bold tracking-wide">徐霞客</span>
           </Link>
           <div className="hidden items-center gap-8 sm:flex">
-            <a href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">功能</a>
-            <a href="#philosophy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">理念</a>
-            <a href="#community" className="text-sm text-muted-foreground hover:text-foreground transition-colors">社区</a>
+            <a href="#about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">关于</a>
+            <a href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">特色</a>
+            <a href="#highlights" className="text-sm text-muted-foreground hover:text-foreground transition-colors">功能</a>
+            <a href="#scenarios" className="text-sm text-muted-foreground hover:text-foreground transition-colors">场景</a>
           </div>
           <div className="flex items-center gap-3">
             {isAuthenticated ? (
@@ -77,7 +83,7 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* ========== Hero 全屏 ========== */}
+      {/* ========== 一、Hero 全屏 ========== */}
       <section className="relative flex min-h-screen items-center justify-center overflow-hidden">
         {/* 多层渐变背景 */}
         <div className="absolute inset-0">
@@ -87,10 +93,8 @@ export default function LandingPage() {
               background: 'linear-gradient(160deg, #042f2e 0%, #0f766e 30%, #115e59 60%, #1a1a2e 100%)',
             }}
           />
-          {/* 动态光晕 */}
           <div className="absolute top-1/4 left-1/4 h-[500px] w-[500px] rounded-full bg-primary/10 blur-[120px] animate-pulse" />
           <div className="absolute bottom-1/3 right-1/4 h-[400px] w-[400px] rounded-full bg-accent/8 blur-[100px] animate-pulse" style={{ animationDelay: '1s' }} />
-          {/* 网格点阵 */}
           <div
             className="absolute inset-0 opacity-[0.04]"
             style={{
@@ -98,44 +102,44 @@ export default function LandingPage() {
               backgroundSize: '40px 40px',
             }}
           />
-          {/* 渐变遮罩 */}
           <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
         </div>
 
         <div className="relative z-10 mx-auto max-w-5xl px-6 text-center">
           <Badge variant="secondary" className="mb-8 px-4 py-1.5 text-sm">
             <Sparkles className="mr-1.5 h-3.5 w-3.5" />
-            AI 驱动的下一代旅行社交平台
+            AI 驱动的第一视角旅行社交平台
           </Badge>
 
           <h1 className="text-5xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl xl:text-8xl leading-[1.1]">
-            用<span className="relative inline-block">
-              <span className="relative z-10">第一视角</span>
+            戴上眼镜
+            <br />
+            <span className="relative inline-block">
+              <span className="relative z-10">走遍天下</span>
               <span className="absolute bottom-2 left-0 right-0 h-3 bg-accent/30 -skew-x-3 z-0" />
             </span>
-            <br />
-            <span className="text-white/90">重新定义旅行社交</span>
           </h1>
 
           <p className="mx-auto mt-8 max-w-2xl text-lg text-white/70 leading-relaxed sm:text-xl">
-            戴上智能眼镜，AI 帮你记录、分享、连接。
+            AI时代的第一视角旅行社交平台
             <br className="hidden sm:block" />
-            在这里，每一位旅行者都是故事的主角，每一段旅程都值得被世界看见。
+            用你的眼睛，记录世界；用AI，连接旅伴
           </p>
 
           <div className="mt-12 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link
-              href={exploreHref}
+              href={registerHref}
               className="group inline-flex items-center gap-2.5 rounded-2xl bg-white px-10 py-4 text-base font-semibold text-primary shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all hover:-translate-y-0.5"
             >
-              {isAuthenticated ? '进入社区' : '开始探索'}
+              {isAuthenticated ? '进入社区' : '立即加入'}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
             <a
-              href="#features"
+              href="#about"
               className="inline-flex items-center gap-2 rounded-2xl border border-white/20 px-10 py-4 text-base font-semibold text-white hover:bg-white/10 transition-all backdrop-blur-sm"
             >
-              了解更多
+              <Play className="h-4 w-4" />
+              观看示例
             </a>
           </div>
         </div>
@@ -147,56 +151,125 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ========== 核心理念 ========== */}
-      <section id="philosophy" className="relative py-24 sm:py-32">
+      {/* ========== 二、平台介绍 ========== */}
+      <section id="about" className="relative py-24 sm:py-32">
+        <div className="mx-auto max-w-4xl px-6 text-center">
+          <Badge variant="outline" className="mb-6">关于平台</Badge>
+          <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl mb-10">
+            什么是徐霞客社区？
+          </h2>
+          <div className="space-y-6 text-lg text-muted-foreground leading-relaxed">
+            <p>
+              四百年前，徐霞客用脚步丈量山河，用笔墨记录见闻。
+              <br />
+              今天，我们用VR眼镜重走霞客路，用AI技术开启旅行新纪元。
+            </p>
+            <p className="text-foreground font-medium text-xl">
+              徐霞客社区是全球首个AI驱动的第一视角旅行社交平台。
+              <br />
+              在这里，你的双眼就是镜头，你的声音就是游记，AI帮你记录每一步精彩。
+            </p>
+            <p>
+              无论你是探索世界的旅行者，还是身不能至心向往之的观看者，
+              <br />
+              徐霞客社区都能让你找到志同道合的旅伴，开启属于你的霞客之旅。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ========== 三、核心特色 ========== */}
+      <section id="features" className="relative py-24 sm:py-32 bg-muted/30">
         <div className="mx-auto max-w-7xl px-6">
           <div className="mb-16 text-center">
-            <Badge variant="outline" className="mb-4">核心理念</Badge>
+            <Badge variant="outline" className="mb-4">核心特色</Badge>
             <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl">
-              三大核心，重新定义旅行
+              四大核心特色
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-muted-foreground text-lg">
-              以技术驱动体验，以社交连接人心，以第一视角记录真实
+              以技术驱动体验，以AI赋能创作，以社交连接旅伴
             </p>
           </div>
 
-          <div className="grid gap-8 sm:grid-cols-3">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {[
               {
-                icon: Eye,
-                title: '第一视角',
-                desc: '通过 AR 智能眼镜，以你的眼睛记录旅途。不再是旁观者的叙述，而是让每一位旅行者成为故事的主角，身临其境地分享每一个瞬间。',
-                color: 'primary',
+                emoji: '👁️',
+                title: '第一视角，身临其境',
+                desc: '通过VR眼镜，跟随旅行者的眼睛看世界。不再是隔着屏幕的旁观，而是感同身受的同行。',
                 gradient: 'from-primary/10 to-primary/5',
               },
               {
-                icon: Brain,
-                title: 'AI 驱动',
-                desc: '大语言模型赋能旅行全流程——智能生成游记、实时翻译标识、精准匹配旅伴、个性化行程规划，让繁琐的事情交给 AI。',
-                color: 'accent',
+                emoji: '🤖',
+                title: 'AI记录，零门槛创作',
+                desc: '边走边说，AI自动转文字、配图片、生成游记。无需剪辑技巧，AI帮你把旅途变成精彩故事。',
                 gradient: 'from-accent/10 to-accent/5',
               },
               {
-                icon: Users,
-                title: '社交连接',
-                desc: '基于地理位置、旅行风格和兴趣偏好，智能推荐志同道合的旅伴。让每一次出行都不再孤单，让旅行者相互连接、分享、启发。',
-                color: 'teal-600',
+                emoji: '🤝',
+                title: '智能匹配，找到同路人',
+                desc: 'AI分析你的旅行风格、兴趣偏好，为你推荐最合拍的旅伴，一起探索未知的世界。',
                 gradient: 'from-teal-500/10 to-teal-500/5',
               },
-            ].map((item, i) => {
+              {
+                emoji: '🎯',
+                title: 'AI助手，全程陪伴',
+                desc: '实时翻译、景点讲解、路线推荐、安全提醒。你的专属AI导游，让每一次旅行都安心顺畅。',
+                gradient: 'from-orange-500/10 to-orange-500/5',
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="group relative rounded-3xl border bg-card p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-primary/20"
+              >
+                <div className={`mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${item.gradient} text-3xl transition-transform duration-300 group-hover:scale-110`}>
+                  {item.emoji}
+                </div>
+                <h3 className="mb-3 text-lg font-bold">{item.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {item.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ========== 四、功能亮点 ========== */}
+      <section id="highlights" className="relative py-24 sm:py-32">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="mb-16 text-center">
+            <Badge variant="outline" className="mb-4">功能亮点</Badge>
+            <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl">
+              探索无限可能
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-muted-foreground text-lg">
+              从记录到分享，从社交到探索，一站式旅行体验
+            </p>
+          </div>
+
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { icon: Video, title: '第一视角直播', desc: '实时分享你的视角，与好友一起云旅行', color: 'text-primary', bg: 'bg-primary/10' },
+              { icon: FileText, title: 'AI自动游记', desc: '语音转文字，AI帮你写游记', color: 'text-accent', bg: 'bg-accent/10' },
+              { icon: Map, title: '3D轨迹地图', desc: '在3D地形上回放你的旅行路线', color: 'text-teal-600', bg: 'bg-teal-500/10' },
+              { icon: Film, title: 'AI智能剪辑', desc: '自动提取高光，一键生成旅行大片', color: 'text-orange-500', bg: 'bg-orange-500/10' },
+              { icon: UserPlus, title: '多人同游', desc: '多人视角共享，一起探索新地方', color: 'text-primary', bg: 'bg-primary/10' },
+              { icon: Trophy, title: '探索成就', desc: '收集勋章、打卡地标、里程排行', color: 'text-accent', bg: 'bg-accent/10' },
+              { icon: Languages, title: '实时翻译', desc: '打破语言障碍，畅游世界', color: 'text-teal-600', bg: 'bg-teal-500/10' },
+              { icon: Gift, title: '虚拟互动', desc: 'AR礼物、空间评论、情感共鸣', color: 'text-orange-500', bg: 'bg-orange-500/10' },
+            ].map((item) => {
               const Icon = item.icon;
               return (
                 <div
                   key={item.title}
-                  className="group relative rounded-3xl border bg-card p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-primary/20"
+                  className="group rounded-2xl border bg-card p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-primary/20"
                 >
-                  <div className={`mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${item.gradient} text-${item.color} transition-transform duration-300 group-hover:scale-110`}>
-                    <Icon className="h-7 w-7" />
+                  <div className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl ${item.bg} ${item.color} transition-transform duration-300 group-hover:scale-110`}>
+                    <Icon className="h-5 w-5" />
                   </div>
-                  <h3 className="mb-3 text-xl font-bold">{item.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {item.desc}
-                  </p>
+                  <h3 className="mb-2 font-bold">{item.title}</h3>
+                  <p className="text-sm text-muted-foreground">{item.desc}</p>
                 </div>
               );
             })}
@@ -204,269 +277,76 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ========== 功能展示 ========== */}
-      <section id="features" className="relative py-24 sm:py-32 bg-muted/30">
+      {/* ========== 五、使用场景 ========== */}
+      <section id="scenarios" className="relative py-24 sm:py-32 bg-muted/30">
         <div className="mx-auto max-w-7xl px-6">
           <div className="mb-16 text-center">
-            <Badge variant="outline" className="mb-4">核心功能</Badge>
+            <Badge variant="outline" className="mb-4">使用场景</Badge>
             <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl">
-              为旅行者打造的每一个功能
+              适合谁？
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-muted-foreground text-lg">
-              从记录到分享，从规划到社交，一站式解决
+              无论你是哪种旅行者，都能在这里找到属于你的方式
             </p>
           </div>
 
-          <div className="space-y-32">
-            {/* 功能 1：沉浸式记录 */}
-            <div className="grid items-center gap-12 lg:grid-cols-2">
-              <div className="order-2 lg:order-1">
-                <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-6">
-                  <Glasses className="h-4 w-4" />
-                  沉浸式记录
-                </div>
-                <h3 className="mb-5 text-3xl font-bold leading-tight">
-                  解放双手，<br />用眼睛记录世界
-                </h3>
-                <p className="text-muted-foreground leading-relaxed mb-8 text-lg">
-                  戴上 AR 智能眼镜，你只需要专注于眼前的风景。AI 自动识别景点、
-                  记录轨迹、捕捉精彩瞬间，生成图文并茂的旅行日记。
-                </p>
-                <div className="grid grid-cols-2 gap-4">
-                  {[
-                    { icon: Camera, label: '第一视角视频录制' },
-                    { icon: MapPin, label: 'AI 自动识别景点' },
-                    { icon: Route, label: '智能轨迹记录' },
-                    { icon: MessageCircle, label: '语音转文字记录' },
-                  ].map((f) => (
-                    <div key={f.label} className="flex items-center gap-3 rounded-xl bg-background p-3 border">
-                      <f.icon className="h-4 w-4 text-primary shrink-0" />
-                      <span className="text-sm">{f.label}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="order-1 lg:order-2">
-                <div className="relative rounded-3xl border bg-gradient-to-br from-primary/5 to-accent/5 p-12 overflow-hidden">
-                  <div className="flex items-center justify-center">
-                    <div className="relative">
-                      <div className="absolute inset-0 h-48 w-48 rounded-full bg-primary/10 blur-3xl" />
-                      <Glasses className="relative z-10 h-36 w-36 text-primary/50" />
-                    </div>
-                  </div>
-                  <div className="mt-8 flex justify-center gap-4">
-                    <div className="flex items-center gap-2 rounded-full bg-background/90 px-4 py-2 text-xs font-medium shadow-md backdrop-blur-sm">
-                      <div className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />
-                      正在录制
-                    </div>
-                    <div className="flex items-center gap-2 rounded-full bg-background/90 px-4 py-2 text-xs font-medium shadow-md backdrop-blur-sm">
-                      <MapPin className="h-3 w-3 text-primary" />
-                      安徽·黄山·光明顶
-                    </div>
-                  </div>
-                  <div className="absolute top-4 right-4 rounded-full bg-background/80 px-3 py-1 text-xs text-muted-foreground backdrop-blur-sm">
-                    4K · 60fps
-                  </div>
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                emoji: '📸',
+                title: '旅行达人',
+                subtitle: '记录每一程',
+                desc: '用第一视角记录旅行，AI自动生成游记。让更多人跟随你的眼睛，感受世界的精彩。',
+                gradient: 'from-primary/10 to-primary/5',
+              },
+              {
+                emoji: '🌍',
+                title: '旅行爱好者',
+                subtitle: '云游四方',
+                desc: '无法出行？戴上VR眼镜，跟随达人的眼睛，足不出户也能身临其境，探索世界的每个角落。',
+                gradient: 'from-accent/10 to-accent/5',
+              },
+              {
+                emoji: '⛰️',
+                title: '户外探险者',
+                subtitle: '探索未知',
+                desc: '徒步、登山、骑行、自驾...记录你的每一次探险，找到志同道合的冒险伙伴。',
+                gradient: 'from-teal-500/10 to-teal-500/5',
+              },
+              {
+                emoji: '📚',
+                title: '文化探索者',
+                subtitle: '重走霞客路',
+                desc: '追寻徐霞客的足迹，探索中华山河。AI讲解历史人文，让旅行更有深度。',
+                gradient: 'from-orange-500/10 to-orange-500/5',
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="group relative rounded-3xl border bg-card p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-primary/20 overflow-hidden"
+              >
+                <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+                <div className="relative">
+                  <span className="text-4xl mb-4 block">{item.emoji}</span>
+                  <h3 className="text-xl font-bold mb-1">{item.title}</h3>
+                  <p className="text-sm font-medium text-primary mb-3">{item.subtitle}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {item.desc}
+                  </p>
                 </div>
               </div>
-            </div>
-
-            {/* 功能 2：AI 智能助手 */}
-            <div className="grid items-center gap-12 lg:grid-cols-2">
-              <div>
-                <div className="relative rounded-3xl border bg-gradient-to-br from-accent/5 to-primary/5 p-10 overflow-hidden">
-                  <div className="space-y-5">
-                    <div className="flex items-start gap-3">
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent/10">
-                        <MessageCircle className="h-4 w-4 text-accent" />
-                      </div>
-                      <div className="rounded-2xl bg-background px-5 py-3.5 text-sm shadow-sm max-w-[80%]">
-                        这座寺庙建于哪个朝代？有什么历史故事？
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3 justify-end">
-                      <div className="rounded-2xl bg-primary/10 px-5 py-3.5 text-sm max-w-[85%]">
-                        <p className="font-medium text-primary mb-1.5">AI 助手</p>
-                        <p className="text-foreground/80">
-                          法隆寺始建于公元 607 年，由圣德太子主持建造，
-                          是世界现存最古老的木构建筑群。它融合了中国南北朝时期的建筑风格...
-                        </p>
-                      </div>
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10">
-                        <Brain className="h-4 w-4 text-primary" />
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent/10">
-                        <MessageCircle className="h-4 w-4 text-accent" />
-                      </div>
-                      <div className="rounded-2xl bg-background px-5 py-3.5 text-sm shadow-sm">
-                        帮我生成今天的游记
-                      </div>
-                    </div>
-                  </div>
-                  <div className="absolute bottom-3 right-3 rounded-full bg-background/60 px-2.5 py-1 text-[10px] text-muted-foreground backdrop-blur-sm">
-                    AI 实时对话
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div className="inline-flex items-center gap-2 rounded-full bg-accent/10 px-4 py-1.5 text-sm font-medium text-accent mb-6">
-                  <Zap className="h-4 w-4" />
-                  AI 智能助手
-                </div>
-                <h3 className="mb-5 text-3xl font-bold leading-tight">
-                  你的随身<br />旅行顾问
-                </h3>
-                <p className="text-muted-foreground leading-relaxed mb-8 text-lg">
-                  AI 助手随时待命，解答旅行疑问、翻译外语标识、推荐当地美食、
-                  生成精美游记。你只管享受旅程，繁琐的事情交给 AI。
-                </p>
-                <div className="grid grid-cols-2 gap-4">
-                  {[
-                    { icon: Globe, label: '实时多语言翻译' },
-                    { icon: Brain, label: '景点文化解读' },
-                    { icon: Sparkles, label: '智能游记生成' },
-                    { icon: Compass, label: '个性化行程推荐' },
-                  ].map((f) => (
-                    <div key={f.label} className="flex items-center gap-3 rounded-xl bg-background p-3 border">
-                      <f.icon className="h-4 w-4 text-accent shrink-0" />
-                      <span className="text-sm">{f.label}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* 功能 3：智能行程规划 */}
-            <div className="grid items-center gap-12 lg:grid-cols-2">
-              <div className="order-2 lg:order-1">
-                <div className="inline-flex items-center gap-2 rounded-full bg-teal-500/10 px-4 py-1.5 text-sm font-medium text-teal-600 mb-6">
-                  <Route className="h-4 w-4" />
-                  智能行程规划
-                </div>
-                <h3 className="mb-5 text-3xl font-bold leading-tight">
-                  AI 为你<br />量身定制旅程
-                </h3>
-                <p className="text-muted-foreground leading-relaxed mb-8 text-lg">
-                  告诉 AI 你的偏好、预算和时间，它会参考社区里数千位旅行者的
-                  真实经验，为你生成最优行程方案。
-                </p>
-                <div className="grid grid-cols-2 gap-4">
-                  {[
-                    { icon: Users, label: '基于真实经验推荐' },
-                    { icon: Shield, label: '天气/人流智能避堵' },
-                    { icon: Sparkles, label: '预算自动优化' },
-                    { icon: Share2, label: '一键分享给旅伴' },
-                  ].map((f) => (
-                    <div key={f.label} className="flex items-center gap-3 rounded-xl bg-background p-3 border">
-                      <f.icon className="h-4 w-4 text-teal-600 shrink-0" />
-                      <span className="text-sm">{f.label}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="order-1 lg:order-2">
-                <div className="relative rounded-3xl border bg-gradient-to-br from-teal-500/5 to-primary/5 p-10 overflow-hidden">
-                  <div className="space-y-4">
-                    {[
-                      { time: '09:00', place: '黄山南大门', status: '已完成', icon: '✅', active: false },
-                      { time: '10:30', place: '迎客松', status: '进行中', icon: '📍', active: true },
-                      { time: '12:00', place: '光明顶', status: '待前往', icon: '🏔️', active: false },
-                      { time: '14:00', place: '飞来石', status: '待前往', icon: '🪨', active: false },
-                      { time: '16:00', place: '云谷寺', status: '待前往', icon: '⛩️', active: false },
-                    ].map((item, i) => (
-                      <div
-                        key={i}
-                        className={`flex items-center gap-4 rounded-xl px-5 py-3.5 transition-all ${
-                          item.active
-                            ? 'bg-primary/10 border border-primary/20 shadow-sm'
-                            : 'bg-background/60 border border-transparent'
-                        }`}
-                      >
-                        <span className="text-lg">{item.icon}</span>
-                        <span className="text-xs text-muted-foreground font-mono w-12">{item.time}</span>
-                        <span className={`text-sm font-medium flex-1 ${item.active ? 'text-primary' : ''}`}>
-                          {item.place}
-                        </span>
-                        <span className={`text-xs px-2 py-0.5 rounded-full ${
-                          item.active ? 'bg-primary/20 text-primary' : 'bg-muted text-muted-foreground'
-                        }`}>
-                          {item.status}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="absolute top-4 right-4 rounded-full bg-background/80 px-3 py-1 text-xs text-muted-foreground backdrop-blur-sm">
-                    AI 智能规划
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* 功能 4：沉浸式社交 */}
-            <div className="grid items-center gap-12 lg:grid-cols-2">
-              <div>
-                <div className="relative rounded-3xl border bg-gradient-to-br from-orange-500/5 to-accent/5 p-10 overflow-hidden">
-                  <div className="grid grid-cols-3 gap-4">
-                    {[
-                      { icon: '🏔️', label: 'VR全景', desc: '360° 沉浸' },
-                      { icon: '🎬', label: '空间视频', desc: '身临其境' },
-                      { icon: '🗺️', label: '互动地图', desc: '轨迹回放' },
-                      { icon: '📸', label: '360°照片', desc: '全景记录' },
-                      { icon: '🎙️', label: '音频日记', desc: '声音记忆' },
-                      { icon: '✍️', label: '图文游记', desc: '经典分享' },
-                    ].map((item) => (
-                      <div
-                        key={item.label}
-                        className="flex flex-col items-center gap-2 rounded-2xl bg-background/80 p-5 transition-all hover:scale-105 hover:shadow-md border"
-                      >
-                        <span className="text-3xl">{item.icon}</span>
-                        <span className="text-sm font-medium">{item.label}</span>
-                        <span className="text-[10px] text-muted-foreground">{item.desc}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div className="inline-flex items-center gap-2 rounded-full bg-orange-500/10 px-4 py-1.5 text-sm font-medium text-orange-600 mb-6">
-                  <Share2 className="h-4 w-4" />
-                  沉浸式社交
-                </div>
-                <h3 className="mb-5 text-3xl font-bold leading-tight">
-                  让朋友身临其境<br />感受你的旅程
-                </h3>
-                <p className="text-muted-foreground leading-relaxed mb-8 text-lg">
-                  你的游记不只是文字和图片。支持 VR 全景、空间视频、互动地图等多种形式，
-                  让观看者以你的视角重新体验那段旅程。
-                </p>
-                <div className="grid grid-cols-2 gap-4">
-                  {[
-                    { icon: Play, label: '多种富媒体形式' },
-                    { icon: Eye, label: '第一视角视频' },
-                    { icon: Wifi, label: '实时位置共享' },
-                    { icon: Heart, label: '多人协作游记' },
-                  ].map((f) => (
-                    <div key={f.label} className="flex items-center gap-3 rounded-xl bg-background p-3 border">
-                      <f.icon className="h-4 w-4 text-orange-500 shrink-0" />
-                      <span className="text-sm">{f.label}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ========== 数据佐证 ========== */}
-      <section id="community" className="relative py-24 sm:py-32">
+      {/* ========== 六、数据展示 ========== */}
+      <section className="relative py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6">
           <div className="mb-16 text-center">
             <Badge variant="outline" className="mb-4">社区数据</Badge>
             <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl">
-              一个正在成长的旅行社区
+              我们的足迹
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-muted-foreground text-lg">
               数以万计的旅行者已经在这里分享他们的故事
@@ -475,10 +355,10 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
             {[
-              { value: '12,800+', label: '旅行者', icon: Users, color: 'text-primary' },
-              { value: '45,600+', label: '旅行故事', icon: MessageCircle, color: 'text-accent' },
-              { value: '1,200+', label: '覆盖城市', icon: MapPin, color: 'text-teal-600' },
-              { value: '8,900+', label: 'VR 内容', icon: Play, color: 'text-orange-500' },
+              { value: '10,000+', label: '探索者数量', icon: Users, color: 'text-primary' },
+              { value: '50,000+', label: '已记录旅程', icon: MapPin, color: 'text-accent' },
+              { value: '5,000+', label: '覆盖景点', icon: Globe, color: 'text-teal-600' },
+              { value: '100万公里', label: '累计里程', icon: Route, color: 'text-orange-500' },
             ].map((stat) => {
               const Icon = stat.icon;
               return (
@@ -495,25 +375,66 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ========== 平台愿景 ========== */}
+      {/* ========== 七、用户评价 ========== */}
       <section className="relative py-24 sm:py-32 bg-muted/30">
-        <div className="mx-auto max-w-4xl px-6 text-center">
-          <Badge variant="outline" className="mb-6">平台愿景</Badge>
-          <h2 className="text-3xl font-bold sm:text-4xl mb-8">
-            我们相信，最好的旅行分享<br />不是告诉别人你看到了什么
-          </h2>
-          <p className="text-xl text-muted-foreground leading-relaxed mb-4">
-            而是让他们感受到你当时的震撼与感动。
-          </p>
-          <p className="text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-            徐霞客致力于打造 AI 时代最前沿的旅行社交平台，
-            让每一次旅行都成为值得珍藏的人生体验，
-            让每一位旅行者都能找到属于自己的旅行圈子。
-          </p>
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="mb-16 text-center">
+            <Badge variant="outline" className="mb-4">用户评价</Badge>
+            <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl">
+              他们怎么说
+            </h2>
+          </div>
+
+          <div className="grid gap-8 sm:grid-cols-3">
+            {[
+              {
+                quote: '第一次用VR眼镜记录旅行，AI自动生成的游记让我惊喜。朋友说看我的视频就像自己去了一样！',
+                name: '小明',
+                role: '旅行博主',
+                stars: 5,
+              },
+              {
+                quote: '因为工作无法经常出行，但在徐霞客社区，我每天都能跟着不同的旅行者云游世界。',
+                name: '小红',
+                role: '上班族',
+                stars: 5,
+              },
+              {
+                quote: '在这里找到了一群热爱户外的朋友，我们一起徒步、露营、探索，AI推荐的旅伴真的很合拍！',
+                name: '小刚',
+                role: '户外爱好者',
+                stars: 5,
+              },
+            ].map((item) => (
+              <div
+                key={item.name}
+                className="group rounded-3xl border bg-card p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+              >
+                <Quote className="h-8 w-8 text-primary/20 mb-4" />
+                <p className="text-muted-foreground leading-relaxed mb-6">
+                  "{item.quote}"
+                </p>
+                <div className="flex items-center gap-1 mb-4">
+                  {Array.from({ length: item.stars }).map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-brand text-sm font-bold text-white">
+                    {item.name[0]}
+                  </div>
+                  <div>
+                    <p className="font-medium">{item.name}</p>
+                    <p className="text-xs text-muted-foreground">{item.role}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ========== 底部 CTA ========== */}
+      {/* ========== 八、号召行动 CTA ========== */}
       <section className="relative overflow-hidden">
         <div
           className="absolute inset-0"
@@ -524,11 +445,12 @@ export default function LandingPage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.08),transparent_50%)]" />
         <div className="relative mx-auto max-w-4xl px-6 py-24 text-center">
           <h2 className="text-4xl font-bold text-white sm:text-5xl mb-6">
-            开启你的旅行新篇章
+            开启你的霞客之旅
           </h2>
           <p className="mx-auto max-w-xl text-lg text-white/70 mb-12">
-            加入徐霞客，用第一视角记录世界，用 AI 连接旅伴，
-            让每一段旅程都成为值得珍藏的人生体验。
+            无论你身在何处，世界就在你眼前。
+            <br />
+            戴上眼镜，与千万旅行者一起，探索无限可能。
           </p>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             {isAuthenticated ? (
@@ -552,8 +474,14 @@ export default function LandingPage() {
                   href="/login"
                   className="inline-flex items-center gap-2 rounded-2xl border border-white/25 px-10 py-4 text-base font-semibold text-white hover:bg-white/10 transition-all backdrop-blur-sm"
                 >
-                  已有账号？登录
+                  下载APP
                 </Link>
+                <a
+                  href="#about"
+                  className="inline-flex items-center gap-2 rounded-2xl border border-white/15 px-10 py-4 text-base font-semibold text-white/80 hover:bg-white/10 transition-all backdrop-blur-sm"
+                >
+                  了解更多
+                </a>
               </>
             )}
           </div>
@@ -563,26 +491,70 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ========== 页脚 ========== */}
+      {/* ========== 九、页脚 ========== */}
       <footer className="border-t bg-muted/30">
-        <div className="mx-auto max-w-7xl px-6 py-12">
-          <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
-            <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-brand text-xs font-bold text-white">
-                徐
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <div className="grid gap-12 sm:grid-cols-4">
+            {/* 品牌 */}
+            <div className="sm:col-span-2">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-brand text-sm font-bold text-white shadow-lg">
+                  徐
+                </div>
+                <span className="text-xl font-bold">徐霞客社区</span>
               </div>
-              <div>
-                <span className="text-sm font-bold">徐霞客</span>
-                <span className="text-xs text-muted-foreground ml-2">
-                  AI 时代的旅行社交平台
-                </span>
+              <p className="text-sm text-muted-foreground leading-relaxed max-w-sm">
+                AI时代的第一视角旅行社交平台
+                <br />
+                用你的眼睛，记录世界；用AI，连接旅伴
+              </p>
+              <div className="flex items-center gap-4 mt-6">
+                {['微信', '微博', '抖音', '小红书'].map((platform) => (
+                  <span
+                    key={platform}
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-muted text-xs text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors cursor-pointer"
+                  >
+                    {platform[0]}
+                  </span>
+                ))}
               </div>
             </div>
-            <div className="flex items-center gap-8 text-xs text-muted-foreground">
-              <a href="#features" className="hover:text-foreground transition-colors">功能</a>
-              <a href="#philosophy" className="hover:text-foreground transition-colors">理念</a>
-              <a href="#community" className="hover:text-foreground transition-colors">社区</a>
-              <span>© 2026 徐霞客</span>
+
+            {/* 快速链接 */}
+            <div>
+              <h4 className="font-medium mb-4">快速链接</h4>
+              <div className="space-y-3">
+                {['首页', '功能', '下载', '关于', '帮助', '联系我们'].map((link) => (
+                  <a
+                    key={link}
+                    href="#"
+                    className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {link}
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* 联系方式 */}
+            <div>
+              <h4 className="font-medium mb-4">联系我们</h4>
+              <div className="space-y-3 text-sm text-muted-foreground">
+                <p>邮箱：hello@xuxiake.com</p>
+                <p>微信公众号：徐霞客社区</p>
+                <p>客服热线：400-888-0000</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-12 pt-8 border-t flex flex-col items-center justify-between gap-4 sm:flex-row">
+            <p className="text-xs text-muted-foreground">
+              © 2026 徐霞客社区. All Rights Reserved.
+            </p>
+            <div className="flex items-center gap-6 text-xs text-muted-foreground">
+              <a href="#" className="hover:text-foreground transition-colors">隐私政策</a>
+              <a href="#" className="hover:text-foreground transition-colors">服务条款</a>
+              <a href="#" className="hover:text-foreground transition-colors">用户协议</a>
             </div>
           </div>
         </div>
