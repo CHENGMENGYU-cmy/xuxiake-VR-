@@ -27,6 +27,7 @@ import apiClient from '@/lib/api-client';
 const navItems = [
   { href: '/feed', label: '首页', icon: Home },
   { href: '/explore', label: '探索发现', icon: Compass },
+  { href: '/discover', label: '发现好友', icon: Users },
   { href: '/upload', label: '上传内容', icon: Upload },
   { href: '/messages', label: '消息', icon: Users },
   { href: '/notifications', label: '通知', icon: Bookmark },
