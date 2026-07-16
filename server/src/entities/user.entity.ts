@@ -1,9 +1,11 @@
-import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryColumn, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import { Post } from './post.entity.js';
 import { Comment } from './comment.entity.js';
 import { Like } from './like.entity.js';
 import { Notification } from './notification.entity.js';
 import { Message } from './message.entity.js';
+import { InterestTag } from './interest-tag.entity.js';
+import { UserInterest } from './user-interest.entity.js';
 
 @Entity('users')
 export class User {
