@@ -1,13 +1,18 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { TrendingUp, Users, ExternalLink } from 'lucide-react';
+import { TrendingUp, Users, ExternalLink, MessageCircle } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { useUIStore } from '@/stores/ui-store';
+import { useAuthStore } from '@/stores/auth-store';
 import { mockUsers } from '@/lib/mock-data';
 import { cn } from '@/lib/utils';
+import { getRecommendedCommunities } from '@/lib/social-api';
+import type { Community } from '@/types';
 
 const hotTopics = [
   { tag: '黄山VR全景', count: 1520 },
