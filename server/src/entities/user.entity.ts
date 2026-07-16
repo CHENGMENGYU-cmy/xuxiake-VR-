@@ -80,4 +80,7 @@ export class User {
 
   @OneToMany(() => Message, (msg) => msg.sender)
   messages: Message[];
+
+  @OneToMany(() => UserInterest, (ui) => ui.user)
+  userInterests: UserInterest[];
 }
