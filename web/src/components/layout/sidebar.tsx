@@ -30,9 +30,9 @@ import { getRecommendedUsers } from '@/lib/social-api';
 const navItems = [
   { href: '/feed', label: '首页', icon: Home },
   { href: '/explore', label: '探索发现', icon: Compass },
-  { href: '/discover', label: '发现好友', icon: Users },
+  { href: '/discover', label: '发现好友', icon: UserPlus },
   { href: '/upload', label: '上传内容', icon: Upload },
-  { href: '/messages', label: '消息', icon: Users },
+  { href: '/messages', label: '消息', icon: MessageCircle },
   { href: '/notifications', label: '通知', icon: Bookmark },
   { href: '/settings', label: '设置', icon: Settings },
 ];
