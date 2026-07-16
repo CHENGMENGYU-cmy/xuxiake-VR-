@@ -5,7 +5,6 @@ import {
   Users,
   MapPin,
   ArrowRight,
-  Play,
   Route,
   Globe,
   Sparkles,
