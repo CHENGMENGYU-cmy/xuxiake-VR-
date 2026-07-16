@@ -50,18 +50,29 @@ export default function LandingPage() {
             <a href="#community" className="text-sm text-muted-foreground hover:text-foreground transition-colors">社区</a>
           </div>
           <div className="flex items-center gap-3">
-            <Link
-              href="/login"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              登录
-            </Link>
-            <Link
-              href="/register"
-              className="rounded-lg bg-primary px-5 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm"
-            >
-              免费注册
-            </Link>
+            {isAuthenticated ? (
+              <Link
+                href="/feed"
+                className="rounded-lg bg-primary px-5 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm"
+              >
+                进入社区
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  登录
+                </Link>
+                <Link
+                  href="/register"
+                  className="rounded-lg bg-primary px-5 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm"
+                >
+                  免费注册
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </nav>
