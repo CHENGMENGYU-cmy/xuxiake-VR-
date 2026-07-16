@@ -10,6 +10,7 @@ import { ConversationsController } from './modules/conversations/conversations.c
 import { FeedController } from './modules/feed/feed.controller.js';
 import { UploadController } from './modules/upload/upload.controller.js';
 import { UsersController } from './modules/users/users.controller.js';
+import { SocialController } from './modules/social/social.controller.js';
 import { User } from './entities/user.entity.js';
 import { Post } from './entities/post.entity.js';
 import { MediaItem } from './entities/media-item.entity.js';
