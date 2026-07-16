@@ -107,6 +107,49 @@ export function RightPanel() {
           </CardContent>
         </Card>
 
+        {/* 推荐社群 */}
+        {isAuthenticated && recommendedCommunities.length > 0 && (
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2 text-sm">
+                <MessageCircle className="h-4 w-4 text-orange-500" />
+                推荐社群
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {recommendedCommunities.map((community) => (
+                  <Link
+                    key={community.id}
+                    href={`/communities/${community.id}`}
+                    className="flex items-center gap-3 rounded-lg p-1 hover:bg-accent"
+                  >
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={community.avatarUrl} alt={community.name} />
+                      <AvatarFallback>{community.name[0]}</AvatarFallback>
+                    </Avatar>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium">{community.name}</p>
+                      <p className="truncate text-xs text-muted-foreground">
+                        {community.memberCount} 成员
+                      </p>
+                      {community.tags && community.tags.length > 0 && (
+                        <div className="mt-1 flex flex-wrap gap-1">
+                          {community.tags.slice(0, 2).map((tag) => (
+                            <Badge key={tag.id} variant="secondary" className="text-xs">
+                              {tag.icon} {tag.name}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* 推荐链接 */}
         <Card>
           <CardHeader className="pb-2">
