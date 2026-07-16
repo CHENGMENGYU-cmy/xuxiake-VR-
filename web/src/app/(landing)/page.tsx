@@ -475,7 +475,7 @@ export default function LandingPage() {
                   href="/login"
                   className="inline-flex items-center gap-2 rounded-2xl border border-white/25 px-10 py-4 text-base font-semibold text-white hover:bg-white/10 transition-all backdrop-blur-sm"
                 >
-                  下载APP
+                  已有账号？登录
                 </Link>
                 <a
                   href="#about"
