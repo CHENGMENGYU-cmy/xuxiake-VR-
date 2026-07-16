@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Settings, User, Lock, Bell, Palette } from 'lucide-react';
+import { Settings, User, Lock, Bell, Palette, Heart } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuthStore } from '@/stores/auth-store';
 import apiClient from '@/lib/api-client';
@@ -9,6 +9,7 @@ import { ProfileTab } from './components/profile-tab';
 import { PrivacyTab } from './components/privacy-tab';
 import { NotificationsTab } from './components/notifications-tab';
 import { AppearanceTab } from './components/appearance-tab';
+import { InterestsTab } from './components/interests-tab';
 
 export default function SettingsPage() {
   const { user, updateUser } = useAuthStore();
