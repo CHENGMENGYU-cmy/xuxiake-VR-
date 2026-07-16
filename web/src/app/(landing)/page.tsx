@@ -1,7 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   Eye,
@@ -18,7 +16,6 @@ import {
   ChevronDown,
   Share2,
   Zap,
-  Mountain,
   Camera,
   Compass,
   Heart,
@@ -29,20 +26,12 @@ import { Badge } from '@/components/ui/badge';
 import { useAuthStore } from '@/stores/auth-store';
 
 export default function LandingPage() {
-  const router = useRouter();
   const { isAuthenticated } = useAuthStore();
 
-  // 已登录用户直接跳转到社区
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.replace('/feed');
-    }
-  }, [isAuthenticated, router]);
-
-  // 已登录时不渲染落地页内容
-  if (isAuthenticated) {
-    return null;
-  }
+  // 根据登录状态决定跳转目标
+  const exploreHref = isAuthenticated ? '/feed' : '/login';
+  const registerHref = isAuthenticated ? '/feed' : '/register';
+  const loginHref = isAuthenticated ? '/feed' : '/login';
 
   return (
     <div className="min-h-screen bg-background">
