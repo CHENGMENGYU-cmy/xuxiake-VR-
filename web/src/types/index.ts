@@ -17,6 +17,7 @@ export interface User {
     version: string;
   };
   createdAt: string;
+  interests?: InterestTag[];
 }
 
 // ===== 媒体类型 =====
