@@ -531,19 +531,31 @@ export default function LandingPage() {
             让每一段旅程都成为值得珍藏的人生体验。
           </p>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            <Link
-              href="/register"
-              className="group inline-flex items-center gap-2.5 rounded-2xl bg-white px-10 py-4 text-base font-semibold text-primary shadow-xl hover:shadow-2xl transition-all hover:-translate-y-0.5"
-            >
-              免费注册
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-            <Link
-              href="/login"
-              className="inline-flex items-center gap-2 rounded-2xl border border-white/25 px-10 py-4 text-base font-semibold text-white hover:bg-white/10 transition-all backdrop-blur-sm"
-            >
-              已有账号？登录
-            </Link>
+            {isAuthenticated ? (
+              <Link
+                href="/feed"
+                className="group inline-flex items-center gap-2.5 rounded-2xl bg-white px-10 py-4 text-base font-semibold text-primary shadow-xl hover:shadow-2xl transition-all hover:-translate-y-0.5"
+              >
+                进入社区
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/register"
+                  className="group inline-flex items-center gap-2.5 rounded-2xl bg-white px-10 py-4 text-base font-semibold text-primary shadow-xl hover:shadow-2xl transition-all hover:-translate-y-0.5"
+                >
+                  免费注册
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+                <Link
+                  href="/login"
+                  className="inline-flex items-center gap-2 rounded-2xl border border-white/25 px-10 py-4 text-base font-semibold text-white hover:bg-white/10 transition-all backdrop-blur-sm"
+                >
+                  已有账号？登录
+                </Link>
+              </>
+            )}
           </div>
           <p className="mt-12 text-sm text-white/40 italic">
             "大丈夫当朝碧海而暮苍梧" —— 徐霞客
