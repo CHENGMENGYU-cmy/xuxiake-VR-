@@ -17,7 +17,6 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { mockUsers } from '@/lib/mock-data';
 
 export const metadata: Metadata = {
@@ -25,7 +24,6 @@ export const metadata: Metadata = {
   description: '以第一视角重新定义旅行社交体验，融合AR技术与AI智能，开启探索世界的新方式',
 };
 
-// 精选故事数据
 const featuredStories = [
   {
     id: 1,
@@ -59,7 +57,6 @@ const featuredStories = [
   },
 ];
 
-// 社区数据
 const communityStats = [
   { label: '旅行者', value: '12,800+', icon: Users },
   { label: '旅行故事', value: '45,600+', icon: MessageCircle },
@@ -67,7 +64,6 @@ const communityStats = [
   { label: 'VR内容', value: '8,900+', icon: Play },
 ];
 
-// 功能特性 - 以用户视角描述
 const features = [
   {
     icon: Glasses,
@@ -101,23 +97,22 @@ const features = [
 
 export default function AboutPage() {
   return (
-    <div className="space-y-6 pb-8">
-      {/* Hero - 简洁有力，像社区公告而不是企业官网 */}
+    <div className="space-y-5 pb-8">
+      {/* Hero */}
       <section className="relative overflow-hidden rounded-2xl bg-gradient-brand-subtle">
-        <div className="relative z-10 px-6 py-12 sm:px-10 sm:py-16">
-          <div className="mx-auto max-w-2xl">
-            <Badge variant="secondary" className="mb-4">
+        <div className="relative z-10 px-6 py-6">
+          <div className="mx-auto max-w-[640px]">
+            <Badge variant="secondary" className="mb-3">
               <Sparkles className="mr-1 h-3 w-3" />
               AI 时代的旅行社区
             </Badge>
             <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
               用<span className="text-gradient-brand">第一视角</span>，重新定义旅行社交
             </h1>
-            <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
+            <p className="mt-3 text-lg text-muted-foreground leading-relaxed">
               在这里，每一位旅行者都是故事的主角。戴上智能眼镜，AI帮你记录、分享、连接。
-              我们相信，最好的旅行分享不是告诉别人你看到了什么，而是让他们感受到你当时的震撼与感动。
             </p>
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-4 flex flex-wrap gap-3">
               <Link
                 href="/feed"
                 className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
@@ -141,36 +136,34 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 社区数据 - 让用户感受到这是一个活跃的社区 */}
-      <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      {/* 社区数据 */}
+      <section className="grid grid-cols-4 gap-3">
         {communityStats.map((stat) => {
           const Icon = stat.icon;
           return (
-            <Card key={stat.label} className="text-center">
-              <CardContent className="pt-4 pb-3">
-                <Icon className="mx-auto h-5 w-5 text-primary mb-2" />
-                <p className="text-2xl font-bold text-foreground">{stat.value}</p>
-                <p className="text-xs text-muted-foreground">{stat.label}</p>
-              </CardContent>
-            </Card>
+            <div key={stat.label} className="flex flex-col items-center gap-1 rounded-xl bg-muted/50 py-3">
+              <Icon className="h-4 w-4 text-primary" />
+              <span className="text-lg font-bold">{stat.value}</span>
+              <span className="text-xs text-muted-foreground">{stat.label}</span>
+            </div>
           );
         })}
       </section>
 
-      {/* 精选故事 - 用真实内容说话 */}
+      {/* 精选故事 */}
       <section>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold flex items-center gap-2">
-            <Heart className="h-5 w-5 text-accent" />
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-base font-bold flex items-center gap-2">
+            <Heart className="h-4 w-4 text-accent" />
             旅行者的故事
           </h2>
-          <Link href="/feed" className="text-sm text-primary hover:underline flex items-center gap-1">
+          <Link href="/feed" className="text-xs text-primary hover:underline flex items-center gap-1">
             查看更多 <ArrowRight className="h-3 w-3" />
           </Link>
         </div>
         <div className="grid gap-4 sm:grid-cols-3">
           {featuredStories.map((story) => (
-            <Card key={story.id} className="group cursor-pointer hover:shadow-md transition-shadow">
+            <Card key={story.id} className="group cursor-pointer">
               <CardContent className="p-4">
                 <div className="flex items-center gap-2 mb-3">
                   <Avatar className="h-8 w-8">
@@ -208,28 +201,26 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 核心功能 - 以用户视角，告诉他们"你能在这里做什么" */}
+      {/* 核心功能 */}
       <section>
-        <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-primary" />
+        <h2 className="text-base font-bold mb-3 flex items-center gap-2">
+          <Sparkles className="h-4 w-4 text-primary" />
           在徐霞客，你可以...
         </h2>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-3 sm:grid-cols-2">
           {features.map((feature) => {
             const Icon = feature.icon;
             return (
               <Card key={feature.title}>
-                <CardContent className="p-5">
-                  <div className="flex items-start gap-4">
-                    <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${feature.bgColor}`}>
-                      <Icon className={`h-5 w-5 ${feature.color}`} />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold mb-1">{feature.title}</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        {feature.description}
-                      </p>
-                    </div>
+                <CardContent className="p-4 flex items-start gap-3">
+                  <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${feature.bgColor}`}>
+                    <Icon className={`h-4 w-4 ${feature.color}`} />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-sm mb-0.5">{feature.title}</h3>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      {feature.description}
+                    </p>
                   </div>
                 </CardContent>
               </Card>
@@ -238,63 +229,58 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 社区理念 - 简洁，有温度 */}
-      <Card className="bg-gradient-brand text-primary-foreground">
-        <CardContent className="p-6 sm:p-8 text-center">
-          <h2 className="text-xl font-bold sm:text-2xl mb-3">我们的理念</h2>
-          <p className="text-base leading-relaxed opacity-90 max-w-xl mx-auto">
-            徐霞客不只是一个旅行平台，而是一个让旅行者相互连接、分享、启发的社区。
-            我们用AI技术降低记录的门槛，用第一视角提升分享的真实感，
-            让每一次旅行都成为值得珍藏的人生体验。
-          </p>
-          <Separator className="my-5 bg-white/20" />
-          <p className="text-sm opacity-75 italic">
-            "大丈夫当朝碧海而暮苍梧" —— 徐霞客
-          </p>
-        </CardContent>
-      </Card>
+      {/* 社区理念 */}
+      <section className="rounded-xl bg-primary/5 border border-primary/10 px-5 py-4 text-center">
+        <p className="text-sm text-muted-foreground leading-relaxed max-w-xl mx-auto">
+          我们用AI技术降低记录的门槛，用第一视角提升分享的真实感，
+          让每一次旅行都成为值得珍藏的人生体验。
+        </p>
+        <p className="mt-3 text-xs text-muted-foreground/70 italic">
+          "大丈夫当朝碧海而暮苍梧" —— 徐霞客
+        </p>
+      </section>
 
-      {/* 快速入口 - 引导用户行动 */}
+      {/* 快速入口 */}
       <section className="grid gap-3 sm:grid-cols-3">
         <Link href="/feed">
           <Card className="group cursor-pointer hover:border-primary/50 transition-colors">
-            <CardContent className="p-4 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
-                <Compass className="h-5 w-5 text-primary" />
+            <CardContent className="p-3 flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
+                <Compass className="h-4 w-4 text-primary" />
               </div>
-              <div>
+              <div className="min-w-0 flex-1">
                 <p className="font-medium text-sm group-hover:text-primary transition-colors">浏览动态</p>
                 <p className="text-xs text-muted-foreground">看看旅行者们在分享什么</p>
               </div>
-              <ArrowRight className="h-4 w-4 ml-auto text-muted-foreground group-hover:text-primary transition-colors" />
+              <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
             </CardContent>
           </Card>
         </Link>
         <Link href="/explore">
           <Card className="group cursor-pointer hover:border-primary/50 transition-colors">
-            <CardContent className="p-4 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent/10">
-                <Users className="h-5 w-5 text-accent" />
+            <CardContent className="p-3 flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent/10">
+                <Users className="h-4 w-4 text-accent" />
               </div>
-              <div>
+              <div className="min-w-0 flex-1">
                 <p className="font-medium text-sm group-hover:text-primary transition-colors">发现旅伴</p>
                 <p className="text-xs text-muted-foreground">找到志同道合的旅行者</p>
               </div>
-              <ArrowRight className="h-4 w-4 ml-auto text-muted-foreground group-hover:text-primary transition-colors" />
+              <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
             </CardContent>
           </Card>
         </Link>
         <Link href="/upload">
           <Card className="group cursor-pointer hover:border-primary/50 transition-colors">
-            <CardContent className="p-4 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-500/10">
-                <Play className="h-5 w-5 text-teal-600" />
+            <CardContent className="p-3 flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-teal-500/10">
+                <Play className="h-4 w-4 text-teal-600" />
               </div>
-              <div>
+              <div className="min-w-0 flex-1">
                 <p className="font-medium text-sm group-hover:text-primary transition-colors">分享旅程</p>
                 <p className="text-xs text-muted-foreground">用第一视角记录你的旅行</p>
               </div>
-              <ArrowRight className="h-4 w-4 ml-auto text-muted-foreground group-hover:text-primary transition-colors" />
+              <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
             </CardContent>
           </Card>
         </Link>
