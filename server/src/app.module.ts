@@ -60,6 +60,7 @@ import { JwtModule } from '@nestjs/jwt';
     FeedController,
     UploadController,
     UsersController,
+    SocialController,
   ],
   providers: [ChatGateway],
 })
