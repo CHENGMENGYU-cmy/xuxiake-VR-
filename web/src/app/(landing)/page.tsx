@@ -26,8 +26,6 @@ import { useAuthStore } from '@/stores/auth-store';
 export default function LandingPage() {
   const { isAuthenticated } = useAuthStore();
 
-  const exploreHref = isAuthenticated ? '/feed' : '/login';
-
   return (
     <div className="min-h-screen bg-background">
       {/* ========== 顶部导航 ========== */}
