@@ -27,8 +27,6 @@ export default function LandingPage() {
   const { isAuthenticated } = useAuthStore();
 
   const exploreHref = isAuthenticated ? '/feed' : '/login';
-  const registerHref = isAuthenticated ? '/feed' : '/register';
-  const loginHref = isAuthenticated ? '/feed' : '/login';
 
   return (
     <div className="min-h-screen bg-background">
