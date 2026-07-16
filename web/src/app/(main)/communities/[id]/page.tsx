@@ -111,7 +111,7 @@ export default function CommunityDetailPage() {
             <CardContent className="pt-6">
               <div className="flex items-start gap-4">
                 <Avatar className="h-20 w-20">
-                  <AvatarImage src={community.avatarUrl} alt={community.name} />
+                  <AvatarImage src={community.avatarUrl || undefined} alt={community.name} />
                   <AvatarFallback className="text-2xl">{community.name[0]}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
@@ -204,7 +204,7 @@ export default function CommunityDetailPage() {
                       className="flex items-center gap-3 rounded-lg p-2 hover:bg-accent"
                     >
                       <Avatar className="h-8 w-8">
-                        <AvatarImage src={member.avatarUrl} alt={member.displayName} />
+                        <AvatarImage src={member.avatarUrl || undefined} alt={member.displayName} />
                         <AvatarFallback>{member.displayName?.[0]}</AvatarFallback>
                       </Avatar>
                       <div className="min-w-0 flex-1">

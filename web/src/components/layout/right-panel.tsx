@@ -125,7 +125,7 @@ export function RightPanel() {
                     className="flex items-center gap-3 rounded-lg p-1 hover:bg-accent"
                   >
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={community.avatarUrl} alt={community.name} />
+                      <AvatarImage src={community.avatarUrl || undefined} alt={community.name} />
                       <AvatarFallback>{community.name[0]}</AvatarFallback>
                     </Avatar>
                     <div className="min-w-0 flex-1">

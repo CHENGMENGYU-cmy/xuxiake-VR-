@@ -120,7 +120,7 @@ export default function DiscoverPage() {
                     <div className="flex items-start gap-3">
                       <Link href={`/profile/${user.username}`}>
                         <Avatar className="h-12 w-12">
-                          <AvatarImage src={user.avatarUrl} alt={user.displayName} />
+                          <AvatarImage src={user.avatarUrl || undefined} alt={user.displayName} />
                           <AvatarFallback>{user.displayName?.[0]}</AvatarFallback>
                         </Avatar>
                       </Link>
@@ -192,7 +192,7 @@ export default function DiscoverPage() {
                   <CardContent className="p-4">
                     <div className="flex items-start gap-3">
                       <Avatar className="h-12 w-12">
-                        <AvatarImage src={community.avatarUrl} alt={community.name} />
+                        <AvatarImage src={community.avatarUrl || undefined} alt={community.name} />
                         <AvatarFallback>{community.name[0]}</AvatarFallback>
                       </Avatar>
                       <div className="min-w-0 flex-1">
@@ -250,7 +250,7 @@ export default function DiscoverPage() {
                     <CardContent className="p-4">
                       <div className="flex items-start gap-3">
                         <Avatar className="h-12 w-12">
-                          <AvatarImage src={community.avatarUrl} alt={community.name} />
+                          <AvatarImage src={community.avatarUrl || undefined} alt={community.name} />
                           <AvatarFallback>{community.name[0]}</AvatarFallback>
                         </Avatar>
                         <div className="min-w-0 flex-1">

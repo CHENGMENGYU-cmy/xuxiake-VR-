@@ -56,9 +56,16 @@ export function Sidebar() {
 
   useEffect(() => {
     if (user) {
+      // 优先使用智能推荐，失败则回退到简单推荐
       getRecommendedUsers(1, 5).then((res) => {
         setSuggestedUsers(res.data || []);
-      }).catch(() => {});
+      }).catch(() => {
+        apiClient.get('/users/suggested/list').then((res) => {
+          if (res.data?.success) {
+            setSuggestedUsers(res.data.data || []);
+          }
+        }).catch(() => {});
+      });
     }
   }, [user]);
 

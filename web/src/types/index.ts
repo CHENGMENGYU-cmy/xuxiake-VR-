@@ -143,6 +143,7 @@ export interface Community {
     avatarUrl?: string | null;
   };
   tags?: InterestTag[];
+  members?: User[];
   isMember?: boolean;
   isCreator?: boolean;
   createdAt: string;
