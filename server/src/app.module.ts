@@ -20,6 +20,10 @@ import { Conversation } from './entities/conversation.entity.js';
 import { Message } from './entities/message.entity.js';
 import { ConversationParticipant } from './entities/conversation-participant.entity.js';
 import { UserFollow } from './entities/user-follow.entity.js';
+import { InterestTag } from './entities/interest-tag.entity.js';
+import { UserInterest } from './entities/user-interest.entity.js';
+import { Community } from './entities/community.entity.js';
+import { CommunityTag } from './entities/community-tag.entity.js';
 import { getDatabaseConfig } from './config/database.config.js';
 import { JwtModule } from '@nestjs/jwt';
 
