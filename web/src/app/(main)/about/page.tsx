@@ -18,7 +18,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { mockUsers, mockPosts } from '@/lib/mock-data';
+import { mockUsers } from '@/lib/mock-data';
 
 export const metadata: Metadata = {
   title: '关于徐霞客 - AI时代的旅行社交平台',
