@@ -31,6 +31,16 @@ const suggestLinks = [
 
 export function RightPanel() {
   const { rightPanelOpen } = useUIStore();
+  const { isAuthenticated } = useAuthStore();
+  const [recommendedCommunities, setRecommendedCommunities] = useState<Community[]>([]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      getRecommendedCommunities(1, 5).then((res) => {
+        setRecommendedCommunities(res.data || []);
+      }).catch(() => {});
+    }
+  }, [isAuthenticated]);
 
   return (
     <aside
