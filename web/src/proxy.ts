@@ -19,9 +19,9 @@ export default function proxy(request: NextRequest) {
   const token = request.cookies.get('auth_token')?.value;
 
   // 首页直接跳转到登录页
-  if (pathname === '/') {
-    return NextResponse.redirect(new URL('/login', request.url));
-  }
+  // if (pathname === '/') {
+  //   return NextResponse.redirect(new URL('/login', request.url));
+  // }
 
   // 已登录用户访问登录/注册页面时，重定向到 feed
   if ((pathname === '/login' || pathname === '/register') && token) {
