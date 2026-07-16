@@ -4,18 +4,14 @@ import {
   Brain,
   Users,
   MapPin,
-  Compass,
   ArrowRight,
   Play,
   MessageCircle,
-  Heart,
   Route,
   Glasses,
   Globe,
   Sparkles,
   ChevronRight,
-  Mountain,
-  Camera,
   Share2,
   Zap,
 } from 'lucide-react';
@@ -26,7 +22,7 @@ export default function LandingPage() {
     <div className="min-h-screen bg-background">
       {/* ========== 顶部导航 ========== */}
       <nav className="fixed top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
-        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
+        <div className="mx-auto flex h-14 max-w-[1200px] items-center justify-between px-6">
           <Link href="/" className="flex items-center gap-2.5">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-brand text-sm font-bold text-white">
               徐
@@ -51,34 +47,36 @@ export default function LandingPage() {
       </nav>
 
       {/* ========== Hero ========== */}
-      <section className="relative flex min-h-screen items-center justify-center overflow-hidden pt-14">
-        {/* 背景装饰 */}
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute left-1/2 top-1/3 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-primary/5 blur-[120px]" />
-          <div className="absolute right-1/4 bottom-1/4 h-[400px] w-[400px] rounded-full bg-accent/5 blur-[100px]" />
-          {/* 网格线 */}
-          <div
-            className="absolute inset-0 opacity-[0.03]"
-            style={{
-              backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)',
-              backgroundSize: '32px 32px',
-            }}
-          />
-        </div>
+      <section className="relative flex h-[640px] items-center justify-center overflow-hidden pt-14">
+        {/* 背景渐变 */}
+        <div
+          className="absolute inset-0 -z-10"
+          style={{
+            background: 'linear-gradient(135deg, #0f766e 0%, #115e59 50%, #f97316 100%)',
+          }}
+        />
+        {/* 噪点纹理 */}
+        <div
+          className="absolute inset-0 -z-10 opacity-[0.06]"
+          style={{
+            backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\' opacity=\'1\'/%3E%3C/svg%3E")',
+            backgroundSize: '128px 128px',
+          }}
+        />
 
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
+        <div className="mx-auto max-w-[1200px] px-6 text-center">
           <Badge variant="secondary" className="mb-6">
             <Sparkles className="mr-1 h-3 w-3" />
             AI 驱动的旅行社交平台
           </Badge>
 
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-            用<span className="text-gradient-brand">第一视角</span>
+          <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
+            用<span className="underline decoration-white/30 underline-offset-8">第一视角</span>
             <br />
             重新定义旅行社交
           </h1>
 
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground leading-relaxed sm:text-xl">
+          <p className="mx-auto mt-6 max-w-2xl text-lg text-white/80 leading-relaxed sm:text-xl">
             戴上智能眼镜，AI 帮你记录、分享、连接。
             在这里，每一位旅行者都是故事的主角，
             每一段旅程都值得被世界看见。
@@ -87,14 +85,14 @@ export default function LandingPage() {
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link
               href="/login"
-              className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-3.5 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90 hover:shadow-primary/30 transition-all"
+              className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-3.5 text-base font-semibold text-primary shadow-lg shadow-black/20 hover:bg-white/90 transition-all"
             >
               开始探索
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
               href="#features"
-              className="inline-flex items-center gap-2 rounded-xl border px-8 py-3.5 text-base font-semibold hover:bg-accent transition-colors"
+              className="inline-flex items-center gap-2 rounded-xl border border-white/30 px-8 py-3.5 text-base font-semibold text-white hover:bg-white/10 transition-colors"
             >
               了解更多
               <ChevronRight className="h-4 w-4" />
@@ -103,8 +101,8 @@ export default function LandingPage() {
 
           {/* 滚动提示 */}
           <div className="mt-16 animate-bounce">
-            <div className="mx-auto h-10 w-6 rounded-full border-2 border-muted-foreground/30 p-1">
-              <div className="h-2 w-1.5 rounded-full bg-muted-foreground/40 mx-auto" />
+            <div className="mx-auto h-10 w-6 rounded-full border-2 border-white/30 p-1">
+              <div className="h-2 w-1.5 rounded-full bg-white/50 mx-auto" />
             </div>
           </div>
         </div>
@@ -112,7 +110,7 @@ export default function LandingPage() {
 
       {/* ========== 核心理念 ========== */}
       <section className="border-y bg-muted/30">
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+        <div className="mx-auto max-w-[1200px] px-6 py-20">
           <div className="mb-14 text-center">
             <h2 className="text-2xl font-bold sm:text-3xl">三大核心理念</h2>
             <p className="mt-3 text-muted-foreground">
@@ -123,8 +121,8 @@ export default function LandingPage() {
           <div className="grid gap-8 sm:grid-cols-3">
             {/* 第一视角 */}
             <div className="group relative rounded-2xl border bg-card p-8 transition-all hover:shadow-lg hover:border-primary/30">
-              <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                <Eye className="h-6 w-6" />
+              <div className="mb-5 inline-flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                <Eye className="h-7 w-7" />
               </div>
               <h3 className="mb-3 text-lg font-bold">第一视角</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
@@ -135,8 +133,8 @@ export default function LandingPage() {
 
             {/* AI 驱动 */}
             <div className="group relative rounded-2xl border bg-card p-8 transition-all hover:shadow-lg hover:border-accent/30">
-              <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground">
-                <Brain className="h-6 w-6" />
+              <div className="mb-5 inline-flex h-16 w-16 items-center justify-center rounded-full bg-accent/10 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground">
+                <Brain className="h-7 w-7" />
               </div>
               <h3 className="mb-3 text-lg font-bold">AI 驱动</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
@@ -147,8 +145,8 @@ export default function LandingPage() {
 
             {/* 社交连接 */}
             <div className="group relative rounded-2xl border bg-card p-8 transition-all hover:shadow-lg hover:border-teal-500/30">
-              <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-teal-500/10 text-teal-600 transition-colors group-hover:bg-teal-600 group-hover:text-white">
-                <Users className="h-6 w-6" />
+              <div className="mb-5 inline-flex h-16 w-16 items-center justify-center rounded-full bg-teal-500/10 text-teal-600 transition-colors group-hover:bg-teal-600 group-hover:text-white">
+                <Users className="h-7 w-7" />
               </div>
               <h3 className="mb-3 text-lg font-bold">社交连接</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
@@ -161,7 +159,7 @@ export default function LandingPage() {
       </section>
 
       {/* ========== 功能展示 ========== */}
-      <section id="features" className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+      <section id="features" className="mx-auto max-w-[1200px] px-6 py-20">
         <div className="mb-14 text-center">
           <h2 className="text-2xl font-bold sm:text-3xl">为旅行者打造的每一个功能</h2>
           <p className="mt-3 text-muted-foreground">
@@ -174,7 +172,7 @@ export default function LandingPage() {
           <div className="grid items-center gap-10 sm:grid-cols-2">
             <div className="order-2 sm:order-1">
               <Badge variant="outline" className="mb-4">
-                <Camera className="mr-1 h-3 w-3" />
+                <Glasses className="mr-1 h-3 w-3" />
                 沉浸式记录
               </Badge>
               <h3 className="mb-4 text-2xl font-bold">
@@ -199,8 +197,8 @@ export default function LandingPage() {
               <div className="relative rounded-2xl border bg-gradient-to-br from-primary/5 to-accent/5 p-10">
                 <div className="flex items-center justify-center">
                   <div className="relative">
-                    <div className="h-48 w-48 rounded-3xl bg-gradient-brand opacity-10 blur-xl absolute inset-0" />
-                    <Glasses className="h-32 w-32 text-primary/60 relative z-10" />
+                    <div className="absolute inset-0 h-48 w-48 rounded-3xl bg-gradient-brand opacity-10 blur-xl" />
+                    <Glasses className="relative z-10 h-32 w-32 text-primary/60" />
                   </div>
                 </div>
                 <div className="mt-6 flex justify-center gap-4">
@@ -377,7 +375,7 @@ export default function LandingPage() {
 
       {/* ========== 数据佐证 ========== */}
       <section className="border-y bg-muted/30">
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+        <div className="mx-auto max-w-[1200px] px-6 py-20">
           <div className="mb-12 text-center">
             <h2 className="text-2xl font-bold sm:text-3xl">一个正在成长的旅行社区</h2>
             <p className="mt-3 text-muted-foreground">
@@ -395,11 +393,11 @@ export default function LandingPage() {
               const Icon = stat.icon;
               return (
                 <div key={stat.label} className="text-center">
-                  <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
-                    <Icon className="h-5 w-5 text-primary" />
+                  <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10">
+                    <Icon className="h-6 w-6 text-primary" />
                   </div>
                   <p className="text-3xl font-bold">{stat.value}</p>
-                  <p className="mt-1 text-sm text-muted-foreground">{stat.label}</p>
+                  <p className="mt-2 text-sm text-muted-foreground">{stat.label}</p>
                 </div>
               );
             })}
@@ -409,13 +407,18 @@ export default function LandingPage() {
 
       {/* ========== 底部 CTA ========== */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-brand" />
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(135deg, #0f766e 0%, #115e59 50%, #f97316 100%)',
+          }}
+        />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.1),transparent_50%)]" />
-        <div className="relative mx-auto max-w-3xl px-4 py-20 text-center sm:px-6">
-          <h2 className="text-3xl font-bold text-primary-foreground sm:text-4xl">
+        <div className="relative mx-auto max-w-3xl px-6 py-20 text-center">
+          <h2 className="text-3xl font-bold text-white sm:text-4xl">
             开启你的旅行新篇章
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-lg text-primary-foreground/80">
+          <p className="mx-auto mt-4 max-w-xl text-lg text-white/80">
             加入徐霞客，用第一视角记录世界，用 AI 连接旅伴，
             让每一段旅程都成为值得珍藏的人生体验。
           </p>
@@ -429,12 +432,12 @@ export default function LandingPage() {
             </Link>
             <Link
               href="/login"
-              className="inline-flex items-center gap-2 rounded-xl border border-white/30 px-8 py-3.5 text-base font-semibold text-primary-foreground hover:bg-white/10 transition-colors"
+              className="inline-flex items-center gap-2 rounded-xl border border-white/30 px-8 py-3.5 text-base font-semibold text-white hover:bg-white/10 transition-colors"
             >
               已有账号？登录
             </Link>
           </div>
-          <p className="mt-6 text-sm text-primary-foreground/60 italic">
+          <p className="mt-8 text-sm text-white/50 italic">
             "大丈夫当朝碧海而暮苍梧" —— 徐霞客
           </p>
         </div>
@@ -442,7 +445,7 @@ export default function LandingPage() {
 
       {/* ========== 页脚 ========== */}
       <footer className="border-t">
-        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+        <div className="mx-auto max-w-[1200px] px-6 py-8">
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
             <div className="flex items-center gap-2">
               <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-brand text-[10px] font-bold text-white">
