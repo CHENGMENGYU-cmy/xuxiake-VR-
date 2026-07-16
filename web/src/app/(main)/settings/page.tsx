@@ -275,6 +275,10 @@ export default function SettingsPage() {
             ) : null}
           </TabsContent>
 
+          <TabsContent value="interests" className="mt-0">
+            <InterestsTab />
+          </TabsContent>
+
           <TabsContent value="privacy" className="mt-0">
             <PrivacyTab
               profileVisibility={profileVisibility}
