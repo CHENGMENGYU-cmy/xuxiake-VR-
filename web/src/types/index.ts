@@ -113,3 +113,44 @@ export interface Message {
   mediaType?: 'IMAGE' | 'FILE';
   createdAt: string;
 }
+
+// ===== 兴趣标签 =====
+export type TagCategory = 'TRAVEL' | 'VR' | 'ACTIVITY' | 'CULTURE' | 'OTHER';
+
+export interface InterestTag {
+  id: string;
+  name: string;
+  category: TagCategory;
+  icon?: string | null;
+  sortOrder: number;
+  isHot: boolean;
+}
+
+// ===== 社群 =====
+export interface Community {
+  id: string;
+  name: string;
+  description?: string | null;
+  avatarUrl?: string | null;
+  memberCount: number;
+  maxMembers: number;
+  isPublic: boolean;
+  conversationId: string;
+  creator?: {
+    id: string;
+    username: string;
+    displayName: string;
+    avatarUrl?: string | null;
+  };
+  tags?: InterestTag[];
+  isMember?: boolean;
+  isCreator?: boolean;
+  createdAt: string;
+}
+
+// ===== 推荐用户 =====
+export interface RecommendedUser extends User {
+  matchReasons?: string[];
+  matchScore?: number;
+  isFollowing?: boolean;
+}
