@@ -23,6 +23,7 @@ import { useAuthStore } from '@/stores/auth-store';
 import { useUIStore } from '@/stores/ui-store';
 import { cn } from '@/lib/utils';
 import apiClient from '@/lib/api-client';
+import { getRecommendedUsers } from '@/lib/social-api';
 
 const navItems = [
   { href: '/feed', label: '首页', icon: Home },
