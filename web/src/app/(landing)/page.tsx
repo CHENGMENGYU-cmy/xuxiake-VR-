@@ -2,21 +2,14 @@
 
 import Link from 'next/link';
 import {
-  Eye,
-  Brain,
   Users,
   MapPin,
   ArrowRight,
   Play,
-  MessageCircle,
   Route,
   Globe,
   Sparkles,
   ChevronDown,
-  Camera,
-  Heart,
-  Shield,
-  Smartphone,
   Trophy,
   Languages,
   Gift,
@@ -27,7 +20,6 @@ import {
   UserPlus,
   Star,
   Quote,
-  Zap,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useAuthStore } from '@/stores/auth-store';
