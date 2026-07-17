@@ -487,7 +487,7 @@ export default function LandingPage() {
                 emoji: '🌍',
                 title: '旅行爱好者',
                 subtitle: '云游四方',
-                desc: '无法出行？戴上VR眼镜，跟随达人的眼睛，足不出户也能身临其境，探索世界的每个角落。',
+                desc: '无法出行？戴上AR眼镜，跟随达人的眼睛，足不出户也能身临其境，探索世界的每个角落。',
                 gradient: 'from-accent/10 to-accent/5',
               },
               {
