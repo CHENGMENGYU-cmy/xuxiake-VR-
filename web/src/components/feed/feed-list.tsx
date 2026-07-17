@@ -15,9 +15,12 @@ interface FeedListProps {
 export function FeedList({ showComposer = true }: FeedListProps) {
   const { posts = [], isLoading, isLoadingMore, hasMore, fetchPosts, loadMore } = usePostStore();
 
-  // 组件挂载时从API加载数据
+  // 组件挂载时从API加载数据（仅当store为空时）
   useEffect(() => {
-    fetchPosts();
+    const currentPosts = usePostStore.getState().posts ?? [];
+    if (currentPosts.length === 0) {
+      fetchPosts();
+    }
   }, [fetchPosts]);
 
   const handleRefresh = useCallback(() => {
