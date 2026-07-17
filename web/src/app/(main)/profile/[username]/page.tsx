@@ -28,10 +28,12 @@ export default function ProfilePage() {
 function ProfileContent({ username }: { username: string }) {
   const { user: currentUser } = useAuthStore();
   const { posts: storePosts, fetchPosts } = usePostStore();
+  const router = useRouter();
   const [profileUser, setProfileUser] = useState<User | null>(null);
   const [userPosts, setUserPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [isFollowing, setIsFollowing] = useState(false);
+  const [isFollowedBy, setIsFollowedBy] = useState(false);
   const [followLoading, setFollowLoading] = useState(false);
   const [followerCount, setFollowerCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
