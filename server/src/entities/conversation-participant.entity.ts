@@ -11,6 +11,9 @@ export class ConversationParticipant {
   @Column({ name: 'user_id', type: 'varchar', length: 36 })
   userId: string;
 
+  @Column({ type: 'enum', enum: ['NORMAL', 'REQUEST', 'HIDDEN'], default: 'NORMAL' })
+  status: 'NORMAL' | 'REQUEST' | 'HIDDEN';
+
   @Column({ name: 'last_read_at', type: 'timestamp', nullable: true })
   lastReadAt: Date | null;
 
