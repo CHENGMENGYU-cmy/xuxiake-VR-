@@ -72,6 +72,9 @@ export default function MessagesPage() {
     setStartingChat(userId);
     try {
       const conv = await getOrCreateDirectConversation(userId);
+      if (conv.isRequest) {
+        alert('消息已发送为请求，对方需要接受后才能继续对话');
+      }
       router.push(`/messages/${conv.id}`);
     } catch {
       // ignore
