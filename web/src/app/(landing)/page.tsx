@@ -643,10 +643,6 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
-              <div className="text-center">
-                <span className="text-3xl font-bold">¥3,000+</span>
-                <span className="text-sm text-muted-foreground ml-2">旗舰手机</span>
-              </div>
             </div>
 
             {/* 运动相机 */}
