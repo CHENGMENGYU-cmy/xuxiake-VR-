@@ -215,7 +215,127 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ========== 二、平台介绍 ========== */}
+      {/* ========== 二、AR眼镜功能展示 ========== */}
+      <section className="relative py-24 sm:py-32 overflow-hidden">
+        {/* 背景装饰 */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/20 to-background" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/5 blur-[100px] rounded-full" />
+
+        <div className="relative mx-auto max-w-7xl px-6">
+          <div className="mb-16 text-center">
+            <Badge variant="outline" className="mb-4">
+              <Eye className="mr-1.5 h-3.5 w-3.5" />
+              AR智能眼镜
+            </Badge>
+            <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl">
+              你的AI旅行伴侣
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-muted-foreground text-lg">
+              专为旅行设计的AR智能眼镜，让AI成为你的第二双眼睛
+            </p>
+          </div>
+
+          <div className="grid gap-8 lg:grid-cols-2 items-center">
+            {/* 左侧：功能列表 */}
+            <div className="space-y-6">
+              {[
+                {
+                  icon: Camera,
+                  title: '4K第一视角拍摄',
+                  desc: '1200万像素超清摄像头，120°广角视野，记录你眼中的每一帧精彩',
+                  color: 'text-cyan-500',
+                  bg: 'bg-cyan-500/10',
+                },
+                {
+                  icon: Eye,
+                  title: 'AR实景叠加',
+                  desc: '智能识别景点、建筑、动植物，实时显示介绍、评分、历史故事',
+                  color: 'text-primary',
+                  bg: 'bg-primary/10',
+                },
+                {
+                  icon: Languages,
+                  title: '实时翻译字幕',
+                  desc: '看到外文自动翻译，对话实时字幕，打破语言障碍',
+                  color: 'text-accent',
+                  bg: 'bg-accent/10',
+                },
+                {
+                  icon: Navigation,
+                  title: 'AR导航指引',
+                  desc: '箭头、路线直接投射在视野中，再复杂的路口也不会迷路',
+                  color: 'text-orange-500',
+                  bg: 'bg-orange-500/10',
+                },
+              ].map((item) => {
+                const Icon = item.icon;
+                return (
+                  <div
+                    key={item.title}
+                    className="group flex items-start gap-4 rounded-2xl border bg-card p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-primary/20"
+                  >
+                    <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${item.bg} ${item.color} transition-transform duration-300 group-hover:scale-110`}>
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold mb-1">{item.title}</h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* 右侧：眼镜规格卡片 */}
+            <div className="relative">
+              <div className="rounded-3xl border bg-card p-8 shadow-xl">
+                <div className="mb-6 flex items-center justify-between">
+                  <h3 className="text-xl font-bold">徐霞客 AR Pro</h3>
+                  <Badge className="bg-gradient-to-r from-cyan-500 to-blue-500">旗舰款</Badge>
+                </div>
+
+                <div className="space-y-4 mb-8">
+                  {[
+                    { label: '重量', value: '仅 49g', icon: '🪶' },
+                    { label: '续航', value: '12 小时', icon: '🔋' },
+                    { label: '视野', value: '52° FOV', icon: '👁️' },
+                    { label: '连接', value: '5G + WiFi 7', icon: '📡' },
+                    { label: '存储', value: '256GB', icon: '💾' },
+                    { label: '防水', value: 'IPX5', icon: '💧' },
+                  ].map((spec) => (
+                    <div key={spec.label} className="flex items-center justify-between py-2 border-b border-muted last:border-0">
+                      <div className="flex items-center gap-3">
+                        <span className="text-lg">{spec.icon}</span>
+                        <span className="text-sm text-muted-foreground">{spec.label}</span>
+                      </div>
+                      <span className="font-medium">{spec.value}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <div className="flex -space-x-2">
+                    {['A', 'B', 'C'].map((name, i) => (
+                      <div key={i} className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-brand text-xs font-bold text-white ring-2 ring-background">
+                        {name}
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    <span className="font-medium text-foreground">2,847</span> 人正在使用
+                  </p>
+                </div>
+              </div>
+
+              {/* 装饰元素 */}
+              <div className="absolute -top-4 -right-4 w-24 h-24 bg-primary/10 rounded-full blur-2xl" />
+              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-accent/10 rounded-full blur-2xl" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========== 三、平台介绍 ========== */}
       <section id="about" className="relative py-24 sm:py-32">
         <div className="mx-auto max-w-4xl px-6 text-center">
           <Badge variant="outline" className="mb-6">关于平台</Badge>
