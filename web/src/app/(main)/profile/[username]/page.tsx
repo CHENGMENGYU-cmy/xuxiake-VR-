@@ -103,6 +103,8 @@ function ProfileContent({ username }: { username: string }) {
     }
   }, [profileUser, storePosts, currentUser, fetchPosts]);
 
+  const isMutualFollow = isFollowing && isFollowedBy;
+
   const handleFollow = async () => {
     if (!profileUser || followLoading) return;
     setFollowLoading(true);
@@ -122,6 +124,19 @@ function ProfileContent({ username }: { username: string }) {
       setIsFollowing(wasFollowing);
       setFollowerCount((prev) => wasFollowing ? prev + 1 : Math.max(0, prev - 1));
       toast.error('操作失败，请重试');
+    } finally {
+      setFollowLoading(false);
+    }
+  };
+
+  const handleMessage = async () => {
+    if (!profileUser || followLoading) return;
+    setFollowLoading(true);
+    try {
+      const conv = await getOrCreateDirectConversation(profileUser.id);
+      router.push(`/messages/${conv.id}`);
+    } catch {
+      toast.error('无法创建对话');
     } finally {
       setFollowLoading(false);
     }
