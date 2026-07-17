@@ -380,7 +380,7 @@ export default function LandingPage() {
               {
                 emoji: '👁️',
                 title: '第一视角，身临其境',
-                desc: '通过VR眼镜，跟随旅行者的眼睛看世界。不再是隔着屏幕的旁观，而是感同身受的同行。',
+                desc: '通过AR眼镜，跟随旅行者的眼睛看世界。不再是隔着屏幕的旁观，而是感同身受的同行。',
                 gradient: 'from-primary/10 to-primary/5',
               },
               {
