@@ -13,6 +13,11 @@ export default function MessagesPage() {
   const { user } = useAuthStore();
   const [conversations, setConversations] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!user) return;
@@ -33,10 +38,10 @@ export default function MessagesPage() {
     fetchConversations();
   }, [user]);
 
-  if (!user) {
+  if (!mounted || !user) {
     return (
       <div className="flex items-center justify-center py-12">
-        <p className="text-muted-foreground">请先登录</p>
+        <p className="text-muted-foreground">{mounted ? '请先登录' : ''}</p>
       </div>
     );
   }

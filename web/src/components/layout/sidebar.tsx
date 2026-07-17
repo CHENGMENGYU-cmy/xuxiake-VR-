@@ -69,10 +69,15 @@ export function Sidebar() {
           }
         }).catch(() => {});
       });
-      // 获取互关好友
-      apiClient.get(`/users/${user.username}/followers`).then((res) => {
-        if (res.data?.success) {
-          setFriends(res.data.data || []);
+      // 获取互关好友：粉丝 ∩ 我的关注
+      Promise.all([
+        apiClient.get(`/users/${user.username}/followers`),
+        apiClient.get(`/users/${user.username}/following`),
+      ]).then(([followersRes, followingRes]) => {
+        if (followersRes.data?.success && followingRes.data?.success) {
+          const followers = followersRes.data.data || [];
+          const followingIds = new Set((followingRes.data.data || []).map((u: any) => u.id));
+          setFriends(followers.filter((u: any) => followingIds.has(u.id)));
         }
       }).catch(() => {});
     }
