@@ -46,10 +46,13 @@ const mediaTypes = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
   const { user } = useAuthStore();
   const { sidebarOpen } = useUIStore();
   const [mounted, setMounted] = useState(false);
   const [suggestedUsers, setSuggestedUsers] = useState<any[]>([]);
+  const [friends, setFriends] = useState<any[]>([]);
+  const [msgLoading, setMsgLoading] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     setMounted(true);
@@ -66,8 +69,27 @@ export function Sidebar() {
           }
         }).catch(() => {});
       });
+      // 获取互关好友
+      apiClient.get(`/users/${user.username}/followers`).then((res) => {
+        if (res.data?.success) {
+          setFriends(res.data.data || []);
+        }
+      }).catch(() => {});
     }
   }, [user]);
+
+  const handleSendMessage = async (userId: string) => {
+    if (msgLoading[userId]) return;
+    setMsgLoading((prev) => ({ ...prev, [userId]: true }));
+    try {
+      const conv = await getOrCreateDirectConversation(userId);
+      router.push(`/messages/${conv.id}`);
+    } catch {
+      // ignore
+    } finally {
+      setMsgLoading((prev) => ({ ...prev, [userId]: false }));
+    }
+  };
 
   return (
     <>
