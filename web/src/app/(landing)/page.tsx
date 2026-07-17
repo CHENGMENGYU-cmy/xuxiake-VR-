@@ -533,7 +533,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ========== 四、功能亮点 ========== */}
+      {/* ========== 六、功能亮点 ========== */}
       <section id="highlights" className="relative py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6">
           <div className="mb-16 text-center">
