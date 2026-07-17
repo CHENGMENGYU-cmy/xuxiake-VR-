@@ -31,7 +31,11 @@ export class PostsService {
       .take(limit + 1);
 
     if (cursor) {
-      qb.andWhere('post.id != :cursor', { cursor });
+      // 获取cursor帖子的createdAt
+      const cursorPost = await this.postRepo.findOne({ where: { id: cursor } });
+      if (cursorPost) {
+        qb.andWhere('post.createdAt < :cursorDate', { cursorDate: cursorPost.createdAt });
+      }
     }
 
     const posts = await qb.getMany();
