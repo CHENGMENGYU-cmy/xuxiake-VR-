@@ -80,6 +80,28 @@ export default function MessagesPage() {
     }
   };
 
+  const handleAcceptRequest = async (convId: string) => {
+    try {
+      await apiClient.post(`/conversations/${convId}/accept`);
+      setRequestConversations((prev) => prev.filter((c) => c.id !== convId));
+      const acceptedConv = requestConversations.find((c) => c.id === convId);
+      if (acceptedConv) {
+        setConversations((prev) => [acceptedConv, ...prev]);
+      }
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleRejectRequest = async (convId: string) => {
+    try {
+      await apiClient.post(`/conversations/${convId}/reject`);
+      setRequestConversations((prev) => prev.filter((c) => c.id !== convId));
+    } catch {
+      // ignore
+    }
+  };
+
   if (!mounted || !user) {
     return (
       <div className="flex items-center justify-center py-12">
