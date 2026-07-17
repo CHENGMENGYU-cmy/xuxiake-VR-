@@ -189,18 +189,18 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
       {/* 输入框 */}
       <div className="flex items-center gap-2 border-t p-3">
         <Input
-          placeholder="输入消息..."
+          placeholder={myStatus === 'REQUEST' ? '请先接受消息请求' : '输入消息...'}
           className="flex-1 rounded-full bg-muted"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          disabled={sending}
+          disabled={sending || myStatus === 'REQUEST'}
         />
         <Button
           size="icon"
           className="h-8 w-8 rounded-full"
           onClick={handleSend}
-          disabled={!input.trim() || sending}
+          disabled={!input.trim() || sending || myStatus === 'REQUEST'}
         >
           <Send className="h-4 w-4" />
         </Button>
