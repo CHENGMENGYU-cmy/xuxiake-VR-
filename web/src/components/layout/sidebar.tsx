@@ -50,6 +50,7 @@ export function Sidebar() {
   const { sidebarOpen } = useUIStore();
   const [mounted, setMounted] = useState(false);
   const [suggestedUsers, setSuggestedUsers] = useState<any[]>([]);
+  const [followingIds, setFollowingIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     setMounted(true);
@@ -69,6 +70,29 @@ export function Sidebar() {
       });
     }
   }, [user]);
+
+  const handleFollow = async (e: React.MouseEvent, userId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      const isFollowing = followingIds.has(userId);
+      if (isFollowing) {
+        await apiClient.delete(`/users/${userId}/follow`);
+        setFollowingIds((prev) => {
+          const next = new Set(prev);
+          next.delete(userId);
+          return next;
+        });
+        toast.success('已取消关注');
+      } else {
+        await apiClient.post(`/users/${userId}/follow`);
+        setFollowingIds((prev) => new Set(prev).add(userId));
+        toast.success('关注成功');
+      }
+    } catch {
+      toast.error('操作失败，请重试');
+    }
+  };
 
   return (
     <>
