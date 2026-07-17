@@ -15,11 +15,11 @@
 
 ## 演示脚本
 
-### 方式1：TypeScript 脚本（推荐）
+### 方式1：Node.js 脚本（推荐）
 
 ```bash
 cd server
-npx tsx ../scripts/create-demo-messages.ts
+node ../scripts/create-demo-messages.js
 ```
 
 ### 方式2：SQL 脚本
@@ -27,6 +27,26 @@ npx tsx ../scripts/create-demo-messages.ts
 1. 先查看用户列表，获取两个用户ID
 2. 编辑 `demo-message-requests.sql`，替换 `<USER_A_ID>` 和 `<USER_B_ID>`
 3. 在 MySQL 中执行脚本
+
+## 已创建的演示数据
+
+已自动创建演示数据：
+- **会话ID**: `57b1ab3d81f711f19ff76018957395ba`
+- **发起者**: 徐霞客 (u1) - 状态: NORMAL
+- **接收者**: 钱一 (u10) - 状态: REQUEST
+- **消息内容**: "你好！想交流VR拍摄经验。"
+
+### 重置演示数据
+
+```bash
+mysql -u root -proot xuxiake < scripts/reset-demo-messages.sql
+```
+
+### 清理演示数据
+
+```bash
+mysql -u root -proot xuxiake < scripts/cleanup-demo-messages.sql
+```
 
 ## API 接口
 
@@ -58,8 +78,8 @@ POST /api/conversations/:id/reject
 
 ## 测试流程
 
-1. 用户A 关注用户B（用户B未关注A）
-2. 用户A 向用户B 发送消息
-3. 用户B 在"陌生人消息"看到请求
-4. 用户B 点击"接受"或"拒绝"
+1. 访问 http://localhost:3000/messages
+2. 登录为钱一（用户B）
+3. 查看"陌生人消息"标签页
+4. 点击接受或拒绝按钮
 5. 接受后，会话移入"私信"，双方可正常聊天
