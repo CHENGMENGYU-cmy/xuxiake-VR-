@@ -21,9 +21,8 @@ import {
   Quote,
   Eye,
   Wifi,
-  Battery,
   Camera,
-  Mic,
+  Languages,
   Navigation,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
