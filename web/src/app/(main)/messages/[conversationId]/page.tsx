@@ -135,6 +135,23 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
         ) : null}
       </div>
 
+      {/* 消息请求提示 */}
+      {myStatus === 'REQUEST' && (
+        <div className="flex items-center justify-between border-b bg-orange-50 px-4 py-3 dark:bg-orange-950/30">
+          <p className="text-sm text-orange-700 dark:text-orange-300">
+            这是来自陌生人的消息请求
+          </p>
+          <div className="flex gap-2">
+            <Button size="sm" onClick={handleAcceptRequest}>
+              接受
+            </Button>
+            <Button size="sm" variant="outline" onClick={handleRejectRequest}>
+              拒绝
+            </Button>
+          </div>
+        </div>
+      )}
+
       {/* 消息列表 */}
       <div className="flex-1 space-y-3 overflow-y-auto p-4">
         {messages.map((msg) => {
