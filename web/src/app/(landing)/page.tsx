@@ -668,10 +668,6 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
-              <div className="text-center">
-                <span className="text-3xl font-bold">¥2,000+</span>
-                <span className="text-sm text-muted-foreground ml-2">专业运动相机</span>
-              </div>
             </div>
           </div>
         </div>
