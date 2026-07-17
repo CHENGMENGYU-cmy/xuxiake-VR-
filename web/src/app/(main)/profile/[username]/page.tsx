@@ -73,8 +73,12 @@ function ProfileContent({ username }: { username: string }) {
         setFollowingCount(followingRes.total || 0);
 
         if (currentUser) {
-          const isFollowingUser = followersRes.data?.some((u) => u.id === currentUser.id);
-          setIsFollowing(!!isFollowingUser);
+          // 我是否关注了TA
+          const amFollowing = followersRes.data?.some((u) => u.id === currentUser.id);
+          setIsFollowing(!!amFollowing);
+          // TA是否关注了我
+          const isFollowedBack = followingRes.data?.some((u) => u.id === currentUser.id);
+          setIsFollowedBy(!!isFollowedBack);
         }
       } catch (err) {
         console.error('Failed to fetch follow data:', err);
