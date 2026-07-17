@@ -13,7 +13,7 @@ interface FeedListProps {
 }
 
 export function FeedList({ showComposer = true }: FeedListProps) {
-  const { posts = [], isLoading, fetchPosts } = usePostStore();
+  const { posts = [], isLoading, isLoadingMore, hasMore, fetchPosts, loadMore } = usePostStore();
 
   // 组件挂载时从API加载数据
   useEffect(() => {
