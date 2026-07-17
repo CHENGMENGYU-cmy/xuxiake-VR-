@@ -13,6 +13,11 @@ export async function getHotTags(): Promise<InterestTag[]> {
   return data.data;
 }
 
+export async function getHotTopics(): Promise<{ tag: string; count: number }[]> {
+  const { data } = await apiClient.get('/social/hot-topics');
+  return data.data;
+}
+
 export async function getUserInterests(): Promise<InterestTag[]> {
   const { data } = await apiClient.get('/social/user/interests');
   return data.data;
