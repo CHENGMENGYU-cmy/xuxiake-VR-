@@ -2,11 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Users, Compass, UserPlus, MessageCircle, Loader2, Heart, MapPin, Eye, UserCheck } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuthStore } from '@/stores/auth-store';
 import {
@@ -69,7 +68,6 @@ export default function DiscoverPage() {
     setFollowLoading((prev) => ({ ...prev, [userId]: true }));
 
     const wasFollowing = followingMap[userId];
-    // 乐观更新
     setFollowingMap((prev) => ({ ...prev, [userId]: !wasFollowing }));
 
     try {
@@ -81,7 +79,6 @@ export default function DiscoverPage() {
         toast.success('关注成功');
       }
     } catch {
-      // 回滚
       setFollowingMap((prev) => ({ ...prev, [userId]: wasFollowing }));
       toast.error('操作失败，请重试');
     } finally {
@@ -92,7 +89,7 @@ export default function DiscoverPage() {
   if (!mounted) {
     return (
       <div className="flex h-[calc(100vh-3.5rem)] items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
       </div>
     );
   }
@@ -100,16 +97,13 @@ export default function DiscoverPage() {
   if (!isAuthenticated) {
     return (
       <div className="flex h-[calc(100vh-3.5rem)] items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardContent className="pt-6 text-center">
-            <Compass className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
-            <h2 className="mb-2 text-xl font-semibold">发现新朋友</h2>
-            <p className="mb-4 text-muted-foreground">登录后查看智能推荐</p>
-            <Link href="/login">
-              <Button>立即登录</Button>
-            </Link>
-          </CardContent>
-        </Card>
+        <div className="text-center">
+          <h2 className="mb-2 text-lg font-medium">发现新朋友</h2>
+          <p className="mb-4 text-sm text-muted-foreground">登录后查看智能推荐</p>
+          <Link href="/login">
+            <Button>立即登录</Button>
+          </Link>
+        </div>
       </div>
     );
   }
@@ -117,44 +111,29 @@ export default function DiscoverPage() {
   if (loading) {
     return (
       <div className="flex h-[calc(100vh-3.5rem)] items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-4xl space-y-6 p-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">发现</h1>
-      </div>
-
+    <div className="mx-auto max-w-3xl p-4">
       <Tabs defaultValue="users" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="users" className="flex items-center gap-2">
-            <Users className="h-4 w-4" />
-            推荐用户
-          </TabsTrigger>
-          <TabsTrigger value="communities" className="flex items-center gap-2">
-            <MessageCircle className="h-4 w-4" />
-            推荐社群
-          </TabsTrigger>
-          <TabsTrigger value="my-communities" className="flex items-center gap-2">
-            <Compass className="h-4 w-4" />
-            我的社群
-          </TabsTrigger>
+        <TabsList className="mb-6 grid w-full grid-cols-3">
+          <TabsTrigger value="users">推荐用户</TabsTrigger>
+          <TabsTrigger value="communities">推荐社群</TabsTrigger>
+          <TabsTrigger value="my-communities">我的社群</TabsTrigger>
         </TabsList>
 
         {/* 推荐用户 */}
-        <TabsContent value="users" className="mt-6">
-          <div className="grid gap-4 sm:grid-cols-2">
-            {recommendedUsers.length === 0 ? (
-              <Card className="col-span-2">
-                <CardContent className="pt-6 text-center text-muted-foreground">
-                  暂无推荐用户，完善个人资料和兴趣标签可获得更精准的推荐
-                </CardContent>
-              </Card>
-            ) : (
-              recommendedUsers.map((user) => (
+        <TabsContent value="users">
+          {recommendedUsers.length === 0 ? (
+            <div className="py-16 text-center text-sm text-muted-foreground">
+              暂无推荐用户，完善个人资料和兴趣标签可获得更精准的推荐
+            </div>
+          ) : (
+            <div className="divide-y rounded-lg border bg-card">
+              {recommendedUsers.map((user) => (
                 <UserCard
                   key={user.id}
                   user={user}
@@ -162,116 +141,80 @@ export default function DiscoverPage() {
                   isLoading={!!followLoading[user.id]}
                   onFollow={() => handleFollow(user.id)}
                 />
-              ))
-            )}
-          </div>
+              ))}
+            </div>
+          )}
         </TabsContent>
 
         {/* 推荐社群 */}
-        <TabsContent value="communities" className="mt-6">
-          <div className="grid gap-4 sm:grid-cols-2">
-            {recommendedCommunities.length === 0 ? (
-              <Card className="col-span-2">
-                <CardContent className="pt-6 text-center text-muted-foreground">
-                  暂无推荐社群，完善兴趣标签可获得更精准的推荐
-                </CardContent>
-              </Card>
-            ) : (
-              recommendedCommunities.map((community) => (
-                <Card key={community.id} className="overflow-hidden">
-                  <CardContent className="p-4">
-                    <div className="flex items-start gap-3">
-                      <Avatar className="h-12 w-12">
-                        <AvatarImage src={community.avatarUrl || undefined} alt={community.name} />
-                        <AvatarFallback>{community.name[0]}</AvatarFallback>
-                      </Avatar>
-                      <div className="min-w-0 flex-1">
-                        <Link href={`/communities/${community.id}`} className="font-semibold hover:underline">
-                          {community.name}
-                        </Link>
-                        <p className="text-sm text-muted-foreground">
-                          {community.memberCount} / {community.maxMembers} 成员
-                        </p>
-                        {community.description && (
-                          <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
-                            {community.description}
-                          </p>
-                        )}
-                        {community.tags && community.tags.length > 0 && (
-                          <div className="mt-2 flex flex-wrap gap-1">
-                            {community.tags.slice(0, 3).map((tag) => (
-                              <Badge key={tag.id} variant="secondary" className="text-xs">
-                                {tag.icon} {tag.name}
-                              </Badge>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))
-            )}
-          </div>
+        <TabsContent value="communities">
+          {recommendedCommunities.length === 0 ? (
+            <div className="py-16 text-center text-sm text-muted-foreground">
+              暂无推荐社群，完善兴趣标签可获得更精准的推荐
+            </div>
+          ) : (
+            <div className="divide-y rounded-lg border bg-card">
+              {recommendedCommunities.map((community) => (
+                <div key={community.id} className="flex items-center gap-3 p-4">
+                  <Avatar className="h-11 w-11">
+                    <AvatarImage src={community.avatarUrl || undefined} alt={community.name} />
+                    <AvatarFallback>{community.name[0]}</AvatarFallback>
+                  </Avatar>
+                  <div className="min-w-0 flex-1">
+                    <Link href={`/communities/${community.id}`} className="text-sm font-medium hover:underline">
+                      {community.name}
+                    </Link>
+                    <p className="text-xs text-muted-foreground">
+                      {community.memberCount}/{community.maxMembers} 成员
+                      {community.description && ` · ${community.description}`}
+                    </p>
+                  </div>
+                  <Link href={`/communities/${community.id}`}>
+                    <Button size="sm" variant="outline">加入</Button>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          )}
         </TabsContent>
 
         {/* 我的社群 */}
-        <TabsContent value="my-communities" className="mt-6">
+        <TabsContent value="my-communities">
           <div className="mb-4 flex justify-end">
             <Link href="/communities/create">
-              <Button>
-                <MessageCircle className="mr-2 h-4 w-4" />
-                创建社群
-              </Button>
+              <Button size="sm">创建社群</Button>
             </Link>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {myCommunities.length === 0 ? (
-              <Card className="col-span-2">
-                <CardContent className="pt-6 text-center text-muted-foreground">
-                  你还没有加入任何社群
-                </CardContent>
-              </Card>
-            ) : (
-              myCommunities.map((community) => (
-                <Link key={community.id} href={`/communities/${community.id}`}>
-                  <Card className="overflow-hidden transition-colors hover:bg-accent">
-                    <CardContent className="p-4">
-                      <div className="flex items-start gap-3">
-                        <Avatar className="h-12 w-12">
-                          <AvatarImage src={community.avatarUrl || undefined} alt={community.name} />
-                          <AvatarFallback>{community.name[0]}</AvatarFallback>
-                        </Avatar>
-                        <div className="min-w-0 flex-1">
-                          <p className="font-semibold">{community.name}</p>
-                          <p className="text-sm text-muted-foreground">
-                            {community.memberCount} 成员
-                            {community.isCreator && ' · 创建者'}
-                          </p>
-                          {community.tags && community.tags.length > 0 && (
-                            <div className="mt-2 flex flex-wrap gap-1">
-                              {community.tags.slice(0, 3).map((tag) => (
-                                <Badge key={tag.id} variant="secondary" className="text-xs">
-                                  {tag.icon} {tag.name}
-                                </Badge>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+          {myCommunities.length === 0 ? (
+            <div className="py-16 text-center text-sm text-muted-foreground">
+              你还没有加入任何社群
+            </div>
+          ) : (
+            <div className="divide-y rounded-lg border bg-card">
+              {myCommunities.map((community) => (
+                <Link key={community.id} href={`/communities/${community.id}`} className="flex items-center gap-3 p-4 hover:bg-accent">
+                  <Avatar className="h-11 w-11">
+                    <AvatarImage src={community.avatarUrl || undefined} alt={community.name} />
+                    <AvatarFallback>{community.name[0]}</AvatarFallback>
+                  </Avatar>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-medium">{community.name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {community.memberCount} 成员
+                      {community.isCreator && ' · 创建者'}
+                    </p>
+                  </div>
                 </Link>
-              ))
-            )}
-          </div>
+              ))}
+            </div>
+          )}
         </TabsContent>
       </Tabs>
     </div>
   );
 }
 
-// ===== 用户推荐卡片组件 =====
+// ===== 用户推荐卡片 =====
 
 function UserCard({
   user,
@@ -285,118 +228,70 @@ function UserCard({
   onFollow: () => void;
 }) {
   return (
-    <Card className="overflow-hidden transition-shadow hover:shadow-md">
-      <CardContent className="p-4">
-        {/* 头部：头像 + 信息 + 关注按钮 */}
-        <div className="flex items-start gap-3">
-          <Link href={`/profile/${user.username}`}>
-            <Avatar className="h-12 w-12">
-              <AvatarImage src={user.avatarUrl || undefined} alt={user.displayName} />
-              <AvatarFallback>{user.displayName?.[0]}</AvatarFallback>
-            </Avatar>
-          </Link>
-          <div className="min-w-0 flex-1">
-            <div className="flex items-start justify-between">
-              <div>
-                <Link href={`/profile/${user.username}`} className="font-semibold hover:underline">
-                  {user.displayName}
-                </Link>
-                <p className="text-sm text-muted-foreground">@{user.username}</p>
-              </div>
-              <Button
-                size="sm"
-                variant={isFollowing ? 'outline' : 'default'}
-                onClick={onFollow}
-                disabled={isLoading}
-                className="gap-1"
-              >
-                {isLoading ? (
-                  <Loader2 className="h-3 w-3 animate-spin" />
-                ) : isFollowing ? (
-                  <UserCheck className="h-3 w-3" />
-                ) : (
-                  <UserPlus className="h-3 w-3" />
-                )}
-                {isFollowing ? '已关注' : '关注'}
-              </Button>
-            </div>
+    <div className="flex items-start gap-3 p-4">
+      <Link href={`/profile/${user.username}`}>
+        <Avatar className="h-11 w-11">
+          <AvatarImage src={user.avatarUrl || undefined} alt={user.displayName} />
+          <AvatarFallback>{user.displayName?.[0]}</AvatarFallback>
+        </Avatar>
+      </Link>
 
+      <div className="min-w-0 flex-1">
+        <div className="flex items-start justify-between">
+          <div className="min-w-0">
+            <Link href={`/profile/${user.username}`} className="text-sm font-medium hover:underline">
+              {user.displayName}
+            </Link>
             {user.bio && (
-              <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{user.bio}</p>
+              <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">{user.bio}</p>
             )}
           </div>
+          <Button
+            size="sm"
+            variant={isFollowing ? 'outline' : 'default'}
+            onClick={onFollow}
+            disabled={isLoading}
+            className="ml-3 shrink-0"
+          >
+            {isFollowing ? '已关注' : '关注'}
+          </Button>
         </div>
 
-        {/* 匹配原因 */}
-        {user.matchReasons && user.matchReasons.length > 0 && (
-          <div className="mt-3 flex flex-wrap gap-1">
-            {user.matchReasons.map((reason, i) => (
-              <Badge key={i} variant="secondary" className="text-xs">
-                {reason}
-              </Badge>
-            ))}
-          </div>
-        )}
-
-        {/* 兴趣标签 */}
-        {user.interests && user.interests.length > 0 && (
-          <div className="mt-2 flex flex-wrap gap-1">
-            {user.interests.slice(0, 4).map((tag) => (
-              <Badge key={tag.id} variant="outline" className="text-xs">
-                {tag.icon} {tag.name}
-              </Badge>
-            ))}
-            {user.interests.length > 4 && (
-              <Badge variant="outline" className="text-xs">
-                +{user.interests.length - 4}
-              </Badge>
-            )}
-          </div>
-        )}
+        {/* 匹配原因 + 兴趣标签，一行展示 */}
+        <div className="mt-2 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
+          {user.matchReasons?.map((reason, i) => (
+            <span key={i} className="rounded bg-secondary px-1.5 py-0.5">{reason}</span>
+          ))}
+          {user.interests?.slice(0, 3).map((tag) => (
+            <span key={tag.id} className="rounded bg-secondary px-1.5 py-0.5">{tag.icon} {tag.name}</span>
+          ))}
+          {(user.interests?.length || 0) > 3 && (
+            <span className="text-xs">+{user.interests!.length - 3}</span>
+          )}
+        </div>
 
         {/* 创作数据 */}
         {user.postCount !== undefined && user.postCount > 0 && (
-          <div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1">
-              <Eye className="h-3 w-3" />
-              {user.postCount} 篇内容
-            </span>
-            <span className="flex items-center gap-1">
-              <Heart className="h-3 w-3" />
-              {user.totalLikes} 获赞
-            </span>
-            {user.vrDeviceInfo && (
-              <span className="flex items-center gap-1">
-                {user.vrDeviceInfo.model}
-              </span>
-            )}
-          </div>
+          <p className="mt-1.5 text-xs text-muted-foreground">
+            {user.postCount} 篇内容 · {user.totalLikes} 获赞
+            {user.vrDeviceInfo && ` · ${user.vrDeviceInfo.model}`}
+          </p>
         )}
 
-        {/* 代表帖子预览 */}
+        {/* 代表帖子缩略图 */}
         {user.representativePosts && user.representativePosts.length > 0 && (
-          <div className="mt-3 flex gap-2">
+          <div className="mt-2 flex gap-1.5">
             {user.representativePosts.map((post) => (
               <Link
                 key={post.id}
                 href={`/post/${post.id}`}
-                className="group relative flex-1 overflow-hidden rounded-lg bg-muted"
+                className="block h-16 w-24 overflow-hidden rounded bg-muted"
               >
                 {post.thumbnailUrl ? (
-                  <img
-                    src={post.thumbnailUrl}
-                    alt=""
-                    className="h-20 w-full object-cover transition-transform group-hover:scale-105"
-                  />
+                  <img src={post.thumbnailUrl} alt="" className="h-full w-full object-cover" />
                 ) : (
-                  <div className="flex h-20 w-full items-center justify-center p-2 text-center text-xs text-muted-foreground">
-                    {post.content || '无内容预览'}
-                  </div>
-                )}
-                {post.locationName && (
-                  <div className="absolute bottom-0 left-0 right-0 flex items-center gap-0.5 bg-black/50 px-1.5 py-0.5 text-[10px] text-white">
-                    <MapPin className="h-2.5 w-2.5" />
-                    {post.locationName}
+                  <div className="flex h-full w-full items-center justify-center p-1 text-center text-[10px] text-muted-foreground">
+                    {post.content?.slice(0, 20) || '无预览'}
                   </div>
                 )}
               </Link>
@@ -406,15 +301,12 @@ function UserCard({
 
         {/* 共同好友 */}
         {user.mutualFriends && user.mutualFriends.count > 0 && (
-          <div className="mt-2 flex items-center gap-1 text-xs text-muted-foreground">
-            <Users className="h-3 w-3" />
-            <span>
-              {user.mutualFriends.names.join('、')}
-              {user.mutualFriends.count > 2 && `等${user.mutualFriends.count}位共同关注`}
-            </span>
-          </div>
+          <p className="mt-1.5 text-xs text-muted-foreground">
+            {user.mutualFriends.names.join('、')}
+            {user.mutualFriends.count > 2 && `等${user.mutualFriends.count}位共同关注`}
+          </p>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
