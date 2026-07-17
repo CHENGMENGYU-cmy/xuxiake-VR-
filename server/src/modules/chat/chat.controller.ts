@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query, Headers, UnauthorizedException } from '@nestjs/common';
+import { Controller, Get, Post, Param, Query, Headers, UnauthorizedException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
@@ -32,10 +32,20 @@ export class ChatController {
   }
 
   @Get()
-  async getConversations(@Headers('authorization') auth: string) {
+  async getConversations(
+    @Headers('authorization') auth: string,
+    @Query('status') status?: string,
+  ) {
     const userId = this.getUserId(auth);
 
-    const parts = await this.partRepo.find({ where: { userId } });
+    const whereCondition: any = { userId };
+    if (status === 'REQUEST' || status === 'NORMAL') {
+      whereCondition.status = status;
+    } else if (!status) {
+      whereCondition.status = 'NORMAL';
+    }
+
+    const parts = await this.partRepo.find({ where: whereCondition });
     const convIds = parts.map((p) => p.conversationId);
     if (!convIds.length) return { success: true, data: [] };
 
@@ -50,6 +60,7 @@ export class ChatController {
         const memberIds = memberships.map((m) => m.userId);
         const allMembers = await this.userRepo.findBy({ id: In(memberIds) });
         const members = allMembers.filter((u) => u.id !== userId);
+        const myMembership = memberships.find((m) => m.userId === userId);
 
         const lastMsg = await this.msgRepo.findOne({
           where: { conversationId: conv.id },
@@ -65,17 +76,54 @@ export class ChatController {
           }),
           lastMessage: lastMsg ? {
             ...lastMsg,
-            sender: members.find((u) => u.id === lastMsg.senderId) ? (() => {
-              const { passwordHash, ...s } = members.find((u) => u.id === lastMsg.senderId)!;
+            sender: allMembers.find((u) => u.id === lastMsg.senderId) ? (() => {
+              const { passwordHash, ...s } = allMembers.find((u) => u.id === lastMsg.senderId)!;
               return s;
             })() : null,
           } : null,
           unreadCount: 0,
+          myStatus: myMembership?.status || 'NORMAL',
         };
       }),
     );
 
     return { success: true, data };
+  }
+
+  @Post(':id/accept')
+  async acceptMessageRequest(
+    @Headers('authorization') auth: string,
+    @Param('id') convId: string,
+  ) {
+    const userId = this.getUserId(auth);
+
+    const part = await this.partRepo.findOne({
+      where: { conversationId: convId, userId, status: 'REQUEST' },
+    });
+    if (!part) throw new NotFoundException('消息请求不存在');
+
+    part.status = 'NORMAL';
+    await this.partRepo.save(part);
+
+    return { success: true, message: '已接受消息请求' };
+  }
+
+  @Post(':id/reject')
+  async rejectMessageRequest(
+    @Headers('authorization') auth: string,
+    @Param('id') convId: string,
+  ) {
+    const userId = this.getUserId(auth);
+
+    const part = await this.partRepo.findOne({
+      where: { conversationId: convId, userId, status: 'REQUEST' },
+    });
+    if (!part) throw new NotFoundException('消息请求不存在');
+
+    part.status = 'HIDDEN';
+    await this.partRepo.save(part);
+
+    return { success: true, message: '已拒绝消息请求' };
   }
 
   @Get(':id/messages')
