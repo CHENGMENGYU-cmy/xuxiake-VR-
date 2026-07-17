@@ -88,24 +88,26 @@ export function RightPanel() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {mockUsers
-                .filter((u) => u.username !== 'xuxiake')
-                .map((user) => (
+              {recommendedUsers.length > 0 ? (
+                recommendedUsers.map((user) => (
                   <Link
                     key={user.id}
                     href={`/profile/${user.username}`}
                     className="flex items-center gap-3 rounded-lg p-1 hover:bg-accent"
                   >
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={user.avatarUrl} alt={user.displayName} />
+                      <AvatarImage src={user.avatarUrl || undefined} alt={user.displayName} />
                       <AvatarFallback>{user.displayName[0]}</AvatarFallback>
                     </Avatar>
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-medium">{user.displayName}</p>
-                      <p className="truncate text-xs text-muted-foreground">{user.bio}</p>
+                      <p className="truncate text-xs text-muted-foreground">{user.bio || `@${user.username}`}</p>
                     </div>
                   </Link>
-                ))}
+                ))
+              ) : (
+                <p className="text-xs text-muted-foreground">暂无推荐用户</p>
+              )}
             </div>
           </CardContent>
         </Card>
