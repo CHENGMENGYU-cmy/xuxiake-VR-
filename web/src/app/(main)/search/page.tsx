@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { Search, Users, FileText } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -10,13 +9,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { PostCard } from '@/components/post/post-card';
 import { mockUsers, mockPosts } from '@/lib/mock-data';
+import { useSearchStore } from '@/stores/search-store';
 
 export default function SearchPage() {
-  const searchParams = useSearchParams();
-  const initialQuery = searchParams.get('q') || '';
-
-  const [query, setQuery] = useState(initialQuery);
-  const [searched, setSearched] = useState(!!initialQuery);
+  const { query, setQuery } = useSearchStore();
+  const [searched, setSearched] = useState(!!query);
 
   const filteredUsers = searched
     ? mockUsers.filter(
