@@ -5,8 +5,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   Home,
-  User,
-  Users,
   Upload,
   Compass,
   Bookmark,
@@ -25,8 +23,7 @@ import { useAuthStore } from '@/stores/auth-store';
 import { useUIStore } from '@/stores/ui-store';
 import { cn } from '@/lib/utils';
 import apiClient from '@/lib/api-client';
-import { getRecommendedUsers, getFollowing, getOrCreateDirectConversation } from '@/lib/social-api';
-import { useRouter } from 'next/navigation';
+import { getRecommendedUsers } from '@/lib/social-api';
 
 const navItems = [
   { href: '/feed', label: '首页', icon: Home },
@@ -46,13 +43,10 @@ const mediaTypes = [
 
 export function Sidebar() {
   const pathname = usePathname();
-  const router = useRouter();
   const { user } = useAuthStore();
   const { sidebarOpen } = useUIStore();
   const [mounted, setMounted] = useState(false);
   const [suggestedUsers, setSuggestedUsers] = useState<any[]>([]);
-  const [friends, setFriends] = useState<any[]>([]);
-  const [msgLoading, setMsgLoading] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     setMounted(true);
@@ -69,36 +63,11 @@ export function Sidebar() {
           }
         }).catch(() => {});
       });
-      // 获取互关好友：粉丝 ∩ 我的关注
-      Promise.all([
-        apiClient.get(`/users/${user.username}/followers`),
-        apiClient.get(`/users/${user.username}/following`),
-      ]).then(([followersRes, followingRes]) => {
-        if (followersRes.data?.success && followingRes.data?.success) {
-          const followers = followersRes.data.data || [];
-          const followingIds = new Set((followingRes.data.data || []).map((u: any) => u.id));
-          setFriends(followers.filter((u: any) => followingIds.has(u.id)));
-        }
-      }).catch(() => {});
     }
   }, [user]);
 
-  const handleSendMessage = async (userId: string) => {
-    if (msgLoading[userId]) return;
-    setMsgLoading((prev) => ({ ...prev, [userId]: true }));
-    try {
-      const conv = await getOrCreateDirectConversation(userId);
-      router.push(`/messages/${conv.id}`);
-    } catch {
-      // ignore
-    } finally {
-      setMsgLoading((prev) => ({ ...prev, [userId]: false }));
-    }
-  };
-
   return (
     <>
-      {/* 移动端遮罩 */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/50 lg:hidden"
@@ -106,7 +75,6 @@ export function Sidebar() {
         />
       )}
 
-      {/* 侧边栏 */}
       <aside
         className={cn(
           'fixed left-0 top-14 z-40 h-[calc(100vh-3.5rem)] w-64 transform border-r bg-card transition-transform duration-200 ease-in-out',
@@ -116,7 +84,6 @@ export function Sidebar() {
       >
         <ScrollArea className="h-full">
           <div className="flex flex-col">
-            {/* 用户信息卡片 */}
             {mounted && user && (
               <div className="space-y-1 p-3">
                 <Link
@@ -137,7 +104,6 @@ export function Sidebar() {
 
             <Separator />
 
-            {/* 主导航 */}
             <div className="space-y-1 p-3">
               {navItems.map((item) => {
                 const Icon = item.icon;
@@ -161,7 +127,6 @@ export function Sidebar() {
 
             <Separator />
 
-            {/* 媒体类型快捷入口 */}
             <div className="space-y-1 p-3">
               <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
                 内容分类
@@ -181,38 +146,6 @@ export function Sidebar() {
 
             <Separator />
 
-            {/* 好友（互关） */}
-            {mounted && user && friends.length > 0 && (
-              <div className="p-3">
-                <p className="px-2 pb-1 text-xs font-medium uppercase text-muted-foreground">
-                  好友
-                </p>
-                <div className="space-y-1">
-                  {friends.map((u: any) => (
-                    <Button
-                      key={u.id}
-                      variant="ghost"
-                      className="w-full justify-start gap-3"
-                      onClick={() => handleSendMessage(u.id)}
-                      disabled={!!msgLoading[u.id]}
-                    >
-                      <Avatar className="h-7 w-7">
-                        <AvatarImage src={u.avatarUrl} alt={u.displayName} />
-                        <AvatarFallback>{u.displayName?.[0]}</AvatarFallback>
-                      </Avatar>
-                      <div className="min-w-0 flex-1 text-left">
-                        <p className="truncate text-sm">{u.displayName}</p>
-                        <p className="truncate text-xs text-muted-foreground">发消息</p>
-                      </div>
-                    </Button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <Separator />
-
-            {/* 推荐关注 */}
             {mounted && user && suggestedUsers.length > 0 && (
               <div className="p-3">
                 <p className="px-2 pb-1 text-xs font-medium uppercase text-muted-foreground">
