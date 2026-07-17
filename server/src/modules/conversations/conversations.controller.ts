@@ -229,9 +229,8 @@ export class ConversationsController {
     }
 
     // 检查是否互相关注
-    const followRepo = this.convRepo.manager.getRepository('Follow');
-    const iFollowTarget = await followRepo.findOne({ where: { followerId: userId, followingId: targetId } });
-    const targetFollowsMe = await followRepo.findOne({ where: { followerId: targetId, followingId: userId } });
+    const iFollowTarget = await this.followRepo.findOne({ where: { followerId: userId, followingId: targetId } });
+    const targetFollowsMe = await this.followRepo.findOne({ where: { followerId: targetId, followingId: userId } });
     const isMutual = iFollowTarget && targetFollowsMe;
 
     // 创建新的私聊会话
