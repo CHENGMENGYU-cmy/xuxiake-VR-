@@ -170,16 +170,16 @@ export default function LandingPage() {
 
             {/* 右侧：AR眼镜3D效果 */}
             <div className="relative flex justify-center lg:justify-end">
-              <div className="relative">
+              <div className="relative ar-glasses">
                 {/* AR眼镜主体 */}
                 <div className="relative w-80 h-64 sm:w-96 sm:h-72">
                   {/* 眼镜镜片 - 左 */}
-                  <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-28 h-20 sm:w-32 sm:h-24 rounded-2xl bg-gradient-to-br from-cyan-400/80 to-blue-500/80 backdrop-blur-sm border-2 border-white/30 shadow-lg shadow-cyan-500/30">
+                  <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-28 h-20 sm:w-32 sm:h-24 rounded-2xl bg-gradient-to-br from-cyan-400/80 to-blue-500/80 backdrop-blur-sm border-2 border-white/30 shadow-lg shadow-cyan-500/30 ar-lens">
                     <div className="absolute inset-2 rounded-xl bg-gradient-to-br from-cyan-300/20 to-transparent" />
                     <Eye className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-8 w-8 text-white/60" />
                   </div>
                   {/* 眼镜镜片 - 右 */}
-                  <div className="absolute top-1/2 right-1/4 translate-x-1/2 -translate-y-1/2 w-28 h-20 sm:w-32 sm:h-24 rounded-2xl bg-gradient-to-br from-cyan-400/80 to-blue-500/80 backdrop-blur-sm border-2 border-white/30 shadow-lg shadow-cyan-500/30">
+                  <div className="absolute top-1/2 right-1/4 translate-x-1/2 -translate-y-1/2 w-28 h-20 sm:w-32 sm:h-24 rounded-2xl bg-gradient-to-br from-cyan-400/80 to-blue-500/80 backdrop-blur-sm border-2 border-white/30 shadow-lg shadow-cyan-500/30 ar-lens" style={{ animationDelay: '1s' }}>
                     <div className="absolute inset-2 rounded-xl bg-gradient-to-br from-cyan-300/20 to-transparent" />
                     <Camera className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-8 w-8 text-white/60" />
                   </div>
