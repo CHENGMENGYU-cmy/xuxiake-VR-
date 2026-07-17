@@ -58,14 +58,19 @@ export const usePostStore = create<PostState>((set) => ({
   },
 
   loadMore: async () => {
-    const { nextCursor, hasMore, isLoadingMore } = usePostStore.getState();
+    const { nextCursor, hasMore, isLoadingMore, posts } = usePostStore.getState();
     if (!hasMore || isLoadingMore || !nextCursor) return;
 
     set({ isLoadingMore: true });
     try {
       const result = await getPosts({ cursor: nextCursor });
+      const newPosts = result.posts ?? [];
+      // 去重：过滤掉已存在的帖子
+      const existingIds = new Set(posts.map(p => p.id));
+      const uniqueNewPosts = newPosts.filter(p => !existingIds.has(p.id));
+
       set((state) => ({
-        posts: [...state.posts, ...(result.posts ?? [])],
+        posts: [...state.posts, ...uniqueNewPosts],
         nextCursor: result.nextCursor,
         hasMore: result.hasMore,
         isLoadingMore: false,
