@@ -31,7 +31,10 @@ interface PostState {
 export const usePostStore = create<PostState>((set) => ({
   posts: [],
   isLoading: false,
+  isLoadingMore: false,
   error: null,
+  nextCursor: null,
+  hasMore: true,
   isPublishing: false,
   publishError: null,
 
@@ -39,13 +42,40 @@ export const usePostStore = create<PostState>((set) => ({
     set({ isLoading: true, error: null });
     try {
       const result = await getPosts();
-      set({ posts: result.posts ?? [], isLoading: false });
+      set({
+        posts: result.posts ?? [],
+        nextCursor: result.nextCursor,
+        hasMore: result.hasMore,
+        isLoading: false,
+      });
     } catch (err: any) {
       const message =
         err.response?.data?.message ||
         err.response?.data?.error ||
         '加载失败，请稍后重试';
       set({ error: message, isLoading: false });
+    }
+  },
+
+  loadMore: async () => {
+    const { nextCursor, hasMore, isLoadingMore } = usePostStore.getState();
+    if (!hasMore || isLoadingMore || !nextCursor) return;
+
+    set({ isLoadingMore: true });
+    try {
+      const result = await getPosts({ cursor: nextCursor });
+      set((state) => ({
+        posts: [...state.posts, ...(result.posts ?? [])],
+        nextCursor: result.nextCursor,
+        hasMore: result.hasMore,
+        isLoadingMore: false,
+      }));
+    } catch (err: any) {
+      const message =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        '加载失败，请稍后重试';
+      set({ error: message, isLoadingMore: false });
     }
   },
 
