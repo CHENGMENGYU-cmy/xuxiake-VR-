@@ -168,20 +168,18 @@ export class SocialController {
 
     const pageNum = parseInt(page || '1');
     const limitNum = parseInt(limit || '20');
-    const skip = (pageNum - 1) * limitNum;
 
     // 获取当前用户信息和兴趣
     const currentUser = await this.userRepo.findOne({ where: { id: userId } });
     if (!currentUser) throw new UnauthorizedException('用户不存在');
 
-    const userInterests = await this.userInterestRepo.find({
-      where: { userId },
-    });
+    const userInterests = await this.userInterestRepo.find({ where: { userId } });
     const myTagIds = userInterests.map((ui) => ui.tagId);
 
     // 获取已关注的用户ID
     const following = await this.followRepo.find({ where: { followerId: userId } });
     const followingIds = following.map((f) => f.followingId);
+    const followingIdSet = new Set(followingIds);
 
     // 基础查询：排除自己和已关注的用户
     const query = this.userRepo.createQueryBuilder('user');
@@ -190,83 +188,191 @@ export class SocialController {
       query.andWhere('user.id NOT IN (:...followingIds)', { followingIds });
     }
 
-    // 如果用户有标签，优先推荐有共同兴趣的用户
-    if (myTagIds.length > 0) {
-      // 找出有共同兴趣的用户
-      const usersWithCommonInterests = await this.userInterestRepo
-        .createQueryBuilder('ui')
-        .select('ui.user_id', 'userId')
-        .addSelect('COUNT(*)', 'commonCount')
-        .where('ui.tag_id IN (:...myTagIds)', { myTagIds })
-        .andWhere('ui.user_id != :userId', { userId })
-        .groupBy('ui.user_id')
-        .orderBy('commonCount', 'DESC')
-        .limit(limitNum * 2)
-        .getRawMany();
+    // 扩大候选池：取更多用户以便后续排序
+    const candidateLimit = limitNum * 5;
+    query.orderBy('user.created_at', 'DESC');
+    query.limit(candidateLimit);
 
-      const recommendedUserIds = usersWithCommonInterests.map((r) => r.userId);
-
-      if (recommendedUserIds.length > 0) {
-        query.andWhere('user.id IN (:...recommendedUserIds)', { recommendedUserIds });
-      }
+    const candidates = await query.getMany();
+    if (candidates.length === 0) {
+      return { success: true, data: [], page: pageNum };
     }
 
-    // 按创建时间排序（新用户优先）
-    query.orderBy('user.created_at', 'DESC');
-    query.skip(skip).take(limitNum);
+    const candidateIds = candidates.map((u) => u.id);
 
-    const users = await query.getMany();
+    // ===== 并行获取所有需要的数据 =====
 
-    // 获取推荐用户的兴趣标签
-    const userIds = users.map((u) => u.id);
-    const userInterestsAll = userIds.length > 0
-      ? await this.userInterestRepo.find({
-          where: { userId: In(userIds) },
-          relations: { tag: true },
-        })
-      : [];
-
+    // 1. 兴趣标签匹配
+    const userInterestsAll = await this.userInterestRepo.find({
+      where: { userId: In(candidateIds) },
+      relations: { tag: true },
+    });
     const userTagMap = new Map<string, InterestTag[]>();
     userInterestsAll.forEach((ui) => {
       if (!userTagMap.has(ui.userId)) userTagMap.set(ui.userId, []);
       userTagMap.get(ui.userId)!.push(ui.tag);
     });
 
-    // 获取关注状态
-    const followStatus = userIds.length > 0
-      ? await this.followRepo.find({
-          where: { followerId: userId, followingId: In(userIds) },
+    // 2. 二度好友（共同关注）：我关注的人也关注了谁
+    let mutualFriendMap = new Map<string, { count: number; names: string[] }>();
+    if (followingIds.length > 0) {
+      const theirFollows = await this.followRepo.find({
+        where: { followerId: In(followingIds), followingId: In(candidateIds) },
+      });
+      // 获取我关注的人的名字映射
+      const myFollowingUsers = await this.userRepo.findBy({ id: In(followingIds) });
+      const myFollowingNameMap = new Map(myFollowingUsers.map((u) => [u.id, u.displayName]));
+
+      const mutualMap = new Map<string, { ids: Set<string>; names: string[] }>();
+      theirFollows.forEach((f) => {
+        if (!mutualMap.has(f.followingId)) mutualMap.set(f.followingId, { ids: new Set(), names: [] });
+        const entry = mutualMap.get(f.followingId)!;
+        if (!entry.ids.has(f.followerId)) {
+          entry.ids.add(f.followerId);
+          const name = myFollowingNameMap.get(f.followerId);
+          if (name) entry.names.push(name);
+        }
+      });
+      mutualMap.forEach((val, key) => {
+        mutualFriendMap.set(key, { count: val.ids.size, names: val.names });
+      });
+    }
+
+    // 3. 帖子统计（活跃创作者 + 总获赞）
+    const postStats = await this.postRepo
+      .createQueryBuilder('post')
+      .select('post.author_id', 'authorId')
+      .addSelect('COUNT(*)', 'postCount')
+      .addSelect('COALESCE(SUM(post.like_count), 0)', 'totalLikes')
+      .where('post.author_id IN (:...candidateIds)', { candidateIds })
+      .andWhere('post.visibility = :vis', { vis: 'PUBLIC' })
+      .groupBy('post.author_id')
+      .getRawMany();
+    const postStatsMap = new Map(postStats.map((s) => [s.authorId, {
+      postCount: parseInt(s.postCount),
+      totalLikes: parseInt(s.totalLikes),
+    }]));
+
+    // 4. 代表帖子（每人最新2条带媒体的公开帖子）
+    const recentPosts = await this.postRepo
+      .createQueryBuilder('post')
+      .where('post.author_id IN (:...candidateIds)', { candidateIds })
+      .andWhere('post.visibility = :vis', { vis: 'PUBLIC' })
+      .orderBy('post.created_at', 'DESC')
+      .limit(candidateIds.length * 2)
+      .getMany();
+    // 按用户分组取最新2条
+    const userPostsMap = new Map<string, PostEntity[]>();
+    recentPosts.forEach((p) => {
+      if (!userPostsMap.has(p.authorId)) userPostsMap.set(p.authorId, []);
+      const arr = userPostsMap.get(p.authorId)!;
+      if (arr.length < 2) arr.push(p);
+    });
+    // 获取这些帖子的媒体
+    const recentPostIds = recentPosts.map((p) => p.id);
+    const mediaItems = recentPostIds.length > 0
+      ? await this.mediaRepo.find({
+          where: { postId: In(recentPostIds) },
+          order: { sortOrder: 'ASC' },
         })
       : [];
+    const postMediaMap = new Map<string, MediaItem[]>();
+    mediaItems.forEach((m) => {
+      if (!postMediaMap.has(m.postId)) postMediaMap.set(m.postId, []);
+      postMediaMap.get(m.postId)!.push(m);
+    });
+
+    // 5. 关注状态
+    const followStatus = await this.followRepo.find({
+      where: { followerId: userId, followingId: In(candidateIds) },
+    });
     const followedIds = new Set(followStatus.map((f) => f.followingId));
 
-    // 计算匹配原因
+    // ===== 计算综合得分并排序 =====
     const myTagIdSet = new Set(myTagIds);
 
-    return {
-      success: true,
-      data: users.map((u) => {
-        const { passwordHash, ...userDto } = u;
-        const userTags = userTagMap.get(u.id) || [];
-        const commonCount = userTags.filter((t) => myTagIdSet.has(t.id)).length;
-        const matchReasons: string[] = [];
+    const scoredUsers = candidates.map((u) => {
+      const { passwordHash, ...userDto } = u;
+      const userTags = userTagMap.get(u.id) || [];
+      const commonTagCount = userTags.filter((t) => myTagIdSet.has(t.id)).length;
+      const mutual = mutualFriendMap.get(u.id);
+      const stats = postStatsMap.get(u.id);
+      const userPosts = userPostsMap.get(u.id) || [];
 
-        if (commonCount > 0) matchReasons.push(`${commonCount}个共同兴趣`);
-        if (currentUser.region && u.region === currentUser.region) matchReasons.push('同城');
+      // 计算综合得分
+      let matchScore = 0;
+      const matchReasons: string[] = [];
 
-        return {
-          ...userDto,
-          vrDeviceInfo: u.vrDeviceModel
-            ? { model: u.vrDeviceModel, version: u.vrDeviceVersion || '' }
-            : null,
-          interests: userTags,
-          matchReasons,
-          isFollowing: followedIds.has(u.id),
-          matchScore: commonCount + (currentUser.region && u.region === currentUser.region ? 5 : 0),
-        };
-      }),
-      page: pageNum,
-    };
+      // 共同兴趣（基础分）
+      if (commonTagCount > 0) {
+        matchScore += commonTagCount;
+        matchReasons.push(`${commonTagCount}个共同兴趣`);
+      }
+
+      // 同城
+      if (currentUser.region && u.region === currentUser.region) {
+        matchScore += 5;
+        matchReasons.push('同城');
+      }
+
+      // 二度好友（共同关注）
+      if (mutual && mutual.count > 0) {
+        const bonus = Math.min(mutual.count * 3, 15);
+        matchScore += bonus;
+        if (mutual.names.length <= 2) {
+          matchReasons.push(`${mutual.names.join('、')}也关注了TA`);
+        } else {
+          matchReasons.push(`${mutual.names[0]}等${mutual.count}位好友也关注了TA`);
+        }
+      }
+
+      // 活跃创作者
+      if (stats && stats.postCount >= 3) {
+        matchScore += 2;
+        matchReasons.push('活跃创作者');
+      }
+
+      // VR 设备同好
+      if (currentUser.vrDeviceModel && u.vrDeviceModel === currentUser.vrDeviceModel) {
+        matchScore += 2;
+        matchReasons.push('同款VR设备');
+      }
+
+      // 构建代表帖子数据
+      const representativePosts = userPosts.map((p) => ({
+        id: p.id,
+        content: p.content ? p.content.slice(0, 80) : null,
+        thumbnailUrl: postMediaMap.get(p.id)?.[0]?.thumbnailUrl || postMediaMap.get(p.id)?.[0]?.url || null,
+        locationName: p.locationName,
+      }));
+
+      return {
+        ...userDto,
+        vrDeviceInfo: u.vrDeviceModel
+          ? { model: u.vrDeviceModel, version: u.vrDeviceVersion || '' }
+          : null,
+        interests: userTags,
+        matchReasons,
+        matchScore,
+        isFollowing: followedIds.has(u.id),
+        postCount: stats?.postCount || 0,
+        totalLikes: stats?.totalLikes || 0,
+        representativePosts,
+        mutualFriends: mutual ? { count: mutual.count, names: mutual.names.slice(0, 3) } : null,
+      };
+    });
+
+    // 按综合得分降序，得分相同按创建时间降序
+    scoredUsers.sort((a, b) => {
+      if (b.matchScore !== a.matchScore) return b.matchScore - a.matchScore;
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
+
+    // 分页截取
+    const skip = (pageNum - 1) * limitNum;
+    const paged = scoredUsers.slice(skip, skip + limitNum);
+
+    return { success: true, data: paged, page: pageNum };
   }
 
   @Get('recommended/communities')
