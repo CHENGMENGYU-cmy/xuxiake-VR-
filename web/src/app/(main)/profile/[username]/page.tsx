@@ -170,28 +170,37 @@ function ProfileContent({ username }: { username: string }) {
             <div className="flex gap-2">
               {isOwnProfile ? (
                 <Link href="/settings">
-                  <Button variant="outline" size="sm" className="gap-1.5">
-                    <Settings className="h-4 w-4" />
+                  <Button variant="outline" size="sm">
                     编辑资料
                   </Button>
                 </Link>
               ) : (
-                <Button
-                  size="sm"
-                  variant={isFollowing ? 'outline' : 'default'}
-                  className="gap-1.5"
-                  onClick={handleFollow}
-                  disabled={followLoading}
-                >
-                  {followLoading ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : isFollowing ? (
-                    <UserCheck className="h-4 w-4" />
-                  ) : (
-                    <UserPlus className="h-4 w-4" />
+                <>
+                  {isMutualFollow && (
+                    <Button
+                      size="sm"
+                      variant="default"
+                      onClick={handleMessage}
+                      disabled={followLoading}
+                    >
+                      发消息
+                    </Button>
                   )}
-                  {isFollowing ? '已关注' : '关注'}
-                </Button>
+                  <Button
+                    size="sm"
+                    variant={isFollowing ? 'outline' : 'default'}
+                    onClick={handleFollow}
+                    disabled={followLoading}
+                  >
+                    {followLoading ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : isFollowing ? (
+                      '已关注'
+                    ) : (
+                      '关注'
+                    )}
+                  </Button>
+                </>
               )}
             </div>
           </div>
