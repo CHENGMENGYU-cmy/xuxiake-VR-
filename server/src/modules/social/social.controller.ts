@@ -69,6 +69,48 @@ export class SocialController {
     return { success: true, data: tags };
   }
 
+  @Get('hot-topics')
+  async getHotTopics() {
+    // 基于热门标签和热门帖子位置生成热门话题
+    const hotTags = await this.tagRepo.find({
+      where: { isHot: true },
+      order: { sortOrder: 'DESC' },
+      take: 5,
+    });
+
+    // 获取浏览量最高的公开帖子的位置信息
+    const hotPosts = await this.postRepo.find({
+      where: { visibility: 'PUBLIC' as any },
+      order: { viewCount: 'DESC' },
+      take: 10,
+    });
+
+    // 从热门帖子中提取位置名称作为话题
+    const locationTopics = hotPosts
+      .filter((p) => p.locationName)
+      .map((p) => ({
+        tag: p.locationName,
+        count: p.viewCount,
+      }));
+
+    // 合并热门标签和位置话题，去重
+    const tagTopics = hotTags.map((t) => ({
+      tag: t.name,
+      count: 0,
+    }));
+
+    // 合并并取前5个
+    const allTopics = [...tagTopics, ...locationTopics];
+    const seen = new Set<string>();
+    const uniqueTopics = allTopics.filter((t) => {
+      if (seen.has(t.tag)) return false;
+      seen.add(t.tag);
+      return true;
+    }).slice(0, 5);
+
+    return { success: true, data: uniqueTopics };
+  }
+
   @Get('user/interests')
   async getUserInterests(@Headers('authorization') auth: string) {
     const userId = this.getUserId(auth);
