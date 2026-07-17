@@ -25,7 +25,8 @@ import { useAuthStore } from '@/stores/auth-store';
 import { useUIStore } from '@/stores/ui-store';
 import { cn } from '@/lib/utils';
 import apiClient from '@/lib/api-client';
-import { getRecommendedUsers } from '@/lib/social-api';
+import { getRecommendedUsers, getFollowing, getOrCreateDirectConversation } from '@/lib/social-api';
+import { useRouter } from 'next/navigation';
 
 const navItems = [
   { href: '/feed', label: '首页', icon: Home },
