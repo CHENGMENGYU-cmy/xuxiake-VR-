@@ -575,7 +575,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ========== 五、AR vs 传统设备 ========== */}
+      {/* ========== 七、AR vs 传统设备 ========== */}
       <section className="relative py-24 sm:py-32 bg-muted/30">
         <div className="mx-auto max-w-7xl px-6">
           <div className="mb-16 text-center">
