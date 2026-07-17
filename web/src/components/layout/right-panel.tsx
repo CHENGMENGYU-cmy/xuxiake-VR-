@@ -104,36 +104,47 @@ export function RightPanel() {
         </Card>
 
         {/* 推荐用户 */}
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2 text-sm">
-              <Users className="h-4 w-4 text-teal-500" />
-              推荐用户
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {mockUsers
-                .filter((u) => u.username !== 'xuxiake')
-                .map((user) => (
-                  <Link
-                    key={user.id}
-                    href={`/profile/${user.username}`}
-                    className="flex items-center gap-3 rounded-lg p-1 hover:bg-accent"
-                  >
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src={user.avatarUrl} alt={user.displayName} />
-                      <AvatarFallback>{user.displayName[0]}</AvatarFallback>
-                    </Avatar>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium">{user.displayName}</p>
-                      <p className="truncate text-xs text-muted-foreground">{user.bio}</p>
-                    </div>
-                  </Link>
+        {recommendedUsers.length > 0 && (
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center justify-between text-sm">
+                <span className="flex items-center gap-2">
+                  <Users className="h-4 w-4 text-teal-500" />
+                  推荐用户
+                </span>
+                <Link href="/discover" className="text-xs text-primary hover:underline font-normal">
+                  更多
+                </Link>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {recommendedUsers.map((u) => (
+                  <div key={u.id} className="flex items-center gap-2 rounded-lg p-1 hover:bg-accent">
+                    <Link href={`/profile/${u.username}`} className="flex items-center gap-2 min-w-0 flex-1">
+                      <Avatar className="h-8 w-8 flex-shrink-0">
+                        <AvatarImage src={u.avatarUrl} alt={u.displayName} />
+                        <AvatarFallback>{u.displayName[0]}</AvatarFallback>
+                      </Avatar>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-medium">{u.displayName}</p>
+                        <p className="truncate text-xs text-muted-foreground">{u.bio || `@${u.username}`}</p>
+                      </div>
+                    </Link>
+                    <Button
+                      variant={followingIds.has(u.id) ? 'secondary' : 'default'}
+                      size="sm"
+                      className="h-7 flex-shrink-0 text-xs"
+                      onClick={() => handleFollow(u.id)}
+                    >
+                      {followingIds.has(u.id) ? '已关注' : '关注'}
+                    </Button>
+                  </div>
                 ))}
-            </div>
-          </CardContent>
-        </Card>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* 推荐社群 */}
         {isAuthenticated && recommendedCommunities.length > 0 && (
