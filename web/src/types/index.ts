@@ -154,4 +154,16 @@ export interface RecommendedUser extends User {
   matchReasons?: string[];
   matchScore?: number;
   isFollowing?: boolean;
+  postCount?: number;
+  totalLikes?: number;
+  representativePosts?: {
+    id: string;
+    content: string | null;
+    thumbnailUrl: string | null;
+    locationName: string | null;
+  }[];
+  mutualFriends?: {
+    count: number;
+    names: string[];
+  };
 }
