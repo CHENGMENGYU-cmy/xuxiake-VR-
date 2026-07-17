@@ -132,6 +132,26 @@ export function Sidebar() {
 
           <Separator />
 
+          {/* 媒体类型快捷入口 */}
+          <div className="space-y-1 p-3">
+            <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
+              内容分类
+            </p>
+            {mediaTypes.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link key={item.href} href={item.href}>
+                  <Button variant="ghost" className="w-full justify-start gap-3">
+                    <Icon className={cn('h-5 w-5', item.color)} />
+                    <span className="text-sm">{item.label}</span>
+                  </Button>
+                </Link>
+              );
+            })}
+          </div>
+
+          <Separator />
+
           {/* 推荐关注 */}
           {mounted && user && suggestedUsers.length > 0 && (
             <div className="space-y-1 p-3">
@@ -154,26 +174,6 @@ export function Sidebar() {
               ))}
             </div>
           )}
-
-          <Separator />
-
-          {/* 媒体类型快捷入口 */}
-          <div className="space-y-1 p-3">
-            <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
-              内容分类
-            </p>
-            {mediaTypes.map((item) => {
-              const Icon = item.icon;
-              return (
-                <Link key={item.href} href={item.href}>
-                  <Button variant="ghost" className="w-full justify-start gap-3">
-                    <Icon className={cn('h-5 w-5', item.color)} />
-                    <span className="text-sm">{item.label}</span>
-                  </Button>
-                </Link>
-              );
-            })}
-          </div>
         </ScrollArea>
       </aside>
     </>
