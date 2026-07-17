@@ -27,16 +27,20 @@ export async function createPost(payload: CreatePostPayload): Promise<Post> {
   return data.data;
 }
 
+export type PostSortType = 'latest' | 'trending' | 'hot';
+
 export async function getPosts(params?: {
   page?: number;
   limit?: number;
   cursor?: string;
-}): Promise<{ posts: Post[]; nextCursor: string | null; hasMore: boolean }> {
+  sort?: PostSortType;
+}): Promise<{ posts: Post[]; nextCursor: string | null; hasMore: boolean; page?: number }> {
   const { data } = await apiClient.get('/posts', { params });
   return {
     posts: data.data ?? [],
     nextCursor: data.nextCursor ?? null,
     hasMore: data.hasMore ?? false,
+    page: data.page,
   };
 }
 
