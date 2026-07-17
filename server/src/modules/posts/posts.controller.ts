@@ -20,8 +20,18 @@ export class PostsController {
   }
 
   @Get()
-  async getPosts(@Query('cursor') cursor?: string, @Query('limit') limit?: string) {
-    const result = await this.postsService.getPosts(cursor, limit ? parseInt(limit) : 10);
+  async getPosts(
+    @Query('cursor') cursor?: string,
+    @Query('limit') limit?: string,
+    @Query('sort') sort?: string,
+    @Query('page') page?: string,
+  ) {
+    const result = await this.postsService.getPosts({
+      cursor,
+      limit: limit ? parseInt(limit) : 10,
+      sort: sort || 'latest',
+      page: page ? parseInt(page) : 1,
+    });
     return { success: true, ...result };
   }
 
