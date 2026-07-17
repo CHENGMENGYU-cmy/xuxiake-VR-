@@ -55,11 +55,25 @@ export function FeedList({ showComposer = true }: FeedListProps) {
       )}
 
       {/* 加载更多 */}
-      <div className="flex justify-center py-4">
-        <Button variant="outline" className="text-sm text-muted-foreground">
-          加载更多...
-        </Button>
-      </div>
+      {hasMore && (
+        <div className="flex justify-center py-4">
+          <Button
+            variant="outline"
+            className="text-sm text-muted-foreground"
+            onClick={loadMore}
+            disabled={isLoadingMore}
+          >
+            {isLoadingMore ? '加载中...' : '加载更多'}
+          </Button>
+        </div>
+      )}
+
+      {/* 没有更多内容 */}
+      {!hasMore && posts.length > 0 && (
+        <div className="flex justify-center py-4">
+          <p className="text-sm text-muted-foreground">没有更多内容了</p>
+        </div>
+      )}
     </div>
   );
 }
