@@ -31,16 +31,18 @@ function ProfileContent({ username }: { username: string }) {
   const [profileUser, setProfileUser] = useState<User | null>(null);
   const [userPosts, setUserPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followLoading, setFollowLoading] = useState(false);
+  const [followerCount, setFollowerCount] = useState(0);
+  const [followingCount, setFollowingCount] = useState(0);
 
   useEffect(() => {
-    // If current user's own profile, always use store data (most up-to-date)
     if (currentUser && currentUser.username === username) {
       setProfileUser(currentUser);
       setLoading(false);
       return;
     }
 
-    // Otherwise, fetch from backend
     const fetchUser = async () => {
       try {
         const res = await apiClient.get(`/users/${username}`);
@@ -57,22 +59,67 @@ function ProfileContent({ username }: { username: string }) {
     fetchUser();
   }, [username, currentUser]);
 
+  // 获取关注状态和粉丝/关注数
+  useEffect(() => {
+    const fetchFollowData = async () => {
+      try {
+        const [followersRes, followingRes] = await Promise.all([
+          getFollowers(username),
+          getFollowing(username),
+        ]);
+        setFollowerCount(followersRes.total || 0);
+        setFollowingCount(followingRes.total || 0);
+
+        if (currentUser) {
+          const isFollowingUser = followersRes.data?.some((u) => u.id === currentUser.id);
+          setIsFollowing(!!isFollowingUser);
+        }
+      } catch (err) {
+        console.error('Failed to fetch follow data:', err);
+      }
+    };
+
+    fetchFollowData();
+  }, [username, currentUser]);
+
   // 获取用户的帖子
   useEffect(() => {
     if (profileUser) {
       const safePosts = storePosts ?? [];
-      // 如果是当前用户，从store获取帖子
       if (currentUser && currentUser.id === profileUser.id) {
         if (safePosts.length === 0) {
           fetchPosts();
         }
         setUserPosts(safePosts.filter((p) => p.author.id === profileUser.id));
       } else {
-        // 其他用户的帖子也从store过滤
         setUserPosts(safePosts.filter((p) => p.author.id === profileUser.id));
       }
     }
   }, [profileUser, storePosts, currentUser, fetchPosts]);
+
+  const handleFollow = async () => {
+    if (!profileUser || followLoading) return;
+    setFollowLoading(true);
+    const wasFollowing = isFollowing;
+    setIsFollowing(!wasFollowing);
+    setFollowerCount((prev) => wasFollowing ? Math.max(0, prev - 1) : prev + 1);
+
+    try {
+      if (wasFollowing) {
+        await unfollowUser(profileUser.id);
+        toast.success('已取消关注');
+      } else {
+        await followUser(profileUser.id);
+        toast.success('关注成功');
+      }
+    } catch {
+      setIsFollowing(wasFollowing);
+      setFollowerCount((prev) => wasFollowing ? prev + 1 : Math.max(0, prev - 1));
+      toast.error('操作失败，请重试');
+    } finally {
+      setFollowLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -89,13 +136,10 @@ function ProfileContent({ username }: { username: string }) {
 
   return (
     <div className="space-y-4">
-      {/* 封面图 + 头像区 */}
       <Card className="overflow-hidden">
-        {/* 封面 */}
         <div className="h-32 bg-gradient-brand sm:h-48" />
 
         <CardContent className="relative px-4 pb-4 pt-0">
-          {/* 头像 */}
           <div className="-mt-12 mb-3 flex items-end justify-between sm:-mt-16">
             <Avatar className="h-20 w-20 border-4 border-white sm:h-28 sm:w-28">
               <AvatarImage src={user.avatarUrl} alt={user.displayName} />
@@ -111,15 +155,26 @@ function ProfileContent({ username }: { username: string }) {
                   </Button>
                 </Link>
               ) : (
-                <Button size="sm" className="gap-1.5">
-                  <UserPlus className="h-4 w-4" />
-                  关注
+                <Button
+                  size="sm"
+                  variant={isFollowing ? 'outline' : 'default'}
+                  className="gap-1.5"
+                  onClick={handleFollow}
+                  disabled={followLoading}
+                >
+                  {followLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : isFollowing ? (
+                    <UserCheck className="h-4 w-4" />
+                  ) : (
+                    <UserPlus className="h-4 w-4" />
+                  )}
+                  {isFollowing ? '已关注' : '关注'}
                 </Button>
               )}
             </div>
           </div>
 
-          {/* 用户信息 */}
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <h1 className="text-xl font-bold">{user.displayName}</h1>
@@ -132,7 +187,6 @@ function ProfileContent({ username }: { username: string }) {
             <p className="text-sm text-muted-foreground">@{user.username}</p>
             {user.bio && <p className="text-sm text-foreground">{user.bio}</p>}
 
-            {/* 额外信息 */}
             <div className="flex flex-wrap items-center gap-3 pt-2 text-xs text-muted-foreground">
               {user.website && (
                 <span className="flex items-center gap-1">
@@ -148,11 +202,10 @@ function ProfileContent({ username }: { username: string }) {
               </span>
             </div>
 
-            {/* 统计数据 */}
             <div className="flex gap-4 pt-2 text-sm">
               <span><strong>{userPosts.length}</strong> <span className="text-muted-foreground">内容</span></span>
-              <span><strong>128</strong> <span className="text-muted-foreground">粉丝</span></span>
-              <span><strong>64</strong> <span className="text-muted-foreground">关注</span></span>
+              <span><strong>{followerCount}</strong> <span className="text-muted-foreground">粉丝</span></span>
+              <span><strong>{followingCount}</strong> <span className="text-muted-foreground">关注</span></span>
             </div>
           </div>
         </CardContent>
