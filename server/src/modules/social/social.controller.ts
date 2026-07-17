@@ -27,7 +27,7 @@ export class SocialController {
     @InjectRepository(CommunityTag) private readonly communityTagRepo: Repository<CommunityTag>,
     @InjectRepository(Conversation) private readonly convRepo: Repository<Conversation>,
     @InjectRepository(ConversationParticipant) private readonly partRepo: Repository<ConversationParticipant>,
-    @InjectRepository(Post) private readonly postRepo: Repository<Post>,
+    @InjectRepository(PostEntity) private readonly postRepo: Repository<PostEntity>,
     private readonly jwtService: JwtService,
   ) {}
 
