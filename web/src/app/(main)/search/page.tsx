@@ -12,8 +12,11 @@ import { PostCard } from '@/components/post/post-card';
 import { mockUsers, mockPosts } from '@/lib/mock-data';
 
 export default function SearchPage() {
-  const [query, setQuery] = useState('');
-  const [searched, setSearched] = useState(false);
+  const searchParams = useSearchParams();
+  const initialQuery = searchParams.get('q') || '';
+
+  const [query, setQuery] = useState(initialQuery);
+  const [searched, setSearched] = useState(!!initialQuery);
 
   const filteredUsers = searched
     ? mockUsers.filter(
