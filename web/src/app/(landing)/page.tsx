@@ -572,7 +572,7 @@ export default function LandingPage() {
           <div className="grid gap-8 sm:grid-cols-3">
             {[
               {
-                quote: '第一次用VR眼镜记录旅行，AI自动生成的游记让我惊喜。朋友说看我的视频就像自己去了一样！',
+                quote: '第一次用AR眼镜记录旅行，AI自动生成的游记让我惊喜。朋友说看我的视频就像自己去了一样！',
                 name: '小明',
                 role: '旅行博主',
                 stars: 5,
