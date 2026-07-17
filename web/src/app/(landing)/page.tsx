@@ -302,50 +302,54 @@ export default function LandingPage() {
               })}
             </div>
 
-            {/* 右侧：眼镜规格卡片 */}
-            <div className="relative">
-              <div className="rounded-3xl border bg-card p-8 shadow-xl">
-                <div className="mb-6 flex items-center justify-between">
-                  <h3 className="text-xl font-bold">徐霞客 AR Pro</h3>
-                  <Badge className="bg-gradient-to-r from-cyan-500 to-blue-500">旗舰款</Badge>
-                </div>
-
-                <div className="space-y-4 mb-8">
-                  {[
-                    { label: '重量', value: '仅 49g', icon: '🪶' },
-                    { label: '续航', value: '12 小时', icon: '🔋' },
-                    { label: '视野', value: '52° FOV', icon: '👁️' },
-                    { label: '连接', value: '5G + WiFi 7', icon: '📡' },
-                    { label: '存储', value: '256GB', icon: '💾' },
-                    { label: '防水', value: 'IPX5', icon: '💧' },
-                  ].map((spec) => (
-                    <div key={spec.label} className="flex items-center justify-between py-2 border-b border-muted last:border-0">
-                      <div className="flex items-center gap-3">
-                        <span className="text-lg">{spec.icon}</span>
-                        <span className="text-sm text-muted-foreground">{spec.label}</span>
-                      </div>
-                      <span className="font-medium">{spec.value}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="flex -space-x-2">
-                    {['A', 'B', 'C'].map((name, i) => (
-                      <div key={i} className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-brand text-xs font-bold text-white ring-2 ring-background">
-                        {name}
-                      </div>
-                    ))}
+            {/* 右侧：AR眼镜展示 */}
+            <div className="relative flex items-center justify-center">
+              <div className="relative w-72 h-72">
+                {/* 眼镜图形 */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="relative">
+                    {/* 左镜片 */}
+                    <div className="absolute top-0 left-0 w-24 h-16 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-500 opacity-80" />
+                    {/* 右镜片 */}
+                    <div className="absolute top-0 right-0 w-24 h-16 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-500 opacity-80" />
+                    {/* 镜框 */}
+                    <div className="absolute top-6 left-1/2 -translate-x-1/2 w-8 h-2 bg-gradient-to-r from-cyan-400 to-blue-500" />
+                    {/* 左镜腿 */}
+                    <div className="absolute top-6 left-0 w-20 h-1.5 bg-gradient-to-l from-cyan-400 to-transparent -rotate-6" />
+                    {/* 右镜腿 */}
+                    <div className="absolute top-6 right-0 w-20 h-1.5 bg-gradient-to-r from-cyan-400 to-transparent rotate-6" />
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    <span className="font-medium text-foreground">2,847</span> 人正在使用
-                  </p>
                 </div>
-              </div>
 
-              {/* 装饰元素 */}
-              <div className="absolute -top-4 -right-4 w-24 h-24 bg-primary/10 rounded-full blur-2xl" />
-              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-accent/10 rounded-full blur-2xl" />
+                {/* 功能环绕 */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-4">
+                  <div className="flex items-center gap-2 bg-card rounded-full px-4 py-2 shadow-lg border">
+                    <Camera className="h-4 w-4 text-cyan-500" />
+                    <span className="text-xs font-medium">4K拍摄</span>
+                  </div>
+                </div>
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-4">
+                  <div className="flex items-center gap-2 bg-card rounded-full px-4 py-2 shadow-lg border">
+                    <Eye className="h-4 w-4 text-primary" />
+                    <span className="text-xs font-medium">AR识别</span>
+                  </div>
+                </div>
+                <div className="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-4">
+                  <div className="flex items-center gap-2 bg-card rounded-full px-4 py-2 shadow-lg border">
+                    <Languages className="h-4 w-4 text-accent" />
+                    <span className="text-xs font-medium">实时翻译</span>
+                  </div>
+                </div>
+                <div className="absolute top-1/2 right-0 -translate-y-1/2 translate-x-4">
+                  <div className="flex items-center gap-2 bg-card rounded-full px-4 py-2 shadow-lg border">
+                    <Navigation className="h-4 w-4 text-orange-500" />
+                    <span className="text-xs font-medium">AR导航</span>
+                  </div>
+                </div>
+
+                {/* 发光效果 */}
+                <div className="absolute inset-0 rounded-full bg-cyan-500/5 blur-3xl" />
+              </div>
             </div>
           </div>
         </div>
