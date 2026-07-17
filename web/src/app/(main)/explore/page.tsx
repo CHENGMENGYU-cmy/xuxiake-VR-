@@ -1,8 +1,20 @@
+'use client';
+
+import { useState } from 'react';
 import { Compass, TrendingUp, Flame, Clock } from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { FeedList } from '@/components/feed/feed-list';
 
+type TabType = 'trending' | 'latest' | 'hot';
+
 export default function ExplorePage() {
+  const [activeTab, setActiveTab] = useState<TabType>('trending');
+
+  const tabs = [
+    { id: 'trending' as TabType, label: '热门内容', icon: TrendingUp },
+    { id: 'latest' as TabType, label: '最新发布', icon: Clock },
+    { id: 'hot' as TabType, label: '精选推荐', icon: Flame },
+  ];
+
   return (
     <div className="space-y-4">
       {/* 页面标题 */}
@@ -12,37 +24,30 @@ export default function ExplorePage() {
       </div>
 
       {/* 标签切换 */}
-      <Tabs defaultValue="trending" className="w-full">
-        <TabsList className="w-full justify-start border-b bg-transparent p-0">
-          <TabsTrigger value="trending" className="gap-1.5 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary">
-            <TrendingUp className="h-4 w-4" />
-            热门内容
-          </TabsTrigger>
-          <TabsTrigger value="latest" className="gap-1.5 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary">
-            <Clock className="h-4 w-4" />
-            最新发布
-          </TabsTrigger>
-          <TabsTrigger value="hot" className="gap-1.5 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary">
-            <Flame className="h-4 w-4" />
-            精选推荐
-          </TabsTrigger>
-        </TabsList>
+      <div className="flex border-b">
+        {tabs.map((tab) => {
+          const Icon = tab.icon;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center gap-1.5 px-4 py-2 text-sm font-medium transition-colors ${
+                activeTab === tab.id
+                  ? 'border-b-2 border-primary text-primary'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              <Icon className="h-4 w-4" />
+              {tab.label}
+            </button>
+          );
+        })}
+      </div>
 
-        {/* 热门内容 */}
-        <TabsContent value="trending" className="mt-4">
-          <FeedList showComposer={false} />
-        </TabsContent>
-
-        {/* 最新发布 */}
-        <TabsContent value="latest" className="mt-4">
-          <FeedList showComposer={false} />
-        </TabsContent>
-
-        {/* 精选推荐 */}
-        <TabsContent value="hot" className="mt-4">
-          <FeedList showComposer={false} />
-        </TabsContent>
-      </Tabs>
+      {/* 内容区域 - 只渲染当前激活的标签 */}
+      <div className="mt-4">
+        <FeedList key={activeTab} showComposer={false} />
+      </div>
     </div>
   );
 }
