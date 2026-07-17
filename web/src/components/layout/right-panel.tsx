@@ -9,10 +9,9 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { useUIStore } from '@/stores/ui-store';
 import { useAuthStore } from '@/stores/auth-store';
-import { mockUsers } from '@/lib/mock-data';
 import { cn } from '@/lib/utils';
-import { getRecommendedCommunities, getHotTopics } from '@/lib/social-api';
-import type { Community } from '@/types';
+import { getRecommendedCommunities, getHotTopics, getRecommendedUsers } from '@/lib/social-api';
+import type { Community, RecommendedUser } from '@/types';
 
 const suggestLinks = [
   { title: 'VR旅游攻略', url: '#' },
