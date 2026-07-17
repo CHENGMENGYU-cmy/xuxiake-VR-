@@ -21,7 +21,18 @@ export class PostsService {
     @InjectRepository(User) private readonly userRepo: Repository<User>,
   ) {}
 
-  async getPosts(cursor?: string, limit = 10) {
+  async getPosts(options: { cursor?: string; limit?: number; sort?: string; page?: number } = {}) {
+    const { cursor, limit = 10, sort = 'latest', page = 1 } = options;
+
+    // trending 和 hot 使用 offset 分页（排名动态变化），latest 使用 cursor 分页
+    if (sort === 'trending') {
+      return this.getTrendingPosts(limit, page);
+    }
+    if (sort === 'hot') {
+      return this.getHotPosts(limit, page);
+    }
+
+    // 默认 latest：按时间倒序，cursor 分页
     const qb = this.postRepo
       .createQueryBuilder('post')
       .leftJoinAndSelect('post.author', 'author')
@@ -31,7 +42,6 @@ export class PostsService {
       .take(limit + 1);
 
     if (cursor) {
-      // 获取cursor帖子的createdAt
       const cursorPost = await this.postRepo.findOne({ where: { id: cursor } });
       if (cursorPost) {
         qb.andWhere('post.createdAt < :cursorDate', { cursorDate: cursorPost.createdAt });
@@ -46,6 +56,63 @@ export class PostsService {
       data: data.map((p) => this.formatPost(p)),
       nextCursor: hasMore ? data[data.length - 1].id : null,
       hasMore,
+    };
+  }
+
+  private async getTrendingPosts(limit: number, page: number) {
+    // 热门内容：加权热度分 + 时间衰减
+    // score = (likeCount*3 + commentCount*2 + viewCount*0.1) * timeDecay
+    const offset = (page - 1) * limit;
+
+    const qb = this.postRepo
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.author', 'author')
+      .leftJoinAndSelect('post.mediaItems', 'mediaItems')
+      .where('post.visibility = :vis', { vis: 'PUBLIC' })
+      .addSelect(
+        `(post.like_count * 3 + post.comment_count * 2 + post.view_count * 0.1) * GREATEST(0.1, 1 - TIMESTAMPDIFF(DAY, post.created_at, NOW()) / 30)`,
+        'hot_score',
+      )
+      .orderBy('hot_score', 'DESC')
+      .skip(offset)
+      .take(limit + 1);
+
+    const [posts, total] = await qb.getManyAndCount();
+    const hasMore = posts.length > limit;
+    const data = posts.slice(0, limit);
+
+    return {
+      data: data.map((p) => this.formatPost(p)),
+      nextCursor: null,
+      hasMore,
+      page,
+      total,
+    };
+  }
+
+  private async getHotPosts(limit: number, page: number) {
+    // 精选推荐：高互动量帖子（点赞 + 评论）
+    const offset = (page - 1) * limit;
+
+    const qb = this.postRepo
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.author', 'author')
+      .leftJoinAndSelect('post.mediaItems', 'mediaItems')
+      .where('post.visibility = :vis', { vis: 'PUBLIC' })
+      .orderBy('(post.like_count + post.comment_count)', 'DESC')
+      .addOrderBy('post.view_count', 'DESC')
+      .skip(offset)
+      .take(limit + 1);
+
+    const posts = await qb.getMany();
+    const hasMore = posts.length > limit;
+    const data = posts.slice(0, limit);
+
+    return {
+      data: data.map((p) => this.formatPost(p)),
+      nextCursor: null,
+      hasMore,
+      page,
     };
   }
 
