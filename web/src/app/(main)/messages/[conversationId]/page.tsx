@@ -29,6 +29,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [myStatus, setMyStatus] = useState<'NORMAL' | 'REQUEST' | 'HIDDEN'>('NORMAL');
   const bottomRef = useRef<HTMLDivElement>(null);
 
   // 获取会话信息
@@ -39,6 +40,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
         if (conv) {
           setConvType(conv.type);
           setConvTitle(conv.title || '');
+          setMyStatus(conv.myStatus || 'NORMAL');
           if (conv.type === 'DIRECT' && conv.members?.length > 0) {
             setOtherUser(conv.members[0]);
           }
@@ -46,6 +48,24 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
       }
     }).catch(() => {});
   }, [conversationId]);
+
+  const handleAcceptRequest = async () => {
+    try {
+      await apiClient.post(`/conversations/${conversationId}/accept`);
+      setMyStatus('NORMAL');
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleRejectRequest = async () => {
+    try {
+      await apiClient.post(`/conversations/${conversationId}/reject`);
+      router.push('/messages');
+    } catch {
+      // ignore
+    }
+  };
 
   // 获取消息
   useEffect(() => {
