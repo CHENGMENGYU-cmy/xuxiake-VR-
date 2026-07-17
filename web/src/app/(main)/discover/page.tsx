@@ -2,14 +2,21 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Users, Compass, UserPlus, MessageCircle, Loader2 } from 'lucide-react';
+import { Users, Compass, UserPlus, MessageCircle, Loader2, Heart, MapPin, Eye, UserCheck } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuthStore } from '@/stores/auth-store';
-import { getRecommendedUsers, getRecommendedCommunities, getUserCommunities } from '@/lib/social-api';
+import {
+  getRecommendedUsers,
+  getRecommendedCommunities,
+  getUserCommunities,
+  followUser,
+  unfollowUser,
+} from '@/lib/social-api';
+import { toast } from 'sonner';
 import type { RecommendedUser, Community } from '@/types';
 
 export default function DiscoverPage() {
@@ -20,6 +27,7 @@ export default function DiscoverPage() {
   const [myCommunities, setMyCommunities] = useState<Community[]>([]);
   const [loading, setLoading] = useState(true);
   const [followingMap, setFollowingMap] = useState<Record<string, boolean>>({});
+  const [followLoading, setFollowLoading] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     setMounted(true);
@@ -32,7 +40,7 @@ export default function DiscoverPage() {
       setLoading(true);
       try {
         const [usersRes, communitiesRes, myCommunitiesRes] = await Promise.all([
-          getRecommendedUsers(1, 10),
+          getRecommendedUsers(1, 20),
           getRecommendedCommunities(1, 10),
           getUserCommunities(),
         ]);
@@ -41,7 +49,6 @@ export default function DiscoverPage() {
         setRecommendedCommunities(communitiesRes.data || []);
         setMyCommunities(myCommunitiesRes || []);
 
-        // 初始化关注状态
         const followMap: Record<string, boolean> = {};
         usersRes.data?.forEach((u) => {
           if (u.isFollowing) followMap[u.id] = true;
@@ -58,8 +65,28 @@ export default function DiscoverPage() {
   }, [isAuthenticated]);
 
   const handleFollow = async (userId: string) => {
-    // TODO: 实现关注功能
-    setFollowingMap((prev) => ({ ...prev, [userId]: !prev[userId] }));
+    if (followLoading[userId]) return;
+    setFollowLoading((prev) => ({ ...prev, [userId]: true }));
+
+    const wasFollowing = followingMap[userId];
+    // 乐观更新
+    setFollowingMap((prev) => ({ ...prev, [userId]: !wasFollowing }));
+
+    try {
+      if (wasFollowing) {
+        await unfollowUser(userId);
+        toast.success('已取消关注');
+      } else {
+        await followUser(userId);
+        toast.success('关注成功');
+      }
+    } catch {
+      // 回滚
+      setFollowingMap((prev) => ({ ...prev, [userId]: wasFollowing }));
+      toast.error('操作失败，请重试');
+    } finally {
+      setFollowLoading((prev) => ({ ...prev, [userId]: false }));
+    }
   };
 
   if (!mounted) {
@@ -128,63 +155,13 @@ export default function DiscoverPage() {
               </Card>
             ) : (
               recommendedUsers.map((user) => (
-                <Card key={user.id} className="overflow-hidden">
-                  <CardContent className="p-4">
-                    <div className="flex items-start gap-3">
-                      <Link href={`/profile/${user.username}`}>
-                        <Avatar className="h-12 w-12">
-                          <AvatarImage src={user.avatarUrl || undefined} alt={user.displayName} />
-                          <AvatarFallback>{user.displayName?.[0]}</AvatarFallback>
-                        </Avatar>
-                      </Link>
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-start justify-between">
-                          <div>
-                            <Link href={`/profile/${user.username}`} className="font-semibold hover:underline">
-                              {user.displayName}
-                            </Link>
-                            <p className="text-sm text-muted-foreground">@{user.username}</p>
-                          </div>
-                          <Button
-                            size="sm"
-                            variant={followingMap[user.id] ? 'outline' : 'default'}
-                            onClick={() => handleFollow(user.id)}
-                          >
-                            {followingMap[user.id] ? '已关注' : '关注'}
-                          </Button>
-                        </div>
-                        {user.bio && (
-                          <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{user.bio}</p>
-                        )}
-                        {/* 匹配原因 */}
-                        {user.matchReasons && user.matchReasons.length > 0 && (
-                          <div className="mt-2 flex flex-wrap gap-1">
-                            {user.matchReasons.map((reason, i) => (
-                              <Badge key={i} variant="secondary" className="text-xs">
-                                {reason}
-                              </Badge>
-                            ))}
-                          </div>
-                        )}
-                        {/* 兴趣标签 */}
-                        {user.interests && user.interests.length > 0 && (
-                          <div className="mt-2 flex flex-wrap gap-1">
-                            {user.interests.slice(0, 4).map((tag) => (
-                              <Badge key={tag.id} variant="outline" className="text-xs">
-                                {tag.icon} {tag.name}
-                              </Badge>
-                            ))}
-                            {user.interests.length > 4 && (
-                              <Badge variant="outline" className="text-xs">
-                                +{user.interests.length - 4}
-                              </Badge>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                <UserCard
+                  key={user.id}
+                  user={user}
+                  isFollowing={!!followingMap[user.id]}
+                  isLoading={!!followLoading[user.id]}
+                  onFollow={() => handleFollow(user.id)}
+                />
               ))
             )}
           </div>
@@ -220,7 +197,6 @@ export default function DiscoverPage() {
                             {community.description}
                           </p>
                         )}
-                        {/* 标签 */}
                         {community.tags && community.tags.length > 0 && (
                           <div className="mt-2 flex flex-wrap gap-1">
                             {community.tags.slice(0, 3).map((tag) => (
@@ -292,5 +268,153 @@ export default function DiscoverPage() {
         </TabsContent>
       </Tabs>
     </div>
+  );
+}
+
+// ===== 用户推荐卡片组件 =====
+
+function UserCard({
+  user,
+  isFollowing,
+  isLoading,
+  onFollow,
+}: {
+  user: RecommendedUser;
+  isFollowing: boolean;
+  isLoading: boolean;
+  onFollow: () => void;
+}) {
+  return (
+    <Card className="overflow-hidden transition-shadow hover:shadow-md">
+      <CardContent className="p-4">
+        {/* 头部：头像 + 信息 + 关注按钮 */}
+        <div className="flex items-start gap-3">
+          <Link href={`/profile/${user.username}`}>
+            <Avatar className="h-12 w-12">
+              <AvatarImage src={user.avatarUrl || undefined} alt={user.displayName} />
+              <AvatarFallback>{user.displayName?.[0]}</AvatarFallback>
+            </Avatar>
+          </Link>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-start justify-between">
+              <div>
+                <Link href={`/profile/${user.username}`} className="font-semibold hover:underline">
+                  {user.displayName}
+                </Link>
+                <p className="text-sm text-muted-foreground">@{user.username}</p>
+              </div>
+              <Button
+                size="sm"
+                variant={isFollowing ? 'outline' : 'default'}
+                onClick={onFollow}
+                disabled={isLoading}
+                className="gap-1"
+              >
+                {isLoading ? (
+                  <Loader2 className="h-3 w-3 animate-spin" />
+                ) : isFollowing ? (
+                  <UserCheck className="h-3 w-3" />
+                ) : (
+                  <UserPlus className="h-3 w-3" />
+                )}
+                {isFollowing ? '已关注' : '关注'}
+              </Button>
+            </div>
+
+            {user.bio && (
+              <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{user.bio}</p>
+            )}
+          </div>
+        </div>
+
+        {/* 匹配原因 */}
+        {user.matchReasons && user.matchReasons.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-1">
+            {user.matchReasons.map((reason, i) => (
+              <Badge key={i} variant="secondary" className="text-xs">
+                {reason}
+              </Badge>
+            ))}
+          </div>
+        )}
+
+        {/* 兴趣标签 */}
+        {user.interests && user.interests.length > 0 && (
+          <div className="mt-2 flex flex-wrap gap-1">
+            {user.interests.slice(0, 4).map((tag) => (
+              <Badge key={tag.id} variant="outline" className="text-xs">
+                {tag.icon} {tag.name}
+              </Badge>
+            ))}
+            {user.interests.length > 4 && (
+              <Badge variant="outline" className="text-xs">
+                +{user.interests.length - 4}
+              </Badge>
+            )}
+          </div>
+        )}
+
+        {/* 创作数据 */}
+        {user.postCount !== undefined && user.postCount > 0 && (
+          <div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground">
+            <span className="flex items-center gap-1">
+              <Eye className="h-3 w-3" />
+              {user.postCount} 篇内容
+            </span>
+            <span className="flex items-center gap-1">
+              <Heart className="h-3 w-3" />
+              {user.totalLikes} 获赞
+            </span>
+            {user.vrDeviceInfo && (
+              <span className="flex items-center gap-1">
+                {user.vrDeviceInfo.model}
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* 代表帖子预览 */}
+        {user.representativePosts && user.representativePosts.length > 0 && (
+          <div className="mt-3 flex gap-2">
+            {user.representativePosts.map((post) => (
+              <Link
+                key={post.id}
+                href={`/post/${post.id}`}
+                className="group relative flex-1 overflow-hidden rounded-lg bg-muted"
+              >
+                {post.thumbnailUrl ? (
+                  <img
+                    src={post.thumbnailUrl}
+                    alt=""
+                    className="h-20 w-full object-cover transition-transform group-hover:scale-105"
+                  />
+                ) : (
+                  <div className="flex h-20 w-full items-center justify-center p-2 text-center text-xs text-muted-foreground">
+                    {post.content || '无内容预览'}
+                  </div>
+                )}
+                {post.locationName && (
+                  <div className="absolute bottom-0 left-0 right-0 flex items-center gap-0.5 bg-black/50 px-1.5 py-0.5 text-[10px] text-white">
+                    <MapPin className="h-2.5 w-2.5" />
+                    {post.locationName}
+                  </div>
+                )}
+              </Link>
+            ))}
+          </div>
+        )}
+
+        {/* 共同好友 */}
+        {user.mutualFriends && user.mutualFriends.count > 0 && (
+          <div className="mt-2 flex items-center gap-1 text-xs text-muted-foreground">
+            <Users className="h-3 w-3" />
+            <span>
+              {user.mutualFriends.names.join('、')}
+              {user.mutualFriends.count > 2 && `等${user.mutualFriends.count}位共同关注`}
+            </span>
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }
