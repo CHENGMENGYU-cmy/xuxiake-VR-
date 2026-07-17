@@ -461,7 +461,117 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ========== 五、使用场景 ========== */}
+      {/* ========== 五、AR vs 传统设备 ========== */}
+      <section className="relative py-24 sm:py-32 bg-muted/30">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="mb-16 text-center">
+            <Badge variant="outline" className="mb-4">
+              <Eye className="mr-1.5 h-3.5 w-3.5" />
+              为什么选择AR眼镜
+            </Badge>
+            <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl">
+              AR眼镜 vs 传统设备
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-muted-foreground text-lg">
+              解放双手，沉浸体验，AI赋能的全新旅行方式
+            </p>
+          </div>
+
+          <div className="grid gap-8 lg:grid-cols-3">
+            {/* AR眼镜 */}
+            <div className="relative rounded-3xl border-2 border-primary bg-card p-8 shadow-xl">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                <Badge className="bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-1.5">推荐</Badge>
+              </div>
+              <div className="mb-6 flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <Eye className="h-6 w-6" />
+                </div>
+                <h3 className="text-xl font-bold">AR智能眼镜</h3>
+              </div>
+              <ul className="space-y-4 mb-8">
+                {[
+                  { text: '解放双手，边走边拍', icon: '✅' },
+                  { text: '第一视角，沉浸体验', icon: '✅' },
+                  { text: 'AI实时识别翻译', icon: '✅' },
+                  { text: 'AR导航，所见即所得', icon: '✅' },
+                  { text: '语音控制，无需触屏', icon: '✅' },
+                  { text: '全天佩戴，轻若无物', icon: '✅' },
+                ].map((item, i) => (
+                  <li key={i} className="flex items-center gap-3">
+                    <span className="text-lg">{item.icon}</span>
+                    <span className="text-sm">{item.text}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="text-center">
+                <span className="text-3xl font-bold text-primary">¥2,999</span>
+                <span className="text-sm text-muted-foreground ml-2">起</span>
+              </div>
+            </div>
+
+            {/* 手机 */}
+            <div className="rounded-3xl border bg-card p-8">
+              <div className="mb-6 flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted">
+                  <Camera className="h-6 w-6 text-muted-foreground" />
+                </div>
+                <h3 className="text-xl font-bold">手机拍摄</h3>
+              </div>
+              <ul className="space-y-4 mb-8">
+                {[
+                  { text: '需要手持，占用双手', icon: '⚠️' },
+                  { text: '第三人视角，距离感', icon: '⚠️' },
+                  { text: '需手动打开翻译App', icon: '⚠️' },
+                  { text: '地图导航需低头看', icon: '⚠️' },
+                  { text: '需手动操作屏幕', icon: '⚠️' },
+                  { text: '长时间举着很累', icon: '⚠️' },
+                ].map((item, i) => (
+                  <li key={i} className="flex items-center gap-3">
+                    <span className="text-lg">{item.icon}</span>
+                    <span className="text-sm text-muted-foreground">{item.text}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="text-center">
+                <span className="text-3xl font-bold">¥3,000+</span>
+                <span className="text-sm text-muted-foreground ml-2">旗舰手机</span>
+              </div>
+            </div>
+
+            {/* 运动相机 */}
+            <div className="rounded-3xl border bg-card p-8">
+              <div className="mb-6 flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted">
+                  <Video className="h-6 w-6 text-muted-foreground" />
+                </div>
+                <h3 className="text-xl font-bold">运动相机</h3>
+              </div>
+              <ul className="space-y-4 mb-8">
+                {[
+                  { text: '需头戴或胸戴固定', icon: '⚠️' },
+                  { text: '视角固定，不够灵活', icon: '⚠️' },
+                  { text: '无AI识别功能', icon: '⚠️' },
+                  { text: '无导航功能', icon: '⚠️' },
+                  { text: '需后期剪辑处理', icon: '⚠️' },
+                  { text: '额外负重，不够舒适', icon: '⚠️' },
+                ].map((item, i) => (
+                  <li key={i} className="flex items-center gap-3">
+                    <span className="text-lg">{item.icon}</span>
+                    <span className="text-sm text-muted-foreground">{item.text}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="text-center">
+                <span className="text-3xl font-bold">¥2,000+</span>
+                <span className="text-sm text-muted-foreground ml-2">专业运动相机</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========== 六、使用场景 ========== */}
       <section id="scenarios" className="relative py-24 sm:py-32 bg-muted/30">
         <div className="mx-auto max-w-7xl px-6">
           <div className="mb-16 text-center">
