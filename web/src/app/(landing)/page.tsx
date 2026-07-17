@@ -785,7 +785,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ========== 九、页脚 ========== */}
+      {/* ========== 十、页脚 ========== */}
       <footer className="border-t bg-muted/30">
         <div className="mx-auto max-w-7xl px-6 py-16">
           <div className="grid gap-12 sm:grid-cols-4">
