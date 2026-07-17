@@ -48,17 +48,17 @@ export function Navbar() {
 
   const unreadCount = mockNotifications.filter((n) => !n.isRead).length;
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = (e: React.FormFormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      router.push('/search');
       setShowSuggestions(false);
     }
   };
 
   const handleSuggestionSelect = (value: string) => {
     setSearchQuery(value);
-    router.push(`/search?q=${encodeURIComponent(value)}`);
+    router.push('/search');
     setShowSuggestions(false);
   };
 
