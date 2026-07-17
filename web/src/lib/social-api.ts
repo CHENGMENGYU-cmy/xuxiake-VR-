@@ -119,7 +119,7 @@ export async function getFollowing(username: string): Promise<{ data: User[]; to
 
 // ==================== 私聊 ====================
 
-export async function getOrCreateDirectConversation(userId: string): Promise<{ id: string }> {
+export async function getOrCreateDirectConversation(userId: string): Promise<{ id: string; isRequest?: boolean }> {
   const { data } = await apiClient.post(`/conversations/direct/${userId}`);
   return data;
 }
