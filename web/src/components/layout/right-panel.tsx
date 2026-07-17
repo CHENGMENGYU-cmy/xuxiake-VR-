@@ -24,6 +24,7 @@ export function RightPanel() {
   const { rightPanelOpen } = useUIStore();
   const { isAuthenticated } = useAuthStore();
   const [recommendedCommunities, setRecommendedCommunities] = useState<Community[]>([]);
+  const [recommendedUsers, setRecommendedUsers] = useState<RecommendedUser[]>([]);
   const [hotTopics, setHotTopics] = useState<{ tag: string; count: number }[]>([]);
 
   useEffect(() => {
@@ -34,8 +35,12 @@ export function RightPanel() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      getRecommendedCommunities(1, 5).then((res) => {
-        setRecommendedCommunities(res.data || []);
+      Promise.all([
+        getRecommendedCommunities(1, 5),
+        getRecommendedUsers(1, 3),
+      ]).then(([communitiesRes, usersRes]) => {
+        setRecommendedCommunities(communitiesRes.data || []);
+        setRecommendedUsers(usersRes.data || []);
       }).catch(() => {});
     }
   }, [isAuthenticated]);
