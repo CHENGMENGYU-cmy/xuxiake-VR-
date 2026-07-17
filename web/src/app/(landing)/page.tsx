@@ -351,7 +351,105 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ========== 三、平台介绍 ========== */}
+      {/* ========== 三、AR功能演示 ========== */}
+      <section className="relative py-24 sm:py-32">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="mb-16 text-center">
+            <Badge variant="outline" className="mb-4">
+              <Camera className="mr-1.5 h-3.5 w-3.5" />
+              实景演示
+            </Badge>
+            <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl">
+              AR眼镜看世界
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-muted-foreground text-lg">
+              透过AR眼镜，世界变得不同
+            </p>
+          </div>
+
+          <div className="grid gap-8 lg:grid-cols-3">
+            {/* 场景1：景点识别 */}
+            <div className="group relative overflow-hidden rounded-3xl border bg-card transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              <div className="aspect-video bg-gradient-to-br from-cyan-500/20 to-blue-500/20 p-8 flex items-center justify-center">
+                <div className="relative">
+                  <div className="w-48 h-32 rounded-xl border-2 border-dashed border-white/50 flex items-center justify-center">
+                    <div className="text-center">
+                      <Eye className="h-10 w-10 text-white/60 mx-auto mb-2" />
+                      <p className="text-xs text-white/60">AR视野</p>
+                    </div>
+                  </div>
+                  {/* AR标注效果 */}
+                  <div className="absolute -top-2 -right-2 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1.5 shadow-lg animate-pulse">
+                    <p className="text-xs font-medium text-primary">故宫博物院</p>
+                  </div>
+                  <div className="absolute -bottom-2 -left-2 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1.5 shadow-lg animate-pulse" style={{ animationDelay: '0.5s' }}>
+                    <p className="text-xs font-medium text-accent">⭐ 4.9分</p>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6">
+                <h3 className="font-bold mb-2">智能景点识别</h3>
+                <p className="text-sm text-muted-foreground">
+                  对准任意景点，AR眼镜自动识别并显示名称、评分、历史介绍
+                </p>
+              </div>
+            </div>
+
+            {/* 场景2：实时翻译 */}
+            <div className="group relative overflow-hidden rounded-3xl border bg-card transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              <div className="aspect-video bg-gradient-to-br from-accent/20 to-orange-500/20 p-8 flex items-center justify-center">
+                <div className="relative">
+                  <div className="w-48 h-32 rounded-xl border-2 border-dashed border-white/50 flex items-center justify-center">
+                    <div className="text-center">
+                      <Languages className="h-10 w-10 text-white/60 mx-auto mb-2" />
+                      <p className="text-xs text-white/60">翻译模式</p>
+                    </div>
+                  </div>
+                  {/* 翻译效果 */}
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/80 backdrop-blur-sm rounded-lg px-4 py-2">
+                    <p className="text-white text-sm font-medium">Welcome → 欢迎光临</p>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6">
+                <h3 className="font-bold mb-2">实时翻译字幕</h3>
+                <p className="text-sm text-muted-foreground">
+                  看到外文自动翻译，对话实时字幕，出国旅行不再有语言障碍
+                </p>
+              </div>
+            </div>
+
+            {/* 场景3：AR导航 */}
+            <div className="group relative overflow-hidden rounded-3xl border bg-card transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              <div className="aspect-video bg-gradient-to-br from-teal-500/20 to-green-500/20 p-8 flex items-center justify-center">
+                <div className="relative">
+                  <div className="w-48 h-32 rounded-xl border-2 border-dashed border-white/50 flex items-center justify-center">
+                    <div className="text-center">
+                      <Navigation className="h-10 w-10 text-white/60 mx-auto mb-2" />
+                      <p className="text-xs text-white/60">导航模式</p>
+                    </div>
+                  </div>
+                  {/* 导航箭头 */}
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
+                    <div className="w-0 h-0 border-l-[20px] border-l-transparent border-r-[20px] border-r-transparent border-b-[30px] border-b-white/80 animate-bounce" />
+                  </div>
+                  <div className="absolute top-2 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1.5 shadow-lg">
+                    <p className="text-xs font-medium text-teal-600">前方200米右转</p>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6">
+                <h3 className="font-bold mb-2">AR实景导航</h3>
+                <p className="text-sm text-muted-foreground">
+                  导航箭头直接投射在视野中，复杂路口也能轻松找到方向
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========== 四、平台介绍 ========== */}
       <section id="about" className="relative py-24 sm:py-32">
         <div className="mx-auto max-w-4xl px-6 text-center">
           <Badge variant="outline" className="mb-6">关于平台</Badge>
