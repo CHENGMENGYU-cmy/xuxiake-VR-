@@ -11,16 +11,8 @@ import { useUIStore } from '@/stores/ui-store';
 import { useAuthStore } from '@/stores/auth-store';
 import { mockUsers } from '@/lib/mock-data';
 import { cn } from '@/lib/utils';
-import { getRecommendedCommunities } from '@/lib/social-api';
+import { getRecommendedCommunities, getHotTopics } from '@/lib/social-api';
 import type { Community } from '@/types';
-
-const hotTopics = [
-  { tag: '黄山VR全景', count: 1520 },
-  { tag: '故宫翻译', count: 980 },
-  { tag: '张家界360', count: 890 },
-  { tag: '桂林空间视频', count: 756 },
-  { tag: '长城记录', count: 650 },
-];
 
 const suggestLinks = [
   { title: 'VR旅游攻略', url: '#' },
