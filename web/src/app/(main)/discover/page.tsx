@@ -14,11 +14,16 @@ import type { RecommendedUser, Community } from '@/types';
 
 export default function DiscoverPage() {
   const { isAuthenticated } = useAuthStore();
+  const [mounted, setMounted] = useState(false);
   const [recommendedUsers, setRecommendedUsers] = useState<RecommendedUser[]>([]);
   const [recommendedCommunities, setRecommendedCommunities] = useState<Community[]>([]);
   const [myCommunities, setMyCommunities] = useState<Community[]>([]);
   const [loading, setLoading] = useState(true);
   const [followingMap, setFollowingMap] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!isAuthenticated) return;
