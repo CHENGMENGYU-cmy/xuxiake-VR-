@@ -31,6 +31,7 @@ import { Badge } from '@/components/ui/badge';
 import { useAuthStore } from '@/stores/auth-store';
 import { useUIStore } from '@/stores/ui-store';
 import { mockNotifications } from '@/lib/mock-data';
+import { SearchSuggestions } from '@/components/search/search-suggestions';
 
 export function Navbar() {
   const router = useRouter();
