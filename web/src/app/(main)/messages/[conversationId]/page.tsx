@@ -1,111 +1,170 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, use } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Send, Smile, Image } from 'lucide-react';
+import { ArrowLeft, Send } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { mockConversations } from '@/lib/mock-data';
 import { useAuthStore } from '@/stores/auth-store';
+import apiClient from '@/lib/api-client';
+
+interface Msg {
+  id: string;
+  content: string | null;
+  createdAt: string;
+  sender: { id: string; username: string; displayName: string; avatarUrl: string | null } | null;
+}
 
 export default function ChatPage({ params }: { params: Promise<{ conversationId: string }> }) {
+  const { conversationId } = use(params);
   const { user: currentUser } = useAuthStore();
   const router = useRouter();
-  const conv = mockConversations[0];
-  if (!conv) {
-    return (
-      <div className="py-12 text-center text-muted-foreground">会话不存在</div>
-    );
+
+  const [messages, setMessages] = useState<Msg[]>([]);
+  const [otherUser, setOtherUser] = useState<{ id: string; username: string; displayName: string; avatarUrl: string | null } | null>(null);
+  const [convType, setConvType] = useState<'DIRECT' | 'GROUP'>('DIRECT');
+  const [convTitle, setConvTitle] = useState('');
+  const [input, setInput] = useState('');
+  const [sending, setSending] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  // 获取会话信息
+  useEffect(() => {
+    apiClient.get('/conversations').then((res) => {
+      if (res.data?.success) {
+        const conv = res.data.data.find((c: any) => c.id === conversationId);
+        if (conv) {
+          setConvType(conv.type);
+          setConvTitle(conv.title || '');
+          if (conv.type === 'DIRECT' && conv.members?.length > 0) {
+            setOtherUser(conv.members[0]);
+          }
+        }
+      }
+    }).catch(() => {});
+  }, [conversationId]);
+
+  // 获取消息
+  useEffect(() => {
+    apiClient.get(`/conversations/${conversationId}/messages?limit=100`)
+      .then((res) => {
+        if (res.data?.success) {
+          setMessages(res.data.data || []);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [conversationId]);
+
+  // 滚动到底部
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  const handleSend = async () => {
+    const text = input.trim();
+    if (!text || sending) return;
+    setSending(true);
+    setInput('');
+
+    try {
+      const res = await apiClient.post(`/conversations/${conversationId}/messages`, { content: text });
+      if (res.data?.success) {
+        setMessages((prev) => [...prev, res.data.data]);
+      }
+    } catch {
+      setInput(text);
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  if (loading) {
+    return <div className="flex items-center justify-center py-12 text-sm text-muted-foreground">加载中...</div>;
   }
-
-  const otherMember = conv.type === 'GROUP' ? null : conv.members[0];
-
-  // 使用当前用户的最新数据
-  const currentUserData = currentUser || { id: 'u1', username: 'xuxiake', displayName: '徐霞客', avatarUrl: '' };
-
-  // 模拟消息列表
-  const messages = [
-    { id: '1', sender: otherMember, content: '你好！看了你拍的黄山VR视频，真的太震撼了！', time: '10:30', isMine: false },
-    { id: '2', sender: currentUserData, content: '谢谢！那天天气特别好，云海效果很棒', time: '10:32', isMine: true },
-    { id: '3', sender: otherMember, content: '是用什么设备拍的？我也想去试试VR拍摄', time: '10:33', isMine: false },
-    { id: '4', sender: currentUserData, content: '用的是Apple Vision Pro，空间视频效果特别好。下次可以一起去拍！', time: '10:35', isMine: true },
-    { id: '5', sender: otherMember, content: '太好了！我也刚买了Vision Pro，正愁找不到人一起玩VR摄影呢', time: '10:36', isMine: false },
-  ];
 
   return (
     <div className="flex h-[calc(100vh-8rem)] flex-col rounded-lg border bg-card">
-      {/* 聊天头部 */}
+      {/* 头部 */}
       <div className="flex items-center gap-3 border-b p-3">
         <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => router.back()}>
           <ArrowLeft className="h-4 w-4" />
         </Button>
-        {conv.type === 'GROUP' ? (
+        {convType === 'GROUP' ? (
           <div>
-            <p className="text-sm font-semibold">{conv.title}</p>
-            <p className="text-xs text-muted-foreground">{conv.members.length} 人</p>
+            <p className="text-sm font-semibold">{convTitle}</p>
           </div>
-        ) : (
-          <Link href={`/profile/${otherMember?.username}`} className="flex items-center gap-2">
+        ) : otherUser ? (
+          <Link href={`/profile/${otherUser.username}`} className="flex items-center gap-2">
             <Avatar className="h-8 w-8">
-              <AvatarImage src={otherMember?.avatarUrl} alt={otherMember?.displayName} />
-              <AvatarFallback>{otherMember?.displayName?.[0]}</AvatarFallback>
+              <AvatarImage src={otherUser.avatarUrl || undefined} alt={otherUser.displayName} />
+              <AvatarFallback>{otherUser.displayName?.[0]}</AvatarFallback>
             </Avatar>
-            <div>
-              <p className="text-sm font-semibold">{otherMember?.displayName}</p>
-              <p className="text-xs text-teal-500">在线</p>
-            </div>
+            <p className="text-sm font-semibold">{otherUser.displayName}</p>
           </Link>
-        )}
+        ) : null}
       </div>
 
       {/* 消息列表 */}
       <div className="flex-1 space-y-3 overflow-y-auto p-4">
-        {messages.map((msg) => (
-          <div
-            key={msg.id}
-            className={`flex ${msg.isMine ? 'justify-end' : 'justify-start'}`}
-          >
-            <div className={`flex max-w-[70%] gap-2 ${msg.isMine ? 'flex-row-reverse' : 'flex-row'}`}>
-              {!msg.isMine && (
-                <Avatar className="h-7 w-7 flex-shrink-0">
-                  <AvatarImage src={msg.sender?.avatarUrl} alt={msg.sender?.displayName} />
-                  <AvatarFallback>{msg.sender?.displayName?.[0]}</AvatarFallback>
-                </Avatar>
-              )}
-              <div>
-                <div
-                  className={`rounded-2xl px-4 py-2 text-sm ${
-                    msg.isMine
-                      ? 'rounded-tr-md bg-primary text-primary-foreground'
-                      : 'rounded-tl-md bg-muted text-foreground'
-                  }`}
-                >
-                  {msg.content}
+        {messages.map((msg) => {
+          const isMine = msg.sender?.id === currentUser?.id;
+          return (
+            <div key={msg.id} className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
+              <div className={`flex max-w-[70%] gap-2 ${isMine ? 'flex-row-reverse' : 'flex-row'}`}>
+                {!isMine && (
+                  <Avatar className="h-7 w-7 shrink-0">
+                    <AvatarImage src={msg.sender?.avatarUrl || undefined} alt={msg.sender?.displayName} />
+                    <AvatarFallback>{msg.sender?.displayName?.[0]}</AvatarFallback>
+                  </Avatar>
+                )}
+                <div>
+                  <div
+                    className={`rounded-2xl px-4 py-2 text-sm ${
+                      isMine
+                        ? 'rounded-tr-md bg-primary text-primary-foreground'
+                        : 'rounded-tl-md bg-muted text-foreground'
+                    }`}
+                  >
+                    {msg.content}
+                  </div>
+                  <p className={`mt-0.5 text-[10px] text-muted-foreground ${isMine ? 'text-right' : 'text-left'}`}>
+                    {new Date(msg.createdAt).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}
+                  </p>
                 </div>
-                <p className={`mt-0.5 text-[10px] text-muted-foreground ${msg.isMine ? 'text-right' : 'text-left'}`}>
-                  {msg.time}
-                </p>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
+        <div ref={bottomRef} />
       </div>
 
       {/* 输入框 */}
       <div className="flex items-center gap-2 border-t p-3">
-        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground">
-          <Image className="h-4 w-4" />
-        </Button>
-        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground">
-          <Smile className="h-4 w-4" />
-        </Button>
         <Input
           placeholder="输入消息..."
-          className="flex-1 rounded-full border-border bg-muted"
+          className="flex-1 rounded-full bg-muted"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+          disabled={sending}
         />
-        <Button size="icon" className="h-8 w-8 rounded-full">
+        <Button
+          size="icon"
+          className="h-8 w-8 rounded-full"
+          onClick={handleSend}
+          disabled={!input.trim() || sending}
+        >
           <Send className="h-4 w-4" />
         </Button>
       </div>
