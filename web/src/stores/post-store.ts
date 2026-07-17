@@ -2,7 +2,7 @@
 
 import { create } from 'zustand';
 import { Post } from '@/types';
-import { createPost, getPosts, CreatePostPayload } from '@/lib/post-api';
+import { createPost, getPosts, CreatePostPayload, PostSortType } from '@/lib/post-api';
 
 interface PostState {
   // 帖子列表
@@ -14,13 +14,15 @@ interface PostState {
   // 分页状态
   nextCursor: string | null;
   hasMore: boolean;
+  currentPage: number;
+  currentSort: PostSortType;
 
   // 发布状态
   isPublishing: boolean;
   publishError: string | null;
 
   // Actions
-  fetchPosts: () => Promise<void>;
+  fetchPosts: (sort?: PostSortType) => Promise<void>;
   loadMore: () => Promise<void>;
   publishPost: (payload: CreatePostPayload) => Promise<Post>;
   prependPost: (post: Post) => void;
@@ -28,22 +30,31 @@ interface PostState {
   updateUserAvatar: (username: string, avatarUrl: string) => void;
 }
 
-export const usePostStore = create<PostState>((set) => ({
+export const usePostStore = create<PostState>((set, get) => ({
   posts: [],
   isLoading: false,
   isLoadingMore: false,
   error: null,
   nextCursor: null,
   hasMore: true,
+  currentPage: 1,
+  currentSort: 'latest',
   isPublishing: false,
   publishError: null,
 
-  fetchPosts: async () => {
-    set({ isLoading: true, error: null });
+  fetchPosts: async (sort?: PostSortType) => {
+    const sortType = sort || get().currentSort;
+    set({ isLoading: true, error: null, currentSort: sortType, currentPage: 1 });
     try {
-      const result = await getPosts();
+      const params: any = { sort: sortType };
+      // trending 和 hot 使用 page 分页，latest 使用 cursor 分页
+      if (sortType === 'latest') {
+        // 不传 page，使用默认 cursor 分页
+      } else {
+        params.page = 1;
+      }
+      const result = await getPosts(params);
       const posts = result.posts ?? [];
-      // 去重：确保没有重复的帖子ID
       const uniquePosts = posts.filter((post, index, self) =>
         index === self.findIndex(p => p.id === post.id)
       );
@@ -51,6 +62,7 @@ export const usePostStore = create<PostState>((set) => ({
         posts: uniquePosts,
         nextCursor: result.nextCursor,
         hasMore: result.hasMore,
+        currentPage: 1,
         isLoading: false,
       });
     } catch (err: any) {
@@ -63,14 +75,21 @@ export const usePostStore = create<PostState>((set) => ({
   },
 
   loadMore: async () => {
-    const { nextCursor, hasMore, isLoadingMore, posts } = usePostStore.getState();
-    if (!hasMore || isLoadingMore || !nextCursor) return;
+    const { nextCursor, hasMore, isLoadingMore, posts, currentSort, currentPage } = get();
+    if (!hasMore || isLoadingMore) return;
 
     set({ isLoadingMore: true });
     try {
-      const result = await getPosts({ cursor: nextCursor });
+      const params: any = { sort: currentSort };
+      if (currentSort === 'latest') {
+        if (!nextCursor) return;
+        params.cursor = nextCursor;
+      } else {
+        params.page = currentPage + 1;
+      }
+
+      const result = await getPosts(params);
       const newPosts = result.posts ?? [];
-      // 去重：过滤掉已存在的帖子
       const existingIds = new Set(posts.map(p => p.id));
       const uniqueNewPosts = newPosts.filter(p => !existingIds.has(p.id));
 
@@ -78,6 +97,7 @@ export const usePostStore = create<PostState>((set) => ({
         posts: [...state.posts, ...uniqueNewPosts],
         nextCursor: result.nextCursor,
         hasMore: result.hasMore,
+        currentPage: currentSort === 'latest' ? state.currentPage : state.currentPage + 1,
         isLoadingMore: false,
       }));
     } catch (err: any) {
