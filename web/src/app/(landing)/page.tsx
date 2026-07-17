@@ -618,10 +618,6 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
-              <div className="text-center">
-                <span className="text-3xl font-bold text-primary">¥2,999</span>
-                <span className="text-sm text-muted-foreground ml-2">起</span>
-              </div>
             </div>
 
             {/* 手机 */}
