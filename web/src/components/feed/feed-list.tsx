@@ -15,7 +15,7 @@ interface FeedListProps {
 }
 
 export function FeedList({ showComposer = true, sort = 'latest' }: FeedListProps) {
-  const { posts = [], isLoading, isLoadingMore, hasMore, fetchPosts, loadMore, currentSort } = usePostStore();
+  const { posts = [], isLoading, isLoadingMore, hasMore, fetchPosts, loadMore } = usePostStore();
 
   // sort 变化时重新获取数据
   useEffect(() => {
