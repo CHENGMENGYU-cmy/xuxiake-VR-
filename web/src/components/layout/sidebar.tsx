@@ -176,6 +176,37 @@ export function Sidebar() {
 
             <Separator />
 
+            {/* 好友（互关） */}
+            {mounted && user && friends.length > 0 && (
+              <div className="p-3">
+                <p className="px-2 pb-1 text-xs font-medium uppercase text-muted-foreground">
+                  好友
+                </p>
+                <div className="space-y-1">
+                  {friends.map((u: any) => (
+                    <Button
+                      key={u.id}
+                      variant="ghost"
+                      className="w-full justify-start gap-3"
+                      onClick={() => handleSendMessage(u.id)}
+                      disabled={!!msgLoading[u.id]}
+                    >
+                      <Avatar className="h-7 w-7">
+                        <AvatarImage src={u.avatarUrl} alt={u.displayName} />
+                        <AvatarFallback>{u.displayName?.[0]}</AvatarFallback>
+                      </Avatar>
+                      <div className="min-w-0 flex-1 text-left">
+                        <p className="truncate text-sm">{u.displayName}</p>
+                        <p className="truncate text-xs text-muted-foreground">发消息</p>
+                      </div>
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <Separator />
+
             {/* 推荐关注 */}
             {mounted && user && suggestedUsers.length > 0 && (
               <div className="p-3">
