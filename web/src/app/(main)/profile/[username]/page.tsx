@@ -234,8 +234,12 @@ function ProfileContent({ username }: { username: string }) {
 
             <div className="flex gap-4 pt-2 text-sm">
               <span><strong>{userPosts.length}</strong> <span className="text-muted-foreground">内容</span></span>
-              <span><strong>{followerCount}</strong> <span className="text-muted-foreground">粉丝</span></span>
-              <span><strong>{followingCount}</strong> <span className="text-muted-foreground">关注</span></span>
+              <Link href={`/profile/${user.username}/followers`} className="hover:underline">
+                <strong>{followerCount}</strong> <span className="text-muted-foreground">粉丝</span>
+              </Link>
+              <Link href={`/profile/${user.username}/followers?tab=following`} className="hover:underline">
+                <strong>{followingCount}</strong> <span className="text-muted-foreground">关注</span>
+              </Link>
             </div>
           </div>
         </CardContent>
