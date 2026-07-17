@@ -99,53 +99,112 @@ export default function LandingPage() {
           <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
         </div>
 
-        <div className="relative z-10 mx-auto max-w-5xl px-6 text-center">
-          <Badge variant="secondary" className="mb-8 px-4 py-1.5 text-sm">
-            <Sparkles className="mr-1.5 h-3.5 w-3.5" />
-            AI 驱动的第一视角旅行社交平台
-          </Badge>
+        <div className="relative z-10 mx-auto max-w-7xl px-6">
+          <div className="grid gap-12 lg:grid-cols-2 items-center">
+            {/* 左侧：文案 */}
+            <div className="text-center lg:text-left">
+              <Badge variant="secondary" className="mb-8 px-4 py-1.5 text-sm">
+                <Sparkles className="mr-1.5 h-3.5 w-3.5" />
+                AI 驱动的第一视角旅行社交平台
+              </Badge>
 
-          <h1 className="text-5xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl xl:text-8xl leading-[1.1]">
-            戴上眼镜
-            <br />
-            <span className="relative inline-block">
-              <span className="relative z-10">走遍天下</span>
-              <span className="absolute bottom-2 left-0 right-0 h-3 bg-accent/30 -skew-x-3 z-0" />
-            </span>
-          </h1>
+              <h1 className="text-5xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl leading-[1.1]">
+                戴上眼镜
+                <br />
+                <span className="relative inline-block">
+                  <span className="relative z-10">走遍天下</span>
+                  <span className="absolute bottom-2 left-0 right-0 h-3 bg-accent/30 -skew-x-3 z-0" />
+                </span>
+              </h1>
 
-          <p className="mx-auto mt-8 max-w-2xl text-lg text-white/70 leading-relaxed sm:text-xl">
-            AI时代的第一视角旅行社交平台
-            <br className="hidden sm:block" />
-            用你的眼睛，记录世界；用AI，连接旅伴
-          </p>
+              <p className="mx-auto lg:mx-0 mt-8 max-w-xl text-lg text-white/70 leading-relaxed sm:text-xl">
+                AI时代的第一视角旅行社交平台
+                <br className="hidden sm:block" />
+                用你的眼睛，记录世界；用AI，连接旅伴
+              </p>
 
-          <div className="mt-12 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            {isAuthenticated ? (
-              <Link
-                href="/feed"
-                className="group inline-flex items-center gap-2.5 rounded-2xl bg-white px-10 py-4 text-base font-semibold text-primary shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all hover:-translate-y-0.5"
-              >
-                进入社区
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-            ) : (
-              <>
-                <Link
-                  href="/register"
-                  className="group inline-flex items-center gap-2.5 rounded-2xl bg-white px-10 py-4 text-base font-semibold text-primary shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all hover:-translate-y-0.5"
-                >
-                  立即加入
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </Link>
-                <Link
-                  href="/login"
-                  className="inline-flex items-center gap-2 rounded-2xl border border-white/20 px-10 py-4 text-base font-semibold text-white hover:bg-white/10 transition-all backdrop-blur-sm"
-                >
-                  已有账号？登录
-                </Link>
-              </>
-            )}
+              <div className="mt-12 flex flex-col items-center gap-4 sm:flex-row lg:justify-start sm:justify-center">
+                {isAuthenticated ? (
+                  <Link
+                    href="/feed"
+                    className="group inline-flex items-center gap-2.5 rounded-2xl bg-white px-10 py-4 text-base font-semibold text-primary shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all hover:-translate-y-0.5"
+                  >
+                    进入社区
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                ) : (
+                  <>
+                    <Link
+                      href="/register"
+                      className="group inline-flex items-center gap-2.5 rounded-2xl bg-white px-10 py-4 text-base font-semibold text-primary shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all hover:-translate-y-0.5"
+                    >
+                      立即加入
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </Link>
+                    <Link
+                      href="/login"
+                      className="inline-flex items-center gap-2 rounded-2xl border border-white/20 px-10 py-4 text-base font-semibold text-white hover:bg-white/10 transition-all backdrop-blur-sm"
+                    >
+                      已有账号？登录
+                    </Link>
+                  </>
+                )}
+              </div>
+            </div>
+
+            {/* 右侧：AR眼镜3D效果 */}
+            <div className="relative flex justify-center lg:justify-end">
+              <div className="relative">
+                {/* AR眼镜主体 */}
+                <div className="relative w-80 h-64 sm:w-96 sm:h-72">
+                  {/* 眼镜镜片 - 左 */}
+                  <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-28 h-20 sm:w-32 sm:h-24 rounded-2xl bg-gradient-to-br from-cyan-400/80 to-blue-500/80 backdrop-blur-sm border-2 border-white/30 shadow-lg shadow-cyan-500/30">
+                    <div className="absolute inset-2 rounded-xl bg-gradient-to-br from-cyan-300/20 to-transparent" />
+                    <Eye className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-8 w-8 text-white/60" />
+                  </div>
+                  {/* 眼镜镜片 - 右 */}
+                  <div className="absolute top-1/2 right-1/4 translate-x-1/2 -translate-y-1/2 w-28 h-20 sm:w-32 sm:h-24 rounded-2xl bg-gradient-to-br from-cyan-400/80 to-blue-500/80 backdrop-blur-sm border-2 border-white/30 shadow-lg shadow-cyan-500/30">
+                    <div className="absolute inset-2 rounded-xl bg-gradient-to-br from-cyan-300/20 to-transparent" />
+                    <Camera className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-8 w-8 text-white/60" />
+                  </div>
+                  {/* 镜框连接 */}
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-3 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full" />
+                  {/* 左镜腿 */}
+                  <div className="absolute top-[45%] left-0 w-16 h-2 bg-gradient-to-l from-cyan-400/80 to-transparent rounded-full -rotate-12" />
+                  {/* 右镜腿 */}
+                  <div className="absolute top-[45%] right-0 w-16 h-2 bg-gradient-to-r from-cyan-400/80 to-transparent rounded-full rotate-12" />
+                </div>
+
+                {/* 功能标签 */}
+                <div className="absolute -top-4 -right-4 animate-bounce">
+                  <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-lg">
+                    <Wifi className="h-4 w-4 text-primary" />
+                    <span className="text-xs font-medium text-primary">实时连接</span>
+                  </div>
+                </div>
+                <div className="absolute -bottom-4 -left-4 animate-bounce" style={{ animationDelay: '0.5s' }}>
+                  <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-lg">
+                    <Battery className="h-4 w-4 text-green-500" />
+                    <span className="text-xs font-medium text-green-600">全天续航</span>
+                  </div>
+                </div>
+                <div className="absolute top-0 left-0 animate-bounce" style={{ animationDelay: '1s' }}>
+                  <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-lg">
+                    <Mic className="h-4 w-4 text-accent" />
+                    <span className="text-xs font-medium text-accent">语音交互</span>
+                  </div>
+                </div>
+                <div className="absolute bottom-0 right-0 animate-bounce" style={{ animationDelay: '1.5s' }}>
+                  <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-lg">
+                    <Navigation className="h-4 w-4 text-orange-500" />
+                    <span className="text-xs font-medium text-orange-500">AR导航</span>
+                  </div>
+                </div>
+
+                {/* 发光效果 */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-cyan-500/10 blur-3xl animate-pulse" />
+              </div>
+            </div>
           </div>
         </div>
 
