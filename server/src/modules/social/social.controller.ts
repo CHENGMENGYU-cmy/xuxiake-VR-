@@ -89,7 +89,7 @@ export class SocialController {
     const locationTopics = hotPosts
       .filter((p) => p.locationName)
       .map((p) => ({
-        tag: p.locationName,
+        tag: p.locationName!,
         count: p.viewCount,
       }));
 
