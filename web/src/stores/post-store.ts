@@ -42,8 +42,13 @@ export const usePostStore = create<PostState>((set) => ({
     set({ isLoading: true, error: null });
     try {
       const result = await getPosts();
+      const posts = result.posts ?? [];
+      // 去重：确保没有重复的帖子ID
+      const uniquePosts = posts.filter((post, index, self) =>
+        index === self.findIndex(p => p.id === post.id)
+      );
       set({
-        posts: result.posts ?? [],
+        posts: uniquePosts,
         nextCursor: result.nextCursor,
         hasMore: result.hasMore,
         isLoading: false,
