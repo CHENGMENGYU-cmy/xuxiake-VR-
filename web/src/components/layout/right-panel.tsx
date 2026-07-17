@@ -25,6 +25,13 @@ export function RightPanel() {
   const { rightPanelOpen } = useUIStore();
   const { isAuthenticated } = useAuthStore();
   const [recommendedCommunities, setRecommendedCommunities] = useState<Community[]>([]);
+  const [hotTopics, setHotTopics] = useState<{ tag: string; count: number }[]>([]);
+
+  useEffect(() => {
+    getHotTopics().then((data) => {
+      setHotTopics(data || []);
+    }).catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (isAuthenticated) {
