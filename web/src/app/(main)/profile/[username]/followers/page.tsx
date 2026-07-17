@@ -19,9 +19,11 @@ import type { User } from '@/types';
 
 export default function FollowersPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const username = params?.username as string || '';
   const router = useRouter();
   const { user: currentUser } = useAuthStore();
+  const defaultTab = searchParams.get('tab') === 'following' ? 'following' : 'followers';
 
   const [followers, setFollowers] = useState<User[]>([]);
   const [following, setFollowing] = useState<User[]>([]);
