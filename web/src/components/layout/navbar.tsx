@@ -48,7 +48,7 @@ export function Navbar() {
 
   const unreadCount = mockNotifications.filter((n) => !n.isRead).length;
 
-  const handleSearch = (e: React.FormFormEvent) => {
+  const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       router.push('/search');
