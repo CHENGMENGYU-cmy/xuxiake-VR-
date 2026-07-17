@@ -48,7 +48,8 @@ export class ChatController {
       convs.map(async (conv) => {
         const memberships = await this.partRepo.find({ where: { conversationId: conv.id } });
         const memberIds = memberships.map((m) => m.userId);
-        const members = await this.userRepo.findBy({ id: In(memberIds) });
+        const allMembers = await this.userRepo.findBy({ id: In(memberIds) });
+        const members = allMembers.filter((u) => u.id !== userId);
 
         const lastMsg = await this.msgRepo.findOne({
           where: { conversationId: conv.id },
