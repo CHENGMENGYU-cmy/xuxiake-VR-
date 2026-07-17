@@ -26,8 +26,6 @@ import { useUIStore } from '@/stores/ui-store';
 import { cn } from '@/lib/utils';
 import apiClient from '@/lib/api-client';
 import { getRecommendedUsers } from '@/lib/social-api';
-import { toast } from 'sonner';
-
 const navItems = [
   { href: '/feed', label: '首页', icon: Home },
   { href: '/explore', label: '探索发现', icon: Compass },
