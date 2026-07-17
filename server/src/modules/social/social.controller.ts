@@ -137,61 +137,39 @@ export class SocialController {
     const following = await this.followRepo.find({ where: { followerId: userId } });
     const followingIds = following.map((f) => f.followingId);
 
-    // 构建推荐查询
+    // 基础查询：排除自己和已关注的用户
     const query = this.userRepo.createQueryBuilder('user');
-
-    // 排除自己和已关注的用户
     query.where('user.id != :userId', { userId });
     if (followingIds.length > 0) {
       query.andWhere('user.id NOT IN (:...followingIds)', { followingIds });
     }
 
-    // 计算匹配分数（基于共同兴趣、同龄、同地区）
-    // 使用子查询计算共同兴趣数量
+    // 如果用户有标签，优先推荐有共同兴趣的用户
     if (myTagIds.length > 0) {
-      query.addSelect((subQuery) => {
-        return subQuery
-          .select('COUNT(*)')
-          .from(UserInterest, 'ui')
-          .where('ui.user_id = user.id')
-          .andWhere('ui.tag_id IN (:...myTagIds)', { myTagIds });
-      }, 'common_interests');
+      // 找出有共同兴趣的用户
+      const usersWithCommonInterests = await this.userInterestRepo
+        .createQueryBuilder('ui')
+        .select('ui.user_id', 'userId')
+        .addSelect('COUNT(*)', 'commonCount')
+        .where('ui.tag_id IN (:...myTagIds)', { myTagIds })
+        .andWhere('ui.user_id != :userId', { userId })
+        .groupBy('ui.user_id')
+        .orderBy('commonCount', 'DESC')
+        .limit(limitNum * 2)
+        .getRawMany();
+
+      const recommendedUserIds = usersWithCommonInterests.map((r) => r.userId);
+
+      if (recommendedUserIds.length > 0) {
+        query.andWhere('user.id IN (:...recommendedUserIds)', { recommendedUserIds });
+      }
     }
 
-    // 同龄人加分（±5岁）
-    if (currentUser.birthday) {
-      const birthDate = new Date(currentUser.birthday);
-      const age = Math.floor((Date.now() - birthDate.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
-      const minBirth = new Date();
-      minBirth.setFullYear(minBirth.getFullYear() - (age + 5));
-      const maxBirth = new Date();
-      maxBirth.setFullYear(maxBirth.getFullYear() - (age - 5));
-
-      query.addSelect(
-        `CASE WHEN user.birthday BETWEEN :minBirth AND :maxBirth THEN 10 ELSE 0 END`,
-        'age_score',
-      );
-      query.setParameter('minBirth', minBirth.toISOString().split('T')[0]);
-      query.setParameter('maxBirth', maxBirth.toISOString().split('T')[0]);
-    }
-
-    // 同地区加分
-    if (currentUser.region) {
-      query.addSelect(
-        `CASE WHEN user.region = :region THEN 5 ELSE 0 END`,
-        'region_score',
-      );
-      query.setParameter('region', currentUser.region);
-    }
-
-    // 计算总分并排序
-    const interestScore = myTagIds.length > 0 ? 'common_interests' : '0';
-    query.orderBy(`(${interestScore} + COALESCE(age_score, 0) + COALESCE(region_score, 0))`, 'DESC');
-    query.addOrderBy('user.created_at', 'DESC');
-
+    // 按创建时间排序（新用户优先）
+    query.orderBy('user.created_at', 'DESC');
     query.skip(skip).take(limitNum);
 
-    const { entities: users, raw } = await query.getRawAndEntities();
+    const users = await query.getMany();
 
     // 获取推荐用户的兴趣标签
     const userIds = users.map((u) => u.id);
@@ -209,34 +187,36 @@ export class SocialController {
     });
 
     // 获取关注状态
-    const followStatus = await this.followRepo.find({
-      where: { followerId: userId, followingId: In(userIds) },
-    });
+    const followStatus = userIds.length > 0
+      ? await this.followRepo.find({
+          where: { followerId: userId, followingId: In(userIds) },
+        })
+      : [];
     const followedIds = new Set(followStatus.map((f) => f.followingId));
+
+    // 计算匹配原因
+    const myTagIdSet = new Set(myTagIds);
 
     return {
       success: true,
-      data: users.map((u, index) => {
+      data: users.map((u) => {
         const { passwordHash, ...userDto } = u;
-        const rawRow = raw[index];
-        const commonCount = parseInt(rawRow?.common_interests || '0');
+        const userTags = userTagMap.get(u.id) || [];
+        const commonCount = userTags.filter((t) => myTagIdSet.has(t.id)).length;
         const matchReasons: string[] = [];
 
         if (commonCount > 0) matchReasons.push(`${commonCount}个共同兴趣`);
-        if (rawRow?.age_score > 0) matchReasons.push('同龄人');
-        if (rawRow?.region_score > 0) matchReasons.push('同城');
+        if (currentUser.region && u.region === currentUser.region) matchReasons.push('同城');
 
         return {
           ...userDto,
           vrDeviceInfo: u.vrDeviceModel
             ? { model: u.vrDeviceModel, version: u.vrDeviceVersion || '' }
             : null,
-          interests: userTagMap.get(u.id) || [],
+          interests: userTags,
           matchReasons,
           isFollowing: followedIds.has(u.id),
-          matchScore: (parseInt(rawRow?.common_interests || '0')) +
-            (parseInt(rawRow?.age_score || '0')) +
-            (parseInt(rawRow?.region_score || '0')),
+          matchScore: commonCount + (currentUser.region && u.region === currentUser.region ? 5 : 0),
         };
       }),
       page: pageNum,
@@ -269,34 +249,40 @@ export class SocialController {
     const myCommunityIds = myCommunities.map((c) => c.id);
 
     // 查询公开且活跃的社群
-    const query = this.communityRepo.createQueryBuilder('community')
-      .where('community.is_public = :isPublic', { isPublic: true })
-      .andWhere('community.status = :status', { status: 'ACTIVE' });
+    const query = this.communityRepo.createQueryBuilder('community');
+    query.where('community.is_public = :isPublic', { isPublic: true });
+    query.andWhere('community.status = :status', { status: 'ACTIVE' });
 
     // 排除已加入的社群
     if (myCommunityIds.length > 0) {
       query.andWhere('community.id NOT IN (:...myCommunityIds)', { myCommunityIds });
     }
 
-    // 按兴趣匹配度排序
+    // 如果用户有标签，优先推荐匹配的社群
     if (myTagIds.length > 0) {
-      query.addSelect((subQuery) => {
-        return subQuery
-          .select('COUNT(*)')
-          .from(CommunityTag, 'ct')
-          .where('ct.community_id = community.id')
-          .andWhere('ct.tag_id IN (:...myTagIds)', { myTagIds });
-      }, 'tag_match');
+      const matchedCommunityIds = await this.communityTagRepo
+        .createQueryBuilder('ct')
+        .select('ct.community_id', 'communityId')
+        .addSelect('COUNT(*)', 'matchCount')
+        .where('ct.tag_id IN (:...myTagIds)', { myTagIds })
+        .groupBy('ct.community_id')
+        .orderBy('matchCount', 'DESC')
+        .limit(limitNum * 2)
+        .getRawMany();
+
+      const matchedIds = matchedCommunityIds.map((r) => r.communityId);
+      if (matchedIds.length > 0) {
+        query.andWhere('community.id IN (:...matchedIds)', { matchedIds });
+      }
     }
 
-    const tagMatchExpr = myTagIds.length > 0 ? 'tag_match' : '0';
-    query.orderBy(`(${tagMatchExpr})`, 'DESC');
-    query.addOrderBy('community.member_count', 'DESC');
+    // 按成员数量和创建时间排序
+    query.orderBy('community.member_count', 'DESC');
     query.addOrderBy('community.created_at', 'DESC');
 
     query.skip(skip).take(limitNum);
 
-    const { entities: communities, raw } = await query.getRawAndEntities();
+    const communities = await query.getMany();
 
     // 获取社群标签
     const communityIds = communities.map((c) => c.id);
@@ -322,10 +308,9 @@ export class SocialController {
 
     return {
       success: true,
-      data: communities.map((c, index) => {
+      data: communities.map((c) => {
         const creator = creatorMap.get(c.creatorId);
         const tags = communityTagMap.get(c.id) || [];
-        const matchCount = parseInt(raw[index]?.tag_match || '0');
 
         return {
           id: c.id,
@@ -339,7 +324,6 @@ export class SocialController {
             ? { id: creator.id, username: creator.username, displayName: creator.displayName, avatarUrl: creator.avatarUrl }
             : null,
           tags,
-          matchCount,
           createdAt: c.createdAt,
         };
       }),

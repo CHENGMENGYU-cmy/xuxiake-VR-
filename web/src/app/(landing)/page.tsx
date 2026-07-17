@@ -19,6 +19,12 @@ import {
   UserPlus,
   Star,
   Quote,
+  Eye,
+  Wifi,
+  Battery,
+  Camera,
+  Mic,
+  Navigation,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useAuthStore } from '@/stores/auth-store';
