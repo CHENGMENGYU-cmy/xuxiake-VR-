@@ -91,3 +91,28 @@ export async function getUserCommunities(): Promise<Community[]> {
   const { data } = await apiClient.get('/social/user/communities');
   return data.data;
 }
+
+// ==================== 关注 ====================
+
+export async function followUser(userId: string): Promise<void> {
+  await apiClient.post(`/users/${userId}/follow`);
+}
+
+export async function unfollowUser(userId: string): Promise<void> {
+  await apiClient.delete(`/users/${userId}/follow`);
+}
+
+export async function getUserProfile(username: string): Promise<User> {
+  const { data } = await apiClient.get(`/users/${username}`);
+  return data.data;
+}
+
+export async function getFollowers(username: string): Promise<{ data: User[]; total: number }> {
+  const { data } = await apiClient.get(`/users/${username}/followers`);
+  return data;
+}
+
+export async function getFollowing(username: string): Promise<{ data: User[]; total: number }> {
+  const { data } = await apiClient.get(`/users/${username}/following`);
+  return data;
+}
