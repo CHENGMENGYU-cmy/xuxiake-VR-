@@ -32,22 +32,6 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <style jsx global>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
-        }
-        @keyframes glow {
-          0%, 100% { box-shadow: 0 0 20px rgba(34, 211, 238, 0.3); }
-          50% { box-shadow: 0 0 40px rgba(34, 211, 238, 0.6); }
-        }
-        .ar-glasses {
-          animation: float 3s ease-in-out infinite;
-        }
-        .ar-lens {
-          animation: glow 2s ease-in-out infinite;
-        }
-      `}</style>
       {/* ========== 顶部导航 ========== */}
       <nav className="fixed top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
