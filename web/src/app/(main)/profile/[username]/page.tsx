@@ -14,7 +14,7 @@ import { PostCard } from '@/components/post/post-card';
 import { useAuthStore } from '@/stores/auth-store';
 import { usePostStore } from '@/stores/post-store';
 import apiClient from '@/lib/api-client';
-import { followUser, unfollowUser, getFollowers, getFollowing } from '@/lib/social-api';
+import { followUser, unfollowUser, getFollowers, getFollowing, getOrCreateDirectConversation } from '@/lib/social-api';
 import { toast } from 'sonner';
 import type { User, Post } from '@/types';
 
