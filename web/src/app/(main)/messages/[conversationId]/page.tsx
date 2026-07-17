@@ -12,6 +12,7 @@ import { useAuthStore } from '@/stores/auth-store';
 
 export default function ChatPage({ params }: { params: Promise<{ conversationId: string }> }) {
   const { user: currentUser } = useAuthStore();
+  const router = useRouter();
   const conv = mockConversations[0];
   if (!conv) {
     return (
