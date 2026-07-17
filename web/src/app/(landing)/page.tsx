@@ -170,7 +170,7 @@ export default function LandingPage() {
             <div className="relative flex justify-center lg:justify-end">
               <div className="relative">
                 <img
-                  src="https://images.unsplash.com/photo-1664351363957-ba53f84c94c9?w=800&q=60"
+                  src="/images/ar-glasses.svg"
                   alt="AR智能眼镜"
                   className="w-80 h-auto sm:w-96 lg:w-[500px] rounded-2xl shadow-2xl"
                 />
