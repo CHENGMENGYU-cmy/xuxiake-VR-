@@ -3,8 +3,15 @@
 import { useState } from 'react';
 import { Compass, TrendingUp, Flame, Clock } from 'lucide-react';
 import { FeedList } from '@/components/feed/feed-list';
+import type { PostSortType } from '@/lib/post-api';
 
 type TabType = 'trending' | 'latest' | 'hot';
+
+const tabSortMap: Record<TabType, PostSortType> = {
+  trending: 'trending',
+  latest: 'latest',
+  hot: 'hot',
+};
 
 export default function ExplorePage() {
   const [activeTab, setActiveTab] = useState<TabType>('trending');
@@ -44,9 +51,9 @@ export default function ExplorePage() {
         })}
       </div>
 
-      {/* 内容区域 - 只渲染当前激活的标签 */}
+      {/* 内容区域 */}
       <div className="mt-4">
-        <FeedList key={activeTab} showComposer={false} />
+        <FeedList key={activeTab} showComposer={false} sort={tabSortMap[activeTab]} />
       </div>
     </div>
   );
