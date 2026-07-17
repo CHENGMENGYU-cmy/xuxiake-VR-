@@ -158,6 +158,44 @@ export function Sidebar() {
 
           <Separator />
 
+          {/* 推荐关注 */}
+          {mounted && user && suggestedUsers.length > 0 && (
+            <div className="space-y-1 p-3">
+              <div className="flex items-center justify-between px-2">
+                <p className="text-xs font-medium uppercase text-muted-foreground">
+                  推荐关注
+                </p>
+                <Link href="/discover" className="text-xs text-primary hover:underline">
+                  查看全部
+                </Link>
+              </div>
+              {suggestedUsers.map((u) => (
+                <div key={u.id} className="flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-accent">
+                  <Link href={`/profile/${u.username}`} className="flex items-center gap-2 min-w-0 flex-1">
+                    <Avatar className="h-8 w-8 flex-shrink-0">
+                      <AvatarImage src={u.avatarUrl} alt={u.displayName} />
+                      <AvatarFallback>{u.displayName[0]}</AvatarFallback>
+                    </Avatar>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium">{u.displayName}</p>
+                      <p className="truncate text-xs text-muted-foreground">@{u.username}</p>
+                    </div>
+                  </Link>
+                  <Button
+                    variant={followingIds.has(u.id) ? 'secondary' : 'default'}
+                    size="sm"
+                    className="h-7 flex-shrink-0 text-xs"
+                    onClick={(e) => handleFollow(e, u.id)}
+                  >
+                    {followingIds.has(u.id) ? '已关注' : '关注'}
+                  </Button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <Separator />
+
           {/* 媒体类型快捷入口 */}
           <div className="space-y-1 p-3">
             <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
@@ -175,31 +213,6 @@ export function Sidebar() {
               );
             })}
           </div>
-
-          <Separator />
-
-          {/* 推荐关注 */}
-          {mounted && user && suggestedUsers.length > 0 && (
-            <div className="space-y-1 p-3">
-              <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
-                推荐关注
-              </p>
-              {suggestedUsers.map((u) => (
-                <Link key={u.id} href={`/profile/${u.username}`}>
-                  <Button variant="ghost" className="w-full justify-start gap-3">
-                    <Avatar className="h-7 w-7">
-                      <AvatarImage src={u.avatarUrl} alt={u.displayName} />
-                      <AvatarFallback>{u.displayName[0]}</AvatarFallback>
-                    </Avatar>
-                    <div className="min-w-0 flex-1 text-left">
-                      <p className="truncate text-sm">{u.displayName}</p>
-                      <p className="truncate text-xs text-muted-foreground">@{u.username}</p>
-                    </div>
-                  </Button>
-                </Link>
-              ))}
-            </div>
-          )}
         </ScrollArea>
       </aside>
     </>
