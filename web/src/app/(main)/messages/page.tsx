@@ -159,67 +159,162 @@ export default function MessagesPage() {
         </div>
       )}
 
+      {/* 标签页切换 */}
+      <div className="flex gap-1 rounded-lg bg-muted p-1">
+        <button
+          className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+            activeTab === 'NORMAL'
+              ? 'bg-background text-foreground shadow-sm'
+              : 'text-muted-foreground hover:text-foreground'
+          }`}
+          onClick={() => setActiveTab('NORMAL')}
+        >
+          私信
+        </button>
+        <button
+          className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+            activeTab === 'REQUEST'
+              ? 'bg-background text-foreground shadow-sm'
+              : 'text-muted-foreground hover:text-foreground'
+          }`}
+          onClick={() => setActiveTab('REQUEST')}
+        >
+          陌生人消息
+          {requestConversations.length > 0 && (
+            <Badge className="ml-2 h-5 min-w-5 bg-orange-500 px-1.5 text-xs">
+              {requestConversations.length}
+            </Badge>
+          )}
+        </button>
+      </div>
+
       {/* 会话列表 */}
       <div className="rounded-lg border bg-card">
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
           </div>
-        ) : conversations.length === 0 ? (
-          <div className="py-12 text-center text-muted-foreground">暂无消息</div>
+        ) : activeTab === 'NORMAL' ? (
+          conversations.length === 0 ? (
+            <div className="py-12 text-center text-muted-foreground">暂无私信</div>
+          ) : (
+            <div>
+              {conversations.map((conv: any, idx: number) => {
+                const otherMember = conv.type === 'GROUP' ? null : conv.members?.[0];
+                return (
+                  <div key={conv.id}>
+                    {idx > 0 && <Separator />}
+                    <Link
+                      href={`/messages/${conv.id}`}
+                      className="flex items-center gap-3 p-4 transition-colors hover:bg-muted/50"
+                    >
+                      {conv.type === 'GROUP' ? (
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                          <Users className="h-6 w-6 text-primary" />
+                        </div>
+                      ) : (
+                        <Avatar className="h-12 w-12">
+                          <AvatarImage src={otherMember?.avatarUrl} alt={otherMember?.displayName} />
+                          <AvatarFallback>{otherMember?.displayName?.[0]}</AvatarFallback>
+                        </Avatar>
+                      )}
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-semibold">
+                            {conv.type === 'GROUP' ? conv.title : otherMember?.displayName}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            {conv.lastMessage?.createdAt
+                              ? new Date(conv.lastMessage.createdAt).toLocaleString('zh-CN', {
+                                  month: 'numeric',
+                                  day: 'numeric',
+                                  hour: 'numeric',
+                                  minute: 'numeric',
+                                })
+                              : ''}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <p className="truncate text-sm text-muted-foreground">
+                            {conv.lastMessage?.content || '暂无消息'}
+                          </p>
+                          {conv.unreadCount > 0 && (
+                            <Badge className="ml-2 h-5 min-w-5 bg-primary px-1.5 text-xs">
+                              {conv.unreadCount}
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
+                );
+              })}
+            </div>
+          )
         ) : (
-          <div>
-            {conversations.map((conv: any, idx: number) => {
-              const otherMember = conv.type === 'GROUP' ? null : conv.members?.[0];
-              return (
-                <div key={conv.id}>
-                  {idx > 0 && <Separator />}
-                  <Link
-                    href={`/messages/${conv.id}`}
-                    className="flex items-center gap-3 p-4 transition-colors hover:bg-muted/50"
-                  >
-                    {conv.type === 'GROUP' ? (
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                        <Users className="h-6 w-6 text-primary" />
-                      </div>
-                    ) : (
-                      <Avatar className="h-12 w-12">
-                        <AvatarImage src={otherMember?.avatarUrl} alt={otherMember?.displayName} />
-                        <AvatarFallback>{otherMember?.displayName?.[0]}</AvatarFallback>
-                      </Avatar>
-                    )}
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-semibold">
-                          {conv.type === 'GROUP' ? conv.title : otherMember?.displayName}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          {conv.lastMessage?.createdAt
-                            ? new Date(conv.lastMessage.createdAt).toLocaleString('zh-CN', {
-                                month: 'numeric',
-                                day: 'numeric',
-                                hour: 'numeric',
-                                minute: 'numeric',
-                              })
-                            : ''}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <p className="truncate text-sm text-muted-foreground">
-                          {conv.lastMessage?.content || '暂无消息'}
-                        </p>
-                        {conv.unreadCount > 0 && (
-                          <Badge className="ml-2 h-5 min-w-5 bg-primary px-1.5 text-xs">
-                            {conv.unreadCount}
-                          </Badge>
-                        )}
+          requestConversations.length === 0 ? (
+            <div className="py-12 text-center text-muted-foreground">暂无陌生人消息</div>
+          ) : (
+            <div>
+              {requestConversations.map((conv: any, idx: number) => {
+                const otherMember = conv.type === 'GROUP' ? null : conv.members?.[0];
+                return (
+                  <div key={conv.id}>
+                    {idx > 0 && <Separator />}
+                    <div className="flex items-center gap-3 p-4">
+                      <Link
+                        href={`/messages/${conv.id}`}
+                        className="flex flex-1 items-center gap-3"
+                      >
+                        <Avatar className="h-12 w-12">
+                          <AvatarImage src={otherMember?.avatarUrl} alt={otherMember?.displayName} />
+                          <AvatarFallback>{otherMember?.displayName?.[0]}</AvatarFallback>
+                        </Avatar>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-semibold">
+                              {otherMember?.displayName}
+                            </span>
+                            <span className="text-xs text-muted-foreground">
+                              {conv.lastMessage?.createdAt
+                                ? new Date(conv.lastMessage.createdAt).toLocaleString('zh-CN', {
+                                    month: 'numeric',
+                                    day: 'numeric',
+                                    hour: 'numeric',
+                                    minute: 'numeric',
+                                  })
+                                : ''}
+                            </span>
+                          </div>
+                          <p className="truncate text-sm text-muted-foreground">
+                            {conv.lastMessage?.content || '暂无消息'}
+                          </p>
+                        </div>
+                      </Link>
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-8 w-8 p-0"
+                          onClick={() => handleAcceptRequest(conv.id)}
+                        >
+                          <Check className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-8 w-8 p-0"
+                          onClick={() => handleRejectRequest(conv.id)}
+                        >
+                          <XIcon className="h-4 w-4" />
+                        </Button>
                       </div>
                     </div>
-                  </Link>
-                </div>
-              );
-            })}
-          </div>
+                  </div>
+                );
+              })}
+            </div>
+          )
         )}
       </div>
     </div>
