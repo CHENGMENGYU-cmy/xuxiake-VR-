@@ -1,8 +1,6 @@
 import { Compass, TrendingUp, Flame, Clock } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FeedList } from '@/components/feed/feed-list';
-import { mockPosts } from '@/lib/mock-data';
 
 export default function ExplorePage() {
   return (
@@ -32,26 +30,17 @@ export default function ExplorePage() {
 
         {/* 热门内容 */}
         <TabsContent value="trending" className="mt-4">
-          <FeedList
-            initialPosts={[...mockPosts].sort((a, b) => b.viewCount - a.viewCount)}
-            showComposer={false}
-          />
+          <FeedList showComposer={false} />
         </TabsContent>
 
         {/* 最新发布 */}
         <TabsContent value="latest" className="mt-4">
-          <FeedList
-            initialPosts={[...mockPosts].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())}
-            showComposer={false}
-          />
+          <FeedList showComposer={false} />
         </TabsContent>
 
         {/* 精选推荐 */}
         <TabsContent value="hot" className="mt-4">
-          <FeedList
-            initialPosts={[...mockPosts].sort((a, b) => b.likeCount - a.likeCount)}
-            showComposer={false}
-          />
+          <FeedList showComposer={false} />
         </TabsContent>
       </Tabs>
     </div>

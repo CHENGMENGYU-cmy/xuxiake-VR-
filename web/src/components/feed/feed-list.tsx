@@ -7,25 +7,18 @@ import { PostCard } from '@/components/post/post-card';
 import { PostComposer } from '@/components/post/post-composer';
 import { FeedSkeleton } from './feed-skeleton';
 import { usePostStore } from '@/stores/post-store';
-import { Post } from '@/types';
 
 interface FeedListProps {
-  initialPosts: Post[];
   showComposer?: boolean;
 }
 
-export function FeedList({ initialPosts, showComposer = true }: FeedListProps) {
+export function FeedList({ showComposer = true }: FeedListProps) {
   const { posts = [], isLoading, fetchPosts } = usePostStore();
 
-  // 组件挂载时加载数据，如果store为空则使用initialPosts
+  // 组件挂载时从API加载数据
   useEffect(() => {
-    const currentPosts = usePostStore.getState().posts ?? [];
-    if (currentPosts.length === 0 && initialPosts?.length > 0) {
-      usePostStore.setState({ posts: initialPosts });
-    } else if (currentPosts.length === 0) {
-      fetchPosts();
-    }
-  }, []);
+    fetchPosts();
+  }, [fetchPosts]);
 
   const handleRefresh = useCallback(() => {
     fetchPosts();

@@ -8,7 +8,12 @@ interface PostState {
   // 帖子列表
   posts: Post[];
   isLoading: boolean;
+  isLoadingMore: boolean;
   error: string | null;
+
+  // 分页状态
+  nextCursor: string | null;
+  hasMore: boolean;
 
   // 发布状态
   isPublishing: boolean;
@@ -16,6 +21,7 @@ interface PostState {
 
   // Actions
   fetchPosts: () => Promise<void>;
+  loadMore: () => Promise<void>;
   publishPost: (payload: CreatePostPayload) => Promise<Post>;
   prependPost: (post: Post) => void;
   clearPublishError: () => void;
