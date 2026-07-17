@@ -105,7 +105,15 @@ export function Navbar() {
               className="w-full rounded-full border-muted bg-muted pl-10 focus:bg-background"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onFocus={() => setShowSuggestions(true)}
             />
+            {showSuggestions && (
+              <SearchSuggestions
+                query={searchQuery}
+                onSelect={handleSuggestionSelect}
+                onClose={() => setShowSuggestions(false)}
+              />
+            )}
           </div>
         </form>
 
