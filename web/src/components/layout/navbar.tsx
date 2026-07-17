@@ -51,7 +51,14 @@ export function Navbar() {
     e.preventDefault();
     if (searchQuery.trim()) {
       router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setShowSuggestions(false);
     }
+  };
+
+  const handleSuggestionSelect = (value: string) => {
+    setSearchQuery(value);
+    router.push(`/search?q=${encodeURIComponent(value)}`);
+    setShowSuggestions(false);
   };
 
   const handleLogout = () => {
