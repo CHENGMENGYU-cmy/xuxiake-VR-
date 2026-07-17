@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 300" fill="none">
+  <!-- 背景 -->
+  <rect width="500" height="300" rx="20" fill="url(#bg)"/>
+
+  <!-- 左镜片 -->
+  <rect x="100" y="100" width="120" height="80" rx="15" fill="url(#lens)" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+  <rect x="110" y="110" width="100" height="60" rx="10" fill="rgba(34,211,238,0.1)"/>
+
+  <!-- 右镜片 -->
+  <rect x="280" y="100" width="120" height="80" rx="15" fill="url(#lens)" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+  <rect x="290" y="110" width="100" height="60" rx="10" fill="rgba(34,211,238,0.1)"/>
+
+  <!-- 镜框连接 -->
+  <rect x="220" y="130" width="60" height="12" rx="6" fill="url(#bridge)"/>
+
+  <!-- 左镜腿 -->
+  <rect x="30" y="130" width="70" height="8" rx="4" fill="url(#temple)" transform="rotate(-8 30 130)"/>
+
+  <!-- 右镜腿 -->
+  <rect x="400" y="130" width="70" height="8" rx="4" fill="url(#temple)" transform="rotate(8 470 130)"/>
+
+  <!-- AR效果光点 -->
+  <circle cx="160" cy="140" r="3" fill="#22d3ee" opacity="0.8">
+    <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="340" cy="140" r="3" fill="#22d3ee" opacity="0.8">
+    <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+  </circle>
+
+  <!-- 发光效果 -->
+  <circle cx="250" cy="150" r="80" fill="url(#glow)" opacity="0.3">
+    <animate attributeName="r" values="80;90;80" dur="3s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- 文字 -->
+  <text x="250" y="230" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">AR 智能眼镜</text>
+  <text x="250" y="255" font-family="Arial, sans-serif" font-size="12" fill="rgba(255,255,255,0.7)" text-anchor="middle">AI-Powered Smart Glasses</text>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="500" y2="300">
+      <stop offset="0%" stop-color="#0f766e"/>
+      <stop offset="50%" stop-color="#0d9488"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="lens" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="bridge" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="temple" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>
