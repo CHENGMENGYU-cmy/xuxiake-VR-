@@ -170,9 +170,9 @@ export default function LandingPage() {
             <div className="relative flex justify-center lg:justify-end">
               <div className="relative">
                 <img
-                  src="https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?w=600&h=400&fit=crop&auto=format"
+                  src="/images/ar-glasses.svg"
                   alt="AR智能眼镜"
-                  className="w-80 h-auto sm:w-96 lg:w-[500px] rounded-2xl shadow-2xl object-cover"
+                  className="w-80 h-auto sm:w-96 lg:w-[500px] drop-shadow-2xl"
                 />
                 {/* 浮动标签 */}
                 <div className="absolute -top-4 -right-4 animate-bounce">
