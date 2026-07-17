@@ -1,58 +1,124 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 300" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 350" fill="none">
   <!-- 背景 -->
-  <rect width="500" height="300" rx="20" fill="url(#bg)"/>
+  <rect width="600" height="350" rx="24" fill="url(#bg)"/>
 
-  <!-- 左镜片 -->
-  <rect x="100" y="100" width="120" height="80" rx="15" fill="url(#lens)" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
-  <rect x="110" y="110" width="100" height="60" rx="10" fill="rgba(34,211,238,0.1)"/>
+  <!-- 眼镜主体 - 类似日常眼镜的侧视图 -->
+  <g transform="translate(80, 60)">
+    <!-- 左镜框 - 圆角矩形，更像普通眼镜 -->
+    <path d="M50 80 Q50 50 80 50 L180 50 Q210 50 210 80 L210 130 Q210 160 180 160 L80 160 Q50 160 50 130 Z"
+          fill="url(#frame)" stroke="rgba(255,255,255,0.6)" stroke-width="2.5"/>
 
-  <!-- 右镜片 -->
-  <rect x="280" y="100" width="120" height="80" rx="15" fill="url(#lens)" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
-  <rect x="290" y="110" width="100" height="60" rx="10" fill="rgba(34,211,238,0.1)"/>
+    <!-- 左镜片 - 半透明，带科技感 -->
+    <path d="M60 85 Q60 65 85 65 L175 65 Q200 65 200 85 L200 125 Q200 145 175 145 L85 145 Q60 145 60 125 Z"
+          fill="url(#lens)" opacity="0.85"/>
 
-  <!-- 镜框连接 -->
-  <rect x="220" y="130" width="60" height="12" rx="6" fill="url(#bridge)"/>
+    <!-- 左镜片反光 -->
+    <path d="M65 90 Q65 75 85 75 L120 75 L75 135 Q65 130 65 115 Z"
+          fill="rgba(255,255,255,0.15)"/>
 
-  <!-- 左镜腿 -->
-  <rect x="30" y="130" width="70" height="8" rx="4" fill="url(#temple)" transform="rotate(-8 30 130)"/>
+    <!-- 右镜框 -->
+    <path d="M230 80 Q230 50 260 50 L360 50 Q390 50 390 80 L390 130 Q390 160 360 160 L260 160 Q230 160 230 130 Z"
+          fill="url(#frame)" stroke="rgba(255,255,255,0.6)" stroke-width="2.5"/>
 
-  <!-- 右镜腿 -->
-  <rect x="400" y="130" width="70" height="8" rx="4" fill="url(#temple)" transform="rotate(8 470 130)"/>
+    <!-- 右镜片 -->
+    <path d="M240 85 Q240 65 265 65 L355 65 Q380 65 380 85 L380 125 Q380 145 355 145 L265 145 Q240 145 240 125 Z"
+          fill="url(#lens)" opacity="0.85"/>
 
-  <!-- AR效果光点 -->
-  <circle cx="160" cy="140" r="3" fill="#22d3ee" opacity="0.8">
-    <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2s" repeatCount="indefinite"/>
+    <!-- 右镜片反光 -->
+    <path d="M245 90 Q245 75 265 75 L300 75 L255 135 Q245 130 245 115 Z"
+          fill="rgba(255,255,255,0.15)"/>
+
+    <!-- 鼻梁 -->
+    <path d="M210 95 Q220 90 230 95" stroke="rgba(255,255,255,0.5)" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+    <!-- 左镜腿 -->
+    <path d="M50 90 L10 85 Q0 84 0 90 L0 92 Q0 98 10 97 L50 100"
+          fill="url(#temple)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+
+    <!-- 右镜腿 -->
+    <path d="M390 90 L430 85 Q440 84 440 90 L440 92 Q440 98 430 97 L390 100"
+          fill="url(#temple)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+
+    <!-- AR指示灯 - 左 -->
+    <circle cx="130" cy="105" r="4" fill="#22d3ee" opacity="0.9">
+      <animate attributeName="opacity" values="0.9;0.4;0.9" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="130" cy="105" r="8" fill="none" stroke="#22d3ee" stroke-width="1" opacity="0.3">
+      <animate attributeName="r" values="8;12;8" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.3;0;0.3" dur="2s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- AR指示灯 - 右 -->
+    <circle cx="310" cy="105" r="4" fill="#22d3ee" opacity="0.9">
+      <animate attributeName="opacity" values="0.9;0.4;0.9" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+    </circle>
+    <circle cx="310" cy="105" r="8" fill="none" stroke="#22d3ee" stroke-width="1" opacity="0.3">
+      <animate attributeName="r" values="8;12;8" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+      <animate attributeName="opacity" values="0.3;0;0.3" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+    </circle>
+
+    <!-- 镜框上的小型摄像头点 -->
+    <circle cx="200" cy="65" r="3" fill="#0d9488" stroke="rgba(255,255,255,0.5)" stroke-width="1"/>
+    <circle cx="380" cy="65" r="3" fill="#0d9488" stroke="rgba(255,255,255,0.5)" stroke-width="1"/>
+
+    <!-- AR HUD 虚线框 - 左镜片内 -->
+    <rect x="80" y="80" width="100" height="60" rx="4" fill="none" stroke="#22d3ee" stroke-width="0.8" stroke-dasharray="4 2" opacity="0.4">
+      <animate attributeName="opacity" values="0.4;0.15;0.4" dur="3s" repeatCount="indefinite"/>
+    </rect>
+
+    <!-- 小型AR信息提示 -->
+    <rect x="85" y="85" width="45" height="12" rx="3" fill="rgba(34,211,238,0.2)" opacity="0.6">
+      <animate attributeName="opacity" values="0.6;0.3;0.6" dur="2.5s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="85" y="85" width="45" height="12" rx="3" fill="none" stroke="#22d3ee" stroke-width="0.5" opacity="0.4"/>
+
+    <!-- 右镜片内的小地图示意 -->
+    <rect x="295" y="95" width="50" height="35" rx="3" fill="rgba(34,211,238,0.1)" opacity="0.5">
+      <animate attributeName="opacity" values="0.5;0.2;0.5" dur="3s" repeatCount="indefinite" begin="1s"/>
+    </rect>
+    <path d="M300 120 L310 105 L320 115 L335 100" stroke="#22d3ee" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.5">
+      <animate attributeName="opacity" values="0.5;0.2;0.5" dur="3s" repeatCount="indefinite" begin="1s"/>
+    </path>
+  </g>
+
+  <!-- 底部文字 -->
+  <text x="300" y="290" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="600" fill="white" text-anchor="middle" letter-spacing="2">AR 智能眼镜</text>
+  <text x="300" y="318" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="rgba(255,255,255,0.6)" text-anchor="middle" letter-spacing="1">外观如常，内藏乾坤</text>
+
+  <!-- 装饰性光点 -->
+  <circle cx="100" cy="50" r="2" fill="#22d3ee" opacity="0.4">
+    <animate attributeName="opacity" values="0.4;0;0.4" dur="4s" repeatCount="indefinite"/>
   </circle>
-  <circle cx="340" cy="140" r="3" fill="#22d3ee" opacity="0.8">
-    <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+  <circle cx="500" cy="80" r="1.5" fill="#22d3ee" opacity="0.3">
+    <animate attributeName="opacity" values="0.3;0;0.3" dur="3.5s" repeatCount="indefinite" begin="1s"/>
   </circle>
-
-  <!-- 发光效果 -->
-  <circle cx="250" cy="150" r="80" fill="url(#glow)" opacity="0.3">
-    <animate attributeName="r" values="80;90;80" dur="3s" repeatCount="indefinite"/>
+  <circle cx="150" cy="280" r="1.5" fill="#22d3ee" opacity="0.35">
+    <animate attributeName="opacity" values="0.35;0;0.35" dur="4.5s" repeatCount="indefinite" begin="0.5s"/>
   </circle>
-
-  <!-- 文字 -->
-  <text x="250" y="230" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">AR 智能眼镜</text>
-  <text x="250" y="255" font-family="Arial, sans-serif" font-size="12" fill="rgba(255,255,255,0.7)" text-anchor="middle">AI-Powered Smart Glasses</text>
+  <circle cx="480" cy="260" r="2" fill="#22d3ee" opacity="0.3">
+    <animate attributeName="opacity" values="0.3;0;0.3" dur="3s" repeatCount="indefinite" begin="1.5s"/>
+  </circle>
 
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="500" y2="300">
-      <stop offset="0%" stop-color="#0f766e"/>
-      <stop offset="50%" stop-color="#0d9488"/>
-      <stop offset="100%" stop-color="#06b6d4"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="600" y2="350">
+      <stop offset="0%" stop-color="#042f2e"/>
+      <stop offset="30%" stop-color="#0f766e"/>
+      <stop offset="70%" stop-color="#115e59"/>
+      <stop offset="100%" stop-color="#1a1a2e"/>
+    </linearGradient>
+    <linearGradient id="frame" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="50%" stop-color="#2d2d44"/>
+      <stop offset="100%" stop-color="#1a1a2e"/>
     </linearGradient>
     <linearGradient id="lens" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#22d3ee"/>
-      <stop offset="100%" stop-color="#3b82f6"/>
-    </linearGradient>
-    <linearGradient id="bridge" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#22d3ee"/>
-      <stop offset="100%" stop-color="#3b82f6"/>
+      <stop offset="0%" stop-color="#164e63" stop-opacity="0.6"/>
+      <stop offset="50%" stop-color="#0e7490" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#155e75" stop-opacity="0.6"/>
     </linearGradient>
     <linearGradient id="temple" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.8"/>
-      <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#2d2d44"/>
+      <stop offset="100%" stop-color="#1a1a2e" stop-opacity="0.6"/>
     </linearGradient>
     <radialGradient id="glow" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#22d3ee"/>
