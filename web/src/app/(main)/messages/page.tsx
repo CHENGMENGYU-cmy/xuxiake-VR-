@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Users, Loader2, X } from 'lucide-react';
+import { Users, Loader2, X, Check, XIcon } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -16,12 +16,14 @@ export default function MessagesPage() {
   const { user } = useAuthStore();
   const router = useRouter();
   const [conversations, setConversations] = useState<any[]>([]);
+  const [requestConversations, setRequestConversations] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
   const [showFriends, setShowFriends] = useState(false);
   const [friends, setFriends] = useState<any[]>([]);
   const [friendsLoading, setFriendsLoading] = useState(false);
   const [startingChat, setStartingChat] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'NORMAL' | 'REQUEST'>('NORMAL');
 
   useEffect(() => {
     setMounted(true);
@@ -29,9 +31,16 @@ export default function MessagesPage() {
 
   useEffect(() => {
     if (!user) return;
-    apiClient.get('/conversations').then((res) => {
-      if (res.data?.success) {
-        setConversations(res.data.data || []);
+    setIsLoading(true);
+    Promise.all([
+      apiClient.get('/conversations?status=NORMAL'),
+      apiClient.get('/conversations?status=REQUEST'),
+    ]).then(([normalRes, requestRes]) => {
+      if (normalRes.data?.success) {
+        setConversations(normalRes.data.data || []);
+      }
+      if (requestRes.data?.success) {
+        setRequestConversations(requestRes.data.data || []);
       }
     }).catch(() => {}).finally(() => setIsLoading(false));
   }, [user]);
