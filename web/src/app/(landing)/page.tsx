@@ -22,7 +22,6 @@ import {
   Eye,
   Wifi,
   Camera,
-  Languages,
   Navigation,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
