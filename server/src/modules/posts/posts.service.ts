@@ -99,7 +99,8 @@ export class PostsService {
       .leftJoinAndSelect('post.author', 'author')
       .leftJoinAndSelect('post.mediaItems', 'mediaItems')
       .where('post.visibility = :vis', { vis: 'PUBLIC' })
-      .orderBy('(post.like_count + post.comment_count)', 'DESC')
+      .addSelect('post.like_count + post.comment_count', 'engagement')
+      .orderBy('engagement', 'DESC')
       .addOrderBy('post.view_count', 'DESC')
       .skip(offset)
       .take(limit + 1);
