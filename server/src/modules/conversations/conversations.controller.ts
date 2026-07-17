@@ -226,6 +226,12 @@ export class ConversationsController {
       if (conv) return { success: true, data: { id: conv.id } };
     }
 
+    // 检查是否互相关注
+    const followRepo = this.convRepo.manager.getRepository('Follow');
+    const iFollowTarget = await followRepo.findOne({ where: { followerId: userId, followingId: targetId } });
+    const targetFollowsMe = await followRepo.findOne({ where: { followerId: targetId, followingId: userId } });
+    const isMutual = iFollowTarget && targetFollowsMe;
+
     // 创建新的私聊会话
     const convId = uuidv4();
     const conv = this.convRepo.create({
@@ -235,12 +241,13 @@ export class ConversationsController {
     });
     await this.convRepo.save(conv);
 
+    // 发起者状态为 NORMAL，接收者状态根据是否互关决定
     const parts = [
-      this.partRepo.create({ id: uuidv4(), conversationId: convId, userId }),
-      this.partRepo.create({ id: uuidv4(), conversationId: convId, userId: targetId }),
+      this.partRepo.create({ id: uuidv4(), conversationId: convId, userId, status: 'NORMAL' }),
+      this.partRepo.create({ id: uuidv4(), conversationId: convId, userId: targetId, status: isMutual ? 'NORMAL' : 'REQUEST' }),
     ];
     await this.partRepo.save(parts);
 
-    return { success: true, data: { id: convId } };
+    return { success: true, data: { id: convId, isRequest: !isMutual } };
   }
 }
