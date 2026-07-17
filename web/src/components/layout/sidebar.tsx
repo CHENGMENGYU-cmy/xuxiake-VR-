@@ -86,9 +86,8 @@ export function Sidebar() {
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
-        <div className="flex h-full flex-col">
-          {/* 顶部固定区域 */}
-          <div className="flex-shrink-0">
+        <ScrollArea className="h-full">
+          <div className="flex flex-col">
             {/* 用户信息卡片 */}
             {mounted && user && (
               <div className="space-y-1 p-3">
@@ -153,16 +152,14 @@ export function Sidebar() {
             </div>
 
             <Separator />
-          </div>
 
-          {/* 推荐关注 - 填充剩余空间 */}
-          {mounted && user && suggestedUsers.length > 0 && (
-            <div className="flex min-h-0 flex-1 flex-col">
-              <p className="flex-shrink-0 px-5 pt-3 pb-1 text-xs font-medium uppercase text-muted-foreground">
-                推荐关注
-              </p>
-              <ScrollArea className="flex-1">
-                <div className="space-y-1 p-3 pt-1">
+            {/* 推荐关注 */}
+            {mounted && user && suggestedUsers.length > 0 && (
+              <div className="p-3">
+                <p className="px-2 pb-1 text-xs font-medium uppercase text-muted-foreground">
+                  推荐关注
+                </p>
+                <div className="space-y-1">
                   {suggestedUsers.map((u) => (
                     <Link key={u.id} href={`/profile/${u.username}`}>
                       <Button variant="ghost" className="w-full justify-start gap-3">
@@ -178,10 +175,10 @@ export function Sidebar() {
                     </Link>
                   ))}
                 </div>
-              </ScrollArea>
-            </div>
-          )}
-        </div>
+              </div>
+            )}
+          </div>
+        </ScrollArea>
       </aside>
     </>
   );
