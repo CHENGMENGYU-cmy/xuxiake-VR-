@@ -346,7 +346,7 @@ export default function LandingPage() {
             <p>
               四百年前，徐霞客用脚步丈量山河，用笔墨记录见闻。
               <br />
-              今天，我们用VR眼镜重走霞客路，用AI技术开启旅行新纪元。
+              今天，我们用AR眼镜重走霞客路，用AI技术开启旅行新纪元。
             </p>
             <p className="text-foreground font-medium text-xl">
               徐霞客社区是全球首个AI驱动的第一视角旅行社交平台。
