@@ -272,57 +272,60 @@ export default function LandingPage() {
               })}
             </div>
 
-            {/* 右侧：AR眼镜3D效果 */}
-            <div className="relative flex justify-center lg:justify-end">
-              <div className="relative ar-glasses">
-                {/* AR眼镜主体 */}
-                <div className="relative w-80 h-64 sm:w-96 sm:h-72">
-                  {/* 眼镜镜片 - 左 */}
-                  <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-28 h-20 sm:w-32 sm:h-24 rounded-2xl bg-gradient-to-br from-cyan-400/80 to-blue-500/80 backdrop-blur-sm border-2 border-white/30 shadow-lg shadow-cyan-500/30 ar-lens">
-                    <div className="absolute inset-2 rounded-xl bg-gradient-to-br from-cyan-300/20 to-transparent" />
-                    <Eye className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-8 w-8 text-white/60" />
-                  </div>
-                  {/* 眼镜镜片 - 右 */}
-                  <div className="absolute top-1/2 right-1/4 translate-x-1/2 -translate-y-1/2 w-28 h-20 sm:w-32 sm:h-24 rounded-2xl bg-gradient-to-br from-cyan-400/80 to-blue-500/80 backdrop-blur-sm border-2 border-white/30 shadow-lg shadow-cyan-500/30 ar-lens" style={{ animationDelay: '1s' }}>
-                    <div className="absolute inset-2 rounded-xl bg-gradient-to-br from-cyan-300/20 to-transparent" />
-                    <Camera className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-8 w-8 text-white/60" />
-                  </div>
-                  {/* 镜框连接 */}
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-3 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full" />
-                  {/* 左镜腿 */}
-                  <div className="absolute top-[45%] left-0 w-16 h-2 bg-gradient-to-l from-cyan-400/80 to-transparent rounded-full -rotate-12" />
-                  {/* 右镜腿 */}
-                  <div className="absolute top-[45%] right-0 w-16 h-2 bg-gradient-to-r from-cyan-400/80 to-transparent rounded-full rotate-12" />
+            {/* 右侧：AR眼镜功能环形图 */}
+            <div className="relative flex items-center justify-center">
+              <div className="relative w-80 h-80">
+                {/* 中心圆形 */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center shadow-lg shadow-cyan-500/30">
+                  <Eye className="h-12 w-12 text-white" />
                 </div>
 
-                {/* 功能标签 */}
-                <div className="absolute -top-4 -right-4 animate-bounce">
-                  <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-lg">
-                    <Wifi className="h-4 w-4 text-primary" />
-                    <span className="text-xs font-medium text-primary">实时连接</span>
-                  </div>
-                </div>
-                <div className="absolute -bottom-4 -left-4 animate-bounce" style={{ animationDelay: '0.5s' }}>
-                  <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-lg">
-                    <Battery className="h-4 w-4 text-green-500" />
-                    <span className="text-xs font-medium text-green-600">全天续航</span>
-                  </div>
-                </div>
-                <div className="absolute top-0 left-0 animate-bounce" style={{ animationDelay: '1s' }}>
-                  <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-lg">
-                    <Mic className="h-4 w-4 text-accent" />
-                    <span className="text-xs font-medium text-accent">语音交互</span>
-                  </div>
-                </div>
-                <div className="absolute bottom-0 right-0 animate-bounce" style={{ animationDelay: '1.5s' }}>
-                  <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-lg">
-                    <Navigation className="h-4 w-4 text-orange-500" />
-                    <span className="text-xs font-medium text-orange-500">AR导航</span>
+                {/* 环形连接线 */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full border-2 border-dashed border-muted-foreground/20" />
+
+                {/* 功能点 - 上 */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2">
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="w-12 h-12 rounded-full bg-card border shadow-md flex items-center justify-center">
+                      <Camera className="h-5 w-5 text-cyan-500" />
+                    </div>
+                    <span className="text-xs font-medium">4K拍摄</span>
                   </div>
                 </div>
 
-                {/* 发光效果 */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-cyan-500/10 blur-3xl animate-pulse" />
+                {/* 功能点 - 右 */}
+                <div className="absolute top-1/2 right-0 -translate-y-1/2">
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="w-12 h-12 rounded-full bg-card border shadow-md flex items-center justify-center">
+                      <Languages className="h-5 w-5 text-accent" />
+                    </div>
+                    <span className="text-xs font-medium">实时翻译</span>
+                  </div>
+                </div>
+
+                {/* 功能点 - 下 */}
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2">
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="w-12 h-12 rounded-full bg-card border shadow-md flex items-center justify-center">
+                      <Navigation className="h-5 w-5 text-orange-500" />
+                    </div>
+                    <span className="text-xs font-medium">AR导航</span>
+                  </div>
+                </div>
+
+                {/* 功能点 - 左 */}
+                <div className="absolute top-1/2 left-0 -translate-y-1/2">
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="w-12 h-12 rounded-full bg-card border shadow-md flex items-center justify-center">
+                      <Wifi className="h-5 w-5 text-primary" />
+                    </div>
+                    <span className="text-xs font-medium">实时连接</span>
+                  </div>
+                </div>
+
+                {/* 装饰小圆点 */}
+                <div className="absolute top-8 right-8 w-3 h-3 rounded-full bg-cyan-400/50 animate-pulse" />
+                <div className="absolute bottom-8 left-8 w-2 h-2 rounded-full bg-accent/50 animate-pulse" style={{ animationDelay: '0.5s' }} />
               </div>
             </div>
           </div>
