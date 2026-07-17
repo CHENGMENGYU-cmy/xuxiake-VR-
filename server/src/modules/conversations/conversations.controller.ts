@@ -9,6 +9,7 @@ import { Conversation } from '../../entities/conversation.entity.js';
 import { ConversationParticipant } from '../../entities/conversation-participant.entity.js';
 import { Message } from '../../entities/message.entity.js';
 import { User } from '../../entities/user.entity.js';
+import { UserFollow } from '../../entities/user-follow.entity.js';
 
 @Controller('api/conversations')
 export class ConversationsController {
@@ -17,6 +18,7 @@ export class ConversationsController {
     @InjectRepository(ConversationParticipant) private readonly partRepo: Repository<ConversationParticipant>,
     @InjectRepository(Message) private readonly msgRepo: Repository<Message>,
     @InjectRepository(User) private readonly userRepo: Repository<User>,
+    @InjectRepository(UserFollow) private readonly followRepo: Repository<UserFollow>,
     private readonly jwtService: JwtService,
   ) {}
 
