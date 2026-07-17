@@ -126,7 +126,7 @@ export default function FollowersPage() {
         </Button>
       </div>
 
-      <Tabs defaultValue="followers" className="w-full">
+      <Tabs defaultValue={defaultTab} className="w-full">
         <TabsList className="mb-4 grid w-full grid-cols-2">
           <TabsTrigger value="followers">粉丝 {followers.length}</TabsTrigger>
           <TabsTrigger value="following">关注 {following.length}</TabsTrigger>
