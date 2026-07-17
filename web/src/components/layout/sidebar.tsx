@@ -26,6 +26,7 @@ import { useUIStore } from '@/stores/ui-store';
 import { cn } from '@/lib/utils';
 import apiClient from '@/lib/api-client';
 import { getRecommendedUsers } from '@/lib/social-api';
+
 const navItems = [
   { href: '/feed', label: '首页', icon: Home },
   { href: '/explore', label: '探索发现', icon: Compass },
@@ -55,8 +56,7 @@ export function Sidebar() {
 
   useEffect(() => {
     if (user) {
-      // 优先使用智能推荐，失败则回退到简单推荐
-      getRecommendedUsers(1, 5).then((res) => {
+      getRecommendedUsers(1, 10).then((res) => {
         setSuggestedUsers(res.data || []);
       }).catch(() => {
         apiClient.get('/users/suggested/list').then((res) => {
@@ -86,95 +86,102 @@ export function Sidebar() {
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
-        <ScrollArea className="h-full">
-          {/* 用户信息卡片 */}
-          {mounted && user && (
+        <div className="flex h-full flex-col">
+          {/* 顶部固定区域 */}
+          <div className="flex-shrink-0">
+            {/* 用户信息卡片 */}
+            {mounted && user && (
+              <div className="space-y-1 p-3">
+                <Link
+                  href={`/profile/${user.username}`}
+                  className="flex items-center gap-3 rounded-lg p-2 hover:bg-accent"
+                >
+                  <Avatar className="h-10 w-10">
+                    <AvatarImage src={user.avatarUrl} alt={user.displayName} />
+                    <AvatarFallback>{user.displayName[0]}</AvatarFallback>
+                  </Avatar>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-semibold">{user.displayName}</p>
+                    <p className="truncate text-xs text-muted-foreground">@{user.username}</p>
+                  </div>
+                </Link>
+              </div>
+            )}
+
+            <Separator />
+
+            {/* 主导航 */}
             <div className="space-y-1 p-3">
-              <Link
-                href={`/profile/${user.username}`}
-                className="flex items-center gap-3 rounded-lg p-2 hover:bg-accent"
-              >
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src={user.avatarUrl} alt={user.displayName} />
-                  <AvatarFallback>{user.displayName[0]}</AvatarFallback>
-                </Avatar>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-semibold">{user.displayName}</p>
-                  <p className="truncate text-xs text-muted-foreground">@{user.username}</p>
-                </div>
-              </Link>
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = pathname === item.href;
+                return (
+                  <Link key={item.href} href={item.href}>
+                    <Button
+                      variant="ghost"
+                      className={cn(
+                        'w-full justify-start gap-3',
+                        isActive && 'bg-primary/10 text-primary hover:bg-primary/10'
+                      )}
+                    >
+                      <Icon className={cn('h-5 w-5', isActive && 'text-primary')} />
+                      <span>{item.label}</span>
+                    </Button>
+                  </Link>
+                );
+              })}
             </div>
-          )}
 
-          <Separator />
+            <Separator />
 
-          {/* 主导航 */}
-          <div className="space-y-1 p-3">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = pathname === item.href;
-              return (
-                <Link key={item.href} href={item.href}>
-                  <Button
-                    variant="ghost"
-                    className={cn(
-                      'w-full justify-start gap-3',
-                      isActive && 'bg-primary/10 text-primary hover:bg-primary/10'
-                    )}
-                  >
-                    <Icon className={cn('h-5 w-5', isActive && 'text-primary')} />
-                    <span>{item.label}</span>
-                  </Button>
-                </Link>
-              );
-            })}
-          </div>
-
-          <Separator />
-
-          {/* 媒体类型快捷入口 */}
-          <div className="space-y-1 p-3">
-            <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
-              内容分类
-            </p>
-            {mediaTypes.map((item) => {
-              const Icon = item.icon;
-              return (
-                <Link key={item.href} href={item.href}>
-                  <Button variant="ghost" className="w-full justify-start gap-3">
-                    <Icon className={cn('h-5 w-5', item.color)} />
-                    <span className="text-sm">{item.label}</span>
-                  </Button>
-                </Link>
-              );
-            })}
-          </div>
-
-          <Separator />
-
-          {/* 推荐关注 */}
-          {mounted && user && suggestedUsers.length > 0 && (
+            {/* 媒体类型快捷入口 */}
             <div className="space-y-1 p-3">
               <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
+                内容分类
+              </p>
+              {mediaTypes.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link key={item.href} href={item.href}>
+                    <Button variant="ghost" className="w-full justify-start gap-3">
+                      <Icon className={cn('h-5 w-5', item.color)} />
+                      <span className="text-sm">{item.label}</span>
+                    </Button>
+                  </Link>
+                );
+              })}
+            </div>
+
+            <Separator />
+          </div>
+
+          {/* 推荐关注 - 填充剩余空间 */}
+          {mounted && user && suggestedUsers.length > 0 && (
+            <div className="flex min-h-0 flex-1 flex-col">
+              <p className="flex-shrink-0 px-5 pt-3 pb-1 text-xs font-medium uppercase text-muted-foreground">
                 推荐关注
               </p>
-              {suggestedUsers.map((u) => (
-                <Link key={u.id} href={`/profile/${u.username}`}>
-                  <Button variant="ghost" className="w-full justify-start gap-3">
-                    <Avatar className="h-7 w-7">
-                      <AvatarImage src={u.avatarUrl} alt={u.displayName} />
-                      <AvatarFallback>{u.displayName[0]}</AvatarFallback>
-                    </Avatar>
-                    <div className="min-w-0 flex-1 text-left">
-                      <p className="truncate text-sm">{u.displayName}</p>
-                      <p className="truncate text-xs text-muted-foreground">@{u.username}</p>
-                    </div>
-                  </Button>
-                </Link>
-              ))}
+              <ScrollArea className="flex-1">
+                <div className="space-y-1 p-3 pt-1">
+                  {suggestedUsers.map((u) => (
+                    <Link key={u.id} href={`/profile/${u.username}`}>
+                      <Button variant="ghost" className="w-full justify-start gap-3">
+                        <Avatar className="h-7 w-7">
+                          <AvatarImage src={u.avatarUrl} alt={u.displayName} />
+                          <AvatarFallback>{u.displayName[0]}</AvatarFallback>
+                        </Avatar>
+                        <div className="min-w-0 flex-1 text-left">
+                          <p className="truncate text-sm">{u.displayName}</p>
+                          <p className="truncate text-xs text-muted-foreground">@{u.username}</p>
+                        </div>
+                      </Button>
+                    </Link>
+                  ))}
+                </div>
+              </ScrollArea>
             </div>
           )}
-        </ScrollArea>
+        </div>
       </aside>
     </>
   );
