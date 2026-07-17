@@ -1,16 +1,15 @@
 /**
  * 消息请求功能演示脚本
- * 运行: npx tsx scripts/create-demo-messages.ts
+ * 运行: cd server && npx tsx ../scripts/create-demo-messages.ts
  */
 
-import { DataSource } from 'typeorm';
+import mysql from 'mysql2/promise';
 import { v4 as uuidv4 } from 'uuid';
 
-const AppDataSource = new DataSource({
-  type: 'mysql',
+const pool = mysql.createPool({
   host: 'localhost',
   port: 3306,
-  username: 'root',
+  user: 'root',
   password: 'root',
   database: 'xuxiake',
 });
