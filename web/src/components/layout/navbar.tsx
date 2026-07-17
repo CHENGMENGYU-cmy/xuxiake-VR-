@@ -38,7 +38,7 @@ export function Navbar() {
   const router = useRouter();
   const { user, logout } = useAuthStore();
   const { toggleSidebar } = useUIStore();
-  const [searchQuery, setSearchQuery] = useState('');
+  const { query: searchQuery, setQuery: setSearchQuery } = useSearchStore();
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [mounted, setMounted] = useState(false);
 
