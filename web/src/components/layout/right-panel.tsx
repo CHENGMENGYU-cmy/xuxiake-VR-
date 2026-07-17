@@ -33,16 +33,42 @@ const suggestLinks = [
 
 export function RightPanel() {
   const { rightPanelOpen } = useUIStore();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
+  const [recommendedUsers, setRecommendedUsers] = useState<RecommendedUser[]>([]);
   const [recommendedCommunities, setRecommendedCommunities] = useState<Community[]>([]);
+  const [followingIds, setFollowingIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (isAuthenticated) {
+      getRecommendedUsers(1, 5).then((res) => {
+        setRecommendedUsers(res.data || []);
+      }).catch(() => {
+        apiClient.get('/users/suggested/list').then((res) => {
+          if (res.data?.success) setRecommendedUsers(res.data.data || []);
+        }).catch(() => {});
+      });
       getRecommendedCommunities(1, 5).then((res) => {
         setRecommendedCommunities(res.data || []);
       }).catch(() => {});
     }
   }, [isAuthenticated]);
+
+  const handleFollow = async (userId: string) => {
+    try {
+      const isFollowing = followingIds.has(userId);
+      if (isFollowing) {
+        await apiClient.delete(`/users/${userId}/follow`);
+        setFollowingIds((prev) => { const next = new Set(prev); next.delete(userId); return next; });
+        toast.success('已取消关注');
+      } else {
+        await apiClient.post(`/users/${userId}/follow`);
+        setFollowingIds((prev) => new Set(prev).add(userId));
+        toast.success('关注成功');
+      }
+    } catch {
+      toast.error('操作失败，请重试');
+    }
+  };
 
   return (
     <aside
