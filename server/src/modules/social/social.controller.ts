@@ -15,6 +15,7 @@ import { CommunityTag } from '../../entities/community-tag.entity.js';
 import { Conversation } from '../../entities/conversation.entity.js';
 import { ConversationParticipant } from '../../entities/conversation-participant.entity.js';
 import { Post as PostEntity } from '../../entities/post.entity.js';
+import { MediaItem } from '../../entities/media-item.entity.js';
 
 @Controller('api/social')
 export class SocialController {
