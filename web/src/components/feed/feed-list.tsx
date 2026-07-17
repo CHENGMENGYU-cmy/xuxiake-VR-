@@ -7,25 +7,24 @@ import { PostCard } from '@/components/post/post-card';
 import { PostComposer } from '@/components/post/post-composer';
 import { FeedSkeleton } from './feed-skeleton';
 import { usePostStore } from '@/stores/post-store';
+import type { PostSortType } from '@/lib/post-api';
 
 interface FeedListProps {
   showComposer?: boolean;
+  sort?: PostSortType;
 }
 
-export function FeedList({ showComposer = true }: FeedListProps) {
-  const { posts = [], isLoading, isLoadingMore, hasMore, fetchPosts, loadMore } = usePostStore();
+export function FeedList({ showComposer = true, sort = 'latest' }: FeedListProps) {
+  const { posts = [], isLoading, isLoadingMore, hasMore, fetchPosts, loadMore, currentSort } = usePostStore();
 
-  // 组件挂载时从API加载数据（仅当store为空时）
+  // sort 变化时重新获取数据
   useEffect(() => {
-    const currentPosts = usePostStore.getState().posts ?? [];
-    if (currentPosts.length === 0) {
-      fetchPosts();
-    }
-  }, [fetchPosts]);
+    fetchPosts(sort);
+  }, [sort, fetchPosts]);
 
   const handleRefresh = useCallback(() => {
-    fetchPosts();
-  }, [fetchPosts]);
+    fetchPosts(sort);
+  }, [fetchPosts, sort]);
 
   return (
     <div className="space-y-4">
