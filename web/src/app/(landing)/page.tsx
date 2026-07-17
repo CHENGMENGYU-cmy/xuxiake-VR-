@@ -669,7 +669,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ========== 七、用户评价 ========== */}
+      {/* ========== 八、用户评价 ========== */}
       <section className="relative py-24 sm:py-32 bg-muted/30">
         <div className="mx-auto max-w-7xl px-6">
           <div className="mb-16 text-center">
