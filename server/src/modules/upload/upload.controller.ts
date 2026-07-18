@@ -16,14 +16,13 @@ import { existsSync, mkdirSync } from 'fs';
 
 const AVATAR_DIR = join(process.cwd(), 'uploads', 'avatars');
 const IMAGE_DIR = join(process.cwd(), 'uploads', 'images');
+const VIDEO_DIR = join(process.cwd(), 'uploads', 'videos');
+const AUDIO_DIR = join(process.cwd(), 'uploads', 'audio');
 
 // Ensure upload directories exist
-if (!existsSync(AVATAR_DIR)) {
-  mkdirSync(AVATAR_DIR, { recursive: true });
-}
-if (!existsSync(IMAGE_DIR)) {
-  mkdirSync(IMAGE_DIR, { recursive: true });
-}
+[AVATAR_DIR, IMAGE_DIR, VIDEO_DIR, AUDIO_DIR].forEach((dir) => {
+  if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+});
 
 @Controller('api/upload')
 export class UploadController {
