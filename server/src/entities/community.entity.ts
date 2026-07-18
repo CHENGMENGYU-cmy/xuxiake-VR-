@@ -1,6 +1,9 @@
-import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn, ManyToOne, OneToMany, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { User } from './user.entity.js';
 import { Conversation } from './conversation.entity.js';
+import { CommunityAnnouncement } from './community-announcement.entity.js';
+import { CommunityRole } from './community-role.entity.js';
+import { CommunityChallenge } from './community-challenge.entity.js';
 
 @Entity('communities')
 export class Community {
