@@ -145,6 +145,28 @@ export function PostCard({ post }: PostCardProps) {
         </div>
       )}
 
+      {/* 标签和话题 */}
+      {((post.tags && post.tags.length > 0) || (post.topics && post.topics.length > 0)) && (
+        <div className="flex flex-wrap gap-1.5 px-4 pb-2">
+          {post.tags?.map((tag) => (
+            <span
+              key={tag.id}
+              className="inline-flex items-center gap-0.5 rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground hover:bg-muted/80 cursor-pointer"
+            >
+              {tag.icon} {tag.name}
+            </span>
+          ))}
+          {post.topics?.map((topic) => (
+            <span
+              key={topic.id}
+              className="inline-flex items-center rounded-full bg-primary/5 px-2 py-0.5 text-xs text-primary hover:bg-primary/10 cursor-pointer"
+            >
+              #{topic.name}
+            </span>
+          ))}
+        </div>
+      )}
+
       {/* 媒体内容 */}
       {post.mediaItems.length > 0 && (
         <MediaViewer items={post.mediaItems} />
