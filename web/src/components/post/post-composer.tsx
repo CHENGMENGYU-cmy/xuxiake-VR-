@@ -384,6 +384,10 @@ export function PostComposer() {
   const handleMediaClick = (type: string) => {
     if (type === 'IMAGE') {
       fileInputRef.current?.click();
+    } else if (type === 'VIDEO') {
+      videoInputRef.current?.click();
+    } else if (type === 'AUDIO') {
+      audioInputRef.current?.click();
     } else if (type === 'LINK') {
       setShowLinkInput(true);
     } else {
