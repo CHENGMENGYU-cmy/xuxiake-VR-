@@ -136,10 +136,20 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
 
     const handleNewMessage = (msg: Msg) => {
       if (msg.conversationId === conversationId) {
+        // 确保sender信息正确：如果sender为空或是自己发的，补全sender
+        const fixedMsg = { ...msg };
+        if (!fixedMsg.sender && fixedMsg.senderId === currentUser.id) {
+          fixedMsg.sender = {
+            id: currentUser.id,
+            username: currentUser.username,
+            displayName: currentUser.displayName,
+            avatarUrl: currentUser.avatarUrl,
+          };
+        }
         setMessages((prev) => {
-          const exists = prev.find((m) => m.id === msg.id);
+          const exists = prev.find((m) => m.id === fixedMsg.id);
           if (exists) return prev;
-          return [...prev, msg];
+          return [...prev, fixedMsg];
         });
         socket.emit('chat:message:read', { conversationId });
       }
