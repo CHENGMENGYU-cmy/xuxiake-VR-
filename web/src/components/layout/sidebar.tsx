@@ -125,6 +125,11 @@ export function Sidebar() {
                     >
                       <Icon className={cn('h-5 w-5', isActive && 'text-primary')} />
                       <span>{item.label}</span>
+                      {item.label === '消息' && totalUnread > 0 && (
+                        <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1 text-[10px] text-white">
+                          {totalUnread > 99 ? '99+' : totalUnread}
+                        </span>
+                      )}
                       {item.label === '通知' && notifUnreadCount > 0 && (
                         <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1 text-[10px] text-white">
                           {notifUnreadCount > 99 ? '99+' : notifUnreadCount}
