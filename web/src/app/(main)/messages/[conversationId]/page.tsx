@@ -385,13 +385,28 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
                     let cardData: ContentCardData | null = null;
                     let locationData: { lat: number; lng: number; locationName?: string; isLive: boolean } | null = null;
                     let broadcastData: { text: string; type: 'ANNOUNCEMENT' | 'ALERT' } | null = null;
+                    let vrData: VRPreviewData | null = null;
+                    let aiData: AIResponse | null = null;
+                    let systemData: { text: string; type: string } | null = null;
                     if (msg.mediaType === 'CARD' && msg.content) {
                       try {
                         const parsed = JSON.parse(msg.content);
                         if (parsed.__card) cardData = parsed.__card;
                         if (parsed.__location) locationData = parsed.__location;
                         if (parsed.__broadcast) broadcastData = parsed.__broadcast;
+                        if (parsed.__vr) vrData = parsed.__vr;
+                        if (parsed.__ai) aiData = parsed.__ai;
+                        if (parsed.__system) systemData = parsed.__system;
                       } catch { /* not a special message */ }
+                    }
+
+                    // 系统消息（截图通知等）全宽居中显示
+                    if (systemData) {
+                      return (
+                        <div className="w-full max-w-[85%] text-center">
+                          <p className="text-xs text-muted-foreground italic">{systemData.text}</p>
+                        </div>
+                      );
                     }
 
                     // 广播消息全宽显示
@@ -403,6 +418,24 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
                             type={broadcastData.type}
                             senderName={msg.sender?.displayName}
                           />
+                        </div>
+                      );
+                    }
+
+                    // AI助手消息
+                    if (aiData) {
+                      return (
+                        <div className="rounded-2xl overflow-hidden">
+                          <AIAssistantMessage data={aiData} isMine={isMine} />
+                        </div>
+                      );
+                    }
+
+                    // VR内容预览
+                    if (vrData) {
+                      return (
+                        <div className="rounded-2xl overflow-hidden">
+                          <VRPreview data={vrData} isMine={isMine} />
                         </div>
                       );
                     }
