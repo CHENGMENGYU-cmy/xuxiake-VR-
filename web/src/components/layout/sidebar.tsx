@@ -37,8 +37,8 @@ const navItems = [
 ];
 
 const mediaTypes = [
-  { href: '/search?type=VIDEO', label: 'VR视频', icon: Video, color: 'text-teal-500' },
-  { href: '/search?type=IMAGE', label: 'VR图片', icon: Image, color: 'text-orange-500' },
+  { href: '/search?type=VIDEO', label: 'AR视频', icon: Video, color: 'text-teal-500' },
+  { href: '/search?type=IMAGE', label: 'AR图片', icon: Image, color: 'text-orange-500' },
   { href: '/search?type=AUDIO', label: '音频记录', icon: Music, color: 'text-teal-400' },
 ];
 
