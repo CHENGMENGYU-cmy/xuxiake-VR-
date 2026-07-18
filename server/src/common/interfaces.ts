@@ -38,11 +38,14 @@ export interface IMediaItem {
 }
 
 // ===== 帖子接口 =====
+export type PostType = 'NOTE' | 'VR_MEDIA' | 'ROUTE' | 'JOURNEY' | 'GUIDE' | 'MOMENT';
+
 export interface IPost {
   id: string;
   content: string | null;
   mediaItems: IMediaItem[];
   authorId: string;
+  postType: PostType;
   location?: { lat: number; lng: number; name: string } | null;
   vrMetadata?: Record<string, unknown> | null;
   visibility: Visibility;
