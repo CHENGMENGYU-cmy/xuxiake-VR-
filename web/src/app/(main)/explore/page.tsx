@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Compass, TrendingUp, Flame, Clock } from 'lucide-react';
+import { Compass, TrendingUp, Flame, Clock, FileText, Video, Map, BookOpen } from 'lucide-react';
 import { FeedList } from '@/components/feed/feed-list';
 import type { PostSortType } from '@/lib/post-api';
 
@@ -13,8 +13,16 @@ const tabSortMap: Record<TabType, PostSortType> = {
   hot: 'hot',
 };
 
+const contentTypeFilters = [
+  { id: 'all', label: '全部', icon: FileText },
+  { id: 'VR_MEDIA', label: 'VR内容', icon: Video },
+  { id: 'ROUTE', label: '路线', icon: Map },
+  { id: 'GUIDE', label: '攻略', icon: BookOpen },
+];
+
 export default function ExplorePage() {
   const [activeTab, setActiveTab] = useState<TabType>('trending');
+  const [contentType, setContentType] = useState('all');
 
   const tabs = [
     { id: 'trending' as TabType, label: '热门内容', icon: TrendingUp },
@@ -30,7 +38,7 @@ export default function ExplorePage() {
         <h1 className="text-xl font-bold">探索发现</h1>
       </div>
 
-      {/* 标签切换 */}
+      {/* 排序切换 */}
       <div className="flex border-b">
         {tabs.map((tab) => {
           const Icon = tab.icon;
@@ -51,9 +59,36 @@ export default function ExplorePage() {
         })}
       </div>
 
+      {/* 内容类型筛选 */}
+      <div className="flex gap-1 overflow-x-auto scrollbar-none">
+        {contentTypeFilters.map((filter) => {
+          const Icon = filter.icon;
+          const isActive = contentType === filter.id;
+          return (
+            <button
+              key={filter.id}
+              onClick={() => setContentType(filter.id)}
+              className={`flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+                isActive
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted text-muted-foreground hover:bg-muted/80'
+              }`}
+            >
+              <Icon className="h-3.5 w-3.5" />
+              {filter.label}
+            </button>
+          );
+        })}
+      </div>
+
       {/* 内容区域 */}
-      <div className="mt-4">
-        <FeedList key={activeTab} showComposer={false} sort={tabSortMap[activeTab]} />
+      <div>
+        <FeedList
+          key={`${activeTab}-${contentType}`}
+          showComposer={false}
+          sort={tabSortMap[activeTab]}
+          postType={contentType !== 'all' ? contentType : undefined}
+        />
       </div>
     </div>
   );
