@@ -191,7 +191,7 @@ CREATE TABLE IF NOT EXISTS messages (
   sender_id       VARCHAR(36) NOT NULL,
   content         TEXT,
   media_url       VARCHAR(500),
-  media_type      ENUM('IMAGE','FILE'),
+  media_type      ENUM('IMAGE','FILE','AUDIO','CARD') NOT NULL DEFAULT 'IMAGE',
   created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   INDEX idx_msg_conv (conversation_id, created_at),
   CONSTRAINT fk_msg_conv   FOREIGN KEY (conversation_id) REFERENCES conversations(id) ON DELETE CASCADE,
