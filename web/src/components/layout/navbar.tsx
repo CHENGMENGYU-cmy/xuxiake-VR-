@@ -45,7 +45,10 @@ export function Navbar() {
   const { query: searchQuery, setQuery: setSearchQuery } = useSearchStore();
   const totalUnread = useChatStore((s) => s.totalUnread);
   const setTotalUnread = useChatStore((s) => s.setTotalUnread);
+  const notifUnreadCount = useNotificationStore((s) => s.unreadCount);
+  const setNotifUnreadCount = useNotificationStore((s) => s.setUnreadCount);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [showNotifDropdown, setShowNotifDropdown] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -74,7 +77,21 @@ export function Navbar() {
     return () => { socket.off('chat:message:new', handleNewMessage); };
   }, [user, setTotalUnread]);
 
-  const unreadCount = mockNotifications.filter((n) => !n.isRead).length;
+  // 加载未读通知数 + WebSocket实时更新
+  useEffect(() => {
+    if (!user) return;
+    apiClient.get('/notifications/unread-count').then((res) => {
+      if (res.data?.success) {
+        setNotifUnreadCount(res.data.data?.count || 0);
+      }
+    }).catch(() => {});
+    const socket = connectChat(user.id);
+    const handleNewNotification = (data: any) => {
+      setNotifUnreadCount(data.unreadCount ?? notifUnreadCount + 1);
+    };
+    socket.on('notification:new', handleNewNotification);
+    return () => { socket.off('notification:new', handleNewNotification); };
+  }, [user, setNotifUnreadCount]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
