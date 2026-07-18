@@ -16,6 +16,7 @@ import { Conversation } from '../../entities/conversation.entity.js';
 import { ConversationParticipant } from '../../entities/conversation-participant.entity.js';
 import { Post as PostEntity } from '../../entities/post.entity.js';
 import { MediaItem } from '../../entities/media-item.entity.js';
+import { SocialService } from './social.service.js';
 
 @Controller('api/social')
 export class SocialController {
@@ -31,6 +32,7 @@ export class SocialController {
     @InjectRepository(PostEntity) private readonly postRepo: Repository<PostEntity>,
     @InjectRepository(MediaItem) private readonly mediaRepo: Repository<MediaItem>,
     private readonly jwtService: JwtService,
+    private readonly socialService: SocialService,
   ) {}
 
   private getUserId(auth?: string): string | null {
