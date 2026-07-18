@@ -1,14 +1,20 @@
 'use client';
 
-import { useState } from 'react';
-import { Upload, Video, Image, Mic, Link2, Languages, FileUp, MapPin } from 'lucide-react';
+import { useState, useRef, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import { Upload, Video, Image, Mic, Link2, Languages, FileUp, MapPin, X, Loader2, Play, Volume2, Send } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { useAuthStore } from '@/stores/auth-store';
+import { usePostStore } from '@/stores/post-store';
+import { uploadVideo, uploadAudio, uploadImage, getImageDimensions, getVideoMetadata, getAudioDuration, fetchLinkPreview } from '@/lib/media-api';
+import { CreatePostPayload } from '@/lib/post-api';
+import type { VrFormat } from '@/types';
 import { cn } from '@/lib/utils';
 
 type UploadTab = 'VIDEO' | 'IMAGE' | 'AUDIO' | 'LINK' | 'TRANSLATION';
@@ -21,10 +27,280 @@ const tabs: { key: UploadTab; label: string; icon: React.ElementType; color: str
   { key: 'TRANSLATION', label: '翻译', icon: Languages, color: 'text-teal-400' },
 ];
 
+const vrFormats: { value: VrFormat; label: string; desc: string }[] = [
+  { value: 'STANDARD', label: '标准', desc: '普通视频/图片' },
+  { value: 'VR180', label: 'VR180', desc: '180°沉浸视野' },
+  { value: 'VR360', label: 'VR360', desc: '360°全景视野' },
+  { value: 'SPATIAL', label: '空间', desc: '3D空间视频' },
+];
+
+interface UploadedMedia {
+  url: string;
+  type: 'VIDEO' | 'IMAGE' | 'AUDIO';
+  vrFormat: VrFormat;
+  duration?: number;
+  width?: number;
+  height?: number;
+  originalName?: string;
+  size?: number;
+}
+
+interface LinkData {
+  url: string;
+  title: string;
+  description: string;
+  favicon: string;
+}
+
 export default function UploadPage() {
+  const router = useRouter();
   const { user } = useAuthStore();
+  const { publishPost, isPublishing } = usePostStore();
+
   const [activeTab, setActiveTab] = useState<UploadTab>('VIDEO');
   const [content, setContent] = useState('');
+  const [location, setLocation] = useState('');
+  const [media, setMedia] = useState<UploadedMedia | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [vrFormat, setVrFormat] = useState<VrFormat>('STANDARD');
+  const [linkData, setLinkData] = useState<LinkData | null>(null);
+  const [linkUrl, setLinkUrl] = useState('');
+  const [loadingLink, setLoadingLink] = useState(false);
+
+  // Audio recording state
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const resetMedia = () => {
+    setMedia(null);
+    setRecordedBlob(null);
+    setVrFormat('STANDARD');
+  };
+
+  const handleTabChange = (tab: UploadTab) => {
+    setActiveTab(tab);
+    resetMedia();
+    setLinkData(null);
+    setLinkUrl('');
+  };
+
+  // Video upload
+  const handleVideoSelect = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    const file = files[0];
+
+    setUploading(true);
+    try {
+      const result = await uploadVideo(file);
+      let duration = 0, width = 0, height = 0;
+      try {
+        const meta = await getVideoMetadata(result.url);
+        duration = meta.duration;
+        width = meta.width;
+        height = meta.height;
+      } catch {}
+
+      setMedia({ url: result.url, type: 'VIDEO', vrFormat: 'STANDARD', duration, width, height, originalName: result.originalName, size: result.size });
+      toast.success('视频上传成功');
+    } catch {
+      toast.error('视频上传失败');
+    }
+    setUploading(false);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  // Image upload
+  const handleImageSelect = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    const file = files[0];
+
+    setUploading(true);
+    try {
+      const result = await uploadImage(file);
+      let width = result.width, height = result.height;
+      if (width === 0 || height === 0) {
+        try {
+          const dims = await getImageDimensions(result.url);
+          width = dims.width;
+          height = dims.height;
+        } catch {}
+      }
+
+      setMedia({ url: result.url, type: 'IMAGE', vrFormat: 'STANDARD', width, height, originalName: result.originalName, size: result.size });
+      toast.success('图片上传成功');
+    } catch {
+      toast.error('图片上传失败');
+    }
+    setUploading(false);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  // Audio upload
+  const handleAudioSelect = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    const file = files[0];
+
+    setUploading(true);
+    try {
+      const result = await uploadAudio(file);
+      let duration = 0;
+      try { duration = await getAudioDuration(result.url); } catch {}
+
+      setMedia({ url: result.url, type: 'AUDIO', vrFormat: 'STANDARD', duration, originalName: result.originalName, size: result.size });
+      toast.success('音频上传成功');
+    } catch {
+      toast.error('音频上传失败');
+    }
+    setUploading(false);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  // Audio recording
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
+      chunksRef.current = [];
+
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) chunksRef.current.push(e.data);
+      };
+
+      recorder.onstop = () => {
+        const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
+        setRecordedBlob(blob);
+        stream.getTracks().forEach(t => t.stop());
+      };
+
+      recorder.start();
+      mediaRecorderRef.current = recorder;
+      setIsRecording(true);
+    } catch {
+      toast.error('无法访问麦克风');
+    }
+  };
+
+  const stopRecording = () => {
+    mediaRecorderRef.current?.stop();
+    setIsRecording(false);
+  };
+
+  const uploadRecordedAudio = async () => {
+    if (!recordedBlob) return;
+    setUploading(true);
+    try {
+      const file = new File([recordedBlob], `recording-${Date.now()}.webm`, { type: 'audio/webm' });
+      const result = await uploadAudio(file);
+      let duration = 0;
+      try { duration = await getAudioDuration(result.url); } catch {}
+
+      setMedia({ url: result.url, type: 'AUDIO', vrFormat: 'STANDARD', duration, originalName: result.originalName, size: result.size });
+      setRecordedBlob(null);
+      toast.success('录音上传成功');
+    } catch {
+      toast.error('录音上传失败');
+    }
+    setUploading(false);
+  };
+
+  // Link preview
+  const handleLinkConfirm = async () => {
+    if (!linkUrl.trim()) return;
+    let url = linkUrl.trim();
+    if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
+
+    setLoadingLink(true);
+    try {
+      const preview = await fetchLinkPreview(url);
+      setLinkData({ url, title: preview.title || url, description: preview.description, favicon: preview.favicon });
+      toast.success('链接预览已获取');
+    } catch {
+      setLinkData({ url, title: url, description: '', favicon: '' });
+      toast.warning('无法获取链接预览');
+    }
+    setLoadingLink(false);
+  };
+
+  // Get file input accept based on active tab
+  const getAccept = () => {
+    switch (activeTab) {
+      case 'VIDEO': return 'video/mp4,video/webm,video/quicktime';
+      case 'IMAGE': return 'image/jpeg,image/png,image/webp';
+      case 'AUDIO': return 'audio/mpeg,audio/wav,audio/ogg,audio/webm,audio/aac';
+      default: return '';
+    }
+  };
+
+  const handleFileInput = (files: FileList | null) => {
+    if (activeTab === 'VIDEO') handleVideoSelect(files);
+    else if (activeTab === 'IMAGE') handleImageSelect(files);
+    else if (activeTab === 'AUDIO') handleAudioSelect(files);
+  };
+
+  // Publish
+  const canPublish = (content.trim().length > 0 || media || linkData) && !isPublishing && !uploading;
+
+  const handlePublish = async () => {
+    if (!canPublish) return;
+
+    const mediaItems: CreatePostPayload['mediaItems'] = [];
+
+    if (media) {
+      mediaItems.push({
+        type: media.type,
+        url: media.url,
+        vrFormat: media.vrFormat,
+        duration: media.duration,
+        width: media.width,
+        height: media.height,
+        sortOrder: 0,
+      });
+    }
+
+    if (linkData) {
+      mediaItems.push({
+        type: 'LINK',
+        url: '',
+        linkUrl: linkData.url,
+        linkTitle: linkData.title,
+        linkDescription: linkData.description,
+        linkFavicon: linkData.favicon,
+        sortOrder: mediaItems.length,
+      });
+    }
+
+    const payload: CreatePostPayload = {
+      content: content.trim() || undefined,
+      visibility: 'PUBLIC',
+      postType: media?.type === 'VIDEO' ? 'VR_MEDIA' : 'NOTE',
+      mediaItems: mediaItems.length > 0 ? mediaItems : undefined,
+    };
+
+    try {
+      await publishPost(payload);
+      toast.success('发布成功');
+      router.push('/feed');
+    } catch {
+      toast.error('发布失败，请重试');
+    }
+  };
+
+  const formatSize = (bytes?: number) => {
+    if (!bytes) return '';
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  };
+
+  const formatDuration = (seconds?: number) => {
+    if (!seconds) return '';
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${String(s).padStart(2, '0')}`;
+  };
 
   return (
     <div className="space-y-4">
@@ -35,7 +311,7 @@ export default function UploadPage() {
 
       <Card>
         <CardContent className="p-6">
-          {/* 媒体类型选择 */}
+          {/* Tab选择 */}
           <div className="flex flex-wrap gap-2">
             {tabs.map((tab) => {
               const Icon = tab.icon;
@@ -44,11 +320,8 @@ export default function UploadPage() {
                 <Button
                   key={tab.key}
                   variant={isActive ? 'default' : 'outline'}
-                  className={cn(
-                    'gap-2',
-                    isActive && ''
-                  )}
-                  onClick={() => setActiveTab(tab.key)}
+                  className="gap-2"
+                  onClick={() => handleTabChange(tab.key)}
                 >
                   <Icon className={cn('h-4 w-4', !isActive && tab.color)} />
                   {tab.label}
@@ -70,78 +343,190 @@ export default function UploadPage() {
             />
           </div>
 
-          {/* 根据类型显示不同的上传区域 */}
+          {/* 上传区域 */}
           <div className="mt-4">
+            {/* VIDEO */}
             {activeTab === 'VIDEO' && (
-              <div className="flex flex-col items-center gap-3 rounded-lg border-2 border-dashed border-border p-8 text-center transition-colors hover:border-primary">
-                <Video className="h-10 w-10 text-primary" />
-                <div>
-                  <p className="text-sm font-medium">拖拽VR视频到此处，或点击上传</p>
-                  <p className="text-xs text-muted-foreground mt-1">支持 MP4、MOV、WebM 格式，最大 2GB</p>
-                  <p className="text-xs text-muted-foreground/70">支持 VR180、VR360、空间视频格式</p>
-                </div>
-                <Button variant="outline" size="sm">
-                  <FileUp className="mr-1.5 h-4 w-4" />
-                  选择视频文件
-                </Button>
-              </div>
+              <>
+                {media?.type === 'VIDEO' ? (
+                  <div className="space-y-3">
+                    <div className="relative overflow-hidden rounded-lg border bg-black">
+                      <video src={media.url} className="max-h-64 w-full object-contain" controls />
+                      <button onClick={resetMedia} className="absolute right-2 top-2 rounded-full bg-black/60 p-1 text-white hover:bg-black/80">
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                      {media.duration > 0 && <Badge variant="secondary">{formatDuration(media.duration)}</Badge>}
+                      {media.width > 0 && <span>{media.width}x{media.height}</span>}
+                      {media.size && <span>{formatSize(media.size)}</span>}
+                    </div>
+                    {/* VR格式选择 */}
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-medium">VR格式</label>
+                      <div className="flex flex-wrap gap-1.5">
+                        {vrFormats.map(f => (
+                          <button key={f.value} onClick={() => { setVrFormat(f.value); setMedia(m => m ? { ...m, vrFormat: f.value } : null); }}
+                            className={cn('rounded-full px-3 py-1 text-xs transition-colors', vrFormat === f.value ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-muted/80')}>
+                            {f.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div onClick={() => fileInputRef.current?.click()}
+                    className="flex cursor-pointer flex-col items-center gap-3 rounded-lg border-2 border-dashed border-border p-8 text-center transition-colors hover:border-primary">
+                    {uploading ? <Loader2 className="h-10 w-10 animate-spin text-primary" /> : <Video className="h-10 w-10 text-primary" />}
+                    <div>
+                      <p className="text-sm font-medium">{uploading ? '上传中...' : '点击或拖拽VR视频到此处'}</p>
+                      <p className="text-xs text-muted-foreground mt-1">支持 MP4、MOV、WebM 格式，最大 500MB</p>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
 
+            {/* IMAGE */}
             {activeTab === 'IMAGE' && (
-              <div className="flex flex-col items-center gap-3 rounded-lg border-2 border-dashed border-border p-8 text-center transition-colors hover:border-teal-400">
-                <Image className="h-10 w-10 text-teal-400" />
-                <div>
-                  <p className="text-sm font-medium">拖拽VR全景图片到此处，或点击上传</p>
-                  <p className="text-xs text-muted-foreground mt-1">支持 JPG、PNG、WebP、HEIC 格式，最大 50MB</p>
-                  <p className="text-xs text-muted-foreground/70">支持 360° 全景图片</p>
-                </div>
-                <Button variant="outline" size="sm">
-                  <FileUp className="mr-1.5 h-4 w-4" />
-                  选择图片文件
-                </Button>
-              </div>
+              <>
+                {media?.type === 'IMAGE' ? (
+                  <div className="space-y-3">
+                    <div className="relative overflow-hidden rounded-lg border">
+                      <img src={media.url} alt="预览" className="max-h-64 w-full object-contain" />
+                      <button onClick={resetMedia} className="absolute right-2 top-2 rounded-full bg-black/60 p-1 text-white hover:bg-black/80">
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                      {media.width > 0 && <span>{media.width}x{media.height}</span>}
+                      {media.size && <span>{formatSize(media.size)}</span>}
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-medium">VR格式</label>
+                      <div className="flex flex-wrap gap-1.5">
+                        {vrFormats.map(f => (
+                          <button key={f.value} onClick={() => { setVrFormat(f.value); setMedia(m => m ? { ...m, vrFormat: f.value } : null); }}
+                            className={cn('rounded-full px-3 py-1 text-xs transition-colors', vrFormat === f.value ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-muted/80')}>
+                            {f.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div onClick={() => fileInputRef.current?.click()}
+                    className="flex cursor-pointer flex-col items-center gap-3 rounded-lg border-2 border-dashed border-border p-8 text-center transition-colors hover:border-teal-400">
+                    {uploading ? <Loader2 className="h-10 w-10 animate-spin text-teal-400" /> : <Image className="h-10 w-10 text-teal-400" />}
+                    <div>
+                      <p className="text-sm font-medium">{uploading ? '上传中...' : '点击或拖拽VR全景图片到此处'}</p>
+                      <p className="text-xs text-muted-foreground mt-1">支持 JPG、PNG、WebP 格式，最大 50MB</p>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
 
+            {/* AUDIO */}
             {activeTab === 'AUDIO' && (
-              <div className="flex flex-col items-center gap-3 rounded-lg border-2 border-dashed border-border p-8 text-center transition-colors hover:border-accent">
-                <Mic className="h-10 w-10 text-accent" />
-                <div>
-                  <p className="text-sm font-medium">上传音频文件</p>
-                  <p className="text-xs text-muted-foreground mt-1">支持 MP3、WAV、AAC、OGG 格式，最大 100MB</p>
-                </div>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm">
-                    <FileUp className="mr-1.5 h-4 w-4" />
-                    选择音频文件
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    <Mic className="mr-1.5 h-4 w-4" />
-                    录制音频
-                  </Button>
-                </div>
-              </div>
+              <>
+                {media?.type === 'AUDIO' ? (
+                  <div className="space-y-3">
+                    <div className="relative flex items-center gap-3 rounded-lg border bg-muted/50 p-4">
+                      <Volume2 className="h-8 w-8 text-accent flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <audio src={media.url} controls className="w-full" />
+                        <div className="mt-1 flex flex-wrap gap-2 text-xs text-muted-foreground">
+                          {media.duration > 0 && <span>{formatDuration(media.duration)}</span>}
+                          {media.size && <span>{formatSize(media.size)}</span>}
+                        </div>
+                      </div>
+                      <button onClick={resetMedia} className="rounded-full p-1 text-muted-foreground hover:text-destructive">
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                ) : recordedBlob ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 rounded-lg border bg-muted/50 p-4">
+                      <Volume2 className="h-6 w-6 text-accent" />
+                      <div className="flex-1">
+                        <p className="text-sm font-medium">录音完成</p>
+                        <audio src={URL.createObjectURL(recordedBlob)} controls className="mt-1 w-full" />
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button size="sm" onClick={uploadRecordedAudio} disabled={uploading}>
+                        {uploading ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <Upload className="h-4 w-4 mr-1" />}
+                        上传录音
+                      </Button>
+                      <Button size="sm" variant="ghost" onClick={() => setRecordedBlob(null)}>重新录制</Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center gap-3 rounded-lg border-2 border-dashed border-border p-8 text-center transition-colors hover:border-accent">
+                    {uploading ? <Loader2 className="h-10 w-10 animate-spin text-accent" /> : <Mic className="h-10 w-10 text-accent" />}
+                    <div>
+                      <p className="text-sm font-medium">{uploading ? '上传中...' : '上传或录制音频'}</p>
+                      <p className="text-xs text-muted-foreground mt-1">支持 MP3、WAV、AAC、OGG 格式，最大 100MB</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()}>
+                        <FileUp className="mr-1.5 h-4 w-4" />
+                        选择音频文件
+                      </Button>
+                      <Button variant="outline" size="sm" onClick={isRecording ? stopRecording : startRecording}
+                        className={isRecording ? 'border-red-300 text-red-500' : ''}>
+                        <Mic className="mr-1.5 h-4 w-4" />
+                        {isRecording ? '停止录制' : '录制音频'}
+                      </Button>
+                    </div>
+                    {isRecording && (
+                      <div className="flex items-center gap-2 text-sm text-red-500">
+                        <span className="h-2 w-2 animate-pulse rounded-full bg-red-500" />
+                        录制中...
+                      </div>
+                    )}
+                  </div>
+                )}
+              </>
             )}
 
+            {/* LINK */}
             {activeTab === 'LINK' && (
               <div className="space-y-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">网页链接</label>
-                  <Input type="url" placeholder="https://example.com" />
+                <div className="flex gap-2">
+                  <Input type="url" placeholder="https://example.com" value={linkUrl}
+                    onChange={(e) => setLinkUrl(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleLinkConfirm(); } }}
+                    disabled={loadingLink} />
+                  <Button size="sm" onClick={handleLinkConfirm} disabled={!linkUrl.trim() || loadingLink}>
+                    {loadingLink ? <Loader2 className="h-4 w-4 animate-spin" /> : '获取预览'}
+                  </Button>
                 </div>
-                <div className="rounded-lg bg-muted/50 p-4">
-                  <p className="text-xs text-muted-foreground">
-                    输入链接后，系统会自动抓取网页标题、描述和图标
-                  </p>
-                </div>
+                {linkData && (
+                  <div className="flex items-center gap-3 rounded-lg border bg-muted/50 p-3">
+                    {linkData.favicon && <img src={linkData.favicon} alt="" className="h-5 w-5" />}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate">{linkData.title}</p>
+                      {linkData.description && <p className="text-xs text-muted-foreground line-clamp-1">{linkData.description}</p>}
+                      <p className="text-xs text-muted-foreground/70 truncate">{linkData.url}</p>
+                    </div>
+                    <button onClick={() => setLinkData(null)} className="rounded-full p-1 text-muted-foreground hover:text-destructive">
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                )}
               </div>
             )}
 
+            {/* TRANSLATION */}
             {activeTab === 'TRANSLATION' && (
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="text-sm font-medium">源语言</label>
-                    <select className="w-full rounded-md border border-border p-2 text-sm">
+                    <select className="w-full rounded-md border border-border bg-background p-2 text-sm">
                       <option value="zh-CN">中文（简体）</option>
                       <option value="en">English</option>
                       <option value="ja">日本語</option>
@@ -150,7 +535,7 @@ export default function UploadPage() {
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">目标语言</label>
-                    <select className="w-full rounded-md border border-border p-2 text-sm">
+                    <select className="w-full rounded-md border border-border bg-background p-2 text-sm">
                       <option value="en">English</option>
                       <option value="zh-CN">中文（简体）</option>
                       <option value="ja">日本語</option>
@@ -162,9 +547,9 @@ export default function UploadPage() {
                   <label className="text-sm font-medium">原文内容</label>
                   <Textarea placeholder="输入需要翻译的文字内容..." className="min-h-[120px]" />
                 </div>
-                <Button variant="outline" size="sm" className="w-full">
+                <Button variant="outline" size="sm" className="w-full" disabled>
                   <Languages className="mr-1.5 h-4 w-4" />
-                  开始翻译
+                  翻译功能即将上线
                 </Button>
               </div>
             )}
@@ -175,20 +560,24 @@ export default function UploadPage() {
             <label className="text-sm font-medium">位置信息（可选）</label>
             <div className="relative">
               <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input type="text" placeholder="添加拍摄地点..." className="pl-10" />
+              <Input type="text" placeholder="添加拍摄地点..." className="pl-10" value={location} onChange={(e) => setLocation(e.target.value)} />
             </div>
           </div>
 
           {/* 发布按钮 */}
           <div className="mt-6 flex justify-end gap-3">
-            <Button variant="outline">保存草稿</Button>
-            <Button className="gap-2">
-              <Upload className="h-4 w-4" />
-              发布内容
+            <Button variant="outline" onClick={() => router.back()}>取消</Button>
+            <Button className="gap-2" disabled={!canPublish} onClick={handlePublish}>
+              {isPublishing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+              {isPublishing ? '发布中...' : '发布内容'}
             </Button>
           </div>
         </CardContent>
       </Card>
+
+      {/* 隐藏的文件输入 */}
+      <input ref={fileInputRef} type="file" accept={getAccept()} className="hidden"
+        onChange={(e) => handleFileInput(e.target.files)} />
     </div>
   );
 }
