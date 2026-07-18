@@ -13,7 +13,7 @@ import { useAuthStore } from '@/stores/auth-store';
 import { usePostStore } from '@/stores/post-store';
 import { uploadImage, getImageDimensions, fetchLinkPreview } from '@/lib/media-api';
 import { CreatePostPayload, getTags } from '@/lib/post-api';
-import type { PostType, InterestTag } from '@/types';
+import type { PostType, InterestTag, Difficulty, RouteType } from '@/types';
 
 const MAX_CONTENT_LENGTH = 500;
 const MAX_IMAGES = 9;
