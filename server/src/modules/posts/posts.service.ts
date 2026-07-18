@@ -370,4 +370,50 @@ export class PostsService {
       .take(20)
       .getMany();
   }
+
+  async getTopicById(id: string) {
+    const topic = await this.topicRepo.findOne({ where: { id } });
+    if (!topic) throw new NotFoundException('话题不存在');
+    return topic;
+  }
+
+  async getTopicPosts(topicId: string, options: { page?: number; limit?: number; sort?: string } = {}) {
+    const { page = 1, limit = 10, sort = 'latest' } = options;
+    const offset = (page - 1) * limit;
+
+    const qb = this.postRepo
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.author', 'author')
+      .leftJoinAndSelect('post.mediaItems', 'mediaItems')
+      .leftJoinAndSelect('post.tags', 'tags')
+      .leftJoinAndSelect('post.topics', 'topics')
+      .innerJoin('post.topics', 'topic', 'topic.id = :topicId', { topicId })
+      .where('post.visibility = :vis', { vis: 'PUBLIC' });
+
+    if (sort === 'hot') {
+      qb.addSelect('post.like_count + post.comment_count', 'engagement')
+        .orderBy('engagement', 'DESC')
+        .addOrderBy('post.view_count', 'DESC');
+    } else {
+      qb.orderBy('post.createdAt', 'DESC');
+    }
+
+    qb.skip(offset).take(limit + 1);
+    const posts = await qb.getMany();
+    const hasMore = posts.length > limit;
+    const data = posts.slice(0, limit);
+
+    return {
+      data: data.map((p) => this.formatPost(p)),
+      hasMore,
+      page,
+    };
+  }
+
+  async getAllTopics(limit = 50) {
+    return this.topicRepo.find({
+      order: { postCount: 'DESC' },
+      take: limit,
+    });
+  }
 }
