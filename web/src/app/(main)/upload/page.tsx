@@ -257,7 +257,6 @@ export default function UploadPage() {
         duration: media.duration,
         width: media.width,
         height: media.height,
-        sortOrder: 0,
       });
     }
 
@@ -269,12 +268,11 @@ export default function UploadPage() {
         linkTitle: linkData.title,
         linkDescription: linkData.description,
         linkFavicon: linkData.favicon,
-        sortOrder: mediaItems.length,
       });
     }
 
     const payload: CreatePostPayload = {
-      content: content.trim() || undefined,
+      content: content.trim() || '',
       visibility: 'PUBLIC',
       postType: media?.type === 'VIDEO' ? 'VR_MEDIA' : 'NOTE',
       mediaItems: mediaItems.length > 0 ? mediaItems : undefined,
@@ -357,8 +355,8 @@ export default function UploadPage() {
                       </button>
                     </div>
                     <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-                      {media.duration > 0 && <Badge variant="secondary">{formatDuration(media.duration)}</Badge>}
-                      {media.width > 0 && <span>{media.width}x{media.height}</span>}
+                      {(media.duration ?? 0) > 0 && <Badge variant="secondary">{formatDuration(media.duration)}</Badge>}
+                      {(media.width ?? 0) > 0 && <span>{media.width}x{media.height}</span>}
                       {media.size && <span>{formatSize(media.size)}</span>}
                     </div>
                     {/* VR格式选择 */}
@@ -399,7 +397,7 @@ export default function UploadPage() {
                       </button>
                     </div>
                     <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-                      {media.width > 0 && <span>{media.width}x{media.height}</span>}
+                      {(media.width ?? 0) > 0 && <span>{media.width}x{media.height}</span>}
                       {media.size && <span>{formatSize(media.size)}</span>}
                     </div>
                     <div className="space-y-1.5">
