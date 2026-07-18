@@ -513,6 +513,70 @@ export function PostComposer() {
                   )}
                 </div>
 
+                {/* 路线专属字段 */}
+                {postType === 'ROUTE' && (
+                  <div className="space-y-2 rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-3">
+                    <p className="text-xs font-medium text-emerald-600 dark:text-emerald-400">路线信息</p>
+                    <div className="grid grid-cols-3 gap-2">
+                      <div>
+                        <label className="text-[10px] text-muted-foreground">距离(km)</label>
+                        <Input type="number" step="0.1" placeholder="0" value={routeDistance} onChange={(e) => setRouteDistance(e.target.value)} className="h-7 text-xs" />
+                      </div>
+                      <div>
+                        <label className="text-[10px] text-muted-foreground">时长(分钟)</label>
+                        <Input type="number" placeholder="0" value={routeDuration} onChange={(e) => setRouteDuration(e.target.value)} className="h-7 text-xs" />
+                      </div>
+                      <div>
+                        <label className="text-[10px] text-muted-foreground">爬升(米)</label>
+                        <Input type="number" placeholder="0" value={routeElevation} onChange={(e) => setRouteElevation(e.target.value)} className="h-7 text-xs" />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <label className="text-[10px] text-muted-foreground">类型</label>
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {([['HIKE','🥾徒步'],['BIKE','🚴骑行'],['DRIVE','🚗自驾'],['PADDLE','🛶皮划艇'],['CLIMB','🧗攀岩']] as const).map(([val, lbl]) => (
+                            <button key={val} onClick={() => setRouteType(val)} className={`rounded-full px-2 py-0.5 text-[10px] ${routeType === val ? 'bg-emerald-500 text-white' : 'bg-muted text-muted-foreground'}`}>{lbl}</button>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <label className="text-[10px] text-muted-foreground">难度</label>
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {([['EASY','简单'],['MODERATE','中等'],['HARD','困难'],['EXPERT','专家']] as const).map(([val, lbl]) => (
+                            <button key={val} onClick={() => setRouteDifficulty(val)} className={`rounded-full px-2 py-0.5 text-[10px] ${routeDifficulty === val ? 'bg-emerald-500 text-white' : 'bg-muted text-muted-foreground'}`}>{lbl}</button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* 旅程专属字段 */}
+                {postType === 'JOURNEY' && (
+                  <div className="space-y-2 rounded-lg border border-amber-500/20 bg-amber-500/5 p-3">
+                    <p className="text-xs font-medium text-amber-600 dark:text-amber-400">旅程信息</p>
+                    <div>
+                      <label className="text-[10px] text-muted-foreground">旅程标题 *</label>
+                      <Input placeholder="例：云南7日自由行" value={journeyTitle} onChange={(e) => setJourneyTitle(e.target.value)} className="h-7 text-xs" />
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-muted-foreground">目的地</label>
+                      <Input placeholder="例：昆明-大理-丽江" value={journeyDestination} onChange={(e) => setJourneyDestination(e.target.value)} className="h-7 text-xs" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <label className="text-[10px] text-muted-foreground">开始日期</label>
+                        <Input type="date" value={journeyStartDate} onChange={(e) => setJourneyStartDate(e.target.value)} className="h-7 text-xs" />
+                      </div>
+                      <div>
+                        <label className="text-[10px] text-muted-foreground">结束日期</label>
+                        <Input type="date" value={journeyEndDate} onChange={(e) => setJourneyEndDate(e.target.value)} className="h-7 text-xs" />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* 媒体按钮 */}
                 <div className="flex flex-wrap gap-1">
                   {mediaButtons.map((btn) => {
