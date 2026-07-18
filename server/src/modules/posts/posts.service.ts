@@ -151,7 +151,7 @@ export class PostsService {
   async getPostById(id: string) {
     const post = await this.postRepo.findOne({
       where: { id },
-      relations: { author: true, mediaItems: true },
+      relations: { author: true, mediaItems: true, tags: true, topics: true },
     });
     if (!post) throw new NotFoundException('内容不存在');
     post.viewCount += 1;
