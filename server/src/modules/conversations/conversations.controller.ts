@@ -600,4 +600,73 @@ export class ConversationsController {
 
     return { success: true, data: message };
   }
+
+  // ==================== AI助手 ====================
+
+  @Post(':id/ai-assist')
+  async aiAssist(
+    @Headers('authorization') auth: string,
+    @Param('id') convId: string,
+    @Body() body: { query: string },
+  ) {
+    const userId = this.getUserId(auth);
+    if (!body.query?.trim()) throw new NotFoundException('查询内容不能为空');
+
+    const part = await this.partRepo.findOne({ where: { conversationId: convId, userId } });
+    if (!part) throw new NotFoundException('会话不存在');
+
+    // 简单的关键词匹配AI回复（后续可接入真实AI API）
+    const query = body.query.trim().toLowerCase();
+    let response: { type: string; title: string; content: string; suggestions?: string[] };
+
+    if (query.includes('路线') || query.includes('怎么走') || query.includes('route')) {
+      response = {
+        type: 'ROUTE_SUGGESTION',
+        title: '路线推荐',
+        content: '根据您的位置，推荐以下路线：\n1. 沿主干道步行约15分钟\n2. 乘坐地铁2号线直达\n3. 骑行共享单车约10分钟',
+        suggestions: ['查看详细路线', '导航开始', '分享给队友'],
+      };
+    } else if (query.includes('天气') || query.includes('weather')) {
+      response = {
+        type: 'WEATHER',
+        title: '今日天气',
+        content: '当前地区：晴转多云\n温度：18°C - 25°C\n风力：微风\n\n适合户外活动，建议携带防晒用品。',
+        suggestions: ['查看一周天气', '穿衣建议'],
+      };
+    } else if (query.includes('翻译') || query.includes('translate')) {
+      response = {
+        type: 'TRANSLATION',
+        title: '翻译助手',
+        content: '请发送需要翻译的内容，支持中英日韩等多语言互译。\n\n示例：翻译"请问最近的地铁站在哪里？"',
+        suggestions: ['英译中', '中译英', '日译中'],
+      };
+    } else if (query.includes('推荐') || query.includes('景点') || query.includes('recommend')) {
+      response = {
+        type: 'TRAVEL_TIP',
+        title: '景点推荐',
+        content: '附近热门景点：\n1. 古城步行街 - 距离2km\n2. 湖畔公园 - 距离3.5km\n3. 历史博物馆 - 距离1.8km\n\n建议游览时间：3-4小时',
+        suggestions: ['查看攻略', '添加到行程', '导航前往'],
+      };
+    } else {
+      response = {
+        type: 'GENERAL',
+        title: 'AI旅行助手',
+        content: '你好！我是徐霞客AI助手，可以帮你：\n• 查询路线和导航\n• 查看天气预报\n• 翻译外语\n• 推荐景点和美食\n\n请输入你的问题～',
+        suggestions: ['推荐路线', '今日天气', '翻译帮助', '附近景点'],
+      };
+    }
+
+    // 发送AI回复消息
+    const message = this.msgRepo.create({
+      id: uuidv4(),
+      conversationId: convId,
+      senderId: userId,
+      content: JSON.stringify({ __ai: response }),
+      mediaType: 'CARD' as any,
+    });
+    await this.msgRepo.save(message);
+    await this.convRepo.update(convId, { updatedAt: new Date() });
+
+    return { success: true, data: message };
+  }
 }
