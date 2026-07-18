@@ -22,6 +22,7 @@ export class ConversationsController {
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     @InjectRepository(UserFollow) private readonly followRepo: Repository<UserFollow>,
     @InjectRepository(MessageReaction) private readonly reactionRepo: Repository<MessageReaction>,
+    @InjectRepository(LocationShare) private readonly locationRepo: Repository<LocationShare>,
     private readonly jwtService: JwtService,
   ) {}
 
