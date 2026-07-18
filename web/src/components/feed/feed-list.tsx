@@ -12,15 +12,17 @@ import type { PostSortType } from '@/lib/post-api';
 interface FeedListProps {
   showComposer?: boolean;
   sort?: PostSortType;
+  postType?: string;
+  tagId?: string;
 }
 
-export function FeedList({ showComposer = true, sort = 'latest' }: FeedListProps) {
+export function FeedList({ showComposer = true, sort = 'latest', postType, tagId }: FeedListProps) {
   const { posts = [], isLoading, isLoadingMore, hasMore, fetchPosts, loadMore } = usePostStore();
 
-  // sort 变化时重新获取数据
+  // sort 或 filter 变化时重新获取数据
   useEffect(() => {
-    fetchPosts(sort);
-  }, [sort, fetchPosts]);
+    fetchPosts(sort, { postType, tagId });
+  }, [sort, postType, tagId, fetchPosts]);
 
   const handleRefresh = useCallback(() => {
     fetchPosts(sort);
