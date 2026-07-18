@@ -32,6 +32,15 @@ const mediaTypeIcons: Record<string, React.ReactNode> = {
   AUDIO: <Volume2 className="h-3 w-3" />,
 };
 
+const postTypeConfig: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
+  NOTE: { label: '笔记', icon: <FileText className="h-3 w-3" />, color: 'bg-primary/10 text-primary' },
+  VR_MEDIA: { label: 'VR', icon: <Play className="h-3 w-3" />, color: 'bg-violet-500/10 text-violet-500' },
+  ROUTE: { label: '路线', icon: <Map className="h-3 w-3" />, color: 'bg-emerald-500/10 text-emerald-500' },
+  JOURNEY: { label: '旅程', icon: <Compass className="h-3 w-3" />, color: 'bg-amber-500/10 text-amber-500' },
+  GUIDE: { label: '攻略', icon: <BookOpen className="h-3 w-3" />, color: 'bg-blue-500/10 text-blue-500' },
+  MOMENT: { label: '动态', icon: <MessageSquare className="h-3 w-3" />, color: 'bg-pink-500/10 text-pink-500' },
+};
+
 interface PostCardProps {
   post: Post;
 }
