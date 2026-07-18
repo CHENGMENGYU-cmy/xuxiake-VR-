@@ -162,7 +162,23 @@ export class PostsService {
     if (!post) throw new NotFoundException('内容不存在');
     post.viewCount += 1;
     await this.postRepo.save(post);
-    return this.formatPost(post);
+
+    // 加载路线详情
+    let routeDetail = null;
+    if (post.postType === 'ROUTE') {
+      routeDetail = await this.routeRepo.findOne({ where: { postId: id } });
+    }
+
+    // 加载旅程数据
+    let journey = null;
+    if (post.postType === 'JOURNEY') {
+      journey = await this.journeyRepo.findOne({
+        where: { postId: id },
+        relations: { stops: true },
+      });
+    }
+
+    return { ...this.formatPost(post), routeDetail, journey };
   }
 
   async createPost(userId: string, dto: CreatePostDto) {
