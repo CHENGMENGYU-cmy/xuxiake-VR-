@@ -180,6 +180,13 @@ export interface CreatePostDto {
       mediaUrl?: string;
     }[];
   };
+  guideDetail?: {
+    destination?: string;
+    category?: 'FOOD' | 'STAY' | 'TRANSPORT' | 'TICKET' | 'TIPS';
+    bestSeason?: string;
+    budgetLevel?: 'BUDGET' | 'MID' | 'LUXURY';
+    richContent?: string;
+  };
 }
 
 export interface CreateCommentDto {
