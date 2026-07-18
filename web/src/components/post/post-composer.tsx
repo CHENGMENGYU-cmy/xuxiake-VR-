@@ -366,6 +366,111 @@ export function PostComposer() {
 
             {expanded && (
               <div className="space-y-3">
+                {/* 内容类型选择 */}
+                <div className="flex flex-wrap gap-1">
+                  {postTypeOptions.map((opt) => {
+                    const Icon = opt.icon;
+                    const isActive = postType === opt.type;
+                    return (
+                      <Button
+                        key={opt.type}
+                        variant={isActive ? 'secondary' : 'ghost'}
+                        size="sm"
+                        className={`gap-1.5 text-xs ${isActive ? '' : opt.color}`}
+                        onClick={() => setPostType(opt.type)}
+                      >
+                        <Icon className="h-3.5 w-3.5" />
+                        {opt.label}
+                      </Button>
+                    );
+                  })}
+                </div>
+
+                {/* 标签选择 */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="gap-1 text-xs text-muted-foreground"
+                      onClick={() => setShowTagPicker(!showTagPicker)}
+                    >
+                      # 添加标签
+                      {selectedTags.length > 0 && (
+                        <span className="text-primary">({selectedTags.length})</span>
+                      )}
+                    </Button>
+                  </div>
+                  {selectedTags.length > 0 && (
+                    <div className="flex flex-wrap gap-1">
+                      {selectedTags.map((tag) => (
+                        <Badge
+                          key={tag.id}
+                          variant="secondary"
+                          className="gap-1 cursor-pointer text-xs hover:bg-destructive/10"
+                          onClick={() => toggleTag(tag)}
+                        >
+                          {tag.icon} {tag.name}
+                          <X className="h-3 w-3" />
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+                  {showTagPicker && (
+                    <div className="rounded-lg border bg-background p-2 shadow-sm">
+                      <div className="flex flex-wrap gap-1">
+                        {allTags.map((tag) => {
+                          const isSelected = selectedTags.some((t) => t.id === tag.id);
+                          return (
+                            <button
+                              key={tag.id}
+                              onClick={() => toggleTag(tag)}
+                              className={`rounded-full px-2.5 py-1 text-xs transition-colors ${
+                                isSelected
+                                  ? 'bg-primary text-primary-foreground'
+                                  : 'bg-muted hover:bg-muted/80 text-muted-foreground'
+                              }`}
+                            >
+                              {tag.icon} {tag.name}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* 话题输入 */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-muted-foreground">#话题</span>
+                    <Input
+                      placeholder="输入话题名称，回车确认"
+                      value={topicInput}
+                      onChange={(e) => setTopicInput(e.target.value)}
+                      onKeyDown={handleTopicKeyDown}
+                      className="h-7 flex-1 text-xs"
+                      disabled={topicNames.length >= 5}
+                    />
+                  </div>
+                  {topicNames.length > 0 && (
+                    <div className="flex flex-wrap gap-1">
+                      {topicNames.map((name) => (
+                        <Badge
+                          key={name}
+                          variant="outline"
+                          className="gap-1 cursor-pointer text-xs hover:bg-destructive/10"
+                          onClick={() => removeTopic(name)}
+                        >
+                          #{name}
+                          <X className="h-3 w-3" />
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* 媒体按钮 */}
                 <div className="flex flex-wrap gap-1">
                   {mediaButtons.map((btn) => {
                     const Icon = btn.icon;
