@@ -137,86 +137,79 @@ export default function MessagesPage() {
 
   return (
     <div className="flex h-[calc(100vh-8rem)] flex-col">
-      {/* 固定头部 */}
-      <div className="shrink-0 space-y-4 pb-4">
+      {/* 固定头部：标题 + 好友选择 + 标签页 */}
+      <div className="shrink-0 space-y-3">
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-bold">消息</h1>
-          <Button size="sm" onClick={loadFriends}>
-            发起对话
-          </Button>
+          <Button size="sm" onClick={loadFriends}>发起对话</Button>
         </div>
 
         {/* 好友选择弹层 */}
         {showFriends && (
-        <div className="rounded-lg border bg-card p-4">
-          <div className="mb-3 flex items-center justify-between">
-            <p className="text-sm font-medium">选择好友开始对话</p>
-            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setShowFriends(false)}>
-              <X className="h-4 w-4" />
-            </Button>
+          <div className="rounded-lg border bg-card p-4">
+            <div className="mb-3 flex items-center justify-between">
+              <p className="text-sm font-medium">选择好友开始对话</p>
+              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setShowFriends(false)}>
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+            {friendsLoading ? (
+              <div className="flex justify-center py-4">
+                <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+              </div>
+            ) : friends.length === 0 ? (
+              <p className="py-4 text-center text-sm text-muted-foreground">暂无互关好友</p>
+            ) : (
+              <div className="space-y-1">
+                {friends.map((f: any) => (
+                  <button
+                    key={f.id}
+                    className="flex w-full items-center gap-3 rounded-lg p-2 text-left hover:bg-accent disabled:opacity-50"
+                    onClick={() => startChat(f.id)}
+                    disabled={startingChat === f.id}
+                  >
+                    <Avatar className="h-9 w-9">
+                      <AvatarImage src={f.avatarUrl || undefined} alt={f.displayName} />
+                      <AvatarFallback>{f.displayName?.[0]}</AvatarFallback>
+                    </Avatar>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium">{f.displayName}</p>
+                      <p className="truncate text-xs text-muted-foreground">{f.bio || `@${f.username}`}</p>
+                    </div>
+                    {startingChat === f.id && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
-          {friendsLoading ? (
-            <div className="flex justify-center py-4">
-              <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-            </div>
-          ) : friends.length === 0 ? (
-            <p className="py-4 text-center text-sm text-muted-foreground">暂无互关好友</p>
-          ) : (
-            <div className="space-y-1">
-              {friends.map((f: any) => (
-                <button
-                  key={f.id}
-                  className="flex w-full items-center gap-3 rounded-lg p-2 text-left hover:bg-accent disabled:opacity-50"
-                  onClick={() => startChat(f.id)}
-                  disabled={startingChat === f.id}
-                >
-                  <Avatar className="h-9 w-9">
-                    <AvatarImage src={f.avatarUrl || undefined} alt={f.displayName} />
-                    <AvatarFallback>{f.displayName?.[0]}</AvatarFallback>
-                  </Avatar>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium">{f.displayName}</p>
-                    <p className="truncate text-xs text-muted-foreground">{f.bio || `@${f.username}`}</p>
-                  </div>
-                  {startingChat === f.id && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
+        )}
 
-      {/* 标签页切换 */}
-      <div className="flex gap-1 rounded-lg bg-muted p-1">
-        <button
-          className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-            activeTab === 'NORMAL'
-              ? 'bg-background text-foreground shadow-sm'
-              : 'text-muted-foreground hover:text-foreground'
-          }`}
-          onClick={() => setActiveTab('NORMAL')}
-        >
-          私信
-        </button>
-        <button
-          className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-            activeTab === 'REQUEST'
-              ? 'bg-background text-foreground shadow-sm'
-              : 'text-muted-foreground hover:text-foreground'
-          }`}
-          onClick={() => setActiveTab('REQUEST')}
-        >
-          陌生人消息
-          {requestConversations.length > 0 && (
-            <Badge className="ml-2 h-5 min-w-5 bg-orange-500 px-1.5 text-xs">
-              {requestConversations.length}
-            </Badge>
-          )}
-        </button>
+        {/* 标签页切换 */}
+        <div className="flex gap-1 rounded-lg bg-muted p-1">
+          <button
+            className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+              activeTab === 'NORMAL' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
+            }`}
+            onClick={() => setActiveTab('NORMAL')}
+          >
+            私信
+          </button>
+          <button
+            className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+              activeTab === 'REQUEST' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
+            }`}
+            onClick={() => setActiveTab('REQUEST')}
+          >
+            陌生人消息
+            {requestConversations.length > 0 && (
+              <Badge className="ml-2 h-5 min-w-5 bg-orange-500 px-1.5 text-xs">{requestConversations.length}</Badge>
+            )}
+          </button>
+        </div>
       </div>
 
-      {/* 会话列表 */}
-      <div className="rounded-lg border bg-card">
+      {/* 可滚动的会话列表 */}
+      <div className="mt-3 flex-1 overflow-y-auto rounded-lg border bg-card">
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
@@ -231,10 +224,7 @@ export default function MessagesPage() {
                 return (
                   <div key={conv.id}>
                     {idx > 0 && <Separator />}
-                    <Link
-                      href={`/messages/${conv.id}`}
-                      className="flex items-center gap-3 p-4 transition-colors hover:bg-muted/50"
-                    >
+                    <Link href={`/messages/${conv.id}`} className="flex items-center gap-3 p-4 transition-colors hover:bg-muted/50">
                       {conv.type === 'GROUP' ? (
                         <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
                           <Users className="h-6 w-6 text-primary" />
@@ -252,25 +242,16 @@ export default function MessagesPage() {
                           </span>
                           <span className="text-xs text-muted-foreground">
                             {conv.lastMessage?.createdAt
-                              ? new Date(conv.lastMessage.createdAt).toLocaleString('zh-CN', {
-                                  month: 'numeric',
-                                  day: 'numeric',
-                                  hour: 'numeric',
-                                  minute: 'numeric',
-                                })
+                              ? new Date(conv.lastMessage.createdAt).toLocaleString('zh-CN', { month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' })
                               : ''}
                           </span>
                         </div>
                         <div className="flex items-center justify-between">
                           <p className="truncate text-sm text-muted-foreground">
-                            {conv.lastMessage?.mediaType === 'IMAGE'
-                              ? '[图片]'
-                              : conv.lastMessage?.content || '暂无消息'}
+                            {conv.lastMessage?.mediaType === 'IMAGE' ? '[图片]' : conv.lastMessage?.content || '暂无消息'}
                           </p>
                           {conv.unreadCount > 0 && (
-                            <Badge className="ml-2 h-5 min-w-5 bg-primary px-1.5 text-xs">
-                              {conv.unreadCount}
-                            </Badge>
+                            <Badge className="ml-2 h-5 min-w-5 bg-primary px-1.5 text-xs">{conv.unreadCount}</Badge>
                           )}
                         </div>
                       </div>
@@ -291,50 +272,28 @@ export default function MessagesPage() {
                   <div key={conv.id}>
                     {idx > 0 && <Separator />}
                     <div className="flex items-center gap-3 p-4">
-                      <Link
-                        href={`/messages/${conv.id}`}
-                        className="flex flex-1 items-center gap-3"
-                      >
+                      <Link href={`/messages/${conv.id}`} className="flex flex-1 items-center gap-3">
                         <Avatar className="h-12 w-12">
                           <AvatarImage src={otherMember?.avatarUrl} alt={otherMember?.displayName} />
                           <AvatarFallback>{otherMember?.displayName?.[0]}</AvatarFallback>
                         </Avatar>
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center justify-between">
-                            <span className="text-sm font-semibold">
-                              {otherMember?.displayName}
-                            </span>
+                            <span className="text-sm font-semibold">{otherMember?.displayName}</span>
                             <span className="text-xs text-muted-foreground">
                               {conv.lastMessage?.createdAt
-                                ? new Date(conv.lastMessage.createdAt).toLocaleString('zh-CN', {
-                                    month: 'numeric',
-                                    day: 'numeric',
-                                    hour: 'numeric',
-                                    minute: 'numeric',
-                                  })
+                                ? new Date(conv.lastMessage.createdAt).toLocaleString('zh-CN', { month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' })
                                 : ''}
                             </span>
                           </div>
-                          <p className="truncate text-sm text-muted-foreground">
-                            {conv.lastMessage?.content || '暂无消息'}
-                          </p>
+                          <p className="truncate text-sm text-muted-foreground">{conv.lastMessage?.content || '暂无消息'}</p>
                         </div>
                       </Link>
                       <div className="flex gap-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="h-8 w-8 p-0"
-                          onClick={() => handleAcceptRequest(conv.id)}
-                        >
+                        <Button size="sm" variant="outline" className="h-8 w-8 p-0" onClick={() => handleAcceptRequest(conv.id)}>
                           <Check className="h-4 w-4" />
                         </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="h-8 w-8 p-0"
-                          onClick={() => handleRejectRequest(conv.id)}
-                        >
+                        <Button size="sm" variant="outline" className="h-8 w-8 p-0" onClick={() => handleRejectRequest(conv.id)}>
                           <XIcon className="h-4 w-4" />
                         </Button>
                       </div>
