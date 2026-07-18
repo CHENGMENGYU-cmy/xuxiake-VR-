@@ -152,6 +152,14 @@ export class UsersController {
     if (!existing) {
       const follow = this.followRepo.create({ id: uuidv4(), followerId: userId, followingId: targetId });
       await this.followRepo.save(follow);
+
+      const follower = await this.userRepo.findOne({ where: { id: userId } });
+      await this.notificationsService.create(
+        targetId,
+        userId,
+        'FOLLOW',
+        `${follower?.displayName || '有人'}关注了你`,
+      );
     }
     return { success: true, message: '关注成功' };
   }
