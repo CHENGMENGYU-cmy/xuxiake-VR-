@@ -1,6 +1,78 @@
 项目修改记录
 ================================================================================
 
+【2026-07-18 内容分类体系 Phase 4 - 攻略与合集】
+
+--------------------------------------------------------------------------------
+第1条
+
+  修改时间：2026-07-18 22:30
+  修改位置：server/sql/migrate-guide-collection.sql
+  修改原因：为攻略和合集功能创建数据表
+  修改内容：
+    - 新建 guide_details 表（目的地/分类/最佳季节/预算/富文本内容）
+    - 新建 collections 表（合集名称/描述/封面/公开状态/帖子数）
+    - 新建 collection_posts 表（合集-帖子关联，支持排序）
+  修改效果：数据库支持攻略结构化数据和内容合集功能
+
+第2条
+
+  修改时间：2026-07-18 22:30
+  修改位置：server/src/entities/guide-detail.entity.ts, collection.entity.ts, collection-post.entity.ts
+  修改原因：TypeORM 实体定义
+  修改内容：
+    - 新建 GuideDetail 实体（与 Post 一对一关联）
+    - 新建 Collection 实体（与 User 多对一关联）
+    - 新建 CollectionPost 实体（Collection 和 Post 的多对多关联）
+  修改效果：后端实体支持攻略和合集数据模型
+
+第3条
+
+  修改时间：2026-07-18 22:30
+  修改位置：server/src/modules/posts/posts.module.ts, posts.service.ts, posts.controller.ts, common/interfaces.ts
+  修改原因：后端服务层支持攻略创建和合集CRUD
+  修改内容：
+    - PostsModule 注册 GuideDetail/Collection/CollectionPost 实体
+    - createPost 支持 GUIDE 类型自动创建攻略详情
+    - getPostById 关联加载 guideDetail
+    - 新增合集 CRUD：createCollection/getCollections/getCollectionById
+    - 新增合集帖子管理：addPostToCollection/removePostFromCollection
+    - 新增 6 个 API 端点：collections CRUD + posts 管理
+  修改效果：后端完整支持攻略发布和合集管理
+
+第4条
+
+  修改时间：2026-07-18 22:30
+  修改位置：web/src/types/index.ts, web/src/lib/post-api.ts
+  修改原因：前端类型和API同步
+  修改内容：
+    - 新增 GuideCategory/BudgetLevel/GuideDetail/Collection 接口
+    - Post 接口新增 guideDetail 字段
+    - CreatePostPayload 新增 guideDetail 字段
+    - 新增合集 API 函数（create/get/getPosts/addPost/removePost）
+  修改效果：前端类型完整支持攻略和合集
+
+第5条
+
+  修改时间：2026-07-18 22:30
+  修改位置：web/src/components/post/post-composer.tsx
+  修改原因：发布器支持攻略专属字段
+  修改内容：
+    - 选择 GUIDE 时显示攻略信息面板（目的地/分类/最佳季节/预算）
+    - 提交时自动携带 guideDetail 数据
+    - 发布后重置攻略状态
+  修改效果：用户可发布带结构化数据的攻略帖子
+
+第6条
+
+  修改时间：2026-07-18 22:30
+  修改位置：web/src/components/post/post-card.tsx
+  修改原因：帖子卡片展示攻略详情
+  修改内容：
+    - GUIDE 类型帖子显示攻略信息条（分类/目的地/季节/预算徽章）
+    - 新增 guideCategoryLabels/budgetLabels 映射
+  修改效果：帖子卡片直观展示攻略的结构化信息
+
 【2026-07-18 内容分类体系 Phase 3 - 路线与旅程】
 
 --------------------------------------------------------------------------------
