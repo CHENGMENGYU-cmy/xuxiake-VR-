@@ -375,6 +375,9 @@ export class SocialController {
     return { success: true, data: paged, page: pageNum };
   }
 
+  // 内存存储推荐反馈（后续可持久化到数据库）
+  private recommendationFeedback = new Map<string, Set<string>>();
+
   @Get('recommended/communities')
   async getRecommendedCommunities(
     @Headers('authorization') auth: string,
@@ -386,11 +389,15 @@ export class SocialController {
 
     const pageNum = parseInt(page || '1');
     const limitNum = parseInt(limit || '20');
-    const skip = (pageNum - 1) * limitNum;
 
-    // 获取用户兴趣
+    // 获取当前用户信息
+    const currentUser = await this.userRepo.findOne({ where: { id: userId } });
+    if (!currentUser) throw new UnauthorizedException('用户不存在');
+
+    // 获取用户兴趣标签
     const userInterests = await this.userInterestRepo.find({ where: { userId } });
     const myTagIds = userInterests.map((ui) => ui.tagId);
+    const myTagIdSet = new Set(myTagIds);
 
     // 获取用户已加入的社群
     const myParts = await this.partRepo.find({ where: { userId } });
@@ -400,87 +407,239 @@ export class SocialController {
       : [];
     const myCommunityIds = myCommunities.map((c) => c.id);
 
-    // 查询公开且活跃的社群
+    // 获取用户不感兴趣的社区ID
+    const notInterested = this.recommendationFeedback.get(userId);
+    const notInterestedIds = notInterested ? [...notInterested] : [];
+
+    // 获取用户关注的人
+    const following = await this.followRepo.find({ where: { followerId: userId } });
+    const followingIds = following.map((f) => f.followingId);
+
+    // 候选社区池：公开、活跃、未加入、未标记不感兴趣
+    const candidateLimit = limitNum * 5;
     const query = this.communityRepo.createQueryBuilder('community');
     query.where('community.is_public = :isPublic', { isPublic: true });
     query.andWhere('community.status = :status', { status: 'ACTIVE' });
-
-    // 排除已加入的社群
     if (myCommunityIds.length > 0) {
       query.andWhere('community.id NOT IN (:...myCommunityIds)', { myCommunityIds });
     }
-
-    // 如果用户有标签，优先推荐匹配的社群
-    if (myTagIds.length > 0) {
-      const matchedCommunityIds = await this.communityTagRepo
-        .createQueryBuilder('ct')
-        .select('ct.community_id', 'communityId')
-        .addSelect('COUNT(*)', 'matchCount')
-        .where('ct.tag_id IN (:...myTagIds)', { myTagIds })
-        .groupBy('ct.community_id')
-        .orderBy('matchCount', 'DESC')
-        .limit(limitNum * 2)
-        .getRawMany();
-
-      const matchedIds = matchedCommunityIds.map((r) => r.communityId);
-      if (matchedIds.length > 0) {
-        query.andWhere('community.id IN (:...matchedIds)', { matchedIds });
-      }
+    if (notInterestedIds.length > 0) {
+      query.andWhere('community.id NOT IN (:...notInterestedIds)', { notInterestedIds });
     }
-
-    // 按成员数量和创建时间排序
     query.orderBy('community.member_count', 'DESC');
     query.addOrderBy('community.created_at', 'DESC');
+    query.limit(candidateLimit);
 
-    query.skip(skip).take(limitNum);
+    const candidates = await query.getMany();
+    if (candidates.length === 0) {
+      return { success: true, data: [], page: pageNum };
+    }
+    const candidateIds = candidates.map((c) => c.id);
 
-    const communities = await query.getMany();
+    // ===== 并行获取所有需要的数据 =====
 
-    // 获取社群标签
-    const communityIds = communities.map((c) => c.id);
-    const communityTags = communityIds.length > 0
-      ? await this.communityTagRepo.find({
-          where: { communityId: In(communityIds) },
-          relations: { tag: true },
-        })
-      : [];
-
+    // 1. 社区标签映射
+    const communityTags = await this.communityTagRepo.find({
+      where: { communityId: In(candidateIds) },
+      relations: { tag: true },
+    });
     const communityTagMap = new Map<string, InterestTag[]>();
     communityTags.forEach((ct) => {
       if (!communityTagMap.has(ct.communityId)) communityTagMap.set(ct.communityId, []);
       communityTagMap.get(ct.communityId)!.push(ct.tag);
     });
 
-    // 获取创建者信息
-    const creatorIds = [...new Set(communities.map((c) => c.creatorId))];
-    const creators = creatorIds.length > 0
-      ? await this.userRepo.findBy({ id: In(creatorIds) })
-      : [];
+    // 2. 社区成员（通过 conversation_participants）
+    const convIds = candidates.map((c) => c.conversationId);
+    const allParticipants = await this.partRepo.find({
+      where: { conversationId: In(convIds) },
+    });
+    // 社区conversationId → 成员userId列表
+    const communityMembersMap = new Map<string, string[]>();
+    allParticipants.forEach((p) => {
+      if (!communityMembersMap.has(p.conversationId)) communityMembersMap.set(p.conversationId, []);
+      communityMembersMap.get(p.conversationId)!.push(p.userId);
+    });
+
+    // 3. 好友在社区内的映射（社交关系信号）
+    const followingIdSet = new Set(followingIds);
+    const friendsInCommunityMap = new Map<string, { id: string; displayName: string; avatarUrl: string | null }[]>();
+    if (followingIds.length > 0) {
+      // 获取所有社区成员中我关注的人
+      const allMemberIds = [...new Set(allParticipants.map((p) => p.userId))];
+      const myFriendsInMembers = allMemberIds.filter((id) => followingIdSet.has(id));
+      if (myFriendsInMembers.length > 0) {
+        const friendUsers = await this.userRepo.findBy({ id: In(myFriendsInMembers) });
+        const friendMap = new Map(friendUsers.map((u) => [u.id, u]));
+        candidates.forEach((c) => {
+          const members = communityMembersMap.get(c.conversationId) || [];
+          const friends = members
+            .filter((mid) => followingIdSet.has(mid) && mid !== userId)
+            .map((mid) => {
+              const u = friendMap.get(mid);
+              return u ? { id: u.id, displayName: u.displayName, avatarUrl: u.avatarUrl } : null;
+            })
+            .filter(Boolean) as { id: string; displayName: string; avatarUrl: string | null }[];
+          if (friends.length > 0) {
+            friendsInCommunityMap.set(c.id, friends);
+          }
+        });
+      }
+    }
+
+    // 4. 地理匹配：社区成员中与用户同 region 的比例
+    const regionScoreMap = new Map<string, number>();
+    if (currentUser.region) {
+      const allMemberIds = [...new Set(allParticipants.map((p) => p.userId))];
+      if (allMemberIds.length > 0) {
+        const memberUsers = await this.userRepo.find({
+          where: { id: In(allMemberIds) },
+          select: ['id', 'region'],
+        });
+        const memberRegionMap = new Map(memberUsers.map((u) => [u.id, u.region]));
+        candidates.forEach((c) => {
+          const members = communityMembersMap.get(c.conversationId) || [];
+          if (members.length === 0) return;
+          const sameRegion = members.filter((mid) => memberRegionMap.get(mid) === currentUser.region).length;
+          regionScoreMap.set(c.id, sameRegion / members.length);
+        });
+      }
+    }
+
+    // 5. 活跃度：社区成员近7天发帖数
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const allMemberIds = [...new Set(allParticipants.map((p) => p.userId))];
+    let recentPostCountMap = new Map<string, number>();
+    if (allMemberIds.length > 0) {
+      const recentPosts = await this.postRepo
+        .createQueryBuilder('post')
+        .select('post.author_id', 'authorId')
+        .addSelect('COUNT(*)', 'postCount')
+        .where('post.author_id IN (:...allMemberIds)', { allMemberIds })
+        .andWhere('post.created_at >= :sevenDaysAgo', { sevenDaysAgo })
+        .andWhere('post.visibility = :vis', { vis: 'PUBLIC' })
+        .groupBy('post.author_id')
+        .getRawMany();
+      const authorPostCountMap = new Map(recentPosts.map((r) => [r.authorId, parseInt(r.postCount)]));
+      candidates.forEach((c) => {
+        const members = communityMembersMap.get(c.conversationId) || [];
+        const total = members.reduce((sum, mid) => sum + (authorPostCountMap.get(mid) || 0), 0);
+        recentPostCountMap.set(c.id, total);
+      });
+    }
+
+    // 6. 创建者信息
+    const creatorIds = [...new Set(candidates.map((c) => c.creatorId))];
+    const creators = await this.userRepo.findBy({ id: In(creatorIds) });
     const creatorMap = new Map(creators.map((u) => [u.id, u]));
 
-    return {
-      success: true,
-      data: communities.map((c) => {
-        const creator = creatorMap.get(c.creatorId);
-        const tags = communityTagMap.get(c.id) || [];
+    // ===== 计算综合得分并排序 =====
+    const scoredCommunities = candidates.map((c) => {
+      const creator = creatorMap.get(c.creatorId);
+      const tags = communityTagMap.get(c.id) || [];
+      const friends = friendsInCommunityMap.get(c.id) || [];
+      const regionRatio = regionScoreMap.get(c.id) || 0;
+      const recentPosts = recentPostCountMap.get(c.id) || 0;
 
-        return {
-          id: c.id,
-          name: c.name,
-          description: c.description,
-          avatarUrl: c.avatarUrl,
-          memberCount: c.memberCount,
-          maxMembers: c.maxMembers,
-          isPublic: c.isPublic,
-          creator: creator
-            ? { id: creator.id, username: creator.username, displayName: creator.displayName, avatarUrl: creator.avatarUrl }
-            : null,
-          tags,
-          createdAt: c.createdAt,
-        };
-      }),
-      page: pageNum,
-    };
+      let matchScore = 0;
+      const matchReasons: { type: string; text: string }[] = [];
+
+      // 1. 兴趣标签匹配（25分）
+      const communityTagIds = tags.map((t) => t.id);
+      const sharedTagCount = communityTagIds.filter((tid) => myTagIdSet.has(tid)).length;
+      if (sharedTagCount > 0 && myTagIds.length > 0) {
+        const tagScore = (sharedTagCount / myTagIds.length) * 25;
+        matchScore += tagScore;
+        matchReasons.push({ type: 'INTEREST', text: `与你的${sharedTagCount}个兴趣标签匹配` });
+      }
+
+      // 2. 社交关系（20分）
+      if (friends.length > 0 && followingIds.length > 0) {
+        const socialScore = Math.min((friends.length / followingIds.length) * 40, 20);
+        matchScore += socialScore;
+        if (friends.length <= 2) {
+          matchReasons.push({
+            type: 'FRIENDS',
+            text: `${friends.map((f) => f.displayName).join('、')}在这里`,
+          });
+        } else {
+          matchReasons.push({
+            type: 'FRIENDS',
+            text: `${friends[0].displayName}等${friends.length}位好友在这里`,
+          });
+        }
+      }
+
+      // 3. 地理匹配（10分）
+      if (regionRatio > 0) {
+        matchScore += regionRatio * 10;
+        const percent = Math.round(regionRatio * 100);
+        if (percent >= 10) {
+          matchReasons.push({ type: 'REGION', text: `${currentUser.region}用户占比${percent}%` });
+        }
+      }
+
+      // 4. 活跃度（5分）
+      if (recentPosts > 0) {
+        const activityScore = Math.min(recentPosts / 5 * 5, 5);
+        matchScore += activityScore;
+        matchReasons.push({ type: 'ACTIVITY', text: `近7天有${recentPosts}条新动态` });
+      }
+
+      return {
+        id: c.id,
+        name: c.name,
+        description: c.description,
+        avatarUrl: c.avatarUrl,
+        memberCount: c.memberCount,
+        maxMembers: c.maxMembers,
+        isPublic: c.isPublic,
+        creator: creator
+          ? { id: creator.id, username: creator.username, displayName: creator.displayName, avatarUrl: creator.avatarUrl }
+          : null,
+        tags,
+        createdAt: c.createdAt,
+        matchScore: Math.round(matchScore * 10) / 10,
+        matchReasons,
+        friendsInCommunity: friends.length > 0 ? friends.slice(0, 5) : undefined,
+        recentPostCount: recentPosts > 0 ? recentPosts : undefined,
+      };
+    });
+
+    // 按综合得分降序，得分相同按成员数降序
+    scoredCommunities.sort((a, b) => {
+      if (b.matchScore !== a.matchScore) return b.matchScore - a.matchScore;
+      return b.memberCount - a.memberCount;
+    });
+
+    // 分页截取
+    const skip = (pageNum - 1) * limitNum;
+    const paged = scoredCommunities.slice(skip, skip + limitNum);
+
+    return { success: true, data: paged, page: pageNum };
+  }
+
+  @Post('recommended/communities/:id/feedback')
+  async submitCommunityFeedback(
+    @Headers('authorization') auth: string,
+    @Param('id') communityId: string,
+    @Body() body: { type: 'NOT_INTERESTED' | 'INTERESTED' },
+  ) {
+    const userId = this.getUserId(auth);
+    if (!userId) throw new UnauthorizedException('请先登录');
+
+    if (!this.recommendationFeedback.has(userId)) {
+      this.recommendationFeedback.set(userId, new Set());
+    }
+    const userFeedback = this.recommendationFeedback.get(userId)!;
+
+    if (body.type === 'NOT_INTERESTED') {
+      userFeedback.add(communityId);
+    } else {
+      userFeedback.delete(communityId);
+    }
+
+    return { success: true, message: '反馈已记录' };
   }
 
   // ==================== 社群相关 ====================
