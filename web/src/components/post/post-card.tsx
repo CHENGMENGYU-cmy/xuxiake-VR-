@@ -41,6 +41,15 @@ const postTypeConfig: Record<string, { label: string; icon: React.ReactNode; col
   MOMENT: { label: '动态', icon: <MessageSquare className="h-3 w-3" />, color: 'bg-pink-500/10 text-pink-500' },
 };
 
+const difficultyLabels: Record<string, string> = { EASY: '简单', MODERATE: '中等', HARD: '困难', EXPERT: '专家' };
+const difficultyColors: Record<string, string> = {
+  EASY: 'bg-green-500/10 text-green-600',
+  MODERATE: 'bg-yellow-500/10 text-yellow-600',
+  HARD: 'bg-orange-500/10 text-orange-600',
+  EXPERT: 'bg-red-500/10 text-red-600',
+};
+const routeTypeLabels: Record<string, string> = { HIKE: '🥾徒步', BIKE: '🚴骑行', DRIVE: '🚗自驾', PADDLE: '🛶皮划艇', CLIMB: '🧗攀岩' };
+
 interface PostCardProps {
   post: Post;
 }
