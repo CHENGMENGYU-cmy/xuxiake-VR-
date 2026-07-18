@@ -147,4 +147,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   handleGetPresence() {
     return Array.from(this.onlineUsers.keys());
   }
+
+  emitNotification(userId: string, data: { notification: any; unreadCount: number }) {
+    const sockets = this.onlineUsers.get(userId);
+    if (sockets) {
+      sockets.forEach((socketId) => {
+        this.server.to(socketId).emit('notification:new', data);
+      });
+    }
+  }
 }
