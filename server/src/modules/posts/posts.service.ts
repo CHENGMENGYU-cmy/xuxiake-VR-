@@ -246,15 +246,7 @@ export class PostsService {
     await this.postRepo.save(post);
 
     if (post.authorId !== userId) {
-      const notif = this.notifRepo.create({
-        id: uuidv4(),
-        recipientId: post.authorId,
-        senderId: userId,
-        type: 'COMMENT',
-        message: '有人评论了你的内容',
-        postId,
-      });
-      await this.notifRepo.save(notif);
+      await this.notificationsService.create(post.authorId, userId, 'COMMENT', '有人评论了你的内容', postId);
     }
 
     const commentAuthor = await this.userRepo.findOne({ where: { id: userId } });
