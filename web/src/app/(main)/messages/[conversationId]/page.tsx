@@ -436,9 +436,21 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
                     />
                   )}
 
-                  <p className={`mt-0.5 text-[10px] text-muted-foreground ${isMine ? 'text-right' : 'text-left'}`}>
-                    {new Date(msg.createdAt).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}
-                  </p>
+                  <div className={`mt-0.5 flex items-center gap-1 ${isMine ? 'justify-end' : 'justify-start'}`}>
+                    <p className="text-[10px] text-muted-foreground">
+                      {new Date(msg.createdAt).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                    {/* 已读指示：仅最后一条自己发的消息显示 */}
+                    {isMine && (() => {
+                      const myLastMsg = [...messages].reverse().find((m) => m.sender?.id === currentUser?.id);
+                      if (myLastMsg?.id !== msg.id) return null;
+                      const otherLastRead = Object.values(readStatus)[0];
+                      if (otherLastRead && new Date(otherLastRead) >= new Date(msg.createdAt)) {
+                        return <span className="text-[10px] text-primary">已读</span>;
+                      }
+                      return null;
+                    })()}
+                  </div>
                 </div>
               </div>
             </div>
