@@ -38,6 +38,27 @@ export class PostsController {
     return { success: true, data: topics };
   }
 
+  @Get('topics/:id')
+  async getTopicById(@Param('id') id: string) {
+    const topic = await this.postsService.getTopicById(id);
+    return { success: true, data: topic };
+  }
+
+  @Get('topics/:id/posts')
+  async getTopicPosts(
+    @Param('id') id: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+    @Query('sort') sort?: string,
+  ) {
+    const result = await this.postsService.getTopicPosts(id, {
+      page: page ? parseInt(page) : 1,
+      limit: limit ? parseInt(limit) : 10,
+      sort: sort || 'latest',
+    });
+    return { success: true, ...result };
+  }
+
   @Get()
   async getPosts(
     @Query('cursor') cursor?: string,
