@@ -1,22 +1,33 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { Video, Image, Mic, Link2, Languages, Send, AlertCircle, X, Loader2, ExternalLink } from 'lucide-react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { Video, Image, Mic, Link2, Languages, Send, AlertCircle, X, Loader2, ExternalLink, FileText, Map, Compass, BookOpen, MessageSquare } from 'lucide-react';
 import { toast } from 'sonner';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { useAuthStore } from '@/stores/auth-store';
 import { usePostStore } from '@/stores/post-store';
 import { uploadImage, getImageDimensions, fetchLinkPreview } from '@/lib/media-api';
-import { CreatePostPayload } from '@/lib/post-api';
+import { CreatePostPayload, getTags } from '@/lib/post-api';
+import type { PostType, InterestTag } from '@/types';
 
 const MAX_CONTENT_LENGTH = 500;
 const MAX_IMAGES = 9;
 
 type MediaItem = NonNullable<CreatePostPayload['mediaItems']>[number];
+
+const postTypeOptions: { type: PostType; label: string; icon: typeof FileText; color: string }[] = [
+  { type: 'NOTE', label: '笔记', icon: FileText, color: 'text-primary' },
+  { type: 'VR_MEDIA', label: 'VR内容', icon: Video, color: 'text-violet-500' },
+  { type: 'ROUTE', label: '路线', icon: Map, color: 'text-emerald-500' },
+  { type: 'JOURNEY', label: '旅程', icon: Compass, color: 'text-amber-500' },
+  { type: 'GUIDE', label: '攻略', icon: BookOpen, color: 'text-blue-500' },
+  { type: 'MOMENT', label: '动态', icon: MessageSquare, color: 'text-pink-500' },
+];
 
 const mediaButtons = [
   { type: 'VIDEO', label: 'VR视频', icon: Video, color: 'text-primary hover:bg-primary/10' },
