@@ -297,6 +297,19 @@ export class PostsService {
       }
     }
 
+    // 处理攻略详情（GUIDE类型）
+    if (dto.postType === 'GUIDE' && dto.guideDetail) {
+      const guide = this.guideRepo.create({
+        postId,
+        destination: dto.guideDetail.destination || null,
+        category: dto.guideDetail.category || 'TIPS',
+        bestSeason: dto.guideDetail.bestSeason || null,
+        budgetLevel: dto.guideDetail.budgetLevel || 'MID',
+        richContent: dto.guideDetail.richContent || null,
+      });
+      await this.guideRepo.save(guide);
+    }
+
     return this.getPostById(postId);
   }
 
