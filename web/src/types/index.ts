@@ -218,6 +218,22 @@ export interface CommunityChallenge {
   createdAt: string;
 }
 
+// ===== 挑战排行榜 =====
+export interface ChallengeLeaderboardEntry {
+  rank: number;
+  userId: string;
+  user: {
+    id: string;
+    username: string;
+    displayName: string;
+    avatarUrl?: string | null;
+  } | null;
+  note?: string | null;
+  score: number;
+  postId?: string | null;
+  joinedAt: string;
+}
+
 // ===== 推荐用户 =====
 export interface RecommendedUser extends User {
   matchReasons?: string[];

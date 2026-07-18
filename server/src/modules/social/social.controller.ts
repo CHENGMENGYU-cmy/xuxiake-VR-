@@ -1184,4 +1184,37 @@ export class SocialController {
 
     return this.socialService.getCommunityPosts(communityId, userId || undefined, pageNum, limitNum);
   }
+
+  // ==================== 挑战参与 ====================
+
+  @Post('challenges/:challengeId/join')
+  async joinChallenge(
+    @Headers('authorization') auth: string,
+    @Param('challengeId') challengeId: string,
+    @Body() body: { note?: string; postId?: string },
+  ) {
+    const userId = this.getUserId(auth);
+    if (!userId) throw new UnauthorizedException('请先登录');
+
+    const entry = await this.socialService.joinChallenge(challengeId, userId, body);
+    return { success: true, data: entry };
+  }
+
+  @Get('challenges/:challengeId/leaderboard')
+  async getChallengeLeaderboard(@Param('challengeId') challengeId: string) {
+    const leaderboard = await this.socialService.getChallengeLeaderboard(challengeId);
+    return { success: true, data: leaderboard };
+  }
+
+  @Get('challenges/:challengeId/status')
+  async getChallengeStatus(
+    @Headers('authorization') auth: string,
+    @Param('challengeId') challengeId: string,
+  ) {
+    const userId = this.getUserId(auth);
+    if (!userId) throw new UnauthorizedException('请先登录');
+
+    const status = await this.socialService.getChallengeParticipationStatus(challengeId, userId);
+    return { success: true, data: status };
+  }
 }

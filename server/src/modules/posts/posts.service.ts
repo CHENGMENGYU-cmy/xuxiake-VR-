@@ -133,6 +133,7 @@ export class PostsService {
     const post = this.postRepo.create({
       id: postId,
       authorId: userId,
+      communityId: dto.communityId || null,
       content: dto.content || null,
       locationLat: dto.location?.lat || null,
       locationLng: dto.location?.lng || null,

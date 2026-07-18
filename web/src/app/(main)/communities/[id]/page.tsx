@@ -4,8 +4,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
-  ArrowLeft, Users, MessageCircle, Loader2, LogOut, Settings,
-  Megaphone, Trophy, Info, ImageIcon, MapPin, Globe, Lock,
+  Users, MessageCircle, Loader2, LogOut, Settings,
+  Trophy, ImageIcon, MapPin, Globe, Lock,
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -14,11 +14,19 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import { useAuthStore } from '@/stores/auth-store';
 import {
   getCommunity, joinCommunity, leaveCommunity,
-  getCommunityAnnouncements, getCommunityRoles,
+  getCommunityAnnouncements, getCommunityRoles, getCommunityPosts,
+  createCommunityAnnouncement, deleteCommunityAnnouncement,
 } from '@/lib/social-api';
+import { CommunityPostComposer } from '@/components/community/community-post-composer';
+import { toast } from 'sonner';
 import type { Community, CommunityAnnouncement, CommunityRole } from '@/types';
 
 export default function CommunitySpacePage() {
@@ -207,6 +215,7 @@ export default function CommunitySpacePage() {
           {/* 公告 Tab */}
           <TabsContent value="announcements" className="mt-4">
             <CommunityAnnouncementsTab
+              communityId={communityId}
               announcements={announcements}
               pinnedAnnouncements={pinnedAnnouncements}
               normalAnnouncements={normalAnnouncements}
@@ -239,15 +248,18 @@ export default function CommunitySpacePage() {
 function CommunityPostsTab({ communityId, isMember }: { communityId: string; isMember: boolean }) {
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
-    import('@/lib/social-api').then(({ getCommunityPosts }) => {
-      getCommunityPosts(communityId, 1, 20)
-        .then((res) => setPosts(res.data || []))
-        .catch(() => {})
-        .finally(() => setLoading(false));
-    });
-  }, [communityId]);
+    getCommunityPosts(communityId, 1, 20)
+      .then((res) => setPosts(res.data || []))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [communityId, refreshKey]);
+
+  const handlePostCreated = () => {
+    setRefreshKey((k) => k + 1);
+  };
 
   if (loading) {
     return (
@@ -261,14 +273,9 @@ function CommunityPostsTab({ communityId, isMember }: { communityId: string; isM
 
   return (
     <div className="space-y-4">
-      {/* 置顶公告预览 */}
+      {/* 发帖组件 */}
       {isMember && (
-        <Card className="border-primary/20 bg-primary/5">
-          <CardContent className="flex items-center gap-3 py-3">
-            <Megaphone className="h-4 w-4 text-primary" />
-            <p className="text-sm text-muted-foreground">分享你的VR旅行体验到社群...</p>
-          </CardContent>
-        </Card>
+        <CommunityPostComposer communityId={communityId} onPostCreated={handlePostCreated} />
       )}
 
       {posts.length === 0 ? (
@@ -314,56 +321,167 @@ function CommunityPostsTab({ communityId, isMember }: { communityId: string; isM
 // ==================== 公告 Tab ====================
 
 function CommunityAnnouncementsTab({
-  announcements, pinnedAnnouncements, normalAnnouncements, isModerator,
+  communityId, announcements: initialAnnouncements, pinnedAnnouncements: initialPinned, normalAnnouncements: initialNormal, isModerator,
 }: {
+  communityId: string;
   announcements: CommunityAnnouncement[];
   pinnedAnnouncements: CommunityAnnouncement[];
   normalAnnouncements: CommunityAnnouncement[];
   isModerator: boolean;
 }) {
-  if (announcements.length === 0) {
-    return (
-      <Card>
-        <CardContent className="py-12 text-center text-sm text-muted-foreground">
-          暂无公告
-        </CardContent>
-      </Card>
-    );
-  }
+  const [announcements, setAnnouncements] = useState(initialAnnouncements);
+  const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const [newTitle, setNewTitle] = useState('');
+  const [newContent, setNewContent] = useState('');
+  const [newPinned, setNewPinned] = useState(false);
+  const [creating, setCreating] = useState(false);
+
+  // 同步外部数据
+  useEffect(() => { setAnnouncements(initialAnnouncements); }, [initialAnnouncements]);
+
+  const pinnedAnnouncements = announcements.filter((a) => a.isPinned);
+  const normalAnnouncements = announcements.filter((a) => !a.isPinned);
+
+  const handleCreate = async () => {
+    if (!newTitle.trim() || !newContent.trim()) return;
+    setCreating(true);
+    try {
+      const created = await createCommunityAnnouncement(communityId, {
+        title: newTitle.trim(),
+        content: newContent.trim(),
+        isPinned: newPinned,
+      });
+      setAnnouncements((prev) => [created, ...prev]);
+      setNewTitle('');
+      setNewContent('');
+      setNewPinned(false);
+      setShowCreateDialog(false);
+      toast.success('公告已发布');
+    } catch {
+      toast.error('发布失败');
+    } finally {
+      setCreating(false);
+    }
+  };
+
+  const handleDelete = async (announcementId: string) => {
+    if (!confirm('确定删除此公告？')) return;
+    try {
+      await deleteCommunityAnnouncement(communityId, announcementId);
+      setAnnouncements((prev) => prev.filter((a) => a.id !== announcementId));
+      toast.success('公告已删除');
+    } catch {
+      toast.error('删除失败');
+    }
+  };
 
   return (
     <div className="space-y-4">
-      {pinnedAnnouncements.map((a) => (
-        <Card key={a.id} className="border-primary/20">
-          <CardHeader className="pb-3">
+      {/* 创建按钮 */}
+      {isModerator && (
+        <div className="flex justify-end">
+          <Button size="sm" onClick={() => setShowCreateDialog(true)}>
+            发布公告
+          </Button>
+        </div>
+      )}
+
+      {announcements.length === 0 ? (
+        <Card>
+          <CardContent className="py-12 text-center text-sm text-muted-foreground">
+            暂无公告
+          </CardContent>
+        </Card>
+      ) : (
+        <>
+          {pinnedAnnouncements.map((a) => (
+            <Card key={a.id} className="border-primary/20">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Badge variant="default" className="text-xs">置顶</Badge>
+                    <CardTitle className="text-base">{a.title}</CardTitle>
+                  </div>
+                  {isModerator && (
+                    <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={() => handleDelete(a.id)}>
+                      删除
+                    </Button>
+                  )}
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="whitespace-pre-wrap text-sm">{a.content}</p>
+                <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
+                  {a.author && <span>{a.author.displayName}</span>}
+                  <span>{new Date(a.createdAt).toLocaleDateString('zh-CN')}</span>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+          {normalAnnouncements.map((a) => (
+            <Card key={a.id}>
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-base">{a.title}</CardTitle>
+                  {isModerator && (
+                    <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={() => handleDelete(a.id)}>
+                      删除
+                    </Button>
+                  )}
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="whitespace-pre-wrap text-sm">{a.content}</p>
+                <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
+                  {a.author && <span>{a.author.displayName}</span>}
+                  <span>{new Date(a.createdAt).toLocaleDateString('zh-CN')}</span>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </>
+      )}
+
+      {/* 创建公告对话框 */}
+      <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>发布公告</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="announcement-title">标题</Label>
+              <Input
+                id="announcement-title"
+                placeholder="公告标题"
+                value={newTitle}
+                onChange={(e) => setNewTitle(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="announcement-content">内容</Label>
+              <Textarea
+                id="announcement-content"
+                placeholder="公告内容..."
+                value={newContent}
+                onChange={(e) => setNewContent(e.target.value)}
+                rows={5}
+              />
+            </div>
             <div className="flex items-center gap-2">
-              <Badge variant="default" className="text-xs">置顶</Badge>
-              <CardTitle className="text-base">{a.title}</CardTitle>
+              <Switch checked={newPinned} onCheckedChange={setNewPinned} id="pinned" />
+              <Label htmlFor="pinned">置顶</Label>
             </div>
-          </CardHeader>
-          <CardContent>
-            <p className="whitespace-pre-wrap text-sm">{a.content}</p>
-            <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
-              {a.author && <span>{a.author.displayName}</span>}
-              <span>{new Date(a.createdAt).toLocaleDateString('zh-CN')}</span>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
-      {normalAnnouncements.map((a) => (
-        <Card key={a.id}>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base">{a.title}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="whitespace-pre-wrap text-sm">{a.content}</p>
-            <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
-              {a.author && <span>{a.author.displayName}</span>}
-              <span>{new Date(a.createdAt).toLocaleDateString('zh-CN')}</span>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowCreateDialog(false)}>取消</Button>
+            <Button onClick={handleCreate} disabled={!newTitle.trim() || !newContent.trim() || creating}>
+              {creating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+              发布
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
@@ -373,6 +491,9 @@ function CommunityAnnouncementsTab({
 function CommunityChallengesTab({ communityId, isModerator }: { communityId: string; isModerator: boolean }) {
   const [challenges, setChallenges] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [leaderboard, setLeaderboard] = useState<any[]>([]);
+  const [joining, setJoining] = useState<string | null>(null);
 
   useEffect(() => {
     import('@/lib/social-api').then(({ getCommunityChallenges }) => {
@@ -382,6 +503,38 @@ function CommunityChallengesTab({ communityId, isModerator }: { communityId: str
         .finally(() => setLoading(false));
     });
   }, [communityId]);
+
+  const handleExpand = async (challengeId: string) => {
+    if (expandedId === challengeId) {
+      setExpandedId(null);
+      return;
+    }
+    setExpandedId(challengeId);
+    import('@/lib/social-api').then(({ getChallengeLeaderboard }) => {
+      getChallengeLeaderboard(challengeId).then(setLeaderboard).catch(() => setLeaderboard([]));
+    });
+  };
+
+  const handleJoin = async (challengeId: string) => {
+    setJoining(challengeId);
+    try {
+      await import('@/lib/social-api').then(({ joinChallenge }) => joinChallenge(challengeId));
+      setChallenges((prev) => prev.map((c) =>
+        c.id === challengeId ? { ...c, participantCount: c.participantCount + 1 } : c
+      ));
+      toast.success('已参与挑战');
+      // 刷新排行榜
+      if (expandedId === challengeId) {
+        import('@/lib/social-api').then(({ getChallengeLeaderboard }) => {
+          getChallengeLeaderboard(challengeId).then(setLeaderboard).catch(() => {});
+        });
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || '参与失败');
+    } finally {
+      setJoining(null);
+    }
+  };
 
   if (loading) {
     return (
@@ -406,6 +559,7 @@ function CommunityChallengesTab({ communityId, isModerator }: { communityId: str
 
   const statusLabel: Record<string, string> = { UPCOMING: '即将开始', ACTIVE: '进行中', ENDED: '已结束' };
   const statusColor: Record<string, string> = { UPCOMING: 'bg-blue-500', ACTIVE: 'bg-green-500', ENDED: 'bg-gray-400' };
+  const typeLabel: Record<string, string> = { PHOTO: '拍照', ROUTE: '路线', CHECKIN: '打卡', DISTANCE: '距离' };
 
   return (
     <div className="space-y-4">
@@ -413,20 +567,61 @@ function CommunityChallengesTab({ communityId, isModerator }: { communityId: str
         <Card key={c.id}>
           <CardContent className="pt-6">
             <div className="flex items-start justify-between">
-              <div>
+              <div className="flex-1 cursor-pointer" onClick={() => handleExpand(c.id)}>
                 <div className="flex items-center gap-2">
                   <span className={`h-2 w-2 rounded-full ${statusColor[c.status]}`} />
                   <span className="text-xs text-muted-foreground">{statusLabel[c.status]}</span>
+                  <Badge variant="outline" className="text-xs">{typeLabel[c.type] || c.type}</Badge>
                 </div>
                 <h3 className="mt-1 font-medium">{c.title}</h3>
                 {c.description && <p className="mt-1 text-sm text-muted-foreground">{c.description}</p>}
+                <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
+                  <span>{new Date(c.startDate).toLocaleDateString('zh-CN')} - {new Date(c.endDate).toLocaleDateString('zh-CN')}</span>
+                  <span>{c.participantCount} 人参与</span>
+                  {c.maxParticipants > 0 && <span>上限 {c.maxParticipants} 人</span>}
+                </div>
               </div>
-              <Badge variant="outline">{c.type}</Badge>
+              {c.status === 'ACTIVE' && (
+                <Button
+                  size="sm"
+                  onClick={() => handleJoin(c.id)}
+                  disabled={joining === c.id}
+                >
+                  {joining === c.id ? <Loader2 className="h-4 w-4 animate-spin" /> : '参与'}
+                </Button>
+              )}
             </div>
-            <div className="mt-3 flex items-center gap-4 text-xs text-muted-foreground">
-              <span>{new Date(c.startDate).toLocaleDateString('zh-CN')} - {new Date(c.endDate).toLocaleDateString('zh-CN')}</span>
-              <span>{c.participantCount} 人参与</span>
-            </div>
+
+            {/* 排行榜展开区 */}
+            {expandedId === c.id && (
+              <div className="mt-4 border-t pt-4">
+                <h4 className="mb-3 text-sm font-medium">排行榜</h4>
+                {leaderboard.length === 0 ? (
+                  <p className="text-xs text-muted-foreground">暂无参与者</p>
+                ) : (
+                  <div className="space-y-2">
+                    {leaderboard.map((entry) => (
+                      <div key={entry.userId} className="flex items-center gap-3 rounded-md p-2 hover:bg-accent">
+                        <span className="w-6 text-center text-sm font-bold text-muted-foreground">
+                          {entry.rank <= 3 ? ['🥇', '🥈', '🥉'][entry.rank - 1] : entry.rank}
+                        </span>
+                        <Avatar className="h-7 w-7">
+                          <AvatarImage src={entry.user?.avatarUrl || undefined} />
+                          <AvatarFallback>{entry.user?.displayName?.[0]}</AvatarFallback>
+                        </Avatar>
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-medium">{entry.user?.displayName}</p>
+                          {entry.note && <p className="truncate text-xs text-muted-foreground">{entry.note}</p>}
+                        </div>
+                        {entry.score > 0 && (
+                          <span className="text-sm font-medium">{entry.score} 分</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </CardContent>
         </Card>
       ))}

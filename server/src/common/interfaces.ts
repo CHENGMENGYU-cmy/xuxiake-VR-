@@ -149,6 +149,7 @@ export interface CreatePostDto {
   location?: { lat: number; lng: number; name: string };
   vrMetadata?: Record<string, unknown>;
   visibility?: Visibility;
+  communityId?: string;
 }
 
 export interface CreateCommentDto {

@@ -29,6 +29,7 @@ import { CommunityTag } from './entities/community-tag.entity.js';
 import { CommunityAnnouncement } from './entities/community-announcement.entity.js';
 import { CommunityRole } from './entities/community-role.entity.js';
 import { CommunityChallenge } from './entities/community-challenge.entity.js';
+import { CommunityChallengeEntry } from './entities/community-challenge-entry.entity.js';
 import { getDatabaseConfig } from './config/database.config.js';
 import { JwtModule } from '@nestjs/jwt';
 
@@ -45,7 +46,7 @@ import { JwtModule } from '@nestjs/jwt';
       Notification, Conversation, Message,
       ConversationParticipant, UserFollow,
       InterestTag, UserInterest, Community, CommunityTag,
-      CommunityAnnouncement, CommunityRole, CommunityChallenge,
+      CommunityAnnouncement, CommunityRole, CommunityChallenge, CommunityChallengeEntry,
     ]),
     JwtModule.registerAsync({
       imports: [ConfigModule],

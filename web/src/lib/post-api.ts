@@ -4,6 +4,8 @@ import { Post, Visibility } from '@/types';
 export interface CreatePostPayload {
   content: string;
   visibility?: Visibility;
+  communityId?: string;
+  location?: { lat: number; lng: number; name: string };
   mediaItems?: {
     type: string;
     url: string;

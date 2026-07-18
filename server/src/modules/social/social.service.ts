@@ -6,6 +6,7 @@ import { Community } from '../../entities/community.entity.js';
 import { CommunityAnnouncement } from '../../entities/community-announcement.entity.js';
 import { CommunityRole } from '../../entities/community-role.entity.js';
 import { CommunityChallenge } from '../../entities/community-challenge.entity.js';
+import { CommunityChallengeEntry } from '../../entities/community-challenge-entry.entity.js';
 import { CommunityTag } from '../../entities/community-tag.entity.js';
 import { ConversationParticipant } from '../../entities/conversation-participant.entity.js';
 import { Post as PostEntity } from '../../entities/post.entity.js';
@@ -19,6 +20,7 @@ export class SocialService {
     @InjectRepository(CommunityAnnouncement) private readonly announcementRepo: Repository<CommunityAnnouncement>,
     @InjectRepository(CommunityRole) private readonly roleRepo: Repository<CommunityRole>,
     @InjectRepository(CommunityChallenge) private readonly challengeRepo: Repository<CommunityChallenge>,
+    @InjectRepository(CommunityChallengeEntry) private readonly entryRepo: Repository<CommunityChallengeEntry>,
     @InjectRepository(CommunityTag) private readonly communityTagRepo: Repository<CommunityTag>,
     @InjectRepository(ConversationParticipant) private readonly partRepo: Repository<ConversationParticipant>,
     @InjectRepository(PostEntity) private readonly postRepo: Repository<PostEntity>,
@@ -366,5 +368,68 @@ export class SocialService {
       total,
       page,
     };
+  }
+
+  // ==================== 挑战参与 ====================
+
+  async joinChallenge(challengeId: string, userId: string, body?: { note?: string; postId?: string }): Promise<CommunityChallengeEntry> {
+    const challenge = await this.challengeRepo.findOne({ where: { id: challengeId } });
+    if (!challenge) throw new NotFoundException('挑战不存在');
+
+    // 检查用户是否是社群成员
+    const { isMember } = await this.checkCommunityPermission(challenge.communityId, userId);
+    if (!isMember) throw new ForbiddenException('请先加入社群');
+
+    // 检查是否已参与
+    const existing = await this.entryRepo.findOne({ where: { challengeId, userId } });
+    if (existing) throw new BadRequestException('你已经参与了此挑战');
+
+    // 检查人数限制
+    if (challenge.maxParticipants > 0 && challenge.participantCount >= challenge.maxParticipants) {
+      throw new BadRequestException('参与人数已满');
+    }
+
+    const entry = this.entryRepo.create({
+      id: uuidv4(),
+      challengeId,
+      userId,
+      postId: body?.postId || null,
+      note: body?.note || null,
+    });
+    await this.entryRepo.save(entry);
+
+    // 更新参与人数
+    challenge.participantCount += 1;
+    await this.challengeRepo.save(challenge);
+
+    return entry;
+  }
+
+  async getChallengeLeaderboard(challengeId: string): Promise<any[]> {
+    const entries = await this.entryRepo.find({
+      where: { challengeId },
+      relations: { user: true },
+      order: { score: 'DESC', createdAt: 'ASC' },
+    });
+
+    return entries.map((e, index) => ({
+      rank: index + 1,
+      userId: e.userId,
+      user: e.user
+        ? { id: e.user.id, username: e.user.username, displayName: e.user.displayName, avatarUrl: e.user.avatarUrl }
+        : null,
+      note: e.note,
+      score: e.score,
+      postId: e.postId,
+      joinedAt: e.createdAt,
+    }));
+  }
+
+  async getChallengeParticipationStatus(challengeId: string, userId: string): Promise<{
+    isParticipating: boolean;
+    entry: CommunityChallengeEntry | null;
+  }> {
+    const entry = await this.entryRepo.findOne({ where: { challengeId, userId } });
+    return { isParticipating: !!entry, entry };
   }
 }

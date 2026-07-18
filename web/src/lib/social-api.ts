@@ -1,7 +1,7 @@
 import apiClient from './api-client';
 import type {
   InterestTag, Community, RecommendedCommunity, RecommendedUser, User,
-  CommunityAnnouncement, CommunityRole, CommunityChallenge,
+  CommunityAnnouncement, CommunityRole, CommunityChallenge, ChallengeLeaderboardEntry,
 } from '@/types';
 
 // ==================== 兴趣标签 ====================
@@ -235,4 +235,23 @@ export async function getCommunityPosts(communityId: string, page = 1, limit = 2
     params: { page, limit },
   });
   return data;
+}
+
+// ==================== 挑战参与 ====================
+
+export async function joinChallenge(challengeId: string, params?: { note?: string; postId?: string }): Promise<void> {
+  await apiClient.post(`/social/challenges/${challengeId}/join`, params || {});
+}
+
+export async function getChallengeLeaderboard(challengeId: string): Promise<ChallengeLeaderboardEntry[]> {
+  const { data } = await apiClient.get(`/social/challenges/${challengeId}/leaderboard`);
+  return data.data;
+}
+
+export async function getChallengeStatus(challengeId: string): Promise<{
+  isParticipating: boolean;
+  entry: any | null;
+}> {
+  const { data } = await apiClient.get(`/social/challenges/${challengeId}/status`);
+  return data.data;
 }
