@@ -248,7 +248,7 @@ export default function MessagesPage() {
                         </div>
                         <div className="flex items-center justify-between">
                           <p className="truncate text-sm text-muted-foreground">
-                            {conv.lastMessage?.mediaType === 'IMAGE' ? '[图片]' : conv.lastMessage?.content || '暂无消息'}
+                            {conv.lastMessage?.mediaType === 'IMAGE' ? '[图片]' : conv.lastMessage?.mediaType === 'AUDIO' ? '[语音消息]' : conv.lastMessage?.mediaType === 'CARD' ? '[分享卡片]' : conv.lastMessage?.content || '暂无消息'}
                           </p>
                           {conv.unreadCount > 0 && (
                             <Badge className="ml-2 h-5 min-w-5 bg-primary px-1.5 text-xs">{conv.unreadCount}</Badge>
