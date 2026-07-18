@@ -153,6 +153,9 @@ export interface CreatePostDto {
   vrMetadata?: Record<string, unknown>;
   visibility?: Visibility;
   communityId?: string;
+  postType?: PostType;
+  tagIds?: string[];
+  topicNames?: string[];
 }
 
 export interface CreateCommentDto {
