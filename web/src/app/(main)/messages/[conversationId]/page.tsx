@@ -199,6 +199,27 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
     }
   };
 
+  // 语音录制完成
+  const handleVoiceRecorded = async (blob: Blob) => {
+    if (!socketRef.current) return;
+    setRecording(false);
+    setUploading(true);
+    try {
+      const file = new File([blob], `voice-${Date.now()}.webm`, { type: 'audio/webm' });
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await apiClient.post('/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      const mediaUrl = res.data?.data?.url;
+      if (mediaUrl) {
+        socketRef.current.emit('chat:message:send', { conversationId, mediaUrl, mediaType: 'AUDIO' });
+      }
+    } catch { /* ignore */ } finally {
+      setUploading(false);
+    }
+  };
+
   // 快速添加反应
   const handleQuickReaction = async (messageId: string, emoji: string) => {
     try {
