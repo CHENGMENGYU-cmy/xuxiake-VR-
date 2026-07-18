@@ -319,7 +319,9 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
                             : 'rounded-tl-md bg-muted text-foreground'
                         }`}
                       >
-                        {msg.mediaUrl && msg.mediaType === 'IMAGE' ? (
+                        {msg.mediaUrl && msg.mediaType === 'AUDIO' ? (
+                          <VoiceMessage url={msg.mediaUrl} isMine={isMine} />
+                        ) : msg.mediaUrl && msg.mediaType === 'IMAGE' ? (
                           <img
                             src={msg.mediaUrl}
                             alt="图片消息"
