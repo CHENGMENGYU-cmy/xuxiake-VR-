@@ -223,6 +223,17 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
     }
   };
 
+  // 位置共享
+  const handleShareLocation = async (data: { lat: number; lng: number; locationName?: string; isLive?: boolean; durationMinutes?: number }) => {
+    try {
+      await apiClient.post(`/conversations/${conversationId}/location`, data);
+      // 刷新消息列表以显示新位置消息
+      const res = await apiClient.get(`/conversations/${conversationId}/messages?limit=50`);
+      if (res.data?.success) setMessages(res.data.data || []);
+    } catch { /* ignore */ }
+    setShowLocationPicker(false);
+  };
+
   // 快速添加反应
   const handleQuickReaction = async (messageId: string, emoji: string) => {
     try {
