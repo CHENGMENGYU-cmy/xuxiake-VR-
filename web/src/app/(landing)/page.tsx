@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Users,
@@ -29,6 +30,8 @@ import { useAuthStore } from '@/stores/auth-store';
 
 export default function LandingPage() {
   const { isAuthenticated } = useAuthStore();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   return (
     <div className="min-h-screen bg-background">
