@@ -163,6 +163,17 @@ export class ConversationsController {
     part.lastReadAt = new Date();
     await this.partRepo.save(part);
 
+    // 获取其他参与者的最后阅读时间
+    const otherParts = await this.partRepo.find({
+      where: { conversationId: convId },
+    });
+    const readStatus: Record<string, string> = {};
+    for (const p of otherParts) {
+      if (p.userId !== userId && p.lastReadAt) {
+        readStatus[p.userId] = p.lastReadAt.toISOString();
+      }
+    }
+
     return {
       success: true,
       data: data.map((m) => {
@@ -171,6 +182,7 @@ export class ConversationsController {
       }),
       nextCursor: hasMore ? data[data.length - 1].id : null,
       hasMore,
+      readStatus,
     };
   }
 
