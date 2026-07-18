@@ -493,4 +493,43 @@ export class ConversationsController {
     await this.locationRepo.remove(share);
     return { success: true, message: '已停止位置共享' };
   }
+
+  // ==================== 广播消息 ====================
+
+  @Post(':id/broadcast')
+  async sendBroadcast(
+    @Headers('authorization') auth: string,
+    @Param('id') convId: string,
+    @Body() body: { content: string; type?: 'ANNOUNCEMENT' | 'ALERT' },
+  ) {
+    const userId = this.getUserId(auth);
+    if (!body.content?.trim()) throw new NotFoundException('消息内容不能为空');
+
+    const part = await this.partRepo.findOne({ where: { conversationId: convId, userId } });
+    if (!part) throw new NotFoundException('会话不存在');
+
+    // 广播消息使用特殊的content格式
+    const message = this.msgRepo.create({
+      id: uuidv4(),
+      conversationId: convId,
+      senderId: userId,
+      content: JSON.stringify({
+        __broadcast: {
+          text: body.content.trim(),
+          type: body.type || 'ANNOUNCEMENT',
+        },
+      }),
+      mediaType: 'CARD' as any,
+    });
+    await this.msgRepo.save(message);
+    await this.convRepo.update(convId, { updatedAt: new Date() });
+
+    const sender = await this.userRepo.findOne({ where: { id: userId } });
+    const msgWithSender = {
+      ...message,
+      sender: sender ? { id: sender.id, username: sender.username, displayName: sender.displayName, avatarUrl: sender.avatarUrl } : null,
+    };
+
+    return { success: true, data: msgWithSender };
+  }
 }
