@@ -13,6 +13,8 @@ import { RouteDetail } from '../../entities/route-detail.entity.js';
 import { Journey } from '../../entities/journey.entity.js';
 import { JourneyStop } from '../../entities/journey-stop.entity.js';
 import { GuideDetail } from '../../entities/guide-detail.entity.js';
+import { Collection } from '../../entities/collection.entity.js';
+import { CollectionPost } from '../../entities/collection-post.entity.js';
 import { CreatePostDto, CreateCommentDto } from '../../common/interfaces.js';
 import { NotificationsService } from '../notifications/notifications.service.js';
 
@@ -30,6 +32,8 @@ export class PostsService {
     @InjectRepository(Journey) private readonly journeyRepo: Repository<Journey>,
     @InjectRepository(JourneyStop) private readonly journeyStopRepo: Repository<JourneyStop>,
     @InjectRepository(GuideDetail) private readonly guideRepo: Repository<GuideDetail>,
+    @InjectRepository(Collection) private readonly collectionRepo: Repository<Collection>,
+    @InjectRepository(CollectionPost) private readonly collectionPostRepo: Repository<CollectionPost>,
     @InjectRepository(JourneyStop) private readonly journeyStopRepo: Repository<JourneyStop>,
     private readonly notificationsService: NotificationsService,
   ) {}
