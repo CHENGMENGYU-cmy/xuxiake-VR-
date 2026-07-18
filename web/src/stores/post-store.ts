@@ -4,6 +4,11 @@ import { create } from 'zustand';
 import { Post } from '@/types';
 import { createPost, getPosts, CreatePostPayload, PostSortType } from '@/lib/post-api';
 
+interface PostFilters {
+  postType?: string;
+  tagId?: string;
+}
+
 interface PostState {
   // 帖子列表
   posts: Post[];
@@ -16,13 +21,14 @@ interface PostState {
   hasMore: boolean;
   currentPage: number;
   currentSort: PostSortType;
+  filters: PostFilters;
 
   // 发布状态
   isPublishing: boolean;
   publishError: string | null;
 
   // Actions
-  fetchPosts: (sort?: PostSortType) => Promise<void>;
+  fetchPosts: (sort?: PostSortType, filters?: PostFilters) => Promise<void>;
   loadMore: () => Promise<void>;
   publishPost: (payload: CreatePostPayload) => Promise<Post>;
   prependPost: (post: Post) => void;
