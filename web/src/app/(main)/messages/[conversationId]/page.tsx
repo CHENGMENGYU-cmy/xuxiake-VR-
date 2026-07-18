@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, use, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Send, ImagePlus, SmilePlus, Mic, MapPin } from 'lucide-react';
+import { ArrowLeft, Send, ImagePlus, SmilePlus, Mic, MapPin, Timer, Eye } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
