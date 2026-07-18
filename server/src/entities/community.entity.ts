@@ -19,6 +19,18 @@ export class Community {
   @Column({ name: 'avatar_url', type: 'varchar', length: 500, nullable: true })
   avatarUrl: string | null;
 
+  @Column({ name: 'cover_url', type: 'varchar', length: 500, nullable: true })
+  coverUrl: string | null;
+
+  @Column({ type: 'text', nullable: true })
+  rules: string | null;
+
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  category: string | null;
+
+  @Column({ name: 'location_name', type: 'varchar', length: 200, nullable: true })
+  locationName: string | null;
+
   @Column({ name: 'creator_id', type: 'varchar', length: 36 })
   creatorId: string;
 
