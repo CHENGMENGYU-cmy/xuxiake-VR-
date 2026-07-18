@@ -49,10 +49,19 @@ export function PostComposer() {
   const [linkUrl, setLinkUrl] = useState('');
   const [loadingLink, setLoadingLink] = useState(false);
 
+  // 内容分类状态
+  const [postType, setPostType] = useState<PostType>('NOTE');
+  const [selectedTags, setSelectedTags] = useState<InterestTag[]>([]);
+  const [topicInput, setTopicInput] = useState('');
+  const [topicNames, setTopicNames] = useState<string[]>([]);
+  const [allTags, setAllTags] = useState<InterestTag[]>([]);
+  const [showTagPicker, setShowTagPicker] = useState(false);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setMounted(true);
+    getTags().then(setAllTags).catch(() => {});
   }, []);
 
   const charCount = content.length;
