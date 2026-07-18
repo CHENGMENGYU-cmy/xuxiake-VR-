@@ -343,6 +343,8 @@ export class PostsService {
         ? { lat: Number(post.locationLat), lng: Number(post.locationLng), name: post.locationName || '' }
         : null,
       vrMetadata: post.vrMetadata ? JSON.parse(post.vrMetadata) : null,
+      tags: post.tags || [],
+      topics: post.topics || [],
       isLiked: false,
     };
   }
