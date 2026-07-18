@@ -57,6 +57,19 @@ export function PostComposer() {
   const [allTags, setAllTags] = useState<InterestTag[]>([]);
   const [showTagPicker, setShowTagPicker] = useState(false);
 
+  // 路线状态
+  const [routeDistance, setRouteDistance] = useState('');
+  const [routeDuration, setRouteDuration] = useState('');
+  const [routeElevation, setRouteElevation] = useState('');
+  const [routeDifficulty, setRouteDifficulty] = useState<Difficulty>('MODERATE');
+  const [routeType, setRouteType] = useState<RouteType>('HIKE');
+
+  // 旅程状态
+  const [journeyTitle, setJourneyTitle] = useState('');
+  const [journeyDestination, setJourneyDestination] = useState('');
+  const [journeyStartDate, setJourneyStartDate] = useState('');
+  const [journeyEndDate, setJourneyEndDate] = useState('');
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
