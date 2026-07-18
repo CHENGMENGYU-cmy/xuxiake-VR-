@@ -3,8 +3,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './modules/auth/auth.module.js';
 import { PostsModule } from './modules/posts/posts.module.js';
-import { ChatGateway } from './modules/chat/chat.gateway.js';
-import { NotificationsController } from './modules/notifications/notifications.controller.js';
+import { ChatModule } from './modules/chat/chat.module.js';
+import { NotificationsModule } from './modules/notifications/notifications.module.js';
 import { ConversationsController } from './modules/conversations/conversations.controller.js';
 import { FeedController } from './modules/feed/feed.controller.js';
 import { UploadController } from './modules/upload/upload.controller.js';
@@ -16,7 +16,6 @@ import { Post } from './entities/post.entity.js';
 import { MediaItem } from './entities/media-item.entity.js';
 import { Comment } from './entities/comment.entity.js';
 import { Like } from './entities/like.entity.js';
-import { Notification } from './entities/notification.entity.js';
 import { Conversation } from './entities/conversation.entity.js';
 import { Message } from './entities/message.entity.js';
 import { ConversationParticipant } from './entities/conversation-participant.entity.js';
@@ -44,7 +43,7 @@ import { JwtModule } from '@nestjs/jwt';
     }),
     TypeOrmModule.forFeature([
       User, Post, MediaItem, Comment, Like,
-      Notification, Conversation, Message,
+      Conversation, Message,
       ConversationParticipant, UserFollow,
       InterestTag, UserInterest, Community, CommunityTag,
       CommunityAnnouncement, CommunityRole, CommunityChallenge, CommunityChallengeEntry,
@@ -60,15 +59,16 @@ import { JwtModule } from '@nestjs/jwt';
     }),
     AuthModule,
     PostsModule,
+    ChatModule,
+    NotificationsModule,
   ],
   controllers: [
-    NotificationsController,
     ConversationsController,
     FeedController,
     UploadController,
     UsersController,
     SocialController,
   ],
-  providers: [ChatGateway, SocialService],
+  providers: [SocialService],
 })
 export class AppModule {}
