@@ -58,6 +58,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
   const [showReactionPicker, setShowReactionPicker] = useState<string | null>(null);
   const [recording, setRecording] = useState(false);
   const [showLocationPicker, setShowLocationPicker] = useState(false);
+  const [readStatus, setReadStatus] = useState<Record<string, string>>({});
   const bottomRef = useRef<HTMLDivElement>(null);
   const socketRef = useRef<Socket | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
