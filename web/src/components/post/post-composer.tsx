@@ -11,7 +11,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useAuthStore } from '@/stores/auth-store';
 import { usePostStore } from '@/stores/post-store';
-import { uploadImage, getImageDimensions, fetchLinkPreview } from '@/lib/media-api';
+import { uploadImage, getImageDimensions, fetchLinkPreview, uploadVideo, uploadAudio, getVideoMetadata, getAudioDuration } from '@/lib/media-api';
 import { CreatePostPayload, getTags } from '@/lib/post-api';
 import type { PostType, InterestTag, Difficulty, RouteType, GuideCategory, BudgetLevel } from '@/types';
 
