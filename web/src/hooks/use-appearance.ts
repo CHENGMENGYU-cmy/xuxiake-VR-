@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useTheme } from 'next-themes';
+import { useTheme } from '@/components/theme-provider';
 import { useUIStore, type Theme, type FontSize, type BorderRadius } from '@/stores/ui-store';
 
 const fontSizeMap: Record<FontSize, string> = {
