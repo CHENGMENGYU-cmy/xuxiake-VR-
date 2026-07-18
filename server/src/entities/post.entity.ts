@@ -70,4 +70,20 @@ export class Post {
 
   @OneToMany(() => Like, (like) => like.post)
   likes: Like[];
+
+  @ManyToMany(() => InterestTag)
+  @JoinTable({
+    name: 'post_tags',
+    joinColumn: { name: 'post_id' },
+    inverseJoinColumn: { name: 'tag_id' },
+  })
+  tags: InterestTag[];
+
+  @ManyToMany(() => Topic)
+  @JoinTable({
+    name: 'post_topics',
+    joinColumn: { name: 'post_id' },
+    inverseJoinColumn: { name: 'topic_id' },
+  })
+  topics: Topic[];
 }
