@@ -976,4 +976,208 @@ export class SocialController {
       })),
     };
   }
+
+  // ==================== 社群编辑 ====================
+
+  @Put('communities/:id')
+  async updateCommunity(
+    @Headers('authorization') auth: string,
+    @Param('id') communityId: string,
+    @Body() body: {
+      name?: string;
+      description?: string;
+      coverUrl?: string;
+      avatarUrl?: string;
+      rules?: string;
+      category?: string;
+      locationName?: string;
+      isPublic?: boolean;
+      maxMembers?: number;
+    },
+  ) {
+    const userId = this.getUserId(auth);
+    if (!userId) throw new UnauthorizedException('请先登录');
+
+    const community = await this.socialService.updateCommunity(communityId, userId, body);
+    return { success: true, data: community };
+  }
+
+  // ==================== 社群解散 ====================
+
+  @Post('communities/:id/dissolve')
+  async dissolveCommunity(
+    @Headers('authorization') auth: string,
+    @Param('id') communityId: string,
+  ) {
+    const userId = this.getUserId(auth);
+    if (!userId) throw new UnauthorizedException('请先登录');
+
+    await this.socialService.dissolveCommunity(communityId, userId);
+    return { success: true, message: '社群已解散' };
+  }
+
+  // ==================== 社群搜索 ====================
+
+  @Get('communities/search')
+  async searchCommunities(
+    @Headers('authorization') auth: string,
+    @Query('q') keyword: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    if (!keyword?.trim()) throw new BadRequestException('搜索关键词不能为空');
+
+    const userId = this.getUserId(auth);
+    const pageNum = parseInt(page || '1');
+    const limitNum = parseInt(limit || '20');
+
+    return this.socialService.searchCommunities(keyword.trim(), userId || undefined, pageNum, limitNum);
+  }
+
+  // ==================== 社群公告 ====================
+
+  @Get('communities/:id/announcements')
+  async getAnnouncements(
+    @Param('id') communityId: string,
+  ) {
+    const announcements = await this.socialService.getAnnouncements(communityId);
+    return {
+      success: true,
+      data: announcements.map((a) => ({
+        id: a.id,
+        title: a.title,
+        content: a.content,
+        isPinned: a.isPinned,
+        author: a.author
+          ? { id: a.author.id, username: a.author.username, displayName: a.author.displayName, avatarUrl: a.author.avatarUrl }
+          : null,
+        createdAt: a.createdAt,
+        updatedAt: a.updatedAt,
+      })),
+    };
+  }
+
+  @Post('communities/:id/announcements')
+  async createAnnouncement(
+    @Headers('authorization') auth: string,
+    @Param('id') communityId: string,
+    @Body() body: { title: string; content: string; isPinned?: boolean },
+  ) {
+    const userId = this.getUserId(auth);
+    if (!userId) throw new UnauthorizedException('请先登录');
+
+    const announcement = await this.socialService.createAnnouncement(communityId, userId, body);
+    return { success: true, data: announcement };
+  }
+
+  @Delete('communities/:communityId/announcements/:announcementId')
+  async deleteAnnouncement(
+    @Headers('authorization') auth: string,
+    @Param('communityId') communityId: string,
+    @Param('announcementId') announcementId: string,
+  ) {
+    const userId = this.getUserId(auth);
+    if (!userId) throw new UnauthorizedException('请先登录');
+
+    await this.socialService.deleteAnnouncement(announcementId, userId);
+    return { success: true, message: '公告已删除' };
+  }
+
+  // ==================== 社群角色 ====================
+
+  @Get('communities/:id/roles')
+  async getRoles(@Param('id') communityId: string) {
+    const roles = await this.socialService.getRoles(communityId);
+    return { success: true, data: roles };
+  }
+
+  @Post('communities/:id/roles')
+  async assignRole(
+    @Headers('authorization') auth: string,
+    @Param('id') communityId: string,
+    @Body() body: { userId: string; role: 'ADMIN' | 'MODERATOR' },
+  ) {
+    const operatorId = this.getUserId(auth);
+    if (!operatorId) throw new UnauthorizedException('请先登录');
+
+    await this.socialService.assignRole(communityId, operatorId, body.userId, body.role);
+    return { success: true, message: '角色已分配' };
+  }
+
+  @Delete('communities/:id/roles/:userId')
+  async removeRole(
+    @Headers('authorization') auth: string,
+    @Param('id') communityId: string,
+    @Param('userId') targetUserId: string,
+  ) {
+    const operatorId = this.getUserId(auth);
+    if (!operatorId) throw new UnauthorizedException('请先登录');
+
+    await this.socialService.removeRole(communityId, operatorId, targetUserId);
+    return { success: true, message: '角色已移除' };
+  }
+
+  // ==================== 社群挑战 ====================
+
+  @Get('communities/:id/challenges')
+  async getChallenges(
+    @Param('id') communityId: string,
+    @Query('status') status?: string,
+  ) {
+    const challenges = await this.socialService.getChallenges(communityId, status);
+    return {
+      success: true,
+      data: challenges.map((c) => ({
+        id: c.id,
+        title: c.title,
+        description: c.description,
+        type: c.type,
+        startDate: c.startDate,
+        endDate: c.endDate,
+        maxParticipants: c.maxParticipants,
+        participantCount: c.participantCount,
+        status: c.status,
+        creator: c.creator
+          ? { id: c.creator.id, username: c.creator.username, displayName: c.creator.displayName, avatarUrl: c.creator.avatarUrl }
+          : null,
+        createdAt: c.createdAt,
+      })),
+    };
+  }
+
+  @Post('communities/:id/challenges')
+  async createChallenge(
+    @Headers('authorization') auth: string,
+    @Param('id') communityId: string,
+    @Body() body: {
+      title: string;
+      description?: string;
+      type?: 'PHOTO' | 'ROUTE' | 'CHECKIN' | 'DISTANCE';
+      startDate: string;
+      endDate: string;
+      maxParticipants?: number;
+    },
+  ) {
+    const userId = this.getUserId(auth);
+    if (!userId) throw new UnauthorizedException('请先登录');
+
+    const challenge = await this.socialService.createChallenge(communityId, userId, body);
+    return { success: true, data: challenge };
+  }
+
+  // ==================== 社群动态 ====================
+
+  @Get('communities/:id/posts')
+  async getCommunityPosts(
+    @Headers('authorization') auth: string,
+    @Param('id') communityId: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    const userId = this.getUserId(auth);
+    const pageNum = parseInt(page || '1');
+    const limitNum = parseInt(limit || '20');
+
+    return this.socialService.getCommunityPosts(communityId, userId || undefined, pageNum, limitNum);
+  }
 }
