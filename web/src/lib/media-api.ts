@@ -63,3 +63,61 @@ export async function fetchLinkPreview(url: string): Promise<LinkPreview> {
   const { data } = await apiClient.post('/upload/links/preview', { url });
   return data.data;
 }
+
+export async function uploadVideo(file: File): Promise<UploadVideoResult> {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const { data } = await apiClient.post('/upload/video', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+
+  const result = data.data;
+  return {
+    ...result,
+    url: BACKEND_BASE + result.url,
+  };
+}
+
+export async function uploadAudio(file: File): Promise<UploadAudioResult> {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const { data } = await apiClient.post('/upload/audio', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+
+  const result = data.data;
+  return {
+    ...result,
+    url: BACKEND_BASE + result.url,
+  };
+}
+
+export function getVideoMetadata(url: string): Promise<{ duration: number; width: number; height: number }> {
+  return new Promise((resolve, reject) => {
+    const video = document.createElement('video');
+    video.preload = 'metadata';
+    video.onloadedmetadata = () => {
+      resolve({
+        duration: Math.round(video.duration),
+        width: video.videoWidth,
+        height: video.videoHeight,
+      });
+    };
+    video.onerror = () => reject(new Error('无法加载视频'));
+    video.src = url;
+  });
+}
+
+export function getAudioDuration(url: string): Promise<number> {
+  return new Promise((resolve, reject) => {
+    const audio = document.createElement('audio');
+    audio.preload = 'metadata';
+    audio.onloadedmetadata = () => {
+      resolve(Math.round(audio.duration));
+    };
+    audio.onerror = () => reject(new Error('无法加载音频'));
+    audio.src = url;
+  });
+}
