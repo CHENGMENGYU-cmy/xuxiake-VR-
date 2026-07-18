@@ -79,10 +79,16 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     await this.convRepo.update(data.conversationId, { updatedAt: new Date() });
 
-    // 获取发送者信息
+    // 获取发送者信息，构建干净的消息对象
     const sender = await this.userRepo.findOne({ where: { id: userId } });
     const msgWithSender = {
-      ...msg,
+      id: msg.id,
+      conversationId: msg.conversationId,
+      senderId: msg.senderId,
+      content: msg.content,
+      mediaUrl: msg.mediaUrl,
+      mediaType: msg.mediaType,
+      createdAt: msg.createdAt,
       sender: sender
         ? { id: sender.id, username: sender.username, displayName: sender.displayName, avatarUrl: sender.avatarUrl }
         : null,
