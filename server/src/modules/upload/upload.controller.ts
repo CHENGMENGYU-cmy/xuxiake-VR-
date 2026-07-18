@@ -155,6 +155,98 @@ export class UploadController {
     };
   }
 
+  @Post('video')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: (_req, _file, cb) => cb(null, VIDEO_DIR),
+        filename: (_req, file, cb) => {
+          const uniqueName = `${uuidv4()}${extname(file.originalname)}`;
+          cb(null, uniqueName);
+        },
+      }),
+      limits: {
+        fileSize: 500 * 1024 * 1024, // 500MB
+      },
+      fileFilter: (_req, file, cb) => {
+        const allowed = ['video/mp4', 'video/webm', 'video/quicktime', 'video/x-msvideo'];
+        if (allowed.includes(file.mimetype)) {
+          cb(null, true);
+        } else {
+          cb(new Error('仅支持 MP4、WebM、MOV、AVI 格式的视频'), false);
+        }
+      },
+    }),
+  )
+  async uploadVideo(
+    @Headers('authorization') auth: string,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    this.getUserId(auth);
+
+    if (!file) {
+      return { success: false, message: '请选择要上传的视频' };
+    }
+
+    const url = `/uploads/videos/${file.filename}`;
+
+    return {
+      success: true,
+      data: {
+        url,
+        originalName: file.originalname,
+        size: file.size,
+        mimeType: file.mimetype,
+      },
+    };
+  }
+
+  @Post('audio')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: (_req, _file, cb) => cb(null, AUDIO_DIR),
+        filename: (_req, file, cb) => {
+          const uniqueName = `${uuidv4()}${extname(file.originalname)}`;
+          cb(null, uniqueName);
+        },
+      }),
+      limits: {
+        fileSize: 100 * 1024 * 1024, // 100MB
+      },
+      fileFilter: (_req, file, cb) => {
+        const allowed = ['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/webm', 'audio/mp4', 'audio/aac'];
+        if (allowed.includes(file.mimetype)) {
+          cb(null, true);
+        } else {
+          cb(new Error('仅支持 MP3、WAV、OGG、WebM、AAC 格式的音频'), false);
+        }
+      },
+    }),
+  )
+  async uploadAudio(
+    @Headers('authorization') auth: string,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    this.getUserId(auth);
+
+    if (!file) {
+      return { success: false, message: '请选择要上传的音频' };
+    }
+
+    const url = `/uploads/audio/${file.filename}`;
+
+    return {
+      success: true,
+      data: {
+        url,
+        originalName: file.originalname,
+        size: file.size,
+        mimeType: file.mimetype,
+      },
+    };
+  }
+
   @Post('links/preview')
   async getLinkPreview(
     @Headers('authorization') auth: string,
