@@ -19,18 +19,41 @@ export class PostsController {
     return userId;
   }
 
+  @Get('tags')
+  async getTags() {
+    const tags = await this.postsService.getAllTags();
+    return { success: true, data: tags };
+  }
+
+  @Get('topics')
+  async getHotTopics(@Query('limit') limit?: string) {
+    const topics = await this.postsService.getHotTopics(limit ? parseInt(limit) : 10);
+    return { success: true, data: topics };
+  }
+
+  @Get('topics/search')
+  async searchTopics(@Query('q') q?: string) {
+    if (!q) return { success: true, data: [] };
+    const topics = await this.postsService.searchTopics(q);
+    return { success: true, data: topics };
+  }
+
   @Get()
   async getPosts(
     @Query('cursor') cursor?: string,
     @Query('limit') limit?: string,
     @Query('sort') sort?: string,
     @Query('page') page?: string,
+    @Query('postType') postType?: string,
+    @Query('tagId') tagId?: string,
   ) {
     const result = await this.postsService.getPosts({
       cursor,
       limit: limit ? parseInt(limit) : 10,
       sort: sort || 'latest',
       page: page ? parseInt(page) : 1,
+      postType,
+      tagId,
     });
     return { success: true, ...result };
   }
