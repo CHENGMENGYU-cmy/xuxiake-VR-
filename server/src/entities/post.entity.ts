@@ -53,6 +53,10 @@ export class Post {
   @JoinColumn({ name: 'author_id' })
   author: User;
 
+  @ManyToOne(() => Community, { onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'community_id' })
+  community: Community | null;
+
   @OneToMany(() => MediaItem, (media) => media.post)
   mediaItems: MediaItem[];
 
