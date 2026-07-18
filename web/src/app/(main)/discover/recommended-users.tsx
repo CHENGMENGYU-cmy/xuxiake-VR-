@@ -129,7 +129,7 @@ export function RecommendedUsers() {
                 <span key={i} className="rounded bg-secondary px-1.5 py-0.5">{reason}</span>
               ))}
               {user.interests?.slice(0, 3).map((tag) => (
-                <span key={tag.id} className="rounded bg-secondary px-1.5 py-0.5">{tag.icon} {tag.name}</span>
+                <span key={tag.id} className="rounded bg-secondary px-1.5 py-0.5">{tag.name}</span>
               ))}
               {(user.interests?.length || 0) > 3 && (
                 <span>+{user.interests!.length - 3}</span>
