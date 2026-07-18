@@ -62,4 +62,13 @@ export class Community {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  @OneToMany(() => CommunityAnnouncement, (a) => a.community)
+  announcements: CommunityAnnouncement[];
+
+  @OneToMany(() => CommunityRole, (r) => r.community)
+  roles: CommunityRole[];
+
+  @OneToMany(() => CommunityChallenge, (c) => c.community)
+  challenges: CommunityChallenge[];
 }
