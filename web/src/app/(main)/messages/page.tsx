@@ -14,7 +14,6 @@ import apiClient from '@/lib/api-client';
 
 export default function MessagesPage() {
   const { user } = useAuthStore();
-  const router = useRouter();
   const setTotalUnread = useChatStore((s) => s.setTotalUnread);
   const [conversations, setConversations] = useState<any[]>([]);
   const [requestConversations, setRequestConversations] = useState<any[]>([]);
