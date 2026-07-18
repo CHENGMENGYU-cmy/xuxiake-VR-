@@ -815,7 +815,7 @@ export default function LandingPage() {
             戴上眼镜，与千万旅行者一起，探索无限可能。
           </p>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            {isAuthenticated ? (
+            {mounted && isAuthenticated ? (
               <Link
                 href="/feed"
                 className="group inline-flex items-center gap-2.5 rounded-2xl bg-white px-10 py-4 text-base font-semibold text-primary shadow-xl hover:shadow-2xl transition-all hover:-translate-y-0.5"
