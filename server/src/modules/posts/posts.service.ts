@@ -181,7 +181,13 @@ export class PostsService {
       });
     }
 
-    return { ...this.formatPost(post), routeDetail, journey };
+    // 加载攻略详情
+    let guideDetail: GuideDetail | null = null;
+    if (post.postType === 'GUIDE') {
+      guideDetail = await this.guideRepo.findOne({ where: { postId: id } });
+    }
+
+    return { ...this.formatPost(post), routeDetail, journey, guideDetail };
   }
 
   async createPost(userId: string, dto: CreatePostDto) {
