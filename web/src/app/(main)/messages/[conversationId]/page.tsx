@@ -22,6 +22,7 @@ import type { Socket } from 'socket.io-client';
 interface Msg {
   id: string;
   conversationId: string;
+  senderId: string;
   content: string | null;
   mediaUrl?: string | null;
   mediaType?: string | null;
