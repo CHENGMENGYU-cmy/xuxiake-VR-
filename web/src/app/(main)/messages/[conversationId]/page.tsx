@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, use, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Send, ImagePlus, SmilePlus, Mic } from 'lucide-react';
+import { ArrowLeft, Send, ImagePlus, SmilePlus, Mic, MapPin } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,6 +12,8 @@ import { MessageReactions } from '@/components/chat/message-reactions';
 import { ContentCard, type ContentCardData } from '@/components/chat/content-card';
 import { VoiceRecorder } from '@/components/chat/voice-recorder';
 import { VoiceMessage } from '@/components/chat/voice-message';
+import { LocationPicker } from '@/components/chat/location-picker';
+import { LocationMessage } from '@/components/chat/location-message';
 import { connectChat } from '@/lib/chat-socket';
 import apiClient from '@/lib/api-client';
 import type { Socket } from 'socket.io-client';
