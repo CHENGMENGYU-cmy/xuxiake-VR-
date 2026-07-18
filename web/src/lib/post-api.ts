@@ -67,3 +67,21 @@ export async function likePost(postId: string): Promise<void> {
 export async function unlikePost(postId: string): Promise<void> {
   await apiClient.delete(`/posts/${postId}/like`);
 }
+
+// ===== 标签 API =====
+import type { InterestTag, Topic } from '@/types';
+
+export async function getTags(): Promise<InterestTag[]> {
+  const { data } = await apiClient.get('/posts/tags');
+  return data.data ?? [];
+}
+
+export async function getHotTopics(limit = 10): Promise<Topic[]> {
+  const { data } = await apiClient.get('/posts/topics', { params: { limit } });
+  return data.data ?? [];
+}
+
+export async function searchTopics(keyword: string): Promise<Topic[]> {
+  const { data } = await apiClient.get('/posts/topics/search', { params: { q: keyword } });
+  return data.data ?? [];
+}
