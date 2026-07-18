@@ -45,17 +45,18 @@ export const usePostStore = create<PostState>((set, get) => ({
   hasMore: true,
   currentPage: 1,
   currentSort: 'latest',
+  filters: {},
   isPublishing: false,
   publishError: null,
 
-  fetchPosts: async (sort?: PostSortType) => {
+  fetchPosts: async (sort?: PostSortType, filters?: PostFilters) => {
     const sortType = sort || get().currentSort;
-    set({ isLoading: true, error: null, currentSort: sortType, currentPage: 1 });
+    const newFilters = filters !== undefined ? filters : get().filters;
+    set({ isLoading: true, error: null, currentSort: sortType, filters: newFilters, currentPage: 1 });
     try {
-      const params: any = { sort: sortType };
-      // trending 和 hot 使用 page 分页，latest 使用 cursor 分页
+      const params: any = { sort: sortType, ...newFilters };
       if (sortType === 'latest') {
-        // 不传 page，使用默认 cursor 分页
+        // cursor 分页
       } else {
         params.page = 1;
       }
@@ -81,12 +82,12 @@ export const usePostStore = create<PostState>((set, get) => ({
   },
 
   loadMore: async () => {
-    const { nextCursor, hasMore, isLoadingMore, posts, currentSort, currentPage } = get();
+    const { nextCursor, hasMore, isLoadingMore, posts, currentSort, currentPage, filters } = get();
     if (!hasMore || isLoadingMore) return;
 
     set({ isLoadingMore: true });
     try {
-      const params: any = { sort: currentSort };
+      const params: any = { sort: currentSort, ...filters };
       if (currentSort === 'latest') {
         if (!nextCursor) return;
         params.cursor = nextCursor;
