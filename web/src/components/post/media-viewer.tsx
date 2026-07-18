@@ -49,24 +49,40 @@ export function MediaViewer({ items }: MediaViewerProps) {
     <div className="space-y-2">
       {/* 视频 */}
       {videos.map((video) => (
-        <div key={video.id} className="relative bg-black">
+        <div
+          key={video.id}
+          className="group relative bg-black"
+          onMouseEnter={() => video.id && handleVideoHover(video.id, true)}
+          onMouseLeave={() => video.id && handleVideoHover(video.id, false)}
+        >
           <video
+            ref={(el) => { if (el && video.id) videoRefs.current.set(video.id, el); }}
             src={video.url}
             poster={video.thumbnailUrl ?? undefined}
-            controls
+            controls={hoveredVideo === video.id}
+            muted
+            loop
             className="w-full"
             style={{ maxHeight: '500px' }}
             preload="metadata"
           >
             您的浏览器不支持视频播放
           </video>
+          {/* 悬停前的播放按钮覆盖层 */}
+          {hoveredVideo !== video.id && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity group-hover:bg-black/10">
+              <div className="rounded-full bg-white/90 p-3 shadow-lg transition-transform group-hover:scale-110">
+                <Play className="h-6 w-6 text-foreground fill-current" />
+              </div>
+            </div>
+          )}
           {video.vrFormat && video.vrFormat !== 'STANDARD' && (
             <Badge className="absolute left-3 top-3 bg-black/70 text-white hover:bg-black/70">
               <Play className="mr-1 h-3 w-3" />
               {vrFormatLabels[video.vrFormat] || video.vrFormat}
             </Badge>
           )}
-          {video.duration && (
+          {video.duration && video.duration > 0 && (
             <span className="absolute bottom-3 right-3 rounded bg-black/70 px-2 py-0.5 text-xs text-white">
               {Math.floor(video.duration / 60)}:{(video.duration % 60).toString().padStart(2, '0')}
             </span>
@@ -122,20 +138,7 @@ export function MediaViewer({ items }: MediaViewerProps) {
 
       {/* 音频 */}
       {audios.map((audio) => (
-        <div key={audio.id} className="rounded-lg bg-muted/50 p-4">
-          <div className="mb-2 flex items-center gap-2 text-sm text-foreground">
-            <Volume2 className="h-4 w-4 text-accent" />
-            <span>音频记录</span>
-            {audio.duration && (
-              <span className="text-xs text-muted-foreground">
-                {Math.floor(audio.duration / 60)}:{(audio.duration % 60).toString().padStart(2, '0')}
-              </span>
-            )}
-          </div>
-          <audio src={audio.url} controls className="w-full" preload="metadata">
-            您的浏览器不支持音频播放
-          </audio>
-        </div>
+        <AudioPlayer key={audio.id} audio={audio} />
       ))}
 
       {/* 翻译 */}

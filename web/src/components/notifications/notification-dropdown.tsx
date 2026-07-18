@@ -77,7 +77,7 @@ export function NotificationDropdown({ onClose }: NotificationDropdownProps) {
 
   return (
     <div className="w-80">
-      <div className="flex items-center justify-between px-3 py-2">
+      <div className="flex items-center justify-between px-4 py-3">
         <span className="text-sm font-semibold">通知</span>
         <Button
           variant="ghost"
@@ -113,7 +113,7 @@ export function NotificationDropdown({ onClose }: NotificationDropdownProps) {
                 key={notif.id}
                 href={link}
                 className={cn(
-                  'flex items-start gap-3 px-3 py-2.5 transition-colors hover:bg-muted/50',
+                  'flex items-start gap-3 px-4 py-3 transition-colors hover:bg-muted/50',
                   !notif.isRead && 'bg-primary/5'
                 )}
                 onClick={() => {
@@ -123,16 +123,16 @@ export function NotificationDropdown({ onClose }: NotificationDropdownProps) {
               >
                 <div
                   className={cn(
-                    'flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full',
+                    'flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full',
                     colorClass
                   )}
                 >
-                  <Icon className="h-3.5 w-3.5" />
+                  <Icon className="h-4 w-4" />
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-start gap-2">
                     {notif.sender && (
-                      <Avatar className="h-5 w-5 flex-shrink-0">
+                      <Avatar className="h-6 w-6 flex-shrink-0">
                         <AvatarImage src={notif.sender.avatarUrl} alt={notif.sender.displayName} />
                         <AvatarFallback className="text-[10px]">
                           {notif.sender.displayName?.[0]}
@@ -140,15 +140,15 @@ export function NotificationDropdown({ onClose }: NotificationDropdownProps) {
                       </Avatar>
                     )}
                     <div className="min-w-0 flex-1">
-                      <p className="line-clamp-2 text-xs text-foreground">{notif.message}</p>
-                      <p className="mt-0.5 text-[10px] text-muted-foreground">
+                      <p className="text-sm text-foreground">{notif.message}</p>
+                      <p className="mt-0.5 text-xs text-muted-foreground">
                         {timeAgo(notif.createdAt)}
                       </p>
                     </div>
                   </div>
                 </div>
                 {!notif.isRead && (
-                  <div className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
+                  <div className="mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-primary" />
                 )}
               </Link>
             );
@@ -159,7 +159,7 @@ export function NotificationDropdown({ onClose }: NotificationDropdownProps) {
       <Separator />
       <Link
         href="/notifications"
-        className="block py-2 text-center text-xs font-medium text-primary transition-colors hover:bg-muted/50"
+        className="block py-2.5 text-center text-xs font-medium text-primary transition-colors hover:bg-muted/50"
         onClick={onClose}
       >
         查看全部通知
