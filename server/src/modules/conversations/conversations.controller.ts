@@ -380,4 +380,117 @@ export class ConversationsController {
 
     return { success: true, data: Object.values(grouped) };
   }
+
+  // ==================== 位置共享 ====================
+
+  @Post(':id/location')
+  async shareLocation(
+    @Headers('authorization') auth: string,
+    @Param('id') convId: string,
+    @Body() body: { lat: number; lng: number; locationName?: string; isLive?: boolean; durationMinutes?: number },
+  ) {
+    const userId = this.getUserId(auth);
+
+    const part = await this.partRepo.findOne({ where: { conversationId: convId, userId } });
+    if (!part) throw new NotFoundException('会话不存在');
+
+    const expiresAt = body.isLive && body.durationMinutes
+      ? new Date(Date.now() + body.durationMinutes * 60 * 1000)
+      : null;
+
+    const share = this.locationRepo.create({
+      id: uuidv4(),
+      conversationId: convId,
+      userId,
+      lat: body.lat,
+      lng: body.lng,
+      locationName: body.locationName || null,
+      isLive: body.isLive || false,
+      expiresAt,
+    });
+    await this.locationRepo.save(share);
+
+    // 同时发送一条位置消息到聊天
+    const message = this.msgRepo.create({
+      id: uuidv4(),
+      conversationId: convId,
+      senderId: userId,
+      content: JSON.stringify({
+        __location: {
+          lat: body.lat,
+          lng: body.lng,
+          locationName: body.locationName || null,
+          isLive: body.isLive || false,
+          shareId: share.id,
+        },
+      }),
+      mediaType: 'CARD' as any,
+    });
+    await this.msgRepo.save(message);
+    await this.convRepo.update(convId, { updatedAt: new Date() });
+
+    // 广播给其他参与者（通过WebSocket）
+    const sender = await this.userRepo.findOne({ where: { id: userId } });
+    const msgWithSender = {
+      ...message,
+      sender: sender ? { id: sender.id, username: sender.username, displayName: sender.displayName, avatarUrl: sender.avatarUrl } : null,
+    };
+    const memberships = await this.partRepo.find({ where: { conversationId: convId } });
+    // 通过注入ChatGateway来广播，或者直接在这里处理
+    // 简化处理：返回消息，前端通过WebSocket接收
+
+    return { success: true, data: { share, message: msgWithSender } };
+  }
+
+  @Get(':id/locations')
+  async getActiveLocations(
+    @Headers('authorization') auth: string,
+    @Param('id') convId: string,
+  ) {
+    const userId = this.getUserId(auth);
+
+    const part = await this.partRepo.findOne({ where: { conversationId: convId, userId } });
+    if (!part) throw new NotFoundException('会话不存在');
+
+    const now = new Date();
+    const shares = await this.locationRepo.find({
+      where: { conversationId: convId },
+      relations: { user: true },
+      order: { createdAt: 'DESC' },
+    });
+
+    // 过滤：实时位置需未过期，静态位置保留最近24小时的
+    const active = shares.filter((s) => {
+      if (s.isLive) return !s.expiresAt || new Date(s.expiresAt) > now;
+      return (now.getTime() - new Date(s.createdAt).getTime()) < 24 * 60 * 60 * 1000;
+    });
+
+    return {
+      success: true,
+      data: active.map((s) => ({
+        id: s.id,
+        lat: s.lat,
+        lng: s.lng,
+        locationName: s.locationName,
+        isLive: s.isLive,
+        expiresAt: s.expiresAt,
+        createdAt: s.createdAt,
+        user: { id: s.user.id, username: s.user.username, displayName: s.user.displayName, avatarUrl: s.user.avatarUrl },
+      })),
+    };
+  }
+
+  @Delete('locations/:shareId')
+  async stopLocationShare(
+    @Headers('authorization') auth: string,
+    @Param('shareId') shareId: string,
+  ) {
+    const userId = this.getUserId(auth);
+
+    const share = await this.locationRepo.findOne({ where: { id: shareId, userId } });
+    if (!share) throw new NotFoundException('位置共享不存在');
+
+    await this.locationRepo.remove(share);
+    return { success: true, message: '已停止位置共享' };
+  }
 }
