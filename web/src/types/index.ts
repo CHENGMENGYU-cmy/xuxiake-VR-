@@ -47,11 +47,14 @@ export interface MediaItem {
 }
 
 // ===== 内容帖子 =====
+export type PostType = 'NOTE' | 'VR_MEDIA' | 'ROUTE' | 'JOURNEY' | 'GUIDE' | 'MOMENT';
+
 export interface Post {
   id: string;
   content: string | null;
   mediaItems: MediaItem[];
   author: User;
+  postType: PostType;
   location?: {
     lat: number;
     lng: number;
@@ -63,8 +66,22 @@ export interface Post {
   commentCount: number;
   viewCount: number;
   isLiked: boolean;
+  tags?: InterestTag[];
+  topics?: Topic[];
   createdAt: string;
   updatedAt: string;
+}
+
+// ===== 话题 =====
+export interface Topic {
+  id: string;
+  name: string;
+  icon?: string | null;
+  description?: string | null;
+  coverUrl?: string | null;
+  postCount: number;
+  isHot: boolean;
+  createdAt: string;
 }
 
 // ===== 评论 =====
