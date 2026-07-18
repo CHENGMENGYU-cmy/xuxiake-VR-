@@ -13,6 +13,9 @@ export class Post {
   @Column({ name: 'author_id', type: 'varchar', length: 36 })
   authorId: string;
 
+  @Column({ name: 'community_id', type: 'varchar', length: 36, nullable: true })
+  communityId: string | null;
+
   @Column({ type: 'text', nullable: true })
   content: string | null;
 
