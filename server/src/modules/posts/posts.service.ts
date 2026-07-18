@@ -72,7 +72,7 @@ export class PostsService {
     };
   }
 
-  private async getTrendingPosts(limit: number, page: number) {
+  private async getTrendingPosts(limit: number, page: number, postType?: string, tagId?: string) {
     // 热门内容：加权热度分 + 时间衰减
     // score = (likeCount*3 + commentCount*2 + viewCount*0.1) * timeDecay
     const offset = (page - 1) * limit;
@@ -81,6 +81,8 @@ export class PostsService {
       .createQueryBuilder('post')
       .leftJoinAndSelect('post.author', 'author')
       .leftJoinAndSelect('post.mediaItems', 'mediaItems')
+      .leftJoinAndSelect('post.tags', 'tags')
+      .leftJoinAndSelect('post.topics', 'topics')
       .where('post.visibility = :vis', { vis: 'PUBLIC' })
       .addSelect(
         `(post.like_count * 3 + post.comment_count * 2 + post.view_count * 0.1) * GREATEST(0.1, 1 - TIMESTAMPDIFF(DAY, post.created_at, NOW()) / 30)`,
@@ -89,6 +91,13 @@ export class PostsService {
       .orderBy('hot_score', 'DESC')
       .skip(offset)
       .take(limit + 1);
+
+    if (postType) {
+      qb.andWhere('post.postType = :postType', { postType });
+    }
+    if (tagId) {
+      qb.innerJoin('post.tags', 'filterTag', 'filterTag.id = :tagId', { tagId });
+    }
 
     const [posts, total] = await qb.getManyAndCount();
     const hasMore = posts.length > limit;
@@ -103,7 +112,7 @@ export class PostsService {
     };
   }
 
-  private async getHotPosts(limit: number, page: number) {
+  private async getHotPosts(limit: number, page: number, postType?: string, tagId?: string) {
     // 精选推荐：高互动量帖子（点赞 + 评论）
     const offset = (page - 1) * limit;
 
@@ -111,12 +120,21 @@ export class PostsService {
       .createQueryBuilder('post')
       .leftJoinAndSelect('post.author', 'author')
       .leftJoinAndSelect('post.mediaItems', 'mediaItems')
+      .leftJoinAndSelect('post.tags', 'tags')
+      .leftJoinAndSelect('post.topics', 'topics')
       .where('post.visibility = :vis', { vis: 'PUBLIC' })
       .addSelect('post.like_count + post.comment_count', 'engagement')
       .orderBy('engagement', 'DESC')
       .addOrderBy('post.view_count', 'DESC')
       .skip(offset)
       .take(limit + 1);
+
+    if (postType) {
+      qb.andWhere('post.postType = :postType', { postType });
+    }
+    if (tagId) {
+      qb.innerJoin('post.tags', 'filterTag', 'filterTag.id = :tagId', { tagId });
+    }
 
     const posts = await qb.getMany();
     const hasMore = posts.length > limit;
