@@ -210,3 +210,72 @@ export function MediaViewer({ items }: MediaViewerProps) {
     </div>
   );
 }
+
+function AudioPlayer({ audio }: { audio: MediaItem }) {
+  const [playing, setPlaying] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  const togglePlay = () => {
+    const el = audioRef.current;
+    if (!el) return;
+    if (playing) {
+      el.pause();
+    } else {
+      el.play().catch(() => {});
+    }
+  };
+
+  const formatTime = (seconds: number) => {
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    return `${m}:${String(s).padStart(2, '0')}`;
+  };
+
+  return (
+    <div className="rounded-lg border bg-card p-4">
+      <div className="flex items-center gap-3">
+        <button
+          onClick={togglePlay}
+          className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent hover:bg-accent/20 transition-colors"
+        >
+          {playing ? <Pause className="h-5 w-5 fill-current" /> : <Play className="h-5 w-5 fill-current" />}
+        </button>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <Volume2 className="h-3.5 w-3.5 text-accent" />
+            <span className="text-sm font-medium">音频记录</span>
+            {audio.duration && audio.duration > 0 && (
+              <span className="text-xs text-muted-foreground">
+                {formatTime(audio.duration)}
+              </span>
+            )}
+          </div>
+          {/* 进度条 */}
+          <div className="relative h-1.5 w-full rounded-full bg-muted overflow-hidden">
+            <div
+              className="absolute left-0 top-0 h-full rounded-full bg-accent transition-all"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          <div className="mt-0.5 flex justify-between text-[10px] text-muted-foreground">
+            <span>{formatTime((audio.duration ?? 0) * progress / 100)}</span>
+            <span>{formatTime(audio.duration ?? 0)}</span>
+          </div>
+        </div>
+      </div>
+      <audio
+        ref={audioRef}
+        src={audio.url}
+        preload="metadata"
+        onPlay={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
+        onTimeUpdate={() => {
+          const el = audioRef.current;
+          if (el && el.duration) setProgress((el.currentTime / el.duration) * 100);
+        }}
+        onEnded={() => { setPlaying(false); setProgress(0); }}
+      />
+    </div>
+  );
+}
