@@ -1,9 +1,11 @@
-import { Entity, Column, PrimaryColumn, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn, ManyToOne, OneToMany, ManyToMany, JoinColumn, JoinTable } from 'typeorm';
 import { User } from './user.entity.js';
 import { MediaItem } from './media-item.entity.js';
 import { Comment } from './comment.entity.js';
 import { Like } from './like.entity.js';
 import { Community } from './community.entity.js';
+import { InterestTag } from './interest-tag.entity.js';
+import { Topic } from './topic.entity.js';
 
 @Entity('posts')
 export class Post {
@@ -15,6 +17,9 @@ export class Post {
 
   @Column({ name: 'community_id', type: 'varchar', length: 36, nullable: true })
   communityId: string | null;
+
+  @Column({ name: 'post_type', type: 'enum', enum: ['NOTE', 'VR_MEDIA', 'ROUTE', 'JOURNEY', 'GUIDE', 'MOMENT'], default: 'NOTE' })
+  postType: 'NOTE' | 'VR_MEDIA' | 'ROUTE' | 'JOURNEY' | 'GUIDE' | 'MOMENT';
 
   @Column({ type: 'text', nullable: true })
   content: string | null;
