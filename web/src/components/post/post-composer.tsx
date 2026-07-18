@@ -261,6 +261,75 @@ export function PostComposer() {
     }
   };
 
+  const handleVideoUpload = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+
+    const file = files[0];
+    setUploading(true);
+    try {
+      const result = await uploadVideo(file);
+      let duration = 0;
+      let width = 0;
+      let height = 0;
+      try {
+        const meta = await getVideoMetadata(result.url);
+        duration = meta.duration;
+        width = meta.width;
+        height = meta.height;
+      } catch {
+        // 忽略元数据读取错误
+      }
+
+      setMediaItems((prev) => [
+        ...prev,
+        {
+          type: 'VIDEO',
+          url: result.url,
+          duration,
+          width,
+          height,
+          sortOrder: prev.length,
+        },
+      ]);
+      toast.success('视频已添加');
+    } catch {
+      toast.error('视频上传失败');
+    }
+    setUploading(false);
+    if (videoInputRef.current) videoInputRef.current.value = '';
+  };
+
+  const handleAudioUpload = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+
+    const file = files[0];
+    setUploading(true);
+    try {
+      const result = await uploadAudio(file);
+      let duration = 0;
+      try {
+        duration = await getAudioDuration(result.url);
+      } catch {
+        // 忽略时长读取错误
+      }
+
+      setMediaItems((prev) => [
+        ...prev,
+        {
+          type: 'AUDIO',
+          url: result.url,
+          duration,
+          sortOrder: prev.length,
+        },
+      ]);
+      toast.success('音频已添加');
+    } catch {
+      toast.error('音频上传失败');
+    }
+    setUploading(false);
+    if (audioInputRef.current) audioInputRef.current.value = '';
+  };
+
   const handleLinkConfirm = async () => {
     if (!linkUrl.trim()) return;
 
