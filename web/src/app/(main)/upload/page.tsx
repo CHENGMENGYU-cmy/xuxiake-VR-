@@ -70,8 +70,14 @@ export default function UploadPage() {
   // Audio recording state
   const [isRecording, setIsRecording] = useState(false);
   const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
+  const [recordingDuration, setRecordingDuration] = useState(0);
+  const [waveform, setWaveform] = useState<number[]>([]);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const animFrameRef = useRef<number | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const startTimeRef = useRef<number>(0);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -163,7 +169,16 @@ export default function UploadPage() {
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
+      const audioCtx = new AudioContext();
+      const source = audioCtx.createMediaStreamSource(stream);
+      const analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 256;
+      source.connect(analyser);
+      analyserRef.current = analyser;
+
+      const recorder = new MediaRecorder(stream, {
+        mimeType: MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm',
+      });
       chunksRef.current = [];
 
       recorder.ondataavailable = (e) => {
@@ -174,11 +189,37 @@ export default function UploadPage() {
         const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
         setRecordedBlob(blob);
         stream.getTracks().forEach(t => t.stop());
+        audioCtx.close();
+        if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+        if (timerRef.current) clearInterval(timerRef.current);
       };
 
-      recorder.start();
+      recorder.start(100);
       mediaRecorderRef.current = recorder;
       setIsRecording(true);
+      setWaveform([]);
+      setRecordingDuration(0);
+      startTimeRef.current = Date.now();
+
+      // 计时器
+      timerRef.current = setInterval(() => {
+        setRecordingDuration(Math.floor((Date.now() - startTimeRef.current) / 1000));
+      }, 200);
+
+      // 波形采样
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+      const sampleWaveform = () => {
+        analyser.getByteFrequencyData(dataArray);
+        const avg = dataArray.reduce((s, v) => s + v, 0) / bufferLength;
+        const normalized = Math.min(1, avg / 128);
+        setWaveform(prev => {
+          const next = [...prev, normalized];
+          return next.length > 50 ? next.slice(-50) : next;
+        });
+        animFrameRef.current = requestAnimationFrame(sampleWaveform);
+      };
+      sampleWaveform();
     } catch {
       toast.error('无法访问麦克风');
     }
@@ -480,9 +521,18 @@ export default function UploadPage() {
                       </Button>
                     </div>
                     {isRecording && (
-                      <div className="flex items-center gap-2 text-sm text-red-500">
-                        <span className="h-2 w-2 animate-pulse rounded-full bg-red-500" />
-                        录制中...
+                      <div className="w-full max-w-xs space-y-2">
+                        <div className="flex items-center gap-2 text-sm text-red-500">
+                          <span className="h-2 w-2 animate-pulse rounded-full bg-red-500" />
+                          <span className="font-medium">{Math.floor(recordingDuration / 60)}:{String(recordingDuration % 60).padStart(2, '0')}</span>
+                          <span className="text-xs text-muted-foreground">录制中...</span>
+                        </div>
+                        <div className="flex h-8 items-end gap-[2px] rounded-lg bg-red-50 dark:bg-red-950/30 px-2 py-1">
+                          {waveform.map((v, i) => (
+                            <div key={i} className="w-[3px] shrink-0 rounded-full bg-red-400/60" style={{ height: `${Math.max(4, v * 24)}px` }} />
+                          ))}
+                          {waveform.length === 0 && <div className="h-1 w-full rounded-full bg-red-200 dark:bg-red-800" />}
+                        </div>
                       </div>
                     )}
                   </div>

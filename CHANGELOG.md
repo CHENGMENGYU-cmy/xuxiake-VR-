@@ -1,6 +1,74 @@
 项目修改记录
 ================================================================================
 
+【2026-07-19 AR媒体功能 P1 - AR增强与内容体验】
+
+--------------------------------------------------------------------------------
+第1条
+
+  修改时间：2026-07-19
+  修改位置：web/src/app/(main)/upload/page.tsx
+  修改原因：上传页所有Tab均为UI占位，未连接实际功能
+  修改内容：
+    - 完整重写上传页，接入真实视频/音频/图片上传
+    - 视频Tab：点击上传 → 视频预览 → VR格式选择 → 发布
+    - 图片Tab：点击上传 → 图片预览 → VR格式选择 → 发布
+    - 音频Tab：文件上传 + 实时录制（含波形可视化）→ 发布
+    - 链接Tab：输入URL → 获取预览 → 发布
+    - 翻译Tab：保留UI占位
+    - 发布功能：调用 createPost API，成功后跳转 Feed
+  修改效果：用户可通过上传页发布视频/图片/音频/链接内容
+
+第2条
+
+  修改时间：2026-07-19
+  修改位置：web/src/components/post/media-viewer.tsx
+  修改原因：媒体查看器需要更好的交互体验
+  修改内容：
+    - 视频：悬停自动播放 + 播放按钮覆盖层 + 暂停时重置
+    - 音频：独立 AudioPlayer 组件（播放/暂停按钮 + 进度条 + 时长显示）
+    - 新增 Pause 图标导入
+  修改效果：视频悬停预览播放，音频播放器更美观
+
+第3条
+
+  修改时间：2026-07-19
+  修改位置：web/src/components/theme-provider.tsx
+  修改原因：next-themes 在 React 19 下注入 script 标签导致警告
+  修改内容：
+    - 用自定义 ThemeProvider 替换 next-themes
+    - 实现 localStorage 持久化 + 系统主题监听 + FOUC 防护
+    - 导出 useTheme hook
+  修改效果：消除 "Encountered a script tag" 警告
+
+第4条
+
+  修改时间：2026-07-19
+  修改位置：web/src/hooks/use-appearance.ts
+  修改原因：useTheme 导入来源需要从 next-themes 改为自定义 provider
+  修改内容：
+    - 导入路径从 'next-themes' 改为 '@/components/theme-provider'
+  修改效果：主题切换功能正常工作
+
+第5条
+
+  修改时间：2026-07-19
+  修改位置：web/src/app/(landing)/page.tsx
+  修改原因：着陆页 isAuthenticated 导致 SSR/客户端 hydration mismatch
+  修改内容：
+    - 新增 mounted 状态，延迟渲染 auth 相关内容
+    - 三处 isAuthenticated 判断均改为 mounted && isAuthenticated
+  修改效果：消除 hydration mismatch 错误
+
+第6条
+
+  修改时间：2026-07-19
+  修改位置：web/src/app/(main)/search/page.tsx
+  修改原因：useSearchParams 需要 Suspense 边界
+  修改内容：
+    - 拆分为 SearchPage（含 Suspense）和 SearchContent（使用 useSearchParams）两个组件
+  修改效果：消除 script tag 警告
+
 【2026-07-18 AR媒体功能 P0 - 基础链路打通】
 
 --------------------------------------------------------------------------------
