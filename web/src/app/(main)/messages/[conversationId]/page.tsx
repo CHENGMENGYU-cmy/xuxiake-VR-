@@ -15,6 +15,8 @@ import { VoiceMessage } from '@/components/chat/voice-message';
 import { LocationPicker } from '@/components/chat/location-picker';
 import { LocationMessage } from '@/components/chat/location-message';
 import { BroadcastMessage } from '@/components/chat/broadcast-message';
+import { VRPreview, type VRPreviewData } from '@/components/chat/vr-preview';
+import { AIAssistantMessage, type AIResponse } from '@/components/chat/ai-assistant';
 import { connectChat } from '@/lib/chat-socket';
 import apiClient from '@/lib/api-client';
 import type { Socket } from 'socket.io-client';
