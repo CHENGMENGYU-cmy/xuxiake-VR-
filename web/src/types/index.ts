@@ -132,9 +132,14 @@ export interface Community {
   name: string;
   description?: string | null;
   avatarUrl?: string | null;
+  coverUrl?: string | null;
+  rules?: string | null;
+  category?: string | null;
+  locationName?: string | null;
   memberCount: number;
   maxMembers: number;
   isPublic: boolean;
+  status?: 'ACTIVE' | 'DISSOLVED';
   conversationId: string;
   creator?: {
     id: string;
@@ -146,6 +151,7 @@ export interface Community {
   members?: User[];
   isMember?: boolean;
   isCreator?: boolean;
+  isAdmin?: boolean;
   createdAt: string;
 }
 
@@ -155,6 +161,61 @@ export interface RecommendedCommunity extends Community {
   matchReasons: { type: string; text: string }[];
   friendsInCommunity?: { id: string; displayName: string; avatarUrl?: string | null }[];
   recentPostCount?: number;
+}
+
+// ===== 社群公告 =====
+export interface CommunityAnnouncement {
+  id: string;
+  title: string;
+  content: string;
+  isPinned: boolean;
+  author: {
+    id: string;
+    username: string;
+    displayName: string;
+    avatarUrl?: string | null;
+  } | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ===== 社群角色 =====
+export type CommunityRoleType = 'ADMIN' | 'MODERATOR';
+
+export interface CommunityRole {
+  id: string;
+  userId: string;
+  role: CommunityRoleType;
+  user: {
+    id: string;
+    username: string;
+    displayName: string;
+    avatarUrl?: string | null;
+  };
+  createdAt: string;
+}
+
+// ===== 社群挑战 =====
+export type ChallengeType = 'PHOTO' | 'ROUTE' | 'CHECKIN' | 'DISTANCE';
+export type ChallengeStatus = 'UPCOMING' | 'ACTIVE' | 'ENDED';
+
+export interface CommunityChallenge {
+  id: string;
+  title: string;
+  description?: string | null;
+  type: ChallengeType;
+  startDate: string;
+  endDate: string;
+  maxParticipants: number;
+  participantCount: number;
+  status: ChallengeStatus;
+  creator: {
+    id: string;
+    username: string;
+    displayName: string;
+    avatarUrl?: string | null;
+  } | null;
+  createdAt: string;
 }
 
 // ===== 推荐用户 =====
