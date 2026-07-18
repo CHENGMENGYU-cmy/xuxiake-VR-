@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, Users, FileText, Hash } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { Search, Users, FileText, Hash, Video, Image, Music } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
