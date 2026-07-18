@@ -348,4 +348,26 @@ export class PostsService {
       isLiked: false,
     };
   }
+
+  // ===== 标签查询 =====
+  async getAllTags() {
+    return this.tagRepo.find({ order: { sortOrder: 'DESC', name: 'ASC' } });
+  }
+
+  async getHotTopics(limit = 10) {
+    return this.topicRepo.find({
+      where: { isHot: true },
+      order: { postCount: 'DESC' },
+      take: limit,
+    });
+  }
+
+  async searchTopics(keyword: string) {
+    return this.topicRepo
+      .createQueryBuilder('topic')
+      .where('topic.name LIKE :kw', { kw: `%${keyword}%` })
+      .orderBy('topic.postCount', 'DESC')
+      .take(20)
+      .getMany();
+  }
 }
