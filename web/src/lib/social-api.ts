@@ -40,13 +40,20 @@ export async function getRecommendedUsers(page = 1, limit = 20): Promise<{
 }
 
 export async function getRecommendedCommunities(page = 1, limit = 20): Promise<{
-  data: Community[];
+  data: RecommendedCommunity[];
   page: number;
 }> {
   const { data } = await apiClient.get('/social/recommended/communities', {
     params: { page, limit },
   });
   return data;
+}
+
+export async function submitCommunityFeedback(
+  id: string,
+  type: 'NOT_INTERESTED' | 'INTERESTED',
+): Promise<void> {
+  await apiClient.post(`/social/recommended/communities/${id}/feedback`, { type });
 }
 
 // ==================== 社群 ====================
