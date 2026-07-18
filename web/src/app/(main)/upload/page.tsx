@@ -435,7 +435,7 @@ export default function UploadPage() {
                       <div className="flex-1 min-w-0">
                         <audio src={media.url} controls className="w-full" />
                         <div className="mt-1 flex flex-wrap gap-2 text-xs text-muted-foreground">
-                          {media.duration > 0 && <span>{formatDuration(media.duration)}</span>}
+                          {(media.duration ?? 0) > 0 && <span>{formatDuration(media.duration)}</span>}
                           {media.size && <span>{formatSize(media.size)}</span>}
                         </div>
                       </div>
