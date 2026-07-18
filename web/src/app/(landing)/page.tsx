@@ -125,7 +125,7 @@ export default function LandingPage() {
               </p>
 
               <div className="mt-12 flex flex-col items-center gap-4 sm:flex-row lg:justify-start sm:justify-center">
-                {isAuthenticated ? (
+                {mounted && isAuthenticated ? (
                   <Link
                     href="/feed"
                     className="group inline-flex items-center gap-2.5 rounded-2xl bg-white px-10 py-4 text-base font-semibold text-primary shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all hover:-translate-y-0.5"
