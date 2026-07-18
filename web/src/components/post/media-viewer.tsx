@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
-import { Play, Volume2, Link2, Languages, ExternalLink, Maximize2 } from 'lucide-react';
+import { Play, Volume2, Link2, Languages, ExternalLink, Maximize2, Pause } from 'lucide-react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
@@ -16,6 +16,22 @@ interface MediaViewerProps {
 export function MediaViewer({ items }: MediaViewerProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [hoveredVideo, setHoveredVideo] = useState<string | null>(null);
+  const videoRefs = useRef<Map<string, HTMLVideoElement>>(new Map());
+
+  const handleVideoHover = useCallback((id: string, hovering: boolean) => {
+    const video = videoRefs.current.get(id);
+    if (!video) return;
+    if (hovering) {
+      setHoveredVideo(id);
+      video.currentTime = 0;
+      video.play().catch(() => {});
+    } else {
+      setHoveredVideo(null);
+      video.pause();
+      video.currentTime = 0;
+    }
+  }, []);
 
   const images = items.filter((m) => m.type === 'IMAGE');
   const videos = items.filter((m) => m.type === 'VIDEO');
