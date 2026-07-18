@@ -9,6 +9,9 @@ import { Like } from '../../entities/like.entity.js';
 import { User } from '../../entities/user.entity.js';
 import { InterestTag } from '../../entities/interest-tag.entity.js';
 import { Topic } from '../../entities/topic.entity.js';
+import { RouteDetail } from '../../entities/route-detail.entity.js';
+import { Journey } from '../../entities/journey.entity.js';
+import { JourneyStop } from '../../entities/journey-stop.entity.js';
 import { CreatePostDto, CreateCommentDto } from '../../common/interfaces.js';
 import { NotificationsService } from '../notifications/notifications.service.js';
 
@@ -22,6 +25,9 @@ export class PostsService {
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     @InjectRepository(InterestTag) private readonly tagRepo: Repository<InterestTag>,
     @InjectRepository(Topic) private readonly topicRepo: Repository<Topic>,
+    @InjectRepository(RouteDetail) private readonly routeRepo: Repository<RouteDetail>,
+    @InjectRepository(Journey) private readonly journeyRepo: Repository<Journey>,
+    @InjectRepository(JourneyStop) private readonly journeyStopRepo: Repository<JourneyStop>,
     private readonly notificationsService: NotificationsService,
   ) {}
 
