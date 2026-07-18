@@ -821,6 +821,20 @@ export function PostComposer() {
           className="hidden"
           onChange={(e) => handleImageUpload(e.target.files)}
         />
+        <input
+          ref={videoInputRef}
+          type="file"
+          accept="video/mp4,video/webm,video/quicktime"
+          className="hidden"
+          onChange={(e) => handleVideoUpload(e.target.files)}
+        />
+        <input
+          ref={audioInputRef}
+          type="file"
+          accept="audio/mpeg,audio/wav,audio/ogg,audio/webm,audio/aac"
+          className="hidden"
+          onChange={(e) => handleAudioUpload(e.target.files)}
+        />
       </CardContent>
     </Card>
   );
