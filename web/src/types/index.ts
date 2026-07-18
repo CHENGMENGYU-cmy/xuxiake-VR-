@@ -88,6 +88,32 @@ export interface Journey {
   stops?: JourneyStop[];
 }
 
+export type GuideCategory = 'FOOD' | 'STAY' | 'TRANSPORT' | 'TICKET' | 'TIPS';
+export type BudgetLevel = 'BUDGET' | 'MID' | 'LUXURY';
+
+export interface GuideDetail {
+  id: number;
+  postId: string;
+  destination?: string | null;
+  category: GuideCategory;
+  bestSeason?: string | null;
+  budgetLevel: BudgetLevel;
+  richContent?: string | null;
+}
+
+export interface Collection {
+  id: string;
+  creatorId: string;
+  name: string;
+  description?: string | null;
+  coverUrl?: string | null;
+  isPublic: boolean;
+  postCount: number;
+  creator?: User;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface Post {
   id: string;
   content: string | null;
@@ -109,6 +135,7 @@ export interface Post {
   topics?: Topic[];
   routeDetail?: RouteDetail | null;
   journey?: Journey | null;
+  guideDetail?: GuideDetail | null;
   createdAt: string;
   updatedAt: string;
 }

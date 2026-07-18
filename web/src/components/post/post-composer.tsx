@@ -13,7 +13,7 @@ import { useAuthStore } from '@/stores/auth-store';
 import { usePostStore } from '@/stores/post-store';
 import { uploadImage, getImageDimensions, fetchLinkPreview } from '@/lib/media-api';
 import { CreatePostPayload, getTags } from '@/lib/post-api';
-import type { PostType, InterestTag, Difficulty, RouteType } from '@/types';
+import type { PostType, InterestTag, Difficulty, RouteType, GuideCategory, BudgetLevel } from '@/types';
 
 const MAX_CONTENT_LENGTH = 500;
 const MAX_IMAGES = 9;
@@ -69,6 +69,12 @@ export function PostComposer() {
   const [journeyDestination, setJourneyDestination] = useState('');
   const [journeyStartDate, setJourneyStartDate] = useState('');
   const [journeyEndDate, setJourneyEndDate] = useState('');
+
+  // 攻略状态
+  const [guideDestination, setGuideDestination] = useState('');
+  const [guideCategory, setGuideCategory] = useState<GuideCategory>('TIPS');
+  const [guideBestSeason, setGuideBestSeason] = useState('');
+  const [guideBudget, setGuideBudget] = useState<BudgetLevel>('MID');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -154,6 +160,16 @@ export function PostComposer() {
         };
       }
 
+      if (postType === 'GUIDE') {
+        payload.guideDetail = {
+          destination: guideDestination || undefined,
+          category: guideCategory,
+          bestSeason: guideBestSeason || undefined,
+          budgetLevel: guideBudget,
+          richContent: content.trim(),
+        };
+      }
+
       await publishPost(payload);
       setContent('');
       setMediaItems([]);
@@ -169,6 +185,10 @@ export function PostComposer() {
       setJourneyDestination('');
       setJourneyStartDate('');
       setJourneyEndDate('');
+      setGuideDestination('');
+      setGuideCategory('TIPS');
+      setGuideBestSeason('');
+      setGuideBudget('MID');
       setExpanded(false);
       toast.success('发布成功');
     } catch {
@@ -572,6 +592,39 @@ export function PostComposer() {
                       <div>
                         <label className="text-[10px] text-muted-foreground">结束日期</label>
                         <Input type="date" value={journeyEndDate} onChange={(e) => setJourneyEndDate(e.target.value)} className="h-7 text-xs" />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* 攻略专属字段 */}
+                {postType === 'GUIDE' && (
+                  <div className="space-y-2 rounded-lg border border-blue-500/20 bg-blue-500/5 p-3">
+                    <p className="text-xs font-medium text-blue-600 dark:text-blue-400">攻略信息</p>
+                    <div>
+                      <label className="text-[10px] text-muted-foreground">目的地</label>
+                      <Input placeholder="例：三亚" value={guideDestination} onChange={(e) => setGuideDestination(e.target.value)} className="h-7 text-xs" />
+                    </div>
+                    <div className="grid grid-cols-3 gap-2">
+                      <div>
+                        <label className="text-[10px] text-muted-foreground">分类</label>
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {([['FOOD','🍜美食'],['STAY','🏨住宿'],['TRANSPORT','🚗交通'],['TICKET','🎫门票'],['TIPS','💡攻略']] as const).map(([val, lbl]) => (
+                            <button key={val} onClick={() => setGuideCategory(val)} className={`rounded-full px-2 py-0.5 text-[10px] ${guideCategory === val ? 'bg-blue-500 text-white' : 'bg-muted text-muted-foreground'}`}>{lbl}</button>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <label className="text-[10px] text-muted-foreground">最佳季节</label>
+                        <Input placeholder="例：春秋" value={guideBestSeason} onChange={(e) => setGuideBestSeason(e.target.value)} className="h-7 text-xs" />
+                      </div>
+                      <div>
+                        <label className="text-[10px] text-muted-foreground">预算</label>
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {([['BUDGET','💰穷游'],['MID','💳中等'],['LUXURY','💎高端']] as const).map(([val, lbl]) => (
+                            <button key={val} onClick={() => setGuideBudget(val)} className={`rounded-full px-2 py-0.5 text-[10px] ${guideBudget === val ? 'bg-blue-500 text-white' : 'bg-muted text-muted-foreground'}`}>{lbl}</button>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>

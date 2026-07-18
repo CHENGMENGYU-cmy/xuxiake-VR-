@@ -34,7 +34,6 @@ export class PostsService {
     @InjectRepository(GuideDetail) private readonly guideRepo: Repository<GuideDetail>,
     @InjectRepository(Collection) private readonly collectionRepo: Repository<Collection>,
     @InjectRepository(CollectionPost) private readonly collectionPostRepo: Repository<CollectionPost>,
-    @InjectRepository(JourneyStop) private readonly journeyStopRepo: Repository<JourneyStop>,
     private readonly notificationsService: NotificationsService,
   ) {}
 

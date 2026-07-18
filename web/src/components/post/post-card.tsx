@@ -49,6 +49,8 @@ const difficultyColors: Record<string, string> = {
   EXPERT: 'bg-red-500/10 text-red-600',
 };
 const routeTypeLabels: Record<string, string> = { HIKE: '🥾徒步', BIKE: '🚴骑行', DRIVE: '🚗自驾', PADDLE: '🛶皮划艇', CLIMB: '🧗攀岩' };
+const guideCategoryLabels: Record<string, string> = { FOOD: '🍜美食', STAY: '🏨住宿', TRANSPORT: '🚗交通', TICKET: '🎫门票', TIPS: '💡攻略' };
+const budgetLabels: Record<string, string> = { BUDGET: '💰穷游', MID: '💳中等', LUXURY: '💎高端' };
 
 interface PostCardProps {
   post: Post;
@@ -220,6 +222,24 @@ export function PostCard({ post }: PostCardProps) {
             {post.journey.destination && <span>📍 {post.journey.destination}</span>}
             {post.journey.startDate && <span>📅 {post.journey.startDate}{post.journey.endDate ? ` ~ ${post.journey.endDate}` : ''}</span>}
             {post.journey.stopCount > 0 && <span>📌 {post.journey.stopCount} 站</span>}
+          </div>
+        </div>
+      )}
+
+      {/* 攻略详情 */}
+      {post.postType === 'GUIDE' && post.guideDetail && (
+        <div className="mx-4 mb-3 rounded-lg border border-blue-500/20 bg-blue-500/5 p-3">
+          <div className="flex flex-wrap gap-3 text-xs">
+            <span className="rounded-full px-2 py-0.5 text-[10px] font-medium bg-blue-500/10 text-blue-600">
+              {guideCategoryLabels[post.guideDetail.category]}
+            </span>
+            {post.guideDetail.destination && (
+              <span className="text-muted-foreground">📍 {post.guideDetail.destination}</span>
+            )}
+            {post.guideDetail.bestSeason && (
+              <span className="text-muted-foreground">🗓️ {post.guideDetail.bestSeason}</span>
+            )}
+            <span className="text-muted-foreground">{budgetLabels[post.guideDetail.budgetLevel]}</span>
           </div>
         </div>
       )}

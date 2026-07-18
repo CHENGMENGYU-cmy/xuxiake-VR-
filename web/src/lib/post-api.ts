@@ -1,5 +1,5 @@
 import apiClient from './api-client';
-import { Post, PostType, Visibility, Difficulty, RouteType } from '@/types';
+import { Post, PostType, Visibility, Difficulty, RouteType, GuideCategory, BudgetLevel, Collection } from '@/types';
 
 export interface CreatePostPayload {
   content: string;
@@ -48,6 +48,13 @@ export interface CreatePostPayload {
       description?: string;
       mediaUrl?: string;
     }[];
+  };
+  guideDetail?: {
+    destination?: string;
+    category?: GuideCategory;
+    bestSeason?: string;
+    budgetLevel?: BudgetLevel;
+    richContent?: string;
   };
 }
 
@@ -131,4 +138,45 @@ export async function getTopicPosts(id: string, params?: {
 export async function getAllTopics(): Promise<Topic[]> {
   const { data } = await apiClient.get('/posts/topics/all');
   return data.data ?? [];
+}
+
+// ===== 合集 API =====
+
+export async function createCollection(params: {
+  name: string;
+  description?: string;
+  isPublic?: boolean;
+}): Promise<Collection> {
+  const { data } = await apiClient.post('/posts/collections', params);
+  return data.data;
+}
+
+export async function getCollections(page = 1): Promise<{
+  data: Collection[];
+  total: number;
+  page: number;
+}> {
+  const { data } = await apiClient.get('/posts/collections', { params: { page } });
+  return data;
+}
+
+export async function getCollectionById(id: string): Promise<Collection> {
+  const { data } = await apiClient.get(`/posts/collections/${id}`);
+  return data.data;
+}
+
+export async function getCollectionPosts(id: string, page = 1): Promise<{
+  posts: Post[];
+  page: number;
+}> {
+  const { data } = await apiClient.get(`/posts/collections/${id}/posts`, { params: { page } });
+  return { posts: data.data ?? [], page: data.page ?? 1 };
+}
+
+export async function addPostToCollection(collectionId: string, postId: string): Promise<void> {
+  await apiClient.post(`/posts/collections/${collectionId}/posts/${postId}`);
+}
+
+export async function removePostFromCollection(collectionId: string, postId: string): Promise<void> {
+  await apiClient.delete(`/posts/collections/${collectionId}/posts/${postId}`);
 }
