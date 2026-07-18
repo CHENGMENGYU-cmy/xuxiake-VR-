@@ -233,6 +233,51 @@ export class PostsService {
       }
     }
 
+    // 处理路线详情（ROUTE类型）
+    if (dto.postType === 'ROUTE' && dto.routeDetail) {
+      const route = this.routeRepo.create({
+        postId,
+        distanceKm: dto.routeDetail.distanceKm || null,
+        durationMinutes: dto.routeDetail.durationMinutes || null,
+        elevationGainM: dto.routeDetail.elevationGainM || null,
+        difficulty: dto.routeDetail.difficulty || 'MODERATE',
+        routeType: dto.routeDetail.routeType || 'HIKE',
+        gpxData: dto.routeDetail.gpxData || null,
+        waypoints: dto.routeDetail.waypoints || null,
+      });
+      await this.routeRepo.save(route);
+    }
+
+    // 处理旅程记录（JOURNEY类型）
+    if (dto.postType === 'JOURNEY' && dto.journey) {
+      const journey = this.journeyRepo.create({
+        postId,
+        title: dto.journey.title,
+        startDate: dto.journey.startDate || null,
+        endDate: dto.journey.endDate || null,
+        destination: dto.journey.destination || null,
+        coverUrl: dto.journey.coverUrl || null,
+        stopCount: dto.journey.stops?.length || 0,
+      });
+      await this.journeyRepo.save(journey);
+
+      if (dto.journey.stops?.length) {
+        const stops = dto.journey.stops.map((s, i) =>
+          this.journeyStopRepo.create({
+            journeyId: journey.id,
+            dayNumber: s.dayNumber || null,
+            locationName: s.locationName || null,
+            locationLat: s.locationLat || null,
+            locationLng: s.locationLng || null,
+            description: s.description || null,
+            mediaUrl: s.mediaUrl || null,
+            sortOrder: i,
+          }),
+        );
+        await this.journeyStopRepo.save(stops);
+      }
+    }
+
     return this.getPostById(postId);
   }
 
