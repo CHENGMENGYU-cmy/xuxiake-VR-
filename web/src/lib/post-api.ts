@@ -85,3 +85,26 @@ export async function searchTopics(keyword: string): Promise<Topic[]> {
   const { data } = await apiClient.get('/posts/topics/search', { params: { q: keyword } });
   return data.data ?? [];
 }
+
+export async function getTopicById(id: string): Promise<Topic> {
+  const { data } = await apiClient.get(`/posts/topics/${id}`);
+  return data.data;
+}
+
+export async function getTopicPosts(id: string, params?: {
+  page?: number;
+  limit?: number;
+  sort?: string;
+}): Promise<{ posts: Post[]; hasMore: boolean; page: number }> {
+  const { data } = await apiClient.get(`/posts/topics/${id}/posts`, { params });
+  return {
+    posts: data.data ?? [],
+    hasMore: data.hasMore ?? false,
+    page: data.page ?? 1,
+  };
+}
+
+export async function getAllTopics(): Promise<Topic[]> {
+  const { data } = await apiClient.get('/posts/topics/all');
+  return data.data ?? [];
+}
