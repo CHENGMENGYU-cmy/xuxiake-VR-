@@ -11,6 +11,7 @@ import { Message } from '../../entities/message.entity.js';
 import { User } from '../../entities/user.entity.js';
 import { UserFollow } from '../../entities/user-follow.entity.js';
 import { MessageReaction } from '../../entities/message-reaction.entity.js';
+import { LocationShare } from '../../entities/location-share.entity.js';
 
 @Controller('api/conversations')
 export class ConversationsController {
