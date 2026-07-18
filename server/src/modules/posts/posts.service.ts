@@ -509,4 +509,94 @@ export class PostsService {
       take: limit,
     });
   }
+
+  // ===== 合集管理 =====
+  async createCollection(userId: string, dto: { name: string; description?: string; isPublic?: boolean }) {
+    const collection = this.collectionRepo.create({
+      id: uuidv4(),
+      creatorId: userId,
+      name: dto.name,
+      description: dto.description || null,
+      isPublic: dto.isPublic !== false,
+      postCount: 0,
+    });
+    await this.collectionRepo.save(collection);
+    return collection;
+  }
+
+  async getCollections(options: { userId?: string; page?: number; limit?: number } = {}) {
+    const { userId, page = 1, limit = 20 } = options;
+    const qb = this.collectionRepo
+      .createQueryBuilder('c')
+      .leftJoinAndSelect('c.creator', 'creator')
+      .where('c.isPublic = :pub', { pub: true })
+      .orderBy('c.postCount', 'DESC')
+      .skip((page - 1) * limit)
+      .take(limit);
+
+    if (userId) {
+      qb.orWhere('c.creatorId = :userId', { userId });
+    }
+
+    const [data, total] = await qb.getManyAndCount();
+    return { data, total, page };
+  }
+
+  async getCollectionById(id: string) {
+    const collection = await this.collectionRepo.findOne({
+      where: { id },
+      relations: { creator: true },
+    });
+    if (!collection) throw new NotFoundException('合集不存在');
+    return collection;
+  }
+
+  async getCollectionPosts(collectionId: string, page = 1, limit = 20) {
+    const qb = this.collectionPostRepo
+      .createQueryBuilder('cp')
+      .leftJoinAndSelect('cp.post', 'post')
+      .leftJoinAndSelect('post.author', 'author')
+      .leftJoinAndSelect('post.mediaItems', 'mediaItems')
+      .leftJoinAndSelect('post.tags', 'tags')
+      .leftJoinAndSelect('post.topics', 'topics')
+      .where('cp.collectionId = :cid', { cid: collectionId })
+      .orderBy('cp.sortOrder', 'ASC')
+      .skip((page - 1) * limit)
+      .take(limit);
+
+    const items = await qb.getMany();
+    return {
+      data: items.map((cp) => this.formatPost(cp.post)),
+      page,
+    };
+  }
+
+  async addPostToCollection(userId: string, collectionId: string, postId: string) {
+    const collection = await this.collectionRepo.findOne({ where: { id: collectionId } });
+    if (!collection) throw new NotFoundException('合集不存在');
+    if (collection.creatorId !== userId) throw new NotFoundException('无权操作此合集');
+
+    const existing = await this.collectionPostRepo.findOne({ where: { collectionId, postId } });
+    if (existing) return { message: '已在合集中' };
+
+    const cp = this.collectionPostRepo.create({ collectionId, postId });
+    await this.collectionPostRepo.save(cp);
+    collection.postCount += 1;
+    await this.collectionRepo.save(collection);
+    return { message: '已添加到合集' };
+  }
+
+  async removePostFromCollection(userId: string, collectionId: string, postId: string) {
+    const collection = await this.collectionRepo.findOne({ where: { id: collectionId } });
+    if (!collection) throw new NotFoundException('合集不存在');
+    if (collection.creatorId !== userId) throw new NotFoundException('无权操作此合集');
+
+    const cp = await this.collectionPostRepo.findOne({ where: { collectionId, postId } });
+    if (!cp) return { message: '不在合集中' };
+
+    await this.collectionPostRepo.remove(cp);
+    if (collection.postCount > 0) collection.postCount -= 1;
+    await this.collectionRepo.save(collection);
+    return { message: '已从合集移除' };
+  }
 }
