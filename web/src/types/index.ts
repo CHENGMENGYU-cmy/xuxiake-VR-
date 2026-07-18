@@ -49,6 +49,45 @@ export interface MediaItem {
 // ===== 内容帖子 =====
 export type PostType = 'NOTE' | 'VR_MEDIA' | 'ROUTE' | 'JOURNEY' | 'GUIDE' | 'MOMENT';
 
+export type Difficulty = 'EASY' | 'MODERATE' | 'HARD' | 'EXPERT';
+export type RouteType = 'HIKE' | 'BIKE' | 'DRIVE' | 'PADDLE' | 'CLIMB';
+
+export interface RouteDetail {
+  id: number;
+  postId: string;
+  distanceKm?: number | null;
+  durationMinutes?: number | null;
+  elevationGainM?: number | null;
+  difficulty: Difficulty;
+  routeType: RouteType;
+  gpxData?: string | null;
+  waypoints?: { lat: number; lng: number; name: string; description?: string }[] | null;
+}
+
+export interface JourneyStop {
+  id: number;
+  journeyId: number;
+  dayNumber?: number | null;
+  locationName?: string | null;
+  locationLat?: number | null;
+  locationLng?: number | null;
+  description?: string | null;
+  mediaUrl?: string | null;
+  sortOrder: number;
+}
+
+export interface Journey {
+  id: number;
+  postId: string;
+  title: string;
+  startDate?: string | null;
+  endDate?: string | null;
+  destination?: string | null;
+  coverUrl?: string | null;
+  stopCount: number;
+  stops?: JourneyStop[];
+}
+
 export interface Post {
   id: string;
   content: string | null;
@@ -68,6 +107,8 @@ export interface Post {
   isLiked: boolean;
   tags?: InterestTag[];
   topics?: Topic[];
+  routeDetail?: RouteDetail | null;
+  journey?: Journey | null;
   createdAt: string;
   updatedAt: string;
 }
