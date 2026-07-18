@@ -85,6 +85,30 @@ export function PostComposer() {
     }
   };
 
+  const handleTopicKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && topicInput.trim()) {
+      e.preventDefault();
+      const name = topicInput.trim();
+      if (!topicNames.includes(name) && topicNames.length < 5) {
+        setTopicNames((prev) => [...prev, name]);
+      }
+      setTopicInput('');
+    }
+  };
+
+  const removeTopic = (name: string) => {
+    setTopicNames((prev) => prev.filter((t) => t !== name));
+  };
+
+  const toggleTag = (tag: InterestTag) => {
+    setSelectedTags((prev) => {
+      const exists = prev.find((t) => t.id === tag.id);
+      if (exists) return prev.filter((t) => t.id !== tag.id);
+      if (prev.length >= 5) return prev;
+      return [...prev, tag];
+    });
+  };
+
   const handleSubmit = async () => {
     if (!canPublish) return;
 
@@ -92,10 +116,16 @@ export function PostComposer() {
       await publishPost({
         content: content.trim(),
         visibility: 'PUBLIC',
+        postType,
+        tagIds: selectedTags.length > 0 ? selectedTags.map((t) => t.id) : undefined,
+        topicNames: topicNames.length > 0 ? topicNames : undefined,
         mediaItems: mediaItems.length > 0 ? mediaItems : undefined,
       });
       setContent('');
       setMediaItems([]);
+      setSelectedTags([]);
+      setTopicNames([]);
+      setPostType('NOTE');
       setExpanded(false);
       toast.success('发布成功');
     } catch {
