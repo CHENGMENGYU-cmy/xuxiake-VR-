@@ -312,12 +312,27 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
                     // 解析特殊消息类型
                     let cardData: ContentCardData | null = null;
                     let locationData: { lat: number; lng: number; locationName?: string; isLive: boolean } | null = null;
+                    let broadcastData: { text: string; type: 'ANNOUNCEMENT' | 'ALERT' } | null = null;
                     if (msg.mediaType === 'CARD' && msg.content) {
                       try {
                         const parsed = JSON.parse(msg.content);
                         if (parsed.__card) cardData = parsed.__card;
                         if (parsed.__location) locationData = parsed.__location;
+                        if (parsed.__broadcast) broadcastData = parsed.__broadcast;
                       } catch { /* not a special message */ }
+                    }
+
+                    // 广播消息全宽显示
+                    if (broadcastData) {
+                      return (
+                        <div className="w-full max-w-[85%]">
+                          <BroadcastMessage
+                            text={broadcastData.text}
+                            type={broadcastData.type}
+                            senderName={msg.sender?.displayName}
+                          />
+                        </div>
+                      );
                     }
 
                     if (locationData) {
