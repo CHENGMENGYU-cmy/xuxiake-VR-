@@ -1,6 +1,96 @@
 项目修改记录
 ================================================================================
 
+【2026-07-18 内容分类体系 Phase 1】
+
+--------------------------------------------------------------------------------
+第1条
+
+  修改时间：2026-07-18 21:00
+  修改位置：server/sql/migrate-content-classification.sql
+  修改原因：为帖子添加内容分类能力，支持多维度内容组织
+  修改内容：
+    - posts表新增 post_type 枚举字段（NOTE/VR_MEDIA/ROUTE/JOURNEY/GUIDE/MOMENT）
+    - 新建 post_tags 表（帖子-标签多对多关联，复用现有 interest_tags）
+    - 新建 topics 表（用户自建话题聚合）
+    - 新建 post_topics 表（帖子-话题多对多关联）
+  修改效果：数据库支持内容形式分类、标签关联、话题聚合三层分类体系
+
+第2条
+
+  修改时间：2026-07-18 21:00
+  修改位置：server/src/entities/post.entity.ts, server/src/entities/topic.entity.ts
+  修改原因：TypeORM 实体与数据库表结构同步
+  修改内容：
+    - Post 实体新增 postType 字段 + tags/topics ManyToMany 关联
+    - 新建 Topic 实体（话题标签）
+    - InterestTag 实体已存在，无需修改
+  修改效果：后端实体完整支持内容分类数据模型
+
+第3条
+
+  修改时间：2026-07-18 21:00
+  修改位置：server/src/modules/posts/posts.service.ts, posts.controller.ts, posts.module.ts
+  修改原因：后端服务层支持标签/话题 CRUD 和筛选查询
+  修改内容：
+    - PostsModule 注册 InterestTag、Topic 实体
+    - createPost 支持 tagIds 和 topicNames 参数（话题不存在时自动创建）
+    - getPosts 支持 postType 和 tagId 筛选参数
+    - 新增 GET /api/posts/tags（获取全部标签）
+    - 新增 GET /api/posts/topics（热门话题）
+    - 新增 GET /api/posts/topics/search（话题搜索）
+    - getPostById 关联加载 tags 和 topics
+    - formatPost 输出包含 tags 和 topics
+  修改效果：帖子发布支持标签和话题，列表查询支持按类型和标签筛选
+
+第4条
+
+  修改时间：2026-07-18 21:00
+  修改位置：server/src/common/interfaces.ts, web/src/types/index.ts, web/src/lib/post-api.ts
+  修改原因：前后端类型定义同步
+  修改内容：
+    - 新增 PostType 类型定义
+    - CreatePostDto 新增 postType/tagIds/topicNames 字段
+    - Post 类型新增 postType/tags/topics 字段
+    - 新增 Topic 接口定义
+    - post-api 新增 getTags/getHotTopics/searchTopics 函数
+    - getPosts 参数新增 postType/tagId 筛选
+  修改效果：前后端类型完全对齐，API 层支持新功能
+
+第5条
+
+  修改时间：2026-07-18 21:00
+  修改位置：web/src/components/post/post-composer.tsx
+  修改原因：发布器支持内容类型选择和标签/话题添加
+  修改内容：
+    - 新增内容类型选择栏（笔记/VR内容/路线/旅程/攻略/动态 6种）
+    - 新增标签选择器（从已有标签中选择，最多5个）
+    - 新增话题输入框（回车添加自定义话题，最多5个）
+    - 发布时携带 postType/tagIds/topicNames
+  修改效果：用户发布内容时可选择内容形式、添加标签和话题
+
+第6条
+
+  修改时间：2026-07-18 21:00
+  修改位置：web/src/app/(main)/feed/page.tsx, web/src/app/(main)/explore/page.tsx
+  修改原因：Feed 页和探索页支持内容类型筛选
+  修改内容：
+    - Feed 页新增内容类型筛选胶囊栏（全部/笔记/VR内容/路线/旅程/攻略/动态）
+    - 探索页新增内容类型筛选栏（全部/VR内容/路线/攻略）
+    - 筛选切换时重新加载对应类型的内容
+  修改效果：用户可按内容形式浏览和筛选帖子
+
+第7条
+
+  修改时间：2026-07-18 21:00
+  修改位置：web/src/components/post/post-card.tsx, web/src/stores/post-store.ts
+  修改原因：帖子卡片展示内容类型标识和标签
+  修改内容：
+    - 帖子卡片新增内容类型徽章（非 NOTE 类型显示彩色标签）
+    - 帖子卡片新增标签和话题展示区
+    - post-store 新增 filters 状态，fetchPosts 支持筛选参数
+  修改效果：帖子卡片直观展示内容分类信息，Feed 支持筛选状态管理
+
 【2026-07-17 首页AR眼镜功能优化】
 
 --------------------------------------------------------------------------------
