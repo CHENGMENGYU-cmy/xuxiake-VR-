@@ -164,13 +164,13 @@ export class PostsService {
     await this.postRepo.save(post);
 
     // 加载路线详情
-    let routeDetail = null;
+    let routeDetail: RouteDetail | null = null;
     if (post.postType === 'ROUTE') {
       routeDetail = await this.routeRepo.findOne({ where: { postId: id } });
     }
 
     // 加载旅程数据
-    let journey = null;
+    let journey: Journey | null = null;
     if (post.postType === 'JOURNEY') {
       journey = await this.journeyRepo.findOne({
         where: { postId: id },
