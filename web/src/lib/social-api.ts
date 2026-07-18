@@ -1,5 +1,8 @@
 import apiClient from './api-client';
-import type { InterestTag, Community, RecommendedCommunity, RecommendedUser, User } from '@/types';
+import type {
+  InterestTag, Community, RecommendedCommunity, RecommendedUser, User,
+  CommunityAnnouncement, CommunityRole, CommunityChallenge,
+} from '@/types';
 
 // ==================== 兴趣标签 ====================
 
