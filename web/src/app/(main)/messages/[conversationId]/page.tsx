@@ -120,6 +120,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
           const msgs = res.data.data || [];
           setMessages(msgs);
           loadReactions(msgs.map((m: Msg) => m.id));
+          if (res.data.readStatus) setReadStatus(res.data.readStatus);
         }
       })
       .catch(() => {})
