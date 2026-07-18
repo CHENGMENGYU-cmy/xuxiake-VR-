@@ -126,19 +126,49 @@ export function PostComposer() {
     if (!canPublish) return;
 
     try {
-      await publishPost({
+      const payload: CreatePostPayload = {
         content: content.trim(),
         visibility: 'PUBLIC',
         postType,
         tagIds: selectedTags.length > 0 ? selectedTags.map((t) => t.id) : undefined,
         topicNames: topicNames.length > 0 ? topicNames : undefined,
         mediaItems: mediaItems.length > 0 ? mediaItems : undefined,
-      });
+      };
+
+      if (postType === 'ROUTE') {
+        payload.routeDetail = {
+          distanceKm: routeDistance ? parseFloat(routeDistance) : undefined,
+          durationMinutes: routeDuration ? parseInt(routeDuration) : undefined,
+          elevationGainM: routeElevation ? parseInt(routeElevation) : undefined,
+          difficulty: routeDifficulty,
+          routeType,
+        };
+      }
+
+      if (postType === 'JOURNEY' && journeyTitle.trim()) {
+        payload.journey = {
+          title: journeyTitle.trim(),
+          destination: journeyDestination || undefined,
+          startDate: journeyStartDate || undefined,
+          endDate: journeyEndDate || undefined,
+        };
+      }
+
+      await publishPost(payload);
       setContent('');
       setMediaItems([]);
       setSelectedTags([]);
       setTopicNames([]);
       setPostType('NOTE');
+      setRouteDistance('');
+      setRouteDuration('');
+      setRouteElevation('');
+      setRouteDifficulty('MODERATE');
+      setRouteType('HIKE');
+      setJourneyTitle('');
+      setJourneyDestination('');
+      setJourneyStartDate('');
+      setJourneyEndDate('');
       setExpanded(false);
       toast.success('发布成功');
     } catch {
