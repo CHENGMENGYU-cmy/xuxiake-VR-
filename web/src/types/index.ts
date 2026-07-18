@@ -149,6 +149,14 @@ export interface Community {
   createdAt: string;
 }
 
+// ===== 推荐社群 =====
+export interface RecommendedCommunity extends Community {
+  matchScore: number;
+  matchReasons: { type: string; text: string }[];
+  friendsInCommunity?: { id: string; displayName: string; avatarUrl?: string | null }[];
+  recentPostCount?: number;
+}
+
 // ===== 推荐用户 =====
 export interface RecommendedUser extends User {
   matchReasons?: string[];
