@@ -1,6 +1,71 @@
 项目修改记录
 ================================================================================
 
+【2026-07-18 AR媒体功能 P0 - 基础链路打通】
+
+--------------------------------------------------------------------------------
+第1条
+
+  修改时间：2026-07-18
+  修改位置：server/src/modules/upload/upload.controller.ts
+  修改原因：后端缺少视频和音频上传端点
+  修改内容：
+    - 新增 POST /api/upload/video 端点（500MB限制，MP4/WebM/MOV/AVI）
+    - 新增 POST /api/upload/audio 端点（100MB限制，MP3/WAV/OGG/WebM/AAC）
+    - 新增 uploads/videos/ 和 uploads/audio/ 存储目录
+    - 重构目录创建逻辑为循环方式
+  修改效果：后端支持视频和音频文件上传
+
+第2条
+
+  修改时间：2026-07-18
+  修改位置：web/src/lib/media-api.ts
+  修改原因：前端缺少视频和音频上传API函数
+  修改内容：
+    - 新增 UploadVideoResult/UploadAudioResult 接口
+    - 新增 uploadVideo(file) 函数
+    - 新增 uploadAudio(file) 函数
+    - 新增 getVideoMetadata(url) 函数（读取视频时长/宽/高）
+    - 新增 getAudioDuration(url) 函数（读取音频时长）
+  修改效果：前端具备视频和音频上传能力
+
+第3条
+
+  修改时间：2026-07-18
+  修改位置：web/src/components/post/post-composer.tsx
+  修改原因：PostComposer 中视频/音频按钮仅显示"功能即将上线"提示
+  修改内容：
+    - 导入 uploadVideo/uploadAudio/getVideoMetadata/getAudioDuration
+    - 新增 videoInputRef/audioInputRef 文件输入引用
+    - 新增 handleVideoUpload 处理函数（上传+元数据读取+预览）
+    - 新增 handleAudioUpload 处理函数（上传+时长读取+预览）
+    - handleMediaClick 支持 VIDEO/AUDIO 类型触发文件选择
+    - 媒体预览区新增视频预览（缩略图+播放图标+时长）和音频预览（图标+时长）
+    - 新增视频/音频隐藏文件输入控件
+  修改效果：用户可通过 PostComposer 上传视频和音频
+
+第4条
+
+  修改时间：2026-07-18
+  修改位置：web/src/app/(main)/search/page.tsx
+  修改原因：侧边栏 AR视频/AR图片/音频记录链接指向搜索页但未实现类型过滤
+  修改内容：
+    - 导入 useSearchParams 读取 URL type 参数
+    - 新增 mediaTypeFilters 筛选栏（全部/AR视频/AR图片/音频记录）
+    - filteredPosts 逻辑增加 mediaTypeFilter 匹配
+    - URL type 参数变化时自动更新筛选并触发搜索
+  修改效果：点击侧边栏"AR视频/AR图片/音频记录"可正确过滤搜索结果
+
+第5条
+
+  修改时间：2026-07-18
+  修改位置：server/sql/schema.sql, server/sql/migrate-media-upload.sql
+  修改原因：messages 表 media_type 与 TypeORM 实体不一致
+  修改内容：
+    - schema.sql: media_type ENUM 扩展 AUDIO/CARD 类型
+    - 新建 migrate-media-upload.sql 迁移脚本
+  修改效果：数据库与实体定义保持一致
+
 【2026-07-18 内容分类体系 Phase 4 - 攻略与合集】
 
 --------------------------------------------------------------------------------
