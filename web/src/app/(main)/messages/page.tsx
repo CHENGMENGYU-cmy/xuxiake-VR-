@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Users, Loader2, X, Check, XIcon } from 'lucide-react';
+import { Users, Loader2, Check, XIcon } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -12,7 +12,6 @@ import { useAuthStore } from '@/stores/auth-store';
 import { useChatStore } from '@/stores/chat-store';
 import { connectChat } from '@/lib/chat-socket';
 import apiClient from '@/lib/api-client';
-import { getOrCreateDirectConversation } from '@/lib/social-api';
 
 export default function MessagesPage() {
   const { user } = useAuthStore();
@@ -22,10 +21,6 @@ export default function MessagesPage() {
   const [requestConversations, setRequestConversations] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
-  const [showFriends, setShowFriends] = useState(false);
-  const [friends, setFriends] = useState<any[]>([]);
-  const [friendsLoading, setFriendsLoading] = useState(false);
-  const [startingChat, setStartingChat] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'NORMAL' | 'REQUEST'>('NORMAL');
 
   useEffect(() => {
