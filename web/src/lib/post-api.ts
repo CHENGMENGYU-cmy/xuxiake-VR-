@@ -1,5 +1,5 @@
 import apiClient from './api-client';
-import { Post, PostType, Visibility } from '@/types';
+import { Post, PostType, Visibility, Difficulty, RouteType } from '@/types';
 
 export interface CreatePostPayload {
   content: string;
@@ -25,6 +25,30 @@ export interface CreatePostPayload {
     linkDescription?: string;
     linkFavicon?: string;
   }[];
+  routeDetail?: {
+    distanceKm?: number;
+    durationMinutes?: number;
+    elevationGainM?: number;
+    difficulty?: Difficulty;
+    routeType?: RouteType;
+    gpxData?: string;
+    waypoints?: { lat: number; lng: number; name: string; description?: string }[];
+  };
+  journey?: {
+    title: string;
+    startDate?: string;
+    endDate?: string;
+    destination?: string;
+    coverUrl?: string;
+    stops?: {
+      dayNumber?: number;
+      locationName?: string;
+      locationLat?: number;
+      locationLng?: number;
+      description?: string;
+      mediaUrl?: string;
+    }[];
+  };
 }
 
 export async function createPost(payload: CreatePostPayload): Promise<Post> {
