@@ -14,9 +14,11 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { MediaViewer } from './media-viewer';
+import { ShareToMessage } from '@/components/chat/share-to-message';
 import { Post } from '@/types';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/stores/auth-store';
+import type { ContentCardData } from '@/components/chat/content-card';
 
 const vrFormatLabels: Record<string, string> = {
   VR360: 'VR 360°',
@@ -38,6 +40,17 @@ export function PostCard({ post }: PostCardProps) {
   const { user: currentUser } = useAuthStore();
   const [isLiked, setIsLiked] = useState(post.isLiked);
   const [likeCount, setLikeCount] = useState(post.likeCount);
+  const [showShare, setShowShare] = useState(false);
+
+  const shareContent: ContentCardData = {
+    type: 'POST',
+    id: post.id,
+    title: post.content?.slice(0, 50) || '笔记',
+    description: post.content?.slice(0, 100),
+    coverUrl: post.mediaItems?.[0]?.thumbnailUrl || post.mediaItems?.[0]?.url,
+    extra: { likes: likeCount, comments: post.commentCount },
+    link: `/post/${post.id}`,
+  };
 
   // 如果帖子作者是当前用户，使用 authStore 中的最新头像
   const authorAvatarUrl = currentUser && post.author.username === currentUser.username
@@ -153,11 +166,23 @@ export function PostCard({ post }: PostCardProps) {
             评论
           </Button>
         </Link>
-        <Button variant="ghost" className="flex-1 gap-2 text-sm text-muted-foreground hover:bg-teal-50 dark:hover:bg-teal-900/20">
+        <Button
+          variant="ghost"
+          className="flex-1 gap-2 text-sm text-muted-foreground hover:bg-teal-50 dark:hover:bg-teal-900/20"
+          onClick={() => setShowShare(true)}
+        >
           <Share2 className="h-4 w-4" />
           分享
         </Button>
       </div>
+
+      {/* 分享到消息弹窗 */}
+      {showShare && (
+        <ShareToMessage
+          content={shareContent}
+          onClose={() => setShowShare(false)}
+        />
+      )}
     </Card>
   );
 }

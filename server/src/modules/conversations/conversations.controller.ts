@@ -1,8 +1,8 @@
 import {
-  Controller, Get, Post, Param, Body, Headers, Query, UnauthorizedException, NotFoundException,
+  Controller, Get, Post, Delete, Param, Body, Headers, Query, UnauthorizedException, NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In, Not } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { v4 as uuidv4 } from 'uuid';
 import { Conversation } from '../../entities/conversation.entity.js';
@@ -10,6 +10,7 @@ import { ConversationParticipant } from '../../entities/conversation-participant
 import { Message } from '../../entities/message.entity.js';
 import { User } from '../../entities/user.entity.js';
 import { UserFollow } from '../../entities/user-follow.entity.js';
+import { MessageReaction } from '../../entities/message-reaction.entity.js';
 
 @Controller('api/conversations')
 export class ConversationsController {
@@ -19,27 +20,39 @@ export class ConversationsController {
     @InjectRepository(Message) private readonly msgRepo: Repository<Message>,
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     @InjectRepository(UserFollow) private readonly followRepo: Repository<UserFollow>,
+    @InjectRepository(MessageReaction) private readonly reactionRepo: Repository<MessageReaction>,
     private readonly jwtService: JwtService,
   ) {}
 
-  private getUserId(auth?: string): string | null {
+  private getUserId(auth?: string): string {
     const token = auth?.replace('Bearer ', '') || null;
-    if (!token) return null;
+    if (!token) throw new UnauthorizedException('请先登录');
     try {
       return this.jwtService.verify(token).sub;
     } catch {
-      return null;
+      throw new UnauthorizedException('Token 已过期或无效');
     }
   }
 
-  @Get()
-  async getConversations(@Headers('authorization') auth: string) {
-    const userId = this.getUserId(auth);
-    if (!userId) throw new UnauthorizedException('请先登录');
+  // ==================== 会话列表 ====================
 
-    // 获取用户参与的会话
+  @Get()
+  async getConversations(
+    @Headers('authorization') auth: string,
+    @Query('status') status?: string,
+  ) {
+    const userId = this.getUserId(auth);
+
+    // 构建查询条件：支持按状态过滤
+    const whereCondition: any = { userId };
+    if (status === 'REQUEST' || status === 'NORMAL') {
+      whereCondition.status = status;
+    } else if (!status) {
+      whereCondition.status = 'NORMAL';
+    }
+
     const participations = await this.partRepo.find({
-      where: { userId },
+      where: whereCondition,
       order: { joinedAt: 'DESC' },
     });
 
@@ -62,7 +75,6 @@ export class ConversationsController {
     const users = allUserIds.length ? await this.userRepo.findBy({ id: In(allUserIds) }) : [];
     const userMap = new Map(users.map((u) => [u.id, u]));
 
-    // 构建会话列表
     const result = conversations.map((conv) => {
       const parts = allParts.filter((p) => p.conversationId === conv.id);
       const otherParts = parts.filter((p) => p.userId !== userId);
@@ -94,6 +106,8 @@ export class ConversationsController {
           ? {
               id: lastMsg.id,
               content: lastMsg.content,
+              mediaUrl: lastMsg.mediaUrl,
+              mediaType: lastMsg.mediaType,
               sender: lastMsgSender
                 ? { id: lastMsgSender.id, username: lastMsgSender.username, displayName: lastMsgSender.displayName, avatarUrl: lastMsgSender.avatarUrl }
                 : null,
@@ -101,6 +115,7 @@ export class ConversationsController {
             }
           : null,
         unreadCount,
+        myStatus: myPart?.status || 'NORMAL',
         updatedAt: conv.updatedAt || conv.createdAt,
       };
     });
@@ -108,19 +123,16 @@ export class ConversationsController {
     return { success: true, data: result };
   }
 
+  // ==================== 获取消息（游标分页） ====================
+
   @Get(':id/messages')
   async getMessages(
     @Headers('authorization') auth: string,
     @Param('id') convId: string,
-    @Query('page') page?: string,
+    @Query('cursor') cursor?: string,
     @Query('limit') limit?: string,
   ) {
     const userId = this.getUserId(auth);
-    if (!userId) throw new UnauthorizedException('请先登录');
-
-    const pageNum = parseInt(page || '1');
-    const limitNum = parseInt(limit || '50');
-    const skip = (pageNum - 1) * limitNum;
 
     // 验证用户是否是会话参与者
     const part = await this.partRepo.findOne({
@@ -128,13 +140,22 @@ export class ConversationsController {
     });
     if (!part) throw new NotFoundException('会话不存在');
 
-    const [messages, total] = await this.msgRepo.findAndCount({
-      where: { conversationId: convId },
-      relations: { sender: true },
-      order: { createdAt: 'ASC' },
-      skip,
-      take: limitNum,
-    });
+    const limitNum = Math.min(parseInt(limit || '30'), 100);
+
+    const qb = this.msgRepo
+      .createQueryBuilder('msg')
+      .leftJoinAndSelect('msg.sender', 'sender')
+      .where('msg.conversationId = :convId', { convId })
+      .orderBy('msg.createdAt', 'DESC')
+      .take(limitNum + 1);
+
+    if (cursor) {
+      qb.andWhere('msg.id < :cursor', { cursor });
+    }
+
+    const msgs = await qb.getMany();
+    const hasMore = msgs.length > limitNum;
+    const data = msgs.slice(0, limitNum);
 
     // 更新最后阅读时间
     part.lastReadAt = new Date();
@@ -142,25 +163,16 @@ export class ConversationsController {
 
     return {
       success: true,
-      data: messages.map((m) => ({
-        id: m.id,
-        content: m.content,
-        mediaUrl: m.mediaUrl,
-        mediaType: m.mediaType,
-        createdAt: m.createdAt,
-        sender: m.sender
-          ? {
-              id: m.sender.id,
-              username: m.sender.username,
-              displayName: m.sender.displayName,
-              avatarUrl: m.sender.avatarUrl,
-            }
-          : null,
-      })),
-      total,
-      page: pageNum,
+      data: data.map((m) => {
+        const { passwordHash, ...sender } = m.sender;
+        return { ...m, sender };
+      }),
+      nextCursor: hasMore ? data[data.length - 1].id : null,
+      hasMore,
     };
   }
+
+  // ==================== 发送消息 ====================
 
   @Post(':id/messages')
   async sendMessage(
@@ -169,9 +181,7 @@ export class ConversationsController {
     @Body() body: { content?: string; mediaUrl?: string; mediaType?: string },
   ) {
     const userId = this.getUserId(auth);
-    if (!userId) throw new UnauthorizedException('请先登录');
 
-    // 验证用户是否是会话参与者
     const part = await this.partRepo.findOne({
       where: { conversationId: convId, userId },
     });
@@ -207,13 +217,14 @@ export class ConversationsController {
     };
   }
 
+  // ==================== 创建/获取私聊 ====================
+
   @Post('direct/:userId')
   async getOrCreateDirectConversation(
     @Headers('authorization') auth: string,
     @Param('userId') targetId: string,
   ) {
     const userId = this.getUserId(auth);
-    if (!userId) throw new UnauthorizedException('请先登录');
     if (userId === targetId) throw new NotFoundException('不能和自己聊天');
 
     // 查找是否已存在私聊会话
@@ -242,7 +253,6 @@ export class ConversationsController {
     });
     await this.convRepo.save(conv);
 
-    // 发起者状态为 NORMAL，接收者状态根据是否互关决定
     const parts = [
       this.partRepo.create({ id: uuidv4(), conversationId: convId, userId, status: 'NORMAL' }),
       this.partRepo.create({ id: uuidv4(), conversationId: convId, userId: targetId, status: isMutual ? 'NORMAL' : 'REQUEST' }),
@@ -250,5 +260,122 @@ export class ConversationsController {
     await this.partRepo.save(parts);
 
     return { success: true, data: { id: convId, isRequest: !isMutual } };
+  }
+
+  // ==================== 消息请求操作 ====================
+
+  @Post(':id/accept')
+  async acceptMessageRequest(
+    @Headers('authorization') auth: string,
+    @Param('id') convId: string,
+  ) {
+    const userId = this.getUserId(auth);
+
+    const part = await this.partRepo.findOne({
+      where: { conversationId: convId, userId, status: 'REQUEST' },
+    });
+    if (!part) throw new NotFoundException('消息请求不存在');
+
+    part.status = 'NORMAL';
+    await this.partRepo.save(part);
+
+    return { success: true, message: '已接受消息请求' };
+  }
+
+  @Post(':id/reject')
+  async rejectMessageRequest(
+    @Headers('authorization') auth: string,
+    @Param('id') convId: string,
+  ) {
+    const userId = this.getUserId(auth);
+
+    const part = await this.partRepo.findOne({
+      where: { conversationId: convId, userId, status: 'REQUEST' },
+    });
+    if (!part) throw new NotFoundException('消息请求不存在');
+
+    part.status = 'HIDDEN';
+    await this.partRepo.save(part);
+
+    return { success: true, message: '已拒绝消息请求' };
+  }
+
+  // ==================== 消息反应 ====================
+
+  @Post('messages/:messageId/reactions')
+  async addReaction(
+    @Headers('authorization') auth: string,
+    @Param('messageId') messageId: string,
+    @Body() body: { emoji: string },
+  ) {
+    const userId = this.getUserId(auth);
+    if (!body.emoji) throw new NotFoundException('emoji不能为空');
+
+    // 验证消息存在
+    const msg = await this.msgRepo.findOne({ where: { id: messageId } });
+    if (!msg) throw new NotFoundException('消息不存在');
+
+    // 检查是否已有相同反应
+    const existing = await this.reactionRepo.findOne({
+      where: { messageId, userId, emoji: body.emoji },
+    });
+    if (existing) {
+      return { success: true, data: existing };
+    }
+
+    const reaction = this.reactionRepo.create({
+      id: uuidv4(),
+      messageId,
+      userId,
+      emoji: body.emoji,
+    });
+    await this.reactionRepo.save(reaction);
+
+    return { success: true, data: reaction };
+  }
+
+  @Delete('messages/:messageId/reactions/:emoji')
+  async removeReaction(
+    @Headers('authorization') auth: string,
+    @Param('messageId') messageId: string,
+    @Param('emoji') emoji: string,
+  ) {
+    const userId = this.getUserId(auth);
+
+    const reaction = await this.reactionRepo.findOne({
+      where: { messageId, userId, emoji },
+    });
+    if (!reaction) throw new NotFoundException('反应不存在');
+
+    await this.reactionRepo.remove(reaction);
+    return { success: true, message: '已取消反应' };
+  }
+
+  @Get('messages/:messageId/reactions')
+  async getReactions(
+    @Param('messageId') messageId: string,
+  ) {
+    const reactions = await this.reactionRepo.find({
+      where: { messageId },
+      relations: { user: true },
+      order: { createdAt: 'ASC' },
+    });
+
+    // 按emoji分组
+    const grouped: Record<string, { emoji: string; count: number; users: any[] }> = {};
+    for (const r of reactions) {
+      if (!grouped[r.emoji]) {
+        grouped[r.emoji] = { emoji: r.emoji, count: 0, users: [] };
+      }
+      grouped[r.emoji].count++;
+      grouped[r.emoji].users.push({
+        id: r.user.id,
+        username: r.user.username,
+        displayName: r.user.displayName,
+        avatarUrl: r.user.avatarUrl,
+      });
+    }
+
+    return { success: true, data: Object.values(grouped) };
   }
 }

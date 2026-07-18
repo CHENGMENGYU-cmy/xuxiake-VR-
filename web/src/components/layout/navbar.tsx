@@ -31,6 +31,9 @@ import { Badge } from '@/components/ui/badge';
 import { useAuthStore } from '@/stores/auth-store';
 import { useUIStore } from '@/stores/ui-store';
 import { useSearchStore } from '@/stores/search-store';
+import { useChatStore } from '@/stores/chat-store';
+import { connectChat } from '@/lib/chat-socket';
+import apiClient from '@/lib/api-client';
 import { mockNotifications } from '@/lib/mock-data';
 import { SearchSuggestions } from '@/components/search/search-suggestions';
 
@@ -39,12 +42,36 @@ export function Navbar() {
   const { user, logout } = useAuthStore();
   const { toggleSidebar } = useUIStore();
   const { query: searchQuery, setQuery: setSearchQuery } = useSearchStore();
+  const totalUnread = useChatStore((s) => s.totalUnread);
+  const setTotalUnread = useChatStore((s) => s.setTotalUnread);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // 加载未读消息数 + WebSocket实时更新
+  useEffect(() => {
+    if (!user) return;
+    apiClient.get('/conversations?status=NORMAL').then((res) => {
+      if (res.data?.success) {
+        const total = (res.data.data || []).reduce((sum: number, c: any) => sum + (c.unreadCount || 0), 0);
+        setTotalUnread(total);
+      }
+    }).catch(() => {});
+    const socket = connectChat(user.id);
+    const handleNewMessage = () => {
+      apiClient.get('/conversations?status=NORMAL').then((res) => {
+        if (res.data?.success) {
+          const total = (res.data.data || []).reduce((sum: number, c: any) => sum + (c.unreadCount || 0), 0);
+          setTotalUnread(total);
+        }
+      }).catch(() => {});
+    };
+    socket.on('chat:message:new', handleNewMessage);
+    return () => { socket.off('chat:message:new', handleNewMessage); };
+  }, [user, setTotalUnread]);
 
   const unreadCount = mockNotifications.filter((n) => !n.isRead).length;
 
@@ -145,9 +172,11 @@ export function Navbar() {
           <Link href="/messages">
             <Button variant="ghost" size="icon" className="relative">
               <MessageCircle className="h-5 w-5" />
-              <Badge className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center bg-accent px-0.5 text-[10px]">
-                2
-              </Badge>
+              {totalUnread > 0 && (
+                <Badge className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center bg-accent px-0.5 text-[10px]">
+                  {totalUnread > 99 ? '99+' : totalUnread}
+                </Badge>
+              )}
             </Button>
           </Link>
 

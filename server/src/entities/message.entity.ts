@@ -19,8 +19,8 @@ export class Message {
   @Column({ name: 'media_url', type: 'varchar', length: 500, nullable: true })
   mediaUrl: string | null;
 
-  @Column({ name: 'media_type', type: 'enum', enum: ['IMAGE', 'FILE'], nullable: true })
-  mediaType: 'IMAGE' | 'FILE' | null;
+  @Column({ name: 'media_type', type: 'enum', enum: ['IMAGE', 'FILE', 'AUDIO', 'CARD'], nullable: true })
+  mediaType: 'IMAGE' | 'FILE' | 'AUDIO' | 'CARD' | null;
 
   @Column({ name: 'created_at', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

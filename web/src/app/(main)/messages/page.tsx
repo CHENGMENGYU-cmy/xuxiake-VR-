@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Users, Loader2, X, Check, XIcon } from 'lucide-react';
@@ -9,12 +9,15 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useAuthStore } from '@/stores/auth-store';
+import { useChatStore } from '@/stores/chat-store';
+import { connectChat } from '@/lib/chat-socket';
 import apiClient from '@/lib/api-client';
 import { getOrCreateDirectConversation } from '@/lib/social-api';
 
 export default function MessagesPage() {
   const { user } = useAuthStore();
   const router = useRouter();
+  const setTotalUnread = useChatStore((s) => s.setTotalUnread);
   const [conversations, setConversations] = useState<any[]>([]);
   const [requestConversations, setRequestConversations] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -29,21 +32,48 @@ export default function MessagesPage() {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
+  // 加载会话列表
+  const loadConversations = useCallback(async () => {
     if (!user) return;
-    setIsLoading(true);
-    Promise.all([
-      apiClient.get('/conversations?status=NORMAL'),
-      apiClient.get('/conversations?status=REQUEST'),
-    ]).then(([normalRes, requestRes]) => {
+    try {
+      const [normalRes, requestRes] = await Promise.all([
+        apiClient.get('/conversations?status=NORMAL'),
+        apiClient.get('/conversations?status=REQUEST'),
+      ]);
       if (normalRes.data?.success) {
-        setConversations(normalRes.data.data || []);
+        const convs = normalRes.data.data || [];
+        setConversations(convs);
+        // 计算总未读数
+        const total = convs.reduce((sum: number, c: any) => sum + (c.unreadCount || 0), 0);
+        setTotalUnread(total);
       }
       if (requestRes.data?.success) {
         setRequestConversations(requestRes.data.data || []);
       }
-    }).catch(() => {}).finally(() => setIsLoading(false));
-  }, [user]);
+    } catch { /* ignore */ } finally {
+      setIsLoading(false);
+    }
+  }, [user, setTotalUnread]);
+
+  useEffect(() => {
+    loadConversations();
+  }, [loadConversations]);
+
+  // WebSocket：监听新消息，刷新列表
+  useEffect(() => {
+    if (!user) return;
+    const socket = connectChat(user.id);
+
+    const handleNewMessage = () => {
+      // 收到新消息时刷新会话列表
+      loadConversations();
+    };
+
+    socket.on('chat:message:new', handleNewMessage);
+    return () => {
+      socket.off('chat:message:new', handleNewMessage);
+    };
+  }, [user, loadConversations]);
 
   const loadFriends = async () => {
     if (!user || friends.length > 0) {
@@ -59,9 +89,7 @@ export default function MessagesPage() {
       const followers = followersRes.data?.data || [];
       const followingIds = new Set((followingRes.data?.data || []).map((u: any) => u.id));
       setFriends(followers.filter((u: any) => followingIds.has(u.id)));
-    } catch {
-      // ignore
-    } finally {
+    } catch { /* ignore */ } finally {
       setFriendsLoading(false);
       setShowFriends(true);
     }
@@ -76,9 +104,7 @@ export default function MessagesPage() {
         alert('消息已发送为请求，对方需要接受后才能继续对话');
       }
       router.push(`/messages/${conv.id}`);
-    } catch {
-      // ignore
-    } finally {
+    } catch { /* ignore */ } finally {
       setStartingChat(null);
     }
   };
@@ -91,18 +117,14 @@ export default function MessagesPage() {
       if (acceptedConv) {
         setConversations((prev) => [acceptedConv, ...prev]);
       }
-    } catch {
-      // ignore
-    }
+    } catch { /* ignore */ }
   };
 
   const handleRejectRequest = async (convId: string) => {
     try {
       await apiClient.post(`/conversations/${convId}/reject`);
       setRequestConversations((prev) => prev.filter((c) => c.id !== convId));
-    } catch {
-      // ignore
-    }
+    } catch { /* ignore */ }
   };
 
   if (!mounted || !user) {
@@ -114,16 +136,18 @@ export default function MessagesPage() {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold">消息</h1>
-        <Button size="sm" onClick={loadFriends}>
-          发起对话
-        </Button>
-      </div>
+    <div className="flex h-[calc(100vh-8rem)] flex-col">
+      {/* 固定头部 */}
+      <div className="shrink-0 space-y-4 pb-4">
+        <div className="flex items-center justify-between">
+          <h1 className="text-xl font-bold">消息</h1>
+          <Button size="sm" onClick={loadFriends}>
+            发起对话
+          </Button>
+        </div>
 
-      {/* 好友选择弹层 */}
-      {showFriends && (
+        {/* 好友选择弹层 */}
+        {showFriends && (
         <div className="rounded-lg border bg-card p-4">
           <div className="mb-3 flex items-center justify-between">
             <p className="text-sm font-medium">选择好友开始对话</p>
@@ -239,7 +263,9 @@ export default function MessagesPage() {
                         </div>
                         <div className="flex items-center justify-between">
                           <p className="truncate text-sm text-muted-foreground">
-                            {conv.lastMessage?.content || '暂无消息'}
+                            {conv.lastMessage?.mediaType === 'IMAGE'
+                              ? '[图片]'
+                              : conv.lastMessage?.content || '暂无消息'}
                           </p>
                           {conv.unreadCount > 0 && (
                             <Badge className="ml-2 h-5 min-w-5 bg-primary px-1.5 text-xs">

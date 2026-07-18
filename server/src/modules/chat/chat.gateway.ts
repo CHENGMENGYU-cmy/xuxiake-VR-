@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Message } from '../../entities/message.entity.js';
 import { Conversation } from '../../entities/conversation.entity.js';
 import { ConversationParticipant } from '../../entities/conversation-participant.entity.js';
+import { User } from '../../entities/user.entity.js';
 
 @WebSocketGateway({
   cors: { origin: '*', credentials: true },
@@ -30,6 +31,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @InjectRepository(Conversation) private readonly convRepo: Repository<Conversation>,
     @InjectRepository(ConversationParticipant)
     private readonly partRepo: Repository<ConversationParticipant>,
+    @InjectRepository(User) private readonly userRepo: Repository<User>,
   ) {}
 
   handleConnection(client: Socket) {
@@ -60,7 +62,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('chat:message:send')
   async handleMessage(
     @ConnectedSocket() client: Socket,
-    @MessageBody() data: { conversationId: string; content: string },
+    @MessageBody() data: { conversationId: string; content?: string; mediaUrl?: string; mediaType?: string },
   ) {
     const userId = client.handshake.query.userId as string;
     if (!userId || !data.conversationId) return;
@@ -69,12 +71,24 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       id: uuidv4(),
       conversationId: data.conversationId,
       senderId: userId,
-      content: data.content,
+      content: data.content || null,
+      mediaUrl: data.mediaUrl || null,
+      mediaType: (data.mediaType as any) || null,
     });
     await this.msgRepo.save(msg);
 
     await this.convRepo.update(data.conversationId, { updatedAt: new Date() });
 
+    // 获取发送者信息
+    const sender = await this.userRepo.findOne({ where: { id: userId } });
+    const msgWithSender = {
+      ...msg,
+      sender: sender
+        ? { id: sender.id, username: sender.username, displayName: sender.displayName, avatarUrl: sender.avatarUrl }
+        : null,
+    };
+
+    // 广播给所有参与者
     const memberships = await this.partRepo.find({
       where: { conversationId: data.conversationId },
     });
@@ -83,7 +97,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       const sockets = this.onlineUsers.get(m.userId);
       if (sockets) {
         sockets.forEach((socketId) => {
-          this.server.to(socketId).emit('chat:message:new', msg);
+          this.server.to(socketId).emit('chat:message:new', msgWithSender);
         });
       }
     });
@@ -109,11 +123,18 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('chat:message:read')
-  handleRead(
+  async handleRead(
     @ConnectedSocket() client: Socket,
     @MessageBody() data: { conversationId: string },
   ) {
-    console.log(`[Chat] 用户标记会话 ${data.conversationId} 已读`);
+    const userId = client.handshake.query.userId as string;
+    if (!userId) return;
+
+    // 更新最后阅读时间
+    await this.partRepo.update(
+      { conversationId: data.conversationId, userId },
+      { lastReadAt: new Date() },
+    );
   }
 
   @SubscribeMessage('presence:get')

@@ -4,7 +4,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './modules/auth/auth.module.js';
 import { PostsModule } from './modules/posts/posts.module.js';
 import { ChatGateway } from './modules/chat/chat.gateway.js';
-import { ChatController } from './modules/chat/chat.controller.js';
 import { NotificationsController } from './modules/notifications/notifications.controller.js';
 import { ConversationsController } from './modules/conversations/conversations.controller.js';
 import { FeedController } from './modules/feed/feed.controller.js';
@@ -30,6 +29,7 @@ import { CommunityAnnouncement } from './entities/community-announcement.entity.
 import { CommunityRole } from './entities/community-role.entity.js';
 import { CommunityChallenge } from './entities/community-challenge.entity.js';
 import { CommunityChallengeEntry } from './entities/community-challenge-entry.entity.js';
+import { MessageReaction } from './entities/message-reaction.entity.js';
 import { getDatabaseConfig } from './config/database.config.js';
 import { JwtModule } from '@nestjs/jwt';
 
@@ -47,6 +47,7 @@ import { JwtModule } from '@nestjs/jwt';
       ConversationParticipant, UserFollow,
       InterestTag, UserInterest, Community, CommunityTag,
       CommunityAnnouncement, CommunityRole, CommunityChallenge, CommunityChallengeEntry,
+      MessageReaction,
     ]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -60,7 +61,6 @@ import { JwtModule } from '@nestjs/jwt';
     PostsModule,
   ],
   controllers: [
-    ChatController,
     NotificationsController,
     ConversationsController,
     FeedController,

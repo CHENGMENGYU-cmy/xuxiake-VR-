@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Search, Upload, MessageCircle, Bell } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { mockNotifications } from '@/lib/mock-data';
+import { useChatStore } from '@/stores/chat-store';
 
 const navItems = [
   { href: '/feed', label: '首页', icon: Home },
@@ -16,7 +16,7 @@ const navItems = [
 
 export function MobileNav() {
   const pathname = usePathname();
-  const unreadNotif = mockNotifications.filter((n) => !n.isRead).length;
+  const totalUnread = useChatStore((s) => s.totalUnread);
 
   return (
     <nav className="fixed bottom-0 z-50 w-full border-t bg-card lg:hidden">
@@ -35,14 +35,9 @@ export function MobileNav() {
             >
               <Icon className="h-5 w-5" />
               <span className="text-[10px]">{item.label}</span>
-              {item.label === '消息' && (
+              {item.label === '消息' && totalUnread > 0 && (
                 <span className="absolute -right-1 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent text-[9px] text-white">
-                  2
-                </span>
-              )}
-              {item.label === '通知' && unreadNotif > 0 && (
-                <span className="absolute -right-1 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent text-[9px] text-white">
-                  {unreadNotif}
+                  {totalUnread > 99 ? '99+' : totalUnread}
                 </span>
               )}
             </Link>
