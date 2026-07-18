@@ -6,9 +6,9 @@ import { Post } from '../../entities/post.entity.js';
 import { MediaItem } from '../../entities/media-item.entity.js';
 import { Comment } from '../../entities/comment.entity.js';
 import { Like } from '../../entities/like.entity.js';
-import { Notification } from '../../entities/notification.entity.js';
 import { User } from '../../entities/user.entity.js';
 import { CreatePostDto, CreateCommentDto } from '../../common/interfaces.js';
+import { NotificationsService } from '../notifications/notifications.service.js';
 
 @Injectable()
 export class PostsService {
@@ -17,8 +17,8 @@ export class PostsService {
     @InjectRepository(MediaItem) private readonly mediaRepo: Repository<MediaItem>,
     @InjectRepository(Comment) private readonly commentRepo: Repository<Comment>,
     @InjectRepository(Like) private readonly likeRepo: Repository<Like>,
-    @InjectRepository(Notification) private readonly notifRepo: Repository<Notification>,
     @InjectRepository(User) private readonly userRepo: Repository<User>,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   async getPosts(options: { cursor?: string; limit?: number; sort?: string; page?: number } = {}) {
