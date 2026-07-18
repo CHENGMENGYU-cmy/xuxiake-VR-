@@ -3,6 +3,7 @@ import { User } from './user.entity.js';
 import { MediaItem } from './media-item.entity.js';
 import { Comment } from './comment.entity.js';
 import { Like } from './like.entity.js';
+import { Community } from './community.entity.js';
 
 @Entity('posts')
 export class Post {
