@@ -20,11 +20,11 @@ const iconMap: Record<string, React.ElementType> = {
 };
 
 const iconColors: Record<string, string> = {
-  LIKE: 'text-red-500 bg-red-50 dark:bg-red-900/20',
-  COMMENT: 'text-blue-500 bg-blue-50 dark:bg-blue-900/20',
-  FOLLOW: 'text-teal-500 bg-teal-50 dark:bg-teal-900/20',
-  SYSTEM: 'text-orange-500 bg-orange-50 dark:bg-orange-900/20',
-  MESSAGE: 'text-purple-500 bg-purple-50 dark:bg-purple-900/20',
+  LIKE: 'text-red-500',
+  COMMENT: 'text-blue-500',
+  FOLLOW: 'text-teal-500',
+  SYSTEM: 'text-orange-500',
+  MESSAGE: 'text-purple-500',
 };
 
 function timeAgo(dateStr: string): string {
@@ -76,8 +76,8 @@ export function NotificationDropdown({ onClose }: NotificationDropdownProps) {
   };
 
   return (
-    <div className="w-96">
-      <div className="flex items-center justify-between px-4 py-3">
+    <div className="w-80">
+      <div className="flex items-center justify-between px-3 py-2.5">
         <span className="text-sm font-semibold">通知</span>
         <Button
           variant="ghost"
@@ -91,7 +91,7 @@ export function NotificationDropdown({ onClose }: NotificationDropdownProps) {
       </div>
       <Separator />
 
-      <ScrollArea className="max-h-[480px]">
+      <ScrollArea className="max-h-[400px]">
         {isLoading ? (
           <div className="flex items-center justify-center py-8">
             <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
@@ -101,7 +101,7 @@ export function NotificationDropdown({ onClose }: NotificationDropdownProps) {
         ) : (
           notifications.map((notif) => {
             const Icon = iconMap[notif.type] || Info;
-            const colorClass = iconColors[notif.type] || 'text-muted-foreground bg-muted';
+            const colorClass = iconColors[notif.type] || 'text-muted-foreground';
             const link = notif.postId
               ? `/post/${notif.postId}`
               : notif.sender
@@ -113,7 +113,7 @@ export function NotificationDropdown({ onClose }: NotificationDropdownProps) {
                 key={notif.id}
                 href={link}
                 className={cn(
-                  'flex items-start gap-3 px-4 py-3 transition-colors hover:bg-muted/50',
+                  'flex items-center gap-3 px-3 py-2.5 transition-colors hover:bg-muted/50',
                   !notif.isRead && 'bg-primary/5'
                 )}
                 onClick={() => {
@@ -121,34 +121,29 @@ export function NotificationDropdown({ onClose }: NotificationDropdownProps) {
                   onClose();
                 }}
               >
-                <div
-                  className={cn(
-                    'flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full',
-                    colorClass
-                  )}
-                >
-                  <Icon className="h-4 w-4" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-start gap-2">
-                    {notif.sender && (
-                      <Avatar className="h-6 w-6 flex-shrink-0">
-                        <AvatarImage src={notif.sender.avatarUrl} alt={notif.sender.displayName} />
-                        <AvatarFallback className="text-[10px]">
-                          {notif.sender.displayName?.[0]}
-                        </AvatarFallback>
-                      </Avatar>
-                    )}
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm text-foreground">{notif.message}</p>
-                      <p className="mt-0.5 text-xs text-muted-foreground">
-                        {timeAgo(notif.createdAt)}
-                      </p>
-                    </div>
+                {/* 头像或图标 */}
+                {notif.sender ? (
+                  <Avatar className="h-8 w-8 flex-shrink-0">
+                    <AvatarImage src={notif.sender.avatarUrl} alt={notif.sender.displayName} />
+                    <AvatarFallback className="text-xs">
+                      {notif.sender.displayName?.[0]}
+                    </AvatarFallback>
+                  </Avatar>
+                ) : (
+                  <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-muted">
+                    <Icon className={cn('h-4 w-4', colorClass)} />
                   </div>
+                )}
+
+                {/* 内容 */}
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm text-foreground">{notif.message}</p>
+                  <p className="text-xs text-muted-foreground">{timeAgo(notif.createdAt)}</p>
                 </div>
+
+                {/* 未读标记 */}
                 {!notif.isRead && (
-                  <div className="mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-primary" />
+                  <div className="h-2 w-2 flex-shrink-0 rounded-full bg-primary" />
                 )}
               </Link>
             );
@@ -159,7 +154,7 @@ export function NotificationDropdown({ onClose }: NotificationDropdownProps) {
       <Separator />
       <Link
         href="/notifications"
-        className="block py-2.5 text-center text-xs font-medium text-primary transition-colors hover:bg-muted/50"
+        className="block py-2 text-center text-xs font-medium text-primary transition-colors hover:bg-muted/50"
         onClick={onClose}
       >
         查看全部通知
