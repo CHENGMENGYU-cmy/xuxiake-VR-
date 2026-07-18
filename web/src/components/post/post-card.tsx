@@ -168,6 +168,53 @@ export function PostCard({ post }: PostCardProps) {
         </div>
       )}
 
+      {/* 路线详情 */}
+      {post.postType === 'ROUTE' && post.routeDetail && (
+        <div className="mx-4 mb-3 rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-3">
+          <div className="flex flex-wrap gap-3 text-xs">
+            {post.routeDetail.distanceKm && (
+              <div className="flex items-center gap-1">
+                <Map className="h-3.5 w-3.5 text-emerald-500" />
+                <span className="font-medium">{post.routeDetail.distanceKm} km</span>
+              </div>
+            )}
+            {post.routeDetail.durationMinutes && (
+              <div className="flex items-center gap-1">
+                <Clock className="h-3.5 w-3.5 text-emerald-500" />
+                <span className="font-medium">{post.routeDetail.durationMinutes >= 60 ? `${Math.floor(post.routeDetail.durationMinutes / 60)}h${post.routeDetail.durationMinutes % 60}m` : `${post.routeDetail.durationMinutes}分钟`}</span>
+              </div>
+            )}
+            {post.routeDetail.elevationGainM && (
+              <div className="flex items-center gap-1">
+                <TrendingUp className="h-3.5 w-3.5 text-emerald-500" />
+                <span className="font-medium">+{post.routeDetail.elevationGainM}m</span>
+              </div>
+            )}
+            <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${difficultyColors[post.routeDetail.difficulty]}`}>
+              {difficultyLabels[post.routeDetail.difficulty]}
+            </span>
+            <span className="rounded-full px-2 py-0.5 text-[10px] font-medium bg-emerald-500/10 text-emerald-600">
+              {routeTypeLabels[post.routeDetail.routeType]}
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* 旅程详情 */}
+      {post.postType === 'JOURNEY' && post.journey && (
+        <div className="mx-4 mb-3 rounded-lg border border-amber-500/20 bg-amber-500/5 p-3">
+          <div className="flex items-center gap-2 mb-1">
+            <Compass className="h-4 w-4 text-amber-500" />
+            <span className="text-sm font-medium">{post.journey.title}</span>
+          </div>
+          <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
+            {post.journey.destination && <span>📍 {post.journey.destination}</span>}
+            {post.journey.startDate && <span>📅 {post.journey.startDate}{post.journey.endDate ? ` ~ ${post.journey.endDate}` : ''}</span>}
+            {post.journey.stopCount > 0 && <span>📌 {post.journey.stopCount} 站</span>}
+          </div>
+        </div>
+      )}
+
       {/* 媒体内容 */}
       {post.mediaItems.length > 0 && (
         <MediaViewer items={post.mediaItems} />
