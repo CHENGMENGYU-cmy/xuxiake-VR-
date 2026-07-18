@@ -454,9 +454,9 @@ export function PostComposer() {
                             <Video className="h-4 w-4 text-white" />
                           </div>
                         </div>
-                        {item.duration > 0 && (
+                        {(item.duration ?? 0) > 0 && (
                           <span className="absolute bottom-1 right-1 rounded bg-black/70 px-1 text-[10px] text-white">
-                            {Math.floor(item.duration / 60)}:{String(item.duration % 60).padStart(2, '0')}
+                            {Math.floor((item.duration ?? 0) / 60)}:{String((item.duration ?? 0) % 60).padStart(2, '0')}
                           </span>
                         )}
                         <button
@@ -472,7 +472,7 @@ export function PostComposer() {
                         <Mic className="h-4 w-4 text-accent" />
                         <span className="text-xs text-muted-foreground">
                           音频记录
-                          {item.duration > 0 && ` · ${Math.floor(item.duration / 60)}:${String(item.duration % 60).padStart(2, '0')}`}
+                          {(item.duration ?? 0) > 0 && ` · ${Math.floor((item.duration ?? 0) / 60)}:${String((item.duration ?? 0) % 60).padStart(2, '0')}`}
                         </span>
                         <button
                           onClick={() => removeMediaItem(index)}

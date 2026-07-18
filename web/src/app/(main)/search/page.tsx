@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Search, Users, FileText, Hash, Video, Image, Music } from 'lucide-react';
@@ -24,6 +24,14 @@ const mediaTypeFilters: { value: MediaType | 'ALL'; label: string; icon: typeof 
 ];
 
 export default function SearchPage() {
+  return (
+    <Suspense fallback={<div className="py-16 text-center text-muted-foreground">加载中...</div>}>
+      <SearchContent />
+    </Suspense>
+  );
+}
+
+function SearchContent() {
   const searchParams = useSearchParams();
   const { query, setQuery } = useSearchStore();
   const [searched, setSearched] = useState(!!query);
