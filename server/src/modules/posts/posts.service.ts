@@ -25,15 +25,15 @@ export class PostsService {
     private readonly notificationsService: NotificationsService,
   ) {}
 
-  async getPosts(options: { cursor?: string; limit?: number; sort?: string; page?: number } = {}) {
-    const { cursor, limit = 10, sort = 'latest', page = 1 } = options;
+  async getPosts(options: { cursor?: string; limit?: number; sort?: string; page?: number; postType?: string; tagId?: string } = {}) {
+    const { cursor, limit = 10, sort = 'latest', page = 1, postType, tagId } = options;
 
     // trending 和 hot 使用 offset 分页（排名动态变化），latest 使用 cursor 分页
     if (sort === 'trending') {
-      return this.getTrendingPosts(limit, page);
+      return this.getTrendingPosts(limit, page, postType, tagId);
     }
     if (sort === 'hot') {
-      return this.getHotPosts(limit, page);
+      return this.getHotPosts(limit, page, postType, tagId);
     }
 
     // 默认 latest：按时间倒序，cursor 分页
@@ -41,9 +41,18 @@ export class PostsService {
       .createQueryBuilder('post')
       .leftJoinAndSelect('post.author', 'author')
       .leftJoinAndSelect('post.mediaItems', 'mediaItems')
+      .leftJoinAndSelect('post.tags', 'tags')
+      .leftJoinAndSelect('post.topics', 'topics')
       .where('post.visibility = :vis', { vis: 'PUBLIC' })
       .orderBy('post.createdAt', 'DESC')
       .take(limit + 1);
+
+    if (postType) {
+      qb.andWhere('post.postType = :postType', { postType });
+    }
+    if (tagId) {
+      qb.innerJoin('post.tags', 'filterTag', 'filterTag.id = :tagId', { tagId });
+    }
 
     if (cursor) {
       const cursorPost = await this.postRepo.findOne({ where: { id: cursor } });
