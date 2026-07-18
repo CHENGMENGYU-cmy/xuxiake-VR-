@@ -446,6 +446,42 @@ export function PostComposer() {
                         </button>
                       </div>
                     )}
+                    {item.type === 'VIDEO' && (
+                      <div className="relative h-20 w-28 overflow-hidden rounded-lg border bg-black/5">
+                        <video src={item.url} className="h-full w-full object-cover" muted />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="rounded-full bg-black/60 p-1.5">
+                            <Video className="h-4 w-4 text-white" />
+                          </div>
+                        </div>
+                        {item.duration > 0 && (
+                          <span className="absolute bottom-1 right-1 rounded bg-black/70 px-1 text-[10px] text-white">
+                            {Math.floor(item.duration / 60)}:{String(item.duration % 60).padStart(2, '0')}
+                          </span>
+                        )}
+                        <button
+                          onClick={() => removeMediaItem(index)}
+                          className="absolute -right-1 -top-1 hidden h-5 w-5 items-center justify-center rounded-full bg-destructive text-white group-hover:flex"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </div>
+                    )}
+                    {item.type === 'AUDIO' && (
+                      <div className="flex items-center gap-2 rounded-lg border bg-muted/50 px-3 py-2 pr-8">
+                        <Mic className="h-4 w-4 text-accent" />
+                        <span className="text-xs text-muted-foreground">
+                          音频记录
+                          {item.duration > 0 && ` · ${Math.floor(item.duration / 60)}:${String(item.duration % 60).padStart(2, '0')}`}
+                        </span>
+                        <button
+                          onClick={() => removeMediaItem(index)}
+                          className="absolute right-1 top-1/2 -translate-y-1/2 hidden h-5 w-5 items-center justify-center rounded-full text-muted-foreground hover:text-destructive group-hover:flex"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </div>
+                    )}
                     {item.type === 'LINK' && (
                       <div className="flex items-center gap-2 rounded-lg border bg-muted/50 px-3 py-2 pr-8">
                         {item.linkFavicon && (
