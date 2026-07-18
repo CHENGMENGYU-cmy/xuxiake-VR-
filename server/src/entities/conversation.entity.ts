@@ -18,6 +18,12 @@ export class Conversation {
   @Column({ name: 'updated_at', type: 'timestamp', nullable: true })
   updatedAt: Date | null;
 
+  @Column({ name: 'is_disappearing', type: 'boolean', default: false })
+  isDisappearing: boolean;
+
+  @Column({ name: 'disappear_seconds', type: 'int', default: 0 })
+  disappearSeconds: number;
+
   @OneToMany(() => Message, (msg) => msg.conversation)
   messages: Message[];
 }
