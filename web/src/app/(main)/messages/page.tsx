@@ -70,40 +70,6 @@ export default function MessagesPage() {
     };
   }, [user, loadConversations]);
 
-  const loadFriends = async () => {
-    if (!user || friends.length > 0) {
-      setShowFriends(true);
-      return;
-    }
-    setFriendsLoading(true);
-    try {
-      const [followersRes, followingRes] = await Promise.all([
-        apiClient.get(`/users/${user.username}/followers`),
-        apiClient.get(`/users/${user.username}/following`),
-      ]);
-      const followers = followersRes.data?.data || [];
-      const followingIds = new Set((followingRes.data?.data || []).map((u: any) => u.id));
-      setFriends(followers.filter((u: any) => followingIds.has(u.id)));
-    } catch { /* ignore */ } finally {
-      setFriendsLoading(false);
-      setShowFriends(true);
-    }
-  };
-
-  const startChat = async (userId: string) => {
-    if (startingChat) return;
-    setStartingChat(userId);
-    try {
-      const conv = await getOrCreateDirectConversation(userId);
-      if (conv.isRequest) {
-        alert('消息已发送为请求，对方需要接受后才能继续对话');
-      }
-      router.push(`/messages/${conv.id}`);
-    } catch { /* ignore */ } finally {
-      setStartingChat(null);
-    }
-  };
-
   const handleAcceptRequest = async (convId: string) => {
     try {
       await apiClient.post(`/conversations/${convId}/accept`);
