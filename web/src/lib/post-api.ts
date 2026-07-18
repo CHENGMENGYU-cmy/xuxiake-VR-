@@ -39,6 +39,8 @@ export async function getPosts(params?: {
   limit?: number;
   cursor?: string;
   sort?: PostSortType;
+  postType?: string;
+  tagId?: string;
 }): Promise<{ posts: Post[]; nextCursor: string | null; hasMore: boolean; page?: number }> {
   const { data } = await apiClient.get('/posts', { params });
   return {
