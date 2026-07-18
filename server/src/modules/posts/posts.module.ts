@@ -9,10 +9,12 @@ import { MediaItem } from '../../entities/media-item.entity.js';
 import { Comment } from '../../entities/comment.entity.js';
 import { Like } from '../../entities/like.entity.js';
 import { User } from '../../entities/user.entity.js';
+import { InterestTag } from '../../entities/interest-tag.entity.js';
+import { Topic } from '../../entities/topic.entity.js';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Post, MediaItem, Comment, Like, User]),
+    TypeOrmModule.forFeature([Post, MediaItem, Comment, Like, User, InterestTag, Topic]),
     AuthModule,
     NotificationsModule,
   ],
