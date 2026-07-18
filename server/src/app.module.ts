@@ -25,6 +25,9 @@ import { InterestTag } from './entities/interest-tag.entity.js';
 import { UserInterest } from './entities/user-interest.entity.js';
 import { Community } from './entities/community.entity.js';
 import { CommunityTag } from './entities/community-tag.entity.js';
+import { CommunityAnnouncement } from './entities/community-announcement.entity.js';
+import { CommunityRole } from './entities/community-role.entity.js';
+import { CommunityChallenge } from './entities/community-challenge.entity.js';
 import { getDatabaseConfig } from './config/database.config.js';
 import { JwtModule } from '@nestjs/jwt';
 
