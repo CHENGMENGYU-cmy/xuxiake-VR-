@@ -77,6 +77,8 @@ export function PostComposer() {
   const [guideBudget, setGuideBudget] = useState<BudgetLevel>('MID');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
+  const audioInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setMounted(true);
