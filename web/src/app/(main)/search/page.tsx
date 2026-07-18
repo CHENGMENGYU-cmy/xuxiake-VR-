@@ -14,12 +14,30 @@ import { PostCard } from '@/components/post/post-card';
 import { mockUsers, mockPosts } from '@/lib/mock-data';
 import { useSearchStore } from '@/stores/search-store';
 import { searchTopics } from '@/lib/post-api';
-import type { Topic } from '@/types';
+import type { Topic, MediaType } from '@/types';
+
+const mediaTypeFilters: { value: MediaType | 'ALL'; label: string; icon: typeof Video; color: string }[] = [
+  { value: 'ALL', label: '全部', icon: FileText, color: 'text-primary' },
+  { value: 'VIDEO', label: 'AR视频', icon: Video, color: 'text-teal-500' },
+  { value: 'IMAGE', label: 'AR图片', icon: Image, color: 'text-orange-500' },
+  { value: 'AUDIO', label: '音频记录', icon: Music, color: 'text-teal-400' },
+];
 
 export default function SearchPage() {
+  const searchParams = useSearchParams();
   const { query, setQuery } = useSearchStore();
   const [searched, setSearched] = useState(!!query);
   const [topics, setTopics] = useState<Topic[]>([]);
+  const typeParam = searchParams.get('type') as MediaType | null;
+  const [mediaTypeFilter, setMediaTypeFilter] = useState<MediaType | 'ALL'>(typeParam || 'ALL');
+
+  // URL type 参数变化时自动更新筛选并触发搜索
+  useEffect(() => {
+    if (typeParam && ['VIDEO', 'IMAGE', 'AUDIO'].includes(typeParam)) {
+      setMediaTypeFilter(typeParam);
+      if (!searched) setSearched(true);
+    }
+  }, [typeParam]);
 
   const filteredUsers = searched
     ? mockUsers.filter(
@@ -31,11 +49,11 @@ export default function SearchPage() {
     : [];
 
   const filteredPosts = searched
-    ? mockPosts.filter(
-        (p) =>
-          p.content?.includes(query) ||
-          p.author.displayName.includes(query)
-      )
+    ? mockPosts.filter((p) => {
+        const matchesQuery = !query.trim() || p.content?.includes(query) || p.author.displayName.includes(query);
+        const matchesType = mediaTypeFilter === 'ALL' || p.mediaItems?.some((m) => m.type === mediaTypeFilter);
+        return matchesQuery && matchesType;
+      })
     : [];
 
   useEffect(() => {
