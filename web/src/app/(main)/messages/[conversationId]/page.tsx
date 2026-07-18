@@ -181,6 +181,43 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
     };
   }, [currentUser, conversationId]);
 
+  // 截图检测（消失消息模式下）
+  useEffect(() => {
+    if (!isDisappearing) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // 检测 PrintScreen / Cmd+Shift+3 / Cmd+Shift+4
+      if (e.key === 'PrintScreen' || (e.metaKey && e.shiftKey && (e.key === '3' || e.key === '4'))) {
+        apiClient.post(`/conversations/${conversationId}/screenshot-notify`).catch(() => {});
+      }
+    };
+
+    // 检测页面可见性变化（切出截图）
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        // 页面隐藏时可能在截图，标记时间
+        sessionStorage.setItem('xxk_hide_ts', Date.now().toString());
+      } else {
+        const hideTs = sessionStorage.getItem('xxk_hide_ts');
+        if (hideTs) {
+          const elapsed = Date.now() - parseInt(hideTs);
+          // 如果隐藏时间很短（<2秒），可能是截图后切回
+          if (elapsed < 2000) {
+            apiClient.post(`/conversations/${conversationId}/screenshot-notify`).catch(() => {});
+          }
+          sessionStorage.removeItem('xxk_hide_ts');
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [isDisappearing, conversationId]);
+
   // 滚动到底部
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
