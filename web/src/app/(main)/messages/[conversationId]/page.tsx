@@ -308,13 +308,29 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
                 >
                   {/* 卡片消息 */}
                   {(() => {
-                    // 解析卡片消息
+                    // 解析特殊消息类型
                     let cardData: ContentCardData | null = null;
+                    let locationData: { lat: number; lng: number; locationName?: string; isLive: boolean } | null = null;
                     if (msg.mediaType === 'CARD' && msg.content) {
                       try {
                         const parsed = JSON.parse(msg.content);
                         if (parsed.__card) cardData = parsed.__card;
-                      } catch { /* not a card message */ }
+                        if (parsed.__location) locationData = parsed.__location;
+                      } catch { /* not a special message */ }
+                    }
+
+                    if (locationData) {
+                      return (
+                        <div className="rounded-2xl overflow-hidden">
+                          <LocationMessage
+                            lat={locationData.lat}
+                            lng={locationData.lng}
+                            locationName={locationData.locationName}
+                            isLive={locationData.isLive}
+                            isMine={isMine}
+                          />
+                        </div>
+                      );
                     }
 
                     if (cardData) {
