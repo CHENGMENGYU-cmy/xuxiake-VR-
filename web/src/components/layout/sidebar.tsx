@@ -32,7 +32,7 @@ const navItems = [
   { href: '/discover', label: '发现好友', icon: UserPlus },
   { href: '/upload', label: '上传内容', icon: Upload },
   { href: '/messages', label: '消息', icon: MessageCircle },
-  { href: '/notifications', label: '通知', icon: Bookmark },
+  { href: '/notifications', label: '通知', icon: Bell },
   { href: '/settings', label: '设置', icon: Settings },
 ];
 
