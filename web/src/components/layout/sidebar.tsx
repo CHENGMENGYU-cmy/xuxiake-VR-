@@ -46,6 +46,7 @@ export function Sidebar() {
   const pathname = usePathname();
   const { user } = useAuthStore();
   const { sidebarOpen } = useUIStore();
+  const notifUnreadCount = useNotificationStore((s) => s.unreadCount);
   const [mounted, setMounted] = useState(false);
   const [suggestedUsers, setSuggestedUsers] = useState<any[]>([]);
 
