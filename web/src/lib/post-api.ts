@@ -1,10 +1,13 @@
 import apiClient from './api-client';
-import { Post, Visibility } from '@/types';
+import { Post, PostType, Visibility } from '@/types';
 
 export interface CreatePostPayload {
   content: string;
   visibility?: Visibility;
   communityId?: string;
+  postType?: PostType;
+  tagIds?: string[];
+  topicNames?: string[];
   location?: { lat: number; lng: number; name: string };
   mediaItems?: {
     type: string;
