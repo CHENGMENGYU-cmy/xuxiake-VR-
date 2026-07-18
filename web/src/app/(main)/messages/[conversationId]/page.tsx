@@ -420,44 +420,67 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
       )}
 
       {/* 输入框 */}
-      <div className="flex items-center gap-2 border-t p-3">
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={handleImageUpload}
-        />
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8 shrink-0"
-          onClick={() => fileInputRef.current?.click()}
-          disabled={uploading || myStatus === 'REQUEST'}
-        >
-          {uploading ? (
-            <span className="h-4 w-4 animate-spin rounded-full border-2 border-muted-foreground border-t-transparent" />
-          ) : (
-            <ImagePlus className="h-4 w-4 text-muted-foreground" />
-          )}
-        </Button>
+      <div className="border-t p-3">
+        {recording ? (
+          <VoiceRecorder
+            onRecorded={handleVoiceRecorded}
+            onCancel={() => setRecording(false)}
+            disabled={uploading}
+          />
+        ) : (
+          <div className="flex items-center gap-2">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleImageUpload}
+            />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 shrink-0"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading || myStatus === 'REQUEST'}
+            >
+              {uploading ? (
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-muted-foreground border-t-transparent" />
+              ) : (
+                <ImagePlus className="h-4 w-4 text-muted-foreground" />
+              )}
+            </Button>
 
-        <Input
-          placeholder={myStatus === 'REQUEST' ? '请先接受消息请求' : '输入消息...'}
-          className="flex-1 rounded-full bg-muted"
-          value={input}
-          onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
-          disabled={sending || myStatus === 'REQUEST'}
-        />
-        <Button
-          size="icon"
-          className="h-8 w-8 rounded-full"
-          onClick={handleSend}
-          disabled={!input.trim() || sending || myStatus === 'REQUEST'}
-        >
-          <Send className="h-4 w-4" />
-        </Button>
+            <Input
+              placeholder={myStatus === 'REQUEST' ? '请先接受消息请求' : '输入消息...'}
+              className="flex-1 rounded-full bg-muted"
+              value={input}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              disabled={sending || myStatus === 'REQUEST'}
+            />
+
+            {input.trim() ? (
+              <Button
+                size="icon"
+                className="h-8 w-8 rounded-full"
+                onClick={handleSend}
+                disabled={sending || myStatus === 'REQUEST'}
+              >
+                <Send className="h-4 w-4" />
+              </Button>
+            ) : (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 shrink-0"
+                onClick={() => setRecording(true)}
+                disabled={myStatus === 'REQUEST'}
+              >
+                <Mic className="h-4 w-4 text-muted-foreground" />
+              </Button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
