@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { User } from '../../entities/user.entity.js';
 import { UserFollow } from '../../entities/user-follow.entity.js';
 import { JwtService } from '@nestjs/jwt';
+import { NotificationsService } from '../notifications/notifications.service.js';
 
 @Controller('api/users')
 export class UsersController {
@@ -13,6 +14,7 @@ export class UsersController {
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     @InjectRepository(UserFollow) private readonly followRepo: Repository<UserFollow>,
     private readonly jwtService: JwtService,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   private getUserId(auth?: string): string | null {
