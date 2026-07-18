@@ -494,7 +494,7 @@ export class SocialController {
       if (allMemberIds.length > 0) {
         const memberUsers = await this.userRepo.find({
           where: { id: In(allMemberIds) },
-          select: ['id', 'region'],
+          select: { id: true, region: true },
         });
         const memberRegionMap = new Map(memberUsers.map((u) => [u.id, u.region]));
         candidates.forEach((c) => {
