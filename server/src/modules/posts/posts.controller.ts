@@ -145,4 +145,68 @@ export class PostsController {
     const result = await this.postsService.deleteComment(userId, commentId);
     return { success: true, ...result };
   }
+
+  // ===== 合集 =====
+  @Post('collections')
+  async createCollection(
+    @Headers('authorization') auth: string,
+    @Body() dto: { name: string; description?: string; isPublic?: boolean },
+  ) {
+    const userId = this.getUserId(auth);
+    const collection = await this.postsService.createCollection(userId, dto);
+    return { success: true, data: collection };
+  }
+
+  @Get('collections')
+  async getCollections(
+    @Headers('authorization') auth: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    let userId: string | undefined;
+    try { userId = this.getUserId(auth); } catch {}
+    const result = await this.postsService.getCollections({
+      userId,
+      page: page ? parseInt(page) : 1,
+      limit: limit ? parseInt(limit) : 20,
+    });
+    return { success: true, ...result };
+  }
+
+  @Get('collections/:id')
+  async getCollectionById(@Param('id') id: string) {
+    const collection = await this.postsService.getCollectionById(id);
+    return { success: true, data: collection };
+  }
+
+  @Get('collections/:id/posts')
+  async getCollectionPosts(
+    @Param('id') id: string,
+    @Query('page') page?: string,
+  ) {
+    const result = await this.postsService.getCollectionPosts(id, page ? parseInt(page) : 1);
+    return { success: true, ...result };
+  }
+
+  @Post('collections/:id/posts/:postId')
+  async addPostToCollection(
+    @Headers('authorization') auth: string,
+    @Param('id') id: string,
+    @Param('postId') postId: string,
+  ) {
+    const userId = this.getUserId(auth);
+    const result = await this.postsService.addPostToCollection(userId, id, postId);
+    return { success: true, ...result };
+  }
+
+  @Delete('collections/:id/posts/:postId')
+  async removePostFromCollection(
+    @Headers('authorization') auth: string,
+    @Param('id') id: string,
+    @Param('postId') postId: string,
+  ) {
+    const userId = this.getUserId(auth);
+    const result = await this.postsService.removePostFromCollection(userId, id, postId);
+    return { success: true, ...result };
+  }
 }
