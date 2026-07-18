@@ -1,12 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { Post } from '../../entities/post.entity.js';
 import { MediaItem } from '../../entities/media-item.entity.js';
 import { Comment } from '../../entities/comment.entity.js';
 import { Like } from '../../entities/like.entity.js';
 import { User } from '../../entities/user.entity.js';
+import { InterestTag } from '../../entities/interest-tag.entity.js';
+import { Topic } from '../../entities/topic.entity.js';
 import { CreatePostDto, CreateCommentDto } from '../../common/interfaces.js';
 import { NotificationsService } from '../notifications/notifications.service.js';
 
@@ -18,6 +20,8 @@ export class PostsService {
     @InjectRepository(Comment) private readonly commentRepo: Repository<Comment>,
     @InjectRepository(Like) private readonly likeRepo: Repository<Like>,
     @InjectRepository(User) private readonly userRepo: Repository<User>,
+    @InjectRepository(InterestTag) private readonly tagRepo: Repository<InterestTag>,
+    @InjectRepository(Topic) private readonly topicRepo: Repository<Topic>,
     private readonly notificationsService: NotificationsService,
   ) {}
 
