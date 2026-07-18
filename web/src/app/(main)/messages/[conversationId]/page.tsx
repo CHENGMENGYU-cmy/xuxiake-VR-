@@ -78,6 +78,8 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
           setConvType(conv.type);
           setConvTitle(conv.title || '');
           setMyStatus(conv.myStatus || 'NORMAL');
+          setIsDisappearing(conv.isDisappearing || false);
+          setDisappearSeconds(conv.disappearSeconds || 0);
           if (conv.type === 'DIRECT' && conv.members?.length > 0) {
             setOtherUser(conv.members[0]);
           }
