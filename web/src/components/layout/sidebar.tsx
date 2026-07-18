@@ -14,6 +14,7 @@ import {
   Music,
   UserPlus,
   MessageCircle,
+  Hash,
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -29,6 +30,7 @@ import { getRecommendedUsers } from '@/lib/social-api';
 const navItems = [
   { href: '/feed', label: '首页', icon: Home },
   { href: '/explore', label: '探索发现', icon: Compass },
+  { href: '/topics', label: '话题广场', icon: Hash },
   { href: '/discover', label: '发现好友', icon: UserPlus },
   { href: '/upload', label: '上传内容', icon: Upload },
   { href: '/messages', label: '消息', icon: MessageCircle },

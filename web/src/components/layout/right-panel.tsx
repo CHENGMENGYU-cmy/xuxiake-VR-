@@ -10,8 +10,9 @@ import { Separator } from '@/components/ui/separator';
 import { useUIStore } from '@/stores/ui-store';
 import { useAuthStore } from '@/stores/auth-store';
 import { cn } from '@/lib/utils';
-import { getRecommendedCommunities, getHotTopics, getRecommendedUsers } from '@/lib/social-api';
-import type { Community, RecommendedUser } from '@/types';
+import { getRecommendedCommunities, getRecommendedUsers } from '@/lib/social-api';
+import { getHotTopics } from '@/lib/post-api';
+import type { Community, RecommendedUser, Topic } from '@/types';
 
 const suggestLinks = [
   { title: 'VR旅游攻略', url: '#' },
@@ -25,12 +26,10 @@ export function RightPanel() {
   const { isAuthenticated } = useAuthStore();
   const [recommendedCommunities, setRecommendedCommunities] = useState<Community[]>([]);
   const [recommendedUsers, setRecommendedUsers] = useState<RecommendedUser[]>([]);
-  const [hotTopics, setHotTopics] = useState<{ tag: string; count: number }[]>([]);
+  const [hotTopics, setHotTopics] = useState<Topic[]>([]);
 
   useEffect(() => {
-    getHotTopics().then((data) => {
-      setHotTopics(data || []);
-    }).catch(() => {});
+    getHotTopics(8).then(setHotTopics).catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -66,14 +65,20 @@ export function RightPanel() {
             <div className="space-y-2">
               {hotTopics.map((topic) => (
                 <Link
-                  key={topic.tag}
-                  href={`/search?q=${encodeURIComponent(topic.tag)}`}
+                  key={topic.id}
+                  href={`/topics/${topic.id}`}
                   className="flex items-center justify-between rounded-lg px-2 py-1.5 text-sm hover:bg-accent"
                 >
-                  <span className="text-foreground"># {topic.tag}</span>
-                  <span className="text-xs text-muted-foreground">{topic.count}次浏览</span>
+                  <span className="text-foreground">{topic.icon || '#'} {topic.name}</span>
+                  <span className="text-xs text-muted-foreground">{topic.postCount}篇</span>
                 </Link>
               ))}
+              <Link
+                href="/topics"
+                className="block rounded-lg px-2 py-1.5 text-center text-xs text-primary hover:bg-accent"
+              >
+                查看全部话题
+              </Link>
             </div>
           </CardContent>
         </Card>

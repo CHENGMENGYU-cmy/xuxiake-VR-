@@ -157,12 +157,13 @@ export function PostCard({ post }: PostCardProps) {
             </span>
           ))}
           {post.topics?.map((topic) => (
-            <span
+            <Link
               key={topic.id}
-              className="inline-flex items-center rounded-full bg-primary/5 px-2 py-0.5 text-xs text-primary hover:bg-primary/10 cursor-pointer"
+              href={`/topics/${topic.id}`}
+              className="inline-flex items-center rounded-full bg-primary/5 px-2 py-0.5 text-xs text-primary hover:bg-primary/10"
             >
               #{topic.name}
-            </span>
+            </Link>
           ))}
         </div>
       )}
