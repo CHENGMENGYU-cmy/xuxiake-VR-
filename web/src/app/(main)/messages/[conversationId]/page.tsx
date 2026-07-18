@@ -451,6 +451,14 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
         </div>
       )}
 
+      {/* 位置选择弹窗 */}
+      {showLocationPicker && (
+        <LocationPicker
+          onShare={handleShareLocation}
+          onClose={() => setShowLocationPicker(false)}
+        />
+      )}
+
       {/* 输入框 */}
       <div className="border-t p-3">
         {recording ? (
@@ -480,6 +488,15 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
               ) : (
                 <ImagePlus className="h-4 w-4 text-muted-foreground" />
               )}
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 shrink-0"
+              onClick={() => setShowLocationPicker(true)}
+              disabled={myStatus === 'REQUEST'}
+            >
+              <MapPin className="h-4 w-4 text-muted-foreground" />
             </Button>
 
             <Input
