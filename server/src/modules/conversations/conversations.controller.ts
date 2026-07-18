@@ -544,4 +544,60 @@ export class ConversationsController {
 
     return { success: true, data: msgWithSender };
   }
+
+  // ==================== 消失消息 ====================
+
+  @Post(':id/disappearing')
+  async toggleDisappearing(
+    @Headers('authorization') auth: string,
+    @Param('id') convId: string,
+    @Body() body: { enabled: boolean; seconds?: number },
+  ) {
+    const userId = this.getUserId(auth);
+
+    const part = await this.partRepo.findOne({ where: { conversationId: convId, userId } });
+    if (!part) throw new NotFoundException('会话不存在');
+
+    const seconds = body.enabled ? (body.seconds || 300) : 0;
+    await this.convRepo.update(convId, {
+      isDisappearing: body.enabled,
+      disappearSeconds: seconds,
+    });
+
+    return {
+      success: true,
+      data: { isDisappearing: body.enabled, disappearSeconds: seconds },
+    };
+  }
+
+  // ==================== 截图通知 ====================
+
+  @Post(':id/screenshot-notify')
+  async notifyScreenshot(
+    @Headers('authorization') auth: string,
+    @Param('id') convId: string,
+  ) {
+    const userId = this.getUserId(auth);
+
+    const part = await this.partRepo.findOne({ where: { conversationId: convId, userId } });
+    if (!part) throw new NotFoundException('会话不存在');
+
+    const user = await this.userRepo.findOne({ where: { id: userId } });
+    const senderName = user?.displayName || '对方';
+
+    // 发送系统消息通知截图
+    const message = this.msgRepo.create({
+      id: uuidv4(),
+      conversationId: convId,
+      senderId: userId,
+      content: JSON.stringify({
+        __system: { text: `${senderName} 截图了聊天记录`, type: 'SCREENSHOT' },
+      }),
+      mediaType: 'CARD' as any,
+    });
+    await this.msgRepo.save(message);
+    await this.convRepo.update(convId, { updatedAt: new Date() });
+
+    return { success: true, data: message };
+  }
 }
