@@ -31,6 +31,12 @@ export class PostsController {
     return { success: true, data: topics };
   }
 
+  @Get('topics/all')
+  async getAllTopics() {
+    const topics = await this.postsService.getAllTopics();
+    return { success: true, data: topics };
+  }
+
   @Get('topics/search')
   async searchTopics(@Query('q') q?: string) {
     if (!q) return { success: true, data: [] };
