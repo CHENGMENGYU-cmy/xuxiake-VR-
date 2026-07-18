@@ -156,6 +156,30 @@ export interface CreatePostDto {
   postType?: PostType;
   tagIds?: string[];
   topicNames?: string[];
+  routeDetail?: {
+    distanceKm?: number;
+    durationMinutes?: number;
+    elevationGainM?: number;
+    difficulty?: 'EASY' | 'MODERATE' | 'HARD' | 'EXPERT';
+    routeType?: 'HIKE' | 'BIKE' | 'DRIVE' | 'PADDLE' | 'CLIMB';
+    gpxData?: string;
+    waypoints?: { lat: number; lng: number; name: string; description?: string }[];
+  };
+  journey?: {
+    title: string;
+    startDate?: string;
+    endDate?: string;
+    destination?: string;
+    coverUrl?: string;
+    stops?: {
+      dayNumber?: number;
+      locationName?: string;
+      locationLat?: number;
+      locationLng?: number;
+      description?: string;
+      mediaUrl?: string;
+    }[];
+  };
 }
 
 export interface CreateCommentDto {
