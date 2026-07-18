@@ -2,8 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
-import { Notification, NotificationType } from '../../entities/notification.entity.js';
+import { Notification } from '../../entities/notification.entity.js';
 import { User } from '../../entities/user.entity.js';
+import { NotificationType } from '../../common/interfaces.js';
 import { ChatGateway } from '../chat/chat.gateway.js';
 
 @Injectable()
