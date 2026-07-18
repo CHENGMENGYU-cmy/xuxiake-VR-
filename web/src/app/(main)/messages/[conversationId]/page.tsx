@@ -234,7 +234,23 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
     const text = input.trim();
     if (!text || sending || !socketRef.current) return;
     setSending(true);
-    socketRef.current.emit('chat:message:send', { conversationId, content: text });
+
+    // 检测 @AI 触发
+    const aiMatch = text.match(/^@ai\s+(.+)$/i) || text.match(/^\/ai\s+(.+)$/i);
+    if (aiMatch) {
+      const query = aiMatch[1];
+      try {
+        const res = await apiClient.post(`/conversations/${conversationId}/ai-assist`, { query });
+        if (res.data?.success) {
+          // 刷新消息列表
+          const msgRes = await apiClient.get(`/conversations/${conversationId}/messages?limit=50`);
+          if (msgRes.data?.success) setMessages(msgRes.data.data || []);
+        }
+      } catch { /* ignore */ }
+    } else {
+      socketRef.current.emit('chat:message:send', { conversationId, content: text });
+    }
+
     setInput('');
     setSending(false);
   }, [input, sending, conversationId]);
