@@ -1,6 +1,78 @@
 项目修改记录
 ================================================================================
 
+【2026-07-18 内容分类体系 Phase 3 - 路线与旅程】
+
+--------------------------------------------------------------------------------
+第1条
+
+  修改时间：2026-07-18 22:00
+  修改位置：server/sql/migrate-route-journey.sql
+  修改原因：为路线和旅程内容类型创建结构化数据表
+  修改内容：
+    - 新建 route_details 表（距离/时长/爬升/难度/类型/GPX/途经点）
+    - 新建 journeys 表（标题/目的地/日期/封面/站点数）
+    - 新建 journey_stops 表（天数/地点/坐标/描述/媒体）
+  修改效果：数据库支持路线和旅程的结构化数据存储
+
+第2条
+
+  修改时间：2026-07-18 22:00
+  修改位置：server/src/entities/route-detail.entity.ts, journey.entity.ts, journey-stop.entity.ts
+  修改原因：TypeORM 实体定义
+  修改内容：
+    - 新建 RouteDetail 实体（与 Post 一对一关联）
+    - 新建 Journey 实体（与 Post 一对一关联，与 JourneyStop 一对多）
+    - 新建 JourneyStop 实体（与 Journey 多对一关联）
+  修改效果：后端实体完整支持路线/旅程数据模型
+
+第3条
+
+  修改时间：2026-07-18 22:00
+  修改位置：server/src/modules/posts/posts.module.ts, posts.service.ts, common/interfaces.ts
+  修改原因：后端服务层支持路线/旅程创建和查询
+  修改内容：
+    - PostsModule 注册 RouteDetail/Journey/JourneyStop 实体
+    - CreatePostDto 新增 routeDetail 和 journey 字段
+    - createPost 根据 postType 自动创建路线/旅程结构化数据
+    - getPostById 关联加载 routeDetail 和 journey（含 stops）
+  修改效果：发布 ROUTE/JOURNEY 类型帖子时自动保存结构化数据
+
+第4条
+
+  修改时间：2026-07-18 22:00
+  修改位置：web/src/types/index.ts, web/src/lib/post-api.ts
+  修改原因：前端类型定义同步
+  修改内容：
+    - 新增 Difficulty/RouteType 类型
+    - 新增 RouteDetail/JourneyStop/Journey 接口
+    - Post 接口新增 routeDetail 和 journey 字段
+    - CreatePostPayload 新增 routeDetail 和 journey 字段
+  修改效果：前端类型完整支持路线/旅程数据
+
+第5条
+
+  修改时间：2026-07-18 22:00
+  修改位置：web/src/components/post/post-composer.tsx
+  修改原因：发布器支持路线/旅程专属字段填写
+  修改内容：
+    - 选择 ROUTE 时显示路线信息面板（距离/时长/爬升/类型/难度）
+    - 选择 JOURNEY 时显示旅程信息面板（标题/目的地/日期）
+    - 提交时自动携带 routeDetail/journey 数据
+    - 发布后重置路线/旅程状态
+  修改效果：用户可发布带结构化数据的路线和旅程帖子
+
+第6条
+
+  修改时间：2026-07-18 22:00
+  修改位置：web/src/components/post/post-card.tsx
+  修改原因：帖子卡片展示路线/旅程详情
+  修改内容：
+    - ROUTE 类型帖子显示路线信息条（距离/时长/爬升/难度/类型徽章）
+    - JOURNEY 类型帖子显示旅程信息条（标题/目的地/日期/站点数）
+    - 新增 difficultyLabels/difficultyColors/routeTypeLabels 映射
+  修改效果：帖子卡片直观展示路线和旅程的结构化信息
+
 【2026-07-18 内容分类体系 Phase 2 - 话题系统】
 
 --------------------------------------------------------------------------------
