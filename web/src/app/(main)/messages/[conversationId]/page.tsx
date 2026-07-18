@@ -347,6 +347,35 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
             <p className="text-sm font-semibold">{otherUser.displayName}</p>
           </Link>
         ) : null}
+
+        {/* 消失消息开关 */}
+        <div className="ml-auto flex items-center gap-2">
+          {isDisappearing && (
+            <span className="flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-[11px] text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+              <Timer className="h-3 w-3" />
+              {disappearSeconds}s
+            </span>
+          )}
+          <Button
+            variant="ghost"
+            size="icon"
+            className={`h-8 w-8 ${isDisappearing ? 'text-amber-600' : 'text-muted-foreground'}`}
+            onClick={async () => {
+              try {
+                const res = await apiClient.post(`/conversations/${conversationId}/disappearing`, {
+                  enabled: !isDisappearing,
+                  seconds: 300,
+                });
+                if (res.data?.success) {
+                  setIsDisappearing(res.data.data.isDisappearing);
+                  setDisappearSeconds(res.data.data.disappearSeconds);
+                }
+              } catch { /* ignore */ }
+            }}
+          >
+            <Eye className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
 
       {/* 消息请求提示 */}
