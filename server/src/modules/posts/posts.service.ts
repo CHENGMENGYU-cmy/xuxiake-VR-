@@ -191,15 +191,7 @@ export class PostsService {
       await this.postRepo.save(post);
 
       if (post.authorId !== userId) {
-        const notif = this.notifRepo.create({
-          id: uuidv4(),
-          recipientId: post.authorId,
-          senderId: userId,
-          type: 'LIKE',
-          message: '有人赞了你的内容',
-          postId,
-        });
-        await this.notifRepo.save(notif);
+        await this.notificationsService.create(post.authorId, userId, 'LIKE', '有人赞了你的内容', postId);
       }
     }
 
