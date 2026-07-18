@@ -165,6 +165,7 @@ export class PostsService {
       id: postId,
       authorId: userId,
       communityId: dto.communityId || null,
+      postType: dto.postType || 'NOTE',
       content: dto.content || null,
       locationLat: dto.location?.lat || null,
       locationLng: dto.location?.lng || null,
@@ -196,6 +197,34 @@ export class PostsService {
         }),
       );
       await this.mediaRepo.save(mediaItems);
+    }
+
+    // 处理标签关联
+    if (dto.tagIds?.length) {
+      const tags = await this.tagRepo.find({ where: { id: In(dto.tagIds) } });
+      if (tags.length > 0) {
+        post.tags = tags;
+        await this.postRepo.save(post);
+      }
+    }
+
+    // 处理话题关联（自动创建不存在的话题）
+    if (dto.topicNames?.length) {
+      const topics: Topic[] = [];
+      for (const name of dto.topicNames) {
+        let topic = await this.topicRepo.findOne({ where: { name } });
+        if (!topic) {
+          topic = this.topicRepo.create({ id: uuidv4(), name, postCount: 0 });
+          await this.topicRepo.save(topic);
+        }
+        topic.postCount += 1;
+        await this.topicRepo.save(topic);
+        topics.push(topic);
+      }
+      if (topics.length > 0) {
+        post.topics = topics;
+        await this.postRepo.save(post);
+      }
     }
 
     return this.getPostById(postId);
