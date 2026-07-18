@@ -32,10 +32,11 @@ import { useAuthStore } from '@/stores/auth-store';
 import { useUIStore } from '@/stores/ui-store';
 import { useSearchStore } from '@/stores/search-store';
 import { useChatStore } from '@/stores/chat-store';
+import { useNotificationStore } from '@/stores/notification-store';
 import { connectChat } from '@/lib/chat-socket';
 import apiClient from '@/lib/api-client';
-import { mockNotifications } from '@/lib/mock-data';
 import { SearchSuggestions } from '@/components/search/search-suggestions';
+import { NotificationDropdown } from '@/components/notifications/notification-dropdown';
 
 export function Navbar() {
   const router = useRouter();
