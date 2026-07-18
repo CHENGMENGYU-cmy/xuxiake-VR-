@@ -662,7 +662,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
             </Button>
 
             <Input
-              placeholder={myStatus === 'REQUEST' ? '请先接受消息请求' : '输入消息...'}
+              placeholder={myStatus === 'REQUEST' ? '请先接受消息请求' : '输入消息...  @AI 唤起助手'}
               className="flex-1 rounded-full bg-muted"
               value={input}
               onChange={handleInputChange}
