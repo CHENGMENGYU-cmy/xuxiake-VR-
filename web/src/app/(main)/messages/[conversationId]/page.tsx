@@ -14,6 +14,7 @@ import { VoiceRecorder } from '@/components/chat/voice-recorder';
 import { VoiceMessage } from '@/components/chat/voice-message';
 import { LocationPicker } from '@/components/chat/location-picker';
 import { LocationMessage } from '@/components/chat/location-message';
+import { BroadcastMessage } from '@/components/chat/broadcast-message';
 import { connectChat } from '@/lib/chat-socket';
 import apiClient from '@/lib/api-client';
 import type { Socket } from 'socket.io-client';
