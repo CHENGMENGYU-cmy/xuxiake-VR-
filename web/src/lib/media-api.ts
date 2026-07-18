@@ -8,6 +8,20 @@ export interface UploadImageResult {
   size: number;
 }
 
+export interface UploadVideoResult {
+  url: string;
+  originalName: string;
+  size: number;
+  mimeType: string;
+}
+
+export interface UploadAudioResult {
+  url: string;
+  originalName: string;
+  size: number;
+  mimeType: string;
+}
+
 export interface LinkPreview {
   title: string;
   description: string;
