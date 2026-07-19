@@ -41,6 +41,55 @@ export function TopicSelector({
     loadHotTopics();
   }, []);
 
+  // 智能推荐话题（基于内容关键词）
+  useEffect(() => {
+    if (!content.trim()) {
+      setRecommendedTopics([]);
+      return;
+    }
+
+    const analyzeContent = async () => {
+      try {
+        // 提取关键词
+        const keywords = extractKeywords(content);
+        if (keywords.length === 0) {
+          setRecommendedTopics([]);
+          return;
+        }
+
+        // 搜索相关话题
+        const allResults: Topic[] = [];
+        for (const keyword of keywords.slice(0, 3)) {
+          try {
+            const results = await searchTopics(keyword);
+            allResults.push(...results);
+          } catch {}
+        }
+
+        // 去重并过滤已选择的
+        const uniqueTopics = allResults.filter(
+          (topic, index, self) =>
+            index === self.findIndex((t) => t.id === topic.id) &&
+            !selectedTopics.some((s) => s.id === topic.id)
+        );
+
+        // 按热度排序，取前5个
+        const sorted = uniqueTopics
+          .sort((a, b) => (b.postCount || 0) - (a.postCount || 0))
+          .slice(0, 5);
+
+        setRecommendedTopics(sorted);
+      } catch (error) {
+        console.error('智能推荐失败:', error);
+        setRecommendedTopics([]);
+      }
+    };
+
+    // 防抖
+    const timer = setTimeout(analyzeContent, 500);
+    return () => clearTimeout(timer);
+  }, [content, selectedTopics]);
+
   // 搜索话题（防抖）
   useEffect(() => {
     if (searchTimeoutRef.current) {
