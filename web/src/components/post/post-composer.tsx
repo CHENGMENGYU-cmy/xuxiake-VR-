@@ -168,15 +168,18 @@ export function PostComposer() {
         visibility: 'PUBLIC',
         postType,
         mediaItems: mediaItems.length > 0 ? mediaItems : undefined,
+        topicNames: selectedTopics.length > 0 ? selectedTopics : undefined,
       };
 
       await publishPost(payload);
       setContent('');
       setMediaItems([]);
       setPostType('NOTE');
+      setSelectedTopics([]);
       setExpanded(false);
       setShowMoreMenu(false);
       setShowLinkInput(false);
+      setShowTopicPicker(false);
       toast.success('发布成功');
     } catch {
       toast.error(publishError || '发布失败，请重试');
