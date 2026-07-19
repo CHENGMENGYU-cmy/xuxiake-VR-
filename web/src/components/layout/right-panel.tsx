@@ -21,12 +21,15 @@ const suggestLinks = [
   { title: '徐霞客游记原文', url: '#' },
 ];
 
+const HOT_TOPIC_PREVIEW_COUNT = 5;
+
 export function RightPanel() {
   const { rightPanelOpen } = useUIStore();
   const { isAuthenticated } = useAuthStore();
   const [recommendedCommunities, setRecommendedCommunities] = useState<Community[]>([]);
   const [recommendedUsers, setRecommendedUsers] = useState<RecommendedUser[]>([]);
   const [hotTopics, setHotTopics] = useState<Topic[]>([]);
+  const [showAllTopics, setShowAllTopics] = useState(false);
 
   useEffect(() => {
     getHotTopics(8).then(setHotTopics).catch(() => {});
