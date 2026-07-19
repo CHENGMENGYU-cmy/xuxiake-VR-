@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { Search, Users, FileText, Hash, Video, Image, Music } from 'lucide-react';
+import { Search, Users, FileText, Hash } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -14,14 +14,7 @@ import { PostCard } from '@/components/post/post-card';
 import { mockUsers, mockPosts } from '@/lib/mock-data';
 import { useSearchStore } from '@/stores/search-store';
 import { searchTopics } from '@/lib/post-api';
-import type { Topic, MediaType } from '@/types';
-
-const mediaTypeFilters: { value: MediaType | 'ALL'; label: string; icon: typeof Video; color: string }[] = [
-  { value: 'ALL', label: '全部', icon: FileText, color: 'text-primary' },
-  { value: 'VIDEO', label: 'AR视频', icon: Video, color: 'text-teal-500' },
-  { value: 'IMAGE', label: 'AR图片', icon: Image, color: 'text-orange-500' },
-  { value: 'AUDIO', label: '音频记录', icon: Music, color: 'text-teal-400' },
-];
+import type { Topic } from '@/types';
 
 export default function SearchPage() {
   return (
