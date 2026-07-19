@@ -37,6 +37,8 @@ export function PostComposer() {
   const [topicSuggestions, setTopicSuggestions] = useState<Topic[]>([]);
   const [hotTopicsList, setHotTopicsList] = useState<Topic[]>([]);
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
+  const [topicLoading, setTopicLoading] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
   const topicPickerRef = useRef<HTMLDivElement>(null);
 
   // 更多选项状态
