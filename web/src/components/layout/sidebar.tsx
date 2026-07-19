@@ -26,6 +26,7 @@ import { useNotificationStore } from '@/stores/notification-store';
 import { cn } from '@/lib/utils';
 import apiClient from '@/lib/api-client';
 import { getRecommendedUsers } from '@/lib/social-api';
+import type { RecommendedUser } from '@/types';
 
 const navItems = [
   { href: '/feed', label: '首页', icon: Home },
