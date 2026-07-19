@@ -639,28 +639,24 @@ export default function LandingPage() {
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {[
               {
-                emoji: '📸',
                 title: '旅行达人',
                 subtitle: '记录每一程',
                 desc: '用第一视角记录旅行，AI自动生成游记。让更多人跟随你的眼睛，感受世界的精彩。',
                 gradient: 'from-primary/10 to-primary/5',
               },
               {
-                emoji: '🌍',
                 title: '旅行爱好者',
                 subtitle: '云游四方',
                 desc: '无法出行？戴上AR眼镜，跟随达人的眼睛，足不出户也能身临其境，探索世界的每个角落。',
                 gradient: 'from-accent/10 to-accent/5',
               },
               {
-                emoji: '⛰️',
                 title: '户外探险者',
                 subtitle: '探索未知',
                 desc: '徒步、登山、骑行、自驾...记录你的每一次探险，找到志同道合的冒险伙伴。',
                 gradient: 'from-teal-500/10 to-teal-500/5',
               },
               {
-                emoji: '📚',
                 title: '文化探索者',
                 subtitle: '重走霞客路',
                 desc: '追寻徐霞客的足迹，探索中华山河。AI讲解历史人文，让旅行更有深度。',
@@ -673,7 +669,6 @@ export default function LandingPage() {
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
                 <div className="relative">
-                  <span className="text-4xl mb-4 block">{item.emoji}</span>
                   <h3 className="text-xl font-bold mb-1">{item.title}</h3>
                   <p className="text-sm font-medium text-primary mb-3">{item.subtitle}</p>
                   <p className="text-sm text-muted-foreground leading-relaxed">
