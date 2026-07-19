@@ -91,6 +91,59 @@ export default function UploadPage() {
   const startTimeRef = useRef<number>(0);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const autoSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // 加载本地草稿
+  useEffect(() => {
+    const draft = loadDraftFromLocal();
+    if (draft) {
+      setContent(draft.content || '');
+      // 可以根据 postType 恢复更多状态
+    }
+  }, []);
+
+  // 自动保存草稿（防抖）
+  useEffect(() => {
+    if (autoSaveTimerRef.current) {
+      clearTimeout(autoSaveTimerRef.current);
+    }
+
+    // 只有有内容时才保存
+    if (content.trim() || media || images.length > 0 || linkData) {
+      autoSaveTimerRef.current = setTimeout(() => {
+        saveDraftToLocal({
+          content,
+          postType: media?.type === 'VIDEO' ? 'VR_MEDIA' : 'NOTE',
+          formData: {
+            activeTab,
+            location,
+            visibility,
+            vrFormat,
+            hasMedia: !!media,
+            imageCount: images.length,
+            hasLink: !!linkData,
+          },
+        });
+      }, 2000); // 2秒后自动保存
+    }
+
+    return () => {
+      if (autoSaveTimerRef.current) {
+        clearTimeout(autoSaveTimerRef.current);
+      }
+    };
+  }, [content, media, images, linkData, activeTab, location, visibility, vrFormat]);
+
+  // 选择草稿
+  const handleSelectDraft = (draft: { content: string; postType: string }) => {
+    setContent(draft.content);
+    // 可以根据 postType 恢复更多状态
+  };
+
+  // 发布后清除草稿
+  const handlePublishSuccess = () => {
+    clearLocalDraft();
+  };
 
   const resetMedia = () => {
     setMedia(null);
