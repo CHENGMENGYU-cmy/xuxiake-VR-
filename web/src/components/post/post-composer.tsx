@@ -192,7 +192,7 @@ export function PostComposer() {
     if (relatedTarget && composerRef.current?.contains(relatedTarget)) return;
 
     setTimeout(() => {
-      if (!content.trim() && mediaItems.length === 0 && !isPublishing && !showMoreMenu) {
+      if (!content.trim() && mediaItems.length === 0 && !isPublishing && !showMoreMenu && !showTopicPicker) {
         setExpanded(false);
         clearPublishError();
       }
