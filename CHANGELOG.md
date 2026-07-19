@@ -1,6 +1,46 @@
 项目修改记录
 ================================================================================
 
+【2026-07-19 首页与探索发现功能区分】
+
+--------------------------------------------------------------------------------
+第1条
+
+  修改时间：2026-07-19
+  修改位置：server/src/modules/posts/posts.service.ts, posts.controller.ts, posts.module.ts
+  修改原因：getPosts 不支持按关注关系过滤帖子，无法实现首页关注动态流
+  修改内容：
+    - 注入 UserFollow repository
+    - getPosts 新增 userId 和 followingOnly 参数
+    - followingOnly=true 时查询关注列表，过滤作者在关注列表中的帖子，可见性包含 PUBLIC 和 FOLLOWERS
+    - getTrendingPosts 和 getHotPosts 同步支持 followingIds 过滤
+    - Controller 的 GET /posts 端点可选读取 authorization header，有 token 时提取 userId
+  修改效果：后端支持按关注关系过滤帖子，支持 FOLLOWERS 可见性帖子展示
+
+第2条
+
+  修改时间：2026-07-19
+  修改位置：web/src/lib/post-api.ts, web/src/stores/post-store.ts, web/src/components/feed/feed-list.tsx
+  修改原因：前端需要传递 followingOnly 参数到后端
+  修改内容：
+    - post-api.ts 的 getPosts 参数新增 followingOnly
+    - post-store.ts 的 PostFilters 新增 followingOnly
+    - feed-list.tsx 的 FeedListProps 新增 followingOnly，传递给 fetchPosts
+    - 关注动态为空时显示引导页面：发现旅伴 + 探索发现按钮
+  修改效果：前端支持关注动态流模式
+
+第3条
+
+  修改时间：2026-07-19
+  修改位置：web/src/app/(main)/feed/page.tsx, web/src/app/(main)/explore/page.tsx
+  修改原因：首页和探索页功能高度重叠，需要明确区分定位
+  修改内容：
+    - 首页：改为关注动态流（followingOnly=true），展示关注用户的最新内容
+    - 探索页：顶部新增热门话题横向滚动卡片（getHotTopics API）
+    - 探索页：内容类型筛选聚焦旅行发现（VR内容/路线/攻略），去掉笔记/旅程/动态
+    - 探索页：排序标签改为圆角 pill 样式
+  修改效果：首页是社交时间线（你在关注谁），探索页是全局发现引擎（全站在发生什么）
+
 【2026-07-19 帖子编辑与删除功能】
 
 --------------------------------------------------------------------------------
