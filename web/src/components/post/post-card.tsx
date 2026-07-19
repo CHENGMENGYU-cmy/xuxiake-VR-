@@ -14,10 +14,21 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { MediaViewer } from './media-viewer';
+import { EditPostDialog } from './edit-post-dialog';
 import { ShareToMessage } from '@/components/chat/share-to-message';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
 import { Post } from '@/types';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/stores/auth-store';
+import { usePostStore } from '@/stores/post-store';
+import { toast } from 'sonner';
 import type { ContentCardData } from '@/components/chat/content-card';
 
 const vrFormatLabels: Record<string, string> = {
