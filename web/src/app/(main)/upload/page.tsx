@@ -23,7 +23,7 @@ import { CommunitySelector } from '@/components/upload/community-selector';
 import { VisibilityControl } from '@/components/upload/visibility-control';
 import { DraftList } from '@/components/upload/draft-list';
 import { PublishPreview } from '@/components/upload/publish-preview';
-import { saveDraftToLocal, loadDraftFromLocal, clearLocalDraft, saveDraftToList } from '@/lib/draft-api';
+import { saveDraftToLocal, clearLocalDraft, saveDraftToList } from '@/lib/draft-api';
 
 type UploadTab = 'VIDEO' | 'IMAGE' | 'AUDIO' | 'LINK' | 'TRANSLATION';
 
