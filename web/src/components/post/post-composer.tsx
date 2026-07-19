@@ -681,7 +681,7 @@ export function PostComposer() {
 
                 {/* 路线专属字段 */}
                 {postType === 'ROUTE' && (
-                  <div className="space-y-2 rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-3">
+                  <div className="space-y-2 rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-3" onMouseDown={(e) => e.preventDefault()}>
                     <p className="text-xs font-medium text-emerald-600 dark:text-emerald-400">路线信息</p>
                     <div className="grid grid-cols-3 gap-2">
                       <div>
