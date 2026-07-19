@@ -15,6 +15,7 @@ import { usePostStore } from '@/stores/post-store';
 import { CreatePostPayload } from '@/lib/post-api';
 import type { GuideCategory, BudgetLevel } from '@/types';
 import { cn } from '@/lib/utils';
+import { MultiImageUploader, UploadedImage } from '@/components/upload/multi-image-uploader';
 
 const categories: { value: GuideCategory; label: string; icon: string }[] = [
   { value: 'FOOD', label: '美食', icon: '🍜' },
