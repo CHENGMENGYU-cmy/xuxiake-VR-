@@ -15,6 +15,7 @@ import { JourneyStop } from '../../entities/journey-stop.entity.js';
 import { GuideDetail } from '../../entities/guide-detail.entity.js';
 import { Collection } from '../../entities/collection.entity.js';
 import { CollectionPost } from '../../entities/collection-post.entity.js';
+import { UserFollow } from '../../entities/user-follow.entity.js';
 import { CreatePostDto, CreateCommentDto } from '../../common/interfaces.js';
 import { NotificationsService } from '../notifications/notifications.service.js';
 
