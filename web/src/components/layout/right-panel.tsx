@@ -14,13 +14,6 @@ import { getRecommendedCommunities, getRecommendedUsers } from '@/lib/social-api
 import { getHotTopics, getPosts } from '@/lib/post-api';
 import type { Community, RecommendedUser, Topic, Post } from '@/types';
 
-const suggestLinks = [
-  { title: 'VR旅游攻略', url: '#' },
-  { title: '拍摄技巧分享', url: '#' },
-  { title: '设备推荐指南', url: '#' },
-  { title: '徐霞客游记原文', url: '#' },
-];
-
 const HOT_TOPIC_PREVIEW_COUNT = 5;
 const COMMUNITY_PICK_COUNT = 3;
 const USER_PICK_COUNT = 3;
