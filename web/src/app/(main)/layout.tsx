@@ -19,6 +19,7 @@ export default function MainLayout({
             {children}
           </div>
         </main>
+        <div className="w-2 flex-shrink-0" />
         <RightPanel />
       </div>
       <MobileNav />
