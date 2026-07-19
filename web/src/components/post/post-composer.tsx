@@ -62,6 +62,10 @@ export function PostComposer() {
   useEffect(() => {
     setMounted(true);
     getHotTopics(10).then(setHotTopicsList).catch(() => {});
+    try {
+      const saved = localStorage.getItem(TOPIC_HISTORY_KEY);
+      if (saved) setTopicHistory(JSON.parse(saved));
+    } catch {}
   }, []);
 
   // 点击外部关闭更多菜单
