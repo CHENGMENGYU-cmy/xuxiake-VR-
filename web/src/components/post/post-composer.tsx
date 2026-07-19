@@ -533,26 +533,63 @@ export function PostComposer() {
                       </>
                     ) : (
                       <>
+                        {/* 搜索历史 */}
+                        {topicHistory.length > 0 && (
+                          <>
+                            <div className="flex items-center justify-between px-3 py-1.5">
+                              <span className="text-xs text-muted-foreground">最近搜索</span>
+                              <button
+                                className="text-[11px] text-muted-foreground hover:text-foreground"
+                                onMouseDown={(e) => {
+                                  e.preventDefault();
+                                  clearTopicHistory();
+                                }}
+                              >
+                                清除
+                              </button>
+                            </div>
+                            {topicHistory.map((name, i) => (
+                              <button
+                                key={name}
+                                className={`flex w-full items-center gap-2 px-3 py-1.5 text-sm transition-colors ${
+                                  i === activeIndex ? 'bg-accent' : 'hover:bg-accent/50'
+                                }`}
+                                onMouseDown={(e) => {
+                                  e.preventDefault();
+                                  selectTopic(name);
+                                }}
+                                onMouseEnter={() => setActiveIndex(i)}
+                              >
+                                <Clock className="h-3.5 w-3.5 text-muted-foreground" />
+                                <span className="flex-1 text-left">{name}</span>
+                              </button>
+                            ))}
+                          </>
+                        )}
+                        {/* 热门话题 */}
                         <p className="px-3 py-1.5 text-xs text-muted-foreground">热门话题</p>
                         {hotTopicsList.length > 0 ? (
-                          hotTopicsList.map((t, i) => (
-                            <button
-                              key={t.id}
-                              className={`flex w-full items-center gap-2 px-3 py-1.5 text-sm transition-colors ${
-                                i === activeIndex ? 'bg-accent' : 'hover:bg-accent/50'
-                              }`}
-                              onMouseDown={(e) => {
-                                e.preventDefault();
-                                selectTopic(t.name);
-                              }}
-                              onMouseEnter={() => setActiveIndex(i)}
-                            >
-                              <Hash className="h-3.5 w-3.5 text-muted-foreground" />
-                              <span className="flex-1 text-left">{t.name}</span>
-                              <span className="text-xs text-muted-foreground">{t.postCount}篇</span>
-                            </button>
-                          ))
-                        ) : (
+                          hotTopicsList.map((t, i) => {
+                            const offset = topicHistory.length;
+                            return (
+                              <button
+                                key={t.id}
+                                className={`flex w-full items-center gap-2 px-3 py-1.5 text-sm transition-colors ${
+                                  i + offset === activeIndex ? 'bg-accent' : 'hover:bg-accent/50'
+                                }`}
+                                onMouseDown={(e) => {
+                                  e.preventDefault();
+                                  selectTopic(t.name);
+                                }}
+                                onMouseEnter={() => setActiveIndex(i + offset)}
+                              >
+                                <Hash className="h-3.5 w-3.5 text-muted-foreground" />
+                                <span className="flex-1 text-left">{t.name}</span>
+                                <span className="text-xs text-muted-foreground">{t.postCount}篇</span>
+                              </button>
+                            );
+                          })
+                        ) : topicHistory.length === 0 && (
                           <p className="px-3 py-2 text-xs text-muted-foreground">暂无热门话题</p>
                         )}
                       </>
