@@ -12,14 +12,13 @@ export default function MainLayout({
   return (
     <AuthGuard>
       <Navbar />
-      <div className="flex h-[calc(100vh-3.5rem)] pt-14">
+      <div className="flex h-[calc(100vh-3.5rem)] gap-0 pt-14">
         <Sidebar />
-        <main className="flex-1 overflow-y-auto px-4 py-4 sm:px-6 lg:pb-0 pb-16">
+        <main className="flex-1 overflow-y-auto px-6 py-4 sm:px-8 lg:pb-0 pb-16">
           <div className="mx-auto max-w-5xl">
             {children}
           </div>
         </main>
-        <div className="w-2 flex-shrink-0" />
         <RightPanel />
       </div>
       <MobileNav />
