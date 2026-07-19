@@ -745,7 +745,7 @@ export function PostComposer() {
 
                 {/* 攻略专属字段 */}
                 {postType === 'GUIDE' && (
-                  <div className="space-y-2 rounded-lg border border-blue-500/20 bg-blue-500/5 p-3">
+                  <div className="space-y-2 rounded-lg border border-blue-500/20 bg-blue-500/5 p-3" onMouseDown={(e) => e.preventDefault()}>
                     <p className="text-xs font-medium text-blue-600 dark:text-blue-400">攻略信息</p>
                     <div>
                       <label className="text-[10px] text-muted-foreground">目的地</label>
