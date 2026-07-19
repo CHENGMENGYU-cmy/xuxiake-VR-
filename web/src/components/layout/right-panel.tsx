@@ -153,7 +153,7 @@ export function RightPanel() {
                         <div className="mt-1 flex flex-wrap gap-1">
                           {community.tags.slice(0, 2).map((tag) => (
                             <Badge key={tag.id} variant="secondary" className="text-xs">
-                              {tag.icon} {tag.name}
+                              {tag.name}
                             </Badge>
                           ))}
                         </div>
