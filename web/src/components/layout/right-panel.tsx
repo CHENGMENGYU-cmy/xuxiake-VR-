@@ -55,7 +55,6 @@ export function RightPanel() {
         !rightPanelOpen && 'hidden'
       )}
     >
-      <div className="sticky top-0">
       <div className="space-y-4">
         {/* 热门话题 */}
         <Card>
