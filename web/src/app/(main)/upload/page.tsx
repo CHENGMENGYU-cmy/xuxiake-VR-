@@ -638,6 +638,14 @@ export default function UploadPage() {
             />
           </div>
 
+          {/* 社群选择 */}
+          <div className="mt-4">
+            <CommunitySelector
+              selectedCommunity={selectedCommunity}
+              onCommunityChange={setSelectedCommunity}
+            />
+          </div>
+
           {/* 发布按钮 */}
           <div className="mt-6 flex justify-end gap-3">
             <Button variant="outline" onClick={() => router.back()}>取消</Button>
