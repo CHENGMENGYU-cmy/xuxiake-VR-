@@ -66,7 +66,7 @@ export function RightPanel() {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              {hotTopics.map((topic) => (
+              {(showAllTopics ? hotTopics : hotTopics.slice(0, HOT_TOPIC_PREVIEW_COUNT)).map((topic) => (
                 <Link
                   key={topic.id}
                   href={`/topics/${topic.id}`}
@@ -76,12 +76,14 @@ export function RightPanel() {
                   <span className="text-xs text-muted-foreground">{topic.postCount}篇</span>
                 </Link>
               ))}
-              <Link
-                href="/topics"
-                className="block rounded-lg px-2 py-1.5 text-center text-xs text-primary hover:bg-accent"
-              >
-                查看全部话题
-              </Link>
+              {hotTopics.length > HOT_TOPIC_PREVIEW_COUNT && !showAllTopics && (
+                <button
+                  onClick={() => setShowAllTopics(true)}
+                  className="block w-full rounded-lg px-2 py-1.5 text-center text-xs text-primary hover:bg-accent"
+                >
+                  查看全部话题
+                </button>
+              )}
             </div>
           </CardContent>
         </Card>
