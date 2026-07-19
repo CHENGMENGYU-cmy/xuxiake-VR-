@@ -440,6 +440,27 @@ export function PostComposer() {
               disabled={isPublishing}
             />
 
+            {/* 快速发布按钮 - 未展开时显示 */}
+            {!expanded && (
+              <div className="flex flex-wrap gap-1">
+                {postTypeOptions.map((opt) => {
+                  const Icon = opt.icon;
+                  return (
+                    <Button
+                      key={opt.type}
+                      variant="ghost"
+                      size="sm"
+                      className={`gap-1.5 text-xs ${opt.color}`}
+                      onClick={() => handleQuickPostType(opt.type)}
+                    >
+                      <Icon className="h-3.5 w-3.5" />
+                      {opt.label}
+                    </Button>
+                  );
+                })}
+              </div>
+            )}
+
             {/* 媒体预览区 */}
             {mediaItems.length > 0 && (
               <div className="flex flex-wrap gap-2">
