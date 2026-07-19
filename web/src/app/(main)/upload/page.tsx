@@ -14,9 +14,10 @@ import { useAuthStore } from '@/stores/auth-store';
 import { usePostStore } from '@/stores/post-store';
 import { uploadVideo, uploadAudio, uploadImage, getImageDimensions, getVideoMetadata, getAudioDuration, fetchLinkPreview } from '@/lib/media-api';
 import { CreatePostPayload } from '@/lib/post-api';
-import type { VrFormat } from '@/types';
+import type { VrFormat, Topic } from '@/types';
 import { cn } from '@/lib/utils';
 import { MultiImageUploader, UploadedImage } from '@/components/upload/multi-image-uploader';
+import { TopicSelector } from '@/components/upload/topic-selector';
 
 type UploadTab = 'VIDEO' | 'IMAGE' | 'AUDIO' | 'LINK' | 'TRANSLATION';
 
