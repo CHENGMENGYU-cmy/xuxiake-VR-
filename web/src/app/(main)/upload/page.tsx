@@ -64,6 +64,7 @@ export default function UploadPage() {
   const [activeTab, setActiveTab] = useState<UploadTab>('VIDEO');
   const [content, setContent] = useState('');
   const [location, setLocation] = useState('');
+  const [visibility, setVisibility] = useState<Visibility>('PUBLIC');
   const [media, setMedia] = useState<UploadedMedia | null>(null);
   const [images, setImages] = useState<UploadedImage[]>([]);
   const [selectedTopics, setSelectedTopics] = useState<Topic[]>([]);
