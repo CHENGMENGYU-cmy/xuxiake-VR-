@@ -17,10 +17,12 @@ export function TopicSelector({
   selectedTopics,
   onTopicsChange,
   maxTopics = 5,
+  content = '',
 }: TopicSelectorProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Topic[]>([]);
   const [hotTopics, setHotTopics] = useState<Topic[]>([]);
+  const [recommendedTopics, setRecommendedTopics] = useState<Topic[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
