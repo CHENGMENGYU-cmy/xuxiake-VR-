@@ -34,6 +34,8 @@ interface PostState {
   prependPost: (post: Post) => void;
   clearPublishError: () => void;
   updateUserAvatar: (username: string, avatarUrl: string) => void;
+  removePost: (postId: string) => Promise<void>;
+  updatePostInList: (postId: string, updatedPost: Post) => void;
 }
 
 export const usePostStore = create<PostState>((set, get) => ({
