@@ -69,9 +69,15 @@ interface PostCardProps {
 
 export function PostCard({ post }: PostCardProps) {
   const { user: currentUser } = useAuthStore();
+  const removePost = usePostStore((s) => s.removePost);
   const [isLiked, setIsLiked] = useState(post.isLiked);
   const [likeCount, setLikeCount] = useState(post.likeCount);
   const [showShare, setShowShare] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  const isOwner = currentUser?.id === post.author.id;
 
   const shareContent: ContentCardData = {
     type: 'POST',
