@@ -26,7 +26,6 @@ export function RightPanel() {
   const { rightPanelOpen } = useUIStore();
   const { isAuthenticated } = useAuthStore();
   const [recommendedCommunities, setRecommendedCommunities] = useState<Community[]>([]);
-  const [recommendedUsers, setRecommendedUsers] = useState<RecommendedUser[]>([]);
   const [hotTopics, setHotTopics] = useState<Topic[]>([]);
   const [hotPosts, setHotPosts] = useState<Post[]>([]);
   const [showAllTopics, setShowAllTopics] = useState(false);
