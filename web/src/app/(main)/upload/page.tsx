@@ -333,6 +333,38 @@ export default function UploadPage() {
     setLoadingLink(false);
   };
 
+  // Translation
+  const handleTranslate = async () => {
+    if (!sourceText.trim()) return;
+
+    setTranslating(true);
+    try {
+      const result = await translateText(sourceText, sourceLang, targetLang);
+      setTranslatedText(result.translatedText);
+      toast.success('翻译完成');
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : '翻译失败，请重试');
+    }
+    setTranslating(false);
+  };
+
+  // 交换语言
+  const handleSwapLanguages = () => {
+    setSourceLang(targetLang);
+    setTargetLang(sourceLang);
+    setSourceText(translatedText);
+    setTranslatedText(sourceText);
+  };
+
+  // 自动检测语言
+  const handleAutoDetect = () => {
+    if (sourceText.trim()) {
+      const detected = detectLanguage(sourceText);
+      setSourceLang(detected);
+      toast.info(`检测到语言: ${detected === 'zh-CN' ? '中文' : detected === 'ja' ? '日语' : detected === 'ko' ? '韩语' : '英语'}`);
+    }
+  };
+
   // Get file input accept based on active tab
   const getAccept = () => {
     switch (activeTab) {
