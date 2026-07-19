@@ -73,7 +73,15 @@ export class PostsController {
     @Query('page') page?: string,
     @Query('postType') postType?: string,
     @Query('tagId') tagId?: string,
+    @Query('followingOnly') followingOnly?: string,
+    @Headers('authorization') auth?: string,
   ) {
+    // 可选认证：有 token 时提取 userId，无 token 时为 null
+    let userId: string | undefined;
+    if (auth) {
+      try { userId = this.getUserId(auth); } catch { /* 游客模式 */ }
+    }
+
     const result = await this.postsService.getPosts({
       cursor,
       limit: limit ? parseInt(limit) : 10,
@@ -81,6 +89,8 @@ export class PostsController {
       page: page ? parseInt(page) : 1,
       postType,
       tagId,
+      userId,
+      followingOnly: followingOnly === 'true',
     });
     return { success: true, ...result };
   }
