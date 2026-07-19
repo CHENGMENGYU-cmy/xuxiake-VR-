@@ -16,6 +16,7 @@ import { uploadVideo, uploadAudio, uploadImage, getImageDimensions, getVideoMeta
 import { CreatePostPayload } from '@/lib/post-api';
 import type { VrFormat } from '@/types';
 import { cn } from '@/lib/utils';
+import { MultiImageUploader, UploadedImage } from '@/components/upload/multi-image-uploader';
 
 type UploadTab = 'VIDEO' | 'IMAGE' | 'AUDIO' | 'LINK' | 'TRANSLATION';
 
