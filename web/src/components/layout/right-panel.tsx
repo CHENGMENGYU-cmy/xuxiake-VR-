@@ -54,6 +54,7 @@ export function RightPanel() {
         'lg:block',
         !rightPanelOpen && 'hidden'
       )}
+      style={{ height: 'calc(100vh - 3.5rem)' }}
     >
       <div className="space-y-4">
         {/* 热门话题 */}
