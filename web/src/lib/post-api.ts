@@ -92,6 +92,11 @@ export async function deletePost(postId: string): Promise<void> {
   await apiClient.delete(`/posts/${postId}`);
 }
 
+export async function updatePost(postId: string, payload: { content: string }): Promise<Post> {
+  const { data } = await apiClient.put(`/posts/${postId}`, payload);
+  return data.data;
+}
+
 export async function likePost(postId: string): Promise<void> {
   await apiClient.post(`/posts/${postId}/like`);
 }
