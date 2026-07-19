@@ -650,7 +650,7 @@ export function PostComposer() {
                 </div>
 
                 {/* 话题输入 */}
-                <div className="space-y-1.5">
+                <div className="space-y-1.5" onMouseDown={(e) => e.preventDefault()}>
                   <div className="flex items-center gap-2">
                     <span className="text-xs text-muted-foreground">#话题</span>
                     <Input
