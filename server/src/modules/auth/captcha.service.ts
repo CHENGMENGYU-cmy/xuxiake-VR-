@@ -39,7 +39,8 @@ export class CaptchaService {
     // 验证后立即删除，防止重复使用
     this.store.delete(key);
     if (Date.now() > entry.expiresAt) return false;
-    return entry.text === answer;
+    // 不区分大小写比较
+    return entry.text.toLowerCase() === answer.toLowerCase();
   }
 
   private cleanup() {
