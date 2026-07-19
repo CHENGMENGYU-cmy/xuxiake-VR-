@@ -193,7 +193,7 @@ export function RightPanel() {
         <div className="px-2 text-xs text-muted-foreground">
           <Separator className="mb-3" />
           <p>徐霞客系统 © 2026</p>
-          <p className="mt-1">用VR记录旅程，让世界触手可及 🌍</p>
+          <p className="mt-1">用VR记录旅程，让世界触手可及</p>
         </div>
       </div>
     </aside>
