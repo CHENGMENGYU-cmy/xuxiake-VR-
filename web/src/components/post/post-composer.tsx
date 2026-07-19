@@ -39,9 +39,23 @@ export function PostComposer() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const composerRef = useRef<HTMLDivElement>(null);
 
+  const moreMenuRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // 点击外部关闭更多菜单
+  useEffect(() => {
+    if (!showMoreMenu) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (moreMenuRef.current && !moreMenuRef.current.contains(e.target as Node)) {
+        setShowMoreMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showMoreMenu]);
 
   const charCount = content.length;
   const isOverLimit = charCount > MAX_CONTENT_LENGTH;
@@ -113,17 +127,18 @@ export function PostComposer() {
     }, 150);
   };
 
-  // 图片上传
-  const handleImageUpload = async (files: FileList | null) => {
-    if (!files) return;
+  // 图片上传（接受 FileList 或 File[]）
+  const handleImageUpload = async (files: FileList | File[] | null) => {
+    if (!files || files.length === 0) return;
+    const fileArray = Array.from(files);
     const remaining = MAX_IMAGES - imageCount;
-    if (files.length > remaining) {
+    if (fileArray.length > remaining) {
       toast.warning(`最多只能上传${MAX_IMAGES}张图片`);
       return;
     }
 
     setUploading(true);
-    const uploadPromises = Array.from(files).map(async (file) => {
+    const uploadPromises = fileArray.map(async (file) => {
       try {
         const result = await uploadImage(file);
         let width = result.width;
@@ -233,28 +248,25 @@ export function PostComposer() {
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
-    const files = e.dataTransfer.files;
-    if (files.length > 0) {
-      const imageFiles = Array.from(files).filter((f) => f.type.startsWith('image/'));
-      if (imageFiles.length > 0) {
-        handleImageUpload({ length: imageFiles.length, item: (i: number) => imageFiles[i] } as unknown as FileList);
-      }
+    const imageFiles = Array.from(e.dataTransfer.files).filter((f) => f.type.startsWith('image/'));
+    if (imageFiles.length > 0) {
+      handleImageUpload(imageFiles);
     }
   };
 
   // 粘贴处理
   const handlePaste = (e: React.ClipboardEvent) => {
-    const items = e.clipboardData.items;
     const imageFiles: File[] = [];
-    for (let i = 0; i < items.length; i++) {
-      if (items[i].type.startsWith('image/')) {
-        const file = items[i].getAsFile();
+    for (let i = 0; i < e.clipboardData.items.length; i++) {
+      const item = e.clipboardData.items[i];
+      if (item.type.startsWith('image/')) {
+        const file = item.getAsFile();
         if (file) imageFiles.push(file);
       }
     }
     if (imageFiles.length > 0) {
       e.preventDefault();
-      handleImageUpload({ length: imageFiles.length, item: (i: number) => imageFiles[i] } as unknown as FileList);
+      handleImageUpload(imageFiles);
     }
   };
 
@@ -288,22 +300,31 @@ export function PostComposer() {
               /* 收起状态：单行输入 + 按钮 */
               <div className="flex items-center gap-2">
                 <div
-                  className="flex-1 cursor-text rounded-lg bg-muted/50 px-3 py-2 text-sm text-muted-foreground hover:bg-muted transition-colors"
+                  className="flex-1 cursor-text rounded-lg bg-muted/50 px-3 py-2 text-sm hover:bg-muted transition-colors truncate"
                   onClick={() => {
                     setExpanded(true);
                     setTimeout(() => textareaRef.current?.focus(), 0);
                   }}
                 >
-                  {content || `分享你的旅行故事...`}
+                  {content ? (
+                    <span className="text-foreground">{content}</span>
+                  ) : (
+                    <span className="text-muted-foreground">分享你的旅行故事...</span>
+                  )}
                 </div>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-9 w-9 text-muted-foreground hover:text-primary"
+                  className="h-9 w-9 text-muted-foreground hover:text-primary relative"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={uploading || imageCount >= MAX_IMAGES}
                 >
-                  <Image className="h-4.5 w-4.5" />
+                  <Image className="h-[18px] w-[18px]" />
+                  {mediaItems.length > 0 && (
+                    <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
+                      {mediaItems.length}
+                    </span>
+                  )}
                 </Button>
                 <Button
                   size="sm"
@@ -311,8 +332,11 @@ export function PostComposer() {
                   disabled={!canPublish}
                   onClick={handlePublish}
                 >
-                  {isPublishing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-                  发布
+                  {isPublishing ? (
+                    <><Loader2 className="h-4 w-4 animate-spin" /> 发布中...</>
+                  ) : (
+                    <><Send className="h-4 w-4" /> 发布</>
+                  )}
                 </Button>
               </div>
             ) : (
@@ -447,7 +471,7 @@ export function PostComposer() {
                     </Button>
 
                     {/* 更多选项按钮 */}
-                    <div className="relative">
+                    <div className="relative" ref={moreMenuRef}>
                       <Button
                         variant="ghost"
                         size="sm"
@@ -489,6 +513,9 @@ export function PostComposer() {
                   </div>
 
                   <div className="flex items-center gap-2">
+                    <span className="hidden sm:inline text-[11px] text-muted-foreground/60">
+                      Ctrl+Enter 发布
+                    </span>
                     <span className={`text-xs ${charCount > 450 ? 'text-orange-500' : 'text-muted-foreground'}`}>
                       {charCount}/{MAX_CONTENT_LENGTH}
                     </span>
