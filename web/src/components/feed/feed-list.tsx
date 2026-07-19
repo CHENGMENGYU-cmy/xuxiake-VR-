@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useCallback } from 'react';
-import { RefreshCw } from 'lucide-react';
+import { RefreshCw, UserPlus, Compass } from 'lucide-react';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { PostCard } from '@/components/post/post-card';
 import { PostComposer } from '@/components/post/post-composer';
