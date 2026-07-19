@@ -39,15 +39,26 @@ export class PostsService {
     private readonly notificationsService: NotificationsService,
   ) {}
 
-  async getPosts(options: { cursor?: string; limit?: number; sort?: string; page?: number; postType?: string; tagId?: string } = {}) {
-    const { cursor, limit = 10, sort = 'latest', page = 1, postType, tagId } = options;
+  async getPosts(options: { cursor?: string; limit?: number; sort?: string; page?: number; postType?: string; tagId?: string; userId?: string; followingOnly?: boolean } = {}) {
+    const { cursor, limit = 10, sort = 'latest', page = 1, postType, tagId, userId, followingOnly } = options;
+
+    // 关注动态模式：查询关注列表
+    let followingIds: string[] | null = null;
+    if (followingOnly && userId) {
+      const follows = await this.followRepo.find({ where: { followerId: userId } });
+      followingIds = follows.map((f) => f.followingId);
+      // 如果没有关注任何人，返回空
+      if (followingIds.length === 0) {
+        return { data: [], nextCursor: null, hasMore: false };
+      }
+    }
 
     // trending 和 hot 使用 offset 分页（排名动态变化），latest 使用 cursor 分页
     if (sort === 'trending') {
-      return this.getTrendingPosts(limit, page, postType, tagId);
+      return this.getTrendingPosts(limit, page, postType, tagId, followingIds);
     }
     if (sort === 'hot') {
-      return this.getHotPosts(limit, page, postType, tagId);
+      return this.getHotPosts(limit, page, postType, tagId, followingIds);
     }
 
     // 默认 latest：按时间倒序，cursor 分页
@@ -57,9 +68,16 @@ export class PostsService {
       .leftJoinAndSelect('post.mediaItems', 'mediaItems')
       .leftJoinAndSelect('post.tags', 'tags')
       .leftJoinAndSelect('post.topics', 'topics')
-      .where('post.visibility = :vis', { vis: 'PUBLIC' })
       .orderBy('post.createdAt', 'DESC')
       .take(limit + 1);
+
+    // 可见性过滤
+    if (followingIds) {
+      qb.where('post.authorId IN (:...followingIds)', { followingIds });
+      qb.andWhere('post.visibility IN (:...visList)', { visList: ['PUBLIC', 'FOLLOWERS'] });
+    } else {
+      qb.where('post.visibility = :vis', { vis: 'PUBLIC' });
+    }
 
     if (postType) {
       qb.andWhere('post.postType = :postType', { postType });
