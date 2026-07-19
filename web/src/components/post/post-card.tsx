@@ -175,9 +175,40 @@ export function PostCard({ post }: PostCardProps) {
             <MoreHorizontal className="h-4 w-4" />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>保存链接</DropdownMenuItem>
-            <DropdownMenuItem>复制链接</DropdownMenuItem>
-            <DropdownMenuItem>举报内容</DropdownMenuItem>
+            {isOwner ? (
+              <>
+                <DropdownMenuItem onClick={() => setShowEdit(true)}>
+                  <Pencil className="h-3.5 w-3.5 mr-2" />
+                  编辑
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="text-destructive focus:text-destructive"
+                  onClick={() => setShowDeleteConfirm(true)}
+                >
+                  <Trash2 className="h-3.5 w-3.5 mr-2" />
+                  删除
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleCopyLink}>
+                  <Copy className="h-3.5 w-3.5 mr-2" />
+                  复制链接
+                </DropdownMenuItem>
+              </>
+            ) : (
+              <>
+                <DropdownMenuItem>
+                  <Bookmark className="h-3.5 w-3.5 mr-2" />
+                  保存
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleCopyLink}>
+                  <Copy className="h-3.5 w-3.5 mr-2" />
+                  复制链接
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <AlertTriangle className="h-3.5 w-3.5 mr-2" />
+                  举报
+                </DropdownMenuItem>
+              </>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
