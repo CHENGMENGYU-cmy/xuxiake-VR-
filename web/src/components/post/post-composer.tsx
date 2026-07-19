@@ -198,13 +198,27 @@ export function PostComposer() {
     }
   };
 
-  const handleBlur = () => {
+  const handleBlur = (e: React.FocusEvent) => {
+    // 检查焦点是否移到了发布区域内的元素
+    const relatedTarget = e.relatedTarget as HTMLElement;
+    const currentTarget = e.currentTarget as HTMLElement;
+
+    // 如果焦点仍在发布区域内，不收起
+    if (relatedTarget && currentTarget.contains(relatedTarget)) {
+      return;
+    }
+
     setTimeout(() => {
       if (!content.trim() && mediaItems.length === 0 && !isPublishing) {
         setExpanded(false);
         clearPublishError();
       }
     }, 150);
+  };
+
+  const handleQuickPostType = (type: PostType) => {
+    setPostType(type);
+    setExpanded(true);
   };
 
   const handleImageUpload = async (files: FileList | null) => {
