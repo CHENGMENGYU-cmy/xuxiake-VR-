@@ -596,7 +596,7 @@ export function PostComposer() {
                 </div>
 
                 {/* 标签选择 */}
-                <div className="space-y-1.5">
+                <div className="space-y-1.5" onMouseDown={(e) => e.preventDefault()}>
                   <div className="flex items-center gap-2">
                     <Button
                       variant="ghost"
