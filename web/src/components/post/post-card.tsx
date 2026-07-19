@@ -103,6 +103,24 @@ export function PostCard({ post }: PostCardProps) {
     setIsLiked(!isLiked);
   };
 
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(`${window.location.origin}/post/${post.id}`);
+    toast.success('链接已复制');
+  };
+
+  const handleDelete = async () => {
+    setDeleting(true);
+    try {
+      await removePost(post.id);
+      setShowDeleteConfirm(false);
+      toast.success('已删除');
+    } catch {
+      toast.error('删除失败，请重试');
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   return (
     <Card className="overflow-hidden shadow-sm transition-shadow hover:shadow-md">
       {/* 作者信息头 */}
