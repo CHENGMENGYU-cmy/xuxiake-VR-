@@ -605,16 +605,16 @@ export default function LandingPage() {
               </div>
               <ul className="space-y-4 mb-8">
                 {[
-                  { text: '需头戴或胸戴固定', icon: '⚠️' },
-                  { text: '视角固定，不够灵活', icon: '⚠️' },
-                  { text: '无AI识别功能', icon: '⚠️' },
-                  { text: '无导航功能', icon: '⚠️' },
-                  { text: '需后期剪辑处理', icon: '⚠️' },
-                  { text: '额外负重，不够舒适', icon: '⚠️' },
-                ].map((item, i) => (
+                  '需头戴或胸戴固定',
+                  '视角固定，不够灵活',
+                  '无AI识别功能',
+                  '无导航功能',
+                  '需后期剪辑处理',
+                  '额外负重，不够舒适',
+                ].map((text, i) => (
                   <li key={i} className="flex items-center gap-3">
-                    <span className="text-lg">{item.icon}</span>
-                    <span className="text-sm text-muted-foreground">{item.text}</span>
+                    <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/40 shrink-0" />
+                    <span className="text-sm text-muted-foreground">{text}</span>
                   </li>
                 ))}
               </ul>
