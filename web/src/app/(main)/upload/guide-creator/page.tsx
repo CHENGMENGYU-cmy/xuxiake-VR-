@@ -228,6 +228,21 @@ export default function GuideCreatorPage() {
 
           <Separator />
 
+          {/* 攻略图片 */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">攻略图片</label>
+            <p className="text-xs text-muted-foreground">
+              上传景点、美食、住宿等相关图片，让攻略更生动
+            </p>
+            <MultiImageUploader
+              images={images}
+              onImagesChange={setImages}
+              maxImages={12}
+            />
+          </div>
+
+          <Separator />
+
           {/* 发布按钮 */}
           <div className="flex justify-end gap-3">
             <Button variant="outline" onClick={() => router.push('/upload')}>
