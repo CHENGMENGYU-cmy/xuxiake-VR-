@@ -295,9 +295,6 @@ export default function LandingPage() {
                   </div>
                 </div>
 
-                {/* 装饰小圆点 */}
-                <div className="absolute top-8 right-8 w-3 h-3 rounded-full bg-cyan-400/50 animate-pulse" />
-                <div className="absolute bottom-8 left-8 w-2 h-2 rounded-full bg-accent/50 animate-pulse" style={{ animationDelay: '0.5s' }} />
               </div>
             </div>
           </div>
