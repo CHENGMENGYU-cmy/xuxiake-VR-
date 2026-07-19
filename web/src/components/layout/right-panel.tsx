@@ -73,7 +73,7 @@ export function RightPanel() {
                   href={`/topics/${topic.id}`}
                   className="flex items-center justify-between rounded-lg px-2 py-1.5 text-sm hover:bg-accent"
                 >
-                  <span className="text-foreground">{topic.icon || '#'} {topic.name}</span>
+                  <span className="text-foreground"># {topic.name}</span>
                   <span className="text-xs text-muted-foreground">{topic.postCount}篇</span>
                 </Link>
               ))}
