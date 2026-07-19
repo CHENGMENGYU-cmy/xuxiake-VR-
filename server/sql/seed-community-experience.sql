@@ -18,6 +18,10 @@ DELETE FROM community_roles;
 DELETE FROM collection_posts;
 DELETE FROM collections;
 DELETE FROM comments WHERE id LIKE 'c-seed-%';
+-- 清理补充点赞（按 user+post 匹配）
+DELETE FROM likes WHERE user_id IN ('u4','u6','u7','u9','u10') AND post_id = 'post-seed-005';
+DELETE FROM likes WHERE user_id IN ('u2','u3','u7','u8','u9') AND post_id = 'post-seed-011';
+DELETE FROM likes WHERE user_id IN ('u5','u7','u8','u9','u10') AND post_id = 'post-seed-013';
 
 -- ============================================================
 -- 1. 社群角色（管理员和版主）
