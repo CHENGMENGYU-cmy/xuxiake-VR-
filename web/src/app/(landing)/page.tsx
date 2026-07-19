@@ -541,83 +541,66 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="grid gap-8 lg:grid-cols-3">
-            {/* AR眼镜 */}
-            <div className="relative rounded-3xl border-2 border-primary bg-card p-8 shadow-xl">
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                <Badge className="bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-1.5">推荐</Badge>
-              </div>
-              <div className="mb-6 flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <Eye className="h-6 w-6" />
+          <div className="mx-auto max-w-4xl">
+            {/* 对比表格 */}
+            <div className="overflow-hidden rounded-3xl border bg-card shadow-xl">
+              {/* 表头 */}
+              <div className="grid grid-cols-4 border-b">
+                <div className="p-6 text-sm font-medium text-muted-foreground">对比维度</div>
+                <div className="relative p-6 text-center bg-primary/5 border-x border-primary/20">
+                  <div className="absolute -top-px left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 to-blue-500" />
+                  <Eye className="h-6 w-6 text-primary mx-auto mb-2" />
+                  <p className="font-bold text-primary">AR眼镜</p>
                 </div>
-                <h3 className="text-xl font-bold">AR智能眼镜</h3>
+                <div className="p-6 text-center">
+                  <Camera className="h-6 w-6 text-muted-foreground mx-auto mb-2" />
+                  <p className="font-bold">手机</p>
+                </div>
+                <div className="p-6 text-center">
+                  <Video className="h-6 w-6 text-muted-foreground mx-auto mb-2" />
+                  <p className="font-bold">运动相机</p>
+                </div>
               </div>
-              <ul className="space-y-4 mb-8">
-                {[
-                  '解放双手，边走边拍',
-                  '第一视角，沉浸体验',
-                  'AI实时识别翻译',
-                  'AR导航，所见即所得',
-                  '语音控制，无需触屏',
-                  '全天佩戴，轻若无物',
-                ].map((text, i) => (
-                  <li key={i} className="flex items-center gap-3">
-                    <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
-                    <span className="text-sm">{text}</span>
-                  </li>
-                ))}
-              </ul>
+
+              {/* 对比行 */}
+              {[
+                { feature: '拍摄方式', ar: '解放双手，第一视角', phone: '手持拍摄，占用双手', cam: '头戴固定，视角受限' },
+                { feature: 'AI能力', ar: '实时识别 + 翻译 + 导航', phone: '需切换多个App', cam: '无AI功能' },
+                { feature: '内容创作', ar: 'AI自动生成游记', phone: '手动剪辑处理', cam: '后期剪辑处理' },
+                { feature: '交互方式', ar: '语音 + 眼动控制', phone: '触屏操作', cam: '物理按键' },
+                { feature: '佩戴体验', ar: '轻若无物，全天舒适', phone: '长时间举着很累', cam: '额外负重，不够灵活' },
+                { feature: '分享方式', ar: '实时直播 + 一键分享', phone: '需导出后分享', cam: '需传输后处理' },
+              ].map((row, i) => (
+                <div key={i} className={`grid grid-cols-4 ${i < 5 ? 'border-b' : ''}`}>
+                  <div className="p-5 flex items-center">
+                    <span className="text-sm font-medium">{row.feature}</span>
+                  </div>
+                  <div className="p-5 flex items-center justify-center bg-primary/5 border-x border-primary/10">
+                    <span className="text-sm text-center font-medium text-primary">{row.ar}</span>
+                  </div>
+                  <div className="p-5 flex items-center justify-center">
+                    <span className="text-sm text-center text-muted-foreground">{row.phone}</span>
+                  </div>
+                  <div className="p-5 flex items-center justify-center">
+                    <span className="text-sm text-center text-muted-foreground">{row.cam}</span>
+                  </div>
+                </div>
+              ))}
             </div>
 
-            {/* 手机 */}
-            <div className="rounded-3xl border bg-card p-8">
-              <div className="mb-6 flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted">
-                  <Camera className="h-6 w-6 text-muted-foreground" />
+            {/* 底部亮点 */}
+            <div className="mt-12 grid gap-6 sm:grid-cols-3">
+              {[
+                { value: '120°', label: '超广角视野', desc: '超越人眼的沉浸体验' },
+                { value: '< 40g', label: '极致轻量', desc: '比太阳镜还轻' },
+                { value: '12h', label: '超长续航', desc: '全天不断电' },
+              ].map((stat) => (
+                <div key={stat.label} className="text-center rounded-2xl border bg-card p-6 transition-all hover:shadow-lg hover:-translate-y-1">
+                  <p className="text-3xl font-bold bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">{stat.value}</p>
+                  <p className="mt-1 font-medium">{stat.label}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{stat.desc}</p>
                 </div>
-                <h3 className="text-xl font-bold">手机拍摄</h3>
-              </div>
-              <ul className="space-y-4 mb-8">
-                {[
-                  '需要手持，占用双手',
-                  '第三人视角，距离感',
-                  '需手动打开翻译App',
-                  '地图导航需低头看',
-                  '需手动操作屏幕',
-                  '长时间举着很累',
-                ].map((text, i) => (
-                  <li key={i} className="flex items-center gap-3">
-                    <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/40 shrink-0" />
-                    <span className="text-sm text-muted-foreground">{text}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* 运动相机 */}
-            <div className="rounded-3xl border bg-card p-8">
-              <div className="mb-6 flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted">
-                  <Video className="h-6 w-6 text-muted-foreground" />
-                </div>
-                <h3 className="text-xl font-bold">运动相机</h3>
-              </div>
-              <ul className="space-y-4 mb-8">
-                {[
-                  '需头戴或胸戴固定',
-                  '视角固定，不够灵活',
-                  '无AI识别功能',
-                  '无导航功能',
-                  '需后期剪辑处理',
-                  '额外负重，不够舒适',
-                ].map((text, i) => (
-                  <li key={i} className="flex items-center gap-3">
-                    <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/40 shrink-0" />
-                    <span className="text-sm text-muted-foreground">{text}</span>
-                  </li>
-                ))}
-              </ul>
+              ))}
             </div>
           </div>
         </div>
