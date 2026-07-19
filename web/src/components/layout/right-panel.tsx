@@ -168,28 +168,35 @@ export function RightPanel() {
           </Card>
         )}
 
-        {/* 推荐链接 */}
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2 text-sm">
-              <ExternalLink className="h-4 w-4 text-accent" />
-              推荐链接
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-1">
-              {suggestLinks.map((link) => (
-                <Link
-                  key={link.title}
-                  href={link.url}
-                  className="block rounded-lg px-2 py-1.5 text-sm text-muted-foreground hover:bg-accent hover:text-primary"
-                >
-                  {link.title}
-                </Link>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+        {/* 近期热门动态 */}
+        {hotPosts.length > 0 && (
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2 text-sm">
+                <Flame className="h-4 w-4 text-red-500" />
+                近期热门动态
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {hotPosts.map((post) => (
+                  <Link
+                    key={post.id}
+                    href={`/post/${post.id}`}
+                    className="block rounded-lg p-2 hover:bg-accent"
+                  >
+                    <p className="line-clamp-2 text-sm text-foreground">{post.content || '动态'}</p>
+                    <div className="mt-1.5 flex items-center gap-2 text-xs text-muted-foreground">
+                      <span>{post.author.displayName}</span>
+                      <span>{post.likeCount} 赞</span>
+                      <span>{post.commentCount} 评论</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* 页脚 */}
         <div className="px-2 text-xs text-muted-foreground">
