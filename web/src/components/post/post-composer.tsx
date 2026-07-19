@@ -39,7 +39,11 @@ export function PostComposer() {
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
   const [topicLoading, setTopicLoading] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [topicHistory, setTopicHistory] = useState<string[]>([]);
   const topicPickerRef = useRef<HTMLDivElement>(null);
+
+  const TOPIC_HISTORY_KEY = 'xuxiake_topic_history';
+  const MAX_HISTORY = 8;
 
   // 更多选项状态
   const [showMoreMenu, setShowMoreMenu] = useState(false);
