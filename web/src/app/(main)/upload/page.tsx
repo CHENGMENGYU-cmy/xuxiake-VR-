@@ -626,6 +626,15 @@ export default function UploadPage() {
             </div>
           </div>
 
+          {/* 话题标签 */}
+          <div className="mt-4">
+            <TopicSelector
+              selectedTopics={selectedTopics}
+              onTopicsChange={setSelectedTopics}
+              maxTopics={5}
+            />
+          </div>
+
           {/* 发布按钮 */}
           <div className="mt-6 flex justify-end gap-3">
             <Button variant="outline" onClick={() => router.back()}>取消</Button>
