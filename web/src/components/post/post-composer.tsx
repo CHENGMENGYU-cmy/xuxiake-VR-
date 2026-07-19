@@ -10,7 +10,8 @@ import { Input } from '@/components/ui/input';
 import { useAuthStore } from '@/stores/auth-store';
 import { usePostStore } from '@/stores/post-store';
 import { uploadImage, getImageDimensions, uploadVideo, uploadAudio, getVideoMetadata, getAudioDuration, fetchLinkPreview } from '@/lib/media-api';
-import { CreatePostPayload } from '@/lib/post-api';
+import { CreatePostPayload, getHotTopics, searchTopics } from '@/lib/post-api';
+import type { Topic } from '@/types';
 
 const MAX_CONTENT_LENGTH = 500;
 const MAX_IMAGES = 9;
