@@ -37,13 +37,9 @@ export function RightPanel() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      Promise.all([
-        getRecommendedCommunities(1, 20),
-        getRecommendedUsers(1, 20),
-      ]).then(([communitiesRes, usersRes]) => {
-        setRecommendedCommunities(shuffleAndPick(communitiesRes.data || [], COMMUNITY_PICK_COUNT));
-        setRecommendedUsers(shuffleAndPick(usersRes.data || [], USER_PICK_COUNT));
-      }).catch(() => {});
+      getRecommendedCommunities(1, 20)
+        .then((res) => setRecommendedCommunities(shuffleAndPick(res.data || [], COMMUNITY_PICK_COUNT)))
+        .catch(() => {});
     }
   }, [isAuthenticated]);
 
