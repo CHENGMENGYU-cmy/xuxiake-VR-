@@ -66,6 +66,7 @@ export default function UploadPage() {
   const [media, setMedia] = useState<UploadedMedia | null>(null);
   const [images, setImages] = useState<UploadedImage[]>([]);
   const [selectedTopics, setSelectedTopics] = useState<Topic[]>([]);
+  const [selectedCommunity, setSelectedCommunity] = useState<Community | null>(null);
   const [uploading, setUploading] = useState(false);
   const [vrFormat, setVrFormat] = useState<VrFormat>('STANDARD');
   const [linkData, setLinkData] = useState<LinkData | null>(null);
