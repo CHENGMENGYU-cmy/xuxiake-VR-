@@ -50,7 +50,7 @@ export function RightPanel() {
   return (
     <aside
       className={cn(
-        'sticky top-14 hidden h-[calc(100vh-3.5rem)] w-72 flex-shrink-0 overflow-y-auto border-l bg-muted/50 p-4',
+        'hidden w-72 flex-shrink-0 border-l bg-muted/50 p-4',
         'lg:block',
         !rightPanelOpen && 'hidden'
       )}
