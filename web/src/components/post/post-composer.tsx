@@ -90,10 +90,16 @@ export function PostComposer() {
     if (!showTopicPicker) return;
     if (!topicQuery.trim()) {
       setTopicSuggestions([]);
+      setActiveIndex(0);
       return;
     }
+    setTopicLoading(true);
+    setActiveIndex(0);
     const timer = setTimeout(() => {
-      searchTopics(topicQuery).then(setTopicSuggestions).catch(() => {});
+      searchTopics(topicQuery)
+        .then((results) => setTopicSuggestions(results))
+        .catch(() => {})
+        .finally(() => setTopicLoading(false));
     }, 200);
     return () => clearTimeout(timer);
   }, [topicQuery, showTopicPicker]);
