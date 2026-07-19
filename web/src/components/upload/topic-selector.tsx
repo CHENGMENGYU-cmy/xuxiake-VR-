@@ -337,6 +337,30 @@ export function TopicSelector({
             </div>
           )}
 
+          {/* 智能推荐 */}
+          {!searchQuery.trim() && content.trim() && recommendedTopics.length > 0 && (
+            <div className="p-2 border-t">
+              <p className="px-2 py-1 text-xs text-muted-foreground flex items-center gap-1">
+                <Sparkles className="h-3 w-3 text-yellow-500" />
+                根据内容推荐
+              </p>
+              {recommendedTopics.map((topic) => (
+                <button
+                  key={topic.id}
+                  type="button"
+                  onClick={() => handleSelectTopic(topic)}
+                  className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-accent transition-colors"
+                >
+                  <Hash className="h-4 w-4 text-yellow-500" />
+                  <span className="flex-1 text-left">{topic.name}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {topic.postCount} 篇内容
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
+
           {/* 空状态 */}
           {searchQuery.trim() && filteredSearchResults.length === 0 && !canCreateNew && (
             <div className="p-4 text-center text-sm text-muted-foreground">
