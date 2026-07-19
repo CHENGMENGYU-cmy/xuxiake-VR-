@@ -372,7 +372,29 @@ export class SocialController {
 
     // 分页截取
     const skip = (pageNum - 1) * limitNum;
-    const paged = scoredUsers.slice(skip, skip + limitNum);
+    let paged = scoredUsers.slice(skip, skip + limitNum);
+
+    // 如果推荐结果为空，回退到最近注册的活跃用户
+    if (paged.length === 0) {
+      const fallbackUsers = await this.userRepo.find({
+        where: { id: Not(userId) },
+        order: { createdAt: 'DESC' },
+        take: limitNum,
+      });
+      paged = fallbackUsers.map((u) => {
+        const { passwordHash, ...userDto } = u;
+        return {
+          ...userDto,
+          matchReasons: ['新加入的用户'],
+          matchScore: 0,
+          isFollowing: false,
+          postCount: 0,
+          totalLikes: 0,
+          representativePosts: [],
+          mutualFriends: null,
+        };
+      });
+    }
 
     return { success: true, data: paged, page: pageNum };
   }
