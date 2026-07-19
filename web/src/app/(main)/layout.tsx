@@ -14,10 +14,10 @@ export default function MainLayout({
       <Navbar />
       <div className="flex h-[calc(100vh-3.5rem)] overflow-hidden">
         <Sidebar />
-        <main className="flex-1 overflow-y-auto px-2 py-4 sm:px-4 lg:pb-0 pb-16">
-          <div className="mx-auto flex max-w-5xl gap-6">
+        <main className="flex-1 overflow-hidden">
+          <div className="flex h-full mx-auto max-w-5xl gap-6 px-2 py-4 sm:px-4 lg:pb-0 pb-16">
             {/* 主内容区 */}
-            <div className="min-w-0 flex-1">{children}</div>
+            <div className="min-w-0 flex-1 overflow-y-auto">{children}</div>
             {/* 右侧面板 */}
             <RightPanel />
           </div>
