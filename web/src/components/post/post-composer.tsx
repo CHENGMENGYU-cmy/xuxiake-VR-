@@ -70,6 +70,32 @@ export function PostComposer() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showMoreMenu]);
 
+  // 点击外部关闭话题选择器
+  useEffect(() => {
+    if (!showTopicPicker) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (topicPickerRef.current && !topicPickerRef.current.contains(e.target as Node)) {
+        setShowTopicPicker(false);
+        setTopicQuery('');
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showTopicPicker]);
+
+  // 话题搜索
+  useEffect(() => {
+    if (!showTopicPicker) return;
+    if (!topicQuery.trim()) {
+      setTopicSuggestions([]);
+      return;
+    }
+    const timer = setTimeout(() => {
+      searchTopics(topicQuery).then(setTopicSuggestions).catch(() => {});
+    }, 200);
+    return () => clearTimeout(timer);
+  }, [topicQuery, showTopicPicker]);
+
   const charCount = content.length;
   const isOverLimit = charCount > MAX_CONTENT_LENGTH;
   const imageCount = mediaItems.filter((m) => m.type === 'IMAGE').length;
