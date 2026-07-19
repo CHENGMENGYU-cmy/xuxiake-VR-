@@ -346,6 +346,7 @@ export default function UploadPage() {
       visibility: 'PUBLIC',
       postType,
       mediaItems: mediaItems.length > 0 ? mediaItems : undefined,
+      topicNames: selectedTopics.length > 0 ? selectedTopics.map(t => t.name) : undefined,
     };
 
     try {
