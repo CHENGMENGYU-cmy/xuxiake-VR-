@@ -40,9 +40,9 @@ const navItems = [
 ];
 
 const mediaTypes = [
-  { href: '/search?type=VIDEO', label: 'AR视频', icon: Video, color: 'text-teal-500' },
-  { href: '/search?type=IMAGE', label: 'AR图片', icon: Image, color: 'text-orange-500' },
-  { href: '/search?type=AUDIO', label: '音频记录', icon: Music, color: 'text-teal-400' },
+  { href: '/media?type=VIDEO', label: 'AR视频', icon: Video, color: 'text-teal-500' },
+  { href: '/media?type=IMAGE', label: 'AR图片', icon: Image, color: 'text-orange-500' },
+  { href: '/media?type=AUDIO', label: '音频记录', icon: Music, color: 'text-teal-400' },
 ];
 
 export function Sidebar() {
