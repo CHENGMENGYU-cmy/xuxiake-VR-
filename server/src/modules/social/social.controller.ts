@@ -660,7 +660,41 @@ export class SocialController {
 
     // 分页截取
     const skip = (pageNum - 1) * limitNum;
-    const paged = scoredCommunities.slice(skip, skip + limitNum);
+    let paged = scoredCommunities.slice(skip, skip + limitNum);
+
+    // 如果推荐结果为空，回退到最活跃的公开社群
+    if (paged.length === 0) {
+      const fallbackCommunities = await this.communityRepo.find({
+        where: { isPublic: true, status: 'ACTIVE' as any },
+        order: { memberCount: 'DESC' },
+        take: limitNum,
+      });
+      const fallbackCreatorIds = [...new Set(fallbackCommunities.map((c) => c.creatorId))];
+      const fallbackCreators = fallbackCreatorIds.length > 0
+        ? await this.userRepo.findBy({ id: In(fallbackCreatorIds) })
+        : [];
+      const fallbackCreatorMap = new Map(fallbackCreators.map((u) => [u.id, u]));
+
+      paged = fallbackCommunities.map((c) => {
+        const creator = fallbackCreatorMap.get(c.creatorId);
+        return {
+          id: c.id,
+          name: c.name,
+          description: c.description,
+          avatarUrl: c.avatarUrl,
+          memberCount: c.memberCount,
+          maxMembers: c.maxMembers,
+          isPublic: c.isPublic,
+          creator: creator
+            ? { id: creator.id, username: creator.username, displayName: creator.displayName, avatarUrl: creator.avatarUrl }
+            : null,
+          tags: [],
+          createdAt: c.createdAt,
+          matchScore: 0,
+          matchReasons: [],
+        };
+      });
+    }
 
     return { success: true, data: paged, page: pageNum };
   }
