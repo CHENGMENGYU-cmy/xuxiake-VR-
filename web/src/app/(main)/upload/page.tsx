@@ -80,6 +80,13 @@ export default function UploadPage() {
   const [linkUrl, setLinkUrl] = useState('');
   const [loadingLink, setLoadingLink] = useState(false);
 
+  // Translation state
+  const [sourceLang, setSourceLang] = useState('zh-CN');
+  const [targetLang, setTargetLang] = useState('en');
+  const [sourceText, setSourceText] = useState('');
+  const [translatedText, setTranslatedText] = useState('');
+  const [translating, setTranslating] = useState(false);
+
   // Audio recording state
   const [isRecording, setIsRecording] = useState(false);
   const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
