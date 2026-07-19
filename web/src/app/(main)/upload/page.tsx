@@ -813,6 +813,7 @@ export default function UploadPage() {
               selectedTopics={selectedTopics}
               onTopicsChange={setSelectedTopics}
               maxTopics={5}
+              content={content}
             />
           </div>
 
