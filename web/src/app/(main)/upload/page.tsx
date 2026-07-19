@@ -685,19 +685,40 @@ export default function UploadPage() {
             {/* TRANSLATION */}
             {activeTab === 'TRANSLATION' && (
               <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-[1fr,auto,1fr] gap-2 items-end">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">源语言</label>
-                    <select className="w-full rounded-md border border-border bg-background p-2 text-sm">
+                    <div className="flex items-center justify-between">
+                      <label className="text-sm font-medium">源语言</label>
+                      <Button variant="ghost" size="sm" className="h-6 text-xs" onClick={handleAutoDetect}>
+                        自动检测
+                      </Button>
+                    </div>
+                    <select
+                      className="w-full rounded-md border border-border bg-background p-2 text-sm"
+                      value={sourceLang}
+                      onChange={(e) => setSourceLang(e.target.value)}
+                    >
                       <option value="zh-CN">中文（简体）</option>
                       <option value="en">English</option>
                       <option value="ja">日本語</option>
                       <option value="ko">한국어</option>
                     </select>
                   </div>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="mb-0.5"
+                    onClick={handleSwapLanguages}
+                  >
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">目标语言</label>
-                    <select className="w-full rounded-md border border-border bg-background p-2 text-sm">
+                    <select
+                      className="w-full rounded-md border border-border bg-background p-2 text-sm"
+                      value={targetLang}
+                      onChange={(e) => setTargetLang(e.target.value)}
+                    >
                       <option value="en">English</option>
                       <option value="zh-CN">中文（简体）</option>
                       <option value="ja">日本語</option>
@@ -707,12 +728,48 @@ export default function UploadPage() {
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium">原文内容</label>
-                  <Textarea placeholder="输入需要翻译的文字内容..." className="min-h-[120px]" />
+                  <Textarea
+                    placeholder="输入需要翻译的文字内容..."
+                    className="min-h-[120px]"
+                    value={sourceText}
+                    onChange={(e) => setSourceText(e.target.value)}
+                  />
                 </div>
-                <Button variant="outline" size="sm" className="w-full" disabled>
-                  <Languages className="mr-1.5 h-4 w-4" />
-                  翻译功能即将上线
+                <Button
+                  variant="default"
+                  size="sm"
+                  className="w-full"
+                  onClick={handleTranslate}
+                  disabled={!sourceText.trim() || translating}
+                >
+                  {translating ? (
+                    <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
+                  ) : (
+                    <Languages className="mr-1.5 h-4 w-4" />
+                  )}
+                  {translating ? '翻译中...' : '翻译'}
                 </Button>
+                {translatedText && (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <label className="text-sm font-medium">翻译结果</label>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-6 text-xs"
+                        onClick={() => {
+                          navigator.clipboard.writeText(translatedText);
+                          toast.success('已复制到剪贴板');
+                        }}
+                      >
+                        复制
+                      </Button>
+                    </div>
+                    <div className="rounded-lg border bg-muted/50 p-4">
+                      <p className="text-sm whitespace-pre-wrap">{translatedText}</p>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
