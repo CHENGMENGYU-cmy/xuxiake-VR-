@@ -1,15 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { FileText, Video, Map, Compass, BookOpen, MessageSquare } from 'lucide-react';
+import { useState } from 'react';
+import { Home, FileText, Video, Map, Compass, BookOpen, MessageSquare } from 'lucide-react';
 import { FeedList } from '@/components/feed/feed-list';
 import type { PostType } from '@/types';
-import type { PostSortType } from '@/lib/post-api';
 
 type FilterTab = { id: string; label: string; icon: typeof FileText; postType?: PostType };
 
 const filterTabs: FilterTab[] = [
-  { id: 'all', label: '全部', icon: FileText },
+  { id: 'all', label: '全部', icon: Home },
   { id: 'NOTE', label: '笔记', icon: FileText, postType: 'NOTE' },
   { id: 'VR_MEDIA', label: 'VR内容', icon: Video, postType: 'VR_MEDIA' },
   { id: 'ROUTE', label: '路线', icon: Map, postType: 'ROUTE' },
@@ -47,10 +46,11 @@ export default function FeedPage() {
         })}
       </div>
 
-      {/* 内容列表 */}
+      {/* 关注动态列表 */}
       <FeedList
-        key={`${activeFilter}`}
+        key={`following-${activeFilter}`}
         postType={currentFilter?.postType}
+        followingOnly={true}
       />
     </div>
   );
