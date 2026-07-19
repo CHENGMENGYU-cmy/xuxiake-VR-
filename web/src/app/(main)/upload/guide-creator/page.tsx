@@ -63,6 +63,13 @@ export default function GuideCreatorPage() {
         budgetLevel,
         richContent: richContent || undefined,
       },
+      mediaItems: images.length > 0 ? images.map((img, index) => ({
+        type: 'IMAGE' as const,
+        url: img.url,
+        width: img.width,
+        height: img.height,
+        sortOrder: index,
+      })) : undefined,
     };
 
     try {
