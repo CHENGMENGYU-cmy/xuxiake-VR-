@@ -363,6 +363,33 @@ export function PostCard({ post }: PostCardProps) {
           onClose={() => setShowShare(false)}
         />
       )}
+
+      {/* 编辑弹窗 */}
+      {showEdit && (
+        <EditPostDialog
+          post={post}
+          open={showEdit}
+          onOpenChange={setShowEdit}
+        />
+      )}
+
+      {/* 删除确认弹窗 */}
+      <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+        <DialogContent className="sm:max-w-xs">
+          <DialogHeader>
+            <DialogTitle>删除内容</DialogTitle>
+            <DialogDescription>确定要删除这条内容吗？删除后无法恢复。</DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowDeleteConfirm(false)} disabled={deleting}>
+              取消
+            </Button>
+            <Button variant="destructive" onClick={handleDelete} disabled={deleting}>
+              {deleting ? '删除中...' : '删除'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 }
