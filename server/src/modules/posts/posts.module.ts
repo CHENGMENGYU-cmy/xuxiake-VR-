@@ -17,10 +17,11 @@ import { JourneyStop } from '../../entities/journey-stop.entity.js';
 import { GuideDetail } from '../../entities/guide-detail.entity.js';
 import { Collection } from '../../entities/collection.entity.js';
 import { CollectionPost } from '../../entities/collection-post.entity.js';
+import { UserFollow } from '../../entities/user-follow.entity.js';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Post, MediaItem, Comment, Like, User, InterestTag, Topic, RouteDetail, Journey, JourneyStop, GuideDetail, Collection, CollectionPost]),
+    TypeOrmModule.forFeature([Post, MediaItem, Comment, Like, User, InterestTag, Topic, RouteDetail, Journey, JourneyStop, GuideDetail, Collection, CollectionPost, UserFollow]),
     AuthModule,
     NotificationsModule,
   ],
