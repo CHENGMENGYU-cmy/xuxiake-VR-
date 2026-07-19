@@ -105,6 +105,13 @@ export class PostsController {
     return { success: true, ...result };
   }
 
+  @Put(':id')
+  async updatePost(@Headers('authorization') auth: string, @Param('id') id: string, @Body() dto: { content: string }) {
+    const userId = this.getUserId(auth);
+    const post = await this.postsService.updatePost(userId, id, dto);
+    return { success: true, data: post };
+  }
+
   @Post(':id/like')
   async likePost(@Headers('authorization') auth: string, @Param('id') id: string) {
     const userId = this.getUserId(auth);
