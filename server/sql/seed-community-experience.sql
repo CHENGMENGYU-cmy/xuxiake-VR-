@@ -17,6 +17,7 @@ DELETE FROM community_announcements;
 DELETE FROM community_roles;
 DELETE FROM collection_posts;
 DELETE FROM collections;
+DELETE FROM comments WHERE id LIKE 'c-seed-%';
 
 -- ============================================================
 -- 1. 社群角色（管理员和版主）
