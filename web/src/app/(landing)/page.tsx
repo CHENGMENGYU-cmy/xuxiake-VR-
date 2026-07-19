@@ -555,16 +555,16 @@ export default function LandingPage() {
               </div>
               <ul className="space-y-4 mb-8">
                 {[
-                  { text: '解放双手，边走边拍', icon: '✅' },
-                  { text: '第一视角，沉浸体验', icon: '✅' },
-                  { text: 'AI实时识别翻译', icon: '✅' },
-                  { text: 'AR导航，所见即所得', icon: '✅' },
-                  { text: '语音控制，无需触屏', icon: '✅' },
-                  { text: '全天佩戴，轻若无物', icon: '✅' },
-                ].map((item, i) => (
+                  '解放双手，边走边拍',
+                  '第一视角，沉浸体验',
+                  'AI实时识别翻译',
+                  'AR导航，所见即所得',
+                  '语音控制，无需触屏',
+                  '全天佩戴，轻若无物',
+                ].map((text, i) => (
                   <li key={i} className="flex items-center gap-3">
-                    <span className="text-lg">{item.icon}</span>
-                    <span className="text-sm">{item.text}</span>
+                    <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
+                    <span className="text-sm">{text}</span>
                   </li>
                 ))}
               </ul>
