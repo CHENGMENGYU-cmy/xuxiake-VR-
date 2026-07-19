@@ -1,5 +1,5 @@
 import {
-  Controller, Get, Post, Delete, Body, Param, Query, Headers, UnauthorizedException,
+  Controller, Get, Post, Put, Delete, Body, Param, Query, Headers, UnauthorizedException,
 } from '@nestjs/common';
 import { PostsService } from './posts.service.js';
 import { AuthService } from '../auth/auth.service.js';

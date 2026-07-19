@@ -168,7 +168,8 @@ export class PostsService {
     } else {
       qb.where('post.visibility = :vis', { vis: 'PUBLIC' });
     }
-      .addSelect('post.like_count + post.comment_count', 'engagement')
+
+    qb.addSelect('post.like_count + post.comment_count', 'engagement')
       .orderBy('engagement', 'DESC')
       .addOrderBy('post.view_count', 'DESC')
       .skip(offset)
