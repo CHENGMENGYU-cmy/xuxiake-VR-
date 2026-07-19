@@ -8,6 +8,16 @@
 USE xuxiake;
 SET NAMES utf8mb4;
 
+-- 清理已有数据（按外键顺序删除）
+DELETE FROM location_shares;
+DELETE FROM message_reactions;
+DELETE FROM community_challenge_entries;
+DELETE FROM community_challenges;
+DELETE FROM community_announcements;
+DELETE FROM community_roles;
+DELETE FROM collection_posts;
+DELETE FROM collections;
+
 -- ============================================================
 -- 1. 社群角色（管理员和版主）
 -- com1=VR旅行爱好者群, com2=户外探险小队, com3=美食探店群
