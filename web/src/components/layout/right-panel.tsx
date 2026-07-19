@@ -11,8 +11,8 @@ import { useUIStore } from '@/stores/ui-store';
 import { useAuthStore } from '@/stores/auth-store';
 import { cn } from '@/lib/utils';
 import { getRecommendedCommunities, getRecommendedUsers } from '@/lib/social-api';
-import { getHotTopics } from '@/lib/post-api';
-import type { Community, RecommendedUser, Topic } from '@/types';
+import { getHotTopics, getPosts } from '@/lib/post-api';
+import type { Community, RecommendedUser, Topic, Post } from '@/types';
 
 const suggestLinks = [
   { title: 'VR旅游攻略', url: '#' },
