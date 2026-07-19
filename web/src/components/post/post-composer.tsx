@@ -454,7 +454,7 @@ export function PostComposer() {
               <div className="space-y-3">
                 <textarea
                   ref={textareaRef}
-                  placeholder={postType === 'MOMENT' ? '此刻在想什么...' : '分享你的旅行故事...'}
+                  placeholder={postType === 'MOMENT' ? '此刻在想什么... 输入#添加话题' : '分享你的旅行故事... 输入#添加话题'}
                   className="w-full resize-none border-0 bg-transparent p-0 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-0 min-h-[60px]"
                   value={content}
                   onChange={handleChange}
