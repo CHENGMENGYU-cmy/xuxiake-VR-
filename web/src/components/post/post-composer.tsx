@@ -55,6 +55,7 @@ export function PostComposer() {
 
   useEffect(() => {
     setMounted(true);
+    getHotTopics(10).then(setHotTopicsList).catch(() => {});
   }, []);
 
   // 点击外部关闭更多菜单
