@@ -197,19 +197,16 @@ export function Navbar() {
           </Link>
 
           {/* 通知 */}
-          <DropdownMenu open={showNotifDropdown} onOpenChange={setShowNotifDropdown}>
-            <DropdownMenuTrigger className="relative inline-flex h-9 w-9 items-center justify-center rounded-md hover:bg-accent">
+          <Link href="/notifications">
+            <Button variant="ghost" size="icon" className="relative">
               <Bell className="h-5 w-5" />
               {notifUnreadCount > 0 && (
                 <Badge className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center bg-accent px-0.5 text-[10px]">
                   {notifUnreadCount > 99 ? '99+' : notifUnreadCount}
                 </Badge>
               )}
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" sideOffset={8} className="p-0">
-              <NotificationDropdown onClose={() => setShowNotifDropdown(false)} />
-            </DropdownMenuContent>
-          </DropdownMenu>
+            </Button>
+          </Link>
 
           {/* 用户菜单 带有人物头像的 */}
           {user && mounted && (
