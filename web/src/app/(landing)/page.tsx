@@ -161,19 +161,6 @@ export default function LandingPage() {
                   alt="AR智能眼镜"
                   className="w-80 h-auto sm:w-96 lg:w-[500px] drop-shadow-2xl"
                 />
-                {/* 浮动标签 */}
-                <div className="absolute -top-4 -right-4 animate-bounce">
-                  <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-lg">
-                    <Camera className="h-4 w-4 text-primary" />
-                    <span className="text-xs font-medium text-primary">4K拍摄</span>
-                  </div>
-                </div>
-                <div className="absolute -bottom-4 -left-4 animate-bounce" style={{ animationDelay: '0.5s' }}>
-                  <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-lg">
-                    <Eye className="h-4 w-4 text-accent" />
-                    <span className="text-xs font-medium text-accent">AR识别</span>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
