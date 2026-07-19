@@ -14,15 +14,16 @@ interface FeedListProps {
   sort?: PostSortType;
   postType?: string;
   tagId?: string;
+  followingOnly?: boolean;
 }
 
-export function FeedList({ showComposer = true, sort = 'latest', postType, tagId }: FeedListProps) {
+export function FeedList({ showComposer = true, sort = 'latest', postType, tagId, followingOnly }: FeedListProps) {
   const { posts = [], isLoading, isLoadingMore, hasMore, fetchPosts, loadMore } = usePostStore();
 
   // sort 或 filter 变化时重新获取数据
   useEffect(() => {
-    fetchPosts(sort, { postType, tagId });
-  }, [sort, postType, tagId, fetchPosts]);
+    fetchPosts(sort, { postType, tagId, followingOnly });
+  }, [sort, postType, tagId, followingOnly, fetchPosts]);
 
   const handleRefresh = useCallback(() => {
     fetchPosts(sort);
