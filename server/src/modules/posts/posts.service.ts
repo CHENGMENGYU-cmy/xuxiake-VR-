@@ -122,7 +122,8 @@ export class PostsService {
     } else {
       qb.where('post.visibility = :vis', { vis: 'PUBLIC' });
     }
-      .addSelect(
+
+    qb.addSelect(
         `(post.like_count * 3 + post.comment_count * 2 + post.view_count * 0.1) * GREATEST(0.1, 1 - TIMESTAMPDIFF(DAY, post.created_at, NOW()) / 30)`,
         'hot_score',
       )
