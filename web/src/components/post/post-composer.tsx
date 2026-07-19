@@ -27,6 +27,9 @@ export function PostComposer() {
   const [uploading, setUploading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
 
+  // 帖子类型状态
+  const [postType, setPostType] = useState<'NOTE' | 'MOMENT'>('NOTE');
+
   // 更多选项状态
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [showLinkInput, setShowLinkInput] = useState(false);
