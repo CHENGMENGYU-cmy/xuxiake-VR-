@@ -13,6 +13,37 @@ interface TopicSelectorProps {
   content?: string; // 用于智能推荐
 }
 
+// 提取关键词（简单实现）
+function extractKeywords(text: string): string[] {
+  // 移除标点符号和特殊字符
+  const cleaned = text.replace(/[^一-龥a-zA-Z0-9\s]/g, ' ');
+
+  // 中文分词（简单按空格和常见词分割）
+  const chineseWords = cleaned.match(/[一-龥]{2,}/g) || [];
+
+  // 英文单词
+  const englishWords = cleaned.match(/[a-zA-Z]{3,}/g) || [];
+
+  // 合并并去重
+  const allWords = [...chineseWords, ...englishWords.map(w => w.toLowerCase())];
+
+  // 过滤常见停用词
+  const stopWords = new Set([
+    '的', '了', '在', '是', '我', '有', '和', '就', '不', '人', '都', '一', '一个',
+    '上', '也', '很', '到', '说', '要', '去', '你', '会', '着', '没有', '看', '好',
+    '自己', '这', '他', '她', '它', '们', '那', '些', '什么', '怎么', '如何', '可以',
+    'the', 'and', 'for', 'are', 'but', 'not', 'you', 'all', 'can', 'had', 'her',
+    'was', 'one', 'our', 'out', 'day', 'get', 'has', 'him', 'his', 'how', 'its',
+    'may', 'new', 'now', 'old', 'see', 'way', 'who', 'did', 'got', 'let', 'say',
+    'she', 'too', 'use',
+  ]);
+
+  const keywords = allWords.filter(word => !stopWords.has(word) && word.length >= 2);
+
+  // 去重并返回
+  return [...new Set(keywords)];
+}
+
 export function TopicSelector({
   selectedTopics,
   onTopicsChange,
