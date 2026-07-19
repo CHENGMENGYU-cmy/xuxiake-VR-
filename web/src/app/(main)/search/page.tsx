@@ -189,25 +189,6 @@ function SearchContent() {
           </TabsContent>
 
           <TabsContent value="posts" className="mt-4">
-            {/* 媒体类型筛选栏 */}
-            <div className="mb-4 flex flex-wrap gap-1.5">
-              {mediaTypeFilters.map((filter) => {
-                const Icon = filter.icon;
-                const isActive = mediaTypeFilter === filter.value;
-                return (
-                  <Button
-                    key={filter.value}
-                    variant={isActive ? 'secondary' : 'ghost'}
-                    size="sm"
-                    className={`gap-1.5 text-xs ${isActive ? '' : filter.color}`}
-                    onClick={() => setMediaTypeFilter(filter.value)}
-                  >
-                    <Icon className="h-3.5 w-3.5" />
-                    {filter.label}
-                  </Button>
-                );
-              })}
-            </div>
             {filteredPosts.length > 0 ? (
               <div className="space-y-4">
                 {filteredPosts.map((post) => (
