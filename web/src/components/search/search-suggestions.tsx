@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, Clock, X, Users, FileText } from 'lucide-react';
+import { Search, Clock, X, Users, FileText, Video, Image, Music } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { mockUsers, mockPosts } from '@/lib/mock-data';
