@@ -467,54 +467,71 @@ export function PostComposer() {
 
                 {/* 话题选择器弹出框 */}
                 {showTopicPicker && (
-                  <div ref={topicPickerRef} className="rounded-lg border bg-popover p-2 shadow-md max-h-48 overflow-y-auto">
+                  <div ref={topicPickerRef} className="rounded-lg border bg-popover shadow-md max-h-48 overflow-y-auto">
                     {topicQuery.trim() ? (
                       <>
-                        {topicSuggestions.length > 0 ? (
-                          topicSuggestions.map((t) => (
+                        {topicLoading ? (
+                          <div className="flex items-center gap-2 px-3 py-2 text-xs text-muted-foreground">
+                            <Loader2 className="h-3 w-3 animate-spin" />
+                            搜索中...
+                          </div>
+                        ) : topicSuggestions.length > 0 ? (
+                          topicSuggestions.map((t, i) => (
                             <button
                               key={t.id}
-                              className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-accent"
+                              className={`flex w-full items-center gap-2 px-3 py-1.5 text-sm transition-colors ${
+                                i === activeIndex ? 'bg-accent' : 'hover:bg-accent/50'
+                              }`}
                               onMouseDown={(e) => {
                                 e.preventDefault();
                                 selectTopic(t.name);
                               }}
+                              onMouseEnter={() => setActiveIndex(i)}
                             >
                               <Hash className="h-3.5 w-3.5 text-muted-foreground" />
-                              <span>{t.name}</span>
-                              <span className="ml-auto text-xs text-muted-foreground">{t.postCount}篇</span>
+                              <span className="flex-1 text-left">{t.name}</span>
+                              <span className="text-xs text-muted-foreground">{t.postCount}篇</span>
                             </button>
                           ))
                         ) : (
                           <button
-                            className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-accent"
+                            className={`flex w-full items-center gap-2 px-3 py-1.5 text-sm transition-colors ${
+                              activeIndex === 0 ? 'bg-accent' : 'hover:bg-accent/50'
+                            }`}
                             onMouseDown={(e) => {
                               e.preventDefault();
                               selectTopic(topicQuery.trim());
                             }}
                           >
                             <Hash className="h-3.5 w-3.5 text-primary" />
-                            <span>创建话题 <span className="text-primary">#{topicQuery.trim()}</span></span>
+                            <span>创建话题 <span className="font-medium text-primary">#{topicQuery.trim()}</span></span>
                           </button>
                         )}
                       </>
                     ) : (
                       <>
-                        <p className="px-2 py-1 text-xs text-muted-foreground">热门话题</p>
-                        {hotTopicsList.map((t) => (
-                          <button
-                            key={t.id}
-                            className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-accent"
-                            onMouseDown={(e) => {
-                              e.preventDefault();
-                              selectTopic(t.name);
-                            }}
-                          >
-                            <Hash className="h-3.5 w-3.5 text-muted-foreground" />
-                            <span>{t.name}</span>
-                            <span className="ml-auto text-xs text-muted-foreground">{t.postCount}篇</span>
-                          </button>
-                        ))}
+                        <p className="px-3 py-1.5 text-xs text-muted-foreground">热门话题</p>
+                        {hotTopicsList.length > 0 ? (
+                          hotTopicsList.map((t, i) => (
+                            <button
+                              key={t.id}
+                              className={`flex w-full items-center gap-2 px-3 py-1.5 text-sm transition-colors ${
+                                i === activeIndex ? 'bg-accent' : 'hover:bg-accent/50'
+                              }`}
+                              onMouseDown={(e) => {
+                                e.preventDefault();
+                                selectTopic(t.name);
+                              }}
+                              onMouseEnter={() => setActiveIndex(i)}
+                            >
+                              <Hash className="h-3.5 w-3.5 text-muted-foreground" />
+                              <span className="flex-1 text-left">{t.name}</span>
+                              <span className="text-xs text-muted-foreground">{t.postCount}篇</span>
+                            </button>
+                          ))
+                        ) : (
+                          <p className="px-3 py-2 text-xs text-muted-foreground">暂无热门话题</p>
+                        )}
                       </>
                     )}
                   </div>
