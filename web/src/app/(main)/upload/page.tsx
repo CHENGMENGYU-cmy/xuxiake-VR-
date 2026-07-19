@@ -94,14 +94,7 @@ export default function UploadPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const autoSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // 加载本地草稿
-  useEffect(() => {
-    const draft = loadDraftFromLocal();
-    if (draft) {
-      setContent(draft.content || '');
-      // 可以根据 postType 恢复更多状态
-    }
-  }, []);
+  // 不再自动加载草稿，只在用户主动选择草稿时加载
 
   // 自动保存草稿（防抖）
   useEffect(() => {
