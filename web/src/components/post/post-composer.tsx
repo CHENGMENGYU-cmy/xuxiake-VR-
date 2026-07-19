@@ -186,9 +186,17 @@ export function PostComposer() {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     // 话题选择器打开时的键盘操作
     if (showTopicPicker) {
-      const list = topicQuery.trim()
-        ? (topicSuggestions.length > 0 ? topicSuggestions : [{ id: '__create__', name: topicQuery.trim(), postCount: 0 } as Topic])
-        : hotTopicsList;
+      let list: { name: string }[];
+      if (topicQuery.trim()) {
+        list = topicSuggestions.length > 0
+          ? topicSuggestions
+          : [{ name: topicQuery.trim() }];
+      } else {
+        list = [
+          ...topicHistory.map((name) => ({ name })),
+          ...hotTopicsList,
+        ];
+      }
       if (e.key === 'ArrowDown') {
         e.preventDefault();
         setActiveIndex((i) => Math.min(i + 1, list.length - 1));
