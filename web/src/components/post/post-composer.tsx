@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Image, Send, X, Loader2, Plus, Video, Mic, Link2, ExternalLink } from 'lucide-react';
+import { Image, Send, X, Loader2, Plus, Video, Mic, Link2, ExternalLink, Hash } from 'lucide-react';
 import { toast } from 'sonner';
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
