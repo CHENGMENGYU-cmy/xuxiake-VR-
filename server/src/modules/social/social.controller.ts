@@ -197,7 +197,29 @@ export class SocialController {
 
     const candidates = await query.getMany();
     if (candidates.length === 0) {
-      return { success: true, data: [], page: pageNum };
+      // 候选池为空，回退到最近注册的用户
+      const fallbackUsers = await this.userRepo.find({
+        where: { id: Not(userId) },
+        order: { createdAt: 'DESC' },
+        take: limitNum,
+      });
+      return {
+        success: true,
+        data: fallbackUsers.map((u) => {
+          const { passwordHash, ...userDto } = u;
+          return {
+            ...userDto,
+            matchReasons: ['新加入的用户'],
+            matchScore: 0,
+            isFollowing: false,
+            postCount: 0,
+            totalLikes: 0,
+            representativePosts: [],
+            mutualFriends: null,
+          };
+        }),
+        page: pageNum,
+      };
     }
 
     const candidateIds = candidates.map((u) => u.id);
