@@ -158,4 +158,17 @@ export const usePostStore = create<PostState>((set, get) => ({
       }),
     }));
   },
+
+  removePost: async (postId: string) => {
+    await deletePost(postId);
+    set((state) => ({
+      posts: state.posts.filter((p) => p.id !== postId),
+    }));
+  },
+
+  updatePostInList: (postId: string, updatedPost: Post) => {
+    set((state) => ({
+      posts: state.posts.map((p) => (p.id === postId ? updatedPost : p)),
+    }));
+  },
 }));
