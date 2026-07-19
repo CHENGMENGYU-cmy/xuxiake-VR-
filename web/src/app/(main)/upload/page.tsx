@@ -440,6 +440,9 @@ export default function UploadPage() {
         <h1 className="text-xl font-bold">上传内容</h1>
       </div>
 
+      {/* 草稿列表 */}
+      <DraftList onSelectDraft={handleSelectDraft} />
+
       <Card>
         <CardContent className="p-6">
           {/* Tab选择 */}
