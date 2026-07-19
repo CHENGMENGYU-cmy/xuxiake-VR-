@@ -36,7 +36,6 @@ import { useNotificationStore } from '@/stores/notification-store';
 import { connectChat } from '@/lib/chat-socket';
 import apiClient from '@/lib/api-client';
 import { SearchSuggestions } from '@/components/search/search-suggestions';
-import { NotificationDropdown } from '@/components/notifications/notification-dropdown';
 
 export function Navbar() {
   const router = useRouter();
