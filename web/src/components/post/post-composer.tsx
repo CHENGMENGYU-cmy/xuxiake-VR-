@@ -406,6 +406,77 @@ export function PostComposer() {
                   rows={3}
                 />
 
+                {/* 话题选择器弹出框 */}
+                {showTopicPicker && (
+                  <div ref={topicPickerRef} className="rounded-lg border bg-popover p-2 shadow-md max-h-48 overflow-y-auto">
+                    {topicQuery.trim() ? (
+                      <>
+                        {topicSuggestions.length > 0 ? (
+                          topicSuggestions.map((t) => (
+                            <button
+                              key={t.id}
+                              className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-accent"
+                              onMouseDown={(e) => {
+                                e.preventDefault();
+                                selectTopic(t.name);
+                              }}
+                            >
+                              <Hash className="h-3.5 w-3.5 text-muted-foreground" />
+                              <span>{t.name}</span>
+                              <span className="ml-auto text-xs text-muted-foreground">{t.postCount}篇</span>
+                            </button>
+                          ))
+                        ) : (
+                          <button
+                            className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-accent"
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              selectTopic(topicQuery.trim());
+                            }}
+                          >
+                            <Hash className="h-3.5 w-3.5 text-primary" />
+                            <span>创建话题 <span className="text-primary">#{topicQuery.trim()}</span></span>
+                          </button>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        <p className="px-2 py-1 text-xs text-muted-foreground">热门话题</p>
+                        {hotTopicsList.map((t) => (
+                          <button
+                            key={t.id}
+                            className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-accent"
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              selectTopic(t.name);
+                            }}
+                          >
+                            <Hash className="h-3.5 w-3.5 text-muted-foreground" />
+                            <span>{t.name}</span>
+                            <span className="ml-auto text-xs text-muted-foreground">{t.postCount}篇</span>
+                          </button>
+                        ))}
+                      </>
+                    )}
+                  </div>
+                )}
+
+                {/* 已选话题标签 */}
+                {selectedTopics.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5">
+                    {selectedTopics.map((name) => (
+                      <span
+                        key={name}
+                        className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-xs text-primary cursor-pointer hover:bg-primary/20"
+                        onClick={() => setSelectedTopics((prev) => prev.filter((t) => t !== name))}
+                      >
+                        #{name}
+                        <X className="h-3 w-3" />
+                      </span>
+                    ))}
+                  </div>
+                )}
+
                 {/* 类型选择 */}
                 <div className="flex items-center gap-1.5">
                   <button
