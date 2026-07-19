@@ -64,26 +64,19 @@ export default function TopicsPage() {
             <Link key={topic.id} href={`/topics/${topic.id}`}>
               <Card className="h-full transition-shadow hover:shadow-md">
                 <CardContent className="p-4">
-                  <div className="flex items-start gap-2">
-                    <span className="text-2xl">{topic.icon || '#'}</span>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate font-medium">#{topic.name}</p>
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        {topic.postCount} 篇内容
-                      </p>
-                      {topic.isHot && (
-                        <Badge variant="secondary" className="mt-1.5 gap-0.5 text-[10px]">
-                          <TrendingUp className="h-3 w-3" />
-                          热门
-                        </Badge>
-                      )}
-                    </div>
+                  <div className="flex items-center gap-2">
+                    <Hash className="h-4 w-4 flex-shrink-0 text-primary" />
+                    <p className="truncate font-medium">{topic.name}</p>
                   </div>
-                  {topic.description && (
-                    <p className="mt-2 line-clamp-2 text-xs text-muted-foreground">
-                      {topic.description}
-                    </p>
-                  )}
+                  <div className="mt-2 flex items-center gap-2">
+                    <span className="text-xs text-muted-foreground">{topic.postCount} 篇内容</span>
+                    {topic.isHot && (
+                      <Badge variant="secondary" className="gap-0.5 text-[10px]">
+                        <TrendingUp className="h-3 w-3" />
+                        热门
+                      </Badge>
+                    )}
+                  </div>
                 </CardContent>
               </Card>
             </Link>
