@@ -442,37 +442,37 @@ export default function LandingPage() {
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {[
               {
-                emoji: '👁️',
+                num: '01',
                 title: '第一视角，身临其境',
                 desc: '通过AR眼镜，跟随旅行者的眼睛看世界。不再是隔着屏幕的旁观，而是感同身受的同行。',
-                gradient: 'from-primary/10 to-primary/5',
+                color: 'text-primary',
               },
               {
-                emoji: '🤖',
+                num: '02',
                 title: 'AI记录，零门槛创作',
                 desc: '边走边说，AI自动转文字、配图片、生成游记。无需剪辑技巧，AI帮你把旅途变成精彩故事。',
-                gradient: 'from-accent/10 to-accent/5',
+                color: 'text-accent',
               },
               {
-                emoji: '🤝',
+                num: '03',
                 title: '智能匹配，找到同路人',
                 desc: 'AI分析你的旅行风格、兴趣偏好，为你推荐最合拍的旅伴，一起探索未知的世界。',
-                gradient: 'from-teal-500/10 to-teal-500/5',
+                color: 'text-teal-600',
               },
               {
-                emoji: '🎯',
+                num: '04',
                 title: 'AI助手，全程陪伴',
                 desc: '实时翻译、景点讲解、路线推荐、安全提醒。你的专属AI导游，让每一次旅行都安心顺畅。',
-                gradient: 'from-orange-500/10 to-orange-500/5',
+                color: 'text-orange-500',
               },
             ].map((item) => (
               <div
                 key={item.title}
                 className="group relative rounded-3xl border bg-card p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-primary/20"
               >
-                <div className={`mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${item.gradient} text-3xl transition-transform duration-300 group-hover:scale-110`}>
-                  {item.emoji}
-                </div>
+                <span className={`mb-6 block text-4xl font-bold ${item.color} opacity-20`}>
+                  {item.num}
+                </span>
                 <h3 className="mb-3 text-lg font-bold">{item.title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   {item.desc}
