@@ -42,8 +42,7 @@ function SearchContent() {
   const filteredPosts = searched
     ? mockPosts.filter((p) => {
         const matchesQuery = !query.trim() || p.content?.includes(query) || p.author.displayName.includes(query);
-        const matchesType = mediaTypeFilter === 'ALL' || p.mediaItems?.some((m) => m.type === mediaTypeFilter);
-        return matchesQuery && matchesType;
+        return matchesQuery;
       })
     : [];
 
