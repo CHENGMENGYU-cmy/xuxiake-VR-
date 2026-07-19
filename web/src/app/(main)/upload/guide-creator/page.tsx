@@ -44,6 +44,7 @@ export default function GuideCreatorPage() {
   const [budgetLevel, setBudgetLevel] = useState<BudgetLevel>('MID');
   const [bestSeason, setBestSeason] = useState('');
   const [richContent, setRichContent] = useState('');
+  const [images, setImages] = useState<UploadedImage[]>([]);
 
   // 发布
   const canPublish = title.trim().length > 0 && content.trim().length > 0 && !isPublishing;
