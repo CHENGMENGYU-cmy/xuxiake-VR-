@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Heart, MessageCircle, Share2, Eye, MoreHorizontal, Play, Volume2, Globe, MapPin, FileText, Map, Compass, BookOpen, MessageSquare, Clock, TrendingUp } from 'lucide-react';
+import { Heart, MessageCircle, Share2, Eye, MoreHorizontal, Play, Volume2, Globe, MapPin, FileText, Map, Compass, BookOpen, MessageSquare, Clock, TrendingUp, Pencil, Trash2, Copy, Bookmark, AlertTriangle } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
