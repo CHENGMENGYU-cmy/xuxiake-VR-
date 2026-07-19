@@ -623,6 +623,14 @@ export default function UploadPage() {
             )}
           </div>
 
+          {/* 可见性控制 */}
+          <div className="mt-4">
+            <VisibilityControl
+              visibility={visibility}
+              onVisibilityChange={setVisibility}
+            />
+          </div>
+
           {/* 位置信息 */}
           <div className="mt-4 space-y-2">
             <label className="text-sm font-medium">位置信息（可选）</label>
