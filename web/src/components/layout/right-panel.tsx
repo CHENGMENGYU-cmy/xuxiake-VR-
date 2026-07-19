@@ -10,9 +10,9 @@ import { Separator } from '@/components/ui/separator';
 import { useUIStore } from '@/stores/ui-store';
 import { useAuthStore } from '@/stores/auth-store';
 import { cn } from '@/lib/utils';
-import { getRecommendedCommunities, getRecommendedUsers } from '@/lib/social-api';
+import { getRecommendedCommunities } from '@/lib/social-api';
 import { getHotTopics, getPosts } from '@/lib/post-api';
-import type { Community, RecommendedUser, Topic, Post } from '@/types';
+import type { Community, Topic, Post } from '@/types';
 
 const HOT_TOPIC_PREVIEW_COUNT = 5;
 const COMMUNITY_PICK_COUNT = 3;
