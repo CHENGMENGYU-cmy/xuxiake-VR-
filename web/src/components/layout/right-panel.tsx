@@ -22,6 +22,13 @@ const suggestLinks = [
 ];
 
 const HOT_TOPIC_PREVIEW_COUNT = 5;
+const COMMUNITY_PICK_COUNT = 3;
+const USER_PICK_COUNT = 3;
+
+function shuffleAndPick<T>(arr: T[], count: number): T[] {
+  const shuffled = [...arr].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, count);
+}
 
 export function RightPanel() {
   const { rightPanelOpen } = useUIStore();
