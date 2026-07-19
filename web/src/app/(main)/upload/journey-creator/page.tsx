@@ -337,7 +337,7 @@ export default function JourneyCreatorPage() {
 
           {/* 发布按钮 */}
           <div className="flex justify-end gap-3">
-            <Button variant="outline" onClick={() => router.back()}>
+            <Button variant="outline" onClick={() => router.push('/upload')}>
               取消
             </Button>
             <Button className="gap-2" disabled={!canPublish} onClick={handlePublish}>
