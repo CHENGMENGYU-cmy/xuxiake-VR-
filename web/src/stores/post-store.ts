@@ -2,7 +2,7 @@
 
 import { create } from 'zustand';
 import { Post } from '@/types';
-import { createPost, getPosts, CreatePostPayload, PostSortType } from '@/lib/post-api';
+import { createPost, getPosts, deletePost, updatePost, CreatePostPayload, PostSortType } from '@/lib/post-api';
 
 interface PostFilters {
   postType?: string;
