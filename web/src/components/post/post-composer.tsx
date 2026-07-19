@@ -576,7 +576,7 @@ export function PostComposer() {
             {expanded && (
               <div className="space-y-3">
                 {/* 内容类型选择 */}
-                <div className="flex flex-wrap gap-1">
+                <div className="flex flex-wrap gap-1" onMouseDown={(e) => e.preventDefault()}>
                   {postTypeOptions.map((opt) => {
                     const Icon = opt.icon;
                     const isActive = postType === opt.type;
