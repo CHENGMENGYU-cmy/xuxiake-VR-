@@ -24,6 +24,7 @@ export interface CreatePostPayload {
     linkTitle?: string;
     linkDescription?: string;
     linkFavicon?: string;
+    sortOrder?: number;
   }[];
   routeDetail?: {
     distanceKm?: number;
