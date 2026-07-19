@@ -17,6 +17,7 @@ import { usePostStore } from '@/stores/post-store';
 import { CreatePostPayload } from '@/lib/post-api';
 import type { Difficulty, RouteType } from '@/types';
 import { cn } from '@/lib/utils';
+import { RouteMapPreview } from '@/components/upload/route-map-preview';
 
 interface Waypoint {
   id: string;
@@ -491,6 +492,20 @@ export default function RouteCreatorPage() {
                 ))}
               </div>
             )}
+          </div>
+
+          {/* 地图预览 */}
+          <div className="space-y-3">
+            <label className="text-sm font-medium">路线预览</label>
+            <RouteMapPreview
+              waypoints={routeData.waypoints.map(wp => ({
+                lat: wp.lat,
+                lng: wp.lng,
+                name: wp.name,
+                description: wp.description,
+              }))}
+              gpxData={routeData.gpxData}
+            />
           </div>
 
           <Separator />
