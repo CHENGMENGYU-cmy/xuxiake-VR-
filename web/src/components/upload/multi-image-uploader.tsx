@@ -166,13 +166,13 @@ export function MultiImageUploader({
         </label>
         {images.length > 0 && (
           <span className="text-xs text-muted-foreground">
-            拖拽可调整顺序，点击星标设为封面
+            拖拽调整顺序，星标设为封面
           </span>
         )}
       </div>
 
-      {/* 图片网格 */}
-      <div className="grid grid-cols-3 gap-2">
+      {/* 图片网格 - 统一入口 */}
+      <div className="grid grid-cols-3 gap-3">
         {images.map((image, index) => (
           <div
             key={image.id}
@@ -195,88 +195,66 @@ export function MultiImageUploader({
             />
 
             {/* 操作按钮 */}
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1">
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
               <button
                 type="button"
                 onClick={() => handleSetCover(index)}
                 className={cn(
-                  'rounded-full p-1.5 transition-colors',
+                  'rounded-full p-2 transition-colors',
                   image.isCover
                     ? 'bg-primary text-primary-foreground'
                     : 'bg-white/80 text-gray-700 hover:bg-white'
                 )}
                 title="设为封面"
               >
-                <Star className="h-3.5 w-3.5" fill={image.isCover ? 'currentColor' : 'none'} />
+                <Star className="h-4 w-4" fill={image.isCover ? 'currentColor' : 'none'} />
               </button>
               <button
                 type="button"
                 onClick={() => handleRemove(index)}
-                className="rounded-full bg-white/80 p-1.5 text-gray-700 hover:bg-white hover:text-destructive transition-colors"
+                className="rounded-full bg-white/80 p-2 text-gray-700 hover:bg-white hover:text-destructive transition-colors"
                 title="删除"
               >
-                <X className="h-3.5 w-3.5" />
+                <X className="h-4 w-4" />
               </button>
             </div>
 
             {/* 封面标识 */}
             {image.isCover && (
-              <div className="absolute bottom-1 left-1 rounded bg-primary px-1.5 py-0.5 text-[10px] text-primary-foreground font-medium">
+              <div className="absolute bottom-1.5 left-1.5 rounded bg-primary px-2 py-0.5 text-xs text-primary-foreground font-medium">
                 封面
               </div>
             )}
 
             {/* 拖拽手柄 */}
-            <div className="absolute top-1 left-1 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing">
-              <GripVertical className="h-4 w-4 text-white drop-shadow" />
+            <div className="absolute top-1.5 left-1.5 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing">
+              <GripVertical className="h-5 w-5 text-white drop-shadow" />
             </div>
           </div>
         ))}
 
-        {/* 添加图片按钮 */}
+        {/* 添加图片按钮 - 始终显示 */}
         {canAddMore && (
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
             className={cn(
-              'aspect-square rounded-lg border-2 border-dashed border-border flex flex-col items-center justify-center gap-1 transition-colors hover:border-primary hover:bg-primary/5',
+              'aspect-square rounded-lg border-2 border-dashed border-muted-foreground/30 flex flex-col items-center justify-center gap-2 transition-colors hover:border-primary hover:bg-primary/5',
               uploading && 'opacity-50 cursor-not-allowed'
             )}
           >
             {uploading ? (
-              <Loader2 className="h-6 w-6 animate-spin text-primary" />
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
             ) : (
               <>
-                <Plus className="h-6 w-6 text-muted-foreground" />
-                <span className="text-xs text-muted-foreground">添加图片</span>
+                <Plus className="h-8 w-8 text-muted-foreground/50" />
+                <span className="text-sm text-muted-foreground">添加图片</span>
               </>
             )}
           </button>
         )}
       </div>
-
-      {/* 上传提示 */}
-      {images.length === 0 && (
-        <div
-          onClick={() => fileInputRef.current?.click()}
-          className="flex cursor-pointer flex-col items-center gap-3 rounded-lg border-2 border-dashed border-border p-8 text-center transition-colors hover:border-teal-400 hover:bg-teal-400/5"
-        >
-          {uploading ? (
-            <Loader2 className="h-10 w-10 animate-spin text-teal-400" />
-          ) : (
-            <Image className="h-10 w-10 text-teal-400" />
-          )}
-          <div>
-            <p className="text-sm font-medium">
-              {uploading ? '上传中...' : '点击或拖拽图片到此处'}
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">
-              支持 JPG、PNG、WebP 格式，最多 {maxImages} 张
-            </p>
-          </div>
-        </div>
-      )}
 
       {/* 隐藏的文件输入 */}
       <input
