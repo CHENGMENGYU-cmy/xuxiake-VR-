@@ -242,9 +242,6 @@ INSERT INTO comments (id, post_id, author_id, parent_id, content, created_at) VA
 -- 更新帖子评论数
 UPDATE posts SET comment_count = (SELECT COUNT(*) FROM comments WHERE post_id = posts.id);
 
--- 更新帖子点赞数
-UPDATE posts SET like_count = (SELECT COUNT(*) FROM likes WHERE post_id = posts.id);
-
 -- ============================================================
 -- 10. 补充更多点赞（让热门帖子数据更好看）
 -- ============================================================
