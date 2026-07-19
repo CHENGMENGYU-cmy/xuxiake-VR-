@@ -470,43 +470,57 @@ export function PostComposer() {
                       视频
                     </Button>
 
+                    {/* 分隔线 */}
+                    <div className="mx-1 h-4 w-px bg-border" />
+
                     {/* 更多选项按钮 */}
                     <div className="relative" ref={moreMenuRef}>
                       <Button
                         variant="ghost"
-                        size="sm"
-                        className="h-8 gap-1 text-xs text-muted-foreground hover:text-foreground"
+                        size="icon"
+                        className={`h-8 w-8 rounded-full ${showMoreMenu ? 'bg-muted text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
                         onClick={() => setShowMoreMenu(!showMoreMenu)}
                       >
                         <Plus className="h-4 w-4" />
-                        更多
                       </Button>
                       {showMoreMenu && (
-                        <div className="absolute top-full left-0 mt-1 w-48 rounded-lg border bg-popover p-1 shadow-md z-50">
-                          <button
-                            className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-xs hover:bg-accent"
-                            onClick={() => { audioInputRef.current?.click(); setShowMoreMenu(false); }}
-                          >
-                            <Mic className="h-3.5 w-3.5 text-accent" />
-                            添加音频
-                          </button>
-                          <button
-                            className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-xs hover:bg-accent"
-                            onClick={() => { setShowLinkInput(true); setShowMoreMenu(false); }}
-                          >
-                            <Link2 className="h-3.5 w-3.5 text-orange-500" />
-                            添加链接
-                          </button>
-                          <div className="my-1 h-px bg-border" />
+                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 rounded-xl border bg-popover/95 p-1.5 shadow-lg backdrop-blur-sm z-50">
+                          <div className="space-y-0.5">
+                            <button
+                              className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-accent"
+                              onClick={() => { audioInputRef.current?.click(); setShowMoreMenu(false); }}
+                            >
+                              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10">
+                                <Mic className="h-4 w-4 text-accent" />
+                              </span>
+                              <span className="text-sm">音频</span>
+                            </button>
+                            <button
+                              className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-accent"
+                              onClick={() => { setShowLinkInput(true); setShowMoreMenu(false); }}
+                            >
+                              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-500/10">
+                                <Link2 className="h-4 w-4 text-orange-500" />
+                              </span>
+                              <span className="text-sm">链接</span>
+                            </button>
+                          </div>
+                          <div className="my-1.5 h-px bg-border" />
                           <Link
                             href="/upload"
-                            className="flex items-center gap-2 rounded-md px-2 py-1.5 text-xs hover:bg-accent"
+                            className="flex items-center gap-3 rounded-lg px-3 py-2 transition-colors hover:bg-accent"
                             onClick={() => setShowMoreMenu(false)}
                           >
-                            <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />
-                            前往上传页面
-                            <span className="ml-auto text-[10px] text-muted-foreground">路线/旅程/攻略</span>
+                            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted">
+                              <ExternalLink className="h-4 w-4 text-muted-foreground" />
+                            </span>
+                            <div>
+                              <p className="text-sm">更多内容</p>
+                              <p className="text-[11px] text-muted-foreground">路线 / 旅程 / 攻略 / VR</p>
+                            </div>
                           </Link>
+                          {/* 小三角 */}
+                          <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 h-3 w-3 rotate-45 border-b border-r bg-popover/95" />
                         </div>
                       )}
                     </div>
