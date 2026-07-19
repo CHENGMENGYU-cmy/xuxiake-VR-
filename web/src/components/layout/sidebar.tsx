@@ -174,16 +174,18 @@ export function Sidebar() {
                 <div className="space-y-1">
                   {suggestedUsers.map((u) => (
                     <Link key={u.id} href={`/profile/${u.username}`}>
-                      <Button variant="ghost" className="w-full justify-start gap-3">
-                        <Avatar className="h-7 w-7">
+                      <div className="flex items-center gap-3 rounded-lg px-2 py-2 hover:bg-accent">
+                        <Avatar className="h-8 w-8">
                           <AvatarImage src={u.avatarUrl} alt={u.displayName} />
                           <AvatarFallback>{u.displayName[0]}</AvatarFallback>
                         </Avatar>
-                        <div className="min-w-0 flex-1 text-left">
-                          <p className="truncate text-sm">{u.displayName}</p>
-                          <p className="truncate text-xs text-muted-foreground">@{u.username}</p>
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-medium">{u.displayName}</p>
+                          <p className="truncate text-xs text-muted-foreground">
+                            {u.matchReasons?.length ? u.matchReasons[0] : (u.bio || `@${u.username}`)}
+                          </p>
                         </div>
-                      </Button>
+                      </div>
                     </Link>
                   ))}
                 </div>
