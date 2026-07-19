@@ -412,6 +412,7 @@ export default function UploadPage() {
 
     try {
       await publishPost(payload);
+      clearLocalDraft();
       toast.success('发布成功');
       router.push('/feed');
     } catch {
