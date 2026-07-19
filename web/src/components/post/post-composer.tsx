@@ -116,6 +116,24 @@ export function PostComposer() {
     }
   }, [content, expanded, adjustTextareaHeight]);
 
+  const selectTopic = (name: string) => {
+    if (!selectedTopics.includes(name) && selectedTopics.length < 5) {
+      setSelectedTopics((prev) => [...prev, name]);
+    }
+    // 移除内容中 # 后面的查询文字，保留 #
+    const cursorPos = textareaRef.current?.selectionStart ?? content.length;
+    const textBeforeCursor = content.slice(0, cursorPos);
+    const hashIndex = textBeforeCursor.lastIndexOf('#');
+    if (hashIndex >= 0) {
+      const before = content.slice(0, hashIndex + 1);
+      const after = content.slice(cursorPos);
+      setContent(before + after);
+    }
+    setShowTopicPicker(false);
+    setTopicQuery('');
+    textareaRef.current?.focus();
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value;
     if (newValue.length <= MAX_CONTENT_LENGTH) {
