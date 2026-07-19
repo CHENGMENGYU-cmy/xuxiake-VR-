@@ -12,9 +12,9 @@ export default function MainLayout({
   return (
     <AuthGuard>
       <Navbar />
-      <div className="flex pt-14">
+      <div className="flex h-[calc(100vh-3.5rem)] overflow-hidden">
         <Sidebar />
-        <main className="min-h-[calc(100vh-3.5rem)] flex-1 px-2 py-4 sm:px-4 lg:pb-0 pb-16">
+        <main className="flex-1 overflow-y-auto px-2 py-4 sm:px-4 lg:pb-0 pb-16">
           <div className="mx-auto flex max-w-5xl gap-6">
             {/* 主内容区 */}
             <div className="min-w-0 flex-1">{children}</div>
