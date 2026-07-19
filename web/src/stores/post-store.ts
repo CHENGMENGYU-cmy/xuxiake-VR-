@@ -7,6 +7,7 @@ import { createPost, getPosts, deletePost, updatePost, CreatePostPayload, PostSo
 interface PostFilters {
   postType?: string;
   tagId?: string;
+  followingOnly?: boolean;
 }
 
 interface PostState {
