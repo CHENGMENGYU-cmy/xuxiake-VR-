@@ -286,13 +286,14 @@ export default function UploadPage() {
   };
 
   // Publish
-  const canPublish = (content.trim().length > 0 || media || linkData) && !isPublishing && !uploading;
+  const canPublish = (content.trim().length > 0 || media || images.length > 0 || linkData) && !isPublishing && !uploading;
 
   const handlePublish = async () => {
     if (!canPublish) return;
 
     const mediaItems: CreatePostPayload['mediaItems'] = [];
 
+    // 单个视频/音频
     if (media) {
       mediaItems.push({
         type: media.type,
@@ -304,6 +305,21 @@ export default function UploadPage() {
       });
     }
 
+    // 多图
+    if (images.length > 0) {
+      images.forEach((img, index) => {
+        mediaItems.push({
+          type: 'IMAGE',
+          url: img.url,
+          width: img.width,
+          height: img.height,
+          vrFormat: vrFormat,
+          sortOrder: index,
+        });
+      });
+    }
+
+    // 链接
     if (linkData) {
       mediaItems.push({
         type: 'LINK',
@@ -315,10 +331,18 @@ export default function UploadPage() {
       });
     }
 
+    // 确定帖子类型
+    let postType: CreatePostPayload['postType'] = 'NOTE';
+    if (media?.type === 'VIDEO') {
+      postType = 'VR_MEDIA';
+    } else if (images.length > 0) {
+      postType = 'VR_MEDIA';
+    }
+
     const payload: CreatePostPayload = {
       content: content.trim() || '',
       visibility: 'PUBLIC',
-      postType: media?.type === 'VIDEO' ? 'VR_MEDIA' : 'NOTE',
+      postType,
       mediaItems: mediaItems.length > 0 ? mediaItems : undefined,
     };
 
