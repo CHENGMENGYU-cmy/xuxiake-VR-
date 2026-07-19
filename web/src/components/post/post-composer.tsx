@@ -347,7 +347,7 @@ export function PostComposer() {
               <div className="space-y-3">
                 <textarea
                   ref={textareaRef}
-                  placeholder="分享你的旅行故事..."
+                  placeholder={postType === 'MOMENT' ? '此刻在想什么...' : '分享你的旅行故事...'}
                   className="w-full resize-none border-0 bg-transparent p-0 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-0 min-h-[60px]"
                   value={content}
                   onChange={handleChange}
@@ -357,6 +357,38 @@ export function PostComposer() {
                   disabled={isPublishing}
                   rows={3}
                 />
+
+                {/* 类型选择 */}
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setPostType('NOTE')}
+                    className={`rounded-full px-2.5 py-0.5 text-[11px] font-medium transition-colors ${
+                      postType === 'NOTE'
+                        ? 'bg-primary/10 text-primary'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                    }`}
+                  >
+                    笔记
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPostType('MOMENT')}
+                    className={`rounded-full px-2.5 py-0.5 text-[11px] font-medium transition-colors ${
+                      postType === 'MOMENT'
+                        ? 'bg-pink-500/10 text-pink-500'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                    }`}
+                  >
+                    动态
+                  </button>
+                  <Link
+                    href="/upload"
+                    className="rounded-full px-2.5 py-0.5 text-[11px] font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                  >
+                    + 更多类型
+                  </Link>
+                </div>
 
                 {/* 拖拽提示 */}
                 {isDragging && (
