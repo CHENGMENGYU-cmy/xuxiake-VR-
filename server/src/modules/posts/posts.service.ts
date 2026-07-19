@@ -150,7 +150,7 @@ export class PostsService {
     };
   }
 
-  private async getHotPosts(limit: number, page: number, postType?: string, tagId?: string) {
+  private async getHotPosts(limit: number, page: number, postType?: string, tagId?: string, followingIds?: string[] | null) {
     // 精选推荐：高互动量帖子（点赞 + 评论）
     const offset = (page - 1) * limit;
 
@@ -159,8 +159,14 @@ export class PostsService {
       .leftJoinAndSelect('post.author', 'author')
       .leftJoinAndSelect('post.mediaItems', 'mediaItems')
       .leftJoinAndSelect('post.tags', 'tags')
-      .leftJoinAndSelect('post.topics', 'topics')
-      .where('post.visibility = :vis', { vis: 'PUBLIC' })
+      .leftJoinAndSelect('post.topics', 'topics');
+
+    if (followingIds && followingIds.length > 0) {
+      qb.where('post.authorId IN (:...followingIds)', { followingIds });
+      qb.andWhere('post.visibility IN (:...visList)', { visList: ['PUBLIC', 'FOLLOWERS'] });
+    } else {
+      qb.where('post.visibility = :vis', { vis: 'PUBLIC' });
+    }
       .addSelect('post.like_count + post.comment_count', 'engagement')
       .orderBy('engagement', 'DESC')
       .addOrderBy('post.view_count', 'DESC')
