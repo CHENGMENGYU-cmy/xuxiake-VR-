@@ -431,42 +431,27 @@ export default function UploadPage() {
 
             {/* IMAGE */}
             {activeTab === 'IMAGE' && (
-              <>
-                {media?.type === 'IMAGE' ? (
-                  <div className="space-y-3">
-                    <div className="relative overflow-hidden rounded-lg border">
-                      <img src={media.url} alt="预览" className="max-h-64 w-full object-contain" />
-                      <button onClick={resetMedia} className="absolute right-2 top-2 rounded-full bg-black/60 p-1 text-white hover:bg-black/80">
-                        <X className="h-4 w-4" />
-                      </button>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-                      {(media.width ?? 0) > 0 && <span>{media.width}x{media.height}</span>}
-                      {media.size && <span>{formatSize(media.size)}</span>}
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-medium">VR格式</label>
-                      <div className="flex flex-wrap gap-1.5">
-                        {vrFormats.map(f => (
-                          <button key={f.value} onClick={() => { setVrFormat(f.value); setMedia(m => m ? { ...m, vrFormat: f.value } : null); }}
-                            className={cn('rounded-full px-3 py-1 text-xs transition-colors', vrFormat === f.value ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-muted/80')}>
-                            {f.label}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div onClick={() => fileInputRef.current?.click()}
-                    className="flex cursor-pointer flex-col items-center gap-3 rounded-lg border-2 border-dashed border-border p-8 text-center transition-colors hover:border-teal-400">
-                    {uploading ? <Loader2 className="h-10 w-10 animate-spin text-teal-400" /> : <Image className="h-10 w-10 text-teal-400" />}
-                    <div>
-                      <p className="text-sm font-medium">{uploading ? '上传中...' : '点击或拖拽VR全景图片到此处'}</p>
-                      <p className="text-xs text-muted-foreground mt-1">支持 JPG、PNG、WebP 格式，最大 50MB</p>
+              <div className="space-y-3">
+                <MultiImageUploader
+                  images={images}
+                  onImagesChange={setImages}
+                  maxImages={9}
+                />
+                {/* VR格式选择 */}
+                {images.length > 0 && (
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-medium">VR格式</label>
+                    <div className="flex flex-wrap gap-1.5">
+                      {vrFormats.map(f => (
+                        <button key={f.value} onClick={() => setVrFormat(f.value)}
+                          className={cn('rounded-full px-3 py-1 text-xs transition-colors', vrFormat === f.value ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-muted/80')}>
+                          {f.label}
+                        </button>
+                      ))}
                     </div>
                   </div>
                 )}
-              </>
+              </div>
             )}
 
             {/* AUDIO */}
