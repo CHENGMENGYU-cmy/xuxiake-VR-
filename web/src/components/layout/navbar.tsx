@@ -47,7 +47,6 @@ export function Navbar() {
   const notifUnreadCount = useNotificationStore((s) => s.unreadCount);
   const setNotifUnreadCount = useNotificationStore((s) => s.setUnreadCount);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [showNotifDropdown, setShowNotifDropdown] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
