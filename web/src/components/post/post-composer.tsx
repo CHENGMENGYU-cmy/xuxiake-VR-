@@ -31,6 +31,14 @@ export function PostComposer() {
   // 帖子类型状态（快速发布支持笔记和动态，其他类型引导到上传页）
   const [postType, setPostType] = useState<'NOTE' | 'MOMENT'>('NOTE');
 
+  // 话题状态
+  const [showTopicPicker, setShowTopicPicker] = useState(false);
+  const [topicQuery, setTopicQuery] = useState('');
+  const [topicSuggestions, setTopicSuggestions] = useState<Topic[]>([]);
+  const [hotTopicsList, setHotTopicsList] = useState<Topic[]>([]);
+  const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
+  const topicPickerRef = useRef<HTMLDivElement>(null);
+
   // 更多选项状态
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [showLinkInput, setShowLinkInput] = useState(false);
