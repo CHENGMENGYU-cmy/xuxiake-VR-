@@ -132,9 +132,24 @@ export function PostComposer() {
     }
   }, [content, expanded, adjustTextareaHeight]);
 
+  const saveTopicHistory = (name: string) => {
+    setTopicHistory((prev) => {
+      const next = [name, ...prev.filter((t) => t !== name)].slice(0, MAX_HISTORY);
+      try { localStorage.setItem(TOPIC_HISTORY_KEY, JSON.stringify(next)); } catch {}
+      return next;
+    });
+  };
+
+  const clearTopicHistory = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setTopicHistory([]);
+    try { localStorage.removeItem(TOPIC_HISTORY_KEY); } catch {}
+  };
+
   const selectTopic = (name: string) => {
     if (!selectedTopics.includes(name) && selectedTopics.length < 5) {
       setSelectedTopics((prev) => [...prev, name]);
+      saveTopicHistory(name);
     }
     // 移除内容中 # 后面的查询文字，保留 #
     const cursorPos = textareaRef.current?.selectionStart ?? content.length;
