@@ -18,7 +18,6 @@ import {
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { useAuthStore } from '@/stores/auth-store';
 import { useUIStore } from '@/stores/ui-store';
@@ -88,7 +87,7 @@ export function Sidebar() {
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
-        <ScrollArea className="h-full">
+        <div className="h-full overflow-y-auto">
           <div className="flex flex-col">
             {mounted && user && (
               <div className="space-y-1 p-3">
@@ -186,7 +185,7 @@ export function Sidebar() {
               </div>
             )}
           </div>
-        </ScrollArea>
+        </div>
       </aside>
     </>
   );
