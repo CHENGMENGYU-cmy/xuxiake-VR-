@@ -109,6 +109,39 @@ export function SearchSuggestions({ query, onSelect, onClose }: SearchSuggestion
         </div>
       )}
 
+      {/* 媒体发现快捷入口 */}
+      {!query.trim() && (
+        <>
+          {showHistory && <Separator className="my-1" />}
+          <div>
+            <div className="flex items-center gap-1 px-2 py-1">
+              <Video className="h-3 w-3 text-muted-foreground" />
+              <span className="text-xs font-medium text-muted-foreground">媒体发现</span>
+            </div>
+            {[
+              { type: 'VIDEO', label: 'AR视频', icon: Video, color: 'text-teal-500' },
+              { type: 'IMAGE', label: 'AR图片', icon: Image, color: 'text-orange-500' },
+              { type: 'AUDIO', label: '音频记录', icon: Music, color: 'text-teal-400' },
+            ].map((item) => {
+              const Icon = item.icon;
+              return (
+                <div
+                  key={item.type}
+                  className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 hover:bg-muted"
+                  onClick={() => {
+                    router.push(`/media?type=${item.type}`);
+                    onClose();
+                  }}
+                >
+                  <Icon className={`h-4 w-4 ${item.color}`} />
+                  <span className="text-sm">{item.label}</span>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
+
       {/* 搜索建议 */}
       {query.trim() && hasResults && (
         <div>
