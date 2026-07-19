@@ -1,9 +1,12 @@
 'use client';
 
-import { useState } from 'react';
-import { Compass, TrendingUp, Flame, Clock, FileText, Video, Map, BookOpen } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { Compass, TrendingUp, Flame, Clock, Video, Map, BookOpen, Hash } from 'lucide-react';
 import { FeedList } from '@/components/feed/feed-list';
+import { getHotTopics } from '@/lib/post-api';
 import type { PostSortType } from '@/lib/post-api';
+import type { Topic } from '@/types';
 
 type TabType = 'trending' | 'latest' | 'hot';
 
@@ -14,7 +17,7 @@ const tabSortMap: Record<TabType, PostSortType> = {
 };
 
 const contentTypeFilters = [
-  { id: 'all', label: '全部', icon: FileText },
+  { id: 'all', label: '全部', icon: Compass },
   { id: 'VR_MEDIA', label: 'VR内容', icon: Video },
   { id: 'ROUTE', label: '路线', icon: Map },
   { id: 'GUIDE', label: '攻略', icon: BookOpen },
@@ -23,36 +26,54 @@ const contentTypeFilters = [
 export default function ExplorePage() {
   const [activeTab, setActiveTab] = useState<TabType>('trending');
   const [contentType, setContentType] = useState('all');
+  const [hotTopics, setHotTopics] = useState<Topic[]>([]);
+
+  useEffect(() => {
+    getHotTopics(8).then(setHotTopics).catch(() => {});
+  }, []);
 
   const tabs = [
-    { id: 'trending' as TabType, label: '热门内容', icon: TrendingUp },
-    { id: 'latest' as TabType, label: '最新发布', icon: Clock },
-    { id: 'hot' as TabType, label: '精选推荐', icon: Flame },
+    { id: 'trending' as TabType, label: '热门', icon: TrendingUp },
+    { id: 'latest' as TabType, label: '最新', icon: Clock },
+    { id: 'hot' as TabType, label: '精选', icon: Flame },
   ];
 
   return (
     <div className="space-y-4">
-      {/* 页面标题 */}
-      <div className="flex items-center gap-2">
-        <Compass className="h-6 w-6 text-primary" />
-        <h1 className="text-xl font-bold">探索发现</h1>
-      </div>
+      {/* 热门话题横向滚动 */}
+      {hotTopics.length > 0 && (
+        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+          {hotTopics.map((topic) => (
+            <Link
+              key={topic.id}
+              href={`/topics/${topic.id}`}
+              className="flex items-center gap-1.5 whitespace-nowrap rounded-full border bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/30 hover:bg-primary/5 hover:text-primary"
+            >
+              <Hash className="h-3 w-3" />
+              {topic.name}
+              {topic.postCount > 0 && (
+                <span className="text-[10px] opacity-60">{topic.postCount}</span>
+              )}
+            </Link>
+          ))}
+        </div>
+      )}
 
       {/* 排序切换 */}
-      <div className="flex border-b">
+      <div className="flex gap-1">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           return (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-1.5 px-4 py-2 text-sm font-medium transition-colors ${
+              className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
                 activeTab === tab.id
-                  ? 'border-b-2 border-primary text-primary'
-                  : 'text-muted-foreground hover:text-foreground'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted text-muted-foreground hover:bg-muted/80'
               }`}
             >
-              <Icon className="h-4 w-4" />
+              <Icon className="h-3.5 w-3.5" />
               {tab.label}
             </button>
           );
@@ -70,7 +91,7 @@ export default function ExplorePage() {
               onClick={() => setContentType(filter.id)}
               className={`flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
                 isActive
-                  ? 'bg-primary text-primary-foreground'
+                  ? 'bg-foreground text-background'
                   : 'bg-muted text-muted-foreground hover:bg-muted/80'
               }`}
             >
@@ -82,14 +103,12 @@ export default function ExplorePage() {
       </div>
 
       {/* 内容区域 */}
-      <div>
-        <FeedList
-          key={`${activeTab}-${contentType}`}
-          showComposer={false}
-          sort={tabSortMap[activeTab]}
-          postType={contentType !== 'all' ? contentType : undefined}
-        />
-      </div>
+      <FeedList
+        key={`${activeTab}-${contentType}`}
+        showComposer={false}
+        sort={tabSortMap[activeTab]}
+        postType={contentType !== 'all' ? contentType : undefined}
+      />
     </div>
   );
 }
