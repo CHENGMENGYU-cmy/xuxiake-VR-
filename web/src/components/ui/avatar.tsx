@@ -25,10 +25,35 @@ function Avatar({
   )
 }
 
-function AvatarImage({ className, ...props }: AvatarPrimitive.Image.Props) {
+function AvatarImage({ className, src, ...props }: AvatarPrimitive.Image.Props) {
+  const [imgSrc, setImgSrc] = React.useState(src);
+
+  React.useEffect(() => {
+    setImgSrc(src);
+  }, [src]);
+
+  // 当图片加载失败时，清除 src 以触发 fallback 显示
+  const handleError = React.useCallback(() => {
+    setImgSrc(undefined);
+  }, []);
+
+  // 当 src 有值时，预加载图片以检测实际可用性
+  React.useEffect(() => {
+    if (!src) return;
+    const img = new window.Image();
+    img.onerror = handleError;
+    img.src = src;
+    // 如果图片已缓存但无效（naturalWidth === 0），也需要触发 fallback
+    if (img.complete && img.naturalWidth === 0) {
+      handleError();
+    }
+    return () => { img.onerror = null; };
+  }, [src, handleError]);
+
   return (
     <AvatarPrimitive.Image
       data-slot="avatar-image"
+      src={imgSrc}
       className={cn(
         "aspect-square size-full rounded-full object-cover",
         className
