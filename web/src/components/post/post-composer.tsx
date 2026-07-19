@@ -108,6 +108,7 @@ export function PostComposer() {
       await publishPost(payload);
       setContent('');
       setMediaItems([]);
+      setPostType('NOTE');
       setExpanded(false);
       setShowMoreMenu(false);
       setShowLinkInput(false);
