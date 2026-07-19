@@ -145,7 +145,7 @@ export function Sidebar() {
 
             <div className="space-y-1 p-3">
               <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
-                内容分类
+                媒体发现
               </p>
               {mediaTypes.map((item) => {
                 const Icon = item.icon;
