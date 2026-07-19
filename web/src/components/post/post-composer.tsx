@@ -120,6 +120,17 @@ export function PostComposer() {
     const newValue = e.target.value;
     if (newValue.length <= MAX_CONTENT_LENGTH) {
       setContent(newValue);
+      // 检测 # 触发话题选择器
+      const cursorPos = e.target.selectionStart;
+      const textBeforeCursor = newValue.slice(0, cursorPos);
+      const hashMatch = textBeforeCursor.match(/#([^#\s]*)$/);
+      if (hashMatch) {
+        setShowTopicPicker(true);
+        setTopicQuery(hashMatch[1]);
+      } else {
+        setShowTopicPicker(false);
+        setTopicQuery('');
+      }
     }
   };
 
