@@ -104,7 +104,7 @@ export class PostsService {
     };
   }
 
-  private async getTrendingPosts(limit: number, page: number, postType?: string, tagId?: string) {
+  private async getTrendingPosts(limit: number, page: number, postType?: string, tagId?: string, followingIds?: string[] | null) {
     // 热门内容：加权热度分 + 时间衰减
     // score = (likeCount*3 + commentCount*2 + viewCount*0.1) * timeDecay
     const offset = (page - 1) * limit;
@@ -114,8 +114,14 @@ export class PostsService {
       .leftJoinAndSelect('post.author', 'author')
       .leftJoinAndSelect('post.mediaItems', 'mediaItems')
       .leftJoinAndSelect('post.tags', 'tags')
-      .leftJoinAndSelect('post.topics', 'topics')
-      .where('post.visibility = :vis', { vis: 'PUBLIC' })
+      .leftJoinAndSelect('post.topics', 'topics');
+
+    if (followingIds && followingIds.length > 0) {
+      qb.where('post.authorId IN (:...followingIds)', { followingIds });
+      qb.andWhere('post.visibility IN (:...visList)', { visList: ['PUBLIC', 'FOLLOWERS'] });
+    } else {
+      qb.where('post.visibility = :vis', { vis: 'PUBLIC' });
+    }
       .addSelect(
         `(post.like_count * 3 + post.comment_count * 2 + post.view_count * 0.1) * GREATEST(0.1, 1 - TIMESTAMPDIFF(DAY, post.created_at, NOW()) / 30)`,
         'hot_score',
