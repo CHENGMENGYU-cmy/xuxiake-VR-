@@ -16,7 +16,6 @@ import type { Community, Topic, Post } from '@/types';
 
 const HOT_TOPIC_PREVIEW_COUNT = 5;
 const COMMUNITY_PICK_COUNT = 3;
-const USER_PICK_COUNT = 3;
 
 function shuffleAndPick<T>(arr: T[], count: number): T[] {
   const shuffled = [...arr].sort(() => Math.random() - 0.5);
