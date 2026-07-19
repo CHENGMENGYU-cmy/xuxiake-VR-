@@ -101,7 +101,7 @@ export function PostComposer() {
       const payload: CreatePostPayload = {
         content: content.trim(),
         visibility: 'PUBLIC',
-        postType: 'NOTE',
+        postType,
         mediaItems: mediaItems.length > 0 ? mediaItems : undefined,
       };
 
