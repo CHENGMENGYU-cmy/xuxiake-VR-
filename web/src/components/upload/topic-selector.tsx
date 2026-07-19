@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Hash, X, Search, TrendingUp, Loader2 } from 'lucide-react';
+import { Hash, X, Search, TrendingUp, Loader2, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { getHotTopics, searchTopics } from '@/lib/post-api';
 import type { Topic } from '@/types';
@@ -10,6 +10,7 @@ interface TopicSelectorProps {
   selectedTopics: Topic[];
   onTopicsChange: (topics: Topic[]) => void;
   maxTopics?: number;
+  content?: string; // 用于智能推荐
 }
 
 export function TopicSelector({
