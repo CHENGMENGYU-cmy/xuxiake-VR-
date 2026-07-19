@@ -625,7 +625,15 @@ export default function UploadPage() {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex flex-col items-center gap-3 rounded-lg border-2 border-dashed border-border p-8 text-center transition-colors hover:border-accent">
+                  <div
+                    onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      const files = e.dataTransfer.files;
+                      if (files.length > 0) handleAudioSelect(files);
+                    }}
+                    className="flex flex-col items-center gap-3 rounded-lg border-2 border-dashed border-border p-8 text-center transition-colors hover:border-accent">
                     {uploading ? <Loader2 className="h-10 w-10 animate-spin text-accent" /> : <Mic className="h-10 w-10 text-accent" />}
                     <div>
                       <p className="text-sm font-medium">{uploading ? '上传中...' : '上传或录制音频'}</p>
