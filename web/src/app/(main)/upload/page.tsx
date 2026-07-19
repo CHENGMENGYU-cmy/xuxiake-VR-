@@ -719,12 +719,38 @@ export default function UploadPage() {
           </div>
 
           {/* 发布按钮 */}
-          <div className="mt-6 flex justify-end gap-3">
-            <Button variant="outline" onClick={() => router.back()}>取消</Button>
-            <Button className="gap-2" disabled={!canPublish} onClick={handlePublish}>
-              {isPublishing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-              {isPublishing ? '发布中...' : '发布内容'}
-            </Button>
+          <div className="mt-6 flex justify-between">
+            <PublishPreview
+              data={{
+                content,
+                media: media ? {
+                  type: media.type,
+                  url: media.url,
+                  vrFormat: media.vrFormat,
+                  duration: media.duration,
+                  width: media.width,
+                  height: media.height,
+                } : undefined,
+                images: images.length > 0 ? images : undefined,
+                link: linkData ? {
+                  url: linkData.url,
+                  title: linkData.title,
+                  description: linkData.description,
+                  favicon: linkData.favicon,
+                } : undefined,
+                topics: selectedTopics,
+                community: selectedCommunity,
+                visibility,
+                location: location || undefined,
+              }}
+            />
+            <div className="flex gap-3">
+              <Button variant="outline" onClick={() => router.back()}>取消</Button>
+              <Button className="gap-2" disabled={!canPublish} onClick={handlePublish}>
+                {isPublishing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                {isPublishing ? '发布中...' : '发布内容'}
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>
