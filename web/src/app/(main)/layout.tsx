@@ -14,7 +14,7 @@ export default function MainLayout({
       <Navbar />
       <div className="flex h-[calc(100vh-3.5rem)] gap-0 pt-14">
         <Sidebar />
-        <main className="flex-1 overflow-y-auto px-6 py-4 sm:px-8 lg:pb-0 pb-16">
+        <main className="flex-1 overflow-y-auto p-4 lg:pb-0 pb-16">
           <div className="mx-auto max-w-5xl">
             {children}
           </div>
