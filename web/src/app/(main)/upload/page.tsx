@@ -24,6 +24,7 @@ import { VisibilityControl } from '@/components/upload/visibility-control';
 import { DraftList } from '@/components/upload/draft-list';
 import { PublishPreview } from '@/components/upload/publish-preview';
 import { saveDraftToLocal, clearLocalDraft } from '@/lib/draft-api';
+import { translateText, detectLanguage } from '@/lib/translation-api';
 
 type UploadTab = 'VIDEO' | 'IMAGE' | 'AUDIO' | 'LINK' | 'TRANSLATION';
 
