@@ -87,6 +87,7 @@ export default function UploadPage() {
     setMedia(null);
     setRecordedBlob(null);
     setVrFormat('STANDARD');
+    setImages([]);
   };
 
   const handleTabChange = (tab: UploadTab) => {
