@@ -29,16 +29,6 @@ function SearchContent() {
   const { query, setQuery } = useSearchStore();
   const [searched, setSearched] = useState(!!query);
   const [topics, setTopics] = useState<Topic[]>([]);
-  const typeParam = searchParams.get('type') as MediaType | null;
-  const [mediaTypeFilter, setMediaTypeFilter] = useState<MediaType | 'ALL'>(typeParam || 'ALL');
-
-  // URL type 参数变化时自动更新筛选并触发搜索
-  useEffect(() => {
-    if (typeParam && ['VIDEO', 'IMAGE', 'AUDIO'].includes(typeParam)) {
-      setMediaTypeFilter(typeParam);
-      if (!searched) setSearched(true);
-    }
-  }, [typeParam]);
 
   const filteredUsers = searched
     ? mockUsers.filter(
