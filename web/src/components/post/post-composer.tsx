@@ -161,6 +161,36 @@ export function PostComposer() {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // 话题选择器打开时的键盘操作
+    if (showTopicPicker) {
+      const list = topicQuery.trim()
+        ? (topicSuggestions.length > 0 ? topicSuggestions : [{ id: '__create__', name: topicQuery.trim(), postCount: 0 } as Topic])
+        : hotTopicsList;
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setActiveIndex((i) => Math.min(i + 1, list.length - 1));
+        return;
+      }
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setActiveIndex((i) => Math.max(i - 1, 0));
+        return;
+      }
+      if (e.key === 'Enter' && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        if (list[activeIndex]) {
+          selectTopic(list[activeIndex].name);
+        }
+        return;
+      }
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        setShowTopicPicker(false);
+        setTopicQuery('');
+        return;
+      }
+    }
+
     if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && canPublish) {
       e.preventDefault();
       handlePublish();
