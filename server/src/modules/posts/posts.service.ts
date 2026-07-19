@@ -330,6 +330,19 @@ export class PostsService {
     return { message: '删除成功' };
   }
 
+  async updatePost(userId: string, postId: string, dto: { content: string }) {
+    const post = await this.postRepo.findOne({
+      where: { id: postId },
+      relations: { author: true, mediaItems: true, tags: true, topics: true },
+    });
+    if (!post) throw new NotFoundException('内容不存在');
+    if (post.authorId !== userId) throw new NotFoundException('无权编辑此内容');
+
+    post.content = dto.content;
+    await this.postRepo.save(post);
+    return this.formatPost(post);
+  }
+
   async likePost(userId: string, postId: string) {
     const post = await this.postRepo.findOne({ where: { id: postId } });
     if (!post) throw new NotFoundException('内容不存在');
