@@ -1,6 +1,41 @@
 项目修改记录
 ================================================================================
 
+【2026-07-19 帖子编辑与删除功能】
+
+--------------------------------------------------------------------------------
+第1条
+
+  修改时间：2026-07-19
+  修改位置：server/src/modules/posts/posts.service.ts, posts.controller.ts
+  修改原因：后端缺少编辑帖子的端点
+  修改内容：
+    - posts.service.ts 新增 updatePost(userId, postId, dto) 方法，验证作者权限后更新 content
+    - posts.controller.ts 新增 @Put(':id') 端点，需 JWT 认证
+  修改效果：后端支持编辑帖子内容
+
+第2条
+
+  修改时间：2026-07-19
+  修改位置：web/src/lib/post-api.ts, web/src/stores/post-store.ts
+  修改原因：前端缺少编辑/删除帖子的 API 和状态管理
+  修改内容：
+    - post-api.ts 新增 updatePost(postId, payload) 函数
+    - post-store.ts 新增 removePost(postId) 和 updatePostInList(postId, updatedPost) actions
+  修改效果：前端具备编辑和删除帖子的完整数据流
+
+第3条
+
+  修改时间：2026-07-19
+  修改位置：web/src/components/post/post-card.tsx, edit-post-dialog.tsx（新建）
+  修改原因：帖子卡片需要编辑和删除操作入口
+  修改内容：
+    - PostCard 的 DropdownMenu 区分自己/他人的帖子：自己的显示编辑、删除、复制链接；他人的显示保存、复制链接、举报
+    - 新建 EditPostDialog 编辑弹窗组件，预填当前内容，保存后原地更新列表
+    - 删除操作使用 Dialog 确认弹窗，确认后从列表移除
+    - 复制链接功能调用 clipboard API
+  修改效果：用户可编辑和删除自己发布的帖子，交互参考小红书/抖音风格
+
 【2026-07-19 首页快速发布社交化改造】
 
 --------------------------------------------------------------------------------
