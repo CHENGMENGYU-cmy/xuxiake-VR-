@@ -116,8 +116,8 @@ export function PostComposer() {
 
   const handleBlur = (e: React.FocusEvent) => {
     const relatedTarget = e.relatedTarget as HTMLElement;
-    const currentTarget = e.currentTarget as HTMLElement;
-    if (relatedTarget && currentTarget.contains(relatedTarget)) return;
+    // 用 composerRef 判断焦点是否仍在整个发布区域内（包括按钮）
+    if (relatedTarget && composerRef.current?.contains(relatedTarget)) return;
 
     setTimeout(() => {
       if (!content.trim() && mediaItems.length === 0 && !isPublishing && !showMoreMenu) {
