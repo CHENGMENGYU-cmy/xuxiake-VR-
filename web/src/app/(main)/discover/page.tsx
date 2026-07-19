@@ -41,7 +41,7 @@ export default function DiscoverPage() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl p-4">
+    <div>
       <Tabs defaultValue="users" className="w-full">
         <TabsList className="mb-6 grid w-full grid-cols-3">
           <TabsTrigger value="users">推荐用户</TabsTrigger>

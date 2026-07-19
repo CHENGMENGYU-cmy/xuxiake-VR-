@@ -745,7 +745,7 @@ export default function UploadPage() {
               }}
             />
             <div className="flex gap-3">
-              <Button variant="outline" onClick={() => router.back()}>取消</Button>
+              <Button variant="outline" onClick={() => router.push('/feed')}>取消</Button>
               <Button className="gap-2" disabled={!canPublish} onClick={handlePublish}>
                 {isPublishing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                 {isPublishing ? '发布中...' : '发布内容'}
