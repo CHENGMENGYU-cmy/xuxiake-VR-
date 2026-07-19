@@ -543,7 +543,15 @@ export default function UploadPage() {
                     </div>
                   </div>
                 ) : (
-                  <div onClick={() => fileInputRef.current?.click()}
+                  <div
+                    onClick={() => fileInputRef.current?.click()}
+                    onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      const files = e.dataTransfer.files;
+                      if (files.length > 0) handleVideoSelect(files);
+                    }}
                     className="flex cursor-pointer flex-col items-center gap-3 rounded-lg border-2 border-dashed border-border p-8 text-center transition-colors hover:border-primary">
                     {uploading ? <Loader2 className="h-10 w-10 animate-spin text-primary" /> : <Video className="h-10 w-10 text-primary" />}
                     <div>
