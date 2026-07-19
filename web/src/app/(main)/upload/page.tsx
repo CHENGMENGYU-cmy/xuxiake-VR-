@@ -21,6 +21,8 @@ import { MultiImageUploader, UploadedImage } from '@/components/upload/multi-ima
 import { TopicSelector } from '@/components/upload/topic-selector';
 import { CommunitySelector } from '@/components/upload/community-selector';
 import { VisibilityControl } from '@/components/upload/visibility-control';
+import { DraftList } from '@/components/upload/draft-list';
+import { saveDraftToLocal, loadDraftFromLocal, clearLocalDraft, saveDraftToList } from '@/lib/draft-api';
 
 type UploadTab = 'VIDEO' | 'IMAGE' | 'AUDIO' | 'LINK' | 'TRANSLATION';
 
