@@ -151,8 +151,14 @@ export class PostsService {
     const hasMore = posts.length > limit;
     const data = posts.slice(0, limit);
 
+    let likedIds = new Set<string>();
+    if (currentUserId && data.length > 0) {
+      const likes = await this.likeRepo.find({ where: { userId: currentUserId, postId: In(data.map((p) => p.id)) } });
+      likedIds = new Set(likes.map((l) => l.postId));
+    }
+
     return {
-      data: data.map((p) => this.formatPost(p)),
+      data: data.map((p) => this.formatPost(p, likedIds.has(p.id))),
       nextCursor: null,
       hasMore,
       page,
@@ -160,7 +166,7 @@ export class PostsService {
     };
   }
 
-  private async getHotPosts(limit: number, page: number, postType?: string, tagId?: string, followingIds?: string[] | null) {
+  private async getHotPosts(limit: number, page: number, postType?: string, tagId?: string, followingIds?: string[] | null, currentUserId?: string) {
     // 精选推荐：高互动量帖子（点赞 + 评论）
     const offset = (page - 1) * limit;
 
