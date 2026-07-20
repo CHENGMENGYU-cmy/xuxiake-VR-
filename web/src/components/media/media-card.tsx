@@ -77,6 +77,7 @@ function VideoCard({ post, media }: { post: Post; media: MediaItem }) {
               src={media.thumbnailUrl || media.url}
               alt={post.content || '视频'}
               fill
+              sizes="(max-width: 640px) 50vw, 33vw"
               className={cn(
                 'object-cover transition-transform duration-300',
                 hovered && 'scale-105'
@@ -149,6 +150,7 @@ function ImageCard({ post, media }: { post: Post; media: MediaItem }) {
               src={media.thumbnailUrl || media.url}
               alt={post.content || '图片'}
               fill
+              sizes="(max-width: 640px) 50vw, 33vw"
               className={cn(
                 'object-cover transition-transform duration-300',
                 hovered && 'scale-105'
