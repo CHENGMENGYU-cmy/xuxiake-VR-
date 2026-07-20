@@ -1,21 +1,74 @@
+'use client';
+
+import { useState, useEffect, use } from 'react';
 import { notFound } from 'next/navigation';
+import { ArrowLeft, Loader2 } from 'lucide-react';
+import Link from 'next/link';
 import { PostCard } from '@/components/post/post-card';
-import { mockPosts } from '@/lib/mock-data';
+import { CommentSection } from '@/components/post/comment-section';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
+import { getPostById } from '@/lib/post-api';
+import type { Post } from '@/types';
 
 export default function PostDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  // 简化处理，直接使用 mock 数据
-  const post = mockPosts[0];
-  if (!post) notFound();
+  const { id } = use(params);
+  return <PostDetailContent postId={id} />;
+}
+
+function PostDetailContent({ postId }: { postId: string }) {
+  const [post, setPost] = useState<Post | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [commentCount, setCommentCount] = useState(0);
+
+  useEffect(() => {
+    let cancelled = false;
+    getPostById(postId).then((data) => {
+      if (!cancelled) {
+        setPost(data);
+        setCommentCount(data.commentCount);
+        setLoading(false);
+      }
+    }).catch(() => {
+      if (!cancelled) setLoading(false);
+    });
+    return () => { cancelled = true; };
+  }, [postId]);
+
+  if (loading) {
+    return (
+      <div className="mx-auto max-w-2xl space-y-4">
+        <Skeleton className="h-64 w-full rounded-lg" />
+        <Skeleton className="h-48 w-full rounded-lg" />
+      </div>
+    );
+  }
+
+  if (!post) {
+    notFound();
+  }
 
   return (
-    <div className="space-y-4">
+    <div className="mx-auto max-w-2xl space-y-4">
+      {/* 返回按钮 */}
+      <div className="flex items-center gap-2">
+        <Link href="/">
+          <Button variant="ghost" size="sm" className="gap-1">
+            <ArrowLeft className="h-4 w-4" />
+            返回
+          </Button>
+        </Link>
+      </div>
+
+      {/* 帖子内容 */}
       <PostCard post={post} />
 
-      {/* 评论区占位 */}
-      <div className="rounded-lg border bg-card p-8 text-center">
-        <p className="text-sm text-muted-foreground">评论功能即将上线</p>
-        <p className="mt-1 text-xs text-muted-foreground/70">你可以在这里看到和发表评论</p>
-      </div>
+      {/* 评论区 */}
+      <CommentSection
+        postId={postId}
+        initialCount={commentCount}
+        onCountChange={(delta) => setCommentCount((prev) => prev + delta)}
+      />
     </div>
   );
 }
