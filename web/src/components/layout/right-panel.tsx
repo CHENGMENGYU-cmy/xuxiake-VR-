@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Link from 'next/link';
 import Image from 'next/image';
 import { TrendingUp, Flame, MessageCircle, Video, Radio, Play } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
