@@ -1,10 +1,13 @@
-import { Controller, Get, Post, Put, Delete, Param, Headers, Body } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Query, Headers, Body } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In } from 'typeorm';
 import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from '../../entities/user.entity.js';
 import { UserFollow } from '../../entities/user-follow.entity.js';
+import { Post as PostEntity } from '../../entities/post.entity.js';
+import { MediaItem } from '../../entities/media-item.entity.js';
+import { Like } from '../../entities/like.entity.js';
 import { JwtService } from '@nestjs/jwt';
 import { NotificationsService } from '../notifications/notifications.service.js';
 
@@ -13,6 +16,9 @@ export class UsersController {
   constructor(
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     @InjectRepository(UserFollow) private readonly followRepo: Repository<UserFollow>,
+    @InjectRepository(PostEntity) private readonly postRepo: Repository<PostEntity>,
+    @InjectRepository(MediaItem) private readonly mediaRepo: Repository<MediaItem>,
+    @InjectRepository(Like) private readonly likeRepo: Repository<Like>,
     private readonly jwtService: JwtService,
     private readonly notificationsService: NotificationsService,
   ) {}
