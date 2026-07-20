@@ -31,21 +31,28 @@ import apiClient from '@/lib/api-client';
 import { getRecommendedUsers } from '@/lib/social-api';
 import type { RecommendedUser } from '@/types';
 
-const navItems = [
+// 内容发现
+const discoverItems = [
   { href: '/feed', label: '首页', icon: Home },
   { href: '/explore', label: '探索发现', icon: Compass },
   { href: '/topics', label: '话题广场', icon: Hash },
   { href: '/discover', label: '发现好友', icon: UserPlus },
-  { href: '/upload', label: '上传内容', icon: Upload },
+];
+
+// 媒体广场
+const mediaTypes = [
+  { href: '/media?type=VIDEO&vr=true', label: 'VR全景', icon: Sparkles, color: 'text-violet-500' },
+  { href: '/media?type=VIDEO', label: '旅行视频', icon: Video, color: 'text-teal-500' },
+  { href: '/media?type=IMAGE', label: '旅行图片', icon: Image, color: 'text-orange-500' },
+  { href: '/media?type=AUDIO', label: '音频记录', icon: Music, color: 'text-teal-400' },
+  { href: '/live', label: '直播', icon: Radio, color: 'text-red-500', badge: '即将上线' },
+];
+
+// 个人中心
+const personalItems = [
   { href: '/messages', label: '消息', icon: MessageCircle },
   { href: '/notifications', label: '通知', icon: Bell },
   { href: '/settings', label: '设置', icon: Settings },
-];
-
-const mediaTypes = [
-  { href: '/media?type=VIDEO', label: 'AR视频', icon: Video, color: 'text-teal-500' },
-  { href: '/media?type=IMAGE', label: 'AR图片', icon: Image, color: 'text-orange-500' },
-  { href: '/media?type=AUDIO', label: '音频记录', icon: Music, color: 'text-teal-400' },
 ];
 
 export function Sidebar() {
