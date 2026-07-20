@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Copy, MessageCircle, Share, Check } from 'lucide-react';
 import { ShareToMessage } from '@/components/chat/share-to-message';
 import { toast } from 'sonner';
@@ -11,6 +12,7 @@ interface ShareSheetProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   post: Post;
+  anchorRef?: React.RefObject<HTMLDivElement | null>;
 }
 
 export function ShareSheet({ open, onOpenChange, post }: ShareSheetProps) {
@@ -38,8 +40,14 @@ export function ShareSheet({ open, onOpenChange, post }: ShareSheetProps) {
         onOpenChange(false);
       }
     };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+    // 延迟注册，避免触发打开菜单的那次点击立即关闭
+    const timer = setTimeout(() => {
+      document.addEventListener('mousedown', handler);
+    }, 0);
+    return () => {
+      clearTimeout(timer);
+      document.removeEventListener('mousedown', handler);
+    };
   }, [open, onOpenChange]);
 
   const handleCopyLink = async () => {
@@ -75,42 +83,47 @@ export function ShareSheet({ open, onOpenChange, post }: ShareSheetProps) {
     setTimeout(() => setShowMessageShare(true), 150);
   };
 
-  if (!open) return null;
+  if (!open && !showMessageShare) return null;
 
   return (
     <>
-      <div
-        ref={menuRef}
-        className="absolute bottom-full right-2 z-50 mb-1 w-36 overflow-hidden rounded-lg border bg-popover shadow-lg"
-      >
-        <button
-          onClick={handleCopyLink}
-          className="flex w-full items-center gap-2.5 px-3 py-2 text-sm hover:bg-muted"
+      {open && (
+        <div
+          ref={menuRef}
+          className="absolute bottom-full right-0 z-50 mb-0.5 w-36 overflow-hidden rounded-lg border bg-popover shadow-lg"
+          style={{ transform: 'translateY(1px)' }}
         >
-          {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4 text-muted-foreground" />}
-          {copied ? '已复制' : '复制链接'}
-        </button>
-        <button
-          onClick={handleShareToMessage}
-          className="flex w-full items-center gap-2.5 px-3 py-2 text-sm hover:bg-muted"
-        >
-          <MessageCircle className="h-4 w-4 text-muted-foreground" />
-          发给好友
-        </button>
-        <button
-          onClick={handleSystemShare}
-          className="flex w-full items-center gap-2.5 px-3 py-2 text-sm hover:bg-muted"
-        >
-          <Share className="h-4 w-4 text-muted-foreground" />
-          系统分享
-        </button>
-      </div>
+          <button
+            onClick={handleCopyLink}
+            className="flex w-full items-center gap-2.5 px-3 py-2 text-sm hover:bg-muted"
+          >
+            {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4 text-muted-foreground" />}
+            {copied ? '已复制' : '复制链接'}
+          </button>
+          <button
+            onClick={handleShareToMessage}
+            className="flex w-full items-center gap-2.5 px-3 py-2 text-sm hover:bg-muted"
+          >
+            <MessageCircle className="h-4 w-4 text-muted-foreground" />
+            发给好友
+          </button>
+          <button
+            onClick={handleSystemShare}
+            className="flex w-full items-center gap-2.5 px-3 py-2 text-sm hover:bg-muted"
+          >
+            <Share className="h-4 w-4 text-muted-foreground" />
+            系统分享
+          </button>
+        </div>
+      )}
 
-      {showMessageShare && (
+      {/* ShareToMessage 用 Portal 渲染到 body，避免被卡片裁剪 */}
+      {showMessageShare && typeof document !== 'undefined' && createPortal(
         <ShareToMessage
           content={shareContent}
           onClose={() => setShowMessageShare(false)}
-        />
+        />,
+        document.body
       )}
     </>
   );
