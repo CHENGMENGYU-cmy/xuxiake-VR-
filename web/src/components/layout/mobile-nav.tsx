@@ -2,14 +2,14 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Search, Upload, MessageCircle, Bell } from 'lucide-react';
+import { Home, Compass, Upload, MessageCircle, Bell } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useChatStore } from '@/stores/chat-store';
 import { useNotificationStore } from '@/stores/notification-store';
 
 const navItems = [
   { href: '/feed', label: '首页', icon: Home },
-  { href: '/search', label: '搜索', icon: Search },
+  { href: '/explore', label: '探索', icon: Compass },
   { href: '/upload', label: '上传', icon: Upload },
   { href: '/messages', label: '消息', icon: MessageCircle },
   { href: '/notifications', label: '通知', icon: Bell },
