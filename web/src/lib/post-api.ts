@@ -106,6 +106,43 @@ export async function unlikePost(postId: string): Promise<void> {
   await apiClient.delete(`/posts/${postId}/like`);
 }
 
+// ===== 评论 API =====
+
+export interface CommentData {
+  id: string;
+  content: string;
+  postId: string;
+  parentId: string | null;
+  author: {
+    id: string;
+    username: string;
+    displayName: string;
+    avatarUrl: string;
+    vrDeviceInfo?: { model: string; version: string } | null;
+  };
+  replies?: CommentData[];
+  createdAt: string;
+}
+
+export async function getComments(postId: string, page = 1, limit = 20): Promise<{
+  data: CommentData[];
+  total: number;
+  page: number;
+  hasMore: boolean;
+}> {
+  const { data } = await apiClient.get(`/posts/${postId}/comments`, { params: { page, limit } });
+  return { data: data.data ?? [], total: data.total ?? 0, page: data.page ?? 1, hasMore: data.hasMore ?? false };
+}
+
+export async function createComment(postId: string, content: string, parentId?: string): Promise<CommentData> {
+  const { data } = await apiClient.post(`/posts/${postId}/comments`, { content, postId, parentId });
+  return data.data;
+}
+
+export async function deleteComment(commentId: string): Promise<void> {
+  await apiClient.delete(`/posts/comments/${commentId}`);
+}
+
 // ===== 标签 API =====
 import type { InterestTag, Topic } from '@/types';
 
