@@ -106,6 +106,12 @@ export class PostsController {
     return { success: true, data: post };
   }
 
+  @Post(':id/view')
+  async incrementViewCount(@Param('id') id: string) {
+    const result = await this.postsService.incrementViewCount(id);
+    return { success: true, data: result };
+  }
+
   @Post()
   async createPost(@Headers('authorization') auth: string, @Body() dto: CreatePostDto) {
     const userId = this.getUserId(auth);
