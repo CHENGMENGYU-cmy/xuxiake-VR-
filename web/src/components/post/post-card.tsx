@@ -359,7 +359,7 @@ export function PostCard({ post, onLikeChange }: PostCardProps) {
           <span>{likeCount}</span>
         </div>
         <div className="flex items-center gap-3">
-          <span>{post.commentCount} 条评论</span>
+          <span>{commentCount} 条评论</span>
           <span>{post.viewCount} 次浏览</span>
         </div>
       </div>
