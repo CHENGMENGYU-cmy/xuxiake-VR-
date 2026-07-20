@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Play, Volume2, Heart, Eye, Video, Image as ImageIcon, Music } from 'lucide-react';
+import { Play, Volume2, Heart, Eye, MessageCircle, Video, Image as ImageIcon, Music } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -21,6 +21,12 @@ function formatDuration(seconds: number): string {
   return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
+function formatCount(count: number): string {
+  if (count >= 10000) return `${(count / 10000).toFixed(1)}w`;
+  if (count >= 1000) return `${(count / 1000).toFixed(1)}k`;
+  return String(count);
+}
+
 function WaveformVisual() {
   const bars = [0.3, 0.6, 0.4, 0.8, 0.5, 0.9, 0.3, 0.7, 0.5, 0.6, 0.4, 0.8, 0.3, 0.5, 0.7, 0.4, 0.6, 0.8, 0.3, 0.5];
   return (
@@ -32,6 +38,25 @@ function WaveformVisual() {
           style={{ height: `${h * 100}%` }}
         />
       ))}
+    </div>
+  );
+}
+
+function StatRow({ post }: { post: Post }) {
+  return (
+    <div className="flex items-center gap-3 text-xs text-muted-foreground">
+      <span className="flex items-center gap-0.5">
+        <Eye className="h-3 w-3" />
+        {formatCount(post.viewCount)}
+      </span>
+      <span className="flex items-center gap-0.5">
+        <Heart className="h-3 w-3" />
+        {formatCount(post.likeCount)}
+      </span>
+      <span className="flex items-center gap-0.5">
+        <MessageCircle className="h-3 w-3" />
+        {formatCount(post.commentCount)}
+      </span>
     </div>
   );
 }
@@ -100,12 +125,7 @@ function VideoCard({ post, media }: { post: Post; media: MediaItem }) {
                 {post.author.displayName}
               </span>
             </div>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground shrink-0">
-              <span className="flex items-center gap-0.5">
-                <Heart className="h-3 w-3" />
-                {post.likeCount}
-              </span>
-            </div>
+            <StatRow post={post} />
           </div>
         </CardContent>
       </Card>
@@ -160,12 +180,7 @@ function ImageCard({ post, media }: { post: Post; media: MediaItem }) {
                 {post.author.displayName}
               </span>
             </div>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground shrink-0">
-              <span className="flex items-center gap-0.5">
-                <Heart className="h-3 w-3" />
-                {post.likeCount}
-              </span>
-            </div>
+            <StatRow post={post} />
           </div>
         </CardContent>
       </Card>
@@ -205,12 +220,7 @@ function AudioCard({ post, media }: { post: Post; media: MediaItem }) {
                 {post.author.displayName}
               </span>
             </div>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground shrink-0">
-              <span className="flex items-center gap-0.5">
-                <Heart className="h-3 w-3" />
-                {post.likeCount}
-              </span>
-            </div>
+            <StatRow post={post} />
           </div>
         </CardContent>
       </Card>
