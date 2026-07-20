@@ -90,6 +90,40 @@ export function RightPanel() {
           </CardContent>
         </Card>
 
+        {/* 推荐关注 */}
+        {isAuthenticated && suggestedUsers.length > 0 && (
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2 text-sm">
+                <UserPlus className="h-4 w-4 text-blue-500" />
+                推荐关注
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {suggestedUsers.map((u) => (
+                  <Link
+                    key={u.id}
+                    href={`/profile/${u.username}`}
+                    className="flex items-center gap-3 rounded-lg p-1 hover:bg-accent"
+                  >
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={u.avatarUrl} alt={u.displayName} />
+                      <AvatarFallback>{u.displayName[0]}</AvatarFallback>
+                    </Avatar>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium">{u.displayName}</p>
+                      <p className="truncate text-xs text-muted-foreground">
+                        {u.matchReasons?.length ? u.matchReasons[0] : (u.bio || `@${u.username}`)}
+                      </p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* 推荐社群 */}
         {isAuthenticated && recommendedCommunities.length > 0 && (
           <Card>
