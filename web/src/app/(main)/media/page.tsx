@@ -37,7 +37,6 @@ function MediaContent() {
   const [mediaType, setMediaType] = useState<MediaType | 'ALL'>(
     typeParam && ['VIDEO', 'IMAGE', 'AUDIO'].includes(typeParam) ? typeParam : 'ALL'
   );
-  const [activeSort, setActiveSort] = useState<TabType>('trending');
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [hotTopics, setHotTopics] = useState<Topic[]>([]);
   const [featuredCreators, setFeaturedCreators] = useState<RecommendedUser[]>([]);
