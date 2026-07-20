@@ -422,7 +422,7 @@ export class PostsService {
       }
     }
 
-    return this.getPostById(postId);
+    return this.getPostById(postId, userId);
   }
 
   async unlikePost(userId: string, postId: string) {
@@ -438,7 +438,7 @@ export class PostsService {
       }
     }
 
-    return this.getPostById(postId);
+    return this.getPostById(postId, userId);
   }
 
   async getComments(postId: string) {
