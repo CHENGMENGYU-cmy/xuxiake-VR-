@@ -1,9 +1,8 @@
 'use client';
 
 import { useState, useEffect, use } from 'react';
-import { notFound } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import { ArrowLeft, Loader2 } from 'lucide-react';
-import Link from 'next/link';
 import { PostCard } from '@/components/post/post-card';
 import { CommentSection } from '@/components/post/comment-section';
 import { Skeleton } from '@/components/ui/skeleton';
