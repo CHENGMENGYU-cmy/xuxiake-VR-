@@ -106,6 +106,10 @@ export async function unlikePost(postId: string): Promise<void> {
   await apiClient.delete(`/posts/${postId}/like`);
 }
 
+export async function incrementViewCount(postId: string): Promise<void> {
+  await apiClient.post(`/posts/${postId}/view`);
+}
+
 // ===== 评论 API =====
 
 export interface CommentData {
