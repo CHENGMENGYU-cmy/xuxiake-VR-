@@ -42,17 +42,20 @@ function MediaContent() {
   const [hotTopics, setHotTopics] = useState<Topic[]>([]);
   const [featuredCreators, setFeaturedCreators] = useState<RecommendedUser[]>([]);
 
+  const { user } = useAuthStore();
   const { posts, isLoading, isLoadingMore, hasMore, fetchPosts, loadMore } = usePostStore();
 
   // 加载热门话题标签
   useEffect(() => {
     getHotTopics(12).then(setHotTopics).catch(() => {});
-    getRecommendedUsers(1, 20).then((res) => {
-      const all = res.data || [];
-      const picked = [...all].sort(() => Math.random() - 0.5).slice(0, 8);
-      setFeaturedCreators(picked);
-    }).catch(() => {});
-  }, []);
+    if (user) {
+      getRecommendedUsers(1, 20).then((res) => {
+        const all = res.data || [];
+        const picked = [...all].sort(() => Math.random() - 0.5).slice(0, 8);
+        setFeaturedCreators(picked);
+      }).catch(() => {});
+    }
+  }, [user]);
 
   // URL type 参数变化时同步
   useEffect(() => {
