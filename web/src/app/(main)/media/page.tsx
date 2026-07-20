@@ -11,10 +11,7 @@ import { MediaCard } from '@/components/media/media-card';
 import { usePostStore } from '@/stores/post-store';
 import { getHotTopics } from '@/lib/post-api';
 import { getRecommendedUsers } from '@/lib/social-api';
-import type { PostSortType } from '@/lib/post-api';
 import type { MediaType, Topic, RecommendedUser } from '@/types';
-
-type TabType = 'trending' | 'latest' | 'hot';
 
 const mediaTabs: { value: MediaType | 'ALL'; label: string; icon: typeof Video; color: string }[] = [
   { value: 'ALL', label: '全部', icon: FileText, color: 'text-primary' },
@@ -22,18 +19,6 @@ const mediaTabs: { value: MediaType | 'ALL'; label: string; icon: typeof Video; 
   { value: 'IMAGE', label: '旅行图片', icon: Image, color: 'text-orange-500' },
   { value: 'AUDIO', label: '音频记录', icon: Music, color: 'text-teal-400' },
 ];
-
-const sortTabs: { id: TabType; label: string; icon: typeof TrendingUp }[] = [
-  { id: 'trending', label: '热门', icon: TrendingUp },
-  { id: 'latest', label: '最新', icon: Clock },
-  { id: 'hot', label: '推荐', icon: Flame },
-];
-
-const tabSortMap: Record<TabType, PostSortType> = {
-  trending: 'trending',
-  latest: 'latest',
-  hot: 'hot',
-};
 
 export default function MediaPage() {
   return (
