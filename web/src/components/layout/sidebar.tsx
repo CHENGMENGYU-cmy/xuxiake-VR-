@@ -34,6 +34,8 @@ const travelItems = [
   { href: '/feed', label: '首页', icon: Home },
   { href: '/explore', label: '探索发现', icon: Compass },
   { href: '/topics', label: '话题广场', icon: Hash },
+  { href: '/discover', label: '发现好友', icon: UserPlus },
+  { href: '/upload', label: '上传内容', icon: Upload },
   { href: '/media?type=VIDEO', label: '旅行视频', icon: Video, color: 'text-teal-500' },
   { href: '/media?type=IMAGE', label: '旅行图片', icon: Image, color: 'text-orange-500' },
   { href: '/media?type=AUDIO', label: '音频记录', icon: Music, color: 'text-teal-400' },
