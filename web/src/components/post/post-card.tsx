@@ -397,8 +397,12 @@ export function PostCard({ post, onLikeChange }: PostCardProps) {
             <Share2 className="h-4 w-4" />
             分享
           </Button>
-          {/* 分享气泡菜单 */}
-          <ShareSheet open={showShare} onOpenChange={setShowShare} post={post} />
+          {/* 分享气泡菜单 — pt-1 填补按钮和菜单之间的间隙 */}
+          {showShare && (
+            <div className="absolute bottom-full right-0 z-50 pb-0.5">
+              <ShareSheet open={showShare} onOpenChange={setShowShare} post={post} />
+            </div>
+          )}
         </div>
       </div>
 
