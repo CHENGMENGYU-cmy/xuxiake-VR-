@@ -27,10 +27,8 @@ export default function ProfilePage() {
 
 function ProfileContent({ username }: { username: string }) {
   const { user: currentUser } = useAuthStore();
-  const { posts: storePosts, fetchPosts } = usePostStore();
   const router = useRouter();
   const [profileUser, setProfileUser] = useState<User | null>(null);
-  const [userPosts, setUserPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [isFollowing, setIsFollowing] = useState(false);
   const [isFollowedBy, setIsFollowedBy] = useState(false);
@@ -73,11 +71,9 @@ function ProfileContent({ username }: { username: string }) {
         setFollowingCount(followingRes.total || 0);
 
         if (currentUser) {
-          // 我是否关注了TA
-          const amFollowing = followersRes.data?.some((u) => u.id === currentUser.id);
+          const amFollowing = followersRes.data?.some((u: User) => u.id === currentUser.id);
           setIsFollowing(!!amFollowing);
-          // TA是否关注了我
-          const isFollowedBack = followingRes.data?.some((u) => u.id === currentUser.id);
+          const isFollowedBack = followingRes.data?.some((u: User) => u.id === currentUser.id);
           setIsFollowedBy(!!isFollowedBack);
         }
       } catch (err) {
@@ -87,21 +83,6 @@ function ProfileContent({ username }: { username: string }) {
 
     fetchFollowData();
   }, [username, currentUser]);
-
-  // 获取用户的帖子
-  useEffect(() => {
-    if (profileUser) {
-      const safePosts = storePosts ?? [];
-      if (currentUser && currentUser.id === profileUser.id) {
-        if (safePosts.length === 0) {
-          fetchPosts();
-        }
-        setUserPosts(safePosts.filter((p) => p.author.id === profileUser.id));
-      } else {
-        setUserPosts(safePosts.filter((p) => p.author.id === profileUser.id));
-      }
-    }
-  }, [profileUser, storePosts, currentUser, fetchPosts]);
 
   const isMutualFollow = isFollowing && isFollowedBy;
 
