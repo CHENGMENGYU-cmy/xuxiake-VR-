@@ -1,13 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Copy, MessageCircle, Share, Check } from 'lucide-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { ShareToMessage } from '@/components/chat/share-to-message';
 import { toast } from 'sonner';
 import type { Post } from '@/types';
@@ -22,6 +16,7 @@ interface ShareSheetProps {
 export function ShareSheet({ open, onOpenChange, post }: ShareSheetProps) {
   const [showMessageShare, setShowMessageShare] = useState(false);
   const [copied, setCopied] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const shareUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/post/${post.id}`;
 
@@ -34,6 +29,18 @@ export function ShareSheet({ open, onOpenChange, post }: ShareSheetProps) {
     extra: { likes: post.likeCount, comments: post.commentCount },
     link: `/post/${post.id}`,
   };
+
+  // 点击外部关闭
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        onOpenChange(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [open, onOpenChange]);
 
   const handleCopyLink = async () => {
     try {
@@ -68,27 +75,36 @@ export function ShareSheet({ open, onOpenChange, post }: ShareSheetProps) {
     setTimeout(() => setShowMessageShare(true), 150);
   };
 
+  if (!open) return null;
+
   return (
     <>
-      <DropdownMenu open={open} onOpenChange={onOpenChange}>
-        <DropdownMenuTrigger asChild>
-          <span />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-40">
-          <DropdownMenuItem onClick={handleCopyLink}>
-            {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
-            {copied ? '已复制' : '复制链接'}
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={handleShareToMessage}>
-            <MessageCircle className="h-4 w-4" />
-            发给好友
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={handleSystemShare}>
-            <Share className="h-4 w-4" />
-            系统分享
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <div
+        ref={menuRef}
+        className="absolute bottom-full right-2 z-50 mb-1 w-36 overflow-hidden rounded-lg border bg-popover shadow-lg"
+      >
+        <button
+          onClick={handleCopyLink}
+          className="flex w-full items-center gap-2.5 px-3 py-2 text-sm hover:bg-muted"
+        >
+          {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4 text-muted-foreground" />}
+          {copied ? '已复制' : '复制链接'}
+        </button>
+        <button
+          onClick={handleShareToMessage}
+          className="flex w-full items-center gap-2.5 px-3 py-2 text-sm hover:bg-muted"
+        >
+          <MessageCircle className="h-4 w-4 text-muted-foreground" />
+          发给好友
+        </button>
+        <button
+          onClick={handleSystemShare}
+          className="flex w-full items-center gap-2.5 px-3 py-2 text-sm hover:bg-muted"
+        >
+          <Share className="h-4 w-4 text-muted-foreground" />
+          系统分享
+        </button>
+      </div>
 
       {showMessageShare && (
         <ShareToMessage
