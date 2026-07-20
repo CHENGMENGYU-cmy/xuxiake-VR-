@@ -377,12 +377,17 @@ export function PostCard({ post, onLikeChange }: PostCardProps) {
           <Heart className={cn('h-4 w-4 transition-colors', isLiked && 'fill-current text-accent', likeAnimation && 'animate-[heartBeat_0.4s_ease-in-out]')} />
           赞
         </Button>
-        <Link href={`/post/${post.id}`} className="flex-1">
-          <Button variant="ghost" className="w-full gap-2 text-sm text-muted-foreground hover:bg-primary/10">
-            <MessageCircle className="h-4 w-4" />
-            评论
-          </Button>
-        </Link>
+        <Button
+          variant="ghost"
+          className={cn(
+            'flex-1 gap-2 text-sm text-muted-foreground hover:bg-primary/10',
+            showComments && 'text-primary'
+          )}
+          onClick={() => setShowComments(!showComments)}
+        >
+          <MessageCircle className="h-4 w-4" />
+          评论
+        </Button>
         <Button
           variant="ghost"
           className="flex-1 gap-2 text-sm text-muted-foreground hover:bg-teal-50 dark:hover:bg-teal-900/20"
