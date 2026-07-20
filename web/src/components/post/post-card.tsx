@@ -388,14 +388,18 @@ export function PostCard({ post, onLikeChange }: PostCardProps) {
           <MessageCircle className="h-4 w-4" />
           评论
         </Button>
-        <Button
-          variant="ghost"
-          className="flex-1 gap-2 text-sm text-muted-foreground hover:bg-teal-50 dark:hover:bg-teal-900/20"
-          onClick={() => setShowShare(true)}
-        >
-          <Share2 className="h-4 w-4" />
-          分享
-        </Button>
+        <div className="relative flex-1">
+          <Button
+            variant="ghost"
+            className="w-full gap-2 text-sm text-muted-foreground hover:bg-teal-50 dark:hover:bg-teal-900/20"
+            onClick={() => setShowShare(!showShare)}
+          >
+            <Share2 className="h-4 w-4" />
+            分享
+          </Button>
+          {/* 分享气泡菜单 */}
+          <ShareSheet open={showShare} onOpenChange={setShowShare} post={post} />
+        </div>
       </div>
 
       {/* 内联评论区 */}
