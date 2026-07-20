@@ -80,16 +80,6 @@ export function PostCard({ post }: PostCardProps) {
 
   const isOwner = currentUser?.id === post.author.id;
 
-  const shareContent: ContentCardData = {
-    type: 'POST',
-    id: post.id,
-    title: post.content?.slice(0, 50) || '笔记',
-    description: post.content?.slice(0, 100),
-    coverUrl: post.mediaItems?.[0]?.thumbnailUrl || post.mediaItems?.[0]?.url,
-    extra: { likes: likeCount, comments: post.commentCount },
-    link: `/post/${post.id}`,
-  };
-
   // 如果帖子作者是当前用户，使用 authStore 中的最新头像
   const authorAvatarUrl = currentUser && post.author.username === currentUser.username
     ? currentUser.avatarUrl
