@@ -215,6 +215,14 @@ export class PostsService {
     };
   }
 
+  async incrementViewCount(id: string) {
+    const post = await this.postRepo.findOne({ where: { id } });
+    if (!post) throw new NotFoundException('内容不存在');
+    post.viewCount += 1;
+    await this.postRepo.save(post);
+    return { viewCount: post.viewCount };
+  }
+
   async getPostById(id: string, currentUserId?: string) {
     const post = await this.postRepo.findOne({
       where: { id },
