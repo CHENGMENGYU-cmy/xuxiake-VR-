@@ -895,45 +895,6 @@ export default function UploadPage() {
       {/* 隐藏的文件输入 */}
       <input ref={fileInputRef} type="file" accept={getAccept()} className="hidden"
         onChange={(e) => handleFileInput(e.target.files)} />
-
-      {/* 高级内容类型入口 */}
-      <Card>
-        <CardContent className="p-4">
-          <h3 className="text-sm font-medium mb-3">更多内容类型</h3>
-          <div className="grid grid-cols-3 gap-3">
-            <Link
-              href="/upload/route-creator"
-              className="flex flex-col items-center gap-2 rounded-lg border p-4 hover:bg-muted transition-colors"
-            >
-              <Route className="h-8 w-8 text-primary" />
-              <div className="text-center">
-                <p className="text-sm font-medium">创建路线</p>
-                <p className="text-xs text-muted-foreground">GPX轨迹、途经点</p>
-              </div>
-            </Link>
-            <Link
-              href="/upload/journey-creator"
-              className="flex flex-col items-center gap-2 rounded-lg border p-4 hover:bg-muted transition-colors"
-            >
-              <Map className="h-8 w-8 text-teal-500" />
-              <div className="text-center">
-                <p className="text-sm font-medium">创建旅程</p>
-                <p className="text-xs text-muted-foreground">时间线、每日行程</p>
-              </div>
-            </Link>
-            <Link
-              href="/upload/guide-creator"
-              className="flex flex-col items-center gap-2 rounded-lg border p-4 hover:bg-muted transition-colors"
-            >
-              <BookOpen className="h-8 w-8 text-orange-500" />
-              <div className="text-center">
-                <p className="text-sm font-medium">创建攻略</p>
-                <p className="text-xs text-muted-foreground">美食、住宿、贴士</p>
-              </div>
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }
