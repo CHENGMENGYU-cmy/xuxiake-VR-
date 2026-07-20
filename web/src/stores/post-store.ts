@@ -37,6 +37,7 @@ interface PostState {
   updateUserAvatar: (username: string, avatarUrl: string) => void;
   removePost: (postId: string) => Promise<void>;
   updatePostInList: (postId: string, updatedPost: Post) => void;
+  updatePostLike: (postId: string, isLiked: boolean, likeCount: number) => void;
 }
 
 export const usePostStore = create<PostState>((set, get) => ({
