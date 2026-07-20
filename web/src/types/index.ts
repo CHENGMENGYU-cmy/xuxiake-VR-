@@ -319,6 +319,39 @@ export interface ChallengeLeaderboardEntry {
   joinedAt: string;
 }
 
+// ===== 直播 =====
+export type LiveStatus = 'PREVIEW' | 'LIVE' | 'ENDED' | 'BANNED';
+export type LiveCategory = 'TRAVEL' | 'VR_TOUR' | 'GUIDE' | 'CHAT' | 'EVENT';
+
+export interface LiveRoom {
+  id: string;
+  hostId: string;
+  host: User;
+  communityId?: string;
+  title: string;
+  coverUrl?: string;
+  description?: string;
+  category: LiveCategory;
+  status: LiveStatus;
+  viewerCount: number;
+  peakViewers: number;
+  likeCount: number;
+  isVr: boolean;
+  vrFormat?: VrFormat;
+  location?: { lat: number; lng: number; name: string };
+  startedAt?: string;
+  createdAt: string;
+}
+
+export interface LiveMessage {
+  id: string;
+  roomId: string;
+  user: User;
+  content: string;
+  type: 'TEXT' | 'GIFT' | 'EMOJI' | 'SYSTEM';
+  createdAt: string;
+}
+
 // ===== 推荐用户 =====
 export interface RecommendedUser extends User {
   matchReasons?: string[];
