@@ -66,29 +66,10 @@ export function Sidebar() {
   const totalUnread = useChatStore((s) => s.totalUnread);
   const notifUnreadCount = useNotificationStore((s) => s.unreadCount);
   const [mounted, setMounted] = useState(false);
-  const [suggestedUsers, setSuggestedUsers] = useState<RecommendedUser[]>([]);
 
   useEffect(() => {
     setMounted(true);
   }, []);
-
-  useEffect(() => {
-    if (user) {
-      getRecommendedUsers(1, 20).then((res) => {
-        const all = res.data || [];
-        const picked = [...all].sort(() => Math.random() - 0.5).slice(0, 3);
-        setSuggestedUsers(picked);
-      }).catch(() => {
-        apiClient.get('/users/suggested/list').then((res) => {
-          if (res.data?.success) {
-            const all = res.data.data || [];
-            const picked = [...all].sort(() => Math.random() - 0.5).slice(0, 3);
-            setSuggestedUsers(picked);
-          }
-        }).catch(() => {});
-      });
-    }
-  }, [user]);
 
   return (
     <>
