@@ -102,14 +102,14 @@ export function Sidebar() {
 
             <Separator />
 
-            {/* 内容发现 */}
+            {/* 旅行内容 */}
             <div className="space-y-1 p-3">
               <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
-                内容发现
+                旅行内容
               </p>
-              {discoverItems.map((item) => {
+              {travelItems.map((item) => {
                 const Icon = item.icon;
-                const isActive = pathname === item.href;
+                const isActive = pathname === item.href || (item.href.includes('?') && pathname === item.href.split('?')[0]);
                 return (
                   <Link key={item.href} href={item.href}>
                     <Button
@@ -119,28 +119,8 @@ export function Sidebar() {
                         isActive && 'bg-primary/10 text-primary hover:bg-primary/10'
                       )}
                     >
-                      <Icon className={cn('h-5 w-5', isActive && 'text-primary')} />
+                      <Icon className={cn('h-5 w-5', 'color' in item && item.color, isActive && 'text-primary')} />
                       <span>{item.label}</span>
-                    </Button>
-                  </Link>
-                );
-              })}
-            </div>
-
-            <Separator />
-
-            {/* 媒体广场 */}
-            <div className="space-y-1 p-3">
-              <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
-                媒体广场
-              </p>
-              {mediaTypes.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <Link key={item.href} href={item.href}>
-                    <Button variant="ghost" className="w-full justify-start gap-3">
-                      <Icon className={cn('h-5 w-5', item.color)} />
-                      <span className="text-sm">{item.label}</span>
                       {'badge' in item && item.badge && (
                         <span className="ml-auto rounded-full bg-red-500/10 px-2 py-0.5 text-[10px] font-medium text-red-500">
                           {item.badge}
@@ -150,54 +130,6 @@ export function Sidebar() {
                   </Link>
                 );
               })}
-            </div>
-
-            <Separator />
-
-            {/* 旅行工具 */}
-            <div className="space-y-1 p-3">
-              <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
-                旅行工具
-              </p>
-              {travelTools.map((item) => {
-                const Icon = item.icon;
-                const isActive = pathname === item.href;
-                return (
-                  <Link key={item.href} href={item.href}>
-                    <Button
-                      variant="ghost"
-                      className={cn(
-                        'w-full justify-start gap-3',
-                        isActive && 'bg-primary/10 text-primary hover:bg-primary/10'
-                      )}
-                    >
-                      <Icon className={cn('h-5 w-5', item.color, isActive && 'text-primary')} />
-                      <span>{item.label}</span>
-                    </Button>
-                  </Link>
-                );
-              })}
-            </div>
-
-            <Separator />
-
-            {/* 创作中心 */}
-            <div className="space-y-1 p-3">
-              <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
-                创作中心
-              </p>
-              <Link href="/upload">
-                <Button
-                  variant="ghost"
-                  className={cn(
-                    'w-full justify-start gap-3',
-                    pathname === '/upload' && 'bg-primary/10 text-primary hover:bg-primary/10'
-                  )}
-                >
-                  <Upload className={cn('h-5 w-5', pathname === '/upload' && 'text-primary')} />
-                  <span>上传内容</span>
-                </Button>
-              </Link>
             </div>
 
             <Separator />
