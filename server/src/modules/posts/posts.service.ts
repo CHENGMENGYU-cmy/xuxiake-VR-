@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In } from 'typeorm';
+import { Repository, In, IsNull } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { Post } from '../../entities/post.entity.js';
 import { MediaItem } from '../../entities/media-item.entity.js';
