@@ -411,9 +411,6 @@ export function PostCard({ post, onLikeChange }: PostCardProps) {
         />
       )}
 
-      {/* 分享面板 */}
-      <ShareSheet open={showShare} onOpenChange={setShowShare} post={post} />
-
       {/* 编辑弹窗 */}
       {showEdit && (
         <EditPostDialog
