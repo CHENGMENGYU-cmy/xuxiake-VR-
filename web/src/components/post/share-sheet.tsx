@@ -90,8 +90,9 @@ export function ShareSheet({ open, onOpenChange, post }: ShareSheetProps) {
       {open && (
         <div
           ref={menuRef}
-          className="w-36 overflow-hidden rounded-lg border bg-popover shadow-lg"
+          className="absolute bottom-full right-0 z-50 w-36 pb-1"
         >
+          <div className="overflow-hidden rounded-lg border bg-popover shadow-lg">
           <button
             onClick={handleCopyLink}
             className="flex w-full items-center gap-2.5 px-3 py-2 text-sm hover:bg-muted"
