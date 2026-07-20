@@ -215,7 +215,7 @@ export class PostsService {
     };
   }
 
-  async getPostById(id: string) {
+  async getPostById(id: string, currentUserId?: string) {
     const post = await this.postRepo.findOne({
       where: { id },
       relations: { author: true, mediaItems: true, tags: true, topics: true },
@@ -223,6 +223,13 @@ export class PostsService {
     if (!post) throw new NotFoundException('内容不存在');
     post.viewCount += 1;
     await this.postRepo.save(post);
+
+    // 查询当前用户是否已点赞
+    let isLiked = false;
+    if (currentUserId) {
+      const like = await this.likeRepo.findOne({ where: { userId: currentUserId, postId: id } });
+      isLiked = !!like;
+    }
 
     // 加载路线详情
     let routeDetail: RouteDetail | null = null;
@@ -245,7 +252,7 @@ export class PostsService {
       guideDetail = await this.guideRepo.findOne({ where: { postId: id } });
     }
 
-    return { ...this.formatPost(post), routeDetail, journey, guideDetail };
+    return { ...this.formatPost(post, isLiked), routeDetail, journey, guideDetail };
   }
 
   async createPost(userId: string, dto: CreatePostDto) {
