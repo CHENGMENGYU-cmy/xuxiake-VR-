@@ -119,7 +119,6 @@ export function LikesTab({ username, isOwnProfile }: LikesTabProps) {
                 if (!isLiked) {
                   // 取消点赞时从列表中移除
                   setPosts((prev) => prev.filter((p) => p.id !== post.id));
-                  setTotal((prev) => Math.max(0, prev - 1));
                 }
               }}
             />
