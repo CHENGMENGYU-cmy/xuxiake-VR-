@@ -175,24 +175,22 @@ export function InlineComment({ postId, commentCount, onCountChange }: InlineCom
                       {comment.author.displayName}
                     </Link>
                     <span className="text-[10px] text-muted-foreground">{formatShortTime(comment.createdAt)}</span>
-                    <div className="ml-auto flex items-center gap-1.5 opacity-0 transition-opacity group-hover:opacity-100">
+                    {currentUser?.id === comment.author.id && (
                       <button
-                        onClick={() => handleReply(comment)}
-                        className="text-[10px] text-muted-foreground hover:text-foreground"
+                        onClick={() => handleDelete(comment.id)}
+                        className="ml-auto text-[10px] text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 hover:text-destructive"
                       >
-                        <Reply className="h-3 w-3" />
+                        <Trash2 className="h-3 w-3" />
                       </button>
-                      {currentUser?.id === comment.author.id && (
-                        <button
-                          onClick={() => handleDelete(comment.id)}
-                          className="text-[10px] text-muted-foreground hover:text-destructive"
-                        >
-                          <Trash2 className="h-3 w-3" />
-                        </button>
-                      )}
-                    </div>
+                    )}
                   </div>
                   <p className="text-sm leading-relaxed">{comment.content}</p>
+                  <button
+                    onClick={() => handleReply(comment)}
+                    className="mt-0.5 text-[11px] text-muted-foreground hover:text-foreground"
+                  >
+                    回复
+                  </button>
                 </div>
               </div>
 
