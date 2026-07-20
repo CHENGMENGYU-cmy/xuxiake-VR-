@@ -221,6 +221,12 @@ export function InlineComment({ postId, commentCount, onCountChange }: InlineCom
                           )}
                         </div>
                         <p className="text-xs leading-relaxed">{reply.content}</p>
+                        <button
+                          onClick={() => handleReply(comment)}
+                          className="mt-0.5 text-[10px] text-muted-foreground hover:text-foreground"
+                        >
+                          回复
+                        </button>
                       </div>
                     </div>
                   ))}
