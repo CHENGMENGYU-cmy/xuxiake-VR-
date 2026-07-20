@@ -183,6 +183,33 @@ export function Sidebar() {
 
             <Separator />
 
+            {/* 旅行工具 */}
+            <div className="space-y-1 p-3">
+              <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
+                旅行工具
+              </p>
+              {travelTools.map((item) => {
+                const Icon = item.icon;
+                const isActive = pathname === item.href;
+                return (
+                  <Link key={item.href} href={item.href}>
+                    <Button
+                      variant="ghost"
+                      className={cn(
+                        'w-full justify-start gap-3',
+                        isActive && 'bg-primary/10 text-primary hover:bg-primary/10'
+                      )}
+                    >
+                      <Icon className={cn('h-5 w-5', item.color, isActive && 'text-primary')} />
+                      <span>{item.label}</span>
+                    </Button>
+                  </Link>
+                );
+              })}
+            </div>
+
+            <Separator />
+
             {/* 创作中心 */}
             <div className="space-y-1 p-3">
               <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
