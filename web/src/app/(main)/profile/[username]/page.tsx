@@ -239,21 +239,16 @@ function ProfileContent({ username }: { username: string }) {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="posts" className="mt-4 space-y-4">
-          {userPosts.map((post) => (
-            <PostCard key={post.id} post={post} />
-          ))}
-          {userPosts.length === 0 && (
-            <div className="py-12 text-center text-muted-foreground">还没有发布任何内容</div>
-          )}
+        <TabsContent value="posts" className="mt-4">
+          <PostsTab username={username} isOwnProfile={!!isOwnProfile} />
         </TabsContent>
 
         <TabsContent value="media" className="mt-4">
-          <div className="py-12 text-center text-muted-foreground">媒体库功能即将上线</div>
+          <MediaTab username={username} />
         </TabsContent>
 
         <TabsContent value="likes" className="mt-4">
-          <div className="py-12 text-center text-muted-foreground">赞过的内容即将上线</div>
+          <LikesTab username={username} isOwnProfile={!!isOwnProfile} />
         </TabsContent>
       </Tabs>
     </div>
