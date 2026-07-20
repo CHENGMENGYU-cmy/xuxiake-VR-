@@ -468,13 +468,13 @@ export class PostsService {
     return { message: '删除成功' };
   }
 
-  private formatPost(post: Post) {
-    const { passwordHash, ...author } = post.author;
+  formatPost(post: Post, isLiked = false) {
+    const { passwordHash, ...author } = post.author || ({} as any);
     return {
       ...post,
       author: {
         ...author,
-        vrDeviceInfo: author.vrDeviceModel
+        vrDeviceInfo: author?.vrDeviceModel
           ? { model: author.vrDeviceModel, version: author.vrDeviceVersion || '' }
           : null,
       },
@@ -484,7 +484,7 @@ export class PostsService {
       vrMetadata: post.vrMetadata ? JSON.parse(post.vrMetadata) : null,
       tags: post.tags || [],
       topics: post.topics || [],
-      isLiked: false,
+      isLiked,
     };
   }
 
