@@ -197,66 +197,6 @@ export function RightPanel() {
           </Card>
         )}
 
-        {/* 热门媒体 */}
-        {hotMedia.length > 0 && (
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center justify-between text-sm">
-                <span className="flex items-center gap-2">
-                  <Video className="h-4 w-4 text-teal-500" />
-                  热门媒体
-                </span>
-                <Link href="/media" className="text-xs font-normal text-primary hover:underline">
-                  更多
-                </Link>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                {hotMedia.map((post) => {
-                  const thumb = post.mediaItems?.[0]?.thumbnailUrl;
-                  return (
-                    <Link
-                      key={post.id}
-                      href={`/post/${post.id}`}
-                      className="flex items-center gap-3 rounded-lg p-1.5 hover:bg-accent"
-                    >
-                      <div className="relative h-12 w-16 shrink-0 overflow-hidden rounded bg-muted">
-                        {thumb ? (
-                          <Image src={thumb} alt="" fill className="object-cover" sizes="64px" />
-                        ) : (
-                          <div className="flex h-full items-center justify-center">
-                            <Play className="h-4 w-4 text-muted-foreground" />
-                          </div>
-                        )}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm">{post.content || '媒体内容'}</p>
-                        <p className="text-xs text-muted-foreground">{post.author.displayName}</p>
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* 直播预告 */}
-        <Link href="/live">
-          <Card className="transition-all hover:shadow-md cursor-pointer border-dashed">
-            <CardContent className="flex items-center gap-3 p-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-500/10">
-                <Radio className="h-5 w-5 text-red-500" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium">直播功能</p>
-                <p className="text-xs text-muted-foreground">即将上线，敬请期待</p>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-
         {/* 页脚 */}
         <div className="px-2 text-xs text-muted-foreground">
           <Separator className="mb-3" />
