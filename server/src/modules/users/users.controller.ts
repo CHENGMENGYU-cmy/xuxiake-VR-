@@ -215,4 +215,217 @@ export class UsersController {
       }),
     };
   }
+
+  // ===== 用户帖子列表 =====
+  @Get(':username/posts')
+  async getUserPosts(
+    @Param('username') username: string,
+    @Query('type') postType?: string,
+    @Query('cursor') cursor?: string,
+    @Query('limit') limit?: string,
+    @Headers('authorization') auth?: string,
+  ) {
+    const user = await this.userRepo.findOne({ where: { username } });
+    if (!user) throw new NotFoundException('用户不存在');
+
+    const currentUserId = this.getUserId(auth || '');
+    const isOwner = currentUserId === user.id;
+    const take = limit ? parseInt(limit) : 20;
+
+    const qb = this.postRepo
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.author', 'author')
+      .leftJoinAndSelect('post.mediaItems', 'mediaItems')
+      .leftJoinAndSelect('post.tags', 'tags')
+      .leftJoinAndSelect('post.topics', 'topics')
+      .where('post.authorId = :userId', { userId: user.id })
+      .orderBy('post.createdAt', 'DESC')
+      .take(take + 1);
+
+    // 非本人只能看到公开内容
+    if (!isOwner) {
+      qb.andWhere('post.visibility = :vis', { vis: 'PUBLIC' });
+    }
+
+    if (postType) {
+      qb.andWhere('post.postType = :postType', { postType });
+    }
+
+    if (cursor) {
+      const cursorPost = await this.postRepo.findOne({ where: { id: cursor } });
+      if (cursorPost) {
+        qb.andWhere('post.createdAt < :cursorDate', { cursorDate: cursorPost.createdAt });
+      }
+    }
+
+    const posts = await qb.getMany();
+    const hasMore = posts.length > take;
+    const data = posts.slice(0, take);
+
+    // 查询当前用户的点赞状态
+    let likedIds = new Set<string>();
+    if (currentUserId && data.length > 0) {
+      const likes = await this.likeRepo.find({
+        where: { userId: currentUserId, postId: In(data.map((p) => p.id)) },
+      });
+      likedIds = new Set(likes.map((l) => l.postId));
+    }
+
+    return {
+      success: true,
+      data: data.map((p) => this.formatPost(p, likedIds.has(p.id))),
+      nextCursor: hasMore ? data[data.length - 1].id : null,
+      hasMore,
+    };
+  }
+
+  // ===== 用户媒体库 =====
+  @Get(':username/media')
+  async getUserMedia(
+    @Param('username') username: string,
+    @Query('type') mediaType?: string,
+    @Query('cursor') cursor?: string,
+    @Query('limit') limit?: string,
+    @Headers('authorization') auth?: string,
+  ) {
+    const user = await this.userRepo.findOne({ where: { username } });
+    if (!user) throw new NotFoundException('用户不存在');
+
+    const currentUserId = this.getUserId(auth || '');
+    const isOwner = currentUserId === user.id;
+    const take = limit ? parseInt(limit) : 30;
+
+    const qb = this.mediaRepo
+      .createQueryBuilder('media')
+      .leftJoinAndSelect('media.post', 'post')
+      .leftJoinAndSelect('post.author', 'author')
+      .where('post.authorId = :userId', { userId: user.id })
+      .andWhere('media.type IN (:...types)', { types: ['IMAGE', 'VIDEO'] })
+      .orderBy('post.createdAt', 'DESC')
+      .take(take + 1);
+
+    if (!isOwner) {
+      qb.andWhere('post.visibility = :vis', { vis: 'PUBLIC' });
+    }
+
+    if (mediaType && (mediaType === 'IMAGE' || mediaType === 'VIDEO')) {
+      qb.andWhere('media.type = :mediaType', { mediaType });
+    }
+
+    if (cursor) {
+      const cursorMedia = await this.mediaRepo.findOne({ where: { id: cursor } });
+      if (cursorMedia) {
+        qb.andWhere('media.createdAt < :cursorDate', { cursorDate: cursorMedia.createdAt });
+      }
+    }
+
+    const items = await qb.getMany();
+    const hasMore = items.length > take;
+    const data = items.slice(0, take);
+
+    return {
+      success: true,
+      data: data.map((m) => ({
+        id: m.id,
+        type: m.type,
+        url: m.url,
+        thumbnailUrl: m.thumbnailUrl,
+        vrFormat: m.vrFormat,
+        width: m.width,
+        height: m.height,
+        duration: m.duration,
+        post: m.post
+          ? {
+              id: m.post.id,
+              content: m.post.content?.slice(0, 100) || null,
+              likeCount: m.post.likeCount,
+              commentCount: m.post.commentCount,
+            }
+          : null,
+      })),
+      nextCursor: hasMore ? data[data.length - 1].id : null,
+      hasMore,
+    };
+  }
+
+  // ===== 用户点赞列表 =====
+  @Get(':username/likes')
+  async getUserLikes(
+    @Param('username') username: string,
+    @Query('cursor') cursor?: string,
+    @Query('limit') limit?: string,
+    @Headers('authorization') auth?: string,
+  ) {
+    const user = await this.userRepo.findOne({ where: { username } });
+    if (!user) throw new NotFoundException('用户不存在');
+
+    const currentUserId = this.getUserId(auth || '');
+    const isOwner = currentUserId === user.id;
+    const take = limit ? parseInt(limit) : 20;
+
+    // 非本人不能查看点赞列表（借鉴 Twitter 隐私策略）
+    if (!isOwner) {
+      return {
+        success: true,
+        data: [],
+        nextCursor: null,
+        hasMore: false,
+        visible: false,
+      };
+    }
+
+    const qb = this.likeRepo
+      .createQueryBuilder('like')
+      .leftJoinAndSelect('like.post', 'post')
+      .leftJoinAndSelect('post.author', 'author')
+      .leftJoinAndSelect('post.mediaItems', 'mediaItems')
+      .leftJoinAndSelect('post.tags', 'tags')
+      .leftJoinAndSelect('post.topics', 'topics')
+      .where('like.userId = :userId', { userId: user.id })
+      .orderBy('like.createdAt', 'DESC')
+      .take(take + 1);
+
+    if (cursor) {
+      const cursorLike = await this.likeRepo.findOne({ where: { id: cursor } });
+      if (cursorLike) {
+        qb.andWhere('like.createdAt < :cursorDate', { cursorDate: cursorLike.createdAt });
+      }
+    }
+
+    const likes = await qb.getMany();
+    const hasMore = likes.length > take;
+    const data = likes.slice(0, take);
+
+    return {
+      success: true,
+      data: data.map((like) => ({
+        likeId: like.id,
+        likedAt: like.createdAt,
+        post: like.post ? this.formatPost(like.post, true) : null,
+      })),
+      nextCursor: hasMore ? data[data.length - 1].id : null,
+      hasMore,
+      visible: true,
+    };
+  }
+
+  private formatPost(post: PostEntity, isLiked = false) {
+    const { passwordHash, ...author } = post.author || ({} as any);
+    return {
+      ...post,
+      author: {
+        ...author,
+        vrDeviceInfo: author?.vrDeviceModel
+          ? { model: author.vrDeviceModel, version: author.vrDeviceVersion || '' }
+          : null,
+      },
+      location: post.locationLat
+        ? { lat: Number(post.locationLat), lng: Number(post.locationLng), name: post.locationName || '' }
+        : null,
+      vrMetadata: post.vrMetadata ? JSON.parse(post.vrMetadata) : null,
+      tags: post.tags || [],
+      topics: post.topics || [],
+      isLiked,
+    };
+  }
 }
