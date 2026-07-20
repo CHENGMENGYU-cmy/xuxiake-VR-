@@ -91,6 +91,7 @@ export class PostsController {
       tagId,
       userId,
       followingOnly: followingOnly === 'true',
+      currentUserId: userId,
     });
     return { success: true, ...result };
   }
