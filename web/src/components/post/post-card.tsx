@@ -359,7 +359,7 @@ export function PostCard({ post }: PostCardProps) {
           )}
           onClick={handleLike}
         >
-          <Heart className={cn('h-4 w-4', isLiked && 'fill-current')} />
+          <Heart className={cn('h-4 w-4 transition-colors', isLiked && 'fill-current text-accent', likeAnimation && 'animate-[heartBeat_0.4s_ease-in-out]')} />
           赞
         </Button>
         <Link href={`/post/${post.id}`} className="flex-1">
