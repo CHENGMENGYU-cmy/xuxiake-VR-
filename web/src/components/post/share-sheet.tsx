@@ -114,6 +114,7 @@ export function ShareSheet({ open, onOpenChange, post }: ShareSheetProps) {
             <Share className="h-4 w-4 text-muted-foreground" />
             系统分享
           </button>
+          </div>
         </div>
       )}
 
