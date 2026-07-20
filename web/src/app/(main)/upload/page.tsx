@@ -77,6 +77,8 @@ export default function UploadPage() {
   const [linkData, setLinkData] = useState<LinkData | null>(null);
   const [linkUrl, setLinkUrl] = useState('');
   const [loadingLink, setLoadingLink] = useState(false);
+  const [showLinkAddon, setShowLinkAddon] = useState(false);
+  const [showTranslationAddon, setShowTranslationAddon] = useState(false);
 
   // Translation state
   const [sourceLang, setSourceLang] = useState('zh-CN');
