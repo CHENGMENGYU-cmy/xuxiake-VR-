@@ -266,33 +266,6 @@ export function Sidebar() {
               })}
             </div>
 
-            <Separator />
-
-            {mounted && user && suggestedUsers.length > 0 && (
-              <div className="p-3">
-                <p className="px-2 pb-1 text-xs font-medium uppercase text-muted-foreground">
-                  推荐关注
-                </p>
-                <div className="space-y-1">
-                  {suggestedUsers.map((u) => (
-                    <Link key={u.id} href={`/profile/${u.username}`}>
-                      <div className="flex items-center gap-3 rounded-lg px-2 py-2 hover:bg-accent">
-                        <Avatar className="h-8 w-8">
-                          <AvatarImage src={u.avatarUrl} alt={u.displayName} />
-                          <AvatarFallback>{u.displayName[0]}</AvatarFallback>
-                        </Avatar>
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm font-medium">{u.displayName}</p>
-                          <p className="truncate text-xs text-muted-foreground">
-                            {u.matchReasons?.length ? u.matchReasons[0] : (u.bio || `@${u.username}`)}
-                          </p>
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </aside>
