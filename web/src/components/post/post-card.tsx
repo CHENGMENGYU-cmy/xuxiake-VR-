@@ -398,6 +398,15 @@ export function PostCard({ post, onLikeChange }: PostCardProps) {
         </Button>
       </div>
 
+      {/* 内联评论区 */}
+      {showComments && (
+        <InlineComment
+          postId={post.id}
+          commentCount={commentCount}
+          onCountChange={(delta) => setCommentCount((prev) => prev + delta)}
+        />
+      )}
+
       {/* 分享面板 */}
       <ShareSheet open={showShare} onOpenChange={setShowShare} post={post} />
 
