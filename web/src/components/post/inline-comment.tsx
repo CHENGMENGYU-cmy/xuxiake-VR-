@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { Send, Loader2, Trash2, ChevronRight } from 'lucide-react';
+import { Send, Loader2, Trash2, ChevronRight, Reply, X } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuthStore } from '@/stores/auth-store';
 import { getComments, createComment, deleteComment, CommentData } from '@/lib/post-api';
@@ -34,6 +34,7 @@ export function InlineComment({ postId, commentCount, onCountChange }: InlineCom
   const [loading, setLoading] = useState(true);
   const [content, setContent] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [replyTo, setReplyTo] = useState<CommentData | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -53,9 +54,21 @@ export function InlineComment({ postId, commentCount, onCountChange }: InlineCom
     if (!content.trim() || submitting || !currentUser) return;
     setSubmitting(true);
     try {
-      const newComment = await createComment(postId, content.trim());
-      setComments((prev) => [newComment, ...prev.slice(0, 2)]);
+      const newComment = await createComment(postId, content.trim(), replyTo?.id);
+      if (replyTo) {
+        // 回复：添加到父评论的 replies 中
+        setComments((prev) =>
+          prev.map((c) =>
+            c.id === replyTo.id
+              ? { ...c, replies: [...(c.replies || []), newComment] }
+              : c
+          )
+        );
+      } else {
+        setComments((prev) => [newComment, ...prev.slice(0, 2)]);
+      }
       setContent('');
+      setReplyTo(null);
       onCountChange?.(1);
     } catch {
       toast.error('评论失败');
@@ -64,10 +77,25 @@ export function InlineComment({ postId, commentCount, onCountChange }: InlineCom
     }
   };
 
+  const handleReply = (comment: CommentData) => {
+    setReplyTo(comment);
+    setContent('');
+    setTimeout(() => inputRef.current?.focus(), 50);
+  };
+
   const handleDelete = async (commentId: string) => {
     try {
       await deleteComment(commentId);
-      setComments((prev) => prev.filter((c) => c.id !== commentId));
+      // 从列表中移除（包括从 replies 中移除）
+      setComments((prev) => {
+        const result: CommentData[] = [];
+        for (const c of prev) {
+          if (c.id === commentId) continue;
+          const filteredReplies = c.replies?.filter((r) => r.id !== commentId);
+          result.push({ ...c, replies: filteredReplies });
+        }
+        return result;
+      });
       onCountChange?.(-1);
       toast.success('已删除');
     } catch {
@@ -79,32 +107,48 @@ export function InlineComment({ postId, commentCount, onCountChange }: InlineCom
     <div className="border-t bg-muted/30">
       {/* 输入框 */}
       {currentUser && (
-        <div className="flex items-center gap-2 border-b px-4 py-2.5">
-          <Avatar className="h-7 w-7 flex-shrink-0">
-            <AvatarImage src={currentUser.avatarUrl} alt={currentUser.displayName} />
-            <AvatarFallback className="text-[10px]">{currentUser.displayName[0]}</AvatarFallback>
-          </Avatar>
-          <input
-            ref={inputRef}
-            type="text"
-            placeholder="写评论..."
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                handleSubmit();
-              }
-            }}
-            className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground/60"
-          />
-          <button
-            onClick={handleSubmit}
-            disabled={!content.trim() || submitting}
-            className="flex-shrink-0 text-primary disabled:text-muted-foreground/40"
-          >
-            {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-          </button>
+        <div className="border-b px-4 py-2.5">
+          {/* 回复指示器 */}
+          {replyTo && (
+            <div className="mb-1.5 flex items-center gap-1.5 text-xs text-muted-foreground">
+              <Reply className="h-3 w-3" />
+              <span>回复</span>
+              <span className="font-medium text-foreground">{replyTo.author.displayName}</span>
+              <button onClick={() => setReplyTo(null)} className="ml-1 hover:text-foreground">
+                <X className="h-3 w-3" />
+              </button>
+            </div>
+          )}
+          <div className="flex items-center gap-2">
+            <Avatar className="h-7 w-7 flex-shrink-0">
+              <AvatarImage src={currentUser.avatarUrl} alt={currentUser.displayName} />
+              <AvatarFallback className="text-[10px]">{currentUser.displayName[0]}</AvatarFallback>
+            </Avatar>
+            <input
+              ref={inputRef}
+              type="text"
+              placeholder={replyTo ? `回复 ${replyTo.author.displayName}...` : '写评论...'}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSubmit();
+                }
+                if (e.key === 'Escape') {
+                  setReplyTo(null);
+                }
+              }}
+              className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground/60"
+            />
+            <button
+              onClick={handleSubmit}
+              disabled={!content.trim() || submitting}
+              className="flex-shrink-0 text-primary disabled:text-muted-foreground/40"
+            >
+              {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+            </button>
+          </div>
         </div>
       )}
 
@@ -116,30 +160,74 @@ export function InlineComment({ postId, commentCount, onCountChange }: InlineCom
       ) : comments.length > 0 ? (
         <div className="divide-y">
           {comments.map((comment) => (
-            <div key={comment.id} className="group flex gap-2.5 px-4 py-2.5">
-              <Link href={`/profile/${comment.author.username}`} className="flex-shrink-0">
-                <Avatar className="h-7 w-7">
-                  <AvatarImage src={comment.author.avatarUrl} alt={comment.author.displayName} />
-                  <AvatarFallback className="text-[10px]">{comment.author.displayName[0]}</AvatarFallback>
-                </Avatar>
-              </Link>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-baseline gap-1.5">
-                  <Link href={`/profile/${comment.author.username}`} className="text-xs font-medium hover:underline">
-                    {comment.author.displayName}
-                  </Link>
-                  <span className="text-[10px] text-muted-foreground">{formatShortTime(comment.createdAt)}</span>
-                  {currentUser?.id === comment.author.id && (
-                    <button
-                      onClick={() => handleDelete(comment.id)}
-                      className="ml-auto text-[10px] text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 hover:text-destructive"
-                    >
-                      <Trash2 className="h-3 w-3" />
-                    </button>
-                  )}
+            <div key={comment.id}>
+              {/* 主评论 */}
+              <div className="group flex gap-2.5 px-4 py-2.5">
+                <Link href={`/profile/${comment.author.username}`} className="flex-shrink-0">
+                  <Avatar className="h-7 w-7">
+                    <AvatarImage src={comment.author.avatarUrl} alt={comment.author.displayName} />
+                    <AvatarFallback className="text-[10px]">{comment.author.displayName[0]}</AvatarFallback>
+                  </Avatar>
+                </Link>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-baseline gap-1.5">
+                    <Link href={`/profile/${comment.author.username}`} className="text-xs font-medium hover:underline">
+                      {comment.author.displayName}
+                    </Link>
+                    <span className="text-[10px] text-muted-foreground">{formatShortTime(comment.createdAt)}</span>
+                    <div className="ml-auto flex items-center gap-1.5 opacity-0 transition-opacity group-hover:opacity-100">
+                      <button
+                        onClick={() => handleReply(comment)}
+                        className="text-[10px] text-muted-foreground hover:text-foreground"
+                      >
+                        <Reply className="h-3 w-3" />
+                      </button>
+                      {currentUser?.id === comment.author.id && (
+                        <button
+                          onClick={() => handleDelete(comment.id)}
+                          className="text-[10px] text-muted-foreground hover:text-destructive"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  <p className="text-sm leading-relaxed">{comment.content}</p>
                 </div>
-                <p className="text-sm leading-relaxed">{comment.content}</p>
               </div>
+
+              {/* 回复列表 */}
+              {comment.replies && comment.replies.length > 0 && (
+                <div className="ml-10 border-l-2 border-muted pl-3">
+                  {comment.replies.map((reply) => (
+                    <div key={reply.id} className="group flex gap-2 py-2">
+                      <Link href={`/profile/${reply.author.username}`} className="flex-shrink-0">
+                        <Avatar className="h-6 w-6">
+                          <AvatarImage src={reply.author.avatarUrl} alt={reply.author.displayName} />
+                          <AvatarFallback className="text-[9px]">{reply.author.displayName[0]}</AvatarFallback>
+                        </Avatar>
+                      </Link>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-baseline gap-1.5">
+                          <Link href={`/profile/${reply.author.username}`} className="text-xs font-medium hover:underline">
+                            {reply.author.displayName}
+                          </Link>
+                          <span className="text-[10px] text-muted-foreground">{formatShortTime(reply.createdAt)}</span>
+                          {currentUser?.id === reply.author.id && (
+                            <button
+                              onClick={() => handleDelete(reply.id)}
+                              className="ml-auto text-[10px] text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 hover:text-destructive"
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </button>
+                          )}
+                        </div>
+                        <p className="text-xs leading-relaxed">{reply.content}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>
