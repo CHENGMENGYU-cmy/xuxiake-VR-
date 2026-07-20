@@ -94,7 +94,10 @@ export function PostCard({ post, onLikeChange }: PostCardProps) {
       (entries) => {
         if (entries[0].isIntersecting && !viewCountedRef.current) {
           viewCountedRef.current = true;
-          incrementViewCount(post.id).catch(() => {});
+          // 只对真实帖子（UUID 格式）计数，跳过测试数据
+          if (/^[0-9a-f]{8}-[0-9a-f]{4}-/.test(post.id)) {
+            incrementViewCount(post.id).catch(() => {});
+          }
           observer.disconnect();
         }
       },
