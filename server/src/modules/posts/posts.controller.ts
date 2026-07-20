@@ -97,8 +97,12 @@ export class PostsController {
   }
 
   @Get(':id')
-  async getPost(@Param('id') id: string) {
-    const post = await this.postsService.getPostById(id);
+  async getPost(@Param('id') id: string, @Headers('authorization') auth?: string) {
+    let userId: string | undefined;
+    if (auth) {
+      try { userId = this.getUserId(auth); } catch { /* 游客模式 */ }
+    }
+    const post = await this.postsService.getPostById(id, userId);
     return { success: true, data: post };
   }
 
