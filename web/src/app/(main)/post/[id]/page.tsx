@@ -50,14 +50,7 @@ function PostDetailContent({ postId }: { postId: string }) {
   return (
     <div className="mx-auto max-w-2xl space-y-4">
       {/* 返回按钮 */}
-      <div className="flex items-center gap-2">
-        <Link href="/">
-          <Button variant="ghost" size="sm" className="gap-1">
-            <ArrowLeft className="h-4 w-4" />
-            返回
-          </Button>
-        </Link>
-      </div>
+      <BackButton />
 
       {/* 帖子内容 */}
       <PostCard post={post} />
