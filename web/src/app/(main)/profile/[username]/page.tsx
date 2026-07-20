@@ -3,20 +3,20 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter, notFound } from 'next/navigation';
 import Link from 'next/link';
-import { Link2, Calendar, Settings, UserCheck, Loader2 } from 'lucide-react';
+import { Link2, Calendar, Loader2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Separator } from '@/components/ui/separator';
-import { PostCard } from '@/components/post/post-card';
 import { useAuthStore } from '@/stores/auth-store';
-import { usePostStore } from '@/stores/post-store';
 import apiClient from '@/lib/api-client';
 import { followUser, unfollowUser, getFollowers, getFollowing, getOrCreateDirectConversation } from '@/lib/social-api';
 import { toast } from 'sonner';
-import type { User, Post } from '@/types';
+import { PostsTab } from './components/posts-tab';
+import { MediaTab } from './components/media-tab';
+import { LikesTab } from './components/likes-tab';
+import type { User } from '@/types';
 
 export default function ProfilePage() {
   const params = useParams();
