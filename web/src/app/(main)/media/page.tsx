@@ -183,28 +183,6 @@ function MediaContent() {
         </div>
       )}
 
-      {/* 排序切换 */}
-      <div className="flex gap-1 overflow-x-auto scrollbar-none">
-        {sortTabs.map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeSort === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveSort(tab.id)}
-              className={`flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
-                isActive
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-muted text-muted-foreground hover:bg-muted/80'
-              }`}
-            >
-              <Icon className="h-3.5 w-3.5" />
-              {tab.label}
-            </button>
-          );
-        })}
-      </div>
-
       {/* 媒体网格 */}
       {isLoading ? (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
