@@ -790,6 +790,28 @@ export default function UploadPage() {
             )}
           </div>
 
+          {/* 附加内容 */}
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Button
+              variant={showLinkAddon ? 'default' : 'outline'}
+              size="sm"
+              className="gap-1.5"
+              onClick={() => setShowLinkAddon(!showLinkAddon)}
+            >
+              <Link2 className="h-3.5 w-3.5" />
+              链接
+            </Button>
+            <Button
+              variant={showTranslationAddon ? 'default' : 'outline'}
+              size="sm"
+              className="gap-1.5"
+              onClick={() => setShowTranslationAddon(!showTranslationAddon)}
+            >
+              <Languages className="h-3.5 w-3.5" />
+              翻译
+            </Button>
+          </div>
+
           {/* 可见性控制 */}
           <div className="mt-4">
             <VisibilityControl
