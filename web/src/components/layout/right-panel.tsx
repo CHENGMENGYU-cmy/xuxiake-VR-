@@ -42,6 +42,9 @@ export function RightPanel() {
       getRecommendedCommunities(1, 20)
         .then((res) => setRecommendedCommunities(shuffleAndPick(res.data || [], COMMUNITY_PICK_COUNT)))
         .catch(() => {});
+      getRecommendedUsers(1, 20)
+        .then((res) => setSuggestedUsers(shuffleAndPick(res.data || [], 3)))
+        .catch(() => {});
     }
   }, [isAuthenticated]);
 
