@@ -29,20 +29,28 @@ import { useChatStore } from '@/stores/chat-store';
 import { useNotificationStore } from '@/stores/notification-store';
 import { cn } from '@/lib/utils';
 
-// 旅行内容
-const travelItems = [
+// 顶部导航
+const navItems = [
   { href: '/feed', label: '首页', icon: Home },
   { href: '/explore', label: '探索发现', icon: Compass },
   { href: '/topics', label: '话题广场', icon: Hash },
   { href: '/discover', label: '发现好友', icon: UserPlus },
   { href: '/upload', label: '上传内容', icon: Upload },
+];
+
+// 媒体广场
+const mediaItems = [
   { href: '/media?type=VIDEO', label: '旅行视频', icon: Video, color: 'text-teal-500' },
   { href: '/media?type=IMAGE', label: '旅行图片', icon: Image, color: 'text-orange-500' },
   { href: '/media?type=AUDIO', label: '音频记录', icon: Music, color: 'text-teal-400' },
+  { href: '/live', label: '直播', icon: Radio, color: 'text-red-500', badge: '即将上线' },
+];
+
+// 旅行工具
+const travelTools = [
   { href: '/routes', label: '路线', icon: Route, color: 'text-primary' },
   { href: '/journeys', label: '旅程', icon: Map, color: 'text-teal-500' },
   { href: '/guides', label: '攻略', icon: BookOpen, color: 'text-orange-500' },
-  { href: '/live', label: '直播', icon: Radio, color: 'text-red-500', badge: '即将上线' },
 ];
 
 // 个人中心
