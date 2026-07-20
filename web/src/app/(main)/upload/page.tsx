@@ -670,8 +670,8 @@ export default function UploadPage() {
               </>
             )}
 
-            {/* LINK */}
-            {activeTab === 'LINK' && (
+            {/* LINK 附加 */}
+            {showLinkAddon && (
               <div className="space-y-4">
                 <div className="flex gap-2">
                   <Input type="url" placeholder="https://example.com" value={linkUrl}
