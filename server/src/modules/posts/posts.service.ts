@@ -39,8 +39,8 @@ export class PostsService {
     private readonly notificationsService: NotificationsService,
   ) {}
 
-  async getPosts(options: { cursor?: string; limit?: number; sort?: string; page?: number; postType?: string; tagId?: string; userId?: string; followingOnly?: boolean } = {}) {
-    const { cursor, limit = 10, sort = 'latest', page = 1, postType, tagId, userId, followingOnly } = options;
+  async getPosts(options: { cursor?: string; limit?: number; sort?: string; page?: number; postType?: string; tagId?: string; userId?: string; followingOnly?: boolean; currentUserId?: string } = {}) {
+    const { cursor, limit = 10, sort = 'latest', page = 1, postType, tagId, userId, followingOnly, currentUserId } = options;
 
     // 关注动态模式：查询关注列表
     let followingIds: string[] | null = null;
@@ -55,10 +55,10 @@ export class PostsService {
 
     // trending 和 hot 使用 offset 分页（排名动态变化），latest 使用 cursor 分页
     if (sort === 'trending') {
-      return this.getTrendingPosts(limit, page, postType, tagId, followingIds);
+      return this.getTrendingPosts(limit, page, postType, tagId, followingIds, currentUserId);
     }
     if (sort === 'hot') {
-      return this.getHotPosts(limit, page, postType, tagId, followingIds);
+      return this.getHotPosts(limit, page, postType, tagId, followingIds, currentUserId);
     }
 
     // 默认 latest：按时间倒序，cursor 分页
@@ -97,8 +97,17 @@ export class PostsService {
     const hasMore = posts.length > limit;
     const data = posts.slice(0, limit);
 
+    // 查询当前用户的点赞状态
+    let likedIds = new Set<string>();
+    if (currentUserId && data.length > 0) {
+      const likes = await this.likeRepo.find({
+        where: { userId: currentUserId, postId: In(data.map((p) => p.id)) },
+      });
+      likedIds = new Set(likes.map((l) => l.postId));
+    }
+
     return {
-      data: data.map((p) => this.formatPost(p)),
+      data: data.map((p) => this.formatPost(p, likedIds.has(p.id))),
       nextCursor: hasMore ? data[data.length - 1].id : null,
       hasMore,
     };
