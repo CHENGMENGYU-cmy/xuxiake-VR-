@@ -158,6 +158,9 @@ export default function UploadPage() {
   };
 
   const handleTabChange = (tab: UploadTab) => {
+    if (tab === 'ROUTE') { router.push('/upload/route-creator'); return; }
+    if (tab === 'JOURNEY') { router.push('/upload/journey-creator'); return; }
+    if (tab === 'GUIDE') { router.push('/upload/guide-creator'); return; }
     setActiveTab(tab);
     resetMedia();
     setLinkData(null);
