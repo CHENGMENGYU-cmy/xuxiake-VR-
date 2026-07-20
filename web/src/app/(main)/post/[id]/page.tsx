@@ -15,6 +15,18 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
   return <PostDetailContent postId={id} />;
 }
 
+function BackButton() {
+  const router = useRouter();
+  return (
+    <div className="flex items-center gap-2">
+      <Button variant="ghost" size="sm" className="gap-1" onClick={() => router.back()}>
+        <ArrowLeft className="h-4 w-4" />
+        返回
+      </Button>
+    </div>
+  );
+}
+
 function PostDetailContent({ postId }: { postId: string }) {
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
