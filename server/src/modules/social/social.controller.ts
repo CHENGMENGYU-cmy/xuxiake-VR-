@@ -694,6 +694,8 @@ export class SocialController {
           createdAt: c.createdAt,
           matchScore: 0,
           matchReasons: [],
+          friendsInCommunity: [],
+          recentPostCount: 0,
         };
       });
     }
