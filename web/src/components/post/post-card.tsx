@@ -81,6 +81,26 @@ export function PostCard({ post, onLikeChange }: PostCardProps) {
 
   const isOwner = currentUser?.id === post.author.id;
 
+  // 浏览量计数：帖子卡片进入视口时计数一次
+  const cardRef = useRef<HTMLDivElement>(null);
+  const viewCountedRef = useRef(false);
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el || viewCountedRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !viewCountedRef.current) {
+          viewCountedRef.current = true;
+          incrementViewCount(post.id).catch(() => {});
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.5 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [post.id]);
+
   // 如果帖子作者是当前用户，使用 authStore 中的最新头像
   const authorAvatarUrl = currentUser && post.author.username === currentUser.username
     ? currentUser.avatarUrl
