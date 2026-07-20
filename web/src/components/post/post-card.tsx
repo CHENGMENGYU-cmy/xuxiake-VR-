@@ -109,6 +109,7 @@ export function PostCard({ post, onLikeChange }: PostCardProps) {
       } else {
         await likePost(post.id);
       }
+      onLikeChange?.(!wasLiked, wasLiked ? prevCount - 1 : prevCount + 1);
     } catch {
       setIsLiked(wasLiked);
       setLikeCount(prevCount);
