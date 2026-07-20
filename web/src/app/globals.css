@@ -169,6 +169,15 @@
   }
 }
 
+/* ========= 点赞心跳动画 ========= */
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  15% { transform: scale(1.3); }
+  30% { transform: scale(0.95); }
+  45% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
 /* ========= 流畅动效 ========= */
 @layer base {
   /* 全局过渡 — 柔和自然 */
