@@ -717,6 +717,6 @@ add_bullet('NestJS Documentation: https://docs.nestjs.com/')
 add_bullet('Next.js Documentation: https://nextjs.org/docs')
 
 # ── 保存 ──
-output_path = r'D:\Other\Cluade CodeProjects\XuXiaKe\研究计划与研究方案.docx'
+output_path = r'D:\Other\Cluade CodeProjects\XuXiaKe\徐霞客社区研究计划与研究方案.docx'
 doc.save(output_path)
 print(f'文档已保存到: {output_path}')
