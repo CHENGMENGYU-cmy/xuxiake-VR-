@@ -16,6 +16,7 @@ import {
 import { MediaViewer } from './media-viewer';
 import { EditPostDialog } from './edit-post-dialog';
 import { ShareSheet } from './share-sheet';
+import { InlineComment } from './inline-comment';
 import {
   Dialog,
   DialogContent,
