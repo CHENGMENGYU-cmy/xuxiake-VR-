@@ -66,9 +66,10 @@ const budgetLabels: Record<string, string> = { BUDGET: '💰穷游', MID: '💳�
 
 interface PostCardProps {
   post: Post;
+  onLikeChange?: (isLiked: boolean, likeCount: number) => void;
 }
 
-export function PostCard({ post }: PostCardProps) {
+export function PostCard({ post, onLikeChange }: PostCardProps) {
   const { user: currentUser } = useAuthStore();
   const removePost = usePostStore((s) => s.removePost);
   const [isLiked, setIsLiked] = useState(post.isLiked);
