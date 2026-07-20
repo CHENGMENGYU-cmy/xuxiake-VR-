@@ -28,9 +28,6 @@ import { useUIStore } from '@/stores/ui-store';
 import { useChatStore } from '@/stores/chat-store';
 import { useNotificationStore } from '@/stores/notification-store';
 import { cn } from '@/lib/utils';
-import apiClient from '@/lib/api-client';
-import { getRecommendedUsers } from '@/lib/social-api';
-import type { RecommendedUser } from '@/types';
 
 // 内容发现
 const discoverItems = [
