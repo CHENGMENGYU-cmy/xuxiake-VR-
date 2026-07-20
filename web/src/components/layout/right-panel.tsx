@@ -29,8 +29,8 @@ export function RightPanel() {
   const [recommendedCommunities, setRecommendedCommunities] = useState<Community[]>([]);
   const [hotTopics, setHotTopics] = useState<Topic[]>([]);
   const [hotPosts, setHotPosts] = useState<Post[]>([]);
-  const [hotMedia, setHotMedia] = useState<Post[]>([]);
   const [showAllTopics, setShowAllTopics] = useState(false);
+  const [suggestedUsers, setSuggestedUsers] = useState<RecommendedUser[]>([]);
 
   useEffect(() => {
     getHotTopics(8).then(setHotTopics).catch(() => {});
