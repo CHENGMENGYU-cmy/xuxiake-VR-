@@ -156,7 +156,7 @@ export function PostCard({ post, onLikeChange }: PostCardProps) {
   };
 
   return (
-    <Card className="overflow-hidden shadow-sm transition-shadow hover:shadow-md">
+    <Card ref={cardRef} className="overflow-hidden shadow-sm transition-shadow hover:shadow-md">
       {/* 作者信息头 */}
       <div className="flex items-center gap-3 p-4">
         <Link href={`/profile/${post.author.username}`}>
