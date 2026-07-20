@@ -441,19 +441,61 @@ export class PostsService {
     return this.getPostById(postId, userId);
   }
 
-  async getComments(postId: string) {
-    const comments = await this.commentRepo.find({
-      where: { postId },
+  async getComments(postId: string, options: { page?: number; limit?: number } = {}) {
+    const { page = 1, limit = 20 } = options;
+    const offset = (page - 1) * limit;
+
+    // 查询顶级评论（分页）
+    const [topLevel, total] = await this.commentRepo.findAndCount({
+      where: { postId, parentId: IsNull() },
       relations: { author: true },
       order: { createdAt: 'DESC' },
+      skip: offset,
+      take: limit,
     });
-    return comments.map((c) => {
-      const { passwordHash, ...author } = c.author;
-      return {
-        ...c,
-        author: { ...author, vrDeviceInfo: null },
-      };
-    });
+
+    // 查询这些顶级评论的回复
+    const commentIds = topLevel.map((c) => c.id);
+    let replies: Comment[] = [];
+    if (commentIds.length > 0) {
+      replies = await this.commentRepo.find({
+        where: { postId, parentId: In(commentIds) },
+        relations: { author: true },
+        order: { createdAt: 'ASC' },
+      });
+    }
+
+    // 构建树形结构
+    const replyMap = new Map<string, Comment[]>();
+    for (const reply of replies) {
+      const list = replyMap.get(reply.parentId!) || [];
+      list.push(reply);
+      replyMap.set(reply.parentId!, list);
+    }
+
+    const data = topLevel.map((c) => ({
+      ...this.formatComment(c),
+      replies: (replyMap.get(c.id) || []).map((r) => this.formatComment(r)),
+    }));
+
+    return { data, total, page, hasMore: offset + limit < total };
+  }
+
+  private formatComment(comment: Comment) {
+    const { passwordHash, ...author } = comment.author || ({} as any);
+    return {
+      id: comment.id,
+      content: comment.content,
+      postId: comment.postId,
+      parentId: comment.parentId,
+      createdAt: comment.createdAt,
+      author: {
+        ...author,
+        vrDeviceInfo: author?.vrDeviceModel
+          ? { model: author.vrDeviceModel, version: author.vrDeviceVersion || '' }
+          : null,
+      },
+    };
   }
 
   async createComment(userId: string, postId: string, dto: CreateCommentDto) {
@@ -472,13 +514,21 @@ export class PostsService {
     post.commentCount += 1;
     await this.postRepo.save(post);
 
+    // 通知帖子作者
     if (post.authorId !== userId) {
       await this.notificationsService.create(post.authorId, userId, 'COMMENT', '有人评论了你的内容', postId);
     }
 
+    // 如果是回复评论，通知被回复的用户
+    if (dto.parentId) {
+      const parentComment = await this.commentRepo.findOne({ where: { id: dto.parentId } });
+      if (parentComment && parentComment.authorId !== userId && parentComment.authorId !== post.authorId) {
+        await this.notificationsService.create(parentComment.authorId, userId, 'COMMENT', '有人回复了你的评论', postId);
+      }
+    }
+
     const commentAuthor = await this.userRepo.findOne({ where: { id: userId } });
-    const { passwordHash: _, ...author } = commentAuthor || {} as any;
-    return { ...comment, author: author || null };
+    return this.formatComment({ ...comment, author: commentAuthor } as Comment);
   }
 
   async deleteComment(userId: string, commentId: string) {
@@ -486,14 +536,29 @@ export class PostsService {
     if (!comment) throw new NotFoundException('评论不存在');
     if (comment.authorId !== userId) throw new NotFoundException('无权删除此评论');
 
+    // 递归获取所有子评论 ID
+    const allIds = await this.getDescendantCommentIds(commentId);
+    allIds.push(commentId);
+
     const post = await this.postRepo.findOne({ where: { id: comment.postId } });
-    if (post && post.commentCount > 0) {
-      post.commentCount -= 1;
+    if (post) {
+      post.commentCount = Math.max(0, post.commentCount - allIds.length);
       await this.postRepo.save(post);
     }
 
-    await this.commentRepo.remove(comment);
+    await this.commentRepo.delete(allIds);
     return { message: '删除成功' };
+  }
+
+  private async getDescendantCommentIds(parentId: string): Promise<string[]> {
+    const children = await this.commentRepo.find({ where: { parentId } });
+    const ids: string[] = [];
+    for (const child of children) {
+      ids.push(child.id);
+      const subIds = await this.getDescendantCommentIds(child.id);
+      ids.push(...subIds);
+    }
+    return ids;
   }
 
   formatPost(post: Post, isLiked = false) {
