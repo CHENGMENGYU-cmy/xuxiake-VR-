@@ -112,7 +112,17 @@ export function LikesTab({ username, isOwnProfile }: LikesTabProps) {
       ) : posts.length > 0 ? (
         <div className="space-y-4">
           {posts.map((post) => (
-            <PostCard key={post.id} post={post} />
+            <PostCard
+              key={post.id}
+              post={post}
+              onLikeChange={(isLiked) => {
+                if (!isLiked) {
+                  // 取消点赞时从列表中移除
+                  setPosts((prev) => prev.filter((p) => p.id !== post.id));
+                  setTotal((prev) => Math.max(0, prev - 1));
+                }
+              }}
+            />
           ))}
           {loadingMore && (
             <div className="flex justify-center py-4">
