@@ -142,9 +142,16 @@ export class PostsController {
   }
 
   @Get(':id/comments')
-  async getComments(@Param('id') id: string) {
-    const comments = await this.postsService.getComments(id);
-    return { success: true, data: comments };
+  async getComments(
+    @Param('id') id: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    const result = await this.postsService.getComments(id, {
+      page: page ? parseInt(page) : 1,
+      limit: limit ? parseInt(limit) : 20,
+    });
+    return { success: true, ...result };
   }
 
   @Post(':id/comments')
