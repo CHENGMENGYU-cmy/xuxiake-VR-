@@ -407,7 +407,7 @@ export class SocialController {
         const { passwordHash, ...userDto } = u;
         return {
           ...userDto,
-          vrDeviceInfo: u.vrDeviceModel ? { model: u.vrDeviceModel, version: u.vrDeviceVersion } : null,
+          vrDeviceInfo: u.vrDeviceModel ? { model: u.vrDeviceModel, version: u.vrDeviceVersion || '' } : null,
           interests: [],
           matchReasons: ['新加入的用户'],
           matchScore: 0,
