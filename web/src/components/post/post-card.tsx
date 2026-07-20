@@ -95,13 +95,34 @@ export function PostCard({ post }: PostCardProps) {
     ? currentUser.avatarUrl
     : post.author.avatarUrl;
 
-  const handleLike = () => {
-    if (isLiked) {
-      setLikeCount((c) => c - 1);
-    } else {
-      setLikeCount((c) => c + 1);
+  const likeAnimRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [likeAnimation, setLikeAnimation] = useState(false);
+
+  const handleLike = async () => {
+    if (!currentUser) {
+      toast.error('请先登录');
+      return;
     }
-    setIsLiked(!isLiked);
+    const wasLiked = isLiked;
+    const prevCount = likeCount;
+    // 乐观更新
+    setIsLiked(!wasLiked);
+    setLikeCount(wasLiked ? prevCount - 1 : prevCount + 1);
+    // 触发动画
+    setLikeAnimation(true);
+    if (likeAnimRef.current) clearTimeout(likeAnimRef.current);
+    likeAnimRef.current = setTimeout(() => setLikeAnimation(false), 400);
+    try {
+      if (wasLiked) {
+        await unlikePost(post.id);
+      } else {
+        await likePost(post.id);
+      }
+    } catch {
+      setIsLiked(wasLiked);
+      setLikeCount(prevCount);
+      toast.error('操作失败，请重试');
+    }
   };
 
   const handleCopyLink = () => {
