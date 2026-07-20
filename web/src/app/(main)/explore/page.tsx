@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { TrendingUp, Flame, Clock, Home, Video, Image, Music, Map, Compass, BookOpen, MessageSquare } from 'lucide-react';
 import { FeedList } from '@/components/feed/feed-list';
-import type { PostSortType, PostType } from '@/types';
+import type { PostSortType } from '@/lib/post-api';
+import type { PostType } from '@/types';
 
 type SortTab = 'trending' | 'latest' | 'hot';
 
