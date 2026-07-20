@@ -60,10 +60,10 @@ function MediaContent() {
     }
   }, [typeParam]);
 
-  // 筛选/排序变化时获取数据
+  // 获取媒体数据
   useEffect(() => {
-    fetchPosts(tabSortMap[activeSort], { postType: 'VR_MEDIA' });
-  }, [activeSort, fetchPosts]);
+    fetchPosts('latest', { postType: 'VR_MEDIA' });
+  }, [fetchPosts]);
 
   const handleTypeChange = (type: MediaType | 'ALL') => {
     setMediaType(type);
