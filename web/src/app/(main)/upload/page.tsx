@@ -159,6 +159,8 @@ export default function UploadPage() {
     resetMedia();
     setLinkData(null);
     setLinkUrl('');
+    setShowLinkAddon(false);
+    setShowTranslationAddon(false);
   };
 
   // Video upload
