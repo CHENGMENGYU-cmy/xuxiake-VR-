@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { MediaCard } from '@/components/media/media-card';
 import { usePostStore } from '@/stores/post-store';
+import { useAuthStore } from '@/stores/auth-store';
 import { getHotTopics } from '@/lib/post-api';
 import { getRecommendedUsers } from '@/lib/social-api';
 import type { MediaType, Topic, RecommendedUser } from '@/types';
