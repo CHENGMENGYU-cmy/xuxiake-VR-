@@ -245,6 +245,11 @@ export function InlineComment({ postId, commentCount, onCountChange }: InlineCom
       {commentCount > 3 && (
         <Link
           href={`/post/${postId}`}
+          onClick={() => {
+            try {
+              sessionStorage.setItem('feed-scroll-y', String(window.scrollY));
+            } catch {}
+          }}
           className="flex items-center justify-center gap-1 border-t px-4 py-2 text-xs text-primary hover:bg-muted/50"
         >
           查看全部 {commentCount} 条评论
