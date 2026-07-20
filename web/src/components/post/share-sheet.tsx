@@ -90,8 +90,7 @@ export function ShareSheet({ open, onOpenChange, post }: ShareSheetProps) {
       {open && (
         <div
           ref={menuRef}
-          className="absolute bottom-full right-0 z-50 mb-0.5 w-36 overflow-hidden rounded-lg border bg-popover shadow-lg"
-          style={{ transform: 'translateY(1px)' }}
+          className="w-36 overflow-hidden rounded-lg border bg-popover shadow-lg"
         >
           <button
             onClick={handleCopyLink}
