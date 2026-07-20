@@ -26,14 +26,12 @@ import { PublishPreview } from '@/components/upload/publish-preview';
 import { saveDraftToLocal, clearLocalDraft } from '@/lib/draft-api';
 import { translateText, detectLanguage } from '@/lib/translation-api';
 
-type UploadTab = 'VIDEO' | 'IMAGE' | 'AUDIO' | 'LINK' | 'TRANSLATION';
+type UploadTab = 'VIDEO' | 'IMAGE' | 'AUDIO';
 
 const tabs: { key: UploadTab; label: string; icon: React.ElementType; color: string }[] = [
   { key: 'VIDEO', label: 'VR视频', icon: Video, color: 'text-primary' },
   { key: 'IMAGE', label: 'VR图片', icon: Image, color: 'text-teal-500' },
   { key: 'AUDIO', label: '音频', icon: Mic, color: 'text-accent' },
-  { key: 'LINK', label: '链接', icon: Link2, color: 'text-orange-500' },
-  { key: 'TRANSLATION', label: '翻译', icon: Languages, color: 'text-teal-400' },
 ];
 
 const vrFormats: { value: VrFormat; label: string; desc: string }[] = [
