@@ -29,11 +29,13 @@ export function RightPanel() {
   const [recommendedCommunities, setRecommendedCommunities] = useState<Community[]>([]);
   const [hotTopics, setHotTopics] = useState<Topic[]>([]);
   const [hotPosts, setHotPosts] = useState<Post[]>([]);
+  const [hotMedia, setHotMedia] = useState<Post[]>([]);
   const [showAllTopics, setShowAllTopics] = useState(false);
 
   useEffect(() => {
     getHotTopics(8).then(setHotTopics).catch(() => {});
     getPosts({ sort: 'hot', limit: 3 }).then((res) => setHotPosts(res.posts)).catch(() => {});
+    getPosts({ sort: 'trending', postType: 'VR_MEDIA', limit: 3 }).then((res) => setHotMedia(res.posts)).catch(() => {});
   }, []);
 
   useEffect(() => {
