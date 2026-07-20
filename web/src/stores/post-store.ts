@@ -173,4 +173,12 @@ export const usePostStore = create<PostState>((set, get) => ({
       posts: state.posts.map((p) => (p.id === postId ? updatedPost : p)),
     }));
   },
+
+  updatePostLike: (postId: string, isLiked: boolean, likeCount: number) => {
+    set((state) => ({
+      posts: state.posts.map((p) =>
+        p.id === postId ? { ...p, isLiked, likeCount } : p
+      ),
+    }));
+  },
 }));
