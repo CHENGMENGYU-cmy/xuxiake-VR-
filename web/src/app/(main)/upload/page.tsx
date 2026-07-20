@@ -698,8 +698,8 @@ export default function UploadPage() {
               </div>
             )}
 
-            {/* TRANSLATION */}
-            {activeTab === 'TRANSLATION' && (
+            {/* TRANSLATION 附加 */}
+            {showTranslationAddon && (
               <div className="space-y-4">
                 <div className="grid grid-cols-[1fr,auto,1fr] gap-2 items-end">
                   <div className="space-y-2">
