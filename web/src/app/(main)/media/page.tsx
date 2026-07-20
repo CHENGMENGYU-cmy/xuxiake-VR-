@@ -100,7 +100,7 @@ function MediaContent() {
           variant="ghost"
           size="sm"
           className="gap-1.5 text-xs text-muted-foreground"
-          onClick={() => fetchPosts(tabSortMap[activeSort], { postType: 'VR_MEDIA' })}
+          onClick={() => fetchPosts('latest', { postType: 'VR_MEDIA' })}
           disabled={isLoading}
         >
           <RefreshCw className={`h-3.5 w-3.5 ${isLoading ? 'animate-spin' : ''}`} />
