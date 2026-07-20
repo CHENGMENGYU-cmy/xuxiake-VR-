@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
 import { Heart, MessageCircle, Share2, Eye, MoreHorizontal, Play, Volume2, Globe, MapPin, FileText, Map, Compass, BookOpen, MessageSquare, Clock, TrendingUp, Pencil, Trash2, Copy, Bookmark, AlertTriangle } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
