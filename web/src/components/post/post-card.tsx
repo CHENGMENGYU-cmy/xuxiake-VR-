@@ -28,6 +28,7 @@ import { Post } from '@/types';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/stores/auth-store';
 import { usePostStore } from '@/stores/post-store';
+import { likePost, unlikePost } from '@/lib/post-api';
 import { toast } from 'sonner';
 import type { ContentCardData } from '@/components/chat/content-card';
 
