@@ -43,11 +43,17 @@ const discoverItems = [
 
 // 媒体广场
 const mediaTypes = [
-  { href: '/media?type=VIDEO&vr=true', label: 'VR全景', icon: Sparkles, color: 'text-violet-500' },
   { href: '/media?type=VIDEO', label: '旅行视频', icon: Video, color: 'text-teal-500' },
   { href: '/media?type=IMAGE', label: '旅行图片', icon: Image, color: 'text-orange-500' },
   { href: '/media?type=AUDIO', label: '音频记录', icon: Music, color: 'text-teal-400' },
   { href: '/live', label: '直播', icon: Radio, color: 'text-red-500', badge: '即将上线' },
+];
+
+// 旅行工具
+const travelTools = [
+  { href: '/routes', label: '路线', icon: Route, color: 'text-primary' },
+  { href: '/journeys', label: '旅程', icon: Map, color: 'text-teal-500' },
+  { href: '/guides', label: '攻略', icon: BookOpen, color: 'text-orange-500' },
 ];
 
 // 个人中心
