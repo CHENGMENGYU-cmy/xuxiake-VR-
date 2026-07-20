@@ -113,7 +113,7 @@ export class PostsService {
     };
   }
 
-  private async getTrendingPosts(limit: number, page: number, postType?: string, tagId?: string, followingIds?: string[] | null) {
+  private async getTrendingPosts(limit: number, page: number, postType?: string, tagId?: string, followingIds?: string[] | null, currentUserId?: string) {
     // 热门内容：加权热度分 + 时间衰减
     // score = (likeCount*3 + commentCount*2 + viewCount*0.1) * timeDecay
     const offset = (page - 1) * limit;
