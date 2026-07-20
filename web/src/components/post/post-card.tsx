@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { MediaViewer } from './media-viewer';
 import { EditPostDialog } from './edit-post-dialog';
-import { ShareToMessage } from '@/components/chat/share-to-message';
+import { ShareSheet } from './share-sheet';
 import {
   Dialog,
   DialogContent,
