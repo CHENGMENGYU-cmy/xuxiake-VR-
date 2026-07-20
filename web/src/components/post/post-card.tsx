@@ -378,13 +378,8 @@ export function PostCard({ post }: PostCardProps) {
         </Button>
       </div>
 
-      {/* 分享到消息弹窗 */}
-      {showShare && (
-        <ShareToMessage
-          content={shareContent}
-          onClose={() => setShowShare(false)}
-        />
-      )}
+      {/* 分享面板 */}
+      <ShareSheet open={showShare} onOpenChange={setShowShare} post={post} />
 
       {/* 编辑弹窗 */}
       {showEdit && (
