@@ -26,6 +26,18 @@ export function FeedList({ showComposer = true, sort = 'latest', postType, tagId
     fetchPosts(sort, { postType, tagId, followingOnly });
   }, [sort, postType, tagId, followingOnly, fetchPosts]);
 
+  // 从详情页返回时恢复滚动位置
+  useEffect(() => {
+    if (isLoading) return;
+    const savedY = sessionStorage.getItem('feed-scroll-y');
+    if (savedY) {
+      sessionStorage.removeItem('feed-scroll-y');
+      requestAnimationFrame(() => {
+        window.scrollTo(0, parseInt(savedY, 10));
+      });
+    }
+  }, [isLoading]);
+
   const handleRefresh = useCallback(() => {
     fetchPosts(sort);
   }, [fetchPosts, sort]);
