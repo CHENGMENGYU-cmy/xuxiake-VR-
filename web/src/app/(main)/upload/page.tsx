@@ -26,12 +26,15 @@ import { PublishPreview } from '@/components/upload/publish-preview';
 import { saveDraftToLocal, clearLocalDraft } from '@/lib/draft-api';
 import { translateText, detectLanguage } from '@/lib/translation-api';
 
-type UploadTab = 'VIDEO' | 'IMAGE' | 'AUDIO';
+type UploadTab = 'VIDEO' | 'IMAGE' | 'AUDIO' | 'ROUTE' | 'JOURNEY' | 'GUIDE';
 
 const tabs: { key: UploadTab; label: string; icon: React.ElementType; color: string }[] = [
-  { key: 'VIDEO', label: 'VR视频', icon: Video, color: 'text-primary' },
-  { key: 'IMAGE', label: 'VR图片', icon: Image, color: 'text-teal-500' },
-  { key: 'AUDIO', label: '音频', icon: Mic, color: 'text-accent' },
+  { key: 'VIDEO', label: '旅行视频', icon: Video, color: 'text-teal-500' },
+  { key: 'IMAGE', label: '旅行图片', icon: Image, color: 'text-orange-500' },
+  { key: 'AUDIO', label: '音频记录', icon: Mic, color: 'text-accent' },
+  { key: 'ROUTE', label: '路线', icon: Route, color: 'text-primary' },
+  { key: 'JOURNEY', label: '旅程', icon: Map, color: 'text-teal-500' },
+  { key: 'GUIDE', label: '攻略', icon: BookOpen, color: 'text-orange-500' },
 ];
 
 const vrFormats: { value: VrFormat; label: string; desc: string }[] = [
