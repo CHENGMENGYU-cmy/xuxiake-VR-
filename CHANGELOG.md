@@ -398,17 +398,3 @@
     - 新增 getAudioDuration(url) 函数（读取音频时长）
   修改效果：前端具备视频和音频上传能力
 
-第3条
-
-  修改时间：2026-07-18
-  修改位置：web/src/components/post/post-composer.tsx
-  修改原因：PostComposer 中视频/音频按钮仅显示"功能即将上线"提示
-  修改内容：
-    - 导入 uploadVideo/uploadAudio/getVideoMetadata/getAudioDuration
-    - 新增 videoInputRef/audioInputRef 文件输入引用
-    - 新增 handleVideoUpload 处理函数（上传+元数据读取+预览）
-    - 新增 handleAudioUpload 处理函数（上传+时长读取+预览）
-    - handleMediaClick 支持 VIDEO/AUDIO 类型触发文件选择
-    - 媒体预览区新增视频预览（缩略图+播放图标+时长）和音频预览（图标+时长）
-    - 新增视频/音频隐藏文件输入控件
-  修改效果：用户可通过 PostComposer 上传视频和音频
