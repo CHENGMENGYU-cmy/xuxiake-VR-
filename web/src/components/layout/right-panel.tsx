@@ -35,7 +35,6 @@ export function RightPanel() {
   useEffect(() => {
     getHotTopics(8).then(setHotTopics).catch(() => {});
     getPosts({ sort: 'hot', limit: 3 }).then((res) => setHotPosts(res.posts)).catch(() => {});
-    getPosts({ sort: 'trending', postType: 'VR_MEDIA', limit: 3 }).then((res) => setHotMedia(res.posts)).catch(() => {});
   }, []);
 
   useEffect(() => {
