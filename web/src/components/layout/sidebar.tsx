@@ -15,7 +15,6 @@ import {
   UserPlus,
   MessageCircle,
   Hash,
-  Sparkles,
   Radio,
   Route,
   Map,
