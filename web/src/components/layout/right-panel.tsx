@@ -2,7 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { TrendingUp, Flame, MessageCircle } from 'lucide-react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { TrendingUp, Flame, MessageCircle, Video, Radio, Play } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
