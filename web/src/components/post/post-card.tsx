@@ -75,6 +75,7 @@ interface PostCardProps {
 export function PostCard({ post, onLikeChange }: PostCardProps) {
   const { user: currentUser } = useAuthStore();
   const removePost = usePostStore((s) => s.removePost);
+  const { requireAuth, showPrompt, setShowPrompt, action } = useRequireAuth();
   const [isLiked, setIsLiked] = useState(post.isLiked);
   const [likeCount, setLikeCount] = useState(post.likeCount);
   const [showShare, setShowShare] = useState(false);
