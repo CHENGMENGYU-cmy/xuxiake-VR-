@@ -112,7 +112,7 @@ export function Sidebar() {
 
             {/* 顶部导航 */}
             <div className="space-y-1 p-3">
-              {navItems.map((item) => {
+              {navItems.filter((item) => user || item.href !== '/upload').map((item) => {
                 const Icon = item.icon;
                 const isActive = pathname === item.href;
                 return (
