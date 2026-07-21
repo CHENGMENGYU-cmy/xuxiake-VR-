@@ -17,6 +17,8 @@ import { MediaViewer } from './media-viewer';
 import { EditPostDialog } from './edit-post-dialog';
 import { ShareSheet } from './share-sheet';
 import { InlineComment } from './inline-comment';
+import { LoginPrompt } from '@/components/login-prompt';
+import { useRequireAuth } from '@/hooks/use-require-auth';
 import {
   Dialog,
   DialogContent,
