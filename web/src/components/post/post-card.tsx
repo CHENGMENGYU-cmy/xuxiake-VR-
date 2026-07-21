@@ -445,6 +445,9 @@ export function PostCard({ post, onLikeChange }: PostCardProps) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* 登录提示 */}
+      <LoginPrompt open={showPrompt} onOpenChange={setShowPrompt} action={action} />
     </Card>
   );
 }
