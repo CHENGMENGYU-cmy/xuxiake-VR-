@@ -184,29 +184,33 @@ export function Navbar() {
             </Button>
           </Link>
 
-          {/* 消息 */}
-          <Link href="/messages">
-            <Button variant="ghost" size="icon" className="relative">
-              <MessageCircle className="h-5 w-5" />
-              {totalUnread > 0 && (
-                <Badge className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center bg-accent px-0.5 text-[10px]">
-                  {totalUnread > 99 ? '99+' : totalUnread}
-                </Badge>
-              )}
-            </Button>
-          </Link>
+          {/* 消息 - 仅登录后显示 */}
+          {user && (
+            <Link href="/messages">
+              <Button variant="ghost" size="icon" className="relative">
+                <MessageCircle className="h-5 w-5" />
+                {totalUnread > 0 && (
+                  <Badge className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center bg-accent px-0.5 text-[10px]">
+                    {totalUnread > 99 ? '99+' : totalUnread}
+                  </Badge>
+                )}
+              </Button>
+            </Link>
+          )}
 
-          {/* 通知 */}
-          <Link href="/notifications">
-            <Button variant="ghost" size="icon" className="relative">
-              <Bell className="h-5 w-5" />
-              {notifUnreadCount > 0 && (
-                <Badge className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center bg-accent px-0.5 text-[10px]">
-                  {notifUnreadCount > 99 ? '99+' : notifUnreadCount}
-                </Badge>
-              )}
-            </Button>
-          </Link>
+          {/* 通知 - 仅登录后显示 */}
+          {user && (
+            <Link href="/notifications">
+              <Button variant="ghost" size="icon" className="relative">
+                <Bell className="h-5 w-5" />
+                {notifUnreadCount > 0 && (
+                  <Badge className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center bg-accent px-0.5 text-[10px]">
+                    {notifUnreadCount > 99 ? '99+' : notifUnreadCount}
+                  </Badge>
+                )}
+              </Button>
+            </Link>
+          )}
 
           {/* 用户菜单 带有人物头像的 */}
           {user && mounted && (
