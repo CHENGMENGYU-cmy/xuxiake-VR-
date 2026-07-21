@@ -106,7 +106,11 @@ export function InlineComment({ postId, commentCount, onCountChange }: InlineCom
   return (
     <div className="border-t bg-muted/30">
       {/* 输入框 */}
-      {currentUser && (
+      {!currentUser ? (
+        <div className="border-b px-4 py-3 text-center text-xs text-muted-foreground">
+          <Link href="/login" className="text-primary hover:underline">登录</Link>后参与评论
+        </div>
+      ) : (
         <div className="border-b px-4 py-2.5">
           {/* 回复指示器 */}
           {replyTo && (
