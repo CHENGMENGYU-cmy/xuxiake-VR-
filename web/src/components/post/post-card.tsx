@@ -386,7 +386,10 @@ export function PostCard({ post, onLikeChange }: PostCardProps) {
             'flex-1 gap-2 text-sm text-muted-foreground hover:bg-primary/10',
             showComments && 'text-primary'
           )}
-          onClick={() => setShowComments(!showComments)}
+          onClick={() => {
+            if (!showComments && !requireAuth('评论')) return;
+            setShowComments(!showComments);
+          }}
         >
           <MessageCircle className="h-4 w-4" />
           评论
