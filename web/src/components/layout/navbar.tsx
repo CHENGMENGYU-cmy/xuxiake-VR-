@@ -212,6 +212,22 @@ export function Navbar() {
             </Link>
           )}
 
+          {/* 登录/注册 - 未登录时显示 */}
+          {!user && mounted && (
+            <div className="flex items-center gap-1.5">
+              <Link href="/login">
+                <Button variant="ghost" size="sm" className="text-sm">
+                  登录
+                </Button>
+              </Link>
+              <Link href="/register">
+                <Button size="sm" className="text-sm">
+                  注册
+                </Button>
+              </Link>
+            </div>
+          )}
+
           {/* 用户菜单 带有人物头像的 */}
           {user && mounted && (
             <DropdownMenu>
