@@ -63,6 +63,14 @@ interface LinkData {
 }
 
 export default function UploadPage() {
+  return (
+    <AuthGuard>
+      <UploadContent />
+    </AuthGuard>
+  );
+}
+
+function UploadContent() {
   const router = useRouter();
   const { user } = useAuthStore();
   const { publishPost, isPublishing } = usePostStore();
