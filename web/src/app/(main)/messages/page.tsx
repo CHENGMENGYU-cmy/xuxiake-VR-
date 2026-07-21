@@ -11,8 +11,17 @@ import { useAuthStore } from '@/stores/auth-store';
 import { useChatStore } from '@/stores/chat-store';
 import { connectChat } from '@/lib/chat-socket';
 import apiClient from '@/lib/api-client';
+import { AuthGuard } from '@/components/auth-guard';
 
 export default function MessagesPage() {
+  return (
+    <AuthGuard>
+      <MessagesContent />
+    </AuthGuard>
+  );
+}
+
+function MessagesContent() {
   const { user } = useAuthStore();
   const setTotalUnread = useChatStore((s) => s.setTotalUnread);
   const [conversations, setConversations] = useState<any[]>([]);
