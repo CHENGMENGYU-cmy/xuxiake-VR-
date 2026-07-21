@@ -398,7 +398,10 @@ export function PostCard({ post, onLikeChange }: PostCardProps) {
           <Button
             variant="ghost"
             className="w-full gap-2 text-sm text-muted-foreground hover:bg-teal-50 dark:hover:bg-teal-900/20"
-            onClick={() => setShowShare(!showShare)}
+            onClick={() => {
+              if (!showShare && !requireAuth('分享')) return;
+              setShowShare(!showShare);
+            }}
           >
             <Share2 className="h-4 w-4" />
             分享
