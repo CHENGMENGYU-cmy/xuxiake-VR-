@@ -1,8 +1,7 @@
-import { Navbar } from '@/components/layout/navbar'; {/*顶部导航栏*/}
-import { Sidebar } from '@/components/layout/sidebar';{/*左侧菜单*/}
-import { RightPanel } from '@/components/layout/right-panel';{/*右侧版面*/}
-import { MobileNav } from '@/components/layout/mobile-nav';{/*底部移动端导航*/}
-import { AuthGuard } from '@/components/auth-guard';
+import { Navbar } from '@/components/layout/navbar';
+import { Sidebar } from '@/components/layout/sidebar';
+import { RightPanel } from '@/components/layout/right-panel';
+import { MobileNav } from '@/components/layout/mobile-nav';
 
 export default function MainLayout({
   children,
@@ -10,7 +9,7 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-    <AuthGuard>
+    <>
       <Navbar />
       <div className="flex h-[calc(100vh-3.5rem)] gap-0 pt-14">
         <Sidebar />
@@ -22,6 +21,6 @@ export default function MainLayout({
         <RightPanel />
       </div>
       <MobileNav />
-    </AuthGuard>
+    </>
   );
 }
