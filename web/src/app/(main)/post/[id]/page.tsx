@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect, use } from 'react';
-import { notFound, useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { PostCard } from '@/components/post/post-card';
 import { CommentSection } from '@/components/post/comment-section';
@@ -10,9 +10,10 @@ import { Button } from '@/components/ui/button';
 import { getPostById } from '@/lib/post-api';
 import type { Post } from '@/types';
 
-export default function PostDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
-  return <PostDetailContent postId={id} />;
+export default function PostDetailPage() {
+  const params = useParams();
+  const postId = params?.id as string || '';
+  return <PostDetailContent postId={postId} />;
 }
 
 function BackButton() {
@@ -33,6 +34,7 @@ function PostDetailContent({ postId }: { postId: string }) {
   const [commentCount, setCommentCount] = useState(0);
 
   useEffect(() => {
+    if (!postId) return;
     let cancelled = false;
     getPostById(postId).then((data) => {
       if (!cancelled) {
@@ -56,18 +58,17 @@ function PostDetailContent({ postId }: { postId: string }) {
   }
 
   if (!post) {
-    notFound();
+    return (
+      <div className="mx-auto max-w-2xl py-16 text-center text-muted-foreground">
+        帖子不存在或已被删除
+      </div>
+    );
   }
 
   return (
     <div className="mx-auto max-w-2xl space-y-4">
-      {/* 返回按钮 */}
       <BackButton />
-
-      {/* 帖子内容 */}
       <PostCard post={post} />
-
-      {/* 评论区 */}
       <CommentSection
         postId={postId}
         initialCount={commentCount}
