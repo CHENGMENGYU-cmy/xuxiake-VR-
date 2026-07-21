@@ -119,10 +119,7 @@ export function PostCard({ post, onLikeChange }: PostCardProps) {
   const [likeAnimation, setLikeAnimation] = useState(false);
 
   const handleLike = async () => {
-    if (!currentUser) {
-      toast.error('请先登录');
-      return;
-    }
+    if (!requireAuth('点赞')) return;
     const wasLiked = isLiked;
     const prevCount = likeCount;
     // 乐观更新
