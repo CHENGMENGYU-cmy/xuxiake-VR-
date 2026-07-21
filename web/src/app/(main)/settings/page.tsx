@@ -10,8 +10,17 @@ import { PrivacyTab } from './components/privacy-tab';
 import { NotificationsTab } from './components/notifications-tab';
 import { AppearanceTab } from './components/appearance-tab';
 import { InterestsTab } from './components/interests-tab';
+import { AuthGuard } from '@/components/auth-guard';
 
 export default function SettingsPage() {
+  return (
+    <AuthGuard>
+      <SettingsContent />
+    </AuthGuard>
+  );
+}
+
+function SettingsContent() {
   const { user, updateUser } = useAuthStore();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
