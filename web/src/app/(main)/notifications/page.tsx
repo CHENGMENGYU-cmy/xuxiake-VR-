@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils';
 import apiClient from '@/lib/api-client';
 import { useAuthStore } from '@/stores/auth-store';
 import { useNotificationStore } from '@/stores/notification-store';
+import { AuthGuard } from '@/components/auth-guard';
 
 const iconMap: Record<string, React.ElementType> = {
   LIKE: Heart,
