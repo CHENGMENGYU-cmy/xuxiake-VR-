@@ -17,6 +17,7 @@ import { CreatePostPayload } from '@/lib/post-api';
 import type { VrFormat, Topic, Community, Visibility } from '@/types';
 import { cn } from '@/lib/utils';
 import { MultiImageUploader, UploadedImage } from '@/components/upload/multi-image-uploader';
+import { AuthGuard } from '@/components/auth-guard';
 import { TopicSelector } from '@/components/upload/topic-selector';
 import { CommunitySelector } from '@/components/upload/community-selector';
 import { VisibilityControl } from '@/components/upload/visibility-control';
