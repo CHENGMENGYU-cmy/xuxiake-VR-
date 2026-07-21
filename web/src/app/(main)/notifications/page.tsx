@@ -40,6 +40,14 @@ const typeLabels: Record<string, string> = {
 };
 
 export default function NotificationsPage() {
+  return (
+    <AuthGuard>
+      <NotificationsContent />
+    </AuthGuard>
+  );
+}
+
+function NotificationsContent() {
   const { user } = useAuthStore();
   const { clearUnread, decrementUnread } = useNotificationStore();
   const [notifications, setNotifications] = useState<any[]>([]);
