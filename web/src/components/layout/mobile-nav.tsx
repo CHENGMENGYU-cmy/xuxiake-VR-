@@ -2,23 +2,29 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Compass, Upload, MessageCircle, Bell } from 'lucide-react';
+import { Home, Compass, Upload, MessageCircle, Bell, LogIn } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useAuthStore } from '@/stores/auth-store';
 import { useChatStore } from '@/stores/chat-store';
 import { useNotificationStore } from '@/stores/notification-store';
 
-const navItems = [
-  { href: '/feed', label: '首页', icon: Home },
-  { href: '/explore', label: '探索', icon: Compass },
-  { href: '/upload', label: '上传', icon: Upload },
-  { href: '/messages', label: '消息', icon: MessageCircle },
-  { href: '/notifications', label: '通知', icon: Bell },
-];
-
 export function MobileNav() {
   const pathname = usePathname();
+  const { user } = useAuthStore();
   const totalUnread = useChatStore((s) => s.totalUnread);
   const notifUnreadCount = useNotificationStore((s) => s.unreadCount);
+
+  const navItems = [
+    { href: '/feed', label: '首页', icon: Home },
+    { href: '/explore', label: '探索', icon: Compass },
+    ...(user ? [
+      { href: '/upload', label: '上传', icon: Upload },
+      { href: '/messages', label: '消息', icon: MessageCircle },
+      { href: '/notifications', label: '通知', icon: Bell },
+    ] : [
+      { href: '/login', label: '登录', icon: LogIn },
+    ]),
+  ];
 
   return (
     <nav className="fixed bottom-0 z-50 w-full border-t bg-card lg:hidden">
