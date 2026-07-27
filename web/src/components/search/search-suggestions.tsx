@@ -121,7 +121,7 @@ export function SearchSuggestions({ query, onSelect, onClose }: SearchSuggestion
             {[
               { type: 'VIDEO', label: 'AR视频', icon: Video, color: 'text-teal-500' },
               { type: 'IMAGE', label: 'AR图片', icon: Image, color: 'text-orange-500' },
-              { type: 'AUDIO', label: '音频记录', icon: Music, color: 'text-teal-400' },
+              { type: 'AUDIO', label: '语音记录', icon: Music, color: 'text-teal-400' },
             ].map((item) => {
               const Icon = item.icon;
               return (
