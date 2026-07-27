@@ -15,6 +15,7 @@ export class PostsController {
     private readonly postsService: PostsService,
     private readonly reviewService: ReviewService,
     private readonly authService: AuthService,
+    @InjectRepository(User) private readonly userRepo: Repository<User>,
   ) {}
 
   private getUserId(auth: string): string {
