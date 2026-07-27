@@ -1,6 +1,6 @@
 'use client';
 
-import { BookOpen, PenLine, Lock, Eye, Globe } from 'lucide-react';
+import { BookOpen, PenLine, Lock } from 'lucide-react';
 import { HierarchyList } from '@/components/feed/hierarchy-list';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
