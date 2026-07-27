@@ -71,6 +71,7 @@ export function PostCard({ post, onLikeChange }: PostCardProps) {
   const [commentCount, setCommentCount] = useState(post.commentCount);
   const [showEdit, setShowEdit] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showReport, setShowReport] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
   const isOwner = currentUser?.id === post.author.id;
