@@ -228,6 +228,28 @@ export class PostsController {
     return { success: true, data: post };
   }
 
+  // ===== 发布/撤回 =====
+  @Post(':id/publish')
+  async publishPost(
+    @Headers('authorization') auth: string,
+    @Param('id') id: string,
+    @Body() dto: { locationPrecision?: 'hidden' | 'city' | 'exact' },
+  ) {
+    const userId = this.getUserId(auth);
+    const post = await this.postsService.publishPost(userId, id, dto);
+    return { success: true, data: post };
+  }
+
+  @Post(':id/unpublish')
+  async unpublishPost(
+    @Headers('authorization') auth: string,
+    @Param('id') id: string,
+  ) {
+    const userId = this.getUserId(auth);
+    const post = await this.postsService.unpublishPost(userId, id);
+    return { success: true, data: post };
+  }
+
   // ===== 合集 =====
   @Post('collections')
   async createCollection(
