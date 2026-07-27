@@ -19,7 +19,7 @@ import { UserFollow } from '../../entities/user-follow.entity.js';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Post, MediaItem, Comment, Like, User, InterestTag, Topic, RouteDetail, Journey, JourneyStop, GuideDetail, Collection, CollectionPost, UserFollow]),
+    TypeOrmModule.forFeature([Post, MediaItem, Comment, Like, User, InterestTag, Topic, Journey, JourneyStop, Collection, CollectionPost, UserFollow]),
     AuthModule,
     NotificationsModule,
   ],
