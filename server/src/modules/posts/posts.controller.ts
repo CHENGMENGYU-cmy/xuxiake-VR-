@@ -104,11 +104,24 @@ export class PostsController {
     @Query('cursor') cursor?: string,
     @Query('limit') limit?: string,
     @Query('parentId') parentId?: string,
+    @Query('location') location?: string,
+    @Query('mediaType') mediaType?: string,
+    @Query('month') month?: string,
+    @Headers('authorization') auth?: string,
   ) {
+    // 可选认证：有 token 时可查看私密内容
+    let currentUserId: string | undefined;
+    if (auth) {
+      try { currentUserId = this.getUserId(auth); } catch {}
+    }
     const result = await this.postsService.getContentHierarchy({
       level, userId, cursor,
       limit: limit ? parseInt(limit) : 12,
       parentId,
+      location,
+      mediaType,
+      month,
+      currentUserId,
     });
     return { success: true, ...result };
   }
