@@ -134,10 +134,10 @@ export function Sidebar() {
 
             <Separator />
 
-            {/* 媒体广场 */}
+            {/* 第一视角 */}
             <div className="space-y-1 p-3">
               <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
-                媒体广场
+                第一视角
               </p>
               {mediaItems.map((item) => {
                 const Icon = item.icon;
