@@ -181,6 +181,42 @@ export class PostsController {
     return { success: true, ...result };
   }
 
+  // ===== 内容层级 =====
+  @Get('hierarchy')
+  async getContentHierarchy(
+    @Query('level') level?: string,
+    @Query('userId') userId?: string,
+    @Query('cursor') cursor?: string,
+    @Query('limit') limit?: string,
+    @Query('parentId') parentId?: string,
+  ) {
+    const result = await this.postsService.getContentHierarchy({
+      level,
+      userId,
+      cursor,
+      limit: limit ? parseInt(limit) : 12,
+      parentId,
+    });
+    return { success: true, ...result };
+  }
+
+  @Get('classified/dimensions')
+  async getClassifiedDimensions(@Query('userId') userId?: string) {
+    const dimensions = await this.postsService.getClassifiedDimensions(userId);
+    return { success: true, data: dimensions };
+  }
+
+  @Post(':id/promote')
+  async promoteContent(
+    @Headers('authorization') auth: string,
+    @Param('id') id: string,
+    @Body() dto: { targetLevel: string; content?: string; title?: string },
+  ) {
+    const userId = this.getUserId(auth);
+    const post = await this.postsService.promoteContent(userId, id, dto);
+    return { success: true, data: post };
+  }
+
   // ===== 合集 =====
   @Post('collections')
   async createCollection(
