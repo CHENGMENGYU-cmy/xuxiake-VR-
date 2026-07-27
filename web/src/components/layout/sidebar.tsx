@@ -35,9 +35,8 @@ const navItems = [
   { href: '/discover', label: '找搭子', icon: UserPlus },
 ];
 
-// 我的内容（四层内容体系）
+// 我的内容
 const contentItems = [
-  { href: '/media', label: '瞬间捕获', icon: Camera, color: 'text-teal-500' },
   { href: '/classified', label: '内容分类', icon: FolderOpen, color: 'text-amber-500' },
   { href: '/diaries', label: '我的日记', icon: PenLine, color: 'text-indigo-500' },
   { href: '/journeys', label: '游记散文', icon: BookOpen, color: 'text-primary' },
