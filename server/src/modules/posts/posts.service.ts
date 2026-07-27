@@ -235,12 +235,6 @@ export class PostsService {
       isLiked = !!like;
     }
 
-    // 加载路线详情
-    let routeDetail: RouteDetail | null = null;
-    if (post.postType === 'ROUTE') {
-      routeDetail = await this.routeRepo.findOne({ where: { postId: id } });
-    }
-
     // 加载旅程数据
     let journey: Journey | null = null;
     if (post.postType === 'JOURNEY') {
@@ -250,13 +244,7 @@ export class PostsService {
       });
     }
 
-    // 加载攻略详情
-    let guideDetail: GuideDetail | null = null;
-    if (post.postType === 'GUIDE') {
-      guideDetail = await this.guideRepo.findOne({ where: { postId: id } });
-    }
-
-    return { ...this.formatPost(post, isLiked), routeDetail, journey, guideDetail };
+    return { ...this.formatPost(post, isLiked), journey };
   }
 
   async createPost(userId: string, dto: CreatePostDto) {
