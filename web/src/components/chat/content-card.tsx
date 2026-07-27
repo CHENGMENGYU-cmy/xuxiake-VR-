@@ -29,9 +29,9 @@ const CARD_ICONS: Record<CardType, typeof MapPin> = {
 };
 
 const CARD_LABELS: Record<CardType, string> = {
-  POST: '笔记',
+  POST: '随记',
   ROUTE: '路线',
-  VR: 'VR内容',
+  VR: '第一视角',
   ACTIVITY: '活动',
   USER: '用户',
 };
