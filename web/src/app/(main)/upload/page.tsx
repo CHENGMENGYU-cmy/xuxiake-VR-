@@ -731,13 +731,11 @@ function UploadContent() {
                       const files = e.dataTransfer.files;
                       if (files.length > 0) handleAudioSelect(files);
                     }}
-                    className="flex flex-col items-center gap-4 rounded-xl border-2 border-dashed border-accent/30 bg-accent/5 p-12 text-center transition-all hover:border-accent hover:bg-accent/10">
+                    className="flex flex-col items-center gap-3 rounded-lg border-2 border-dashed border-accent/30 bg-accent/5 p-8 text-center transition-all hover:border-accent hover:bg-accent/10">
                     {uploading ? (
-                      <Loader2 className="h-12 w-12 animate-spin text-accent" />
+                      <Loader2 className="h-8 w-8 animate-spin text-accent" />
                     ) : (
-                      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-accent/10">
-                        <Mic className="h-8 w-8 text-accent" />
-                      </div>
+                      <Mic className="h-10 w-10 text-accent" />
                     )}
                     <div>
                       <p className="text-base font-medium">{uploading ? '上传中...' : '上传或录制音频'}</p>
