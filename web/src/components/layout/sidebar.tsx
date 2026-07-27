@@ -132,7 +132,7 @@ export function Sidebar() {
               <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
                 我的内容
               </p>
-              {contentItems.map((item, index) => {
+              {contentItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = pathname === item.href;
                 return (
@@ -144,18 +144,8 @@ export function Sidebar() {
                         isActive && 'bg-primary/10 text-primary hover:bg-primary/10'
                       )}
                     >
-                      <div className="flex items-center gap-2.5">
-                        <div className="relative">
-                          <Icon className={cn('h-5 w-5', item.color, isActive && 'text-primary')} />
-                          {index < contentItems.length - 1 && (
-                            <div className="absolute left-1/2 top-full h-3 w-px -translate-x-1/2 bg-border" />
-                          )}
-                        </div>
-                        <div className="flex flex-col items-start">
-                          <span className="text-sm leading-tight">{item.label}</span>
-                          <span className="text-[10px] leading-tight text-muted-foreground">{item.desc}</span>
-                        </div>
-                      </div>
+                      <Icon className={cn('h-5 w-5', item.color, isActive && 'text-primary')} />
+                      <span>{item.label}</span>
                     </Button>
                   </Link>
                 );
