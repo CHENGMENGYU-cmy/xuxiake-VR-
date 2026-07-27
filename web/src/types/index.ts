@@ -118,9 +118,7 @@ export interface Post {
   isLiked: boolean;
   tags?: InterestTag[];
   topics?: Topic[];
-  routeDetail?: RouteDetail | null;
   journey?: Journey | null;
-  guideDetail?: GuideDetail | null;
   createdAt: string;
   updatedAt: string;
 }
