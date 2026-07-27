@@ -146,6 +146,8 @@ export interface TokenPair {
   refreshToken: string;
 }
 
+export type ContentLevel = 'SNAPSHOT' | 'CLASSIFIED' | 'DIARY' | 'ESSAY';
+
 export interface CreatePostDto {
   content?: string;
   mediaItems?: Omit<IMediaItem, 'id'>[];
@@ -154,6 +156,8 @@ export interface CreatePostDto {
   visibility?: Visibility;
   communityId?: string;
   postType?: PostType;
+  contentLevel?: ContentLevel;
+  parentPostId?: string;
   tagIds?: string[];
   topicNames?: string[];
   routeDetail?: {
