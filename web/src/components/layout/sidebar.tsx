@@ -14,7 +14,6 @@ import {
   Hash,
   FolderOpen,
   PenLine,
-  Camera,
   BookOpen,
   PlusCircle,
 } from 'lucide-react';
