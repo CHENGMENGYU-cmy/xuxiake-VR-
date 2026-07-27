@@ -1,8 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { Map, TrendingUp, Flame, Clock } from 'lucide-react';
+import { useState } from 'react';
+import { BookOpen, TrendingUp, Flame, Clock, PenLine } from 'lucide-react';
 import { FeedList } from '@/components/feed/feed-list';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 import type { PostSortType } from '@/lib/post-api';
 
 type SortTab = 'trending' | 'latest' | 'hot';
