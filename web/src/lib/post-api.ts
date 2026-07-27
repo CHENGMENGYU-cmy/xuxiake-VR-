@@ -173,6 +173,36 @@ export async function getAllTopics(): Promise<Topic[]> {
   return data.data ?? [];
 }
 
+// ===== 内容层级 API =====
+
+export async function getContentHierarchy(params?: {
+  level?: string;
+  userId?: string;
+  cursor?: string;
+  limit?: number;
+  parentId?: string;
+  location?: string;
+  mediaType?: string;
+  month?: string;
+}): Promise<{ posts: Post[]; nextCursor: string | null; hasMore: boolean }> {
+  const { data } = await apiClient.get('/posts/hierarchy', { params });
+  return {
+    posts: data.data ?? [],
+    nextCursor: data.nextCursor ?? null,
+    hasMore: data.hasMore ?? false,
+  };
+}
+
+export async function publishPost(postId: string, locationPrecision?: 'hidden' | 'city' | 'exact'): Promise<Post> {
+  const { data } = await apiClient.post(`/posts/${postId}/publish`, { locationPrecision });
+  return data.data;
+}
+
+export async function unpublishPost(postId: string): Promise<Post> {
+  const { data } = await apiClient.post(`/posts/${postId}/unpublish`);
+  return data.data;
+}
+
 // ===== 合集 API =====
 
 export async function createCollection(params: {
