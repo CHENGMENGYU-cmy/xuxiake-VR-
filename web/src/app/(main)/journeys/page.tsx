@@ -8,12 +8,11 @@ import Link from 'next/link';
 import { useAuthStore } from '@/stores/auth-store';
 import { AuthGuard } from '@/components/auth-guard';
 
-type StatusTab = 'public' | 'private' | 'draft';
+type StatusTab = 'public' | 'private';
 
-const statusTabs: { id: StatusTab; label: string; icon: typeof Globe; desc: string }[] = [
-  { id: 'public', label: '已发布', icon: Globe, desc: '所有人可见' },
-  { id: 'private', label: '私密', icon: Lock, desc: '仅自己可见' },
-  { id: 'draft', label: '草稿', icon: FileEdit, desc: '编辑中' },
+const statusTabs: { id: StatusTab; label: string; icon: typeof Globe }[] = [
+  { id: 'public', label: '已发布', icon: Globe },
+  { id: 'private', label: '我的（私密）', icon: Lock },
 ];
 
 export default function JourneysPage() {
