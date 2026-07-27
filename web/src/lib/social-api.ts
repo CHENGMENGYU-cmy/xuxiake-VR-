@@ -42,6 +42,16 @@ export async function getRecommendedUsers(page = 1, limit = 20): Promise<{
   return data;
 }
 
+export async function getRecommendedCompanions(destination?: string, page = 1, limit = 20): Promise<{
+  data: RecommendedUser[];
+  page: number;
+}> {
+  const { data } = await apiClient.get('/social/recommended/companions', {
+    params: { destination, page, limit },
+  });
+  return data;
+}
+
 export async function getRecommendedCommunities(page = 1, limit = 20): Promise<{
   data: RecommendedCommunity[];
   page: number;
