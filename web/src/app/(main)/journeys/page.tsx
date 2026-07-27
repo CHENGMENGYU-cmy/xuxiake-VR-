@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useState } from 'react';
 import { BookOpen, TrendingUp, Flame, Clock, PenLine } from 'lucide-react';
 import { FeedList } from '@/components/feed/feed-list';
 import { Button } from '@/components/ui/button';
