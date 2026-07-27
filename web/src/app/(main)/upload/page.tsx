@@ -180,6 +180,10 @@ function UploadContent() {
     setLinkUrl('');
     setShowLinkAddon(false);
     setShowTranslationAddon(false);
+    // 日记Tab默认私密
+    if (tab === 'DIARY') {
+      setVisibility('PRIVATE');
+    }
   };
 
   // Video upload
