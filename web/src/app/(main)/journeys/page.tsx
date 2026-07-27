@@ -27,10 +27,22 @@ export default function JourneysPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-2">
-        <Map className="h-6 w-6 text-teal-500" />
-        <h1 className="text-xl font-bold">旅程</h1>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <BookOpen className="h-6 w-6 text-primary" />
+          <h1 className="text-xl font-bold">游记散文</h1>
+        </div>
+        <Link href="/upload/journey-creator">
+          <Button size="sm" className="gap-1.5">
+            <PenLine className="h-4 w-4" />
+            写游记
+          </Button>
+        </Link>
       </div>
+
+      <p className="text-sm text-muted-foreground">
+        基于瞬间捕获和日记，生成有个人情感的正式游记文章。
+      </p>
 
       {/* 排序切换 */}
       <div className="flex gap-1">
