@@ -34,15 +34,15 @@ const navItems = [
   { href: '/feed', label: '首页', icon: Home },
   { href: '/explore', label: '探索发现', icon: Compass },
   { href: '/topics', label: '话题广场', icon: Hash },
-  { href: '/discover', label: '发现好友', icon: UserPlus },
-  { href: '/upload', label: '上传内容', icon: Upload },
+  { href: '/discover', label: '找搭子', icon: UserPlus },
+  { href: '/upload', label: '分享见闻', icon: Upload },
 ];
 
-// 媒体广场
+// 第一视角
 const mediaItems = [
-  { href: '/media?type=VIDEO', label: '旅行视频', icon: Video, color: 'text-teal-500' },
-  { href: '/media?type=IMAGE', label: '旅行图片', icon: Image, color: 'text-orange-500' },
-  { href: '/media?type=AUDIO', label: '音频记录', icon: Music, color: 'text-teal-400' },
+  { href: '/media?type=VIDEO', label: '瞬间捕获', icon: Video, color: 'text-teal-500' },
+  { href: '/media?type=IMAGE', label: '影像集', icon: Image, color: 'text-orange-500' },
+  { href: '/media?type=AUDIO', label: '语音记录', icon: Music, color: 'text-teal-400' },
   { href: '/live', label: '直播', icon: Radio, color: 'text-red-500', badge: '即将上线' },
 ];
 
