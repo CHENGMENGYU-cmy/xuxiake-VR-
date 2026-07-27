@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Compass, Upload, MessageCircle, Bell, LogIn } from 'lucide-react';
@@ -13,6 +14,11 @@ export function MobileNav() {
   const { user } = useAuthStore();
   const totalUnread = useChatStore((s) => s.totalUnread);
   const notifUnreadCount = useNotificationStore((s) => s.unreadCount);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const navItems = [
     { href: '/feed', label: '首页', icon: Home },
@@ -25,6 +31,33 @@ export function MobileNav() {
       { href: '/login', label: '登录', icon: LogIn },
     ]),
   ];
+
+  // 未挂载时渲染固定内容（避免 hydration mismatch）
+  if (!mounted) {
+    return (
+      <nav className="fixed bottom-0 z-50 w-full border-t bg-card lg:hidden">
+        <div className="flex h-14 items-center justify-around">
+          {[
+            { href: '/feed', label: '首页', icon: Home },
+            { href: '/explore', label: '探索', icon: Compass },
+            { href: '/login', label: '登录', icon: LogIn },
+          ].map((item) => {
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="relative flex flex-col items-center justify-center gap-0.5 text-muted-foreground"
+              >
+                <Icon className="h-5 w-5" />
+                <span className="text-[10px]">{item.label}</span>
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
+    );
+  }
 
   return (
     <nav className="fixed bottom-0 z-50 w-full border-t bg-card lg:hidden">
