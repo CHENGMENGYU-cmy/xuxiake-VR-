@@ -691,6 +691,28 @@ function UploadContent() {
               </>
             )}
 
+            {/* DIARY — 写日记 */}
+            {activeTab === 'DIARY' && (
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 rounded-lg border border-indigo-200 bg-indigo-50 dark:border-indigo-900 dark:bg-indigo-950/30 px-3 py-2">
+                  <Lock className="h-4 w-4 text-indigo-500 shrink-0" />
+                  <p className="text-xs text-indigo-600 dark:text-indigo-400">
+                    日记默认为私密内容，仅自己可见。
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">今日感想</label>
+                  <Textarea
+                    placeholder="写下今天的所见所闻、所思所想..."
+                    className="min-h-[200px]"
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                  />
+                  <p className="text-xs text-muted-foreground">{content.length} 字</p>
+                </div>
+              </div>
+            )}
+
             {/* LINK 附加 */}
             {showLinkAddon && (
               <div className="space-y-4">
