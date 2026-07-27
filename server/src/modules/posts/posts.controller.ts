@@ -315,4 +315,82 @@ export class PostsController {
     const result = await this.postsService.removePostFromCollection(userId, id, postId);
     return { success: true, ...result };
   }
+
+  // ===== 内容审核 =====
+
+  @Get('reviews/queue')
+  async getReviewQueue(
+    @Headers('authorization') auth: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    this.getUserId(auth);
+    const result = await this.reviewService.getReviewQueue(
+      page ? parseInt(page) : 1,
+      limit ? parseInt(limit) : 20,
+    );
+    return { success: true, ...result };
+  }
+
+  @Post(':id/review/approve')
+  async approvePost(
+    @Headers('authorization') auth: string,
+    @Param('id') postId: string,
+    @Body() dto: { reason?: string },
+  ) {
+    const userId = this.getUserId(auth);
+    const review = await this.reviewService.approve(postId, userId, dto.reason);
+    return { success: true, data: review };
+  }
+
+  @Post(':id/review/reject')
+  async rejectPost(
+    @Headers('authorization') auth: string,
+    @Param('id') postId: string,
+    @Body() dto: { reason: string },
+  ) {
+    const userId = this.getUserId(auth);
+    const review = await this.reviewService.reject(postId, userId, dto.reason);
+    return { success: true, data: review };
+  }
+
+  // ===== 举报 =====
+
+  @Post(':id/report')
+  async reportPost(
+    @Headers('authorization') auth: string,
+    @Param('id') postId: string,
+    @Body() dto: { reason: string; detail?: string },
+  ) {
+    const userId = this.getUserId(auth);
+    const report = await this.reviewService.createReport(userId, postId, dto.reason, dto.detail);
+    return { success: true, data: report };
+  }
+
+  @Get('reports/list')
+  async getReports(
+    @Headers('authorization') auth: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+    @Query('status') status?: string,
+  ) {
+    this.getUserId(auth);
+    const result = await this.reviewService.getReports(
+      page ? parseInt(page) : 1,
+      limit ? parseInt(limit) : 20,
+      status,
+    );
+    return { success: true, ...result };
+  }
+
+  @Post('reports/:reportId/resolve')
+  async resolveReport(
+    @Headers('authorization') auth: string,
+    @Param('reportId') reportId: string,
+    @Body() dto: { action: 'RESOLVED' | 'DISMISSED'; resolution?: string },
+  ) {
+    const userId = this.getUserId(auth);
+    const report = await this.reviewService.resolveReport(reportId, userId, dto.action, dto.resolution);
+    return { success: true, data: report };
+  }
 }
