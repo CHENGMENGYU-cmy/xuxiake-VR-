@@ -47,7 +47,7 @@ export interface MediaItem {
 }
 
 // ===== 内容帖子 =====
-export type PostType = 'NOTE' | 'VR_MEDIA' | 'ROUTE' | 'JOURNEY' | 'GUIDE' | 'MOMENT';
+export type PostType = 'NOTE' | 'VR_MEDIA' | 'JOURNEY' | 'MOMENT';
 
 // 内容层级：瞬间捕获 → 内容分类 → 日记/日志 → 游记/散文
 export type ContentLevel = 'SNAPSHOT' | 'CLASSIFIED' | 'DIARY' | 'ESSAY';
