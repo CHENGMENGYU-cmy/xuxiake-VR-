@@ -26,7 +26,9 @@ export function HierarchyList({
   level, userId, location, mediaType, month, parentId,
   emptyText = '暂无内容',
   showRefresh = true,
+  detailBasePath,
 }: HierarchyListProps) {
+  const router = useRouter();
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
