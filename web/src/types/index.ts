@@ -130,6 +130,9 @@ export interface Post {
   mediaItems: MediaItem[];
   author: User;
   postType: PostType;
+  contentLevel: ContentLevel;
+  parentPostId?: string | null;
+  parentPost?: Post | null;
   location?: {
     lat: number;
     lng: number;
