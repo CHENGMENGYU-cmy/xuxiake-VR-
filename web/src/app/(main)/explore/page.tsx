@@ -22,13 +22,13 @@ const sortTabs = [
 
 const contentTabs: { id: string; label: string; icon: typeof Home; postType?: PostType }[] = [
   { id: 'all', label: '全部', icon: Home },
-  { id: 'VIDEO', label: '旅行视频', icon: Video, postType: 'VR_MEDIA' },
-  { id: 'IMAGE', label: '旅行图片', icon: Image, postType: 'VR_MEDIA' },
-  { id: 'AUDIO', label: '音频记录', icon: Music, postType: 'VR_MEDIA' },
+  { id: 'VIDEO', label: '第一视角', icon: Video, postType: 'VR_MEDIA' },
+  { id: 'IMAGE', label: '瞬间捕获', icon: Image, postType: 'VR_MEDIA' },
+  { id: 'AUDIO', label: '语音记录', icon: Music, postType: 'VR_MEDIA' },
   { id: 'ROUTE', label: '路线', icon: Map, postType: 'ROUTE' },
   { id: 'JOURNEY', label: '旅程', icon: Compass, postType: 'JOURNEY' },
   { id: 'GUIDE', label: '攻略', icon: BookOpen, postType: 'GUIDE' },
-  { id: 'MOMENT', label: '动态', icon: MessageSquare, postType: 'MOMENT' },
+  { id: 'MOMENT', label: '瞬间', icon: MessageSquare, postType: 'MOMENT' },
 ];
 
 export default function ExplorePage() {
