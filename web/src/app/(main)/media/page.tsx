@@ -16,9 +16,9 @@ import type { MediaType, Topic, RecommendedUser } from '@/types';
 
 const mediaTabs: { value: MediaType | 'ALL'; label: string; icon: typeof Video; color: string }[] = [
   { value: 'ALL', label: '全部', icon: FileText, color: 'text-primary' },
-  { value: 'VIDEO', label: '旅行视频', icon: Video, color: 'text-teal-500' },
-  { value: 'IMAGE', label: '旅行图片', icon: Image, color: 'text-orange-500' },
-  { value: 'AUDIO', label: '音频记录', icon: Music, color: 'text-teal-400' },
+  { value: 'VIDEO', label: '第一视角', icon: Video, color: 'text-teal-500' },
+  { value: 'IMAGE', label: '瞬间捕获', icon: Image, color: 'text-orange-500' },
+  { value: 'AUDIO', label: '语音记录', icon: Music, color: 'text-teal-400' },
 ];
 
 export default function MediaPage() {
