@@ -10,7 +10,6 @@ import { MediaItem } from '../../entities/media-item.entity.js';
 import { Comment } from '../../entities/comment.entity.js';
 import { Like } from '../../entities/like.entity.js';
 import { User } from '../../entities/user.entity.js';
-import { Journey } from '../../entities/journey.entity.js';
 import { InterestTag } from '../../entities/interest-tag.entity.js';
 import { Topic } from '../../entities/topic.entity.js';
 import { Journey } from '../../entities/journey.entity.js';
