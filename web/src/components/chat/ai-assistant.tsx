@@ -1,10 +1,10 @@
 'use client';
 
-import { Bot, MapPin, Route, Calendar, Lightbulb } from 'lucide-react';
+import { Bot, MapPin, Calendar, Lightbulb } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export interface AIResponse {
-  type: 'TRAVEL_TIP' | 'ROUTE_SUGGESTION' | 'WEATHER' | 'TRANSLATION' | 'GENERAL';
+  type: 'TRAVEL_TIP' | 'WEATHER' | 'TRANSLATION' | 'GENERAL';
   title: string;
   content: string;
   suggestions?: string[];
@@ -17,7 +17,6 @@ interface AIAssistantMessageProps {
 
 const TYPE_CONFIG: Record<string, { icon: typeof Bot; label: string; color: string }> = {
   TRAVEL_TIP: { icon: Lightbulb, label: '旅行贴士', color: 'text-amber-600 bg-amber-50 border-amber-200 dark:bg-amber-950/30 dark:border-amber-800' },
-  ROUTE_SUGGESTION: { icon: Route, label: '路线推荐', color: 'text-green-600 bg-green-50 border-green-200 dark:bg-green-950/30 dark:border-green-800' },
   WEATHER: { icon: Calendar, label: '天气信息', color: 'text-blue-600 bg-blue-50 border-blue-200 dark:bg-blue-950/30 dark:border-blue-800' },
   TRANSLATION: { icon: MapPin, label: '翻译', color: 'text-purple-600 bg-purple-50 border-purple-200 dark:bg-purple-950/30 dark:border-purple-800' },
   GENERAL: { icon: Bot, label: 'AI助手', color: 'text-gray-600 bg-gray-50 border-gray-200 dark:bg-gray-950/30 dark:border-gray-800' },
