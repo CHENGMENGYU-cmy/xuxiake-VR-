@@ -10,6 +10,7 @@ import type { CreatePostDto, CreateCommentDto } from '../../common/interfaces.js
 export class PostsController {
   constructor(
     private readonly postsService: PostsService,
+    private readonly reviewService: ReviewService,
     private readonly authService: AuthService,
   ) {}
 
