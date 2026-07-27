@@ -505,75 +505,132 @@ function UploadContent() {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2">
-        <Upload className="h-6 w-6 text-primary" />
-        <h1 className="text-xl font-bold">分享见闻</h1>
+    <div className="mx-auto max-w-3xl space-y-6 pb-8">
+      {/* 页面标题 */}
+      <div className="space-y-1">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/70">
+            <Upload className="h-5 w-5 text-white" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold">分享见闻</h1>
+            <p className="text-sm text-muted-foreground">记录你的旅行瞬间</p>
+          </div>
+        </div>
       </div>
 
       {/* 草稿列表 */}
       <DraftList onSelectDraft={handleSelectDraft} />
 
-      <Card>
-        <CardContent className="p-6">
-          {/* Tab选择 */}
-          <div className="flex flex-wrap gap-2">
-            {tabs.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.key;
-              return (
-                <Button
-                  key={tab.key}
-                  variant={isActive ? 'default' : 'outline'}
-                  className="gap-2"
-                  onClick={() => handleTabChange(tab.key)}
-                >
-                  <Icon className={cn('h-4 w-4', !isActive && tab.color)} />
-                  {tab.label}
-                </Button>
-              );
-            })}
-          </div>
+      {/* 内容类型选择卡片 */}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+        {tabs.map((tab) => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.key;
+          return (
+            <button
+              key={tab.key}
+              onClick={() => handleTabChange(tab.key)}
+              className={cn(
+                'flex flex-col items-center gap-2 rounded-xl border-2 p-4 transition-all',
+                isActive
+                  ? 'border-primary bg-primary/5 shadow-sm'
+                  : 'border-muted bg-card hover:border-primary/30 hover:bg-accent/50'
+              )}
+            >
+              <div className={cn(
+                'flex h-12 w-12 items-center justify-center rounded-xl',
+                isActive ? 'bg-primary/10' : 'bg-muted'
+              )}>
+                <Icon className={cn('h-6 w-6', isActive ? 'text-primary' : tab.color)} />
+              </div>
+              <span className={cn(
+                'text-sm font-medium',
+                isActive ? 'text-primary' : 'text-foreground'
+              )}>
+                {tab.label}
+              </span>
+            </button>
+          );
+        })}
+      </div>
 
-          <Separator className="my-4" />
+      {/* 主要内容区域 */}
+      <Card className="shadow-sm">
+        <CardContent className="p-6 space-y-6">
+          {/* 文字内容 - 写日记模式 */}
+          {activeTab === 'DIARY' && (
+            <>
+              <div className="flex items-center gap-2 rounded-lg border border-indigo-200 bg-gradient-to-r from-indigo-50 to-purple-50 dark:border-indigo-900 dark:from-indigo-950/30 dark:to-purple-950/30 px-4 py-3">
+                <Lock className="h-5 w-5 text-indigo-500 shrink-0" />
+                <div>
+                  <p className="text-sm font-medium text-indigo-700 dark:text-indigo-300">私密日记</p>
+                  <p className="text-xs text-indigo-600/80 dark:text-indigo-400/80">
+                    仅自己可见，记录内心感受
+                  </p>
+                </div>
+              </div>
+              <div className="space-y-3">
+                <label className="text-sm font-medium flex items-center gap-2">
+                  <span className="flex h-5 w-5 items-center justify-center rounded bg-indigo-100 dark:bg-indigo-900">
+                    <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">1</span>
+                  </span>
+                  今日感想
+                </label>
+                <Textarea
+                  placeholder="写下今天的所见所闻、所思所想..."
+                  className="min-h-[250px] resize-none"
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                />
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <span>{content.length} 字</span>
+                  <span>{new Date().toLocaleDateString('zh-CN', { month: 'long', day: 'numeric' })}</span>
+                </div>
+              </div>
+            </>
+          )}
 
-          {/* 文字内容 */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium">说点什么...</label>
-            <Textarea
-              placeholder="分享你的VR旅程体验..."
-              className="min-h-[100px]"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-            />
-          </div>
+          {/* 文字内容 - 其他模式 */}
+          {activeTab !== 'DIARY' && (
+            <div className="space-y-3">
+              <label className="text-sm font-medium">说点什么...</label>
+              <Textarea
+                placeholder="分享你的旅行体验..."
+                className="min-h-[120px] resize-none"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+              />
+            </div>
+          )}
 
-          {/* 上传区域 */}
-          <div className="mt-4">
+          {/* 媒体上传区域 */}
+          <div className="space-y-3">
             {/* VIDEO */}
             {activeTab === 'VIDEO' && (
               <>
                 {media?.type === 'VIDEO' ? (
                   <div className="space-y-3">
-                    <div className="relative overflow-hidden rounded-lg border bg-black">
-                      <video src={media.url} className="max-h-64 w-full object-contain" controls />
-                      <button onClick={resetMedia} className="absolute right-2 top-2 rounded-full bg-black/60 p-1 text-white hover:bg-black/80">
-                        <X className="h-4 w-4" />
+                    <div className="relative overflow-hidden rounded-xl border-2 border-primary/20 bg-black">
+                      <video src={media.url} className="max-h-80 w-full object-contain" controls />
+                      <button onClick={resetMedia} className="absolute right-3 top-3 rounded-full bg-black/60 p-2 text-white hover:bg-black/80 transition-colors">
+                        <X className="h-5 w-5" />
                       </button>
                     </div>
                     <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-                      {(media.duration ?? 0) > 0 && <Badge variant="secondary">{formatDuration(media.duration)}</Badge>}
-                      {(media.width ?? 0) > 0 && <span>{media.width}x{media.height}</span>}
-                      {media.size && <span>{formatSize(media.size)}</span>}
+                      {(media.duration ?? 0) > 0 && <Badge variant="secondary" className="font-mono">{formatDuration(media.duration)}</Badge>}
+                      {(media.width ?? 0) > 0 && <Badge variant="outline">{media.width}x{media.height}</Badge>}
+                      {media.size && <Badge variant="outline">{formatSize(media.size)}</Badge>}
                     </div>
                     {/* VR格式选择 */}
-                    <div className="space-y-1.5">
+                    <div className="space-y-2">
                       <label className="text-xs font-medium">VR格式</label>
-                      <div className="flex flex-wrap gap-1.5">
+                      <div className="flex flex-wrap gap-2">
                         {vrFormats.map(f => (
                           <button key={f.value} onClick={() => { setVrFormat(f.value); setMedia(m => m ? { ...m, vrFormat: f.value } : null); }}
-                            className={cn('rounded-full px-3 py-1 text-xs transition-colors', vrFormat === f.value ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-muted/80')}>
-                            {f.label}
+                            className={cn('rounded-lg px-4 py-2 text-sm transition-all', vrFormat === f.value ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-muted text-muted-foreground hover:bg-muted/80')}>
+                            <div className="font-medium">{f.label}</div>
+                            <div className="text-xs opacity-80">{f.desc}</div>
                           </button>
                         ))}
                       </div>
@@ -589,11 +646,17 @@ function UploadContent() {
                       const files = e.dataTransfer.files;
                       if (files.length > 0) handleVideoSelect(files);
                     }}
-                    className="flex cursor-pointer flex-col items-center gap-3 rounded-lg border-2 border-dashed border-border p-8 text-center transition-colors hover:border-primary">
-                    {uploading ? <Loader2 className="h-10 w-10 animate-spin text-primary" /> : <Video className="h-10 w-10 text-primary" />}
+                    className="flex cursor-pointer flex-col items-center gap-4 rounded-xl border-2 border-dashed border-primary/30 bg-primary/5 p-12 text-center transition-all hover:border-primary hover:bg-primary/10">
+                    {uploading ? (
+                      <Loader2 className="h-12 w-12 animate-spin text-primary" />
+                    ) : (
+                      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
+                        <Video className="h-8 w-8 text-primary" />
+                      </div>
+                    )}
                     <div>
-                      <p className="text-sm font-medium">{uploading ? '上传中...' : '点击或拖拽VR视频到此处'}</p>
-                      <p className="text-xs text-muted-foreground mt-1">支持 MP4、MOV、WebM 格式，最大 500MB</p>
+                      <p className="text-base font-medium">{uploading ? '上传中...' : '点击或拖拽视频到此处'}</p>
+                      <p className="text-sm text-muted-foreground mt-1">支持 MP4、MOV、WebM 格式，最大 500MB</p>
                     </div>
                   </div>
                 )}
@@ -610,13 +673,14 @@ function UploadContent() {
                 />
                 {/* VR格式选择 */}
                 {images.length > 0 && (
-                  <div className="space-y-1.5">
+                  <div className="space-y-2">
                     <label className="text-xs font-medium">VR格式</label>
-                    <div className="flex flex-wrap gap-1.5">
+                    <div className="flex flex-wrap gap-2">
                       {vrFormats.map(f => (
                         <button key={f.value} onClick={() => setVrFormat(f.value)}
-                          className={cn('rounded-full px-3 py-1 text-xs transition-colors', vrFormat === f.value ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-muted/80')}>
-                          {f.label}
+                          className={cn('rounded-lg px-4 py-2 text-sm transition-all', vrFormat === f.value ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-muted text-muted-foreground hover:bg-muted/80')}>
+                          <div className="font-medium">{f.label}</div>
+                          <div className="text-xs opacity-80">{f.desc}</div>
                         </button>
                       ))}
                     </div>
@@ -630,32 +694,36 @@ function UploadContent() {
               <>
                 {media?.type === 'AUDIO' ? (
                   <div className="space-y-3">
-                    <div className="relative flex items-center gap-3 rounded-lg border bg-muted/50 p-4">
-                      <Volume2 className="h-8 w-8 text-accent flex-shrink-0" />
+                    <div className="relative flex items-center gap-4 rounded-xl border-2 border-accent/20 bg-accent/5 p-5">
+                      <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-accent/10 flex-shrink-0">
+                        <Volume2 className="h-7 w-7 text-accent" />
+                      </div>
                       <div className="flex-1 min-w-0">
                         <audio src={media.url} controls className="w-full" />
-                        <div className="mt-1 flex flex-wrap gap-2 text-xs text-muted-foreground">
-                          {(media.duration ?? 0) > 0 && <span>{formatDuration(media.duration)}</span>}
-                          {media.size && <span>{formatSize(media.size)}</span>}
+                        <div className="mt-2 flex flex-wrap gap-2 text-xs text-muted-foreground">
+                          {(media.duration ?? 0) > 0 && <Badge variant="secondary" className="font-mono">{formatDuration(media.duration)}</Badge>}
+                          {media.size && <Badge variant="outline">{formatSize(media.size)}</Badge>}
                         </div>
                       </div>
-                      <button onClick={resetMedia} className="rounded-full p-1 text-muted-foreground hover:text-destructive">
-                        <X className="h-4 w-4" />
+                      <button onClick={resetMedia} className="rounded-full p-2 text-muted-foreground hover:text-destructive transition-colors">
+                        <X className="h-5 w-5" />
                       </button>
                     </div>
                   </div>
                 ) : recordedBlob ? (
                   <div className="space-y-3">
-                    <div className="flex items-center gap-3 rounded-lg border bg-muted/50 p-4">
-                      <Volume2 className="h-6 w-6 text-accent" />
+                    <div className="flex items-center gap-4 rounded-xl border-2 border-accent/20 bg-accent/5 p-5">
+                      <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-accent/10">
+                        <Volume2 className="h-7 w-7 text-accent" />
+                      </div>
                       <div className="flex-1">
-                        <p className="text-sm font-medium">录音完成</p>
-                        <audio src={URL.createObjectURL(recordedBlob)} controls className="mt-1 w-full" />
+                        <p className="text-sm font-medium mb-2">录音完成</p>
+                        <audio src={URL.createObjectURL(recordedBlob)} controls className="w-full" />
                       </div>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-3">
                       <Button size="sm" onClick={uploadRecordedAudio} disabled={uploading}>
-                        {uploading ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <Upload className="h-4 w-4 mr-1" />}
+                        {uploading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Upload className="h-4 w-4 mr-2" />}
                         上传录音
                       </Button>
                       <Button size="sm" variant="ghost" onClick={() => setRecordedBlob(null)}>重新录制</Button>
@@ -670,33 +738,39 @@ function UploadContent() {
                       const files = e.dataTransfer.files;
                       if (files.length > 0) handleAudioSelect(files);
                     }}
-                    className="flex flex-col items-center gap-3 rounded-lg border-2 border-dashed border-border p-8 text-center transition-colors hover:border-accent">
-                    {uploading ? <Loader2 className="h-10 w-10 animate-spin text-accent" /> : <Mic className="h-10 w-10 text-accent" />}
+                    className="flex flex-col items-center gap-4 rounded-xl border-2 border-dashed border-accent/30 bg-accent/5 p-12 text-center transition-all hover:border-accent hover:bg-accent/10">
+                    {uploading ? (
+                      <Loader2 className="h-12 w-12 animate-spin text-accent" />
+                    ) : (
+                      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-accent/10">
+                        <Mic className="h-8 w-8 text-accent" />
+                      </div>
+                    )}
                     <div>
-                      <p className="text-sm font-medium">{uploading ? '上传中...' : '上传或录制音频'}</p>
-                      <p className="text-xs text-muted-foreground mt-1">支持 MP3、WAV、AAC、OGG 格式，最大 100MB</p>
+                      <p className="text-base font-medium">{uploading ? '上传中...' : '上传或录制音频'}</p>
+                      <p className="text-sm text-muted-foreground mt-1">支持 MP3、WAV、AAC、OGG 格式，最大 100MB</p>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-3">
                       <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()}>
-                        <FileUp className="mr-1.5 h-4 w-4" />
-                        选择音频文件
+                        <FileUp className="mr-2 h-4 w-4" />
+                        选择文件
                       </Button>
                       <Button variant="outline" size="sm" onClick={isRecording ? stopRecording : startRecording}
-                        className={isRecording ? 'border-red-300 text-red-500' : ''}>
-                        <Mic className="mr-1.5 h-4 w-4" />
+                        className={isRecording ? 'border-red-300 text-red-500 bg-red-50 dark:bg-red-950/30' : ''}>
+                        <Mic className="mr-2 h-4 w-4" />
                         {isRecording ? '停止录制' : '录制音频'}
                       </Button>
                     </div>
                     {isRecording && (
-                      <div className="w-full max-w-xs space-y-2">
-                        <div className="flex items-center gap-2 text-sm text-red-500">
-                          <span className="h-2 w-2 animate-pulse rounded-full bg-red-500" />
-                          <span className="font-medium">{Math.floor(recordingDuration / 60)}:{String(recordingDuration % 60).padStart(2, '0')}</span>
-                          <span className="text-xs text-muted-foreground">录制中...</span>
+                      <div className="w-full max-w-xs space-y-3 mt-4">
+                        <div className="flex items-center justify-center gap-2 text-sm font-medium text-red-500">
+                          <span className="h-3 w-3 animate-pulse rounded-full bg-red-500" />
+                          <span className="font-mono">{Math.floor(recordingDuration / 60)}:{String(recordingDuration % 60).padStart(2, '0')}</span>
+                          <span className="text-xs text-muted-foreground">录制中</span>
                         </div>
-                        <div className="flex h-8 items-end gap-[2px] rounded-lg bg-red-50 dark:bg-red-950/30 px-2 py-1">
+                        <div className="flex h-10 items-end gap-1 rounded-xl bg-red-50 dark:bg-red-950/30 px-3 py-2">
                           {waveform.map((v, i) => (
-                            <div key={i} className="w-[3px] shrink-0 rounded-full bg-red-400/60" style={{ height: `${Math.max(4, v * 24)}px` }} />
+                            <div key={i} className="w-1 shrink-0 rounded-full bg-red-400/60" style={{ height: `${Math.max(4, v * 32)}px` }} />
                           ))}
                           {waveform.length === 0 && <div className="h-1 w-full rounded-full bg-red-200 dark:bg-red-800" />}
                         </div>
@@ -707,29 +781,16 @@ function UploadContent() {
               </>
             )}
 
-            {/* DIARY — 写日记 */}
+            {/* DIARY - 附加功能 */}
             {activeTab === 'DIARY' && (
-              <div className="space-y-4">
-                <div className="flex items-center gap-2 rounded-lg border border-indigo-200 bg-indigo-50 dark:border-indigo-900 dark:bg-indigo-950/30 px-3 py-2">
-                  <Lock className="h-4 w-4 text-indigo-500 shrink-0" />
-                  <p className="text-xs text-indigo-600 dark:text-indigo-400">
-                    日记默认为私密内容，仅自己可见。
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">今日感想</label>
-                  <Textarea
-                    placeholder="写下今天的所见所闻、所思所想..."
-                    className="min-h-[250px]"
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                  />
-                  <p className="text-xs text-muted-foreground">{content.length} 字</p>
-                </div>
-
-                {/* 图片上传 */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">配图（可选）</label>
+              <>
+                <div className="space-y-3">
+                  <label className="text-sm font-medium flex items-center gap-2">
+                    <span className="flex h-5 w-5 items-center justify-center rounded bg-indigo-100 dark:bg-indigo-900">
+                      <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">2</span>
+                    </span>
+                    配图（可选）
+                  </label>
                   <MultiImageUploader
                     images={images}
                     onImagesChange={setImages}
@@ -737,46 +798,58 @@ function UploadContent() {
                   />
                 </div>
 
-                {/* 地点信息 */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">地点（可选）</label>
+                <div className="space-y-3">
+                  <label className="text-sm font-medium flex items-center gap-2">
+                    <span className="flex h-5 w-5 items-center justify-center rounded bg-indigo-100 dark:bg-indigo-900">
+                      <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">3</span>
+                    </span>
+                    地点（可选）
+                  </label>
                   <div className="relative">
                     <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input type="text" placeholder="记录你在哪里..." className="pl-10" value={location} onChange={(e) => setLocation(e.target.value)} />
                   </div>
                 </div>
 
-                {/* 话题标签 */}
-                <TopicSelector
-                  selectedTopics={selectedTopics}
-                  onTopicsChange={setSelectedTopics}
-                  maxTopics={5}
-                  content={content}
-                />
-              </div>
+                <div className="space-y-3">
+                  <label className="text-sm font-medium flex items-center gap-2">
+                    <span className="flex h-5 w-5 items-center justify-center rounded bg-indigo-100 dark:bg-indigo-900">
+                      <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">4</span>
+                    </span>
+                    话题标签（可选）
+                  </label>
+                  <TopicSelector
+                    selectedTopics={selectedTopics}
+                    onTopicsChange={setSelectedTopics}
+                    maxTopics={5}
+                    content={content}
+                  />
+                </div>
+              </>
             )}
 
             {/* LINK 附加 */}
             {showLinkAddon && (
-              <div className="space-y-4">
-                <div className="flex gap-2">
+              <div className="space-y-4 rounded-xl border-2 border-muted bg-muted/30 p-4">
+                <div className="flex gap-3">
                   <Input type="url" placeholder="https://example.com" value={linkUrl}
                     onChange={(e) => setLinkUrl(e.target.value)}
                     onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleLinkConfirm(); } }}
-                    disabled={loadingLink} />
+                    disabled={loadingLink}
+                    className="flex-1" />
                   <Button size="sm" onClick={handleLinkConfirm} disabled={!linkUrl.trim() || loadingLink}>
                     {loadingLink ? <Loader2 className="h-4 w-4 animate-spin" /> : '获取预览'}
                   </Button>
                 </div>
                 {linkData && (
-                  <div className="flex items-center gap-3 rounded-lg border bg-muted/50 p-3">
-                    {linkData.favicon && <img src={linkData.favicon} alt="" className="h-5 w-5" />}
+                  <div className="flex items-center gap-3 rounded-lg border bg-card p-4">
+                    {linkData.favicon && <img src={linkData.favicon} alt="" className="h-6 w-6 rounded" />}
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium truncate">{linkData.title}</p>
-                      {linkData.description && <p className="text-xs text-muted-foreground line-clamp-1">{linkData.description}</p>}
-                      <p className="text-xs text-muted-foreground/70 truncate">{linkData.url}</p>
+                      {linkData.description && <p className="text-xs text-muted-foreground line-clamp-1 mt-1">{linkData.description}</p>}
+                      <p className="text-xs text-muted-foreground/70 truncate mt-1">{linkData.url}</p>
                     </div>
-                    <button onClick={() => setLinkData(null)} className="rounded-full p-1 text-muted-foreground hover:text-destructive">
+                    <button onClick={() => setLinkData(null)} className="rounded-full p-2 text-muted-foreground hover:text-destructive transition-colors">
                       <X className="h-4 w-4" />
                     </button>
                   </div>
@@ -786,8 +859,8 @@ function UploadContent() {
 
             {/* TRANSLATION 附加 */}
             {showTranslationAddon && (
-              <div className="space-y-4">
-                <div className="grid grid-cols-[1fr,auto,1fr] gap-2 items-end">
+              <div className="space-y-4 rounded-xl border-2 border-muted bg-muted/30 p-4">
+                <div className="grid grid-cols-[1fr,auto,1fr] gap-3 items-end">
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <label className="text-sm font-medium">源语言</label>
@@ -796,7 +869,7 @@ function UploadContent() {
                       </Button>
                     </div>
                     <select
-                      className="w-full rounded-md border border-border bg-background p-2 text-sm"
+                      className="w-full rounded-lg border-2 border-border bg-background p-2.5 text-sm focus:border-primary"
                       value={sourceLang}
                       onChange={(e) => setSourceLang(e.target.value)}
                     >
@@ -809,7 +882,7 @@ function UploadContent() {
                   <Button
                     variant="outline"
                     size="icon"
-                    className="mb-0.5"
+                    className="mb-0.5 h-10 w-10"
                     onClick={handleSwapLanguages}
                   >
                     <ArrowLeftRight className="h-4 w-4" />
@@ -817,7 +890,7 @@ function UploadContent() {
                   <div className="space-y-2">
                     <label className="text-sm font-medium">目标语言</label>
                     <select
-                      className="w-full rounded-md border border-border bg-background p-2 text-sm"
+                      className="w-full rounded-lg border-2 border-border bg-background p-2.5 text-sm focus:border-primary"
                       value={targetLang}
                       onChange={(e) => setTargetLang(e.target.value)}
                     >
@@ -832,7 +905,7 @@ function UploadContent() {
                   <label className="text-sm font-medium">原文内容</label>
                   <Textarea
                     placeholder="输入需要翻译的文字内容..."
-                    className="min-h-[120px]"
+                    className="min-h-[120px] resize-none"
                     value={sourceText}
                     onChange={(e) => setSourceText(e.target.value)}
                   />
@@ -845,11 +918,11 @@ function UploadContent() {
                   disabled={!sourceText.trim() || translating}
                 >
                   {translating ? (
-                    <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   ) : (
-                    <Languages className="mr-1.5 h-4 w-4" />
+                    <Languages className="mr-2 h-4 w-4" />
                   )}
-                  {translating ? '翻译中...' : '翻译'}
+                  {translating ? '翻译中...' : '开始翻译'}
                 </Button>
                 {translatedText && (
                   <div className="space-y-2">
@@ -867,7 +940,7 @@ function UploadContent() {
                         复制
                       </Button>
                     </div>
-                    <div className="rounded-lg border bg-muted/50 p-4">
+                    <div className="rounded-lg border-2 border-primary/20 bg-primary/5 p-4">
                       <p className="text-sm whitespace-pre-wrap">{translatedText}</p>
                     </div>
                   </div>
@@ -876,65 +949,73 @@ function UploadContent() {
             )}
           </div>
 
-          {/* 附加内容 */}
-          <div className="mt-4 flex flex-wrap gap-2">
-            <Button
-              variant={showLinkAddon ? 'default' : 'outline'}
-              size="sm"
-              className="gap-1.5"
-              onClick={() => setShowLinkAddon(!showLinkAddon)}
-            >
-              <Link2 className="h-3.5 w-3.5" />
-              链接
-            </Button>
-            <Button
-              variant={showTranslationAddon ? 'default' : 'outline'}
-              size="sm"
-              className="gap-1.5"
-              onClick={() => setShowTranslationAddon(!showTranslationAddon)}
-            >
-              <Languages className="h-3.5 w-3.5" />
-              翻译
-            </Button>
-          </div>
-
-          {/* 可见性控制 */}
-          <div className="mt-4">
-            <VisibilityControl
-              visibility={visibility}
-              onVisibilityChange={setVisibility}
-            />
-          </div>
-
-          {/* 位置信息 */}
-          <div className="mt-4 space-y-2">
-            <label className="text-sm font-medium">位置信息（可选）</label>
-            <div className="relative">
-              <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input type="text" placeholder="添加拍摄地点..." className="pl-10" value={location} onChange={(e) => setLocation(e.target.value)} />
+          {/* 附加内容按钮 - 仅在非日记模式显示 */}
+          {activeTab !== 'DIARY' && (
+            <div className="flex flex-wrap gap-3">
+              <Button
+                variant={showLinkAddon ? 'default' : 'outline'}
+                size="sm"
+                className="gap-2"
+                onClick={() => setShowLinkAddon(!showLinkAddon)}
+              >
+                <Link2 className="h-4 w-4" />
+                添加链接
+              </Button>
+              <Button
+                variant={showTranslationAddon ? 'default' : 'outline'}
+                size="sm"
+                className="gap-2"
+                onClick={() => setShowTranslationAddon(!showTranslationAddon)}
+              >
+                <Languages className="h-4 w-4" />
+                翻译内容
+              </Button>
             </div>
-          </div>
+          )}
 
-          {/* 话题标签 */}
-          <div className="mt-4">
-            <TopicSelector
-              selectedTopics={selectedTopics}
-              onTopicsChange={setSelectedTopics}
-              maxTopics={5}
-              content={content}
-            />
-          </div>
+          {/* 设置区域 - 仅在非日记模式显示 */}
+          {activeTab !== 'DIARY' && (
+            <>
+              <Separator />
 
-          {/* 社群选择 */}
-          <div className="mt-4">
-            <CommunitySelector
-              selectedCommunity={selectedCommunity}
-              onCommunityChange={setSelectedCommunity}
-            />
-          </div>
+              <div className="space-y-4">
+                <h3 className="text-sm font-semibold flex items-center gap-2">
+                  <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <span className="text-xs font-bold">⚙</span>
+                  </span>
+                  发布设置
+                </h3>
+
+                <VisibilityControl
+                  visibility={visibility}
+                  onVisibilityChange={setVisibility}
+                />
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">位置信息</label>
+                  <div className="relative">
+                    <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <Input type="text" placeholder="添加拍摄地点..." className="pl-10" value={location} onChange={(e) => setLocation(e.target.value)} />
+                  </div>
+                </div>
+
+                <TopicSelector
+                  selectedTopics={selectedTopics}
+                  onTopicsChange={setSelectedTopics}
+                  maxTopics={5}
+                  content={content}
+                />
+
+                <CommunitySelector
+                  selectedCommunity={selectedCommunity}
+                  onCommunityChange={setSelectedCommunity}
+                />
+              </div>
+            </>
+          )}
 
           {/* 发布按钮 */}
-          <div className="mt-6 flex justify-between">
+          <div className="flex items-center justify-between pt-4 border-t">
             <PublishPreview
               data={{
                 content,
@@ -960,10 +1041,10 @@ function UploadContent() {
               }}
             />
             <div className="flex gap-3">
-              <Button variant="outline" onClick={() => router.push('/feed')}>取消</Button>
-              <Button className="gap-2" disabled={!canPublish} onClick={handlePublish}>
-                {isPublishing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-                {isPublishing ? '发布中...' : '发布内容'}
+              <Button variant="outline" size="lg" onClick={() => router.push('/feed')}>取消</Button>
+              <Button size="lg" className="gap-2 px-8" disabled={!canPublish} onClick={handlePublish}>
+                {isPublishing ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
+                {isPublishing ? '发布中...' : activeTab === 'DIARY' ? '保存日记' : '发布内容'}
               </Button>
             </div>
           </div>
