@@ -589,6 +589,129 @@ export class PostsService {
     };
   }
 
+  // ===== 内容层级查询 =====
+  async getContentHierarchy(options: { level?: string; userId?: string; cursor?: string; limit?: number; parentId?: string } = {}) {
+    const { level, userId, cursor, limit = 12, parentId } = options;
+
+    const qb = this.postRepo
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.author', 'author')
+      .leftJoinAndSelect('post.mediaItems', 'mediaItems')
+      .leftJoinAndSelect('post.tags', 'tags')
+      .leftJoinAndSelect('post.topics', 'topics')
+      .leftJoinAndSelect('post.parentPost', 'parentPost')
+      .where('post.visibility = :vis', { vis: 'PUBLIC' })
+      .orderBy('post.createdAt', 'DESC')
+      .take(limit + 1);
+
+    if (level) {
+      qb.andWhere('post.contentLevel = :level', { level });
+    }
+    if (userId) {
+      qb.andWhere('post.authorId = :userId', { userId });
+    }
+    if (parentId) {
+      qb.andWhere('post.parentPostId = :parentId', { parentId });
+    }
+
+    const posts = await qb.getMany();
+    const hasMore = posts.length > limit;
+    const data = posts.slice(0, limit);
+
+    return {
+      data: data.map((p) => this.formatPost(p)),
+      nextCursor: hasMore ? data[data.length - 1].id : null,
+      hasMore,
+    };
+  }
+
+  async getClassifiedDimensions(userId?: string) {
+    const qb = this.postRepo
+      .createQueryBuilder('post')
+      .select('post.locationName', 'location')
+      .addSelect('COUNT(post.id)', 'count')
+      .where('post.contentLevel = :level', { level: 'SNAPSHOT' })
+      .andWhere('post.visibility = :vis', { vis: 'PUBLIC' });
+
+    if (userId) {
+      qb.andWhere('post.authorId = :userId', { userId });
+    }
+
+    const byLocation = await qb
+      .groupBy('post.locationName')
+      .having('post.locationName IS NOT NULL')
+      .orderBy('count', 'DESC')
+      .take(10)
+      .getRawMany();
+
+    const byType = await this.postRepo
+      .createQueryBuilder('post')
+      .select('post.postType', 'type')
+      .addSelect('COUNT(post.id)', 'count')
+      .where('post.contentLevel = :level', { level: 'SNAPSHOT' })
+      .andWhere('post.visibility = :vis', { vis: 'PUBLIC' })
+      .groupBy('post.postType')
+      .getRawMany();
+
+    const byTime = await this.postRepo
+      .createQueryBuilder('post')
+      .select("DATE_FORMAT(post.createdAt, '%Y-%m')", 'month')
+      .addSelect('COUNT(post.id)', 'count')
+      .where('post.contentLevel = :level', { level: 'SNAPSHOT' })
+      .andWhere('post.visibility = :vis', { vis: 'PUBLIC' })
+      .groupBy('month')
+      .orderBy('month', 'DESC')
+      .take(12)
+      .getRawMany();
+
+    return {
+      byLocation: byLocation.map((r) => ({ name: r.location, count: Number(r.count) })),
+      byType: byType.map((r) => ({ type: r.type, count: Number(r.count) })),
+      byTime: byTime.map((r) => ({ month: r.month, count: Number(r.count) })),
+    };
+  }
+
+  async promoteContent(userId: string, postId: string, dto: { targetLevel: string; content?: string; title?: string }) {
+    const post = await this.postRepo.findOne({ where: { id: postId, authorId: userId } });
+    if (!post) throw new NotFoundException('内容不存在');
+
+    const validLevels = ['SNAPSHOT', 'CLASSIFIED', 'DIARY', 'ESSAY'];
+    if (!validLevels.includes(dto.targetLevel)) throw new NotFoundException('无效的目标层级');
+
+    const newPost = this.postRepo.create({
+      id: uuidv4(),
+      authorId: userId,
+      postType: post.postType,
+      contentLevel: dto.targetLevel as Post['contentLevel'],
+      parentPostId: post.id,
+      content: dto.content || post.content,
+      locationLat: post.locationLat,
+      locationLng: post.locationLng,
+      locationName: post.locationName,
+      vrMetadata: post.vrMetadata,
+      visibility: 'PRIVATE',
+      likeCount: 0,
+      commentCount: 0,
+      viewCount: 0,
+    });
+
+    await this.postRepo.save(newPost);
+
+    // 如果升级到 ESSAY，关联 journey
+    if (dto.targetLevel === 'ESSAY') {
+      const journey = this.journeyRepo.create({
+        id: uuidv4(),
+        postId: newPost.id,
+        title: dto.title || post.locationName || '未命名游记',
+        destination: post.locationName,
+        stopCount: 0,
+      });
+      await this.journeyRepo.save(journey);
+    }
+
+    return this.formatPost(newPost);
+  }
+
   // ===== 标签查询 =====
   async getAllTags() {
     return this.tagRepo.find({ order: { sortOrder: 'DESC', name: 'ASC' } });
