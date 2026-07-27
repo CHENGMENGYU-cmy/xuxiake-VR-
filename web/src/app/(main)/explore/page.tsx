@@ -1,10 +1,16 @@
 'use client';
 
-import { useState } from 'react';
-import { TrendingUp, Flame, Clock, Home, Video, Image, Music, Map, Compass, BookOpen, MessageSquare } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { TrendingUp, Flame, Clock, Home, Video, Image, Music, Compass, MessageSquare, FileText } from 'lucide-react';
 import { FeedList } from '@/components/feed/feed-list';
+import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useAuthStore } from '@/stores/auth-store';
+import { getHotTopics } from '@/lib/post-api';
+import { getRecommendedUsers } from '@/lib/social-api';
 import type { PostSortType } from '@/lib/post-api';
-import type { PostType } from '@/types';
+import type { PostType, Topic, RecommendedUser } from '@/types';
 
 type SortTab = 'trending' | 'latest' | 'hot';
 
@@ -23,20 +29,60 @@ const sortTabs = [
 const contentTabs: { id: string; label: string; icon: typeof Home; postType?: PostType }[] = [
   { id: 'all', label: '全部', icon: Home },
   { id: 'VIDEO', label: '第一视角', icon: Video, postType: 'VR_MEDIA' },
-  { id: 'IMAGE', label: '瞬间捕获', icon: Image, postType: 'VR_MEDIA' },
-  { id: 'AUDIO', label: '语音记录', icon: Music, postType: 'VR_MEDIA' },
-  { id: 'JOURNEY', label: '旅程', icon: Compass, postType: 'JOURNEY' },
+  { id: 'IMAGE', label: '影像', icon: Image, postType: 'VR_MEDIA' },
+  { id: 'AUDIO', label: '语音', icon: Music, postType: 'VR_MEDIA' },
+  { id: 'JOURNEY', label: '游记', icon: Compass, postType: 'JOURNEY' },
+  { id: 'NOTE', label: '随记', icon: FileText, postType: 'NOTE' },
   { id: 'MOMENT', label: '瞬间', icon: MessageSquare, postType: 'MOMENT' },
 ];
 
 export default function ExplorePage() {
   const [activeSort, setActiveSort] = useState<SortTab>('trending');
   const [activeContent, setActiveContent] = useState('all');
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [hotTopics, setHotTopics] = useState<Topic[]>([]);
+  const [featuredCreators, setFeaturedCreators] = useState<RecommendedUser[]>([]);
+  const { user } = useAuthStore();
+
+  useEffect(() => {
+    getHotTopics(12).then(setHotTopics).catch(() => {});
+    if (user) {
+      getRecommendedUsers(1, 20).then((res) => {
+        const all = res.data || [];
+        const picked = [...all].sort(() => Math.random() - 0.5).slice(0, 8);
+        setFeaturedCreators(picked);
+      }).catch(() => {});
+    }
+  }, [user]);
 
   const currentContent = contentTabs.find((t) => t.id === activeContent);
 
   return (
     <div className="space-y-4">
+      {/* 热门创作者 */}
+      {featuredCreators.length > 0 && (
+        <div className="space-y-2">
+          <p className="text-xs font-medium text-muted-foreground">热门创作者</p>
+          <div className="flex gap-3 overflow-x-auto pb-1 scrollbar-none">
+            {featuredCreators.map((creator) => (
+              <Link
+                key={creator.id}
+                href={`/profile/${creator.username}`}
+                className="flex flex-col items-center gap-1.5 shrink-0 group"
+              >
+                <Avatar className="h-12 w-12 border-2 border-transparent group-hover:border-primary transition-colors">
+                  <AvatarImage src={creator.avatarUrl} alt={creator.displayName} />
+                  <AvatarFallback>{creator.displayName[0]}</AvatarFallback>
+                </Avatar>
+                <span className="text-xs font-medium text-center max-w-[56px] truncate">
+                  {creator.displayName}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* 内容类型筛选 */}
       <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-none">
         {contentTabs.map((tab) => {
@@ -58,6 +104,35 @@ export default function ExplorePage() {
           );
         })}
       </div>
+
+      {/* 热门话题标签 */}
+      {hotTopics.length > 0 && (
+        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+          <button
+            onClick={() => setSelectedTag(null)}
+            className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+              selectedTag === null
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-muted text-muted-foreground hover:bg-muted/80'
+            }`}
+          >
+            全部话题
+          </button>
+          {hotTopics.map((topic) => (
+            <button
+              key={topic.id}
+              onClick={() => setSelectedTag(selectedTag === topic.id ? null : topic.id)}
+              className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+                selectedTag === topic.id
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted text-muted-foreground hover:bg-muted/80'
+              }`}
+            >
+              # {topic.name}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* 排序切换 */}
       <div className="flex gap-1">
@@ -82,10 +157,11 @@ export default function ExplorePage() {
 
       {/* 内容列表 */}
       <FeedList
-        key={`${activeSort}-${activeContent}`}
+        key={`${activeSort}-${activeContent}-${selectedTag}`}
         showComposer={false}
         sort={sortTabMap[activeSort]}
         postType={currentContent?.postType}
+        tagId={selectedTag ?? undefined}
       />
     </div>
   );
