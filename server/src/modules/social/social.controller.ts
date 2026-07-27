@@ -1388,7 +1388,7 @@ export class SocialController {
     @Body() body: {
       title: string;
       description?: string;
-      type?: 'PHOTO' | 'ROUTE' | 'CHECKIN' | 'DISTANCE';
+      type?: 'PHOTO' | 'CHECKIN' | 'DISTANCE';
       startDate: string;
       endDate: string;
       maxParticipants?: number;
