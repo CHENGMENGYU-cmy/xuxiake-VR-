@@ -21,6 +21,12 @@ export class Post {
   @Column({ name: 'post_type', type: 'enum', enum: ['NOTE', 'VR_MEDIA', 'ROUTE', 'JOURNEY', 'GUIDE', 'MOMENT'], default: 'NOTE' })
   postType: 'NOTE' | 'VR_MEDIA' | 'ROUTE' | 'JOURNEY' | 'GUIDE' | 'MOMENT';
 
+  @Column({ name: 'content_level', type: 'enum', enum: ['SNAPSHOT', 'CLASSIFIED', 'DIARY', 'ESSAY'], default: 'SNAPSHOT' })
+  contentLevel: 'SNAPSHOT' | 'CLASSIFIED' | 'DIARY' | 'ESSAY';
+
+  @Column({ name: 'parent_post_id', type: 'varchar', length: 36, nullable: true })
+  parentPostId: string | null;
+
   @Column({ type: 'text', nullable: true })
   content: string | null;
 
