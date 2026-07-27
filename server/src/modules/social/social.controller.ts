@@ -423,6 +423,156 @@ export class SocialController {
     return { success: true, data: paged, page: pageNum };
   }
 
+  // ==================== 搭子推荐 ====================
+
+  @Get('recommended/companions')
+  async getRecommendedCompanions(
+    @Headers('authorization') auth: string,
+    @Query('destination') destination?: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    const userId = this.getUserId(auth);
+    if (!userId) throw new UnauthorizedException('请先登录');
+
+    const pageNum = parseInt(page || '1');
+    const limitNum = parseInt(limit || '20');
+
+    const currentUser = await this.userRepo.findOne({ where: { id: userId } });
+    if (!currentUser) throw new UnauthorizedException('用户不存在');
+
+    // 获取用户兴趣标签
+    const userInterests = await this.userInterestRepo.find({ where: { userId } });
+    const myTagIds = userInterests.map((ui) => ui.tagId);
+    const myTagIdSet = new Set(myTagIds);
+
+    // 获取用户去过的目的地（从帖子location中提取）
+    const myPosts = await this.postRepo.find({
+      where: { authorId: userId, visibility: 'PUBLIC' },
+      select: ['locationName'],
+      order: { createdAt: 'DESC' },
+      take: 20,
+    });
+    const myDestinations = new Set(myPosts.filter((p) => p.locationName).map((p) => p.locationName!));
+
+    // 获取已关注用户ID
+    const following = await this.followRepo.find({ where: { followerId: userId } });
+    const followingIds = following.map((f) => f.followingId);
+    const followingIdSet = new Set(followingIds);
+
+    // 排除自己和已关注用户
+    const query = this.userRepo.createQueryBuilder('user');
+    query.where('user.id != :userId', { userId });
+    if (followingIds.length > 0) {
+      query.andWhere('user.id NOT IN (:...followingIds)', { followingIds });
+    }
+    if (destination) {
+      query.andWhere('user.region LIKE :dest', { dest: `%${destination}%` });
+    }
+    query.orderBy('user.created_at', 'DESC');
+    query.limit(limitNum * 5);
+
+    const candidates = await query.getMany();
+    const candidateIds = candidates.map((u) => u.id);
+
+    if (candidates.length === 0) {
+      return { success: true, data: [], page: pageNum };
+    }
+
+    // 并行获取数据
+    const [userInterestsAll, mutualFollows, candidatePosts] = await Promise.all([
+      this.userInterestRepo.find({ where: { userId: In(candidateIds) }, relations: { tag: true } }),
+      this.followRepo.find({ where: { followerId: In(followingIds), followingId: In(candidateIds) } }),
+      this.postRepo
+        .createQueryBuilder('post')
+        .select(['post.authorId', 'post.locationName', 'post.createdAt'])
+        .where('post.authorId IN (:...candidateIds)', { candidateIds })
+        .andWhere('post.visibility = :vis', { vis: 'PUBLIC' })
+        .orderBy('post.createdAt', 'DESC')
+        .getMany(),
+    ]);
+
+    // 用户标签映射
+    const userTagMap = new Map<string, InterestTag[]>();
+    userInterestsAll.forEach((ui) => {
+      if (!userTagMap.has(ui.userId)) userTagMap.set(ui.userId, []);
+      userTagMap.get(ui.userId)!.push(ui.tag);
+    });
+
+    // 候选用户目的地
+    const candidateDestMap = new Map<string, Set<string>>();
+    candidatePosts.forEach((p) => {
+      if (p.locationName) {
+        if (!candidateDestMap.has(p.authorId)) candidateDestMap.set(p.authorId, new Set());
+        candidateDestMap.get(p.authorId)!.add(p.locationName);
+      }
+    });
+
+    // 搭子匹配算法
+    const scored = candidates.map((u) => {
+      const { passwordHash, ...userDto } = u;
+      const userTags = userTagMap.get(u.id) || [];
+      const commonTags = userTags.filter((t) => myTagIdSet.has(t.id));
+      const theirDests = candidateDestMap.get(u.id) || new Set();
+
+      let score = 0;
+      const reasons: string[] = [];
+
+      // 相同目的地: 40分
+      const sharedDests = [...theirDests].filter((d) => myDestinations.has(d));
+      if (sharedDests.length > 0) {
+        score += Math.min(sharedDests.length * 20, 40);
+        reasons.push(`去过${sharedDests.slice(0, 2).join('、')}`);
+      }
+
+      // 共同兴趣: 25分
+      if (commonTags.length > 0) {
+        score += Math.min(commonTags.length * 8, 25);
+        reasons.push(`${commonTags.length}个共同兴趣`);
+      }
+
+      // 同区域: 15分
+      if (currentUser.region && u.region === currentUser.region) {
+        score += 15;
+        reasons.push('同城');
+      }
+
+      // 共同好友关注: 10分
+      const mutualCount = mutualFollows.filter((f) => f.followingId === u.id).length;
+      if (mutualCount > 0) {
+        score += Math.min(mutualCount * 5, 10);
+        reasons.push(`${mutualCount}位共同好友`);
+      }
+
+      // 行程时间相近: 10分 (近期有发布内容的加分)
+      const recentCount = candidatePosts.filter((p) => p.authorId === u.id).length;
+      if (recentCount >= 3) {
+        score += 5;
+        reasons.push('近期活跃');
+      }
+
+      return {
+        ...userDto,
+        vrDeviceInfo: u.vrDeviceModel ? { model: u.vrDeviceModel, version: u.vrDeviceVersion || '' } : null,
+        matchScore: score,
+        matchReasons: reasons,
+        isFollowing: followingIdSet.has(u.id),
+        sharedDestinations: sharedDests.slice(0, 3),
+        commonTags: commonTags.map((t) => t.name),
+      };
+    });
+
+    // 过滤低于50分的，按得分降序
+    const filtered = scored
+      .filter((s) => s.matchScore >= 50)
+      .sort((a, b) => b.matchScore - a.matchScore);
+
+    const skip = (pageNum - 1) * limitNum;
+    const paged = filtered.slice(skip, skip + limitNum);
+
+    return { success: true, data: paged, page: pageNum };
+  }
+
   // 内存存储推荐反馈（后续可持久化到数据库）
   private recommendationFeedback = new Map<string, Set<string>>();
 
