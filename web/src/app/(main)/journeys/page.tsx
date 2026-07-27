@@ -76,23 +76,13 @@ function JourneysContent() {
         />
       )}
 
-      {/* 私密 — 只看当前用户的ESSAY级别私密内容 */}
+      {/* 我的（私密）— 只看当前用户的ESSAY级别私密内容 */}
       {activeTab === 'private' && (
         <HierarchyList
           key="private-essay"
           level="ESSAY"
           userId={user?.id}
           emptyText="没有私密游记，已发布的游记会显示在「已发布」标签中"
-        />
-      )}
-
-      {/* 草稿 — 只看当前用户的ESSAY级别草稿内容 */}
-      {activeTab === 'draft' && (
-        <HierarchyList
-          key="draft-essay"
-          level="ESSAY"
-          userId={user?.id}
-          emptyText="没有草稿，点击「写游记」开始创作吧"
         />
       )}
     </div>
