@@ -3,7 +3,7 @@
 import { MapPin, Route, Video, Calendar, User as UserIcon, Heart, MessageCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export type CardType = 'POST' | 'ROUTE' | 'VR' | 'ACTIVITY' | 'USER';
+export type CardType = 'POST' | 'VR' | 'ACTIVITY' | 'USER';
 
 export interface ContentCardData {
   type: CardType;
