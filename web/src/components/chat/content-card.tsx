@@ -1,6 +1,6 @@
 'use client';
 
-import { MapPin, Route, Video, Calendar, User as UserIcon, Heart, MessageCircle } from 'lucide-react';
+import { MapPin, Video, Calendar, User as UserIcon, Heart, MessageCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export type CardType = 'POST' | 'VR' | 'ACTIVITY' | 'USER';
