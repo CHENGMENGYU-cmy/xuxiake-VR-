@@ -2,6 +2,7 @@ import {
   Controller, Get, Post, Put, Delete, Body, Param, Query, Headers, UnauthorizedException,
 } from '@nestjs/common';
 import { PostsService } from './posts.service.js';
+import { ReviewService } from './review.service.js';
 import { AuthService } from '../auth/auth.service.js';
 import type { CreatePostDto, CreateCommentDto } from '../../common/interfaces.js';
 
