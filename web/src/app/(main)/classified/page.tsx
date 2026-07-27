@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { FolderOpen, MapPin, Calendar, Tag } from 'lucide-react';
-import { FeedList } from '@/components/feed/feed-list';
+import { HierarchyList } from '@/components/feed/hierarchy-list';
 import apiClient from '@/lib/api-client';
 
 type Dimension = { name: string; count: number };
@@ -40,6 +40,13 @@ export default function ClassifiedPage() {
     { id: 'type' as const, label: '按类型', icon: Tag },
     { id: 'time' as const, label: '按时间', icon: Calendar },
   ];
+
+  // 根据当前维度和选中值构建过滤参数
+  const filterParams = selectedValue ? (
+    activeDim === 'location' ? { location: selectedValue } :
+    activeDim === 'type' ? { mediaType: selectedValue } :
+    { month: selectedValue }
+  ) : {};
 
   return (
     <div className="space-y-5">
@@ -137,13 +144,18 @@ export default function ClassifiedPage() {
         </div>
       )}
 
-      {/* 选中分类后的内容列表 */}
+      {/* 选中分类后的内容列表 — 使用层级API按维度过滤 */}
       {selectedValue && (
         <div className="space-y-3">
           <h3 className="text-sm font-medium text-muted-foreground">
             分类结果: {selectedValue}
           </h3>
-          <FeedList postType="VR_MEDIA" followingOnly={false} />
+          <HierarchyList
+            key={`${activeDim}-${selectedValue}`}
+            level="SNAPSHOT"
+            emptyText="该分类下暂无内容"
+            {...filterParams}
+          />
         </div>
       )}
     </div>
