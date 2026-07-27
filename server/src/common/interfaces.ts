@@ -38,7 +38,7 @@ export interface IMediaItem {
 }
 
 // ===== 帖子接口 =====
-export type PostType = 'NOTE' | 'VR_MEDIA' | 'ROUTE' | 'JOURNEY' | 'GUIDE' | 'MOMENT';
+export type PostType = 'NOTE' | 'VR_MEDIA' | 'JOURNEY' | 'MOMENT';
 
 export interface IPost {
   id: string;
