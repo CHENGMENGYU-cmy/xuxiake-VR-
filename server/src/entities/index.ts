@@ -8,3 +8,5 @@ export { Conversation } from './conversation.entity.js';
 export { Message } from './message.entity.js';
 export { ConversationParticipant } from './conversation-participant.entity.js';
 export { UserFollow } from './user-follow.entity.js';
+export { ContentReview } from './content-review.entity.js';
+export { Report } from './report.entity.js';
