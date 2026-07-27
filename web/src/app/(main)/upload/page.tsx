@@ -709,7 +709,7 @@ function UploadContent() {
 
             {/* DIARY — 写日记 */}
             {activeTab === 'DIARY' && (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <div className="flex items-center gap-2 rounded-lg border border-indigo-200 bg-indigo-50 dark:border-indigo-900 dark:bg-indigo-950/30 px-3 py-2">
                   <Lock className="h-4 w-4 text-indigo-500 shrink-0" />
                   <p className="text-xs text-indigo-600 dark:text-indigo-400">
@@ -720,12 +720,39 @@ function UploadContent() {
                   <label className="text-sm font-medium">今日感想</label>
                   <Textarea
                     placeholder="写下今天的所见所闻、所思所想..."
-                    className="min-h-[200px]"
+                    className="min-h-[250px]"
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                   />
                   <p className="text-xs text-muted-foreground">{content.length} 字</p>
                 </div>
+
+                {/* 图片上传 */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">配图（可选）</label>
+                  <MultiImageUploader
+                    images={images}
+                    onImagesChange={setImages}
+                    maxImages={9}
+                  />
+                </div>
+
+                {/* 地点信息 */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">地点（可选）</label>
+                  <div className="relative">
+                    <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <Input type="text" placeholder="记录你在哪里..." className="pl-10" value={location} onChange={(e) => setLocation(e.target.value)} />
+                  </div>
+                </div>
+
+                {/* 话题标签 */}
+                <TopicSelector
+                  selectedTopics={selectedTopics}
+                  onTopicsChange={setSelectedTopics}
+                  maxTopics={5}
+                  content={content}
+                />
               </div>
             )}
 
