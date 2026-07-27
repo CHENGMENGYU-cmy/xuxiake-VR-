@@ -154,18 +154,20 @@ export function Sidebar() {
 
             {/* 创作 — 分享见闻 */}
             {mounted && user && (
-              <div className="p-3">
+              <div className="space-y-1 p-3">
+                <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
+                  创作
+                </p>
                 <Link href="/upload">
                   <Button
+                    variant="ghost"
                     className={cn(
-                      'w-full gap-2',
-                      pathname === '/upload' || pathname.startsWith('/upload/')
-                        ? 'bg-primary text-primary-foreground'
-                        : ''
+                      'w-full justify-start gap-3',
+                      (pathname === '/upload' || pathname.startsWith('/upload/')) && 'bg-primary/10 text-primary hover:bg-primary/10'
                     )}
                   >
-                    <PlusCircle className="h-5 w-5" />
-                    分享见闻
+                    <Upload className="h-5 w-5" />
+                    <span>分享见闻</span>
                   </Button>
                 </Link>
               </div>
