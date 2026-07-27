@@ -100,8 +100,11 @@ export function Sidebar() {
 
             <Separator />
 
-            {/* 顶部导航 */}
+            {/* 浏览发现 */}
             <div className="space-y-1 p-3">
+              <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
+                浏览发现
+              </p>
               {navItems.filter((item) => user || item.href !== '/upload').map((item) => {
                 const Icon = item.icon;
                 const isActive = pathname === item.href;
@@ -124,42 +127,12 @@ export function Sidebar() {
 
             <Separator />
 
-            {/* 第一视角 */}
+            {/* 我的内容 — 四层内容体系 */}
             <div className="space-y-1 p-3">
               <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
-                第一视角
+                我的内容
               </p>
-              {mediaItems.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <Link key={item.href} href={item.href}>
-                    <Button variant="ghost" className="w-full justify-start gap-3">
-                      <Icon className={cn('h-5 w-5', item.color)} />
-                      <span className="text-sm">{item.label}</span>
-                      {'badge' in item && item.badge && (
-                        <span className="ml-auto rounded-full bg-red-500/10 px-2 py-0.5 text-[10px] font-medium text-red-500">
-                          {item.badge}
-                        </span>
-                      )}
-                    </Button>
-                  </Link>
-                );
-              })}
-            </div>
-
-            <Separator />
-
-            {/* 内容层级: 瞬间捕获 → 分类 → 日记 → 游记 */}
-            <div className="space-y-1 p-3">
-              <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
-                内容体系
-              </p>
-              {[
-                { href: '/media', label: '瞬间捕获', icon: Camera, color: 'text-teal-500' },
-                { href: '/classified', label: '内容分类', icon: FolderOpen, color: 'text-amber-500' },
-                { href: '/diaries', label: '我的日记', icon: PenLine, color: 'text-indigo-500' },
-                { href: '/journeys', label: '游记散文', icon: BookOpen, color: 'text-primary' },
-              ].map((item) => {
+              {contentItems.map((item, index) => {
                 const Icon = item.icon;
                 const isActive = pathname === item.href;
                 return (
@@ -171,8 +144,18 @@ export function Sidebar() {
                         isActive && 'bg-primary/10 text-primary hover:bg-primary/10'
                       )}
                     >
-                      <Icon className={cn('h-5 w-5', item.color, isActive && 'text-primary')} />
-                      <span>{item.label}</span>
+                      <div className="flex items-center gap-2.5">
+                        <div className="relative">
+                          <Icon className={cn('h-5 w-5', item.color, isActive && 'text-primary')} />
+                          {index < contentItems.length - 1 && (
+                            <div className="absolute left-1/2 top-full h-3 w-px -translate-x-1/2 bg-border" />
+                          )}
+                        </div>
+                        <div className="flex flex-col items-start">
+                          <span className="text-sm leading-tight">{item.label}</span>
+                          <span className="text-[10px] leading-tight text-muted-foreground">{item.desc}</span>
+                        </div>
+                      </div>
                     </Button>
                   </Link>
                 );
@@ -181,11 +164,30 @@ export function Sidebar() {
 
             <Separator />
 
+            {/* 创作 — 分享见闻 */}
+            {mounted && user && (
+              <div className="p-3">
+                <Link href="/upload">
+                  <Button
+                    className={cn(
+                      'w-full gap-2',
+                      pathname === '/upload' || pathname.startsWith('/upload/')
+                        ? 'bg-primary text-primary-foreground'
+                        : ''
+                    )}
+                  >
+                    <PlusCircle className="h-5 w-5" />
+                    分享见闻
+                  </Button>
+                </Link>
+              </div>
+            )}
+
             {/* 个人中心 - 仅登录后显示 */}
             {mounted && user && (
-            <div className="space-y-1 p-3">
+            <div className="space-y-1 px-3 pb-3">
               <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
-                个人中心
+                个人
               </p>
               {personalItems.map((item) => {
                 const Icon = item.icon;
