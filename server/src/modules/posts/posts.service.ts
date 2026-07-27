@@ -702,7 +702,6 @@ export class PostsService {
     // 如果升级到 ESSAY，关联 journey
     if (dto.targetLevel === 'ESSAY') {
       const journey = this.journeyRepo.create({
-        id: uuidv4(),
         postId: newPost.id,
         title: dto.title || post.locationName || '未命名游记',
         destination: post.locationName,

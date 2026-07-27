@@ -449,8 +449,8 @@ export class SocialController {
     // 获取用户去过的目的地（从帖子location中提取）
     const myPosts = await this.postRepo.find({
       where: { authorId: userId, visibility: 'PUBLIC' },
-      select: ['locationName'],
-      order: { createdAt: 'DESC' },
+      select: { locationName: true } as any,
+      order: { createdAt: 'DESC' as any },
       take: 20,
     });
     const myDestinations = new Set(myPosts.filter((p) => p.locationName).map((p) => p.locationName!));

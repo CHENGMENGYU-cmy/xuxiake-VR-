@@ -46,6 +46,8 @@ export interface IPost {
   mediaItems: IMediaItem[];
   authorId: string;
   postType: PostType;
+  contentLevel?: ContentLevel;
+  parentPostId?: string;
   location?: { lat: number; lng: number; name: string } | null;
   vrMetadata?: Record<string, unknown> | null;
   visibility: Visibility;
