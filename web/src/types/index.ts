@@ -59,21 +59,6 @@ export const ContentLevelLabel: Record<ContentLevel, string> = {
   ESSAY: '游记',
 };
 
-export type Difficulty = 'EASY' | 'MODERATE' | 'HARD' | 'EXPERT';
-export type RouteType = 'HIKE' | 'BIKE' | 'DRIVE' | 'PADDLE' | 'CLIMB';
-
-export interface RouteDetail {
-  id: number;
-  postId: string;
-  distanceKm?: number | null;
-  durationMinutes?: number | null;
-  elevationGainM?: number | null;
-  difficulty: Difficulty;
-  routeType: RouteType;
-  gpxData?: string | null;
-  waypoints?: { lat: number; lng: number; name: string; description?: string }[] | null;
-}
-
 export interface JourneyStop {
   id: number;
   journeyId: number;
