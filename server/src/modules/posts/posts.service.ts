@@ -270,6 +270,8 @@ export class PostsService {
       authorId: userId,
       communityId: dto.communityId || null,
       postType: dto.postType || 'NOTE',
+      contentLevel: dto.contentLevel || 'SNAPSHOT',
+      parentPostId: dto.parentPostId || null,
       content: dto.content || null,
       locationLat: dto.location?.lat || null,
       locationLng: dto.location?.lng || null,
