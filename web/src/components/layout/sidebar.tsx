@@ -49,13 +49,6 @@ const mediaItems = [
   { href: '/live', label: '直播', icon: Radio, color: 'text-red-500', badge: '即将上线' },
 ];
 
-// 旅行工具
-const travelTools = [
-  { href: '/routes', label: '路线', icon: Route, color: 'text-primary' },
-  { href: '/journeys', label: '旅程', icon: Map, color: 'text-teal-500' },
-  { href: '/guides', label: '攻略', icon: BookOpen, color: 'text-orange-500' },
-];
-
 // 个人中心
 const personalItems = [
   { href: '/messages', label: '消息', icon: MessageCircle },
