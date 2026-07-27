@@ -641,13 +641,11 @@ function UploadContent() {
                       const files = e.dataTransfer.files;
                       if (files.length > 0) handleVideoSelect(files);
                     }}
-                    className="flex cursor-pointer flex-col items-center gap-4 rounded-xl border-2 border-dashed border-primary/30 bg-primary/5 p-12 text-center transition-all hover:border-primary hover:bg-primary/10">
+                    className="flex cursor-pointer flex-col items-center gap-3 rounded-lg border-2 border-dashed border-primary/30 bg-primary/5 p-8 text-center transition-all hover:border-primary hover:bg-primary/10">
                     {uploading ? (
-                      <Loader2 className="h-12 w-12 animate-spin text-primary" />
+                      <Loader2 className="h-8 w-8 animate-spin text-primary" />
                     ) : (
-                      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
-                        <Video className="h-8 w-8 text-primary" />
-                      </div>
+                      <Video className="h-10 w-10 text-primary" />
                     )}
                     <div>
                       <p className="text-base font-medium">{uploading ? '上传中...' : '点击或拖拽视频到此处'}</p>
