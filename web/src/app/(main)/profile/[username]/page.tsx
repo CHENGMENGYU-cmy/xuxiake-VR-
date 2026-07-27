@@ -229,13 +229,13 @@ function ProfileContent({ username }: { username: string }) {
       <Tabs defaultValue="posts" className="w-full">
         <TabsList className="w-full justify-start border-b bg-transparent p-0">
           <TabsTrigger value="posts" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-primary">
-            发布内容
+            在路上
           </TabsTrigger>
           <TabsTrigger value="media" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-primary">
-            媒体库
+            瞬间捕获
           </TabsTrigger>
           <TabsTrigger value="likes" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-primary">
-            赞过的
+            收藏
           </TabsTrigger>
         </TabsList>
 
