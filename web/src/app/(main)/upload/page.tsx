@@ -509,11 +509,11 @@ function UploadContent() {
       {/* 页面标题 */}
       <div className="space-y-1">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/70">
-            <Upload className="h-5 w-5 text-white" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/70">
+            <Upload className="h-4 w-4 text-white" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold">分享见闻</h1>
+            <h1 className="text-xl font-bold">分享见闻</h1>
             <p className="text-sm text-muted-foreground">记录你的旅行瞬间</p>
           </div>
         </div>
