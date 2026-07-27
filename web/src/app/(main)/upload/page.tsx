@@ -705,9 +705,9 @@ function UploadContent() {
                   </div>
                 ) : recordedBlob ? (
                   <div className="space-y-3">
-                    <div className="flex items-center gap-4 rounded-xl border-2 border-accent/20 bg-accent/5 p-5">
-                      <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-accent/10">
-                        <Volume2 className="h-7 w-7 text-accent" />
+                    <div className="flex items-center gap-3 rounded-lg border-2 border-accent/20 bg-accent/5 p-4">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10">
+                        <Volume2 className="h-5 w-5 text-accent" />
                       </div>
                       <div className="flex-1">
                         <p className="text-sm font-medium mb-2">录音完成</p>
