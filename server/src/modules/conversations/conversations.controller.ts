@@ -619,14 +619,7 @@ export class ConversationsController {
     const query = body.query.trim().toLowerCase();
     let response: { type: string; title: string; content: string; suggestions?: string[] };
 
-    if (query.includes('路线') || query.includes('怎么走') || query.includes('route')) {
-      response = {
-        type: 'ROUTE_SUGGESTION',
-        title: '路线推荐',
-        content: '根据您的位置，推荐以下路线：\n1. 沿主干道步行约15分钟\n2. 乘坐地铁2号线直达\n3. 骑行共享单车约10分钟',
-        suggestions: ['查看详细路线', '导航开始', '分享给队友'],
-      };
-    } else if (query.includes('天气') || query.includes('weather')) {
+    if (query.includes('天气') || query.includes('weather')) {
       response = {
         type: 'WEATHER',
         title: '今日天气',
