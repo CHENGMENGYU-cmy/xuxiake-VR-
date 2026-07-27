@@ -20,7 +20,7 @@ export class CommunityChallenge {
   description: string | null;
 
   @Column({ type: 'varchar', length: 50, default: 'PHOTO' })
-  type: 'PHOTO' | 'ROUTE' | 'CHECKIN' | 'DISTANCE';
+  type: 'PHOTO' | 'CHECKIN' | 'DISTANCE';
 
   @Column({ name: 'start_date', type: 'timestamp' })
   startDate: Date;
