@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Home, FileText, Video, Map, Compass, BookOpen, MessageSquare, Sparkles, Users } from 'lucide-react';
+import { Home, FileText, Video, Compass, MessageSquare, Sparkles, Users } from 'lucide-react';
 import { FeedList } from '@/components/feed/feed-list';
 import type { PostType } from '@/types';
 
