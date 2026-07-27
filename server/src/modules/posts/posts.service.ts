@@ -317,21 +317,6 @@ export class PostsService {
       }
     }
 
-    // 处理路线详情（ROUTE类型）
-    if (dto.postType === 'ROUTE' && dto.routeDetail) {
-      const route = this.routeRepo.create({
-        postId,
-        distanceKm: dto.routeDetail.distanceKm || null,
-        durationMinutes: dto.routeDetail.durationMinutes || null,
-        elevationGainM: dto.routeDetail.elevationGainM || null,
-        difficulty: dto.routeDetail.difficulty || 'MODERATE',
-        routeType: dto.routeDetail.routeType || 'HIKE',
-        gpxData: dto.routeDetail.gpxData || null,
-        waypoints: dto.routeDetail.waypoints || null,
-      });
-      await this.routeRepo.save(route);
-    }
-
     // 处理旅程记录（JOURNEY类型）
     if (dto.postType === 'JOURNEY' && dto.journey) {
       const journey = this.journeyRepo.create({
