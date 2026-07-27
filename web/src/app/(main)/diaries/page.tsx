@@ -49,6 +49,7 @@ function DiariesContent() {
       <HierarchyList
         level="DIARY"
         userId={user?.id}
+        detailBasePath="/diaries"
         emptyText="还没有日记，点击「写日记」开始记录吧"
       />
     </div>
