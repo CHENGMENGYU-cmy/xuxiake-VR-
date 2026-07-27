@@ -26,12 +26,13 @@ import { PublishPreview } from '@/components/upload/publish-preview';
 import { saveDraftToLocal, clearLocalDraft } from '@/lib/draft-api';
 import { translateText, detectLanguage } from '@/lib/translation-api';
 
-type UploadTab = 'VIDEO' | 'IMAGE' | 'AUDIO' | 'JOURNEY';
+type UploadTab = 'VIDEO' | 'IMAGE' | 'AUDIO' | 'DIARY' | 'JOURNEY';
 
 const tabContentTypes: Record<UploadTab, string | undefined> = {
   VIDEO: 'VR_MEDIA',
   IMAGE: 'VR_MEDIA',
   AUDIO: 'VR_MEDIA',
+  DIARY: 'NOTE',
   JOURNEY: 'JOURNEY',
 };
 
@@ -39,6 +40,7 @@ const tabs: { key: UploadTab; label: string; icon: React.ElementType; color: str
   { key: 'VIDEO', label: '第一视角', icon: Video, color: 'text-teal-500' },
   { key: 'IMAGE', label: '瞬间捕获', icon: Image, color: 'text-orange-500' },
   { key: 'AUDIO', label: '语音记录', icon: Mic, color: 'text-accent' },
+  { key: 'DIARY', label: '写日记', icon: PenLine, color: 'text-indigo-500' },
   { key: 'JOURNEY', label: '写游记', icon: Send, color: 'text-primary' },
 ];
 
