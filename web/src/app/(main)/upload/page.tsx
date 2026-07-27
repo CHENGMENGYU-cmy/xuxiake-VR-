@@ -479,8 +479,13 @@ function UploadContent() {
     try {
       await publishPost(payload);
       clearLocalDraft();
-      toast.success('发布成功');
-      router.push('/feed');
+      if (activeTab === 'DIARY') {
+        toast.success('日记已保存');
+        router.push('/diaries');
+      } else {
+        toast.success('发布成功');
+        router.push('/feed');
+      }
     } catch {
       toast.error('发布失败，请重试');
     }
