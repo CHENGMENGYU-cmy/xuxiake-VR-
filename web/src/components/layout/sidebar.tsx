@@ -179,6 +179,21 @@ export function Sidebar() {
               <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
                 个人
               </p>
+              {/* 管理入口 — 仅管理员/审核员可见 */}
+              {(user as any).role && (user as any).role !== 'USER' && (
+                <Link href="/admin/reviews">
+                  <Button
+                    variant="ghost"
+                    className={cn(
+                      'w-full justify-start gap-3',
+                      pathname === '/admin/reviews' && 'bg-primary/10 text-primary hover:bg-primary/10'
+                    )}
+                  >
+                    <Shield className="h-5 w-5 text-amber-500" />
+                    <span>审核管理</span>
+                  </Button>
+                </Link>
+              )}
               {personalItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = pathname === item.href;
