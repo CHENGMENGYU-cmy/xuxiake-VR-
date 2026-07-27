@@ -13,9 +13,7 @@ const typeLabels: Record<string, string> = {
   VR_MEDIA: '第一视角',
   IMAGE: '瞬间影像',
   AUDIO: '语音记录',
-  ROUTE: '路线',
-  JOURNEY: '旅程',
-  GUIDE: '攻略',
+  JOURNEY: '游记',
   MOMENT: '瞬间',
   NOTE: '随记',
 };
