@@ -37,10 +37,10 @@ const navItems = [
 
 // 我的内容（四层内容体系）
 const contentItems = [
-  { href: '/media', label: '瞬间捕获', icon: Camera, color: 'text-teal-500', desc: '照片·视频·音频' },
-  { href: '/classified', label: '内容分类', icon: FolderOpen, color: 'text-amber-500', desc: '按地点·类型·时间' },
-  { href: '/diaries', label: '我的日记', icon: PenLine, color: 'text-indigo-500', desc: '感想随笔' },
-  { href: '/journeys', label: '游记散文', icon: BookOpen, color: 'text-primary', desc: '正式文章' },
+  { href: '/media', label: '瞬间捕获', icon: Camera, color: 'text-teal-500' },
+  { href: '/classified', label: '内容分类', icon: FolderOpen, color: 'text-amber-500' },
+  { href: '/diaries', label: '我的日记', icon: PenLine, color: 'text-indigo-500' },
+  { href: '/journeys', label: '游记散文', icon: BookOpen, color: 'text-primary' },
 ];
 
 // 个人中心
