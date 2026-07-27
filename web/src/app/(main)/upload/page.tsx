@@ -687,9 +687,9 @@ function UploadContent() {
               <>
                 {media?.type === 'AUDIO' ? (
                   <div className="space-y-3">
-                    <div className="relative flex items-center gap-4 rounded-xl border-2 border-accent/20 bg-accent/5 p-5">
-                      <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-accent/10 flex-shrink-0">
-                        <Volume2 className="h-7 w-7 text-accent" />
+                    <div className="relative flex items-center gap-3 rounded-lg border-2 border-accent/20 bg-accent/5 p-4">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 flex-shrink-0">
+                        <Volume2 className="h-5 w-5 text-accent" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <audio src={media.url} controls className="w-full" />
