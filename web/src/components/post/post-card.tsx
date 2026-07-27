@@ -385,6 +385,9 @@ export function PostCard({ post, onLikeChange }: PostCardProps) {
         </DialogContent>
       </Dialog>
 
+      {/* 举报弹窗 */}
+      <ReportDialog postId={post.id} open={showReport} onClose={() => setShowReport(false)} />
+
       {/* 登录提示 */}
       <LoginPrompt open={showPrompt} onOpenChange={setShowPrompt} action={action} />
     </Card>
