@@ -452,9 +452,13 @@ function UploadContent() {
       });
     }
 
-    // 确定帖子类型
+    // 确定帖子类型和内容层级
     let postType: CreatePostPayload['postType'] = 'NOTE';
-    if (media?.type === 'VIDEO') {
+    let contentLevel: string | undefined;
+    if (activeTab === 'DIARY') {
+      postType = 'NOTE';
+      contentLevel = 'DIARY';
+    } else if (media?.type === 'VIDEO') {
       postType = 'VR_MEDIA';
     } else if (images.length > 0) {
       postType = 'VR_MEDIA';
@@ -462,8 +466,9 @@ function UploadContent() {
 
     const payload: CreatePostPayload = {
       content: content.trim() || '',
-      visibility,
+      visibility: activeTab === 'DIARY' ? 'PRIVATE' : visibility,
       postType,
+      contentLevel,
       mediaItems: mediaItems.length > 0 ? mediaItems : undefined,
       topicNames: selectedTopics.length > 0 ? selectedTopics.map(t => t.name) : undefined,
       communityId: selectedCommunity?.id,
