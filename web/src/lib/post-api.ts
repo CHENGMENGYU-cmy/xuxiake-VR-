@@ -1,11 +1,12 @@
 import apiClient from './api-client';
-import { Post, PostType, Visibility, Difficulty, RouteType, GuideCategory, BudgetLevel, Collection } from '@/types';
+import { Post, PostType, Visibility, Collection } from '@/types';
 
 export interface CreatePostPayload {
   content: string;
   visibility?: Visibility;
   communityId?: string;
   postType?: PostType;
+  contentLevel?: string;
   tagIds?: string[];
   topicNames?: string[];
   location?: { lat: number; lng: number; name: string };
@@ -26,15 +27,6 @@ export interface CreatePostPayload {
     linkFavicon?: string;
     sortOrder?: number;
   }[];
-  routeDetail?: {
-    distanceKm?: number;
-    durationMinutes?: number;
-    elevationGainM?: number;
-    difficulty?: Difficulty;
-    routeType?: RouteType;
-    gpxData?: string;
-    waypoints?: { lat: number; lng: number; name: string; description?: string }[];
-  };
   journey?: {
     title: string;
     startDate?: string;
@@ -49,13 +41,6 @@ export interface CreatePostPayload {
       description?: string;
       mediaUrl?: string;
     }[];
-  };
-  guideDetail?: {
-    destination?: string;
-    category?: GuideCategory;
-    bestSeason?: string;
-    budgetLevel?: BudgetLevel;
-    richContent?: string;
   };
 }
 
