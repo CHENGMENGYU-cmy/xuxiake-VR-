@@ -102,7 +102,37 @@ export function HierarchyList({
         <>
           <div className="space-y-4">
             {posts.map((post) => (
-              <PostCard key={post.id} post={post} />
+              detailBasePath ? (
+                <button
+                  key={post.id}
+                  onClick={() => router.push(`${detailBasePath}/${post.id}`)}
+                  className="block w-full rounded-lg border bg-card p-4 text-left transition-colors hover:bg-accent/50"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0 flex-1">
+                      <p className="line-clamp-2 text-sm">{post.content || '(无内容)'}</p>
+                      <div className="mt-2 flex items-center gap-3 text-xs text-muted-foreground">
+                        {post.location?.name && (
+                          <span>{post.location.name}</span>
+                        )}
+                        <span>{new Date(post.createdAt).toLocaleDateString('zh-CN')}</span>
+                        {post.mediaItems && post.mediaItems.length > 0 && (
+                          <span>{post.mediaItems.length} 个附件</span>
+                        )}
+                      </div>
+                    </div>
+                    {post.mediaItems?.[0]?.type === 'IMAGE' && (
+                      <img
+                        src={post.mediaItems[0].url}
+                        alt=""
+                        className="h-16 w-16 shrink-0 rounded-md object-cover"
+                      />
+                    )}
+                  </div>
+                </button>
+              ) : (
+                <PostCard key={post.id} post={post} />
+              )
             ))}
           </div>
 
