@@ -29,9 +29,9 @@ import { translateText, detectLanguage } from '@/lib/translation-api';
 type UploadTab = 'VIDEO' | 'IMAGE' | 'AUDIO' | 'ROUTE' | 'JOURNEY' | 'GUIDE';
 
 const tabs: { key: UploadTab; label: string; icon: React.ElementType; color: string }[] = [
-  { key: 'VIDEO', label: '旅行视频', icon: Video, color: 'text-teal-500' },
-  { key: 'IMAGE', label: '旅行图片', icon: Image, color: 'text-orange-500' },
-  { key: 'AUDIO', label: '音频记录', icon: Mic, color: 'text-accent' },
+  { key: 'VIDEO', label: '第一视角', icon: Video, color: 'text-teal-500' },
+  { key: 'IMAGE', label: '瞬间捕获', icon: Image, color: 'text-orange-500' },
+  { key: 'AUDIO', label: '语音记录', icon: Mic, color: 'text-accent' },
   { key: 'ROUTE', label: '路线', icon: Route, color: 'text-primary' },
   { key: 'JOURNEY', label: '旅程', icon: Map, color: 'text-teal-500' },
   { key: 'GUIDE', label: '攻略', icon: BookOpen, color: 'text-orange-500' },
