@@ -21,11 +21,10 @@ interface DraftListProps {
 }
 
 const postTypeLabels: Record<string, string> = {
-  NOTE: '笔记',
-  VR_MEDIA: 'VR媒体',
-  ROUTE: '路线',
-  JOURNEY: '旅程',
-  GUIDE: '攻略',
+  NOTE: '随记',
+  VR_MEDIA: '第一视角',
+  JOURNEY: '游记',
+  MOMENT: '瞬间',
 };
 
 export function DraftList({ onSelectDraft }: DraftListProps) {
