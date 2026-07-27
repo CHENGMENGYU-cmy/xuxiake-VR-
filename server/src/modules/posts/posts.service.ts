@@ -548,8 +548,12 @@ export class PostsService {
   }
 
   // ===== 内容层级查询 =====
-  async getContentHierarchy(options: { level?: string; userId?: string; cursor?: string; limit?: number; parentId?: string } = {}) {
-    const { level, userId, cursor, limit = 12, parentId } = options;
+  async getContentHierarchy(options: {
+    level?: string; userId?: string; cursor?: string; limit?: number;
+    parentId?: string; location?: string; mediaType?: string; month?: string;
+    currentUserId?: string;
+  } = {}) {
+    const { level, userId, cursor, limit = 12, parentId, location, mediaType, month, currentUserId } = options;
 
     const qb = this.postRepo
       .createQueryBuilder('post')
@@ -558,9 +562,17 @@ export class PostsService {
       .leftJoinAndSelect('post.tags', 'tags')
       .leftJoinAndSelect('post.topics', 'topics')
       .leftJoinAndSelect('post.parentPost', 'parentPost')
-      .where('post.visibility = :vis', { vis: 'PUBLIC' })
       .orderBy('post.createdAt', 'DESC')
       .take(limit + 1);
+
+    // 可见性：有认证用户时可查看自己的私密内容，否则只看公开
+    if (currentUserId) {
+      qb.where('(post.visibility = :vis OR (post.authorId = :currentUserId AND post.visibility = :priv))', {
+        vis: 'PUBLIC', currentUserId, priv: 'PRIVATE',
+      });
+    } else {
+      qb.where('post.visibility = :vis', { vis: 'PUBLIC' });
+    }
 
     if (level) {
       qb.andWhere('post.contentLevel = :level', { level });
@@ -570,6 +582,18 @@ export class PostsService {
     }
     if (parentId) {
       qb.andWhere('post.parentPostId = :parentId', { parentId });
+    }
+    // 按地点过滤
+    if (location) {
+      qb.andWhere('post.locationName = :location', { location });
+    }
+    // 按媒体类型过滤
+    if (mediaType) {
+      qb.innerJoin('post.mediaItems', 'filterMedia', 'filterMedia.type = :mediaType', { mediaType });
+    }
+    // 按月份过滤
+    if (month) {
+      qb.andWhere("DATE_FORMAT(post.createdAt, '%Y-%m') = :month", { month });
     }
 
     const posts = await qb.getMany();
