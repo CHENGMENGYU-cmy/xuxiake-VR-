@@ -63,6 +63,9 @@ export class User {
   @Column({ name: 'updated_at', type: 'timestamp', nullable: true })
   updatedAt: Date | null;
 
+  @Column({ type: 'enum', enum: ['USER', 'MODERATOR', 'ADMIN'], default: 'USER' })
+  role: 'USER' | 'MODERATOR' | 'ADMIN';
+
   @OneToMany(() => Post, (post) => post.author)
   posts: Post[];
 
