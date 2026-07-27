@@ -322,13 +322,22 @@ export class PostsController {
 
   // ===== 内容审核 =====
 
+  private async checkAdmin(auth: string) {
+    const userId = this.getUserId(auth);
+    const user = await this.userRepo.findOne({ where: { id: userId } });
+    if (!user || (user.role !== 'ADMIN' && user.role !== 'MODERATOR')) {
+      throw new UnauthorizedException('需要管理员或审核员权限');
+    }
+    return user;
+  }
+
   @Get('reviews/queue')
   async getReviewQueue(
     @Headers('authorization') auth: string,
     @Query('page') page?: string,
     @Query('limit') limit?: string,
   ) {
-    this.getUserId(auth);
+    await this.checkAdmin(auth);
     const result = await this.reviewService.getReviewQueue(
       page ? parseInt(page) : 1,
       limit ? parseInt(limit) : 20,
@@ -342,8 +351,8 @@ export class PostsController {
     @Param('id') postId: string,
     @Body() dto: { reason?: string },
   ) {
-    const userId = this.getUserId(auth);
-    const review = await this.reviewService.approve(postId, userId, dto.reason);
+    const admin = await this.checkAdmin(auth);
+    const review = await this.reviewService.approve(postId, admin.id, dto.reason);
     return { success: true, data: review };
   }
 
@@ -353,8 +362,8 @@ export class PostsController {
     @Param('id') postId: string,
     @Body() dto: { reason: string },
   ) {
-    const userId = this.getUserId(auth);
-    const review = await this.reviewService.reject(postId, userId, dto.reason);
+    const admin = await this.checkAdmin(auth);
+    const review = await this.reviewService.reject(postId, admin.id, dto.reason);
     return { success: true, data: review };
   }
 
