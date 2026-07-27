@@ -10,12 +10,10 @@ import type { Post } from '@/types';
 
 const postTypeFilters = [
   { value: '', label: '全部', icon: null },
-  { value: 'NOTE', label: '笔记', icon: <FileText className="h-3.5 w-3.5" /> },
-  { value: 'VR_MEDIA', label: 'VR', icon: <Play className="h-3.5 w-3.5" /> },
-  { value: 'ROUTE', label: '路线', icon: <Map className="h-3.5 w-3.5" /> },
-  { value: 'GUIDE', label: '攻略', icon: <BookOpen className="h-3.5 w-3.5" /> },
-  { value: 'JOURNEY', label: '旅程', icon: <Compass className="h-3.5 w-3.5" /> },
-  { value: 'MOMENT', label: '动态', icon: <MessageSquare className="h-3.5 w-3.5" /> },
+  { value: 'NOTE', label: '随记', icon: <FileText className="h-3.5 w-3.5" /> },
+  { value: 'VR_MEDIA', label: '第一视角', icon: <Play className="h-3.5 w-3.5" /> },
+  { value: 'JOURNEY', label: '游记', icon: <Compass className="h-3.5 w-3.5" /> },
+  { value: 'MOMENT', label: '瞬间', icon: <MessageSquare className="h-3.5 w-3.5" /> },
 ];
 
 interface PostsTabProps {
