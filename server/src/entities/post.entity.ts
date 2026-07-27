@@ -18,8 +18,8 @@ export class Post {
   @Column({ name: 'community_id', type: 'varchar', length: 36, nullable: true })
   communityId: string | null;
 
-  @Column({ name: 'post_type', type: 'enum', enum: ['NOTE', 'VR_MEDIA', 'ROUTE', 'JOURNEY', 'GUIDE', 'MOMENT'], default: 'NOTE' })
-  postType: 'NOTE' | 'VR_MEDIA' | 'ROUTE' | 'JOURNEY' | 'GUIDE' | 'MOMENT';
+  @Column({ name: 'post_type', type: 'enum', enum: ['NOTE', 'VR_MEDIA', 'JOURNEY', 'MOMENT'], default: 'NOTE' })
+  postType: 'NOTE' | 'VR_MEDIA' | 'JOURNEY' | 'MOMENT';
 
   @Column({ name: 'content_level', type: 'enum', enum: ['SNAPSHOT', 'CLASSIFIED', 'DIARY', 'ESSAY'], default: 'SNAPSHOT' })
   contentLevel: 'SNAPSHOT' | 'CLASSIFIED' | 'DIARY' | 'ESSAY';
