@@ -16,12 +16,10 @@ import {
   MessageCircle,
   Hash,
   Radio,
-  Route,
-  Map,
-  BookOpen,
   FolderOpen,
   PenLine,
   Camera,
+  BookOpen,
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
