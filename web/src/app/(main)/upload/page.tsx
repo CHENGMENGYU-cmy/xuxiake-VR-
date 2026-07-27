@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Upload, Video, Image, Mic, Link2, Languages, FileUp, MapPin, X, Loader2, Play, Volume2, Send } from 'lucide-react';
+import { Upload, Video, Image, Mic, Link2, Languages, FileUp, MapPin, X, Loader2, Play, Volume2, Send, ArrowLeftRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -745,7 +745,7 @@ function UploadContent() {
                     className="mb-0.5"
                     onClick={handleSwapLanguages}
                   >
-                    <ArrowRight className="h-4 w-4" />
+                    <ArrowLeftRight className="h-4 w-4" />
                   </Button>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">目标语言</label>

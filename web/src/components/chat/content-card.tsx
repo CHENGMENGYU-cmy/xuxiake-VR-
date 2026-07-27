@@ -88,7 +88,7 @@ export function ContentCard({ data, isMine }: ContentCardProps) {
             )}
             {data.extra.distance && (
               <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                <Route className="h-3 w-3" /> {data.extra.distance}
+                <MapPin className="h-3 w-3" /> {data.extra.distance}
               </span>
             )}
             {data.extra.duration && (
