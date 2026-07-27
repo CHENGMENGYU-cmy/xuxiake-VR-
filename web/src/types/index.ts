@@ -49,6 +49,16 @@ export interface MediaItem {
 // ===== 内容帖子 =====
 export type PostType = 'NOTE' | 'VR_MEDIA' | 'ROUTE' | 'JOURNEY' | 'GUIDE' | 'MOMENT';
 
+// 内容层级：瞬间捕获 → 内容分类 → 日记/日志 → 游记/散文
+export type ContentLevel = 'SNAPSHOT' | 'CLASSIFIED' | 'DIARY' | 'ESSAY';
+
+export const ContentLevelLabel: Record<ContentLevel, string> = {
+  SNAPSHOT: '瞬间捕获',
+  CLASSIFIED: '内容分类',
+  DIARY: '日记',
+  ESSAY: '游记',
+};
+
 export type Difficulty = 'EASY' | 'MODERATE' | 'HARD' | 'EXPERT';
 export type RouteType = 'HIKE' | 'BIKE' | 'DRIVE' | 'PADDLE' | 'CLIMB';
 
