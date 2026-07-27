@@ -22,7 +22,6 @@ interface ContentCardProps {
 
 const CARD_ICONS: Record<CardType, typeof MapPin> = {
   POST: Heart,
-  ROUTE: Route,
   VR: Video,
   ACTIVITY: Calendar,
   USER: UserIcon,
