@@ -9,12 +9,12 @@ type FilterTab = { id: string; label: string; icon: typeof FileText; postType?: 
 
 const filterTabs: FilterTab[] = [
   { id: 'all', label: '全部', icon: Home },
-  { id: 'NOTE', label: '笔记', icon: FileText, postType: 'NOTE' },
-  { id: 'VR_MEDIA', label: 'VR内容', icon: Video, postType: 'VR_MEDIA' },
+  { id: 'NOTE', label: '随记', icon: FileText, postType: 'NOTE' },
+  { id: 'VR_MEDIA', label: '第一视角', icon: Video, postType: 'VR_MEDIA' },
   { id: 'ROUTE', label: '路线', icon: Map, postType: 'ROUTE' },
   { id: 'JOURNEY', label: '旅程', icon: Compass, postType: 'JOURNEY' },
   { id: 'GUIDE', label: '攻略', icon: BookOpen, postType: 'GUIDE' },
-  { id: 'MOMENT', label: '动态', icon: MessageSquare, postType: 'MOMENT' },
+  { id: 'MOMENT', label: '瞬间', icon: MessageSquare, postType: 'MOMENT' },
 ];
 
 export default function FeedPage() {
