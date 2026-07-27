@@ -12,8 +12,6 @@ const filterTabs: FilterTab[] = [
   { id: 'VR_MEDIA', label: '第一视角', icon: Video, postType: 'VR_MEDIA' },
   { id: 'NOTE', label: '随记', icon: FileText, postType: 'NOTE' },
   { id: 'JOURNEY', label: '游记', icon: Compass, postType: 'JOURNEY' },
-  { id: 'ROUTE', label: '路线', icon: Map, postType: 'ROUTE' },
-  { id: 'GUIDE', label: '攻略', icon: BookOpen, postType: 'GUIDE' },
   { id: 'MOMENT', label: '瞬间', icon: MessageSquare, postType: 'MOMENT' },
 ];
 
