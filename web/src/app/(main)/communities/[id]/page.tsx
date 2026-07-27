@@ -559,7 +559,7 @@ function CommunityChallengesTab({ communityId, isModerator }: { communityId: str
 
   const statusLabel: Record<string, string> = { UPCOMING: '即将开始', ACTIVE: '进行中', ENDED: '已结束' };
   const statusColor: Record<string, string> = { UPCOMING: 'bg-blue-500', ACTIVE: 'bg-green-500', ENDED: 'bg-gray-400' };
-  const typeLabel: Record<string, string> = { PHOTO: '拍照', ROUTE: '路线', CHECKIN: '打卡', DISTANCE: '距离' };
+  const typeLabel: Record<string, string> = { PHOTO: '拍照', CHECKIN: '打卡', DISTANCE: '距离' };
 
   return (
     <div className="space-y-4">
