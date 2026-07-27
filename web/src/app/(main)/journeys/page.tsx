@@ -72,6 +72,7 @@ function JourneysContent() {
       {activeTab === 'public' && (
         <HierarchyList
           level="ESSAY"
+          detailBasePath="/journeys"
           emptyText="还没有公开的游记"
         />
       )}
@@ -82,6 +83,7 @@ function JourneysContent() {
           key="private-essay"
           level="ESSAY"
           userId={user?.id}
+          detailBasePath="/journeys"
           emptyText="没有私密游记，已发布的游记会显示在「已发布」标签中"
         />
       )}
