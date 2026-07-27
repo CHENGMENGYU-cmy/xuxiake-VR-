@@ -9,17 +9,14 @@ import {
   Compass,
   Bell,
   Settings,
-  Video,
-  Image,
-  Music,
   UserPlus,
   MessageCircle,
   Hash,
-  Radio,
   FolderOpen,
   PenLine,
   Camera,
   BookOpen,
+  PlusCircle,
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -30,21 +27,20 @@ import { useChatStore } from '@/stores/chat-store';
 import { useNotificationStore } from '@/stores/notification-store';
 import { cn } from '@/lib/utils';
 
-// 顶部导航
+// 浏览发现
 const navItems = [
   { href: '/feed', label: '首页', icon: Home },
   { href: '/explore', label: '探索发现', icon: Compass },
   { href: '/topics', label: '话题广场', icon: Hash },
   { href: '/discover', label: '找搭子', icon: UserPlus },
-  { href: '/upload', label: '分享见闻', icon: Upload },
 ];
 
-// 第一视角
-const mediaItems = [
-  { href: '/media?type=VIDEO', label: '瞬间捕获', icon: Video, color: 'text-teal-500' },
-  { href: '/media?type=IMAGE', label: '影像集', icon: Image, color: 'text-orange-500' },
-  { href: '/media?type=AUDIO', label: '语音记录', icon: Music, color: 'text-teal-400' },
-  { href: '/live', label: '直播', icon: Radio, color: 'text-red-500', badge: '即将上线' },
+// 我的内容（四层内容体系）
+const contentItems = [
+  { href: '/media', label: '瞬间捕获', icon: Camera, color: 'text-teal-500', desc: '照片·视频·音频' },
+  { href: '/classified', label: '内容分类', icon: FolderOpen, color: 'text-amber-500', desc: '按地点·类型·时间' },
+  { href: '/diaries', label: '我的日记', icon: PenLine, color: 'text-indigo-500', desc: '感想随笔' },
+  { href: '/journeys', label: '游记散文', icon: BookOpen, color: 'text-primary', desc: '正式文章' },
 ];
 
 // 个人中心
