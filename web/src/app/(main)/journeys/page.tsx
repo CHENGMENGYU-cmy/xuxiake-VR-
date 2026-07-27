@@ -1,28 +1,32 @@
 'use client';
 
 import { useState } from 'react';
-import { BookOpen, TrendingUp, Flame, Clock, PenLine } from 'lucide-react';
-import { FeedList } from '@/components/feed/feed-list';
+import { BookOpen, TrendingUp, Flame, Clock, PenLine, FileEdit, Lock, Globe } from 'lucide-react';
+import { HierarchyList } from '@/components/feed/hierarchy-list';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import type { PostSortType } from '@/lib/post-api';
+import { useAuthStore } from '@/stores/auth-store';
+import { AuthGuard } from '@/components/auth-guard';
 
-type SortTab = 'trending' | 'latest' | 'hot';
+type StatusTab = 'public' | 'private' | 'draft';
 
-const sortTabMap: Record<SortTab, PostSortType> = {
-  trending: 'trending',
-  latest: 'latest',
-  hot: 'hot',
-};
-
-const sortTabs = [
-  { id: 'trending' as SortTab, label: '热门', icon: TrendingUp },
-  { id: 'latest' as SortTab, label: '最新', icon: Clock },
-  { id: 'hot' as SortTab, label: '精选', icon: Flame },
+const statusTabs: { id: StatusTab; label: string; icon: typeof Globe; desc: string }[] = [
+  { id: 'public', label: '已发布', icon: Globe, desc: '所有人可见' },
+  { id: 'private', label: '私密', icon: Lock, desc: '仅自己可见' },
+  { id: 'draft', label: '草稿', icon: FileEdit, desc: '编辑中' },
 ];
 
 export default function JourneysPage() {
-  const [activeSort, setActiveSort] = useState<SortTab>('latest');
+  return (
+    <AuthGuard>
+      <JourneysContent />
+    </AuthGuard>
+  );
+}
+
+function JourneysContent() {
+  const { user } = useAuthStore();
+  const [activeTab, setActiveTab] = useState<StatusTab>('public');
 
   return (
     <div className="space-y-4">
@@ -43,18 +47,19 @@ export default function JourneysPage() {
         基于瞬间捕获和日记，生成有个人情感的正式游记文章。
       </p>
 
-      {/* 排序切换 */}
-      <div className="flex gap-1">
-        {sortTabs.map((tab) => {
+      {/* 状态切换 */}
+      <div className="flex gap-1 border-b">
+        {statusTabs.map((tab) => {
           const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
           return (
             <button
               key={tab.id}
-              onClick={() => setActiveSort(tab.id)}
-              className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                activeSort === tab.id
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-muted text-muted-foreground hover:bg-muted/80'
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center gap-1.5 px-4 py-2 text-sm font-medium transition-colors ${
+                isActive
+                  ? 'border-b-2 border-primary text-primary'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               <Icon className="h-4 w-4" />
@@ -64,12 +69,33 @@ export default function JourneysPage() {
         })}
       </div>
 
-      <FeedList
-        key={activeSort}
-        showComposer={false}
-        sort={sortTabMap[activeSort]}
-        postType="JOURNEY"
-      />
+      {/* 已发布 — 展示全站公开的ESSAY级别内容 */}
+      {activeTab === 'public' && (
+        <HierarchyList
+          level="ESSAY"
+          emptyText="还没有公开的游记"
+        />
+      )}
+
+      {/* 私密 — 只看当前用户的ESSAY级别私密内容 */}
+      {activeTab === 'private' && (
+        <HierarchyList
+          key="private-essay"
+          level="ESSAY"
+          userId={user?.id}
+          emptyText="没有私密游记，已发布的游记会显示在「已发布」标签中"
+        />
+      )}
+
+      {/* 草稿 — 只看当前用户的ESSAY级别草稿内容 */}
+      {activeTab === 'draft' && (
+        <HierarchyList
+          key="draft-essay"
+          level="ESSAY"
+          userId={user?.id}
+          emptyText="没有草稿，点击「写游记」开始创作吧"
+        />
+      )}
     </div>
   );
 }
