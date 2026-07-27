@@ -532,18 +532,13 @@ function UploadContent() {
               key={tab.key}
               onClick={() => handleTabChange(tab.key)}
               className={cn(
-                'flex flex-col items-center gap-2 rounded-xl border-2 p-4 transition-all',
+                'flex flex-col items-center gap-1.5 rounded-lg border p-3 transition-all',
                 isActive
                   ? 'border-primary bg-primary/5 shadow-sm'
                   : 'border-muted bg-card hover:border-primary/30 hover:bg-accent/50'
               )}
             >
-              <div className={cn(
-                'flex h-12 w-12 items-center justify-center rounded-xl',
-                isActive ? 'bg-primary/10' : 'bg-muted'
-              )}>
-                <Icon className={cn('h-6 w-6', isActive ? 'text-primary' : tab.color)} />
-              </div>
+              <Icon className={cn('h-5 w-5', isActive ? 'text-primary' : tab.color)} />
               <span className={cn(
                 'text-sm font-medium',
                 isActive ? 'text-primary' : 'text-foreground'
