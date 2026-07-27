@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PostCard } from '@/components/post/post-card';
@@ -17,6 +18,8 @@ interface HierarchyListProps {
   parentId?: string;
   emptyText?: string;
   showRefresh?: boolean;
+  /** 点击卡片跳转的详情路径前缀，如 /diaries 或 /journeys */
+  detailBasePath?: string;
 }
 
 export function HierarchyList({
