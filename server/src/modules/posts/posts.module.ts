@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostsController } from './posts.controller.js';
 import { PostsService } from './posts.service.js';
+import { ReviewService } from './review.service.js';
 import { AuthModule } from '../auth/auth.module.js';
 import { NotificationsModule } from '../notifications/notifications.module.js';
 import { Post } from '../../entities/post.entity.js';
@@ -16,15 +17,17 @@ import { JourneyStop } from '../../entities/journey-stop.entity.js';
 import { Collection } from '../../entities/collection.entity.js';
 import { CollectionPost } from '../../entities/collection-post.entity.js';
 import { UserFollow } from '../../entities/user-follow.entity.js';
+import { ContentReview } from '../../entities/content-review.entity.js';
+import { Report } from '../../entities/report.entity.js';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Post, MediaItem, Comment, Like, User, InterestTag, Topic, Journey, JourneyStop, Collection, CollectionPost, UserFollow]),
+    TypeOrmModule.forFeature([Post, MediaItem, Comment, Like, User, InterestTag, Topic, Journey, JourneyStop, Collection, CollectionPost, UserFollow, ContentReview, Report]),
     AuthModule,
     NotificationsModule,
   ],
   controllers: [PostsController],
-  providers: [PostsService],
+  providers: [PostsService, ReviewService],
   exports: [PostsService],
 })
 export class PostsModule {}
