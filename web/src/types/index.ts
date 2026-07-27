@@ -83,19 +83,6 @@ export interface Journey {
   stops?: JourneyStop[];
 }
 
-export type GuideCategory = 'FOOD' | 'STAY' | 'TRANSPORT' | 'TICKET' | 'TIPS';
-export type BudgetLevel = 'BUDGET' | 'MID' | 'LUXURY';
-
-export interface GuideDetail {
-  id: number;
-  postId: string;
-  destination?: string | null;
-  category: GuideCategory;
-  bestSeason?: string | null;
-  budgetLevel: BudgetLevel;
-  richContent?: string | null;
-}
-
 export interface Collection {
   id: string;
   creatorId: string;
