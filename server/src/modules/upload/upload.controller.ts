@@ -12,21 +12,29 @@ import { JwtService } from '@nestjs/jwt';
 import { v4 as uuidv4 } from 'uuid';
 import { diskStorage } from 'multer';
 import { extname, join } from 'path';
-import { existsSync, mkdirSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync } from 'fs';
+import sharp from 'sharp';
+import { StorageService } from '../../common/storage.service.js';
 
-const AVATAR_DIR = join(process.cwd(), 'uploads', 'avatars');
-const IMAGE_DIR = join(process.cwd(), 'uploads', 'images');
-const VIDEO_DIR = join(process.cwd(), 'uploads', 'videos');
-const AUDIO_DIR = join(process.cwd(), 'uploads', 'audio');
+const UPLOAD_DIR = join(process.cwd(), 'uploads');
+if (!existsSync(UPLOAD_DIR)) mkdirSync(UPLOAD_DIR, { recursive: true });
 
-// Ensure upload directories exist
-[AVATAR_DIR, IMAGE_DIR, VIDEO_DIR, AUDIO_DIR].forEach((dir) => {
-  if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+// 确保子目录存在
+const AVATAR_DIR = join(UPLOAD_DIR, 'avatars');
+const IMAGE_DIR = join(UPLOAD_DIR, 'images');
+const VIDEO_DIR = join(UPLOAD_DIR, 'videos');
+const AUDIO_DIR = join(UPLOAD_DIR, 'audio');
+const THUMB_DIR = join(UPLOAD_DIR, 'thumbnails');
+[AVATAR_DIR, IMAGE_DIR, VIDEO_DIR, AUDIO_DIR, THUMB_DIR].forEach((d) => {
+  if (!existsSync(d)) mkdirSync(d, { recursive: true });
 });
 
 @Controller('api/upload')
 export class UploadController {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly storageService: StorageService,
+  ) {}
 
   private getUserId(auth?: string): string {
     const token = auth?.replace('Bearer ', '') || null;
@@ -38,23 +46,31 @@ export class UploadController {
     }
   }
 
+  /** 生成图片缩略图 */
+  private async generateThumbnail(filePath: string): Promise<string> {
+    try {
+      const thumbName = `thumb_${extname(filePath)}`;
+      const thumbPath = join(THUMB_DIR, thumbName);
+      await sharp(filePath)
+        .resize(400, 300, { fit: 'cover' })
+        .jpeg({ quality: 80 })
+        .toFile(thumbPath);
+      return `/uploads/thumbnails/${thumbName}`;
+    } catch {
+      return '';
+    }
+  }
+
   @Post('presign')
   getPresignedUrl(
     @Headers('authorization') auth: string,
     @Body() body: { fileName: string; fileType: string; mediaType: string },
   ) {
     const userId = this.getUserId(auth);
-    const uploadId = uuidv4();
-    const key = `${userId}/${new Date().toISOString().split('T')[0]}/${uploadId}-${body.fileName}`;
-
-    return {
-      success: true,
-      data: {
-        uploadId,
-        uploadUrl: `https://mock-storage.example.com/${key}?presigned=true`,
-        publicUrl: `https://cdn.xuxiake.com/${key}`,
-      },
-    };
+    const result = this.storageService.getPresignedUrl(
+      userId, body.fileName, body.fileType, body.mediaType,
+    );
+    return { success: true, data: result };
   }
 
   @Post('avatar')
@@ -142,13 +158,26 @@ export class UploadController {
     }
 
     const url = `/uploads/images/${file.filename}`;
+    const fullPath = join(process.cwd(), url);
+
+    // 生成缩略图
+    const thumbnailUrl = await this.generateThumbnail(fullPath);
+
+    // 获取图片尺寸
+    let width = 0, height = 0;
+    try {
+      const meta = await sharp(fullPath).metadata();
+      width = meta.width || 0;
+      height = meta.height || 0;
+    } catch {}
 
     return {
       success: true,
       data: {
         url,
-        width: 0,
-        height: 0,
+        width,
+        height,
+        thumbnailUrl: thumbnailUrl || undefined,
         originalName: file.originalname,
         size: file.size,
       },
