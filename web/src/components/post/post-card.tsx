@@ -232,7 +232,7 @@ export function PostCard({ post, onLikeChange }: PostCardProps) {
                   <Copy className="h-3.5 w-3.5 mr-2" />
                   复制链接
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setShowReport(true)}>
                   <AlertTriangle className="h-3.5 w-3.5 mr-2" />
                   举报
                 </DropdownMenuItem>
