@@ -96,6 +96,29 @@ export class PostsController {
     return { success: true, ...result };
   }
 
+  // ===== 内容层级（必须在 :id 之前） =====
+  @Get('hierarchy')
+  async getContentHierarchy(
+    @Query('level') level?: string,
+    @Query('userId') userId?: string,
+    @Query('cursor') cursor?: string,
+    @Query('limit') limit?: string,
+    @Query('parentId') parentId?: string,
+  ) {
+    const result = await this.postsService.getContentHierarchy({
+      level, userId, cursor,
+      limit: limit ? parseInt(limit) : 12,
+      parentId,
+    });
+    return { success: true, ...result };
+  }
+
+  @Get('classified/dimensions')
+  async getClassifiedDimensions(@Query('userId') userId?: string) {
+    const dimensions = await this.postsService.getClassifiedDimensions(userId);
+    return { success: true, data: dimensions };
+  }
+
   @Get(':id')
   async getPost(@Param('id') id: string, @Headers('authorization') auth?: string) {
     let userId: string | undefined;
@@ -179,31 +202,6 @@ export class PostsController {
     const userId = this.getUserId(auth);
     const result = await this.postsService.deleteComment(userId, commentId);
     return { success: true, ...result };
-  }
-
-  // ===== 内容层级 =====
-  @Get('hierarchy')
-  async getContentHierarchy(
-    @Query('level') level?: string,
-    @Query('userId') userId?: string,
-    @Query('cursor') cursor?: string,
-    @Query('limit') limit?: string,
-    @Query('parentId') parentId?: string,
-  ) {
-    const result = await this.postsService.getContentHierarchy({
-      level,
-      userId,
-      cursor,
-      limit: limit ? parseInt(limit) : 12,
-      parentId,
-    });
-    return { success: true, ...result };
-  }
-
-  @Get('classified/dimensions')
-  async getClassifiedDimensions(@Query('userId') userId?: string) {
-    const dimensions = await this.postsService.getClassifiedDimensions(userId);
-    return { success: true, data: dimensions };
   }
 
   @Post(':id/promote')
