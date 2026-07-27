@@ -19,8 +19,8 @@ const quicksand = Quicksand({
 });
 
 export const metadata: Metadata = {
-  title: "徐霞客系统 - VR旅行记录平台",
-  description: "带着VR眼镜看世界，记录每一段旅程。上传VR视频、全景图片、音频记录、翻译信息和旅行链接。",
+  title: "徐霞客系统 - 第一视角旅行分享平台",
+  description: "第一视角看世界，记录每一段旅程。分享瞬间捕获、全景影像、语音记录和旅行见闻。",
 };
 
 export default function RootLayout({
