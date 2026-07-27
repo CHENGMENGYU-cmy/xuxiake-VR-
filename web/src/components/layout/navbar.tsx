@@ -185,7 +185,7 @@ export function Navbar() {
           </Link>
 
           {/* 消息 - 仅登录后显示 */}
-          {user && (
+          {user && mounted && (
             <Link href="/messages">
               <Button variant="ghost" size="icon" className="relative">
                 <MessageCircle className="h-5 w-5" />
@@ -199,7 +199,7 @@ export function Navbar() {
           )}
 
           {/* 通知 - 仅登录后显示 */}
-          {user && (
+          {user && mounted && (
             <Link href="/notifications">
               <Button variant="ghost" size="icon" className="relative">
                 <Bell className="h-5 w-5" />
