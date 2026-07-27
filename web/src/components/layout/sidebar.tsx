@@ -162,12 +162,47 @@ export function Sidebar() {
 
             <Separator />
 
+            {/* 内容层级: 瞬间捕获 → 分类 → 日记 → 游记 */}
+            <div className="space-y-1 p-3">
+              <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
+                内容体系
+              </p>
+              {[
+                { href: '/media', label: '瞬间捕获', icon: Camera, color: 'text-teal-500' },
+                { href: '/classified', label: '内容分类', icon: FolderOpen, color: 'text-amber-500' },
+                { href: '/diaries', label: '我的日记', icon: PenLine, color: 'text-indigo-500' },
+                { href: '/journeys', label: '游记散文', icon: BookOpen, color: 'text-primary' },
+              ].map((item) => {
+                const Icon = item.icon;
+                const isActive = pathname === item.href;
+                return (
+                  <Link key={item.href} href={item.href}>
+                    <Button
+                      variant="ghost"
+                      className={cn(
+                        'w-full justify-start gap-3',
+                        isActive && 'bg-primary/10 text-primary hover:bg-primary/10'
+                      )}
+                    >
+                      <Icon className={cn('h-5 w-5', item.color, isActive && 'text-primary')} />
+                      <span>{item.label}</span>
+                    </Button>
+                  </Link>
+                );
+              })}
+            </div>
+
+            <Separator />
+
             {/* 旅行工具 */}
             <div className="space-y-1 p-3">
               <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
                 旅行工具
               </p>
-              {travelTools.map((item) => {
+              {[
+                { href: '/routes', label: '路线', icon: Route, color: 'text-primary' },
+                { href: '/guides', label: '攻略', icon: Map, color: 'text-orange-500' },
+              ].map((item) => {
                 const Icon = item.icon;
                 const isActive = pathname === item.href;
                 return (
