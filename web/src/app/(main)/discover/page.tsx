@@ -9,6 +9,7 @@ import { useAuthStore } from '@/stores/auth-store';
 import { RecommendedUsers } from './recommended-users';
 import { RecommendedCommunities } from './recommended-communities';
 import { MyCommunities } from './my-communities';
+import { CompanionsTab } from './companions-tab';
 
 export default function DiscoverPage() {
   const { isAuthenticated } = useAuthStore();
@@ -30,8 +31,8 @@ export default function DiscoverPage() {
     return (
       <div className="flex h-[calc(100vh-3.5rem)] items-center justify-center">
         <div className="text-center">
-          <h2 className="mb-2 text-lg font-medium">发现新朋友</h2>
-          <p className="mb-4 text-sm text-muted-foreground">登录后查看智能推荐</p>
+          <h2 className="mb-2 text-lg font-medium">找个旅行搭子</h2>
+          <p className="mb-4 text-sm text-muted-foreground">登录后发现同行的伙伴</p>
           <Link href="/login">
             <Button>立即登录</Button>
           </Link>
@@ -42,12 +43,17 @@ export default function DiscoverPage() {
 
   return (
     <div>
-      <Tabs defaultValue="users" className="w-full">
-        <TabsList className="mb-6 grid w-full grid-cols-3">
+      <Tabs defaultValue="companions" className="w-full">
+        <TabsList className="mb-6 grid w-full grid-cols-4">
+          <TabsTrigger value="companions">找搭子</TabsTrigger>
           <TabsTrigger value="users">推荐用户</TabsTrigger>
           <TabsTrigger value="communities">推荐社群</TabsTrigger>
           <TabsTrigger value="my-communities">我的社群</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="companions">
+          <CompanionsTab />
+        </TabsContent>
 
         <TabsContent value="users">
           <RecommendedUsers />
