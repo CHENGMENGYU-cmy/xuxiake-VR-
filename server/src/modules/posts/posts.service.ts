@@ -653,6 +653,48 @@ export class PostsService {
     };
   }
 
+  // ===== 发布/撤回 =====
+  async publishPost(userId: string, postId: string, dto?: { locationPrecision?: 'hidden' | 'city' | 'exact' }) {
+    const post = await this.postRepo.findOne({
+      where: { id: postId },
+      relations: { author: true, mediaItems: true, tags: true, topics: true },
+    });
+    if (!post) throw new NotFoundException('内容不存在');
+    if (post.authorId !== userId) throw new NotFoundException('无权发布此内容');
+
+    // 地点精度处理
+    if (dto?.locationPrecision === 'hidden') {
+      post.locationName = null;
+      post.locationLat = null;
+      post.locationLng = null;
+    } else if (dto?.locationPrecision === 'city' && post.locationName) {
+      // 只保留城市级别（取第一个逗号前的部分）
+      const parts = post.locationName.split(/[,，]/);
+      post.locationName = parts[0];
+      post.locationLat = null;
+      post.locationLng = null;
+    }
+
+    post.visibility = 'PUBLIC';
+    post.updatedAt = new Date();
+    await this.postRepo.save(post);
+    return this.formatPost(post);
+  }
+
+  async unpublishPost(userId: string, postId: string) {
+    const post = await this.postRepo.findOne({
+      where: { id: postId },
+      relations: { author: true, mediaItems: true, tags: true, topics: true },
+    });
+    if (!post) throw new NotFoundException('内容不存在');
+    if (post.authorId !== userId) throw new NotFoundException('无权撤回此内容');
+
+    post.visibility = 'PRIVATE';
+    post.updatedAt = new Date();
+    await this.postRepo.save(post);
+    return this.formatPost(post);
+  }
+
   async promoteContent(userId: string, postId: string, dto: { targetLevel: string; content?: string; title?: string }) {
     const post = await this.postRepo.findOne({ where: { id: postId, authorId: userId } });
     if (!post) throw new NotFoundException('内容不存在');
