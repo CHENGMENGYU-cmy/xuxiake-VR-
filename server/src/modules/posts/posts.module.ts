@@ -19,6 +19,8 @@ import { CollectionPost } from '../../entities/collection-post.entity.js';
 import { UserFollow } from '../../entities/user-follow.entity.js';
 import { ContentReview } from '../../entities/content-review.entity.js';
 import { Report } from '../../entities/report.entity.js';
+import { VideoComment } from '../../entities/video-comment.entity.js';
+import { AudioPlaylist } from '../../entities/audio-playlist.entity.js';
 
 @Module({
   imports: [
