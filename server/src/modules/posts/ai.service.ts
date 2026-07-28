@@ -8,7 +8,7 @@ import { MediaItem } from '../../entities/media-item.entity.js';
 import { Journey } from '../../entities/journey.entity.js';
 import { JourneyStop } from '../../entities/journey-stop.entity.js';
 
-interface GenerationJob {
+export interface GenerationJob {
   id: string;
   userId: string;
   status: 'QUEUED' | 'ANALYZING' | 'GENERATING' | 'DONE' | 'ERROR';

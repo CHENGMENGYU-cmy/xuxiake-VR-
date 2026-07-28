@@ -25,32 +25,23 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    // 未登录（无token）的401请求静默处理，不跳转登录页
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      const refreshToken = localStorage.getItem('refreshToken');
+      const refreshToken = typeof window !== 'undefined' ? localStorage.getItem('refreshToken') : null;
       if (refreshToken) {
         try {
           const { data } = await axios.post(`${API_BASE}/auth/refresh`, { refreshToken });
           const { accessToken, refreshToken: newRefresh } = data.data;
-
           localStorage.setItem('accessToken', accessToken);
           localStorage.setItem('refreshToken', newRefresh);
-
           originalRequest.headers.Authorization = `Bearer ${accessToken}`;
           return apiClient(originalRequest);
         } catch {
-          // 刷新失败，清除状态
           localStorage.removeItem('accessToken');
           localStorage.removeItem('refreshToken');
           localStorage.removeItem('user');
-          if (typeof window !== 'undefined') {
-            window.location.href = '/login';
-          }
-        }
-      } else {
-        if (typeof window !== 'undefined') {
-          window.location.href = '/login';
         }
       }
     }

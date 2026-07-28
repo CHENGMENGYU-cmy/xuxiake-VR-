@@ -9,7 +9,7 @@ import { VideoComment } from '../../entities/video-comment.entity.js';
 import { AudioPlaylist } from '../../entities/audio-playlist.entity.js';
 import { PostsService } from './posts.service.js';
 import { ReviewService } from './review.service.js';
-import { AiService } from './ai.service.js';
+import { AiService, type GenerationJob } from './ai.service.js';
 import { AuthService } from '../auth/auth.service.js';
 import type { CreatePostDto, CreateCommentDto } from '../../common/interfaces.js';
 
@@ -504,7 +504,7 @@ export class PostsController {
   }
 
   @Get('ai/jobs/:jobId')
-  async getJobStatus(@Param('jobId') jobId: string) {
+  async getJobStatus(@Param('jobId') jobId: string): Promise<{ success: boolean; data: GenerationJob | null }> {
     const job = this.aiService.getJobStatus(jobId);
     if (!job) throw new UnauthorizedException('任务不存在');
     return { success: true, data: job };
