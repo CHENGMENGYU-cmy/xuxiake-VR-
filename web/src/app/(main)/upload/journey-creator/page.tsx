@@ -12,7 +12,6 @@ import { Separator } from '@/components/ui/separator';
 import { usePostStore } from '@/stores/post-store';
 import { uploadImage } from '@/lib/media-api';
 import { CreatePostPayload } from '@/lib/post-api';
-import { cn } from '@/lib/utils';
 
 interface JourneyStop {
   id: string;
