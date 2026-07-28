@@ -19,6 +19,8 @@ export class PostsController {
     private readonly reviewService: ReviewService,
     private readonly authService: AuthService,
     @InjectRepository(User) private readonly userRepo: Repository<User>,
+    @InjectRepository(VideoComment) private readonly vcRepo: Repository<VideoComment>,
+    @InjectRepository(AudioPlaylist) private readonly playlistRepo: Repository<AudioPlaylist>,
   ) {}
 
   private getUserId(auth: string): string {
