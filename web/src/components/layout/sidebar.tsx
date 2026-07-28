@@ -92,7 +92,15 @@ export function Sidebar() {
                     <AvatarFallback>{user.displayName[0]}</AvatarFallback>
                   </Avatar>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-semibold">{user.displayName}</p>
+                    <div className="flex items-center gap-2">
+                      <p className="truncate text-sm font-semibold">{user.displayName}</p>
+                      {user.role === 'ADMIN' && (
+                        <Badge className="h-4 px-1 text-[10px] bg-red-500">管理员</Badge>
+                      )}
+                      {user.role === 'MODERATOR' && (
+                        <Badge className="h-4 px-1 text-[10px] bg-amber-500">审核员</Badge>
+                      )}
+                    </div>
                     <p className="truncate text-xs text-muted-foreground">@{user.username}</p>
                   </div>
                 </Link>
