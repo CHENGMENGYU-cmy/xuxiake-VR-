@@ -3,7 +3,10 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
 import { User } from '../../entities/user.entity.js';
+import { VideoComment } from '../../entities/video-comment.entity.js';
+import { AudioPlaylist } from '../../entities/audio-playlist.entity.js';
 import { PostsService } from './posts.service.js';
 import { ReviewService } from './review.service.js';
 import { AuthService } from '../auth/auth.service.js';
