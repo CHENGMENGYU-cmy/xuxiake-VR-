@@ -32,6 +32,8 @@ import { CommunityChallengeEntry } from './entities/community-challenge-entry.en
 import { MessageReaction } from './entities/message-reaction.entity.js';
 import { LocationShare } from './entities/location-share.entity.js';
 import { RecommendationFeedback } from './entities/recommendation-feedback.entity.js';
+import { VideoComment } from './entities/video-comment.entity.js';
+import { AudioPlaylist } from './entities/audio-playlist.entity.js';
 import { getDatabaseConfig } from './config/database.config.js';
 import { JwtModule } from '@nestjs/jwt';
 
