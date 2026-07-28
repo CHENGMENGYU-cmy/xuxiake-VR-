@@ -32,6 +32,7 @@ export class SocialController {
     @InjectRepository(ConversationParticipant) private readonly partRepo: Repository<ConversationParticipant>,
     @InjectRepository(PostEntity) private readonly postRepo: Repository<PostEntity>,
     @InjectRepository(MediaItem) private readonly mediaRepo: Repository<MediaItem>,
+    @InjectRepository(RecommendationFeedback) private readonly feedbackRepo: Repository<RecommendationFeedback>,
     private readonly jwtService: JwtService,
     private readonly socialService: SocialService,
   ) {}
