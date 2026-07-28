@@ -131,218 +131,114 @@ export default function JourneyCreatorPage() {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2">
-        <Map className="h-6 w-6 text-primary" />
-        <h1 className="text-xl font-bold">创建旅程</h1>
+    <div className="mx-auto max-w-3xl space-y-5">
+      {/* 页面标题 */}
+      <div className="flex items-center gap-3">
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/70">
+          <Map className="h-4 w-4 text-white" />
+        </div>
+        <div>
+          <h1 className="text-xl font-bold">创建游记</h1>
+          <p className="text-sm text-muted-foreground">记录旅程的每一个精彩瞬间</p>
+        </div>
       </div>
 
-      <Card>
-        <CardContent className="p-6 space-y-6">
-          {/* 基本信息 */}
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium">旅程标题 *</label>
-              <Input
-                placeholder="给你的旅程起个名字..."
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
+      <Card className="shadow-sm">
+        <CardContent className="p-6 space-y-5">
+          {/* 标题+封面 */}
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div className="sm:col-span-2 space-y-2">
+              <label className="text-sm font-medium">游记标题 *</label>
+              <Input placeholder="给你的游记起个名字..." value={title} onChange={(e) => setTitle(e.target.value)} />
             </div>
-
             <div className="space-y-2">
-              <label className="text-sm font-medium">旅程描述</label>
-              <Textarea
-                placeholder="描述这次旅程的精彩之处..."
-                className="min-h-[100px]"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">目的地</label>
-                <Input
-                  placeholder="例如：云南大理"
-                  value={destination}
-                  onChange={(e) => setDestination(e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">封面图</label>
-                <div className="flex gap-2">
-                  {coverUrl ? (
-                    <div className="relative flex-1 h-10 rounded-md overflow-hidden">
-                      <img src={coverUrl} alt="封面" className="h-full w-full object-cover" />
-                      <button
-                        onClick={() => setCoverUrl('')}
-                        className="absolute right-1 top-1 rounded-full bg-black/60 p-0.5 text-white"
-                      >
-                        <X className="h-3 w-3" />
-                      </button>
-                    </div>
-                  ) : (
-                    <label className="flex-1 flex items-center justify-center gap-2 h-10 rounded-md border border-dashed cursor-pointer hover:bg-muted transition-colors">
-                      {uploadingCover ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                      ) : (
-                        <ImagePlus className="h-4 w-4 text-muted-foreground" />
-                      )}
-                      <span className="text-sm text-muted-foreground">
-                        {uploadingCover ? '上传中...' : '选择封面'}
-                      </span>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={(e) => handleCoverUpload(e.target.files)}
-                      />
-                    </label>
-                  )}
+              <label className="text-sm font-medium">封面图</label>
+              {coverUrl ? (
+                <div className="relative h-[72px] rounded-lg overflow-hidden border">
+                  <img src={coverUrl} alt="" className="h-full w-full object-cover" />
+                  <button onClick={() => setCoverUrl('')} className="absolute right-1.5 top-1.5 rounded-full bg-black/60 p-1 text-white"><X className="h-3 w-3" /></button>
                 </div>
-              </div>
+              ) : (
+                <label className="flex flex-col items-center justify-center gap-1 h-[72px] rounded-lg border-2 border-dashed border-muted cursor-pointer hover:border-primary/50 transition-colors">
+                  {uploadingCover ? <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /> : <ImagePlus className="h-5 w-5 text-muted-foreground" />}
+                  <span className="text-xs text-muted-foreground">{uploadingCover ? '上传中' : '点击上传'}</span>
+                  <input type="file" accept="image/*" className="hidden" onChange={(e) => handleCoverUpload(e.target.files)} />
+                </label>
+              )}
             </div>
+          </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium flex items-center gap-1.5">
-                  <Calendar className="h-4 w-4" />
-                  开始日期
-                </label>
-                <Input
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium flex items-center gap-1.5">
-                  <Calendar className="h-4 w-4" />
-                  结束日期
-                </label>
-                <Input
-                  type="date"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                />
-              </div>
+          {/* 描述+日期 */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">游记正文</label>
+            <Textarea placeholder="写下你的旅程故事..." className="min-h-[120px] resize-none" value={content} onChange={(e) => setContent(e.target.value)} />
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium">目的地</label>
+              <Input placeholder="如：云南大理" value={destination} onChange={(e) => setDestination(e.target.value)} />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium">开始日期</label>
+              <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium">结束日期</label>
+              <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
             </div>
           </div>
 
           <Separator />
 
           {/* 行程站点 */}
-          <div className="space-y-4">
+          <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <label className="text-sm font-medium">行程安排</label>
-              <Button variant="outline" size="sm" onClick={addStop}>
-                <Plus className="h-4 w-4 mr-1" />
-                添加站点
-              </Button>
+              <h3 className="font-semibold">行程安排</h3>
+              <Button variant="outline" size="sm" onClick={addStop} className="gap-1"><Plus className="h-4 w-4" />添加站点</Button>
             </div>
-
             {stops.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
-                <Map className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                <p className="text-sm">暂无行程站点</p>
-                <p className="text-xs">点击"添加站点"开始规划你的旅程</p>
+              <div className="rounded-lg border-2 border-dashed py-12 text-center text-muted-foreground">
+                <Map className="h-10 w-10 mx-auto mb-2 opacity-30" />
+                <p className="text-sm">点击「添加站点」规划你的旅程路线</p>
               </div>
             ) : (
-              <div className="space-y-4">
-                {stops.map((stop, index) => (
-                  <Card key={stop.id}>
-                    <CardContent className="p-4">
-                      <div className="flex items-start gap-3">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-medium">
-                          {stop.dayNumber}
-                        </div>
-                        <div className="flex-1 space-y-3">
-                          <div className="grid grid-cols-2 gap-3">
-                            <Input
-                              placeholder="地点名称"
-                              value={stop.locationName}
-                              onChange={(e) => updateStop(stop.id, { locationName: e.target.value })}
-                            />
-                            <div className="flex gap-2">
-                              <Input
-                                type="number"
-                                step="0.0001"
-                                placeholder="纬度"
-                                value={stop.locationLat || ''}
-                                onChange={(e) => updateStop(stop.id, { locationLat: parseFloat(e.target.value) || undefined })}
-                                className="text-xs"
-                              />
-                              <Input
-                                type="number"
-                                step="0.0001"
-                                placeholder="经度"
-                                value={stop.locationLng || ''}
-                                onChange={(e) => updateStop(stop.id, { locationLng: parseFloat(e.target.value) || undefined })}
-                                className="text-xs"
-                              />
-                            </div>
-                          </div>
-                          <Textarea
-                            placeholder="描述这一天的行程..."
-                            value={stop.description}
-                            onChange={(e) => updateStop(stop.id, { description: e.target.value })}
-                            className="min-h-[60px]"
-                          />
-                          {/* 站点图片 */}
-                          {stop.mediaUrl ? (
-                            <div className="relative rounded-lg overflow-hidden h-32">
-                              <img src={stop.mediaUrl} alt="" className="h-full w-full object-cover" />
-                              <button
-                                onClick={() => updateStop(stop.id, { mediaUrl: undefined })}
-                                className="absolute right-2 top-2 rounded-full bg-black/60 p-1 text-white"
-                              >
-                                <X className="h-4 w-4" />
-                              </button>
-                            </div>
-                          ) : (
-                            <label className="flex items-center justify-center gap-2 h-20 rounded-lg border border-dashed cursor-pointer hover:bg-muted transition-colors">
-                              {uploadingStopMedia === stop.id ? (
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                              ) : (
-                                <ImagePlus className="h-4 w-4 text-muted-foreground" />
-                              )}
-                              <span className="text-sm text-muted-foreground">
-                                {uploadingStopMedia === stop.id ? '上传中...' : '添加图片'}
-                              </span>
-                              <input
-                                type="file"
-                                accept="image/*"
-                                className="hidden"
-                                onChange={(e) => handleStopMediaUpload(stop.id, e.target.files)}
-                              />
-                            </label>
-                          )}
-                        </div>
-                        <button
-                          onClick={() => removeStop(stop.id)}
-                          className="rounded-full p-1 text-muted-foreground hover:text-destructive"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
+              <div className="space-y-3">
+                {stops.map((stop) => (
+                  <div key={stop.id} className="flex gap-3 rounded-lg border bg-card p-4">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary text-sm font-bold">{stop.dayNumber}</div>
+                    <div className="flex-1 space-y-2">
+                      <div className="flex gap-2">
+                        <Input placeholder="地点名称" value={stop.locationName} onChange={(e) => updateStop(stop.id, { locationName: e.target.value })} className="flex-1" />
+                        <Input type="number" step="0.0001" placeholder="纬度" value={stop.locationLat || ''} onChange={(e) => updateStop(stop.id, { locationLat: parseFloat(e.target.value) || undefined })} className="w-24 text-xs" />
+                        <Input type="number" step="0.0001" placeholder="经度" value={stop.locationLng || ''} onChange={(e) => updateStop(stop.id, { locationLng: parseFloat(e.target.value) || undefined })} className="w-24 text-xs" />
                       </div>
-                    </CardContent>
-                  </Card>
+                      <Textarea placeholder="描述这一站..." value={stop.description} onChange={(e) => updateStop(stop.id, { description: e.target.value })} className="min-h-[50px] resize-none" />
+                      {stop.mediaUrl ? (
+                        <div className="relative h-24 rounded-lg overflow-hidden">
+                          <img src={stop.mediaUrl} alt="" className="h-full w-full object-cover" />
+                          <button onClick={() => updateStop(stop.id, { mediaUrl: undefined })} className="absolute right-2 top-2 rounded-full bg-black/60 p-1 text-white"><X className="h-3 w-3" /></button>
+                        </div>
+                      ) : (
+                        <label className="flex items-center justify-center gap-1.5 h-16 rounded-lg border border-dashed cursor-pointer hover:bg-muted/50 transition-colors">
+                          {uploadingStopMedia === stop.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImagePlus className="h-4 w-4 text-muted-foreground" />}
+                          <span className="text-xs text-muted-foreground">{uploadingStopMedia === stop.id ? '上传中' : '添加图片'}</span>
+                          <input type="file" accept="image/*" className="hidden" onChange={(e) => handleStopMediaUpload(stop.id, e.target.files)} />
+                        </label>
+                      )}
+                    </div>
+                    <button onClick={() => removeStop(stop.id)} className="shrink-0 rounded-full p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10"><Trash2 className="h-4 w-4" /></button>
+                  </div>
                 ))}
               </div>
             )}
           </div>
 
-          <Separator />
-
-          {/* 发布按钮 */}
-          <div className="flex justify-end gap-3">
-            <Button variant="outline" onClick={() => router.push('/upload')}>
-              取消
-            </Button>
-            <Button className="gap-2" disabled={!canPublish} onClick={handlePublish}>
+          {/* 发布 */}
+          <div className="flex justify-end gap-3 pt-2">
+            <Button variant="outline" size="lg" onClick={() => router.push('/upload')}>取消</Button>
+            <Button size="lg" className="gap-2" disabled={!canPublish} onClick={handlePublish}>
               {isPublishing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-              {isPublishing ? '发布中...' : '发布旅程'}
+              {isPublishing ? '发布中...' : '发布游记'}
             </Button>
           </div>
         </CardContent>
