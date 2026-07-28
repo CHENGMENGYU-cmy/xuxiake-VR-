@@ -133,8 +133,27 @@ function AdminReviewsContent() {
         </div>
       ) : (
         <div className="space-y-3">
+          {/* 批量操作栏 */}
+          {selected.size > 0 && (
+            <div className="sticky top-0 z-10 flex items-center gap-3 rounded-lg border-2 border-primary bg-primary/5 p-3">
+              <span className="text-sm font-medium">已选 {selected.size} 条</span>
+              <Button size="sm" variant="outline" onClick={() => { setBatchAction('APPROVED'); handleBatch(); }}>全部通过</Button>
+              <Button size="sm" variant="outline" className="text-red-500" onClick={() => setBatchAction('REJECTED')}>
+                全部驳回
+              </Button>
+              {batchAction === 'REJECTED' && (
+                <>
+                  <Input placeholder="驳回原因" className="h-8 w-48" value={batchReason} onChange={e => setBatchReason(e.target.value)} />
+                  <Button size="sm" variant="destructive" onClick={handleBatch}>确认驳回</Button>
+                  <Button size="sm" variant="ghost" onClick={() => { setBatchAction(null); setBatchReason(''); }}>取消</Button>
+                </>
+              )}
+              <Button size="sm" variant="ghost" onClick={() => setSelected(new Set())}>取消选择</Button>
+            </div>
+          )}
           {reviews.map((review) => (
-            <div key={review.id} className="rounded-lg border bg-card p-4">
+            <div key={review.id} className={`flex gap-3 rounded-lg border bg-card p-4 ${selected.has(review.postId) ? 'border-primary bg-primary/5' : ''}`}>
+              <input type="checkbox" checked={selected.has(review.postId)} onChange={() => toggleSelect(review.postId)} className="mt-1 h-4 w-4 shrink-0" />
               <div className="mb-3 flex items-center justify-between">
                 {statusBadge(review.status)}
                 <span className="text-xs text-muted-foreground">
