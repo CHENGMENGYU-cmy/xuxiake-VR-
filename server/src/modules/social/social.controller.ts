@@ -16,6 +16,7 @@ import { Conversation } from '../../entities/conversation.entity.js';
 import { ConversationParticipant } from '../../entities/conversation-participant.entity.js';
 import { Post as PostEntity } from '../../entities/post.entity.js';
 import { MediaItem } from '../../entities/media-item.entity.js';
+import { RecommendationFeedback } from '../../entities/recommendation-feedback.entity.js';
 import { SocialService } from './social.service.js';
 
 @Controller('api/social')
