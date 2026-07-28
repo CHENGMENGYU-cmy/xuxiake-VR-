@@ -863,18 +863,46 @@ export class SocialController {
     const userId = this.getUserId(auth);
     if (!userId) throw new UnauthorizedException('请先登录');
 
-    if (!this.recommendationFeedback.has(userId)) {
-      this.recommendationFeedback.set(userId, new Set());
-    }
-    const userFeedback = this.recommendationFeedback.get(userId)!;
-
     if (body.type === 'NOT_INTERESTED') {
-      userFeedback.add(communityId);
+      // 持久化不感兴趣反馈
+      const existing = await this.feedbackRepo.findOne({
+        where: { userId, targetId: communityId, targetType: 'COMMUNITY' },
+      });
+      if (!existing) {
+        const feedback = this.feedbackRepo.create({
+          id: uuidv4(), userId, targetId: communityId, targetType: 'COMMUNITY', type: 'NOT_INTERESTED',
+        });
+        await this.feedbackRepo.save(feedback);
+      }
     } else {
-      userFeedback.delete(communityId);
+      // 移除不感兴趣标记
+      await this.feedbackRepo.delete({
+        userId, targetId: communityId, targetType: 'COMMUNITY', type: 'NOT_INTERESTED',
+      });
     }
 
     return { success: true, message: '反馈已记录' };
+  }
+
+  /** 记录推荐点击行为 */
+  @Post('recommended/communities/:id/click')
+  async recordCommunityClick(
+    @Headers('authorization') auth: string,
+    @Param('id') communityId: string,
+  ) {
+    const userId = this.getUserId(auth);
+    if (!userId) return { success: true };
+
+    const existing = await this.feedbackRepo.findOne({
+      where: { userId, targetId: communityId, targetType: 'COMMUNITY', type: 'CLICK' },
+    });
+    if (!existing) {
+      const feedback = this.feedbackRepo.create({
+        id: uuidv4(), userId, targetId: communityId, targetType: 'COMMUNITY', type: 'CLICK',
+      });
+      await this.feedbackRepo.save(feedback);
+    }
+    return { success: true };
   }
 
   // ==================== 社群相关 ====================
