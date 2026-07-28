@@ -101,21 +101,26 @@ function UsersContent() {
                   <p className="text-xs text-muted-foreground">@{u.username}</p>
                 </div>
               </div>
-              <div className="flex gap-2">
-                {u.role !== 'ADMIN' && (
-                  <Button size="sm" variant="outline" onClick={() => handleRoleChange(u.id, 'MODERATOR')}>
-                    <Shield className="mr-1 h-3 w-3" /> 设为审核员
-                  </Button>
-                )}
-                {u.role === 'MODERATOR' && (
-                  <Button size="sm" variant="outline" onClick={() => handleRoleChange(u.id, 'USER')}>
-                    取消审核员
-                  </Button>
-                )}
-                {u.role !== 'ADMIN' && (
-                  <Button size="sm" variant="outline" className="text-red-500" onClick={() => handleRoleChange(u.id, 'ADMIN')}>
-                    <Shield className="mr-1 h-3 w-3" /> 设为管理员
-                  </Button>
+              <div className="flex gap-1.5">
+                {u.status === 'BANNED' ? (
+                  <Button size="sm" variant="outline" onClick={() => handleUnban(u.id)}>解封</Button>
+                ) : (
+                  <>
+                    {u.role !== 'ADMIN' && u.role !== 'MODERATOR' && (
+                      <Button size="sm" variant="outline" onClick={() => handleRoleChange(u.id, 'MODERATOR')}>
+                        <Shield className="mr-1 h-3 w-3" /> 审核员
+                      </Button>
+                    )}
+                    {u.role === 'MODERATOR' && (
+                      <Button size="sm" variant="outline" onClick={() => handleRoleChange(u.id, 'USER')}>取消审核员</Button>
+                    )}
+                    {u.role !== 'ADMIN' && (
+                      <Button size="sm" variant="outline" className="text-red-500" onClick={() => handleRoleChange(u.id, 'ADMIN')}>
+                        <Shield className="mr-1 h-3 w-3" /> 管理员
+                      </Button>
+                    )}
+                    <Button size="sm" variant="outline" className="text-red-400" onClick={() => handleBan(u.id)}>封禁</Button>
+                  </>
                 )}
               </div>
             </div>
