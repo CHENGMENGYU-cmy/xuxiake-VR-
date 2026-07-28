@@ -94,6 +94,7 @@ function UsersContent() {
                 <div>
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-medium">{u.displayName}</p>
+                    {u.status === 'BANNED' && <Badge className="h-4 text-[10px] bg-gray-500">已封禁</Badge>}
                     {u.role === 'ADMIN' && <Badge className="h-4 text-[10px] bg-red-500">管理员</Badge>}
                     {u.role === 'MODERATOR' && <Badge className="h-4 text-[10px] bg-amber-500">审核员</Badge>}
                   </div>
