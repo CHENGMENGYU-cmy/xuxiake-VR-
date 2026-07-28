@@ -411,4 +411,81 @@ export class PostsController {
     const report = await this.reviewService.resolveReport(reportId, userId, dto.action, dto.resolution);
     return { success: true, data: report };
   }
+
+  // ===== 视频弹幕 =====
+
+  @Get(':id/danmaku')
+  async getDanmaku(@Param('id') postId: string) {
+    const comments = await this.vcRepo.find({
+      where: { postId },
+      relations: { user: true },
+      order: { timeOffset: 'ASC' },
+    });
+    return {
+      success: true,
+      data: comments.map((c) => ({
+        id: c.id, content: c.content, timeOffset: Number(c.timeOffset),
+        color: c.color, createdAt: c.createdAt,
+        user: c.user ? { id: c.user.id, username: c.user.username, displayName: c.user.displayName, avatarUrl: c.user.avatarUrl } : null,
+      })),
+    };
+  }
+
+  @Post(':id/danmaku')
+  async addDanmaku(
+    @Headers('authorization') auth: string,
+    @Param('id') postId: string,
+    @Body() body: { content: string; timeOffset: number; color?: string },
+  ) {
+    const userId = this.getUserId(auth);
+    const comment = this.vcRepo.create({
+      id: uuidv4(), postId, userId, content: body.content,
+      timeOffset: body.timeOffset, color: body.color || null,
+    });
+    await this.vcRepo.save(comment);
+    const user = await this.userRepo.findOne({ where: { id: userId } });
+    return { success: true, data: { ...comment, user: user ? { id: user.id, username: user.username, displayName: user.displayName, avatarUrl: user.avatarUrl } : null } };
+  }
+
+  // ===== 音频专辑 =====
+
+  @Get('playlists')
+  async getPlaylists(@Query('userId') userId?: string) {
+    const qb = this.playlistRepo.createQueryBuilder('p')
+      .leftJoinAndSelect('p.user', 'user')
+      .where('p.isPublic = :pub', { pub: true })
+      .orderBy('p.createdAt', 'DESC');
+    if (userId) qb.andWhere('p.userId = :uid', { uid: userId });
+    const data = await qb.getMany();
+    return { success: true, data };
+  }
+
+  @Post('playlists')
+  async createPlaylist(
+    @Headers('authorization') auth: string,
+    @Body() body: { title: string; description?: string; coverUrl?: string; isPublic?: boolean },
+  ) {
+    const userId = this.getUserId(auth);
+    const playlist = this.playlistRepo.create({
+      id: uuidv4(), userId, title: body.title,
+      description: body.description || null, coverUrl: body.coverUrl || null,
+      isPublic: body.isPublic !== false,
+    });
+    await this.playlistRepo.save(playlist);
+    return { success: true, data: playlist };
+  }
+
+  @Post('playlists/:id/tracks/:postId')
+  async addTrackToPlaylist(
+    @Headers('authorization') auth: string,
+    @Param('id') playlistId: string,
+    @Param('postId') postId: string,
+  ) {
+    const userId = this.getUserId(auth);
+    const playlist = await this.playlistRepo.findOne({ where: { id: playlistId } });
+    if (!playlist || playlist.userId !== userId) throw new UnauthorizedException('无权操作');
+    playlist.trackCount += 1;
+    await this.playlistRepo.save(playlist);
+    return { success: true, message: '已添加到专辑' };
+  }
 }
