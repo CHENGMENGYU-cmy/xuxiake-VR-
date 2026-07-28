@@ -42,6 +42,9 @@ function AdminReviewsContent() {
   const [loading, setLoading] = useState(true);
   const [rejectReason, setRejectReason] = useState('');
   const [rejectingId, setRejectingId] = useState<string | null>(null);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [batchAction, setBatchAction] = useState<'APPROVED' | 'REJECTED' | null>(null);
+  const [batchReason, setBatchReason] = useState('');
 
   const loadReviews = async () => {
     setLoading(true);
