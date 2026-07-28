@@ -180,7 +180,7 @@ export function Sidebar() {
                 个人
               </p>
               {/* 管理入口 — 仅管理员/审核员可见 */}
-              {(user as any).role && (user as any).role !== 'USER' && (
+              {user.role && user.role !== 'USER' && (
                 <Link href="/admin/reviews">
                   <Button
                     variant="ghost"
