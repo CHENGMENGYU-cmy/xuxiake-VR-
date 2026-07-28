@@ -490,4 +490,23 @@ export class PostsController {
     await this.playlistRepo.save(playlist);
     return { success: true, message: '已添加到专辑' };
   }
+
+  // ===== AI 游记生成 =====
+
+  @Post('ai/generate')
+  async generateEssay(
+    @Headers('authorization') auth: string,
+    @Body() body: { seedPostIds: string[]; style: string; tone: string; length: string },
+  ) {
+    const userId = this.getUserId(auth);
+    const jobId = await this.aiService.generateEssay(userId, body.seedPostIds, body.style, body.tone, body.length);
+    return { success: true, data: { jobId } };
+  }
+
+  @Get('ai/jobs/:jobId')
+  async getJobStatus(@Param('jobId') jobId: string) {
+    const job = this.aiService.getJobStatus(jobId);
+    if (!job) throw new UnauthorizedException('任务不存在');
+    return { success: true, data: job };
+  }
 }
