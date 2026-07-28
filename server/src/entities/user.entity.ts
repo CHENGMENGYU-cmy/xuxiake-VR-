@@ -66,6 +66,9 @@ export class User {
   @Column({ type: 'enum', enum: ['USER', 'MODERATOR', 'ADMIN'], default: 'USER' })
   role: 'USER' | 'MODERATOR' | 'ADMIN';
 
+  @Column({ type: 'enum', enum: ['ACTIVE', 'BANNED'], default: 'ACTIVE' })
+  status: 'ACTIVE' | 'BANNED';
+
   @OneToMany(() => Post, (post) => post.author)
   posts: Post[];
 
