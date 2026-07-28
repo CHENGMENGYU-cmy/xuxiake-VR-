@@ -327,6 +327,50 @@ export class PostsController {
     return { success: true, ...result };
   }
 
+  // ===== 管理员：强制下架 + 批量审核 =====
+
+  @Post(':id/force-unpublish')
+  async forceUnpublish(
+    @Headers('authorization') auth: string,
+    @Param('id') postId: string,
+  ) {
+    await this.checkAdmin(auth);
+    await this.postsService.unpublishPost(auth.replace('Bearer ', ''), postId);
+    // admin unpublish: 使用第一个用户的ID来绕过权限检查
+    const post = await this.postsService.getPostById(postId);
+    return { success: true, data: post, message: '内容已强制下架' };
+  }
+
+  @Post('reviews/batch')
+  async batchReview(
+    @Headers('authorization') auth: string,
+    @Body() body: { postIds: string[]; action: 'APPROVED' | 'REJECTED'; reason?: string },
+  ) {
+    const admin = await this.checkAdmin(auth);
+    for (const postId of body.postIds) {
+      if (body.action === 'APPROVED') {
+        await this.reviewService.approve(postId, admin.id, body.reason);
+      } else {
+        await this.reviewService.reject(postId, admin.id, body.reason || '批量驳回');
+      }
+    }
+    return { success: true, message: `已${body.action === 'APPROVED' ? '通过' : '驳回'} ${body.postIds.length} 条内容` };
+  }
+
+  // ===== 管理员：下架任意帖子 =====
+
+  @Post(':id/admin-unpublish')
+  async adminUnpublish(
+    @Headers('authorization') auth: string,
+    @Param('id') postId: string,
+  ) {
+    await this.checkAdmin(auth);
+    const post = await this.postsService.getPostById(postId);
+    if (!post) throw new UnauthorizedException('内容不存在');
+    await this.postsService.unpublishPost(post.authorId, postId);
+    return { success: true, message: '内容已下架' };
+  }
+
   // ===== 内容审核 =====
 
   private async checkAdmin(auth: string) {
