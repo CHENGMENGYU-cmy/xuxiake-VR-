@@ -65,6 +65,7 @@ export function Sidebar() {
   const totalUnread = useChatStore((s) => s.totalUnread);
   const notifUnreadCount = useNotificationStore((s) => s.unreadCount);
   const [mounted, setMounted] = useState(false);
+  const isAdmin = !!(mounted && user && user.role && user.role !== 'USER');
 
   useEffect(() => {
     setMounted(true);
