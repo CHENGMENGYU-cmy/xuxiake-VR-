@@ -154,7 +154,8 @@ function AdminReviewsContent() {
           {reviews.map((review) => (
             <div key={review.id} className={`flex gap-3 rounded-lg border bg-card p-4 ${selected.has(review.postId) ? 'border-primary bg-primary/5' : ''}`}>
               <input type="checkbox" checked={selected.has(review.postId)} onChange={() => toggleSelect(review.postId)} className="mt-1 h-4 w-4 shrink-0" />
-              <div className="mb-3 flex items-center justify-between">
+              <div className="flex-1 space-y-3">
+              <div className="flex items-center justify-between">
                 {statusBadge(review.status)}
                 <span className="text-xs text-muted-foreground">
                   {new Date(review.createdAt).toLocaleString('zh-CN')}
