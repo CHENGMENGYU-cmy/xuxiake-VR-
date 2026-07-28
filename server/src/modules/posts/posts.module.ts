@@ -30,7 +30,7 @@ import { AudioPlaylist } from '../../entities/audio-playlist.entity.js';
     NotificationsModule,
   ],
   controllers: [PostsController],
-  providers: [PostsService, ReviewService],
+  providers: [PostsService, ReviewService, AiService],
   exports: [PostsService],
 })
 export class PostsModule {}
