@@ -575,9 +575,6 @@ export class SocialController {
     return { success: true, data: paged, page: pageNum };
   }
 
-  // 内存存储推荐反馈（后续可持久化到数据库）
-  private recommendationFeedback = new Map<string, Set<string>>();
-
   @Get('recommended/communities')
   async getRecommendedCommunities(
     @Headers('authorization') auth: string,
