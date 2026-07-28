@@ -24,7 +24,7 @@ import { AudioPlaylist } from '../../entities/audio-playlist.entity.js';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Post, MediaItem, Comment, Like, User, InterestTag, Topic, Journey, JourneyStop, Collection, CollectionPost, UserFollow, ContentReview, Report]),
+    TypeOrmModule.forFeature([Post, MediaItem, Comment, Like, User, InterestTag, Topic, Journey, JourneyStop, Collection, CollectionPost, UserFollow, ContentReview, Report, VideoComment, AudioPlaylist]),
     AuthModule,
     NotificationsModule,
   ],
