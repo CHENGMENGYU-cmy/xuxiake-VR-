@@ -216,6 +216,51 @@ export class UsersController {
     };
   }
 
+  // ===== 管理员：用户列表 + 角色管理 =====
+
+  @Get('list')
+  async listUsers(
+    @Headers('authorization') auth: string,
+    @Query('limit') limit?: string,
+  ) {
+    const userId = this.getUserId(auth);
+    if (!userId) throw new UnauthorizedException('请先登录');
+    const admin = await this.userRepo.findOne({ where: { id: userId } });
+    if (!admin || admin.role !== 'ADMIN') throw new UnauthorizedException('需要管理员权限');
+
+    const users = await this.userRepo.find({
+      order: { createdAt: 'DESC' },
+      take: limit ? parseInt(limit) : 100,
+    });
+    return {
+      success: true,
+      data: users.map(u => {
+        const { passwordHash, ...dto } = u;
+        return dto;
+      }),
+    };
+  }
+
+  @Put(':id/role')
+  async updateUserRole(
+    @Headers('authorization') auth: string,
+    @Param('id') targetId: string,
+    @Body() body: { role: 'USER' | 'MODERATOR' | 'ADMIN' },
+  ) {
+    const userId = this.getUserId(auth);
+    if (!userId) throw new UnauthorizedException('请先登录');
+    const admin = await this.userRepo.findOne({ where: { id: userId } });
+    if (!admin || admin.role !== 'ADMIN') throw new UnauthorizedException('需要管理员权限');
+
+    const user = await this.userRepo.findOne({ where: { id: targetId } });
+    if (!user) throw new NotFoundException('用户不存在');
+    if (!['USER', 'MODERATOR', 'ADMIN'].includes(body.role)) throw new NotFoundException('无效角色');
+
+    user.role = body.role;
+    await this.userRepo.save(user);
+    return { success: true, message: '角色已更新' };
+  }
+
   // ===== 用户帖子列表 =====
   @Get(':username/posts')
   async getUserPosts(
