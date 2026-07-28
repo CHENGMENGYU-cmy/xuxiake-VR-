@@ -167,14 +167,26 @@ export function Sidebar() {
             {mounted && user && user.role && user.role !== 'USER' && (
               <div className="space-y-1 p-3">
                 <p className="px-2 text-xs font-medium uppercase text-amber-600 dark:text-amber-400">
-                  管理
+                  管理中心
                 </p>
+                <Link href="/admin/dashboard">
+                  <Button
+                    variant="ghost"
+                    className={cn(
+                      'w-full justify-start gap-3',
+                      pathname === '/admin/dashboard' && 'bg-primary/10 text-primary'
+                    )}
+                  >
+                    <TrendingUp className="h-5 w-5 text-primary" />
+                    <span>管理仪表板</span>
+                  </Button>
+                </Link>
                 <Link href="/admin/reviews">
                   <Button
                     variant="ghost"
                     className={cn(
                       'w-full justify-start gap-3',
-                      pathname.startsWith('/admin/reviews') && 'bg-primary/10 text-primary'
+                      pathname.startsWith('/admin/reviews') && !pathname.startsWith('/admin/reports') && 'bg-primary/10 text-primary'
                     )}
                   >
                     <Shield className="h-5 w-5 text-amber-500" />
@@ -199,7 +211,7 @@ export function Sidebar() {
                       variant="ghost"
                       className={cn(
                         'w-full justify-start gap-3',
-                        pathname.startsWith('/admin/users') && 'bg-primary/10 text-primary'
+                        pathname === '/admin/users' && 'bg-primary/10 text-primary'
                       )}
                     >
                       <Users className="h-5 w-5 text-blue-500" />
