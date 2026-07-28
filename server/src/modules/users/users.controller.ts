@@ -261,6 +261,42 @@ export class UsersController {
     return { success: true, message: '角色已更新' };
   }
 
+  @Put(':id/ban')
+  async banUser(
+    @Headers('authorization') auth: string,
+    @Param('id') targetId: string,
+  ) {
+    const userId = this.getUserId(auth);
+    if (!userId) throw new UnauthorizedException('请先登录');
+    const admin = await this.userRepo.findOne({ where: { id: userId } });
+    if (!admin || admin.role !== 'ADMIN') throw new UnauthorizedException('需要管理员权限');
+
+    const user = await this.userRepo.findOne({ where: { id: targetId } });
+    if (!user) throw new NotFoundException('用户不存在');
+    if (user.role === 'ADMIN') throw new UnauthorizedException('不能封禁管理员');
+
+    user.status = 'BANNED';
+    await this.userRepo.save(user);
+    return { success: true, message: '用户已封禁' };
+  }
+
+  @Put(':id/unban')
+  async unbanUser(
+    @Headers('authorization') auth: string,
+    @Param('id') targetId: string,
+  ) {
+    const userId = this.getUserId(auth);
+    if (!userId) throw new UnauthorizedException('请先登录');
+    const admin = await this.userRepo.findOne({ where: { id: userId } });
+    if (!admin || admin.role !== 'ADMIN') throw new UnauthorizedException('需要管理员权限');
+
+    const user = await this.userRepo.findOne({ where: { id: targetId } });
+    if (!user) throw new NotFoundException('用户不存在');
+    user.status = 'ACTIVE';
+    await this.userRepo.save(user);
+    return { success: true, message: '用户已解封' };
+  }
+
   // ===== 用户帖子列表 =====
   @Get(':username/posts')
   async getUserPosts(
