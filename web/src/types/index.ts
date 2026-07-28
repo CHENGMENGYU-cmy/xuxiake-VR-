@@ -16,6 +16,7 @@ export interface User {
     model: string;
     version: string;
   };
+  role?: 'USER' | 'MODERATOR' | 'ADMIN';
   createdAt: string;
   interests?: InterestTag[];
 }
