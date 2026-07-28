@@ -51,7 +51,7 @@ import { JwtModule } from '@nestjs/jwt';
       ConversationParticipant, UserFollow,
       InterestTag, UserInterest, Community, CommunityTag,
       CommunityAnnouncement, CommunityRole, CommunityChallenge, CommunityChallengeEntry,
-      MessageReaction, LocationShare, RecommendationFeedback,
+      MessageReaction, LocationShare, RecommendationFeedback, VideoComment, AudioPlaylist,
     ]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
