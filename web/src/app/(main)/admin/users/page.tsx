@@ -40,6 +40,23 @@ function UsersContent() {
     } catch { toast.error('操作失败'); }
   };
 
+  const handleBan = async (userId: string) => {
+    if (!confirm('确定封禁该用户？封禁后将无法登录和发布内容。')) return;
+    try {
+      await apiClient.put(`/users/${userId}/ban`);
+      setUsers(prev => prev.map(u => u.id === userId ? { ...u, status: 'BANNED' } : u));
+      toast.success('用户已封禁');
+    } catch (err: any) { toast.error(err.response?.data?.message || '操作失败'); }
+  };
+
+  const handleUnban = async (userId: string) => {
+    try {
+      await apiClient.put(`/users/${userId}/unban`);
+      setUsers(prev => prev.map(u => u.id === userId ? { ...u, status: 'ACTIVE' } : u));
+      toast.success('用户已解封');
+    } catch { toast.error('操作失败'); }
+  };
+
   const filtered = search
     ? users.filter(u => u.displayName?.includes(search) || u.username?.includes(search))
     : users;
