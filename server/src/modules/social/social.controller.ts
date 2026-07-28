@@ -604,9 +604,11 @@ export class SocialController {
       : [];
     const myCommunityIds = myCommunities.map((c) => c.id);
 
-    // 获取用户不感兴趣的社区ID
-    const notInterested = this.recommendationFeedback.get(userId);
-    const notInterestedIds = notInterested ? [...notInterested] : [];
+    // 获取用户不感兴趣的社区ID（从数据库）
+    const notInterestedRecords = await this.feedbackRepo.find({
+      where: { userId, targetType: 'COMMUNITY', type: 'NOT_INTERESTED' },
+    });
+    const notInterestedIds = notInterestedRecords.map((r) => r.targetId);
 
     // 获取用户关注的人
     const following = await this.followRepo.find({ where: { followerId: userId } });
