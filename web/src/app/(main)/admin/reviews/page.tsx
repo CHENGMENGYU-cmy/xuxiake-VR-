@@ -70,6 +70,22 @@ function AdminReviewsContent() {
     } catch { toast.error('操作失败'); }
   };
 
+  const toggleSelect = (id: string) => {
+    setSelected(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
+  };
+
+  const handleBatch = async () => {
+    if (selected.size === 0) { toast.error('请先选择内容'); return; }
+    try {
+      await apiClient.post('/posts/reviews/batch', {
+        postIds: [...selected], action: batchAction, reason: batchReason || undefined,
+      });
+      setReviews(r => r.filter(i => !selected.has(i.postId)));
+      setSelected(new Set()); setBatchAction(null); setBatchReason('');
+      toast.success(`已${batchAction === 'APPROVED' ? '通过' : '驳回'} ${selected.size} 条`);
+    } catch { toast.error('操作失败'); }
+  };
+
   const handleReject = async (postId: string) => {
     if (!rejectReason.trim()) { toast.error('请输入驳回原因'); return; }
     try {
