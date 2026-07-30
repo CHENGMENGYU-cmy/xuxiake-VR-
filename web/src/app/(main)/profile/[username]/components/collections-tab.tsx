@@ -20,8 +20,8 @@ export function CollectionsTab() {
   const [editName, setEditName] = useState('');
 
   useEffect(() => {
-    getCollections(1)
-      .then((res) => setCollections(res.data || []))
+    apiClient.get('/posts/collections?mine=1&limit=50')
+      .then((res) => setCollections(res.data.data || []))
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
