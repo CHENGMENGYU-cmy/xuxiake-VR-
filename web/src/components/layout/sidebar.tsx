@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation';
 import {
   Home,
   Upload,
-  Compass,
   Bell,
   Settings,
   UserPlus,
