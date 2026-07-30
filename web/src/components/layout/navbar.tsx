@@ -88,7 +88,7 @@ export function Navbar() {
     };
     socket.on('notification:new', handleNewNotification);
     return () => { socket.off('notification:new', handleNewNotification); };
-  }, [user, setNotifUnreadCount]);
+  }, [user, isAuthenticated, setNotifUnreadCount]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
