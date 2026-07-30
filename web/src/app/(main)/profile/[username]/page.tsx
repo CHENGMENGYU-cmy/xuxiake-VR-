@@ -258,7 +258,7 @@ function ProfileContent({ username }: { username: string }) {
           <LikesTab username={username} isOwnProfile={!!isOwnProfile} />
         </TabsContent>
 
-        {isOwnProfile && hasCollections && (
+        {isOwnProfile && (
           <TabsContent value="collections" className="mt-4">
             <CollectionsTab />
           </TabsContent>
