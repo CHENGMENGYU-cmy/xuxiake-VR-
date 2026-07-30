@@ -150,11 +150,13 @@ export class PostsController {
     @Headers('authorization') auth: string,
     @Query('page') page?: string,
     @Query('limit') limit?: string,
+    @Query('mine') mine?: string,
   ) {
     let userId: string | undefined;
     try { userId = this.getUserId(auth); } catch {}
     const result = await this.postsService.getCollections({
       userId,
+      onlyMine: mine === '1',
       page: page ? parseInt(page) : 1,
       limit: limit ? parseInt(limit) : 20,
     });
