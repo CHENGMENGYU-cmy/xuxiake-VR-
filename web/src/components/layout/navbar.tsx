@@ -38,7 +38,7 @@ import { SearchSuggestions } from '@/components/search/search-suggestions';
 
 export function Navbar() {
   const router = useRouter();
-  const { user, logout } = useAuthStore();
+  const { user, isAuthenticated, logout } = useAuthStore();
   const { toggleSidebar } = useUIStore();
   const { query: searchQuery, setQuery: setSearchQuery } = useSearchStore();
   const totalUnread = useChatStore((s) => s.totalUnread);
