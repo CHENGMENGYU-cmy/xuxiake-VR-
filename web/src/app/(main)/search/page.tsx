@@ -1,8 +1,7 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
 import { Search, Users, FileText, Hash } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -17,47 +16,49 @@ import { searchTopics } from '@/lib/post-api';
 import type { Topic } from '@/types';
 
 export default function SearchPage() {
-  return (
-    <Suspense fallback={<div className="py-16 text-center text-muted-foreground">加载中...</div>}>
-      <SearchContent />
-    </Suspense>
-  );
-}
-
-function SearchContent() {
-  const searchParams = useSearchParams();
   const { query, setQuery } = useSearchStore();
+  const [inputValue, setInputValue] = useState(query);
   const [searched, setSearched] = useState(!!query);
   const [topics, setTopics] = useState<Topic[]>([]);
+
+  // 首次加载时，如果 store 中有 query 则自动搜索
+  useEffect(() => {
+    if (query) {
+      setInputValue(query);
+      setSearched(true);
+    }
+  }, [query]);
+
+  useEffect(() => {
+    if (!searched || !inputValue.trim()) {
+      setTopics([]);
+      return;
+    }
+    searchTopics(inputValue).then(setTopics).catch(() => {});
+  }, [searched, inputValue]);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (inputValue.trim()) {
+      setQuery(inputValue.trim());
+      setSearched(true);
+    }
+  };
 
   const filteredUsers = searched
     ? mockUsers.filter(
         (u) =>
-          u.displayName.includes(query) ||
-          u.username.includes(query) ||
-          u.bio?.includes(query)
+          u.displayName.includes(inputValue) ||
+          u.username.includes(inputValue) ||
+          u.bio?.includes(inputValue)
       )
     : [];
 
   const filteredPosts = searched
-    ? mockPosts.filter((p) => {
-        const matchesQuery = !query.trim() || p.content?.includes(query) || p.author.displayName.includes(query);
-        return matchesQuery;
-      })
+    ? mockPosts.filter((p) =>
+        p.content?.includes(inputValue) || p.author.displayName.includes(inputValue)
+      )
     : [];
-
-  useEffect(() => {
-    if (!searched || !query.trim()) {
-      setTopics([]);
-      return;
-    }
-    searchTopics(query).then(setTopics).catch(() => {});
-  }, [searched, query]);
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (query.trim()) setSearched(true);
-  };
 
   return (
     <div className="space-y-4">
@@ -69,13 +70,12 @@ function SearchContent() {
             type="search"
             placeholder="搜索用户、内容、话题..."
             className="pl-10"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            autoFocus
           />
         </div>
-        <Button type="submit">
-          搜索
-        </Button>
+        <Button type="submit">搜索</Button>
       </form>
 
       {/* 结果 */}
@@ -123,7 +123,7 @@ function SearchContent() {
                   {filteredUsers.map((user, i) => (
                     <div key={user.id}>
                       {i > 0 && <Separator />}
-                      <a
+                      <Link
                         href={`/profile/${user.username}`}
                         className="flex items-center gap-3 p-3 hover:bg-muted/50"
                       >
@@ -135,7 +135,7 @@ function SearchContent() {
                           <p className="text-sm font-semibold">{user.displayName}</p>
                           <p className="text-xs text-muted-foreground">@{user.username}</p>
                         </div>
-                      </a>
+                      </Link>
                     </div>
                   ))}
                 </div>
@@ -155,7 +155,7 @@ function SearchContent() {
 
             {filteredUsers.length === 0 && filteredPosts.length === 0 && topics.length === 0 && (
               <div className="py-12 text-center text-muted-foreground">
-                没有找到 &quot;{query}&quot; 相关的结果
+                没有找到 &quot;{inputValue}&quot; 相关的结果
               </div>
             )}
           </TabsContent>
@@ -166,7 +166,7 @@ function SearchContent() {
                 {filteredUsers.map((user, i) => (
                   <div key={user.id}>
                     {i > 0 && <Separator />}
-                    <a
+                    <Link
                       href={`/profile/${user.username}`}
                       className="flex items-center gap-3 p-3 hover:bg-muted/50"
                     >
@@ -179,7 +179,7 @@ function SearchContent() {
                         <p className="text-xs text-muted-foreground">@{user.username}</p>
                         <p className="mt-0.5 text-xs text-muted-foreground line-clamp-1">{user.bio}</p>
                       </div>
-                    </a>
+                    </Link>
                   </div>
                 ))}
               </div>
