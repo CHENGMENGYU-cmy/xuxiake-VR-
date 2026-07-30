@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { Compass, Shield, Flag, ArrowRight } from 'lucide-react';
 import { FeedList } from '@/components/feed/feed-list';
 import { Badge } from '@/components/ui/badge';
 import { useAuthStore } from '@/stores/auth-store';
