@@ -139,6 +139,17 @@ export function PostCard({ post, onLikeChange }: PostCardProps) {
     toast.success('链接已复制');
   };
 
+  const handleUnpublish = async () => {
+    setUnpublishing(true);
+    try {
+      await apiClient.post(`/posts/${post.id}/force-unpublish`);
+      toast.success('内容已强制下架');
+    } catch { toast.error('下架失败'); }
+    setUnpublishing(false);
+  };
+
+  const apiClient = require('@/lib/api-client').default;
+
   const handleDelete = async () => {
     setDeleting(true);
     try {
