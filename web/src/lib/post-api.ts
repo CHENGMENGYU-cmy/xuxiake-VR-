@@ -193,8 +193,8 @@ export async function getContentHierarchy(params?: {
   };
 }
 
-export async function publishPost(postId: string, locationPrecision?: 'hidden' | 'city' | 'exact'): Promise<Post> {
-  const { data } = await apiClient.post(`/posts/${postId}/publish`, { locationPrecision });
+export async function publishPost(postId: string, locationPrecision?: 'hidden' | 'city' | 'exact', visibility?: 'PUBLIC' | 'FOLLOWERS' | 'PRIVATE'): Promise<Post> {
+  const { data } = await apiClient.post(`/posts/${postId}/publish`, { locationPrecision, visibility });
   return data.data;
 }
 
