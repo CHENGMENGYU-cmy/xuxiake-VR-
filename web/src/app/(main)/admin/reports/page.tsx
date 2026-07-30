@@ -12,7 +12,7 @@ import { toast } from 'sonner';
 import apiClient from '@/lib/api-client';
 
 export default function AdminReportsPage() {
-  return <AuthGuard><ReportsContent /></AuthGuard>;
+  return <AuthGuard requiredRole="MODERATOR"><ReportsContent /></AuthGuard>;
 }
 
 function ReportsContent() {
