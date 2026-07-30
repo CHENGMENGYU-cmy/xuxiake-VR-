@@ -874,6 +874,8 @@ export class PostsService {
     const collection = await this.collectionRepo.findOne({ where: { id: collectionId } });
     if (!collection) throw new NotFoundException('合集不存在');
     if (collection.creatorId !== userId) throw new NotFoundException('无权操作此合集');
+    const post = await this.postRepo.findOne({ where: { id: postId } });
+    if (!post) throw new NotFoundException('内容不存在');
 
     const existing = await this.collectionPostRepo.findOne({ where: { collectionId, postId } });
     if (existing) return { message: '已在合集中' };
