@@ -54,7 +54,7 @@ export function Navbar() {
 
   // 加载未读消息数 + WebSocket实时更新
   useEffect(() => {
-    if (!user || !useAuthStore.getState().isAuthenticated) return;
+    if (!user || !isAuthenticated) return;
     apiClient.get('/conversations?status=NORMAL').then((res) => {
       if (res.data?.success) {
         const total = (res.data.data || []).reduce((sum: number, c: any) => sum + (c.unreadCount || 0), 0);
