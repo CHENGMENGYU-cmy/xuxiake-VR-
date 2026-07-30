@@ -1,14 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { FolderOpen, MapPin, Calendar, Tag, Hash } from 'lucide-react';
+import { FolderOpen, MapPin, Calendar, Tag } from 'lucide-react';
 import { HierarchyList } from '@/components/feed/hierarchy-list';
 import apiClient from '@/lib/api-client';
 
 type Dimension = { name: string; count: number };
 type TypeDim = { type: string; count: number };
 type TimeDim = { month: string; count: number };
-type TopicDim = { id: string; name: string; count: number };
 
 const typeLabels: Record<string, string> = {
   VR_MEDIA: '第一视角',
@@ -20,32 +19,18 @@ const typeLabels: Record<string, string> = {
 };
 
 export default function ClassifiedPage() {
-  const [activeDim, setActiveDim] = useState<'location' | 'type' | 'time' | 'topic'>('location');
+  const [activeDim, setActiveDim] = useState<'location' | 'type' | 'time'>('location');
   const [byLocation, setByLocation] = useState<Dimension[]>([]);
   const [byType, setByType] = useState<TypeDim[]>([]);
   const [byTime, setByTime] = useState<TimeDim[]>([]);
-  const [byTopic, setByTopic] = useState<TopicDim[]>([]);
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
 
   useEffect(() => {
-    // 获取分类维度数据
     apiClient.get('/posts/classified/dimensions').then((res) => {
       if (res.data?.success) {
         setByLocation(res.data.data.byLocation || []);
         setByType(res.data.data.byType || []);
         setByTime(res.data.data.byTime || []);
-      }
-    }).catch(() => {});
-
-    // 获取话题数据
-    apiClient.get('/posts/topics').then((res) => {
-      if (res.data?.success) {
-        const topics = res.data.data || [];
-        setByTopic(topics.map((t: any) => ({
-          id: t.id,
-          name: t.name,
-          count: t.postCount || 0
-        })));
       }
     }).catch(() => {});
   }, []);
@@ -54,14 +39,12 @@ export default function ClassifiedPage() {
     { id: 'location' as const, label: '目的地', icon: MapPin },
     { id: 'type' as const, label: '内容形式', icon: Tag },
     { id: 'time' as const, label: '时间', icon: Calendar },
-    { id: 'topic' as const, label: '主题', icon: Hash },
   ];
 
   // 根据当前维度和选中值构建过滤参数
   const filterParams = selectedValue ? (
     activeDim === 'location' ? { location: selectedValue } :
     activeDim === 'type' ? { mediaType: selectedValue } :
-    activeDim === 'topic' ? { topicId: selectedValue } :
     { month: selectedValue }
   ) : {};
 
