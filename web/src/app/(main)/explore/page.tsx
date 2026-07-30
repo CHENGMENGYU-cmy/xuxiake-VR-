@@ -16,10 +16,13 @@ const adminContentTabs = [
 
 export default function ExplorePage() {
   const { user } = useAuthStore();
-  const isAdmin = !!(user?.role && user.role !== 'USER');
+  const [mounted, setMounted] = useState(false);
+  const isAdmin = !!(mounted && user?.role && user.role !== 'USER');
   const [activeTab, setActiveTab] = useState('all');
   const [pendingReviews, setPendingReviews] = useState(0);
   const [pendingReports, setPendingReports] = useState(0);
+
+  useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
     if (!isAdmin) return;
