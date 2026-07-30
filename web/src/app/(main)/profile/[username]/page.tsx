@@ -235,7 +235,7 @@ function ProfileContent({ username }: { username: string }) {
             瞬间捕获
           </TabsTrigger>
           <TabsTrigger value="likes" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-primary">
-            收藏
+            喜欢
           </TabsTrigger>
         </TabsList>
 
