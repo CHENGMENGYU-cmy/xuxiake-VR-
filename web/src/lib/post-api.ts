@@ -244,6 +244,10 @@ export async function updateCollection(
   return data.data;
 }
 
+export async function deleteCollection(id: string): Promise<void> {
+  await apiClient.delete(`/posts/collections/${id}`);
+}
+
 export async function addPostToCollection(collectionId: string, postId: string): Promise<void> {
   await apiClient.post(`/posts/collections/${collectionId}/posts/${postId}`);
 }
