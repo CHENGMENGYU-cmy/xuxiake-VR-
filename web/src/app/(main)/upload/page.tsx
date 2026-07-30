@@ -15,7 +15,7 @@ import { usePostStore } from '@/stores/post-store';
 import { uploadVideo, uploadAudio, uploadImage, getImageDimensions, getVideoMetadata, getAudioDuration, fetchLinkPreview } from '@/lib/media-api';
 import { CreatePostPayload } from '@/lib/post-api';
 import type { VrFormat, Topic, Community, Visibility, MoodType, WeatherType } from '@/types';
-import { MoodEmoji, WeatherEmoji, MoodType as MoodTypeArray, WeatherType as WeatherTypeArray } from '@/types';
+import { MoodEmoji, WeatherEmoji, MoodLabel, WeatherLabel } from '@/types';
 import { cn } from '@/lib/utils';
 import { MultiImageUploader, UploadedImage } from '@/components/upload/multi-image-uploader';
 import { AuthGuard } from '@/components/auth-guard';
