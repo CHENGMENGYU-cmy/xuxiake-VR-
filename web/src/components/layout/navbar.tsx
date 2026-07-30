@@ -76,7 +76,7 @@ export function Navbar() {
 
   // 加载未读通知数 + WebSocket实时更新
   useEffect(() => {
-    if (!user) return;
+    if (!user || !isAuthenticated) return;
     apiClient.get('/notifications/unread-count').then((res) => {
       if (res.data?.success) {
         setNotifUnreadCount(res.data.data?.count || 0);
