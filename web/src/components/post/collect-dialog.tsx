@@ -35,9 +35,9 @@ export function CollectDialog({ postId, open, onClose }: CollectDialogProps) {
       }
       setSelectedIds(new Set());
       setLoading(true);
-      getCollections(1)
+      apiClient.get('/posts/collections?mine=1&limit=50')
         .then(async (res) => {
-          const cols = res.data || [];
+          const cols = res.data.data || [];
           setCollections(cols);
           // 检查哪些收藏夹已包含此帖子
           const results = await Promise.allSettled(
