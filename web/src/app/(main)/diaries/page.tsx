@@ -361,6 +361,16 @@ function DiariesContent() {
                               转为私密
                             </Button>
                           )}
+
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handlePromoteToJourney(post)}
+                            className="gap-1.5 text-purple-600 hover:text-purple-700"
+                          >
+                            <Sparkles className="h-3.5 w-3.5" />
+                            升华为游记
+                          </Button>
                         </div>
                       </CardContent>
                     </Card>
