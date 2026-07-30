@@ -28,15 +28,14 @@ export function RightPanel() {
   const isAdmin = !!(user?.role && user.role !== 'USER');
   const [mounted, setMounted] = useState(false);
 
-  // 管理员不显示右侧面板
-  useEffect(() => { setMounted(true); }, []);
-  if (!mounted || isAdmin) return null;
-
+  // 所有 hooks 必须在条件返回之前声明
   const [recommendedCommunities, setRecommendedCommunities] = useState<Community[]>([]);
   const [hotTopics, setHotTopics] = useState<Topic[]>([]);
   const [hotPosts, setHotPosts] = useState<Post[]>([]);
   const [showAllTopics, setShowAllTopics] = useState(false);
   const [suggestedUsers, setSuggestedUsers] = useState<RecommendedUser[]>([]);
+
+  useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
     getHotTopics(8).then(setHotTopics).catch(() => {});
@@ -53,6 +52,9 @@ export function RightPanel() {
         .catch(() => {});
     }
   }, [isAuthenticated]);
+
+  // 管理员不显示右侧面板
+  if (!mounted || isAdmin) return null;
 
   return (
     <aside

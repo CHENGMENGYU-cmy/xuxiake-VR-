@@ -37,8 +37,12 @@ test.describe('响应式视口适配', () => {
           const viewportWidth = await page.evaluate(() => window.innerWidth);
           const hasOverflow = bodyWidth > viewportWidth + 5; // 5px tolerance
 
-          // 检查关键交互元素可见
+          // 检查关键交互元素可见（auth 页面可能没有 nav）
           const hasNav = await page.locator('nav, header, [class*="nav"]').first().isVisible().catch(() => false);
+          const isAuthPage = pageInfo.path === '/login' || pageInfo.path === '/register';
+          const hasForm = isAuthPage
+            ? await page.locator('form, button[type="submit"], input').first().isVisible().catch(() => false)
+            : true;
 
           // 截图留念
           const safeName = pageInfo.name.replace(/[\/\\]/g, '-');
@@ -50,7 +54,11 @@ test.describe('响应式视口适配', () => {
           await context.close();
 
           expect(hasOverflow).toBeFalsy();
-          expect(hasNav).toBeTruthy();
+          if (isAuthPage) {
+            expect(hasForm).toBeTruthy();
+          } else {
+            expect(hasNav).toBeTruthy();
+          }
         });
       }
     });
