@@ -236,6 +236,14 @@ export async function getCollectionPosts(id: string, page = 1): Promise<{
   return { posts: data.data ?? [], page: data.page ?? 1 };
 }
 
+export async function updateCollection(
+  id: string,
+  params: { name?: string; description?: string; isPublic?: boolean }
+): Promise<Collection> {
+  const { data } = await apiClient.put(`/posts/collections/${id}`, params);
+  return data.data;
+}
+
 export async function addPostToCollection(collectionId: string, postId: string): Promise<void> {
   await apiClient.post(`/posts/collections/${collectionId}/posts/${postId}`);
 }
