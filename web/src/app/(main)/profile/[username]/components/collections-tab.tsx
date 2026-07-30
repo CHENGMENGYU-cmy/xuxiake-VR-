@@ -87,7 +87,23 @@ export function CollectionsTab() {
               ) : posts.length > 0 ? (
                 <div className="space-y-3">
                   {posts.map((post) => (
-                    <PostCard key={post.id} post={post} />
+                    <div key={post.id} className="relative">
+                      <PostCard post={post} />
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        className="absolute right-2 top-2 h-7 w-7 text-muted-foreground hover:text-destructive"
+                        onClick={async () => {
+                          try {
+                            await removePostFromCollection(col.id, post.id);
+                            setPosts((prev) => prev.filter((p) => p.id !== post.id));
+                            toast.success('已取消收藏');
+                          } catch { toast.error('操作失败'); }
+                        }}
+                      >
+                        <BookmarkMinus className="h-4 w-4" />
+                      </Button>
+                    </div>
                   ))}
                 </div>
               ) : (
