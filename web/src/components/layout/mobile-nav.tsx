@@ -38,7 +38,6 @@ export function MobileNav() {
         <div className="flex h-14 items-center justify-around">
           {[
             { href: '/feed', label: '首页', icon: Home },
-            { href: '/explore', label: '探索', icon: Compass },
             { href: '/login', label: '登录', icon: LogIn },
           ].map((item) => {
             const Icon = item.icon;
