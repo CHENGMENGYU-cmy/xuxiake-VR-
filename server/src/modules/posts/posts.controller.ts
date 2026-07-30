@@ -318,6 +318,16 @@ export class PostsController {
     return { success: true, data: collection };
   }
 
+  @Delete('collections/:id')
+  async deleteCollection(
+    @Headers('authorization') auth: string,
+    @Param('id') id: string,
+  ) {
+    const userId = this.getUserId(auth);
+    await this.postsService.deleteCollection(userId, id);
+    return { success: true, message: '收藏夹已删除' };
+  }
+
   @Get('collections/:id/posts')
   async getCollectionPosts(
     @Param('id') id: string,
