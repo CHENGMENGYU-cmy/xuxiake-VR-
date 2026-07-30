@@ -14,10 +14,10 @@ test.describe('普通用户功能', () => {
     await page.waitForTimeout(2000);
   });
 
-  test('浏览发现页 (Explore)', async ({ page }) => {
-    await page.goto('/explore');
+  test('浏览首页内容流', async ({ page }) => {
+    await page.goto('/feed');
     await expect(page.locator('nav, header, [class*="nav"]').first()).toBeVisible();
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(2000);
   });
 
   test('打开发帖页面', async ({ page }) => {
