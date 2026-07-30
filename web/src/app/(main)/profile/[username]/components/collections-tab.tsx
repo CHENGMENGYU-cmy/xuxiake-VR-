@@ -89,7 +89,7 @@ export function CollectionsTab() {
         <Card key={col.id} className="overflow-hidden">
           <button
             onClick={() => toggleExpand(col)}
-            className="flex w-full items-center gap-3 p-4 text-left hover:bg-accent/50 transition-colors"
+            className="group flex w-full items-center gap-3 p-4 text-left hover:bg-accent/50 transition-colors"
           >
             <Bookmark className="h-5 w-5 text-primary shrink-0" />
             <div className="min-w-0 flex-1" onClick={(e) => e.stopPropagation()}>
