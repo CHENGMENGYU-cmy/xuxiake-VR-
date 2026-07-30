@@ -19,7 +19,7 @@ interface DashboardStats {
 }
 
 export default function AdminDashboard() {
-  return <AuthGuard><DashboardContent /></AuthGuard>;
+  return <AuthGuard requiredRole="MODERATOR"><DashboardContent /></AuthGuard>;
 }
 
 function DashboardContent() {
