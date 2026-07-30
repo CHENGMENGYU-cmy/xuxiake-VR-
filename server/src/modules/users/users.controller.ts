@@ -136,6 +136,37 @@ export class UsersController {
 
   @Get('suggested/list')
   async getSuggestedUsers(@Headers('authorization') auth: string) {
+    const userId = this.getUserId(auth);
+
+    const query = this.userRepo.createQueryBuilder('user');
+    if (userId) {
+      query.where('user.id != :userId', { userId });
+    }
+    query.orderBy('user.created_at', 'DESC').limit(5);
+    const users = await query.getMany();
+
+    let followingIds: string[] = [];
+    if (userId && users.length > 0) {
+      const follows = await this.followRepo.find({
+        where: { followerId: userId, followingId: In(users.map((u) => u.id)) },
+      });
+      followingIds = follows.map((f) => f.followingId);
+    }
+
+    return {
+      success: true,
+      data: users.map((u) => {
+        const { passwordHash, ...uDto } = u;
+        return {
+          ...uDto,
+          isFollowing: followingIds.includes(u.id),
+          vrDeviceInfo: u.vrDeviceModel
+            ? { model: u.vrDeviceModel, version: u.vrDeviceVersion || '' }
+            : null,
+        };
+      }),
+    };
+  }
 
   @Get(':username')
   async getUser(@Param('username') username: string) {
