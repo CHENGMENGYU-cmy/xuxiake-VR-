@@ -146,14 +146,26 @@ export function CollectionsTab() {
             </span>
           </button>
         ))}
-        {/* 新建按钮 */}
-        <button
-          onClick={handleCreate}
-          className="inline-flex items-center gap-1 rounded-full border border-dashed border-muted-foreground/30 px-3 py-1.5 text-sm text-muted-foreground hover:border-primary hover:text-primary transition-colors"
-        >
-          <Plus className="h-3.5 w-3.5" />
-          新建
-        </button>
+        {/* 新建按钮/输入框 */}
+        {creating ? (
+          <Input
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+            onBlur={() => setCreating(false)}
+            onKeyDown={(e) => { if (e.key === 'Enter') handleCreate(); if (e.key === 'Escape') setCreating(false); }}
+            placeholder="收藏夹名称"
+            className="h-8 w-32 text-sm"
+            autoFocus
+          />
+        ) : (
+          <button
+            onClick={() => setCreating(true)}
+            className="inline-flex items-center gap-1 rounded-full border border-dashed border-muted-foreground/30 px-3 py-1.5 text-sm text-muted-foreground hover:border-primary hover:text-primary transition-colors"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            新建
+          </button>
+        )}
       </div>
 
       {/* 选中收藏夹的内容 */}
