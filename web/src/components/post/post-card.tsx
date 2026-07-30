@@ -73,6 +73,7 @@ export function PostCard({ post, onLikeChange }: PostCardProps) {
   const [showEdit, setShowEdit] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showReport, setShowReport] = useState(false);
+  const [showCollect, setShowCollect] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [unpublishing, setUnpublishing] = useState(false);
   const isAdmin = !!(currentUser?.role && currentUser.role !== 'USER');
