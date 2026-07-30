@@ -155,57 +155,40 @@ function AdminReviewsContent() {
             <div key={review.id} className={`flex gap-3 rounded-lg border bg-card p-4 ${selected.has(review.postId) ? 'border-primary bg-primary/5' : ''}`}>
               <input type="checkbox" checked={selected.has(review.postId)} onChange={() => toggleSelect(review.postId)} className="mt-1 h-4 w-4 shrink-0" />
               <div className="flex-1 space-y-3">
-              <div className="flex items-center justify-between">
-                {statusBadge(review.status)}
-                <span className="text-xs text-muted-foreground">
-                  {new Date(review.createdAt).toLocaleString('zh-CN')}
-                </span>
-              </div>
-
-              {review.riskType && (
-                <div className="mb-2 rounded-lg bg-amber-50 dark:bg-amber-950/20 px-3 py-2">
-                  <p className="text-sm font-medium text-amber-700 dark:text-amber-400">
-                    {review.riskType}
-                  </p>
-                  <p className="text-xs text-amber-600 dark:text-amber-500">{review.riskDetail}</p>
+                <div className="flex items-center justify-between">
+                  {statusBadge(review.status)}
+                  <span className="text-xs text-muted-foreground">
+                    {new Date(review.createdAt).toLocaleString('zh-CN')}
+                  </span>
                 </div>
-              )}
 
-              <div className="mb-3 rounded-lg bg-muted/50 p-3">
-                <p className="text-sm whitespace-pre-wrap line-clamp-5">
-                  {review.post?.content || '(无文本内容)'}
-                </p>
-              </div>
-
-              {rejectingId === review.postId ? (
-                <div className="space-y-2">
-                  <Textarea
-                    placeholder="驳回原因"
-                    className="min-h-[60px]"
-                    value={rejectReason}
-                    onChange={(e) => setRejectReason(e.target.value)}
-                  />
-                  <div className="flex gap-2">
-                    <Button size="sm" variant="outline" onClick={() => setRejectingId(null)}>取消</Button>
-                    <Button size="sm" variant="destructive" onClick={() => handleReject(review.postId)}>确认驳回</Button>
+                {review.riskType && (
+                  <div className="rounded-lg bg-amber-50 dark:bg-amber-950/20 px-3 py-2">
+                    <p className="text-sm font-medium text-amber-700 dark:text-amber-400">{review.riskType}</p>
+                    <p className="text-xs text-amber-600 dark:text-amber-500">{review.riskDetail}</p>
                   </div>
+                )}
+
+                <div className="rounded-lg bg-muted/50 p-3">
+                  <p className="text-sm whitespace-pre-wrap line-clamp-5">{review.post?.content || '(无文本内容)'}</p>
                 </div>
-              ) : (
-                <div className="flex gap-2">
-                  <Button size="sm" onClick={() => {
-                    router.push(`/post/${review.postId}`);
-                  }}>
-                    <Eye className="mr-1 h-4 w-4" />
-                    查看原文
-                  </Button>
-                  <Button size="sm" variant="outline" className="gap-1" onClick={() => handleApprove(review.postId)}>
-                    <Check className="h-4 w-4" /> 通过
-                  </Button>
-                  <Button size="sm" variant="outline" className="gap-1 text-red-500" onClick={() => setRejectingId(review.postId)}>
-                    <X className="h-4 w-4" /> 驳回
-                  </Button>
-                </div>
-              )}
+
+                {rejectingId === review.postId ? (
+                  <div className="space-y-2">
+                    <Textarea placeholder="驳回原因" className="min-h-[60px]" value={rejectReason} onChange={(e) => setRejectReason(e.target.value)} />
+                    <div className="flex gap-2">
+                      <Button size="sm" variant="outline" onClick={() => setRejectingId(null)}>取消</Button>
+                      <Button size="sm" variant="destructive" onClick={() => handleReject(review.postId)}>确认驳回</Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex gap-2">
+                    <Button size="sm" onClick={() => router.push(`/post/${review.postId}`)}><Eye className="mr-1 h-4 w-4" />查看原文</Button>
+                    <Button size="sm" variant="outline" onClick={() => handleApprove(review.postId)}><Check className="mr-1 h-4 w-4" />通过</Button>
+                    <Button size="sm" variant="outline" className="text-red-500" onClick={() => setRejectingId(review.postId)}><X className="mr-1 h-4 w-4" />驳回</Button>
+                  </div>
+                )}
+              </div>
             </div>
           ))}
         </div>
