@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Bookmark, Loader2, ChevronRight, PackageOpen, X, BookmarkMinus } from 'lucide-react';
+import { Bookmark, Loader2, ChevronRight, PackageOpen, BookmarkMinus, Pencil } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { PostCard } from '@/components/post/post-card';
-import { getCollections, getCollectionPosts, removePostFromCollection } from '@/lib/post-api';
+import { getCollections, getCollectionPosts, removePostFromCollection, updateCollection } from '@/lib/post-api';
 import { toast } from 'sonner';
 import type { Collection, Post } from '@/types';
 
