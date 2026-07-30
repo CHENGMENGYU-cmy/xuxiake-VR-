@@ -24,7 +24,14 @@ function shuffleAndPick<T>(arr: T[], count: number): T[] {
 
 export function RightPanel() {
   const { rightPanelOpen } = useUIStore();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
+  const isAdmin = !!(user?.role && user.role !== 'USER');
+  const [mounted, setMounted] = useState(false);
+
+  // 管理员不显示右侧面板
+  useEffect(() => { setMounted(true); }, []);
+  if (!mounted || isAdmin) return null;
+
   const [recommendedCommunities, setRecommendedCommunities] = useState<Community[]>([]);
   const [hotTopics, setHotTopics] = useState<Topic[]>([]);
   const [hotPosts, setHotPosts] = useState<Post[]>([]);
