@@ -12,7 +12,6 @@ import {
   LogOut,
   Settings,
   User,
-  Compass,
   Upload,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
