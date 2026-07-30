@@ -124,6 +124,22 @@ export function CollectionsTab() {
             >
               <Pencil className="h-3 w-3" />
             </span>
+            <span
+              onClick={(e) => {
+                e.stopPropagation();
+                if (confirm(`确定删除「${col.name}」？`)) {
+                  deleteCollection(col.id).then(() => {
+                    setCollections((prev) => prev.filter((c) => c.id !== col.id));
+                    if (activeId === col.id) setActiveId(null);
+                    toast.success('已删除');
+                  }).catch(() => toast.error('删除失败'));
+                }
+              }}
+              className="cursor-pointer rounded p-0.5 text-muted-foreground opacity-0 group-hover:opacity-100 hover:text-destructive"
+              role="button"
+            >
+              <Trash2 className="h-3 w-3" />
+            </span>
           </button>
         ))}
         {/* 新建按钮 */}
