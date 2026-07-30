@@ -66,11 +66,12 @@ export function CollectionsTab() {
   };
 
   const handleCreate = async () => {
-    const name = prompt('收藏夹名称：');
-    if (!name?.trim()) return;
+    if (!newName.trim()) { setCreating(false); return; }
     try {
-      const col = await createCollection({ name: name.trim() });
-      setCollections((prev) => [{ ...col, name: name.trim() }, ...prev]);
+      const col = await createCollection({ name: newName.trim() });
+      setCollections((prev) => [{ ...col, name: newName.trim() }, ...prev]);
+      setNewName('');
+      setCreating(false);
       toast.success('已创建');
     } catch { toast.error('创建失败'); }
   };
