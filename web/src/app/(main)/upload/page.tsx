@@ -185,6 +185,8 @@ function UploadContent() {
     setLinkUrl('');
     setShowLinkAddon(false);
     setShowTranslationAddon(false);
+    setMood('');
+    setWeather('');
     // 日记Tab默认私密
     if (tab === 'DIARY') {
       setVisibility('PRIVATE');
