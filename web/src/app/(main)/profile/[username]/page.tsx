@@ -16,6 +16,7 @@ import { toast } from 'sonner';
 import { PostsTab } from './components/posts-tab';
 import { MediaTab } from './components/media-tab';
 import { LikesTab } from './components/likes-tab';
+import { CollectionsTab } from './components/collections-tab';
 import type { User } from '@/types';
 
 export default function ProfilePage() {
