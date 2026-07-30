@@ -6,28 +6,64 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuthStore } from '@/stores/auth-store';
-import { getUserCommunities, searchCommunities, joinCommunity } from '@/lib/social-api';
-import { Search, Plus, Users, Crown, ChevronRight, Check, X } from 'lucide-react';
-import { toast } from 'sonner';
+import { getUserCommunities } from '@/lib/social-api';
+import { Search, Plus, Users, Crown, ChevronRight } from 'lucide-react';
 import type { Community } from '@/types';
 
 export function MyCommunities() {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
   const [communities, setCommunities] = useState<Community[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<Community[]>([]);
+  const [searching, setSearching] = useState(false);
+  const [joiningMap, setJoiningMap] = useState<Record<string, boolean>>({});
   const [filter, setFilter] = useState<'all' | 'created' | 'joined'>('all');
 
   useEffect(() => {
-    if (!isAuthenticated) return;
+    if (!isAuthenticated || !user) return;
     getUserCommunities()
       .then((data) => setCommunities(data || []))
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [isAuthenticated]);
+  }, [isAuthenticated, user]);
+
+  // 搜索全站社群
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setSearchResults([]);
+      return;
+    }
+    setSearching(true);
+    const timer = setTimeout(() => {
+      searchCommunities(searchQuery.trim(), 1, 20)
+        .then((res) => setSearchResults(res.data || []))
+        .catch(() => {})
+        .finally(() => setSearching(false));
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  const handleJoin = async (id: string) => {
+    if (joiningMap[id]) return;
+    setJoiningMap((prev) => ({ ...prev, [id]: true }));
+    try {
+      await joinCommunity(id);
+      setSearchResults((prev) => prev.filter((c) => c.id !== id));
+      toast.success('已加入社群');
+      // 刷新我的社群列表
+      getUserCommunities()
+        .then((data) => setCommunities(data || []))
+        .catch(() => {});
+    } catch {
+      toast.error('加入失败');
+    } finally {
+      setJoiningMap((prev) => ({ ...prev, [id]: false }));
+    }
+  };
 
   const filteredCommunities = communities.filter((c) => {
-    // 搜索过滤
+    // 搜索时也过滤我的社群
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       const matchName = c.name.toLowerCase().includes(q);
@@ -85,7 +121,72 @@ export function MyCommunities() {
       </div>
 
       {/* 社群列表 */}
-      {filteredCommunities.length === 0 ? (
+      {searchQuery ? (
+        // 搜索模式：显示搜索结果
+        <>
+          {searching && (
+            <div className="py-16 text-center text-sm text-muted-foreground">搜索中...</div>
+          )}
+          {!searching && searchResults.length === 0 && (
+            <div className="py-16 text-center">
+              <p className="text-sm text-muted-foreground">没有找到匹配的社群</p>
+            </div>
+          )}
+          {!searching && searchResults.length > 0 && (
+            <div className="space-y-2">
+              {searchResults.map((community) => {
+                const isJoined = communities.some((c) => c.id === community.id);
+                return (
+                  <div
+                    key={community.id}
+                    className="group flex items-center gap-3 rounded-lg border bg-card p-3 transition-colors hover:bg-accent"
+                  >
+                    <Link href={`/communities/${community.id}`} className="flex items-center gap-3 min-w-0 flex-1">
+                      <Avatar className="h-12 w-12 shrink-0">
+                        <AvatarImage src={community.avatarUrl || undefined} alt={community.name} />
+                        <AvatarFallback className="text-lg">{community.name[0]}</AvatarFallback>
+                      </Avatar>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-medium">{community.name}</p>
+                        <div className="mt-0.5 flex items-center gap-2 text-xs text-muted-foreground">
+                          <span className="flex items-center gap-1">
+                            <Users className="h-3 w-3" /> {community.memberCount} 成员
+                          </span>
+                        </div>
+                        {community.tags && community.tags.length > 0 && (
+                          <div className="mt-1.5 flex flex-wrap gap-1">
+                            {community.tags.slice(0, 3).map((tag) => (
+                              <span key={tag.id} className="rounded bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">
+                                {tag.name}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </Link>
+                    <Button
+                      size="sm"
+                      variant={isJoined ? 'secondary' : 'default'}
+                      disabled={isJoined || !!joiningMap[community.id]}
+                      onClick={() => handleJoin(community.id)}
+                      className="shrink-0"
+                    >
+                      {isJoined ? (
+                        <><Check className="mr-1 h-3.5 w-3.5" /> 已加入</>
+                      ) : joiningMap[community.id] ? (
+                        '加入中...'
+                      ) : (
+                        <><Plus className="mr-1 h-3.5 w-3.5" /> 加入</>
+                      )}
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </>
+      ) : filteredCommunities.length === 0 ? (
+        // 非搜索模式：显示我的社群
         <div className="py-16 text-center">
           {communities.length === 0 ? (
             <>
