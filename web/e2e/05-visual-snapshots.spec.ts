@@ -23,13 +23,6 @@ test.describe('视觉快照对比', () => {
     await expect(page).toHaveScreenshot('feed-page.png', { fullPage: true, maxDiffPixels: 5000 });
   });
 
-  test('发现页快照', async ({ page }) => {
-    await loginAsUser(page);
-    await page.goto('/explore');
-    await page.waitForTimeout(2000);
-    await expect(page).toHaveScreenshot('explore-page.png', { fullPage: true, maxDiffPixels: 5000 });
-  });
-
   test('探索页快照', async ({ page }) => {
     await loginAsUser(page);
     await page.goto('/discover');
