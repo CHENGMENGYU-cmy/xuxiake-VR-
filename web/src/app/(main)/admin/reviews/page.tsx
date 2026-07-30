@@ -30,7 +30,7 @@ interface ReviewItem {
 
 export default function AdminReviewsPage() {
   return (
-    <AuthGuard>
+    <AuthGuard requiredRole="MODERATOR">
       <AdminReviewsContent />
     </AuthGuard>
   );
