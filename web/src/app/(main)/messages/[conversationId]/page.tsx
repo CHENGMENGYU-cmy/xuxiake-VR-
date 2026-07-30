@@ -331,7 +331,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
     <div className="flex h-[calc(100vh-8rem)] flex-col rounded-lg border bg-card">
       {/* 头部 */}
       <div className="flex items-center gap-3 border-b p-3">
-        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => router.back()}>
+        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => router.push('/messages')}>
           <ArrowLeft className="h-4 w-4" />
         </Button>
         {convType === 'GROUP' ? (
