@@ -256,6 +256,12 @@ function ProfileContent({ username }: { username: string }) {
         <TabsContent value="likes" className="mt-4">
           <LikesTab username={username} isOwnProfile={!!isOwnProfile} />
         </TabsContent>
+
+        {isOwnProfile && (
+          <TabsContent value="collections" className="mt-4">
+            <CollectionsTab />
+          </TabsContent>
+        )}
       </Tabs>
     </div>
   );
