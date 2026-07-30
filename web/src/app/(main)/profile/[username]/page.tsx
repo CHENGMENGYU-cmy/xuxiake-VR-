@@ -138,14 +138,6 @@ function ProfileContent({ username }: { username: string }) {
   const user = profileUser;
   const isOwnProfile = currentUser?.username === username;
 
-  // 检查是否有收藏（仅自己的主页）
-  useEffect(() => {
-    if (!isOwnProfile) return;
-    getCollections(1).then((res) => {
-      setHasCollections((res.data || []).length > 0);
-    }).catch(() => {});
-  }, [isOwnProfile]);
-
   return (
     <div className="space-y-4">
       <Card className="overflow-hidden">
