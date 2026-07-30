@@ -52,11 +52,11 @@ export default function ClassifiedPage() {
     <div className="space-y-5">
       <div className="flex items-center gap-2">
         <FolderOpen className="h-6 w-6 text-amber-500" />
-        <h1 className="text-xl font-bold">内容分类</h1>
+        <h1 className="text-xl font-bold">风物志</h1>
       </div>
 
       <p className="text-sm text-muted-foreground">
-        自动按地点、类型、时间整理您的瞬间捕获，不带主观色彩。
+        按地点、类型、时间自动整理你的瞬间捕获。一方水土，一方风物。
       </p>
 
       {/* 分类维度切换 */}
