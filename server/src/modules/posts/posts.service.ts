@@ -842,18 +842,22 @@ export class PostsService {
     await this.collectionRepo.remove(collection);
   }
 
-  async getCollections(options: { userId?: string; page?: number; limit?: number } = {}) {
-    const { userId, page = 1, limit = 20 } = options;
+  async getCollections(options: { userId?: string; onlyMine?: boolean; page?: number; limit?: number } = {}) {
+    const { userId, onlyMine, page = 1, limit = 20 } = options;
     const qb = this.collectionRepo
       .createQueryBuilder('c')
       .leftJoinAndSelect('c.creator', 'creator')
-      .where('c.isPublic = :pub', { pub: true })
       .orderBy('c.postCount', 'DESC')
       .skip((page - 1) * limit)
       .take(limit);
 
-    if (userId) {
-      qb.orWhere('c.creatorId = :userId', { userId });
+    if (onlyMine && userId) {
+      qb.where('c.creatorId = :userId', { userId });
+    } else {
+      qb.where('c.isPublic = :pub', { pub: true });
+      if (userId) {
+        qb.orWhere('c.creatorId = :userId', { userId });
+      }
     }
 
     const [data, total] = await qb.getManyAndCount();
