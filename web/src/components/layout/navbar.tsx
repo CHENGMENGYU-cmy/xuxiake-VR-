@@ -177,13 +177,6 @@ export function Navbar() {
             </Button>
           </Link>
 
-          {/* 探索 */}
-          <Link href="/explore">
-            <Button variant="ghost" size="icon" className="hidden sm:inline-flex">
-              <Compass className="h-5 w-5" />
-            </Button>
-          </Link>
-
           {/* 消息 - 仅登录后显示 */}
           {user && mounted && (
             <Link href="/messages">
