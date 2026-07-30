@@ -19,6 +19,8 @@ export function CollectionsTab() {
   const [postsLoading, setPostsLoading] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState('');
+  const [creating, setCreating] = useState(false);
+  const [newName, setNewName] = useState('');
 
   useEffect(() => {
     apiClient.get('/posts/collections?mine=1&limit=50')
