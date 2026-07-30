@@ -13,7 +13,7 @@ import { toast } from 'sonner';
 import apiClient from '@/lib/api-client';
 
 export default function AdminUsersPage() {
-  return <AuthGuard><UsersContent /></AuthGuard>;
+  return <AuthGuard requiredRole="MODERATOR"><UsersContent /></AuthGuard>;
 }
 
 function UsersContent() {
