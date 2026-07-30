@@ -1,8 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { Home, FileText, Video, Compass, MessageSquare, Sparkles, Users } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Home, FileText, Video, Compass, MessageSquare, Sparkles, Users, Search } from 'lucide-react';
 import { FeedList } from '@/components/feed/feed-list';
+import { Input } from '@/components/ui/input';
 import type { PostType } from '@/types';
 
 type FilterTab = { id: string; label: string; icon: typeof FileText; postType?: PostType };
@@ -16,13 +18,34 @@ const filterTabs: FilterTab[] = [
 ];
 
 export default function FeedPage() {
+  const router = useRouter();
   const [activeFilter, setActiveFilter] = useState('all');
   const [feedMode, setFeedMode] = useState<'discover' | 'following'>('discover');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const currentFilter = filterTabs.find((t) => t.id === activeFilter);
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
   return (
     <div className="space-y-4">
+      {/* 搜索入口 */}
+      <form onSubmit={handleSearch} className="relative">
+        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <Input
+          type="search"
+          placeholder="搜索徐霞客系统..."
+          className="h-10 pl-10"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </form>
+
       {/* 发现/关注切换 */}
       <div className="flex items-center gap-2">
         <button
@@ -34,7 +57,7 @@ export default function FeedPage() {
           }`}
         >
           <Sparkles className="h-3.5 w-3.5" />
-          发现
+          推荐
         </button>
         <button
           onClick={() => setFeedMode('following')}
