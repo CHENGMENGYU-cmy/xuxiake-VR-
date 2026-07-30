@@ -22,7 +22,6 @@ export function MobileNav() {
 
   const navItems = [
     { href: '/feed', label: '首页', icon: Home },
-    { href: '/explore', label: '探索', icon: Compass },
     ...(user ? [
       { href: '/upload', label: '分享', icon: Upload },
       { href: '/messages', label: '消息', icon: MessageCircle },
