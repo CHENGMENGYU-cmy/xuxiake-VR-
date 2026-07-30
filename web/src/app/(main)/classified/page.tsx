@@ -1,13 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { FolderOpen, MapPin, Calendar, Tag } from 'lucide-react';
+import { FolderOpen, MapPin, Calendar, Tag, Hash } from 'lucide-react';
 import { HierarchyList } from '@/components/feed/hierarchy-list';
 import apiClient from '@/lib/api-client';
 
 type Dimension = { name: string; count: number };
 type TypeDim = { type: string; count: number };
 type TimeDim = { month: string; count: number };
+type TopicDim = { id: string; name: string; count: number };
 
 const typeLabels: Record<string, string> = {
   VR_MEDIA: '第一视角',
@@ -19,13 +20,15 @@ const typeLabels: Record<string, string> = {
 };
 
 export default function ClassifiedPage() {
-  const [activeDim, setActiveDim] = useState<'location' | 'type' | 'time'>('location');
+  const [activeDim, setActiveDim] = useState<'location' | 'type' | 'time' | 'topic'>('location');
   const [byLocation, setByLocation] = useState<Dimension[]>([]);
   const [byType, setByType] = useState<TypeDim[]>([]);
   const [byTime, setByTime] = useState<TimeDim[]>([]);
+  const [byTopic, setByTopic] = useState<TopicDim[]>([]);
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
 
   useEffect(() => {
+    // 获取分类维度数据
     apiClient.get('/posts/classified/dimensions').then((res) => {
       if (res.data?.success) {
         setByLocation(res.data.data.byLocation || []);
@@ -33,18 +36,32 @@ export default function ClassifiedPage() {
         setByTime(res.data.data.byTime || []);
       }
     }).catch(() => {});
+
+    // 获取话题数据
+    apiClient.get('/posts/topics').then((res) => {
+      if (res.data?.success) {
+        const topics = res.data.data || [];
+        setByTopic(topics.map((t: any) => ({
+          id: t.id,
+          name: t.name,
+          count: t.postCount || 0
+        })));
+      }
+    }).catch(() => {});
   }, []);
 
   const dimTabs = [
-    { id: 'location' as const, label: '按地点', icon: MapPin },
-    { id: 'type' as const, label: '按类型', icon: Tag },
-    { id: 'time' as const, label: '按时间', icon: Calendar },
+    { id: 'location' as const, label: '目的地', icon: MapPin },
+    { id: 'type' as const, label: '内容形式', icon: Tag },
+    { id: 'time' as const, label: '时间', icon: Calendar },
+    { id: 'topic' as const, label: '主题', icon: Hash },
   ];
 
   // 根据当前维度和选中值构建过滤参数
   const filterParams = selectedValue ? (
     activeDim === 'location' ? { location: selectedValue } :
     activeDim === 'type' ? { mediaType: selectedValue } :
+    activeDim === 'topic' ? { topicId: selectedValue } :
     { month: selectedValue }
   ) : {};
 
@@ -52,11 +69,11 @@ export default function ClassifiedPage() {
     <div className="space-y-5">
       <div className="flex items-center gap-2">
         <FolderOpen className="h-6 w-6 text-amber-500" />
-        <h1 className="text-xl font-bold">风物志</h1>
+        <h1 className="text-xl font-bold">旅途档案</h1>
       </div>
 
       <p className="text-sm text-muted-foreground">
-        按地点、类型、时间自动整理你的瞬间捕获。一方水土，一方风物。
+        所有内容的归档整理，多维度浏览。
       </p>
 
       {/* 分类维度切换 */}
@@ -81,7 +98,7 @@ export default function ClassifiedPage() {
         })}
       </div>
 
-      {/* 按地点 */}
+      {/* 按地点 - 目的地 */}
       {activeDim === 'location' && (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           {byLocation.map((loc) => (
@@ -95,14 +112,19 @@ export default function ClassifiedPage() {
               <MapPin className="h-4 w-4 text-teal-500 shrink-0" />
               <div className="min-w-0">
                 <p className="truncate text-sm font-medium">{loc.name}</p>
-                <p className="text-xs text-muted-foreground">{loc.count} 条瞬间</p>
+                <p className="text-xs text-muted-foreground">{loc.count} 条内容</p>
               </div>
             </button>
           ))}
+          {byLocation.length === 0 && (
+            <p className="col-span-full text-center text-sm text-muted-foreground py-8">
+              暂无地点数据
+            </p>
+          )}
         </div>
       )}
 
-      {/* 按类型 */}
+      {/* 按类型 - 内容形式 */}
       {activeDim === 'type' && (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           {byType.map((t) => (
@@ -116,10 +138,15 @@ export default function ClassifiedPage() {
               <Tag className="h-4 w-4 text-orange-500 shrink-0" />
               <div className="min-w-0">
                 <p className="truncate text-sm font-medium">{typeLabels[t.type] || t.type}</p>
-                <p className="text-xs text-muted-foreground">{t.count} 条瞬间</p>
+                <p className="text-xs text-muted-foreground">{t.count} 条内容</p>
               </div>
             </button>
           ))}
+          {byType.length === 0 && (
+            <p className="col-span-full text-center text-sm text-muted-foreground py-8">
+              暂无内容类型数据
+            </p>
+          )}
         </div>
       )}
 
@@ -137,10 +164,41 @@ export default function ClassifiedPage() {
               <Calendar className="h-4 w-4 text-primary shrink-0" />
               <div className="min-w-0">
                 <p className="truncate text-sm font-medium">{m.month}</p>
-                <p className="text-xs text-muted-foreground">{m.count} 条瞬间</p>
+                <p className="text-xs text-muted-foreground">{m.count} 条内容</p>
               </div>
             </button>
           ))}
+          {byTime.length === 0 && (
+            <p className="col-span-full text-center text-sm text-muted-foreground py-8">
+              暂无时间数据
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* 按主题 - 话题标签 */}
+      {activeDim === 'topic' && (
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          {byTopic.map((topic) => (
+            <button
+              key={topic.id}
+              onClick={() => setSelectedValue(selectedValue === topic.id ? null : topic.id)}
+              className={`flex items-center gap-2 rounded-lg border p-3 text-left transition-colors hover:bg-accent ${
+                selectedValue === topic.id ? 'border-primary bg-primary/5' : ''
+              }`}
+            >
+              <Hash className="h-4 w-4 text-violet-500 shrink-0" />
+              <div className="min-w-0">
+                <p className="truncate text-sm font-medium">{topic.name}</p>
+                <p className="text-xs text-muted-foreground">{topic.count} 条内容</p>
+              </div>
+            </button>
+          ))}
+          {byTopic.length === 0 && (
+            <p className="col-span-full text-center text-sm text-muted-foreground py-8">
+              暂无话题数据
+            </p>
+          )}
         </div>
       )}
 
@@ -148,7 +206,13 @@ export default function ClassifiedPage() {
       {selectedValue && (
         <div className="space-y-3">
           <h3 className="text-sm font-medium text-muted-foreground">
-            分类结果: {selectedValue}
+            {activeDim === 'location' ? '目的地' :
+             activeDim === 'type' ? '内容形式' :
+             activeDim === 'topic' ? '主题' : '时间'}: {
+               activeDim === 'topic'
+                 ? byTopic.find(t => t.id === selectedValue)?.name
+                 : selectedValue
+             }
           </h3>
           <HierarchyList
             key={`${activeDim}-${selectedValue}`}
