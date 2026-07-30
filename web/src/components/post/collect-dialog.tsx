@@ -67,8 +67,13 @@ export function CollectDialog({ postId, open, onClose }: CollectDialogProps) {
         setSelectedIds((prev) => new Set(prev).add(col.id));
         toast.success('已加入收藏');
       }
-    } catch {
-      toast.error('操作失败');
+    } catch (err: any) {
+      const status = err?.response?.status;
+      if (status === 404) {
+        toast.error('内容不存在，可能已被删除');
+      } else {
+        toast.error('操作失败，请重试');
+      }
     }
   };
 
