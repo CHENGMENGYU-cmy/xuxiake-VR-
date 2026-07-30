@@ -45,8 +45,6 @@ function DashboardContent() {
     }).catch(() => {}).finally(() => setLoading(false));
   }, [user, router]);
 
-  if (!user || user.role === 'USER') return null;
-
   const cards = [
     { label: '待审核', value: stats.pendingReviews, icon: Shield, color: 'text-amber-500', bg: 'bg-amber-100 dark:bg-amber-900/30', href: '/admin/reviews' },
     { label: '待处理举报', value: stats.pendingReports, icon: Flag, color: 'text-red-500', bg: 'bg-red-100 dark:bg-red-900/30', href: '/admin/reports' },
