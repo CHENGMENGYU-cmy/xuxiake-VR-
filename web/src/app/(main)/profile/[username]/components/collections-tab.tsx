@@ -117,12 +117,13 @@ export function CollectionsTab() {
               <span className="max-w-32 truncate">{col.name}</span>
             )}
             <span className="text-xs text-muted-foreground">{col.postCount || 0}</span>
-            <button
+            <span
               onClick={(e) => { e.stopPropagation(); startEdit(col); }}
-              className="ml-0.5 rounded p-0.5 text-muted-foreground opacity-0 group-hover:opacity-100 hover:text-foreground"
+              className="ml-0.5 cursor-pointer rounded p-0.5 text-muted-foreground opacity-0 group-hover:opacity-100 hover:text-foreground"
+              role="button"
             >
               <Pencil className="h-3 w-3" />
-            </button>
+            </span>
           </button>
         ))}
         {/* 新建按钮 */}
