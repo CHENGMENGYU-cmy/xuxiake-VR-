@@ -42,13 +42,7 @@ export function RecommendedUsers() {
         toast.success('已取消关注');
       } else {
         await followUser(userId);
-        toast.success('关注成功，和TA打个招呼吧', {
-          action: {
-            label: '发消息',
-            onClick: () => handleMessage(userId),
-          },
-          duration: 5000,
-        });
+        toast.success('关注成功！', { duration: 3000 });
       }
     } catch {
       setFollowingMap((prev) => ({ ...prev, [userId]: wasFollowing }));
