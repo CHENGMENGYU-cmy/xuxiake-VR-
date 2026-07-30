@@ -14,23 +14,10 @@ export default defineConfig({
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
+    viewport: { width: 1440, height: 900 },
   },
 
   projects: [
-    {
-      name: 'chromium',
-      use: {
-        ...devices['Desktop Chrome'],
-        viewport: { width: 1440, height: 900 },
-      },
-    },
-    {
-      name: 'mobile',
-      use: { ...devices['iPhone 14 Pro'] },
-    },
-    {
-      name: 'tablet',
-      use: { ...devices['iPad Pro 11'] },
-    },
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
   ],
 });
