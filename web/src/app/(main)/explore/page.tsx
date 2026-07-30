@@ -35,6 +35,9 @@ export default function ExplorePage() {
     }).catch(() => {});
   }, [isAdmin]);
 
+  // SSR阶段渲染相同结构（避免hydration）
+  if (!mounted) return <div className="space-y-4"><div className="flex items-center gap-2"><Compass className="h-6 w-6 text-primary" /><h1 className="text-xl font-bold">探索发现</h1></div></div>;
+
   // 管理员精简版
   if (isAdmin) {
     return (
