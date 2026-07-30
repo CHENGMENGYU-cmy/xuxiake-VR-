@@ -418,6 +418,9 @@ export function PostCard({ post, onLikeChange }: PostCardProps) {
         </DialogContent>
       </Dialog>
 
+      {/* 收藏弹窗 */}
+      <CollectDialog postId={post.id} open={showCollect} onClose={() => setShowCollect(false)} />
+
       {/* 举报弹窗 */}
       <ReportDialog postId={post.id} open={showReport} onClose={() => setShowReport(false)} />
 
