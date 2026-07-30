@@ -834,6 +834,14 @@ export class PostsService {
     return collection;
   }
 
+  async deleteCollection(userId: string, collectionId: string) {
+    const collection = await this.collectionRepo.findOne({ where: { id: collectionId } });
+    if (!collection) throw new NotFoundException('收藏夹不存在');
+    if (collection.creatorId !== userId) throw new NotFoundException('无权操作此收藏夹');
+    await this.collectionPostRepo.delete({ collectionId });
+    await this.collectionRepo.remove(collection);
+  }
+
   async getCollections(options: { userId?: string; page?: number; limit?: number } = {}) {
     const { userId, page = 1, limit = 20 } = options;
     const qb = this.collectionRepo
