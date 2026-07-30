@@ -294,43 +294,6 @@ export class UsersController {
     return { success: true, message: '已取消关注' };
   }
 
-  @Get('suggested/list')
-  async getSuggestedUsers(@Headers('authorization') auth: string) {
-    const userId = this.getUserId(auth);
-
-    // 推荐用户：排除自己，取最新的几个
-    const query = this.userRepo.createQueryBuilder('user');
-    if (userId) {
-      query.where('user.id != :userId', { userId });
-    }
-    query.orderBy('user.created_at', 'DESC').limit(5);
-
-    const users = await query.getMany();
-
-    // 如果登录了，获取已关注状态
-    let followingIds: string[] = [];
-    if (userId && users.length > 0) {
-      const follows = await this.followRepo.find({
-        where: { followerId: userId, followingId: In(users.map((u) => u.id)) },
-      });
-      followingIds = follows.map((f) => f.followingId);
-    }
-
-    return {
-      success: true,
-      data: users.map((u) => {
-        const { passwordHash, ...uDto } = u;
-        return {
-          ...uDto,
-          isFollowing: followingIds.includes(u.id),
-          vrDeviceInfo: u.vrDeviceModel
-            ? { model: u.vrDeviceModel, version: u.vrDeviceVersion || '' }
-            : null,
-        };
-      }),
-    };
-  }
-
   // ===== 用户帖子列表 =====
   @Get(':username/posts')
   async getUserPosts(

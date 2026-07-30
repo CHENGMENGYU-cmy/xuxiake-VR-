@@ -1045,6 +1045,22 @@ export class SocialController {
     return { success: true, message: '已退出社群' };
   }
 
+  @Get('communities/search')
+  async searchCommunities(
+    @Headers('authorization') auth: string,
+    @Query('q') keyword: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    if (!keyword?.trim()) throw new BadRequestException('搜索关键词不能为空');
+
+    const userId = this.getUserId(auth);
+    const pageNum = parseInt(page || '1');
+    const limitNum = parseInt(limit || '20');
+
+    return this.socialService.searchCommunities(keyword.trim(), userId || undefined, pageNum, limitNum);
+  }
+
   @Get('communities/:id')
   async getCommunity(
     @Headers('authorization') auth: string,
@@ -1279,24 +1295,6 @@ export class SocialController {
 
     await this.socialService.dissolveCommunity(communityId, userId);
     return { success: true, message: '社群已解散' };
-  }
-
-  // ==================== 社群搜索 ====================
-
-  @Get('communities/search')
-  async searchCommunities(
-    @Headers('authorization') auth: string,
-    @Query('q') keyword: string,
-    @Query('page') page?: string,
-    @Query('limit') limit?: string,
-  ) {
-    if (!keyword?.trim()) throw new BadRequestException('搜索关键词不能为空');
-
-    const userId = this.getUserId(auth);
-    const pageNum = parseInt(page || '1');
-    const limitNum = parseInt(limit || '20');
-
-    return this.socialService.searchCommunities(keyword.trim(), userId || undefined, pageNum, limitNum);
   }
 
   // ==================== 社群公告 ====================

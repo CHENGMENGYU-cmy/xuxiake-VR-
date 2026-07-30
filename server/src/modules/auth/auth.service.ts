@@ -212,6 +212,7 @@ export class AuthService {
   async getProfile(userId: string) {
     const user = await this.userRepo.findOne({ where: { id: userId } });
     if (!user) return null;
+    if (user.status === 'BANNED') throw new UnauthorizedException('您的账号已被封禁，如有疑问请联系管理员');
     const { passwordHash, ...userDto } = user;
     return {
       ...userDto,

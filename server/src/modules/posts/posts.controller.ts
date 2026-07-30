@@ -145,6 +145,33 @@ export class PostsController {
     return { success: true, data: dimensions };
   }
 
+  @Get('collections')
+  async getCollections(
+    @Headers('authorization') auth: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    let userId: string | undefined;
+    try { userId = this.getUserId(auth); } catch {}
+    const result = await this.postsService.getCollections({
+      userId,
+      page: page ? parseInt(page) : 1,
+      limit: limit ? parseInt(limit) : 20,
+    });
+    return { success: true, ...result };
+  }
+
+  @Get('playlists')
+  async getPlaylists(@Query('userId') userId?: string) {
+    const qb = this.playlistRepo.createQueryBuilder('p')
+      .leftJoinAndSelect('p.user', 'user')
+      .where('p.isPublic = :pub', { pub: true })
+      .orderBy('p.createdAt', 'DESC');
+    if (userId) qb.andWhere('p.userId = :uid', { uid: userId });
+    const data = await qb.getMany();
+    return { success: true, data };
+  }
+
   @Get(':id')
   async getPost(@Param('id') id: string, @Headers('authorization') auth?: string) {
     let userId: string | undefined;
@@ -272,22 +299,6 @@ export class PostsController {
     const userId = this.getUserId(auth);
     const collection = await this.postsService.createCollection(userId, dto);
     return { success: true, data: collection };
-  }
-
-  @Get('collections')
-  async getCollections(
-    @Headers('authorization') auth: string,
-    @Query('page') page?: string,
-    @Query('limit') limit?: string,
-  ) {
-    let userId: string | undefined;
-    try { userId = this.getUserId(auth); } catch {}
-    const result = await this.postsService.getCollections({
-      userId,
-      page: page ? parseInt(page) : 1,
-      limit: limit ? parseInt(limit) : 20,
-    });
-    return { success: true, ...result };
   }
 
   @Get('collections/:id')
@@ -495,17 +506,6 @@ export class PostsController {
   }
 
   // ===== 音频专辑 =====
-
-  @Get('playlists')
-  async getPlaylists(@Query('userId') userId?: string) {
-    const qb = this.playlistRepo.createQueryBuilder('p')
-      .leftJoinAndSelect('p.user', 'user')
-      .where('p.isPublic = :pub', { pub: true })
-      .orderBy('p.createdAt', 'DESC');
-    if (userId) qb.andWhere('p.userId = :uid', { uid: userId });
-    const data = await qb.getMany();
-    return { success: true, data };
-  }
 
   @Post('playlists')
   async createPlaylist(
