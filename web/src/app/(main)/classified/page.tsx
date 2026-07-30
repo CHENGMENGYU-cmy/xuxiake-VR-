@@ -164,12 +164,7 @@ export default function ClassifiedPage() {
         <div className="space-y-3">
           <h3 className="text-sm font-medium text-muted-foreground">
             {activeDim === 'location' ? '目的地' :
-             activeDim === 'type' ? '内容形式' :
-             activeDim === 'topic' ? '主题' : '时间'}: {
-               activeDim === 'topic'
-                 ? byTopic.find(t => t.id === selectedValue)?.name
-                 : selectedValue
-             }
+             activeDim === 'type' ? '内容形式' : '时间'}: {selectedValue}
           </h3>
           <HierarchyList
             key={`${activeDim}-${selectedValue}`}
