@@ -1,6 +1,18 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { TrendingUp, Flame, MessageCircle, UserPlus } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { useUIStore } from '@/stores/ui-store';
+import { useAuthStore } from '@/stores/auth-store';
+import { cn } from '@/lib/utils';
+import { getRecommendedCommunities, getRecommendedUsers } from '@/lib/social-api';
+import { getHotTopics, getPosts } from '@/lib/post-api';
+import type { Community, Topic, Post, RecommendedUser } from '@/types';
 
 const HOT_TOPIC_PREVIEW_COUNT = 5;
 const COMMUNITY_PICK_COUNT = 3;
