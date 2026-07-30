@@ -201,6 +201,35 @@ export class ConversationsController {
     });
     if (!part) throw new NotFoundException('会话不存在');
 
+    // 检查是否是私聊且未互关
+    const conv = await this.convRepo.findOne({ where: { id: convId } });
+    if (conv?.type === 'DIRECT') {
+      const participants = await this.partRepo.find({ where: { conversationId: convId } });
+      const otherUserId = participants.find(p => p.userId !== userId)?.userId;
+
+      if (otherUserId) {
+        // 检查是否互关
+        const iFollow = await this.followRepo.findOne({ where: { followerId: userId, followingId: otherUserId } });
+        const followMe = await this.followRepo.findOne({ where: { followerId: otherUserId, followingId: userId } });
+        const isMutual = iFollow && followMe;
+
+        // 未互关时，检查是否已发过消息且对方未回复
+        if (!isMutual) {
+          const myMessages = await this.msgRepo.count({
+            where: { conversationId: convId, senderId: userId },
+          });
+          const otherMessages = await this.msgRepo.count({
+            where: { conversationId: convId, senderId: otherUserId },
+          });
+
+          // 如果我发过消息但对方还没回复过，则禁止继续发送
+          if (myMessages > 0 && otherMessages === 0) {
+            throw new NotFoundException('请等待对方回复后再发送消息');
+          }
+        }
+      }
+    }
+
     const message = this.msgRepo.create({
       id: uuidv4(),
       conversationId: convId,
