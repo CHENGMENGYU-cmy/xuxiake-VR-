@@ -6,7 +6,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PostCard } from '@/components/post/post-card';
-import { getCollections, getCollectionPosts, removePostFromCollection, updateCollection, createCollection, deleteCollection } from '@/lib/post-api';
+import { getCollectionPosts, removePostFromCollection, updateCollection, createCollection, deleteCollection } from '@/lib/post-api';
+import apiClient from '@/lib/api-client';
 import { toast } from 'sonner';
 import type { Collection, Post } from '@/types';
 
