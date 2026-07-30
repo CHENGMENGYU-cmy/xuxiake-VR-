@@ -20,30 +20,38 @@ const filterTabs: FilterTab[] = [
 
 export default function FeedPage() {
   const router = useRouter();
+  const setSearchQuery = useSearchStore((s) => s.setQuery);
   const [activeFilter, setActiveFilter] = useState('all');
   const [feedMode, setFeedMode] = useState<'discover' | 'following'>('discover');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [localQuery, setLocalQuery] = useState('');
 
   const currentFilter = filterTabs.find((t) => t.id === activeFilter);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+  const goToSearch = useCallback((keyword?: string) => {
+    const q = keyword ?? localQuery;
+    if (q.trim()) {
+      setSearchQuery(q.trim());
     }
+    router.push('/search');
+  }, [localQuery, router, setSearchQuery]);
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    goToSearch();
   };
 
   return (
     <div className="space-y-4">
-      {/* 搜索入口 */}
-      <form onSubmit={handleSearch} className="relative">
+      {/* 搜索入口 — 点击跳转搜索页 */}
+      <form onSubmit={handleSearchSubmit} className="relative">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
           type="search"
           placeholder="搜索徐霞客系统..."
           className="h-10 pl-10"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          value={localQuery}
+          onChange={(e) => setLocalQuery(e.target.value)}
+          onClick={() => router.push('/search')}
         />
       </form>
 
