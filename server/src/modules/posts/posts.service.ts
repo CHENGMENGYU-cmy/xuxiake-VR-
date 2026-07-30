@@ -225,6 +225,12 @@ export class PostsService {
       relations: { author: true, mediaItems: true, tags: true, topics: true },
     });
     if (!post) throw new NotFoundException('内容不存在');
+
+    // 非公开内容只有作者可查看
+    if (post.visibility !== 'PUBLIC' && (!currentUserId || post.authorId !== currentUserId)) {
+      throw new NotFoundException('内容不存在或已被下架');
+    }
+
     post.viewCount += 1;
     await this.postRepo.save(post);
 
