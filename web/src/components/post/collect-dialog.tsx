@@ -130,8 +130,7 @@ export function CollectDialog({ postId, open, onClose }: CollectDialogProps) {
                       {isSelected && <Check className="h-3 w-3" />}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium">{col.title}</p>
-                      <p className="text-xs text-muted-foreground">{col.description || `${col.postCount || 0} 条内容`}</p>
+                      <p className="truncate text-sm font-medium">{col.name || col.title}</p>
                     </div>
                   </button>
                 );

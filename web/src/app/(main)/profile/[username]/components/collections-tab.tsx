@@ -80,12 +80,33 @@ export function CollectionsTab() {
     return <div className="flex justify-center py-12"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>;
   }
 
-  if (collections.length === 0) {
+  if (collections.length === 0 && !creating) {
     return (
       <div className="flex flex-col items-center py-12 text-muted-foreground">
         <PackageOpen className="h-12 w-12 opacity-30" />
         <p className="mt-3">还没有收藏夹</p>
         <p className="mt-1 text-sm">浏览内容时点击「...」→「收藏」即可创建</p>
+        <Button variant="outline" size="sm" className="mt-4 gap-1.5" onClick={() => setCreating(true)}>
+          <Plus className="h-3.5 w-3.5" />
+          新建收藏夹
+        </Button>
+      </div>
+    );
+  }
+
+  if (collections.length === 0 && creating) {
+    return (
+      <div className="flex items-center gap-2 py-4">
+        <Input
+          value={newName}
+          onChange={(e) => setNewName(e.target.value)}
+          onBlur={() => setCreating(false)}
+          onKeyDown={(e) => { if (e.key === 'Enter') handleCreate(); if (e.key === 'Escape') setCreating(false); }}
+          placeholder="收藏夹名称"
+          className="h-9 text-sm"
+          autoFocus
+        />
+        <Button size="sm" onClick={handleCreate}>创建</Button>
       </div>
     );
   }
