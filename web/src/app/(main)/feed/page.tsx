@@ -1,11 +1,8 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
-import { Home, FileText, Video, Compass, MessageSquare, Sparkles, Users, Search } from 'lucide-react';
+import { useState } from 'react';
+import { Home, FileText, Video, Compass, MessageSquare, Sparkles, Users } from 'lucide-react';
 import { FeedList } from '@/components/feed/feed-list';
-import { Input } from '@/components/ui/input';
-import { useSearchStore } from '@/stores/search-store';
 import type { PostType } from '@/types';
 
 type FilterTab = { id: string; label: string; icon: typeof FileText; postType?: PostType };
@@ -19,41 +16,13 @@ const filterTabs: FilterTab[] = [
 ];
 
 export default function FeedPage() {
-  const router = useRouter();
-  const setSearchQuery = useSearchStore((s) => s.setQuery);
   const [activeFilter, setActiveFilter] = useState('all');
   const [feedMode, setFeedMode] = useState<'discover' | 'following'>('discover');
-  const [localQuery, setLocalQuery] = useState('');
 
   const currentFilter = filterTabs.find((t) => t.id === activeFilter);
 
-  const goToSearch = useCallback((keyword?: string) => {
-    const q = keyword ?? localQuery;
-    if (q.trim()) {
-      setSearchQuery(q.trim());
-    }
-    router.push('/search');
-  }, [localQuery, router, setSearchQuery]);
-
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    goToSearch();
-  };
-
   return (
     <div className="space-y-4">
-      {/* 搜索入口 — 点击跳转搜索页 */}
-      <form onSubmit={handleSearchSubmit} className="relative">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-        <Input
-          type="search"
-          placeholder="搜索徐霞客系统..."
-          className="h-10 pl-10"
-          value={localQuery}
-          onChange={(e) => setLocalQuery(e.target.value)}
-          onClick={() => router.push('/search')}
-        />
-      </form>
 
       {/* 发现/关注切换 */}
       <div className="flex items-center gap-2">
