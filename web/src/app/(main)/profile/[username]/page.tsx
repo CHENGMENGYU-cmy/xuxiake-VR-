@@ -239,7 +239,7 @@ function ProfileContent({ username }: { username: string }) {
           <TabsTrigger value="likes" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-primary">
             喜欢
           </TabsTrigger>
-          {isOwnProfile && hasCollections && (
+          {isOwnProfile && (
             <TabsTrigger value="collections" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-primary">
               收藏
             </TabsTrigger>
