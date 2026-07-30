@@ -130,6 +130,13 @@ function UploadContent() {
 
   // 不再自动加载草稿，只在用户主动选择草稿时加载
 
+  // 初始 Tab 是日记时，自动设置私密可见性
+  useEffect(() => {
+    if (initialTab === 'DIARY') {
+      setVisibility('PRIVATE');
+    }
+  }, [initialTab]);
+
   // 自动保存草稿（防抖）
   useEffect(() => {
     if (autoSaveTimerRef.current) {
