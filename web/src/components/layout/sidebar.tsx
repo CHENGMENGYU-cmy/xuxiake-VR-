@@ -33,7 +33,6 @@ import { cn } from '@/lib/utils';
 // 浏览发现（普通用户完整版）
 const navItems = [
   { href: '/feed', label: '首页', icon: Home },
-  { href: '/explore', label: '探索发现', icon: Compass },
   { href: '/topics', label: '话题广场', icon: Hash },
   { href: '/discover', label: '找搭子', icon: UserPlus },
 ];
@@ -41,7 +40,6 @@ const navItems = [
 // 浏览发现（管理员精简版）
 const adminNavItems = [
   { href: '/feed', label: '首页', icon: Home },
-  { href: '/explore', label: '探索发现', icon: Compass },
 ];
 
 // 我的内容
