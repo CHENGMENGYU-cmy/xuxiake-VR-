@@ -61,6 +61,48 @@ export const ContentLevelLabel: Record<ContentLevel, string> = {
   ESSAY: '游记',
 };
 
+// 日记心情类型
+export type MoodType = 'happy' | 'calm' | 'excited' | 'tired' | 'sad' | 'neutral';
+
+export const MoodLabel: Record<MoodType, string> = {
+  happy: '开心',
+  calm: '平静',
+  excited: '兴奋',
+  tired: '疲惫',
+  sad: '难过',
+  neutral: '一般',
+};
+
+export const MoodEmoji: Record<MoodType, string> = {
+  happy: '😊',
+  calm: '😌',
+  excited: '🤩',
+  tired: '😴',
+  sad: '😔',
+  neutral: '😐',
+};
+
+// 天气类型
+export type WeatherType = 'sunny' | 'cloudy' | 'rainy' | 'snowy' | 'windy' | 'foggy';
+
+export const WeatherLabel: Record<WeatherType, string> = {
+  sunny: '晴天',
+  cloudy: '多云',
+  rainy: '雨天',
+  snowy: '雪天',
+  windy: '大风',
+  foggy: '雾天',
+};
+
+export const WeatherEmoji: Record<WeatherType, string> = {
+  sunny: '☀️',
+  cloudy: '☁️',
+  rainy: '🌧️',
+  snowy: '❄️',
+  windy: '💨',
+  foggy: '🌫️',
+};
+
 export interface JourneyStop {
   id: number;
   journeyId: number;
