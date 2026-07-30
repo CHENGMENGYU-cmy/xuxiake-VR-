@@ -335,10 +335,11 @@ export class PostsController {
     @Param('id') postId: string,
   ) {
     await this.checkAdmin(auth);
-    await this.postsService.unpublishPost(auth.replace('Bearer ', ''), postId);
-    // admin unpublish: 使用第一个用户的ID来绕过权限检查
+    // 管理员可直接下架任何内容，使用post作者的ID绕过权限检查
     const post = await this.postsService.getPostById(postId);
-    return { success: true, data: post, message: '内容已强制下架' };
+    if (!post) throw new UnauthorizedException('内容不存在');
+    await this.postsService.unpublishPost(post.authorId, postId);
+    return { success: true, message: '内容已强制下架' };
   }
 
   @Post('reviews/batch')
