@@ -15,9 +15,6 @@ export function MyCommunities() {
   const [communities, setCommunities] = useState<Community[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<Community[]>([]);
-  const [searching, setSearching] = useState(false);
-  const [joiningMap, setJoiningMap] = useState<Record<string, boolean>>({});
   const [filter, setFilter] = useState<'all' | 'created' | 'joined'>('all');
 
   useEffect(() => {
@@ -28,42 +25,8 @@ export function MyCommunities() {
       .finally(() => setLoading(false));
   }, [isAuthenticated, user]);
 
-  // 搜索全站社群
-  useEffect(() => {
-    if (!searchQuery.trim()) {
-      setSearchResults([]);
-      return;
-    }
-    setSearching(true);
-    const timer = setTimeout(() => {
-      searchCommunities(searchQuery.trim(), 1, 20)
-        .then((res) => setSearchResults(res.data || []))
-        .catch(() => {})
-        .finally(() => setSearching(false));
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [searchQuery]);
-
-  const handleJoin = async (id: string) => {
-    if (joiningMap[id]) return;
-    setJoiningMap((prev) => ({ ...prev, [id]: true }));
-    try {
-      await joinCommunity(id);
-      setSearchResults((prev) => prev.filter((c) => c.id !== id));
-      toast.success('已加入社群');
-      // 刷新我的社群列表
-      getUserCommunities()
-        .then((data) => setCommunities(data || []))
-        .catch(() => {});
-    } catch {
-      toast.error('加入失败');
-    } finally {
-      setJoiningMap((prev) => ({ ...prev, [id]: false }));
-    }
-  };
-
   const filteredCommunities = communities.filter((c) => {
-    // 搜索时也过滤我的社群
+    // 本地过滤
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       const matchName = c.name.toLowerCase().includes(q);
