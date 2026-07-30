@@ -159,32 +159,6 @@ export default function ClassifiedPage() {
         </div>
       )}
 
-      {/* 按主题 - 话题标签 */}
-      {activeDim === 'topic' && (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {byTopic.map((topic) => (
-            <button
-              key={topic.id}
-              onClick={() => setSelectedValue(selectedValue === topic.id ? null : topic.id)}
-              className={`flex items-center gap-2 rounded-lg border p-3 text-left transition-colors hover:bg-accent ${
-                selectedValue === topic.id ? 'border-primary bg-primary/5' : ''
-              }`}
-            >
-              <Hash className="h-4 w-4 text-violet-500 shrink-0" />
-              <div className="min-w-0">
-                <p className="truncate text-sm font-medium">{topic.name}</p>
-                <p className="text-xs text-muted-foreground">{topic.count} 条内容</p>
-              </div>
-            </button>
-          ))}
-          {byTopic.length === 0 && (
-            <p className="col-span-full text-center text-sm text-muted-foreground py-8">
-              暂无话题数据
-            </p>
-          )}
-        </div>
-      )}
-
       {/* 选中分类后的内容列表 — 使用层级API按维度过滤 */}
       {selectedValue && (
         <div className="space-y-3">
