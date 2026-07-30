@@ -210,6 +210,14 @@ export function PostCard({ post, onLikeChange }: PostCardProps) {
           </div>
         </div>
 
+        {/* 评论数角标 */}
+        {commentCount > 0 && (
+          <span className="inline-flex items-center gap-0.5 rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+            <MessageCircle className="h-3 w-3" />
+            {commentCount}
+          </span>
+        )}
+
         <DropdownMenu>
           <DropdownMenuTrigger className="inline-flex h-8 w-8 items-center justify-center rounded-md hover:bg-muted">
             <MoreHorizontal className="h-4 w-4" />
