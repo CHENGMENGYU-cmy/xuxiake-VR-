@@ -83,78 +83,66 @@ export default function ClassifiedPage() {
 
       {/* 按地点 - 目的地 */}
       {activeDim === 'location' && (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        <div className="flex flex-wrap gap-2">
           {byLocation.map((loc) => (
             <button
               key={loc.name}
               onClick={() => setSelectedValue(selectedValue === loc.name ? null : loc.name)}
-              className={`flex items-center gap-2 rounded-lg border p-3 text-left transition-colors hover:bg-accent ${
-                selectedValue === loc.name ? 'border-primary bg-primary/5' : ''
+              className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-colors hover:bg-accent ${
+                selectedValue === loc.name ? 'border-primary bg-primary/10 text-primary' : ''
               }`}
             >
-              <MapPin className="h-4 w-4 text-teal-500 shrink-0" />
-              <div className="min-w-0">
-                <p className="truncate text-sm font-medium">{loc.name}</p>
-                <p className="text-xs text-muted-foreground">{loc.count} 条内容</p>
-              </div>
+              <MapPin className="h-3 w-3 text-teal-500" />
+              {loc.name}
+              <span className="text-muted-foreground">{loc.count}</span>
             </button>
           ))}
           {byLocation.length === 0 && (
-            <p className="col-span-full text-center text-sm text-muted-foreground py-8">
-              暂无地点数据
-            </p>
+            <p className="w-full text-center text-sm text-muted-foreground py-8">暂无地点数据</p>
           )}
         </div>
       )}
 
       {/* 按类型 - 内容形式 */}
       {activeDim === 'type' && (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        <div className="flex flex-wrap gap-2">
           {byType.map((t) => (
             <button
               key={t.type}
               onClick={() => setSelectedValue(selectedValue === t.type ? null : t.type)}
-              className={`flex items-center gap-2 rounded-lg border p-3 text-left transition-colors hover:bg-accent ${
-                selectedValue === t.type ? 'border-primary bg-primary/5' : ''
+              className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-colors hover:bg-accent ${
+                selectedValue === t.type ? 'border-primary bg-primary/10 text-primary' : ''
               }`}
             >
-              <Tag className="h-4 w-4 text-orange-500 shrink-0" />
-              <div className="min-w-0">
-                <p className="truncate text-sm font-medium">{typeLabels[t.type] || t.type}</p>
-                <p className="text-xs text-muted-foreground">{t.count} 条内容</p>
-              </div>
+              <Tag className="h-3 w-3 text-orange-500" />
+              {typeLabels[t.type] || t.type}
+              <span className="text-muted-foreground">{t.count}</span>
             </button>
           ))}
           {byType.length === 0 && (
-            <p className="col-span-full text-center text-sm text-muted-foreground py-8">
-              暂无内容类型数据
-            </p>
+            <p className="w-full text-center text-sm text-muted-foreground py-8">暂无内容类型数据</p>
           )}
         </div>
       )}
 
       {/* 按时间 */}
       {activeDim === 'time' && (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        <div className="flex flex-wrap gap-2">
           {byTime.map((m) => (
             <button
               key={m.month}
               onClick={() => setSelectedValue(selectedValue === m.month ? null : m.month)}
-              className={`flex items-center gap-2 rounded-lg border p-3 text-left transition-colors hover:bg-accent ${
-                selectedValue === m.month ? 'border-primary bg-primary/5' : ''
+              className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-colors hover:bg-accent ${
+                selectedValue === m.month ? 'border-primary bg-primary/10 text-primary' : ''
               }`}
             >
-              <Calendar className="h-4 w-4 text-primary shrink-0" />
-              <div className="min-w-0">
-                <p className="truncate text-sm font-medium">{m.month}</p>
-                <p className="text-xs text-muted-foreground">{m.count} 条内容</p>
-              </div>
+              <Calendar className="h-3 w-3 text-primary" />
+              {m.month}
+              <span className="text-muted-foreground">{m.count}</span>
             </button>
           ))}
           {byTime.length === 0 && (
-            <p className="col-span-full text-center text-sm text-muted-foreground py-8">
-              暂无时间数据
-            </p>
+            <p className="w-full text-center text-sm text-muted-foreground py-8">暂无时间数据</p>
           )}
         </div>
       )}
