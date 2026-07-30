@@ -228,6 +228,12 @@ export function PostCard({ post, onLikeChange }: PostCardProps) {
                   <Trash2 className="h-3.5 w-3.5 mr-2" />
                   删除
                 </DropdownMenuItem>
+                {isAdmin && post.visibility === 'PUBLIC' && (
+                  <DropdownMenuItem onClick={handleUnpublish} disabled={unpublishing}>
+                    <EyeOff className="h-3.5 w-3.5 mr-2" />
+                    {unpublishing ? '下架中...' : '下架'}
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuItem onClick={handleCopyLink}>
                   <Copy className="h-3.5 w-3.5 mr-2" />
                   复制链接
@@ -235,6 +241,12 @@ export function PostCard({ post, onLikeChange }: PostCardProps) {
               </>
             ) : (
               <>
+                {isAdmin && post.visibility === 'PUBLIC' && (
+                  <DropdownMenuItem onClick={handleUnpublish} disabled={unpublishing}>
+                    <EyeOff className="h-3.5 w-3.5 mr-2" />
+                    {unpublishing ? '下架中...' : '下架'}
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuItem>
                   <Bookmark className="h-3.5 w-3.5 mr-2" />
                   保存
