@@ -34,7 +34,9 @@ export async function loginAs(page: Page, account: string, password = 'password1
 /** 清除登录状态 */
 export async function logout(page: Page) {
   // 先导航到基准 URL，确保有可操作的 document
-  await page.goto('/login', { waitUntil: 'domcontentloaded' }).catch(() => {});
+  await page.goto('/login', { waitUntil: 'networkidle' }).catch(() => {});
+  // 等待页面稳定
+  await page.waitForTimeout(500);
   await page.evaluate(() => {
     try { localStorage.clear(); } catch {}
     try { sessionStorage.clear(); } catch {}
