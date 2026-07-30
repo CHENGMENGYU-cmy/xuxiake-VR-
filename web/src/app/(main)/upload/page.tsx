@@ -80,10 +80,13 @@ export default function UploadPage() {
 
 function UploadContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { user } = useAuthStore();
   const { publishPost, isPublishing } = usePostStore();
 
-  const [activeTab, setActiveTab] = useState<UploadTab>('VIDEO');
+  // 根据 URL 参数决定初始 Tab
+  const initialTab: UploadTab = searchParams.get('level') === 'DIARY' ? 'DIARY' : 'VIDEO';
+  const [activeTab, setActiveTab] = useState<UploadTab>(initialTab);
   const [content, setContent] = useState('');
   const [location, setLocation] = useState('');
   const [visibility, setVisibility] = useState<Visibility>('PUBLIC');
