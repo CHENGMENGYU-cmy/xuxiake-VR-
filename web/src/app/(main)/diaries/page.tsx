@@ -128,6 +128,21 @@ function DiariesContent() {
     }
   };
 
+  const handlePromoteToJourney = (post: Post) => {
+    // 保存日记数据到 localStorage，供游记创建器使用
+    const journeyDraft = {
+      sourceDiaryId: post.id,
+      title: post.content?.slice(0, 50) || '我的旅行游记',
+      content: post.content || '',
+      location: post.location,
+      mediaItems: post.mediaItems,
+      vrMetadata: post.vrMetadata,
+      createdAt: post.createdAt,
+    };
+    localStorage.setItem('journey-from-diary', JSON.stringify(journeyDraft));
+    router.push('/upload/journey-creator?from=diary');
+  };
+
   return (
     <div className="space-y-5">
       {/* 标题栏 */}
