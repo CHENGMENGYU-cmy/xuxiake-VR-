@@ -23,7 +23,6 @@ export default function FeedPage() {
 
   return (
     <div className="space-y-4">
-
       {/* 发现/关注切换 */}
       <div className="flex items-center gap-2">
         <button
@@ -50,32 +49,9 @@ export default function FeedPage() {
         </button>
       </div>
 
-      {/* 内容类型筛选 */}
-      <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-none">
-        {filterTabs.map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeFilter === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveFilter(tab.id)}
-              className={`flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
-                isActive
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-muted text-muted-foreground hover:bg-muted/80'
-              }`}
-            >
-              <Icon className="h-3.5 w-3.5" />
-              {tab.label}
-            </button>
-          );
-        })}
-      </div>
-
       {/* 内容流 */}
       <FeedList
-        key={`${feedMode}-${activeFilter}`}
-        postType={currentFilter?.postType}
+        key={feedMode}
         followingOnly={feedMode === 'following'}
       />
     </div>
