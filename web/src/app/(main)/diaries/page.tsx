@@ -117,8 +117,7 @@ function DiariesContent() {
 
   const handlePublish = async (postId: string, visibility: Visibility) => {
     try {
-      const { apiClient } = await import('@/lib/api-client');
-      await apiClient.post(`/posts/${postId}/publish`, { visibility });
+      await publishPost(postId, undefined, visibility);
       // 更新本地状态
       setPosts(prev => prev.map(p =>
         p.id === postId ? { ...p, visibility } : p
