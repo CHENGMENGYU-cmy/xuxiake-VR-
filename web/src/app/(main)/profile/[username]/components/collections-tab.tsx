@@ -92,8 +92,27 @@ export function CollectionsTab() {
             className="flex w-full items-center gap-3 p-4 text-left hover:bg-accent/50 transition-colors"
           >
             <Bookmark className="h-5 w-5 text-primary shrink-0" />
-            <div className="min-w-0 flex-1">
-              <p className="font-medium">{col.title}</p>
+            <div className="min-w-0 flex-1" onClick={(e) => e.stopPropagation()}>
+              {editingId === col.id ? (
+                <Input
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  onBlur={() => saveEdit(col)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') saveEdit(col); if (e.key === 'Escape') setEditingId(null); }}
+                  className="h-7 text-sm"
+                  autoFocus
+                />
+              ) : (
+                <div className="flex items-center gap-1.5">
+                  <p className="font-medium">{col.name || col.title}</p>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); startEdit(col); }}
+                    className="rounded p-0.5 text-muted-foreground opacity-0 group-hover:opacity-100 hover:text-foreground transition-opacity"
+                  >
+                    <Pencil className="h-3 w-3" />
+                  </button>
+                </div>
+              )}
               <p className="text-xs text-muted-foreground">
                 {col.postCount || 0} 条内容
                 {col.description && ` · ${col.description}`}
