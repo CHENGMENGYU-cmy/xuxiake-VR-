@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuthStore } from '@/stores/auth-store';
 import apiClient from '@/lib/api-client';
 import { followUser, unfollowUser, getFollowers, getFollowing, getOrCreateDirectConversation } from '@/lib/social-api';
+import { getCollections } from '@/lib/post-api';
 import { toast } from 'sonner';
 import { PostsTab } from './components/posts-tab';
 import { MediaTab } from './components/media-tab';
@@ -137,6 +138,14 @@ function ProfileContent({ username }: { username: string }) {
   const user = profileUser;
   const isOwnProfile = currentUser?.username === username;
 
+  // 检查是否有收藏（仅自己的主页）
+  useEffect(() => {
+    if (!isOwnProfile) return;
+    getCollections(1).then((res) => {
+      setHasCollections((res.data || []).length > 0);
+    }).catch(() => {});
+  }, [isOwnProfile]);
+
   return (
     <div className="space-y-4">
       <Card className="overflow-hidden">
@@ -238,7 +247,7 @@ function ProfileContent({ username }: { username: string }) {
           <TabsTrigger value="likes" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-primary">
             喜欢
           </TabsTrigger>
-          {isOwnProfile && (
+          {isOwnProfile && hasCollections && (
             <TabsTrigger value="collections" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-primary">
               收藏
             </TabsTrigger>
@@ -257,7 +266,7 @@ function ProfileContent({ username }: { username: string }) {
           <LikesTab username={username} isOwnProfile={!!isOwnProfile} />
         </TabsContent>
 
-        {isOwnProfile && (
+        {isOwnProfile && hasCollections && (
           <TabsContent value="collections" className="mt-4">
             <CollectionsTab />
           </TabsContent>
