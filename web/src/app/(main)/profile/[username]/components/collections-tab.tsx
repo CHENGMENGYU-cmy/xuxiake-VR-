@@ -67,7 +67,7 @@ export function CollectionsTab() {
     const name = prompt('收藏夹名称：');
     if (!name?.trim()) return;
     try {
-      const col = await createCollection({ title: name.trim() });
+      const col = await createCollection({ name: name.trim() });
       setCollections((prev) => [{ ...col, name: name.trim() }, ...prev]);
       toast.success('已创建');
     } catch { toast.error('创建失败'); }
