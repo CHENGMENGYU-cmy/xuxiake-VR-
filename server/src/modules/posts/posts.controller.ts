@@ -307,6 +307,17 @@ export class PostsController {
     return { success: true, data: collection };
   }
 
+  @Put('collections/:id')
+  async updateCollection(
+    @Headers('authorization') auth: string,
+    @Param('id') id: string,
+    @Body() dto: { name?: string; description?: string; isPublic?: boolean },
+  ) {
+    const userId = this.getUserId(auth);
+    const collection = await this.postsService.updateCollection(userId, id, dto);
+    return { success: true, data: collection };
+  }
+
   @Get('collections/:id/posts')
   async getCollectionPosts(
     @Param('id') id: string,
