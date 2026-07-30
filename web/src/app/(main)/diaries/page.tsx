@@ -9,7 +9,8 @@ import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth-store';
 import { AuthGuard } from '@/components/auth-guard';
 import { getContentHierarchy, publishPost } from '@/lib/post-api';
-import type { Post, Visibility } from '@/types';
+import type { Post, Visibility, MoodType, WeatherType } from '@/types';
+import { MoodEmoji, WeatherEmoji } from '@/types';
 
 type FilterType = 'all' | 'PRIVATE' | 'PUBLIC' | 'FOLLOWERS';
 
