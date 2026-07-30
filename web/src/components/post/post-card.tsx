@@ -257,7 +257,7 @@ export function PostCard({ post, onLikeChange }: PostCardProps) {
                     {unpublishing ? '下架中...' : '下架'}
                   </DropdownMenuItem>
                 )}
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setShowCollect(true)}>
                   <Bookmark className="h-3.5 w-3.5 mr-2" />
                   收藏
                 </DropdownMenuItem>
