@@ -214,6 +214,22 @@ function DiariesContent() {
                         <div className="flex items-start justify-between gap-2 mb-3">
                           <div className="flex items-center gap-2 text-xs text-muted-foreground">
                             <span>{formatRelativeTime(post.createdAt)}</span>
+                            {post.vrMetadata?.mood && (
+                              <>
+                                <span>·</span>
+                                <span className="flex items-center gap-1">
+                                  {MoodEmoji[post.vrMetadata.mood as MoodType]}
+                                </span>
+                              </>
+                            )}
+                            {post.vrMetadata?.weather && (
+                              <>
+                                <span>·</span>
+                                <span className="flex items-center gap-1">
+                                  {WeatherEmoji[post.vrMetadata.weather as WeatherType]}
+                                </span>
+                              </>
+                            )}
                             {post.location?.name && (
                               <>
                                 <span>·</span>
