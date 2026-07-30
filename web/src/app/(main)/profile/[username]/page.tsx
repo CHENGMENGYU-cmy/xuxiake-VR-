@@ -12,7 +12,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuthStore } from '@/stores/auth-store';
 import apiClient from '@/lib/api-client';
 import { followUser, unfollowUser, getFollowers, getFollowing, getOrCreateDirectConversation } from '@/lib/social-api';
-import { getCollections } from '@/lib/post-api';
 import { toast } from 'sonner';
 import { PostsTab } from './components/posts-tab';
 import { MediaTab } from './components/media-tab';
