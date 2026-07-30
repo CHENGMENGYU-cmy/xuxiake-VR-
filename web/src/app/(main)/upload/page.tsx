@@ -616,7 +616,7 @@ function UploadContent() {
                       )}
                     >
                       <span className="text-xl">{emoji}</span>
-                      <span className="font-medium">{MoodTypeArray[key as MoodType]}</span>
+                      <span className="font-medium">{MoodLabel[key as MoodType]}</span>
                     </button>
                   ))}
                 </div>
@@ -643,7 +643,7 @@ function UploadContent() {
                       )}
                     >
                       <span className="text-xl">{emoji}</span>
-                      <span className="font-medium">{WeatherTypeArray[key as WeatherType]}</span>
+                      <span className="font-medium">{WeatherLabel[key as WeatherType]}</span>
                     </button>
                   ))}
                 </div>
