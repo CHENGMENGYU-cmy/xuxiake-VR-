@@ -823,6 +823,17 @@ export class PostsService {
     return collection;
   }
 
+  async updateCollection(userId: string, collectionId: string, dto: { name?: string; description?: string; isPublic?: boolean }) {
+    const collection = await this.collectionRepo.findOne({ where: { id: collectionId } });
+    if (!collection) throw new NotFoundException('收藏夹不存在');
+    if (collection.creatorId !== userId) throw new NotFoundException('无权操作此收藏夹');
+    if (dto.name !== undefined) collection.name = dto.name;
+    if (dto.description !== undefined) collection.description = dto.description;
+    if (dto.isPublic !== undefined) collection.isPublic = dto.isPublic;
+    await this.collectionRepo.save(collection);
+    return collection;
+  }
+
   async getCollections(options: { userId?: string; page?: number; limit?: number } = {}) {
     const { userId, page = 1, limit = 20 } = options;
     const qb = this.collectionRepo
