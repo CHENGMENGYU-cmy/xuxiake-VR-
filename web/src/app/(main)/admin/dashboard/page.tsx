@@ -29,16 +29,24 @@ function DashboardContent() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([
+    const isAdmin = user?.role === 'ADMIN';
+    const requests: Promise<any>[] = [
       apiClient.get('/posts/reviews/queue?limit=100'),
       apiClient.get('/posts/reports/list?limit=100'),
-      apiClient.get('/users/list?limit=1'),
       apiClient.get('/posts?sort=latest&limit=5'),
-    ]).then(([reviews, reports, users, posts]) => {
+    ];
+    // 仅 ADMIN 可查看用户列表
+    if (isAdmin) {
+      requests.push(apiClient.get('/users/list?limit=1'));
+    }
+
+    Promise.all(requests).then((results) => {
+      const [reviews, reports, posts] = results;
+      const users = isAdmin ? results[3] : null;
       setStats({
         pendingReviews: (reviews.data?.data || []).filter((r: any) => r.status === 'FLAGGED').length,
         pendingReports: (reports.data?.data || []).filter((r: any) => r.status === 'PENDING').length,
-        totalUsers: users.data?.data?.length || 0,
+        totalUsers: users ? (users.data?.data?.length || 0) : 0,
         totalPosts: posts.data?.posts?.length || 0,
         recentPosts: posts.data?.posts || [],
       });
