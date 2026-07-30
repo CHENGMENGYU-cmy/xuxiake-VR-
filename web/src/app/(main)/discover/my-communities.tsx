@@ -6,8 +6,9 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuthStore } from '@/stores/auth-store';
-import { getUserCommunities } from '@/lib/social-api';
-import { Search, Plus, Users, Crown, ChevronRight } from 'lucide-react';
+import { getUserCommunities, searchCommunities, joinCommunity } from '@/lib/social-api';
+import { Search, Plus, Users, Crown, ChevronRight, Check, X } from 'lucide-react';
+import { toast } from 'sonner';
 import type { Community } from '@/types';
 
 export function MyCommunities() {
