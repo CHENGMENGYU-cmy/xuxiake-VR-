@@ -590,6 +590,60 @@ function UploadContent() {
                   <span>{new Date().toLocaleDateString('zh-CN', { month: 'long', day: 'numeric' })}</span>
                 </div>
               </div>
+
+              {/* 心情选择 */}
+              <div className="space-y-3">
+                <label className="text-sm font-medium flex items-center gap-2">
+                  <span className="flex h-5 w-5 items-center justify-center rounded bg-indigo-100 dark:bg-indigo-900">
+                    <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">2</span>
+                  </span>
+                  今天的心情
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {Object.entries(MoodEmoji).map(([key, emoji]) => (
+                    <button
+                      key={key}
+                      onClick={() => setMood(mood === key ? '' : key as MoodType)}
+                      className={cn(
+                        'flex items-center gap-2 rounded-lg px-4 py-2 text-sm transition-all',
+                        mood === key
+                          ? 'bg-indigo-100 dark:bg-indigo-900 border-2 border-indigo-500 shadow-sm'
+                          : 'bg-muted text-muted-foreground hover:bg-muted/80 border-2 border-transparent'
+                      )}
+                    >
+                      <span className="text-xl">{emoji}</span>
+                      <span className="font-medium">{MoodTypeArray[key as MoodType]}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* 天气选择 */}
+              <div className="space-y-3">
+                <label className="text-sm font-medium flex items-center gap-2">
+                  <span className="flex h-5 w-5 items-center justify-center rounded bg-indigo-100 dark:bg-indigo-900">
+                    <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">3</span>
+                  </span>
+                  今天的天气
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {Object.entries(WeatherEmoji).map(([key, emoji]) => (
+                    <button
+                      key={key}
+                      onClick={() => setWeather(weather === key ? '' : key as WeatherType)}
+                      className={cn(
+                        'flex items-center gap-2 rounded-lg px-4 py-2 text-sm transition-all',
+                        weather === key
+                          ? 'bg-indigo-100 dark:bg-indigo-900 border-2 border-indigo-500 shadow-sm'
+                          : 'bg-muted text-muted-foreground hover:bg-muted/80 border-2 border-transparent'
+                      )}
+                    >
+                      <span className="text-xl">{emoji}</span>
+                      <span className="font-medium">{WeatherTypeArray[key as WeatherType]}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
             </>
           )}
 
