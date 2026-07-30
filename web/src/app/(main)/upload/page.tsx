@@ -106,6 +106,10 @@ function UploadContent() {
   const [translatedText, setTranslatedText] = useState('');
   const [translating, setTranslating] = useState(false);
 
+  // 日记元数据状态
+  const [mood, setMood] = useState<MoodType | ''>('');
+  const [weather, setWeather] = useState<WeatherType | ''>('');
+
   // Audio recording state
   const [isRecording, setIsRecording] = useState(false);
   const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
