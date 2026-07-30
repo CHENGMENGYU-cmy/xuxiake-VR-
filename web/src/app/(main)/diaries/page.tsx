@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth-store';
 import { AuthGuard } from '@/components/auth-guard';
-import { getContentHierarchy } from '@/lib/post-api';
+import { getContentHierarchy, publishPost } from '@/lib/post-api';
 import type { Post, Visibility } from '@/types';
 
 type FilterType = 'all' | 'PRIVATE' | 'PUBLIC' | 'FOLLOWERS';
