@@ -43,7 +43,7 @@ const adminNavItems = [
 
 // 我的内容
 const contentItems = [
-  { href: '/classified', label: '内容分类', icon: FolderOpen, color: 'text-amber-500' },
+  { href: '/classified', label: '风物志', icon: FolderOpen, color: 'text-amber-500' },
   { href: '/diaries', label: '我的日记', icon: PenLine, color: 'text-indigo-500' },
   { href: '/journeys', label: '游记散文', icon: BookOpen, color: 'text-primary' },
 ];
