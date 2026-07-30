@@ -17,6 +17,7 @@ export interface User {
     version: string;
   };
   role?: 'USER' | 'MODERATOR' | 'ADMIN';
+  status?: 'ACTIVE' | 'BANNED';
   createdAt: string;
   interests?: InterestTag[];
 }
