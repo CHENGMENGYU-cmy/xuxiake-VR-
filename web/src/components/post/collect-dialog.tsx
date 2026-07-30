@@ -82,7 +82,7 @@ export function CollectDialog({ postId, open, onClose }: CollectDialogProps) {
     if (!newName.trim()) return;
     setCreating(true);
     try {
-      const col = await createCollection({ title: newName.trim() });
+      const col = await createCollection({ name: newName.trim() });
       setCollections((prev) => [...prev, col]);
       setNewName('');
       toast.success('收藏夹已创建');
