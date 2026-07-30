@@ -32,13 +32,28 @@ export function CollectDialog({ postId, open, onClose }: CollectDialogProps) {
         onClose();
         return;
       }
+      setSelectedIds(new Set());
       setLoading(true);
       getCollections(1)
-        .then((res) => setCollections(res.data || []))
+        .then(async (res) => {
+          const cols = res.data || [];
+          setCollections(cols);
+          // 检查哪些收藏夹已包含此帖子
+          const results = await Promise.allSettled(
+            cols.map((c) => getCollectionPosts(c.id, 1))
+          );
+          const ids = new Set<string>();
+          results.forEach((r, i) => {
+            if (r.status === 'fulfilled' && r.value.posts?.some((p: any) => p.id === postId)) {
+              ids.add(cols[i].id);
+            }
+          });
+          setSelectedIds(ids);
+        })
         .catch(() => {})
         .finally(() => setLoading(false));
     }
-  }, [open]);
+  }, [open, postId]);
 
   const toggle = async (col: Collection) => {
     const isSelected = selectedIds.has(col.id);
