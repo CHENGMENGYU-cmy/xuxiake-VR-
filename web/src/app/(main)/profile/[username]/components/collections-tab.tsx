@@ -17,6 +17,29 @@ export function CollectionsTab() {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
   const [postsLoading, setPostsLoading] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editName, setEditName] = useState('');
+
+  const startEdit = (col: Collection) => {
+    setEditingId(col.id);
+    setEditName(col.name || col.title || '');
+  };
+
+  const saveEdit = async (col: Collection) => {
+    if (!editName.trim() || editName.trim() === (col.name || col.title)) {
+      setEditingId(null);
+      return;
+    }
+    try {
+      await updateCollection(col.id, { name: editName.trim() });
+      setCollections((prev) => prev.map((c) => c.id === col.id ? { ...c, name: editName.trim(), title: editName.trim() } : c));
+      toast.success('已重命名');
+    } catch {
+      toast.error('重命名失败');
+    } finally {
+      setEditingId(null);
+    }
+  };
 
   useEffect(() => {
     getCollections(1)
