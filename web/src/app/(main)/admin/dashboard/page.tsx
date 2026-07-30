@@ -29,7 +29,6 @@ function DashboardContent() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user || user.role === 'USER') { router.push('/'); return; }
     Promise.all([
       apiClient.get('/posts/reviews/queue?limit=100'),
       apiClient.get('/posts/reports/list?limit=100'),
