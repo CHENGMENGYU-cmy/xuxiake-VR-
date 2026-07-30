@@ -257,7 +257,7 @@ export function PostCard({ post, onLikeChange }: PostCardProps) {
                 )}
                 <DropdownMenuItem>
                   <Bookmark className="h-3.5 w-3.5 mr-2" />
-                  保存
+                  收藏
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleCopyLink}>
                   <Copy className="h-3.5 w-3.5 mr-2" />
