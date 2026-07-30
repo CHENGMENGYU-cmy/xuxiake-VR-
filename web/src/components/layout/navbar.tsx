@@ -72,7 +72,7 @@ export function Navbar() {
     };
     socket.on('chat:message:new', handleNewMessage);
     return () => { socket.off('chat:message:new', handleNewMessage); };
-  }, [user, setTotalUnread]);
+  }, [user, isAuthenticated, setTotalUnread]);
 
   // 加载未读通知数 + WebSocket实时更新
   useEffect(() => {
