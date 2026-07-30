@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import { getCollections, createCollection, addPostToCollection, removePostFromCollection } from '@/lib/post-api';
+import { getCollections, getCollectionPosts, createCollection, addPostToCollection, removePostFromCollection } from '@/lib/post-api';
 import { useRequireAuth } from '@/hooks/use-require-auth';
 import { LoginPrompt } from '@/components/login-prompt';
 import { toast } from 'sonner';
