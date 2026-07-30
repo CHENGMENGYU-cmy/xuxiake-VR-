@@ -55,7 +55,7 @@ export function RightPanel() {
   }, [isAuthenticated]);
 
   // 管理员不显示右侧面板
-  if (!mounted || isAdmin) return null;
+  if (!mounted || isStaff) return null;
 
   return (
     <aside
