@@ -59,6 +59,11 @@ export class AuthService {
       throw new UnauthorizedException('密码错误');
     }
 
+    // 检查用户是否被封禁
+    if (user.status === 'BANNED') {
+      throw new UnauthorizedException('您的账号已被封禁，请联系管理员');
+    }
+
     const tokens = this.generateTokens(user.id);
     const { passwordHash, ...userDto } = user;
     return {
