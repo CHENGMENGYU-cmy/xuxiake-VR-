@@ -660,7 +660,7 @@ export class PostsService {
   }
 
   // ===== 发布/撤回 =====
-  async publishPost(userId: string, postId: string, dto?: { locationPrecision?: 'hidden' | 'city' | 'exact' }) {
+  async publishPost(userId: string, postId: string, dto?: { locationPrecision?: 'hidden' | 'city' | 'exact'; visibility?: 'PUBLIC' | 'FOLLOWERS' | 'PRIVATE' }) {
     const post = await this.postRepo.findOne({
       where: { id: postId },
       relations: { author: true, mediaItems: true, tags: true, topics: true },
@@ -681,7 +681,7 @@ export class PostsService {
       post.locationLng = null;
     }
 
-    post.visibility = 'PUBLIC';
+    post.visibility = dto?.visibility || 'PUBLIC';
     post.updatedAt = new Date();
     await this.postRepo.save(post);
     return this.formatPost(post);
