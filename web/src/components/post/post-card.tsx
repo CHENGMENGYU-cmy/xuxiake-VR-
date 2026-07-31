@@ -203,7 +203,7 @@ export function PostCard({ post, onLikeChange, onDelete }: PostCardProps) {
                 </span>
               );
             })()}
-            {post.vrMetadata && (
+            {post.vrMetadata?.device && (
               <Badge variant="secondary" className="h-5 px-1.5 text-[10px]">
                 {typeof post.vrMetadata.device === 'string' ? post.vrMetadata.device : 'VR'}
               </Badge>
