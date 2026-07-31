@@ -73,7 +73,6 @@ export function MultiImageUploader({
         const newImages = await Promise.all(uploadPromises);
         const updatedImages = [...images, ...newImages];
 
-        // 如果是第一批图片，第一张设为封面
         if (images.length === 0 && updatedImages.length > 0) {
           updatedImages[0].isCover = true;
         }
@@ -97,7 +96,6 @@ export function MultiImageUploader({
       const newImages = [...images];
       const removedImage = newImages.splice(index, 1)[0];
 
-      // 如果删除的是封面，将第一张设为封面
       if (removedImage.isCover && newImages.length > 0) {
         newImages[0].isCover = true;
       }
@@ -118,7 +116,6 @@ export function MultiImageUploader({
     [images, onImagesChange]
   );
 
-  // 拖拽排序
   const handleDragStart = useCallback((index: number) => {
     setDraggedIndex(index);
   }, []);
@@ -159,20 +156,20 @@ export function MultiImageUploader({
   const canAddMore = images.length < maxImages;
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <label className="text-sm font-medium">
+        <label className="text-xs font-medium">
           图片 ({images.length}/{maxImages})
         </label>
         {images.length > 0 && (
-          <span className="text-xs text-muted-foreground">
-            拖拽调整顺序，星标设为封面
+          <span className="text-[10px] text-muted-foreground">
+            拖拽排序，星标设为封面
           </span>
         )}
       </div>
 
       {/* 图片网格 - 统一入口 */}
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-3 gap-1.5">
         {images.map((image, index) => (
           <div
             key={image.id}
@@ -182,7 +179,7 @@ export function MultiImageUploader({
             onDrop={() => handleDrop(index)}
             onDragEnd={handleDragEnd}
             className={cn(
-              'group relative aspect-square overflow-hidden rounded-lg border-2 transition-all',
+              'group relative aspect-square overflow-hidden rounded-md border-2 transition-all',
               draggedIndex === index && 'opacity-50 scale-95',
               dragOverIndex === index && 'border-primary',
               image.isCover ? 'border-primary' : 'border-border'
@@ -195,61 +192,61 @@ export function MultiImageUploader({
             />
 
             {/* 操作按钮 */}
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1.5">
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1">
               <button
                 type="button"
                 onClick={() => handleSetCover(index)}
                 className={cn(
-                  'rounded-full p-1.5 transition-colors',
+                  'rounded-full p-1 transition-colors',
                   image.isCover
                     ? 'bg-primary text-primary-foreground'
                     : 'bg-white/80 text-gray-700 hover:bg-white'
                 )}
                 title="设为封面"
               >
-                <Star className="h-3.5 w-3.5" fill={image.isCover ? 'currentColor' : 'none'} />
+                <Star className="h-3 w-3" fill={image.isCover ? 'currentColor' : 'none'} />
               </button>
               <button
                 type="button"
                 onClick={() => handleRemove(index)}
-                className="rounded-full bg-white/80 p-1.5 text-gray-700 hover:bg-white hover:text-destructive transition-colors"
+                className="rounded-full bg-white/80 p-1 text-gray-700 hover:bg-white hover:text-destructive transition-colors"
                 title="删除"
               >
-                <X className="h-3.5 w-3.5" />
+                <X className="h-3 w-3" />
               </button>
             </div>
 
             {/* 封面标识 */}
             {image.isCover && (
-              <div className="absolute bottom-1 left-1 rounded bg-primary/90 px-1.5 py-0.5 text-[10px] text-primary-foreground">
+              <div className="absolute bottom-1 left-1 rounded bg-primary/90 px-1 py-0.5 text-[10px] text-primary-foreground">
                 封面
               </div>
             )}
 
             {/* 拖拽手柄 */}
             <div className="absolute top-1 left-1 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing">
-              <GripVertical className="h-4 w-4 text-white drop-shadow" />
+              <GripVertical className="h-3 w-3 text-white drop-shadow" />
             </div>
           </div>
         ))}
 
-        {/* 添加图片按钮 - 始终显示 */}
+        {/* 添加图片按钮 */}
         {canAddMore && (
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
             className={cn(
-              'aspect-square rounded-lg border-2 border-dashed border-muted-foreground/20 flex flex-col items-center justify-center gap-1 transition-colors hover:border-primary/50 hover:bg-primary/5',
+              'aspect-square rounded-md border-2 border-dashed border-muted-foreground/20 flex flex-col items-center justify-center gap-0.5 transition-colors hover:border-primary/50 hover:bg-primary/5',
               uploading && 'opacity-50 cursor-not-allowed'
             )}
           >
             {uploading ? (
-              <Loader2 className="h-5 w-5 animate-spin text-primary" />
+              <Loader2 className="h-4 w-4 animate-spin text-primary" />
             ) : (
               <>
-                <Plus className="h-5 w-5 text-muted-foreground/40" />
-                <span className="text-xs text-muted-foreground/60">添加</span>
+                <Plus className="h-4 w-4 text-muted-foreground/40" />
+                <span className="text-[10px] text-muted-foreground/60">添加</span>
               </>
             )}
           </button>
