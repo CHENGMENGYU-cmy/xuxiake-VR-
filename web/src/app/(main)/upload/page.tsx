@@ -202,6 +202,7 @@ function UploadContent() {
       preview: content.slice(0, 80),
     });
     toast.success('草稿已保存');
+    setDraftRefreshKey(k => k + 1);
   };
 
   const resetMedia = () => {
