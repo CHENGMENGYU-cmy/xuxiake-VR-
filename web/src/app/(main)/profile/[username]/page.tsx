@@ -253,7 +253,7 @@ function ProfileContent({ username }: { username: string }) {
         </TabsList>
 
         <TabsContent value="posts" className="mt-4">
-          <PostsTab username={username} isOwnProfile={!!isOwnProfile} />
+          <PostsTab username={username} isOwnProfile={!!isOwnProfile} onDeletePost={() => setPostCount(c => Math.max(0, c - 1))} />
         </TabsContent>
 
         <TabsContent value="media" className="mt-4">
