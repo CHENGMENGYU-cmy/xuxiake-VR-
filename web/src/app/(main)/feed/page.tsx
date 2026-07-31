@@ -1,8 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Home, FileText, Video, Compass, MessageSquare, Sparkles, Users } from 'lucide-react';
 import { FeedList } from '@/components/feed/feed-list';
+import { useAuthStore } from '@/stores/auth-store';
 import type { PostType } from '@/types';
 
 type FilterTab = { id: string; label: string; icon: typeof FileText; postType?: PostType };
