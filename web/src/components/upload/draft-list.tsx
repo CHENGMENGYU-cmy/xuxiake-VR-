@@ -12,6 +12,7 @@ interface DraftItem {
   title: string;
   content: string;
   postType: string;
+  formData?: Record<string, any>;
   preview?: string;
   savedAt: string;
 }
