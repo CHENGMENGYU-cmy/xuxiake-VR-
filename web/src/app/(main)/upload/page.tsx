@@ -772,7 +772,6 @@ function UploadContent() {
                         <option key={f.value} value={f.value}>{f.label} - {f.desc}</option>
                       ))}
                     </select>
-                  </div>
                 )}
               </div>
             )}
