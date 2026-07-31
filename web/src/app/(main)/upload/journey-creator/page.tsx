@@ -41,6 +41,30 @@ export default function JourneyCreatorPage() {
   const [uploadingCover, setUploadingCover] = useState(false);
   const [uploadingStopMedia, setUploadingStopMedia] = useState<string | null>(null);
 
+  // 编辑模式：加载已有游记数据
+  useEffect(() => {
+    if (!editId) return;
+    getPostById(editId).then(post => {
+      setTitle(post.journey?.title || '');
+      setContent(post.content || '');
+      setDestination(post.journey?.destination || '');
+      setStartDate(post.journey?.startDate || '');
+      setEndDate(post.journey?.endDate || '');
+      setCoverUrl(post.journey?.coverUrl || '');
+      if (post.journey?.stops) {
+        setStops(post.journey.stops.map((s: any) => ({
+          id: `stop-${Date.now()}-${Math.random()}`,
+          dayNumber: s.dayNumber || 1,
+          locationName: s.locationName || '',
+          locationLat: s.locationLat,
+          locationLng: s.locationLng,
+          description: s.description || '',
+          mediaUrl: s.mediaUrl,
+        })));
+      }
+    }).catch(() => {});
+  }, [editId]);
+
   // 上传封面
   const handleCoverUpload = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
