@@ -186,11 +186,11 @@ function UploadContent() {
   const handleSaveDraft = () => {
     if (!content.trim() && !media && images.length === 0) return;
     const postTypeMap: Record<UploadTab, string> = {
-      VIDEO: 'VR_MEDIA',
-      IMAGE: 'VR_MEDIA',
-      AUDIO: 'MOMENT',
-      DIARY: 'NOTE',
-      JOURNEY: 'JOURNEY',
+      VIDEO: '第一视角',
+      IMAGE: '瞬间捕获',
+      AUDIO: '语音记录',
+      DIARY: '日记',
+      JOURNEY: '游记',
     };
     saveDraftToList({
       id: `draft-${Date.now()}`,
