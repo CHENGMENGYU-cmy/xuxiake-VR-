@@ -188,6 +188,11 @@ function UploadContent() {
   // 手动保存草稿到草稿箱
   const handleSaveDraft = () => {
     if (!content.trim() && !media && images.length === 0) return;
+    // 如果是编辑已有草稿且内容未变，跳过
+    if (currentDraftId && content === lastSavedContentRef.current) {
+      toast.info('内容未变化');
+      return;
+    }
     const postTypeMap: Record<UploadTab, string> = {
       VIDEO: '第一视角',
       IMAGE: '瞬间捕获',
@@ -203,6 +208,7 @@ function UploadContent() {
       formData: { activeTab, location, visibility, vrFormat },
       preview: content.slice(0, 80),
     });
+    lastSavedContentRef.current = content;
     toast.success('草稿已保存');
     setDraftRefreshKey(k => k + 1);
   };
