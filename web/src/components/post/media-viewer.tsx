@@ -90,23 +90,25 @@ export function MediaViewer({ items }: MediaViewerProps) {
         </div>
       ))}
 
-      {/* 图片网格 */}
+      {/* 图片网格 — 微信朋友圈式九宫格 */}
       {images.length > 0 && (
         <div
           className={cn(
-            'grid gap-1',
+            'grid gap-0.5',
             images.length === 1 && 'grid-cols-1',
             images.length === 2 && 'grid-cols-2',
             images.length === 3 && 'grid-cols-2',
-            images.length >= 4 && 'grid-cols-2'
+            images.length >= 4 && 'grid-cols-3'
           )}
         >
-          {images.slice(0, 4).map((img, idx) => (
+          {images.slice(0, 9).map((img, idx) => (
             <div
               key={img.id}
               className={cn(
                 'relative cursor-pointer overflow-hidden bg-muted',
-                images.length === 3 && idx === 0 && 'row-span-2'
+                images.length === 3 && idx === 0 && 'row-span-2',
+                // 单张图限制最大高度，多张图用正方形比例
+                images.length === 1 ? 'max-h-96' : 'aspect-square'
               )}
               onClick={() => {
                 setLightboxIndex(idx);
@@ -126,9 +128,9 @@ export function MediaViewer({ items }: MediaViewerProps) {
                   {vrFormatLabels[img.vrFormat]}
                 </Badge>
               )}
-              {images.length > 4 && idx === 3 && (
+              {images.length > 9 && idx === 8 && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-lg font-bold text-white">
-                  +{images.length - 4}
+                  +{images.length - 9}
                 </div>
               )}
             </div>
