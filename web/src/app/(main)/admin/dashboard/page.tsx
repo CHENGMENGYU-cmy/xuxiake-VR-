@@ -113,6 +113,9 @@ function DashboardContent() {
                   <Button variant="outline" className="w-full justify-between" onClick={() => router.push('/admin/reports')}>
                     举报管理 <Badge className="bg-red-500">{stats.pendingReports}</Badge> <ArrowRight className="h-4 w-4" />
                   </Button>
+                  <Button variant="outline" className="w-full justify-between" onClick={() => router.push('/feed')}>
+                    <Eye className="h-4 w-4 mr-2" /> 内容巡查 <ArrowRight className="h-4 w-4" />
+                  </Button>
                 </div>
               </CardContent>
             </Card>
