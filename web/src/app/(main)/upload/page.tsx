@@ -111,6 +111,7 @@ function UploadContent() {
   // 日记元数据状态
   const [mood, setMood] = useState<MoodType | ''>('');
   const [weather, setWeather] = useState<WeatherType | ''>('');
+  const [draftRefreshKey, setDraftRefreshKey] = useState(0);
 
   // Audio recording state
   const [isRecording, setIsRecording] = useState(false);
