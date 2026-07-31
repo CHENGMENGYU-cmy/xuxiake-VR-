@@ -155,15 +155,6 @@ function UploadContent() {
       };
       autoSaveTimerRef.current = setTimeout(() => {
         saveDraftToLocal({ content, postType: media?.type === 'VIDEO' ? 'VR_MEDIA' : 'NOTE', formData });
-        // 同时保存到草稿列表，以便草稿箱中恢复
-        saveDraftToList({
-          id: `auto-${Date.now()}`,
-          title: content.slice(0, 30) || '无标题',
-          content,
-          postType: media?.type === 'VIDEO' ? 'VR_MEDIA' : 'NOTE',
-          formData,
-          preview: content.slice(0, 80),
-        });
       }, 2000); // 2秒后自动保存
     }
 
