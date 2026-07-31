@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { FileText, Play, Compass, MessageSquare, Loader2 } from 'lucide-react';
+import { Play, Compass, MessageSquare, Loader2, Image, Mic, PenLine } from 'lucide-react';
 import { PostCard } from '@/components/post/post-card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
