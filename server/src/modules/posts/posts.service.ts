@@ -353,7 +353,7 @@ export class PostsService {
       }
     }
 
-    return this.getPostById(postId);
+    return this.getPostById(postId, userId);
   }
 
   async deletePost(userId: string, postId: string) {
