@@ -38,6 +38,7 @@ export default function JourneyCreatorPage() {
   const [endDate, setEndDate] = useState('');
   const [coverUrl, setCoverUrl] = useState('');
   const [stops, setStops] = useState<JourneyStop[]>([]);
+  const [visibility, setVisibility] = useState<'PUBLIC' | 'PRIVATE'>('PUBLIC');
   const [uploadingCover, setUploadingCover] = useState(false);
   const [uploadingStopMedia, setUploadingStopMedia] = useState<string | null>(null);
 
