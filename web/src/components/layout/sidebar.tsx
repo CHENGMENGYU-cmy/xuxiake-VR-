@@ -33,7 +33,7 @@ import { cn } from '@/lib/utils';
 const navItems = [
   { href: '/feed', label: '首页', icon: Home },
   { href: '/topics', label: '话题广场', icon: Hash },
-  { href: '/discover', label: '找搭子', icon: UserPlus },
+  { href: '/discover', label: '寻找搭子', icon: UserPlus },
 ];
 
 // 浏览发现（管理员精简版）
@@ -43,7 +43,7 @@ const adminNavItems = [
 
 // 我的内容
 const contentItems = [
-  { href: '/classified', label: '旅途档案', icon: FolderOpen, color: 'text-amber-500' },
+  { href: '/classified', label: '旅途分类', icon: FolderOpen, color: 'text-amber-500' },
   { href: '/diaries', label: '我的日记', icon: PenLine, color: 'text-indigo-500' },
   { href: '/journeys', label: '游记散文', icon: BookOpen, color: 'text-primary' },
 ];

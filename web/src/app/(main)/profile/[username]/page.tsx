@@ -29,6 +29,7 @@ export default function ProfilePage() {
 function ProfileContent({ username }: { username: string }) {
   const { user: currentUser } = useAuthStore();
   const router = useRouter();
+  const pathname = usePathname();
   const [profileUser, setProfileUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [isFollowing, setIsFollowing] = useState(false);
