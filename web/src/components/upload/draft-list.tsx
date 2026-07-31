@@ -19,6 +19,7 @@ interface DraftItem {
 
 interface DraftListProps {
   onSelectDraft: (draft: DraftItem) => void;
+  refreshKey?: number;
 }
 
 const postTypeLabels: Record<string, string> = {
