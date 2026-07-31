@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { Users, Loader2, Check, XIcon, Search, Trash2, ImageIcon, Mic, MapPin } from 'lucide-react';
+import { Users, Loader2, Check, XIcon, Search, Trash2, ImageIcon, Mic, MapPin, Shield, Flag, Bell, TrendingUp, ArrowRight } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
