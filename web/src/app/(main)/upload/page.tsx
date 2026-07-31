@@ -185,11 +185,18 @@ function UploadContent() {
   // 手动保存草稿到草稿箱
   const handleSaveDraft = () => {
     if (!content.trim() && !media && images.length === 0) return;
+    const postTypeMap: Record<UploadTab, string> = {
+      VIDEO: 'VR_MEDIA',
+      IMAGE: 'VR_MEDIA',
+      AUDIO: 'MOMENT',
+      DIARY: 'NOTE',
+      JOURNEY: 'JOURNEY',
+    };
     saveDraftToList({
       id: `draft-${Date.now()}`,
       title: content.slice(0, 30) || '无标题',
       content,
-      postType: media?.type === 'VIDEO' ? 'VR_MEDIA' : activeTab === 'DIARY' ? 'NOTE' : 'NOTE',
+      postType: postTypeMap[activeTab] || 'NOTE',
       formData: { activeTab, location, visibility, vrFormat },
       preview: content.slice(0, 80),
     });
