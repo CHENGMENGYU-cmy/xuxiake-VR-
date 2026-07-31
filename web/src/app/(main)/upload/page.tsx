@@ -577,7 +577,7 @@ function UploadContent() {
       </div>
 
       {/* 草稿列表 */}
-      <DraftList onSelectDraft={handleSelectDraft} />
+      <DraftList onSelectDraft={handleSelectDraft} refreshKey={draftRefreshKey} />
 
       {/* 内容类型选择卡片 */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
