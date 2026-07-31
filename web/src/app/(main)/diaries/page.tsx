@@ -439,6 +439,15 @@ function DiariesContent() {
                             <Edit className="h-3.5 w-3.5" />
                             编辑
                           </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleDelete(post.id)}
+                            className="gap-1.5 text-destructive hover:text-destructive"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                            删除
+                          </Button>
 
                           {post.visibility === 'PRIVATE' && (
                             <>
