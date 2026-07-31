@@ -216,6 +216,7 @@ function UploadContent() {
   const handleTabChange = (tab: UploadTab) => {
     if (tab === 'JOURNEY') { router.push('/upload/journey-creator'); return; }
     setActiveTab(tab);
+    setCurrentDraftId(null);
     // 切换Tab时清空所有内容
     setContent('');
     setLocation('');
