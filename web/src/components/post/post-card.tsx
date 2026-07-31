@@ -192,12 +192,17 @@ export function PostCard({ post, onLikeChange, onDelete }: PostCardProps) {
             >
               {post.author.displayName}
             </Link>
-            {post.postType && post.postType !== 'NOTE' && postTypeConfig[post.postType] && (
-              <span className={`inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${postTypeConfig[post.postType].color}`}>
-                {postTypeConfig[post.postType].icon}
-                {postTypeConfig[post.postType].label}
-              </span>
-            )}
+            {(() => {
+              const tab = post.vrMetadata?.tab as string;
+              const config = tab ? tabLabelConfig[tab] : postTypeConfig[post.postType];
+              if (!config) return null;
+              return (
+                <span className={`inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${config.color}`}>
+                  {config.icon}
+                  {config.label}
+                </span>
+              );
+            })()}
             {post.vrMetadata && (
               <Badge variant="secondary" className="h-5 px-1.5 text-[10px]">
                 {typeof post.vrMetadata.device === 'string' ? post.vrMetadata.device : 'VR'}
