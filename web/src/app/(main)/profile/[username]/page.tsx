@@ -69,11 +69,11 @@ function ProfileContent({ username }: { username: string }) {
         const [followersRes, followingRes, postsRes] = await Promise.all([
           getFollowers(username),
           getFollowing(username),
-          apiClient.get(`/users/${username}/posts`, { params: { limit: '1' } }),
+          apiClient.get(`/users/${username}/posts`, { params: { limit: '100' } }),
         ]);
         setFollowerCount(followersRes.total || 0);
         setFollowingCount(followingRes.total || 0);
-        setPostCount(postsRes.data?.total || postsRes.data?.data?.length || 0);
+        setPostCount((postsRes.data?.data || []).length);
 
         if (currentUser) {
           const amFollowing = followersRes.data?.some((u: User) => u.id === currentUser.id);
@@ -240,7 +240,7 @@ function ProfileContent({ username }: { username: string }) {
             在路上
           </TabsTrigger>
           <TabsTrigger value="media" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-primary">
-            瞬间捕获
+            影像库
           </TabsTrigger>
           <TabsTrigger value="likes" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-primary">
             喜欢
