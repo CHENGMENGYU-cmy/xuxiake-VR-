@@ -49,11 +49,13 @@ export default function NotificationsPage() {
 
 function NotificationsContent() {
   const { user } = useAuthStore();
+  const isAdmin = user?.role !== 'USER';
   const { clearUnread, decrementUnread } = useNotificationStore();
   const [notifications, setNotifications] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState('ALL');
+  const [adminItems, setAdminItems] = useState<any[]>([]);
 
   useEffect(() => {
     setMounted(true);
@@ -64,9 +66,44 @@ function NotificationsContent() {
 
     const fetchNotifications = async () => {
       try {
-        const res = await apiClient.get('/notifications');
-        if (res.data.success) {
-          setNotifications(res.data.data || []);
+        const [notifRes, reviewsRes, reportsRes] = await Promise.all([
+          apiClient.get('/notifications'),
+          isAdmin ? apiClient.get('/posts/reviews/queue?limit=20') : Promise.resolve(null),
+          isAdmin ? apiClient.get('/posts/reports/list?limit=20') : Promise.resolve(null),
+        ]);
+        if (notifRes.data.success) {
+          setNotifications(notifRes.data.data || []);
+        }
+        // 构建管理通知列表
+        if (isAdmin) {
+          const items: any[] = [];
+          const reviews = (reviewsRes?.data?.data || []).filter((r: any) => r.status === 'FLAGGED');
+          const reports = (reportsRes?.data?.data || []).filter((r: any) => r.status === 'PENDING');
+          reviews.forEach((r: any) => {
+            items.push({
+              id: `review-${r.id}`,
+              type: 'REVIEW',
+              message: `内容待审核`,
+              detail: r.post?.content?.slice(0, 50) || '(无内容)',
+              postId: r.postId,
+              createdAt: r.createdAt,
+              isRead: false,
+            });
+          });
+          reports.forEach((r: any) => {
+            items.push({
+              id: `report-${r.id}`,
+              type: 'REPORT',
+              message: `收到新举报：${r.reason || '违规内容'}`,
+              detail: r.detail?.slice(0, 50) || '',
+              postId: r.postId,
+              createdAt: r.createdAt,
+              isRead: false,
+            });
+          });
+          // 按时间倒序
+          items.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+          setAdminItems(items);
         }
       } catch (err) {
         console.error('Failed to fetch notifications:', err);
@@ -76,7 +113,7 @@ function NotificationsContent() {
     };
 
     fetchNotifications();
-  }, [user]);
+  }, [user, isAdmin]);
 
   const handleMarkAllRead = async () => {
     try {

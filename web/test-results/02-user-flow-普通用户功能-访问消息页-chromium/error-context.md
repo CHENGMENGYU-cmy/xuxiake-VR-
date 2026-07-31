@@ -6,16 +6,13 @@
 
 # Test info
 
-- Name: 03-admin-flow.spec.ts >> 管理员功能 >> 访问管理仪表板
-- Location: e2e\03-admin-flow.spec.ts:10:7
+- Name: 02-user-flow.spec.ts >> 普通用户功能 >> 访问消息页
+- Location: e2e\02-user-flow.spec.ts:65:7
 
 # Error details
 
 ```
-Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/login
-Call log:
-  - navigating to "http://localhost:3000/login", waiting until "load"
-
+Error: page.waitForTimeout: Page crashed
 ```
 
 # Test source
@@ -25,8 +22,7 @@ Call log:
   2  | 
   3  | /** 使用 TEST1234 万能验证码登录 */
   4  | export async function loginAs(page: Page, account: string, password = 'password123') {
-> 5  |   await page.goto('/login');
-     |              ^ Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/login
+  5  |   await page.goto('/login');
   6  |   // 获取验证码 key (直接调用后端 API)
   7  |   const captchaResp = await page.evaluate(async () => {
   8  |     const res = await fetch('http://localhost:3001/api/auth/captcha');
@@ -60,7 +56,8 @@ Call log:
   36 |   // 先导航到基准 URL，确保有可操作的 document
   37 |   await page.goto('/login', { waitUntil: 'networkidle' }).catch(() => {});
   38 |   // 等待页面稳定
-  39 |   await page.waitForTimeout(500);
+> 39 |   await page.waitForTimeout(500);
+     |              ^ Error: page.waitForTimeout: Page crashed
   40 |   await page.evaluate(() => {
   41 |     try { localStorage.clear(); } catch {}
   42 |     try { sessionStorage.clear(); } catch {}
