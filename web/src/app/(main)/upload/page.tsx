@@ -1135,7 +1135,7 @@ function UploadContent() {
               }}
             />
             <div className="flex gap-3">
-              <Button variant="outline" size="lg" onClick={() => router.push('/feed')}>取消</Button>
+              <Button variant="outline" size="lg" onClick={() => router.push(activeTab === 'DIARY' ? '/diaries' : '/feed')}>取消</Button>
               <Button size="lg" className="gap-2 px-8" disabled={!canPublish} onClick={handlePublish}>
                 {isPublishing ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
                 {isPublishing ? '发布中...' : activeTab === 'DIARY' ? '保存日记' : '发布内容'}
