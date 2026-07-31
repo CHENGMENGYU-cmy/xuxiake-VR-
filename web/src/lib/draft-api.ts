@@ -2,14 +2,21 @@ import apiClient from './api-client';
 
 export interface Draft {
   id: string;
+  content: string;
+  postType: string;
+  formData: Record<string, any>;
+  autoSavedAt: string;
+  createdAt: string;
+}
+
+export interface DraftListItem {
+  id: string;
   title: string;
   content: string;
   postType: string;
-  formData?: Record<string, any>;
+  formData: Record<string, any>;
   preview?: string;
-  autoSavedAt?: string;
-  createdAt?: string;
-  savedAt?: string;
+  savedAt: string;
 }
 
 // 本地草稿存储键
