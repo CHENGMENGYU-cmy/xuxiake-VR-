@@ -15,13 +15,13 @@ type LoginMethod = 'account' | 'phone';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login, isLoading, error, clearError, isAuthenticated } = useAuthStore();
+  const { login, isLoading, error, clearError, isAuthenticated, user } = useAuthStore();
 
   useEffect(() => {
-    if (isAuthenticated) {
-      router.replace('/feed');
+    if (isAuthenticated && user) {
+      router.replace(user.role !== 'USER' ? '/admin/dashboard' : '/feed');
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, user, router]);
 
   const [loginMethod, setLoginMethod] = useState<LoginMethod>('account');
   const [account, setAccount] = useState('');
