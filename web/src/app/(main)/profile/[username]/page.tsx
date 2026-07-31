@@ -218,6 +218,9 @@ function ProfileContent({ username }: { username: string }) {
             </div>
 
             <div className="flex gap-4 pt-2 text-sm">
+              <span>
+                <strong>{postCount}</strong> <span className="text-muted-foreground">帖子</span>
+              </span>
               <Link href={`/profile/${user.username}/followers`} className="hover:underline">
                 <strong>{followerCount}</strong> <span className="text-muted-foreground">粉丝</span>
               </Link>
