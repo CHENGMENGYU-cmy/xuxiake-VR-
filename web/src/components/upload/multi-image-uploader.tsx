@@ -237,7 +237,7 @@ export function MultiImageUploader({
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
             className={cn(
-              'aspect-square flex items-center justify-center rounded-md border-2 border-dashed border-muted-foreground/20 transition-colors hover:border-primary/50 hover:bg-primary/5',
+              'flex items-center justify-center rounded-md border-2 border-dashed border-muted-foreground/20 transition-colors hover:border-primary/50 hover:bg-primary/5 min-h-[80px]',
               uploading && 'opacity-50 cursor-not-allowed'
             )}
           >
