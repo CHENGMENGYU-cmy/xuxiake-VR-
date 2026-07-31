@@ -156,6 +156,7 @@ export function PostCard({ post, onLikeChange, onDelete }: PostCardProps) {
     try {
       await removePost(post.id);
       setShowDeleteConfirm(false);
+      onDelete?.();
       toast.success('已删除');
     } catch {
       toast.error('删除失败，请重试');
