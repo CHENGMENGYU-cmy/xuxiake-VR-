@@ -20,6 +20,7 @@ export default function MessagesPage() {
 
 function MessagesContent() {
   const { user } = useAuthStore();
+  const isAdmin = user?.role !== 'USER';
   const setTotalUnread = useChatStore((s) => s.setTotalUnread);
   const [conversations, setConversations] = useState<any[]>([]);
   const [requestConversations, setRequestConversations] = useState<any[]>([]);
@@ -27,8 +28,26 @@ function MessagesContent() {
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState<'NORMAL' | 'REQUEST'>('NORMAL');
   const [searchQuery, setSearchQuery] = useState('');
+  const [adminStats, setAdminStats] = useState({ reviews: 0, reports: 0, users: 0 });
 
   useEffect(() => { setMounted(true); }, []);
+
+  // 管理员加载统计数据
+  useEffect(() => {
+    if (!isAdmin || !user) return;
+    Promise.all([
+      apiClient.get('/posts/reviews/queue?limit=100'),
+      apiClient.get('/posts/reports/list?limit=100'),
+      user.role === 'ADMIN' ? apiClient.get('/users/list?limit=1') : Promise.resolve(null),
+    ]).then(([reviews, reports, usersRes]) => {
+      setAdminStats({
+        reviews: (reviews.data?.data || []).filter((r: any) => r.status === 'FLAGGED').length,
+        reports: (reports.data?.data || []).filter((r: any) => r.status === 'PENDING').length,
+        users: usersRes ? (usersRes.data?.data?.length || 0) : 0,
+      });
+      setIsLoading(false);
+    }).catch(() => setIsLoading(false));
+  }, [isAdmin, user]);
 
   const loadConversations = useCallback(async () => {
     if (!user) return;
