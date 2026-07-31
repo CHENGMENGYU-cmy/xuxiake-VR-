@@ -10,10 +10,11 @@ import type { Post } from '@/types';
 
 const postTypeFilters = [
   { value: '', label: '全部', icon: null },
-  { value: 'NOTE', label: '随记', icon: <FileText className="h-3.5 w-3.5" /> },
   { value: 'VR_MEDIA', label: '第一视角', icon: <Play className="h-3.5 w-3.5" /> },
+  { value: 'IMAGE', label: '瞬间捕获', icon: <Image className="h-3.5 w-3.5" /> },
+  { value: 'AUDIO', label: '语音记录', icon: <Mic className="h-3.5 w-3.5" /> },
+  { value: 'DIARY', label: '日记', icon: <PenLine className="h-3.5 w-3.5" /> },
   { value: 'JOURNEY', label: '游记', icon: <Compass className="h-3.5 w-3.5" /> },
-  { value: 'MOMENT', label: '瞬间', icon: <MessageSquare className="h-3.5 w-3.5" /> },
 ];
 
 interface PostsTabProps {
