@@ -867,7 +867,7 @@ function UploadContent() {
                 <div className="space-y-3">
                   <label className="text-sm font-medium flex items-center gap-2">
                     <span className="flex h-5 w-5 items-center justify-center rounded bg-indigo-100 dark:bg-indigo-900">
-                      <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">2</span>
+                      <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">4</span>
                     </span>
                     配图（可选）
                   </label>
@@ -881,7 +881,7 @@ function UploadContent() {
                 <div className="space-y-3">
                   <label className="text-sm font-medium flex items-center gap-2">
                     <span className="flex h-5 w-5 items-center justify-center rounded bg-indigo-100 dark:bg-indigo-900">
-                      <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">3</span>
+                      <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">5</span>
                     </span>
                     地点（可选）
                   </label>
@@ -894,7 +894,7 @@ function UploadContent() {
                 <div className="space-y-3">
                   <label className="text-sm font-medium flex items-center gap-2">
                     <span className="flex h-5 w-5 items-center justify-center rounded bg-indigo-100 dark:bg-indigo-900">
-                      <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">4</span>
+                      <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">6</span>
                     </span>
                     话题标签（可选）
                   </label>
