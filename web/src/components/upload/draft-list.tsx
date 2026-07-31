@@ -116,6 +116,7 @@ export function DraftList({ onSelectDraft, refreshKey }: DraftListProps) {
                     {contentPreview(draft.content, 35)}
                   </p>
                 </div>
+                <ArrowRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground/50" />
                 <span
                   className="shrink-0 rounded p-1 text-muted-foreground hover:text-destructive transition-colors"
                   onClick={(e) => handleDelete(e, draft.id)}
