@@ -155,6 +155,15 @@ function UploadContent() {
       };
       autoSaveTimerRef.current = setTimeout(() => {
         saveDraftToLocal({ content, postType: media?.type === 'VIDEO' ? 'VR_MEDIA' : 'NOTE', formData });
+        // 用固定ID同步到草稿列表（更新而非追加），让草稿箱能看到当前草稿
+        saveDraftToList({
+          id: '__current__',
+          title: content.slice(0, 30) || '无标题草稿',
+          content,
+          postType: media?.type === 'VIDEO' ? 'VR_MEDIA' : 'NOTE',
+          formData,
+          preview: content.slice(0, 80),
+        });
       }, 2000); // 2秒后自动保存
     }
 
