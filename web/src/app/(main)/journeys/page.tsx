@@ -91,7 +91,7 @@ function JourneysContent() {
   const handleDelete = async (postId: string) => {
     if (!confirm('确定要删除这篇游记吗？')) return;
     try {
-      await deletePost(postId);
+      await removePost(postId);
       setPosts(prev => prev.filter(p => p.id !== postId));
     } catch {}
   };
