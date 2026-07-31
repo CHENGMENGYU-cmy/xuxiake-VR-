@@ -536,10 +536,10 @@ function UploadContent() {
       topicNames: selectedTopics.length > 0 ? selectedTopics.map(t => t.name) : undefined,
       communityId: selectedCommunity?.id,
       location: location.trim() ? { lat: 0, lng: 0, name: location.trim() } : undefined,
-      vrMetadata: activeTab === 'DIARY' && (mood || weather) ? {
-        mood: mood || undefined,
-        weather: weather || undefined,
-      } : undefined,
+      vrMetadata: {
+        tab: activeTab,
+        ...(activeTab === 'DIARY' && (mood || weather) ? { mood: mood || undefined, weather: weather || undefined } : {}),
+      },
     };
 
     try {
