@@ -142,10 +142,11 @@ export default function LoginPage() {
       if (loginMethod === 'account') {
         await login(account, password, captchaKey, captchaCode);
       } else {
-        // 手机号验证码登录
         await apiClient.post('/auth/login-sms', { phone, smsCode });
       }
-      router.push('/feed');
+      // 管理员/审核员跳仪表板，普通用户跳首页
+      const u = useAuthStore.getState().user;
+      router.push(u?.role !== 'USER' ? '/admin/dashboard' : '/feed');
     } catch {
       if (loginMethod === 'account') {
         fetchCaptcha();
