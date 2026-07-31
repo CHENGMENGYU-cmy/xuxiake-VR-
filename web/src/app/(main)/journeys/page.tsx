@@ -85,7 +85,7 @@ function JourneysContent() {
   const monthKeys = Object.keys(groupedPosts).sort((a, b) => b.localeCompare(a));
 
   const handleEdit = (postId: string) => {
-    router.push(`/upload?edit=${postId}`);
+    router.push(`/upload/journey-creator?edit=${postId}`);
   };
 
   const handleDelete = async (postId: string) => {
