@@ -369,6 +369,77 @@ function SettingsContent() {
           <TabsContent value="appearance" className="mt-0">
             <AppearanceTab />
           </TabsContent>
+
+          {/* 系统管理 — 仅管理员 */}
+          {user?.role === 'ADMIN' && (
+            <TabsContent value="system" className="mt-0">
+              <div className="space-y-6">
+                <div>
+                  <h2 className="text-lg font-semibold mb-4">系统管理</h2>
+                  <div className="grid gap-4">
+                    <div className="rounded-lg border p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <div>
+                          <p className="font-medium">敏感词库</p>
+                          <p className="text-sm text-muted-foreground">管理内容审核中的敏感词</p>
+                        </div>
+                        <Button variant="outline" size="sm">暂未开放</Button>
+                      </div>
+                    </div>
+                    <div className="rounded-lg border p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <div>
+                          <p className="font-medium">用户统计导出</p>
+                          <p className="text-sm text-muted-foreground">导出用户数据报表</p>
+                        </div>
+                        <Button variant="outline" size="sm">暂未开放</Button>
+                      </div>
+                    </div>
+                    <div className="rounded-lg border p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <div>
+                          <p className="font-medium">操作日志</p>
+                          <p className="text-sm text-muted-foreground">查看管理员操作记录</p>
+                        </div>
+                        <Button variant="outline" size="sm">暂未开放</Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+          )}
+
+          {/* 审核设置 — 仅审核员 */}
+          {user?.role === 'MODERATOR' && (
+            <TabsContent value="review" className="mt-0">
+              <div className="space-y-6">
+                <h2 className="text-lg font-semibold">审核设置</h2>
+                <div className="rounded-lg border p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div>
+                      <p className="font-medium">默认审核操作</p>
+                      <p className="text-sm text-muted-foreground">设置批量审核时的默认行为</p>
+                    </div>
+                    <select className="h-9 rounded-lg border border-border bg-background px-2 text-sm">
+                      <option>通过</option>
+                      <option>驳回</option>
+                      <option>跳过</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="rounded-lg border p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div>
+                      <p className="font-medium">驳回理由模板</p>
+                      <p className="text-sm text-muted-foreground">快速选择常用的驳回理由</p>
+                    </div>
+                    <Button variant="outline" size="sm">暂未开放</Button>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+          )}
         </div>
       </Tabs>
     </div>
