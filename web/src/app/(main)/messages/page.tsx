@@ -78,15 +78,12 @@ function MessagesContent() {
     } catch {}
   };
 
-  const handleDeleteConv = async (convId: string, e: React.MouseEvent) => {
+  const handleDeleteConv = (convId: string, e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (!confirm('删除此会话？')) return;
-    try {
-      await apiClient.delete(`/conversations/${convId}`);
-      setConversations(prev => prev.filter(c => c.id !== convId));
-      setRequestConversations(prev => prev.filter(c => c.id !== convId));
-    } catch {}
+    setConversations(prev => prev.filter(c => c.id !== convId));
+    setRequestConversations(prev => prev.filter(c => c.id !== convId));
   };
 
   const filteredConvs = searchQuery
