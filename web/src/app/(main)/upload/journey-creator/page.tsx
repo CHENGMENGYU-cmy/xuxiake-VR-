@@ -11,7 +11,9 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { usePostStore } from '@/stores/post-store';
 import { uploadImage } from '@/lib/media-api';
+import { getPostById } from '@/lib/post-api';
 import { CreatePostPayload } from '@/lib/post-api';
+import apiClient from '@/lib/api-client';
 
 interface JourneyStop {
   id: string;
