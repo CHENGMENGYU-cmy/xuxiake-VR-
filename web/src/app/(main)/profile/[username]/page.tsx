@@ -87,7 +87,7 @@ function ProfileContent({ username }: { username: string }) {
     };
 
     fetchFollowData();
-  }, [username, currentUser]);
+  }, [username, currentUser, pathname]);
 
   const isMutualFollow = isFollowing && isFollowedBy;
 
