@@ -27,6 +27,8 @@ interface JourneyStop {
 
 export default function JourneyCreatorPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const editId = searchParams.get('edit');
   const { publishPost, isPublishing } = usePostStore();
 
   const [title, setTitle] = useState('');
