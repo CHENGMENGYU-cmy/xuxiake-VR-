@@ -736,15 +736,15 @@ function UploadContent() {
                       const files = e.dataTransfer.files;
                       if (files.length > 0) handleVideoSelect(files);
                     }}
-                    className="flex cursor-pointer flex-col items-center gap-3 rounded-lg border-2 border-dashed border-primary/30 bg-primary/5 p-8 text-center transition-all hover:border-primary hover:bg-primary/10">
+                    className="flex cursor-pointer flex-col items-center gap-2 rounded-lg border-2 border-dashed border-primary/30 bg-primary/5 p-4 text-center transition-all hover:border-primary hover:bg-primary/10">
                     {uploading ? (
-                      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                      <Loader2 className="h-6 w-6 animate-spin text-primary" />
                     ) : (
-                      <Video className="h-10 w-10 text-primary" />
+                      <Video className="h-6 w-6 text-primary" />
                     )}
                     <div>
-                      <p className="text-base font-medium">{uploading ? '上传中...' : '点击或拖拽视频到此处'}</p>
-                      <p className="text-sm text-muted-foreground mt-1">支持 MP4、MOV、WebM 格式，最大 500MB</p>
+                      <p className="text-sm font-medium">{uploading ? '上传中...' : '点击或拖拽视频到此处'}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">MP4、MOV、WebM，最大 500MB</p>
                     </div>
                   </div>
                 )}
