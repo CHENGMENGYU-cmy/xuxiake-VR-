@@ -498,6 +498,7 @@ function UploadContent() {
       mediaItems: mediaItems.length > 0 ? mediaItems : undefined,
       topicNames: selectedTopics.length > 0 ? selectedTopics.map(t => t.name) : undefined,
       communityId: selectedCommunity?.id,
+      location: location.trim() ? { lat: 0, lng: 0, name: location.trim() } : undefined,
       vrMetadata: activeTab === 'DIARY' && (mood || weather) ? {
         mood: mood || undefined,
         weather: weather || undefined,
