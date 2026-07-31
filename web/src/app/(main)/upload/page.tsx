@@ -168,8 +168,9 @@ function UploadContent() {
   }, [content, media, images, linkData, activeTab, location, visibility, vrFormat]);
 
   // 选择草稿
-  const handleSelectDraft = (draft: { content: string; postType: string; formData?: Record<string, any> }) => {
+  const handleSelectDraft = (draft: { id: string; content: string; postType: string; formData?: Record<string, any> }) => {
     setContent(draft.content);
+    setCurrentDraftId(draft.id); // 记住正在编辑的草稿ID
     if (draft.formData) {
       if (draft.formData.activeTab) setActiveTab(draft.formData.activeTab);
       if (draft.formData.location) setLocation(draft.formData.location || '');
