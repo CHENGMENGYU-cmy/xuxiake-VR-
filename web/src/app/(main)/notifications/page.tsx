@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Bell, Heart, MessageCircle, UserPlus, Info, MessageSquare, Loader2 } from 'lucide-react';
+import { Bell, Heart, MessageCircle, UserPlus, Info, MessageSquare, Loader2, Shield, Flag } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
