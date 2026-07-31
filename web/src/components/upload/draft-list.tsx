@@ -23,6 +23,12 @@ interface DraftListProps {
 }
 
 const postTypeLabels: Record<string, string> = {
+  '第一视角': '第一视角',
+  '瞬间捕获': '瞬间捕获',
+  '语音记录': '语音记录',
+  '日记': '日记',
+  '游记': '游记',
+  // 兼容旧格式
   NOTE: '随记',
   VR_MEDIA: '第一视角',
   JOURNEY: '游记',
