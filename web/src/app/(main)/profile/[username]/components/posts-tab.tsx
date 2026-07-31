@@ -116,7 +116,11 @@ export function PostsTab({ username, isOwnProfile }: PostsTabProps) {
       ) : posts.length > 0 ? (
         <div className="space-y-4">
           {posts.map((post) => (
-            <PostCard key={post.id} post={post} />
+            <PostCard
+              key={post.id}
+              post={post}
+              onDelete={() => setPosts(prev => prev.filter(p => p.id !== post.id))}
+            />
           ))}
           {loadingMore && (
             <div className="flex justify-center py-4">
