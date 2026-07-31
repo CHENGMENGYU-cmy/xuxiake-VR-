@@ -113,6 +113,7 @@ function UploadContent() {
   const [weather, setWeather] = useState<WeatherType | ''>('');
   const [draftRefreshKey, setDraftRefreshKey] = useState(0);
   const [currentDraftId, setCurrentDraftId] = useState<string | null>(null);
+  const lastSavedContentRef = useRef<string>('');
 
   // Audio recording state
   const [isRecording, setIsRecording] = useState(false);
