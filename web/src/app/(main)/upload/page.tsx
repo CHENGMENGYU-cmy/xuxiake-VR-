@@ -761,17 +761,17 @@ function UploadContent() {
                 />
                 {/* VR格式选择 */}
                 {images.length > 0 && (
-                  <div className="space-y-2">
-                    <label className="text-xs font-medium">VR格式</label>
-                    <div className="flex flex-wrap gap-2">
+                  <div className="flex items-center gap-2">
+                    <label className="text-xs font-medium shrink-0">VR格式</label>
+                    <select
+                      value={vrFormat}
+                      onChange={(e) => setVrFormat(e.target.value as VrFormat)}
+                      className="h-8 rounded-lg border border-border bg-background px-2 text-xs focus:border-primary"
+                    >
                       {vrFormats.map(f => (
-                        <button key={f.value} onClick={() => setVrFormat(f.value)}
-                          className={cn('rounded-lg px-4 py-2 text-sm transition-all', vrFormat === f.value ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-muted text-muted-foreground hover:bg-muted/80')}>
-                          <div className="font-medium">{f.label}</div>
-                          <div className="text-xs opacity-80">{f.desc}</div>
-                        </button>
+                        <option key={f.value} value={f.value}>{f.label} - {f.desc}</option>
                       ))}
-                    </div>
+                    </select>
                   </div>
                 )}
               </div>
