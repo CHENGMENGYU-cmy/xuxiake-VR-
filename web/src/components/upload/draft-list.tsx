@@ -33,7 +33,7 @@ const postTypeLabels: Record<string, string> = {
   MOMENT: '瞬间',
 };
 
-const contentPreview = (text: string | undefined, maxLen = 35) => {
+const contentPreview = (text: string | undefined, maxLen = 10) => {
   const t = (text || '').replace(/\n/g, ' ');
   return t.length > maxLen ? t.slice(0, maxLen) + '...' : t;
 };
