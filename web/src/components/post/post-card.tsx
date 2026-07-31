@@ -56,6 +56,14 @@ const postTypeConfig: Record<string, { label: string; icon: React.ReactNode; col
   MOMENT: { label: '瞬间', icon: <MessageSquare className="h-3 w-3" />, color: 'bg-pink-500/10 text-pink-500' },
 };
 
+const tabLabelConfig: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
+  VIDEO:   { label: '第一视角', icon: <Play className="h-3 w-3" />, color: 'bg-teal-500/10 text-teal-500' },
+  IMAGE:   { label: '瞬间捕获', icon: <Image className="h-3 w-3" />, color: 'bg-orange-500/10 text-orange-500' },
+  AUDIO:   { label: '语音记录', icon: <Volume2 className="h-3 w-3" />, color: 'bg-pink-500/10 text-pink-500' },
+  DIARY:   { label: '日记', icon: <PenLineEdit className="h-3 w-3" />, color: 'bg-indigo-500/10 text-indigo-500' },
+  JOURNEY: { label: '游记', icon: <Compass className="h-3 w-3" />, color: 'bg-amber-500/10 text-amber-500' },
+};
+
 interface PostCardProps {
   post: Post;
   onLikeChange?: (isLiked: boolean, likeCount: number) => void;
