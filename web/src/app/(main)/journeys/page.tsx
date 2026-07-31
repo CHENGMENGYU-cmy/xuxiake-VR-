@@ -7,6 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth-store';
+import { usePostStore } from '@/stores/post-store';
 import { AuthGuard } from '@/components/auth-guard';
 import { getContentHierarchy, deletePost } from '@/lib/post-api';
 import type { Post, Visibility } from '@/types';
