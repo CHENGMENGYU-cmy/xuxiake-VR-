@@ -30,6 +30,19 @@ const iconColors: Record<string, string> = {
   MESSAGE: 'text-accent bg-accent/10',
 };
 
+function formatTime(dateStr: string): string {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diff = now.getTime() - date.getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return '刚刚';
+  if (mins < 60) return `${mins}分钟前`;
+  const hours = Math.floor(diff / 3600000);
+  if (hours < 24) return `${hours}小时前`;
+  return date.toLocaleDateString('zh-CN');
+}
+
 const typeLabels: Record<string, string> = {
   ALL: '全部',
   LIKE: '赞',
