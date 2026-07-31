@@ -96,6 +96,14 @@ function JourneysContent() {
     } catch {}
   };
 
+  const handleToggleVisibility = async (postId: string, visible: boolean) => {
+    try {
+      const newVis = visible ? 'PRIVATE' : 'PUBLIC';
+      await publishPost(postId, undefined, newVis as any);
+      setPosts(prev => prev.map(p => p.id === postId ? { ...p, visibility: newVis } : p));
+    } catch {}
+  };
+
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between">
