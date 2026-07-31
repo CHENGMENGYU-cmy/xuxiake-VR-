@@ -579,7 +579,7 @@ function UploadContent() {
                   : 'border-muted bg-card hover:border-primary/30 hover:bg-accent/50'
               )}
             >
-              <Icon className={cn('h-5 w-5', isActive ? 'text-primary' : tab.color)} />
+              <Icon className={cn('h-4 w-4', isActive ? 'text-primary' : tab.color)} />
               <span className={cn(
                 'text-sm font-medium',
                 isActive ? 'text-primary' : 'text-foreground'
