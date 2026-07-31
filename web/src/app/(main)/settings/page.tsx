@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Settings, User, Lock, Bell, Shield, ClipboardCheck, Heart } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/stores/auth-store';
 import apiClient from '@/lib/api-client';
 import { ProfileTab } from './components/profile-tab';
