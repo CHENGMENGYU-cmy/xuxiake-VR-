@@ -507,10 +507,7 @@ function DiariesContent() {
           posts={filteredPosts}
           currentMonth={currentMonth}
           setCurrentMonth={setCurrentMonth}
-          onDateClick={(date) => {
-            // TODO: 可以在这里添加日期点击后的操作，比如筛选该日期的日记
-            console.log('Clicked date:', date);
-          }}
+          onDateClick={() => {}}
         />
       )}
     </div>
@@ -557,80 +554,64 @@ function CalendarView({ posts, currentMonth, setCurrentMonth, onDateClick }: {
   const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {/* 月份导航 */}
       <div className="flex items-center justify-between">
-        <Button variant="outline" size="sm" onClick={prevMonth}>
-          <ChevronLeft className="h-4 w-4" />
+        <Button variant="ghost" size="sm" className="h-7 px-1.5" onClick={prevMonth}>
+          <ChevronLeft className="h-3.5 w-3.5" />
         </Button>
-        <div className="flex items-center gap-3">
-          <h2 className="text-lg font-semibold">
+        <div className="flex items-center gap-2">
+          <h2 className="text-sm font-semibold">
             {currentMonth.getFullYear()}年{currentMonth.getMonth() + 1}月
           </h2>
-          <Button variant="ghost" size="sm" onClick={goToToday}>
+          <Button variant="ghost" size="sm" className="h-6 text-xs px-2" onClick={goToToday}>
             今天
           </Button>
         </div>
-        <Button variant="outline" size="sm" onClick={nextMonth}>
-          <ChevronRight className="h-4 w-4" />
+        <Button variant="ghost" size="sm" className="h-7 px-1.5" onClick={nextMonth}>
+          <ChevronRight className="h-3.5 w-3.5" />
         </Button>
       </div>
 
       {/* 日历网格 */}
       <Card>
-        <CardContent className="p-4">
+        <CardContent className="p-2">
           {/* 星期标题 */}
-          <div className="grid grid-cols-7 gap-1 mb-2">
+          <div className="grid grid-cols-7 gap-0.5 mb-1">
             {weekDays.map(day => (
-              <div key={day} className="text-center text-xs font-medium text-muted-foreground py-2">
+              <div key={day} className="text-center text-[10px] text-muted-foreground py-1">
                 {day}
               </div>
             ))}
           </div>
 
-          {/* 日期网格 */}
-          <div className="grid grid-cols-7 gap-1">
-            {/* 空白填充 */}
+          {/* 日期格子 */}
+          <div className="grid grid-cols-7 gap-0.5">
             {Array.from({ length: firstDay }).map((_, i) => (
               <div key={`empty-${i}`} className="aspect-square" />
             ))}
-
-            {/* 日期格子 */}
             {Array.from({ length: daysInMonth }).map((_, i) => {
               const day = i + 1;
               const dateKey = formatDateKey(currentMonth.getFullYear(), currentMonth.getMonth(), day);
               const dayPosts = postsByDate[dateKey] || [];
-              const hasMood = dayPosts.some(p => p.vrMetadata?.mood);
               const isToday = new Date().toDateString() === new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day).toDateString();
 
               return (
                 <button
                   key={day}
                   onClick={() => handleDateClick(day)}
-                  className={`aspect-square rounded-lg border p-1 transition-colors hover:bg-accent/50 ${
+                  className={`aspect-square rounded-md border p-0.5 flex flex-col items-center justify-start gap-px transition-colors hover:bg-accent/50 ${
                     isToday ? 'border-primary bg-primary/5' : 'border-transparent'
-                  }`}
+                  } ${selectedDate && selectedDate.getDate() === day && selectedDate.getMonth() === currentMonth.getMonth() ? 'ring-1 ring-primary/30' : ''}`}
                 >
-                  <div className="h-full flex flex-col items-center justify-start gap-0.5">
-                    <span className={`text-sm ${isToday ? 'font-bold text-primary' : ''}`}>
-                      {day}
-                    </span>
-                    {dayPosts.length > 0 && (
-                      <div className="flex gap-0.5">
-                        {dayPosts.slice(0, 3).map((post, idx) => (
-                          <div
-                            key={idx}
-                            className={`w-1.5 h-1.5 rounded-full ${
-                              post.vrMetadata?.mood ? 'bg-indigo-500' : 'bg-muted-foreground/40'
-                            }`}
-                          />
-                        ))}
-                        {dayPosts.length > 3 && (
-                          <span className="text-[8px] text-muted-foreground">+{dayPosts.length - 3}</span>
-                        )}
-                      </div>
-                    )}
-                  </div>
+                  <span className={`text-xs ${isToday ? 'font-bold text-primary' : ''}`}>{day}</span>
+                  {dayPosts.length > 0 && (
+                    <div className="flex gap-px">
+                      {dayPosts.slice(0, 3).map((_, idx) => (
+                        <div key={idx} className={`w-1 h-1 rounded-full ${dayPosts.some(p => p.vrMetadata?.mood) ? 'bg-indigo-400' : 'bg-muted-foreground/30'}`} />
+                      ))}
+                    </div>
+                  )}
                 </button>
               );
             })}
@@ -639,12 +620,14 @@ function CalendarView({ posts, currentMonth, setCurrentMonth, onDateClick }: {
       </Card>
 
       {/* 统计信息 */}
-      <div className="text-sm text-muted-foreground text-center">
-        本月共 {Object.values(postsByDate).flat().filter(p => {
-          const postDate = new Date(p.createdAt);
-          return postDate.getFullYear() === currentMonth.getFullYear() &&
-                 postDate.getMonth() === currentMonth.getMonth();
-        }).length} 篇日记
+      <div className="text-xs text-muted-foreground text-center">
+        {(() => {
+          const count = Object.values(postsByDate).flat().filter(p => {
+            const postDate = new Date(p.createdAt);
+            return postDate.getFullYear() === currentMonth.getFullYear() && postDate.getMonth() === currentMonth.getMonth();
+          }).length;
+          return `本月共 ${count} 篇日记`;
+        })()}
       </div>
 
       {/* 选中日期的日记列表 */}
