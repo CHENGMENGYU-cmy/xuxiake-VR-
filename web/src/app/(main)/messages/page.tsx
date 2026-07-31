@@ -143,6 +143,69 @@ function MessagesContent() {
     return <div className="flex items-center justify-center py-12"><p className="text-muted-foreground">{mounted ? '请先登录' : ''}</p></div>;
   }
 
+  // 管理员/审核员 — 管理通知中心
+  if (isAdmin) {
+    return (
+      <div className="space-y-5">
+        <div className="flex items-center gap-2">
+          <Bell className="h-6 w-6 text-primary" />
+          <h1 className="text-xl font-bold">管理通知</h1>
+        </div>
+        <p className="text-sm text-muted-foreground">
+          {user.role === 'ADMIN' ? '系统管理员' : '审核员'}通知中心，查看待处理和系统消息
+        </p>
+
+        {isLoading ? (
+          <div className="flex justify-center py-12"><Loader2 className="h-6 w-6 animate-spin" /></div>
+        ) : (
+          <div className="space-y-4">
+            {/* 待处理概览 */}
+            <div className="grid grid-cols-2 gap-3">
+              <button onClick={() => window.location.href = '/admin/reviews'} className="flex items-center gap-3 rounded-lg border border-amber-200 bg-amber-50 dark:border-amber-900 dark:bg-amber-950/30 p-4 hover:shadow-sm transition-shadow text-left">
+                <Shield className="h-5 w-5 text-amber-500 shrink-0" />
+                <div>
+                  <p className="text-2xl font-bold text-amber-600">{adminStats.reviews}</p>
+                  <p className="text-xs text-muted-foreground">待审核内容</p>
+                </div>
+                <ArrowRight className="h-4 w-4 ml-auto text-muted-foreground" />
+              </button>
+              <button onClick={() => window.location.href = '/admin/reports'} className="flex items-center gap-3 rounded-lg border border-red-200 bg-red-50 dark:border-red-900 dark:bg-red-950/30 p-4 hover:shadow-sm transition-shadow text-left">
+                <Flag className="h-5 w-5 text-red-500 shrink-0" />
+                <div>
+                  <p className="text-2xl font-bold text-red-600">{adminStats.reports}</p>
+                  <p className="text-xs text-muted-foreground">待处理举报</p>
+                </div>
+                <ArrowRight className="h-4 w-4 ml-auto text-muted-foreground" />
+              </button>
+            </div>
+
+            {/* 快捷入口 */}
+            <div className="rounded-lg border bg-card p-4 space-y-3">
+              <h3 className="font-semibold text-sm">快捷操作</h3>
+              <div className="grid gap-2">
+                <a href="/admin/dashboard" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-muted/50 transition-colors">
+                  <TrendingUp className="h-4 w-4 text-blue-500" />管理仪表板 <ArrowRight className="h-3 w-3 ml-auto text-muted-foreground" />
+                </a>
+                <a href="/admin/reviews" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-muted/50 transition-colors">
+                  <Shield className="h-4 w-4 text-amber-500" />审核队列 {adminStats.reviews > 0 && <Badge className="bg-amber-500 h-5 px-1.5">{adminStats.reviews}</Badge>} <ArrowRight className="h-3 w-3 ml-auto text-muted-foreground" />
+                </a>
+                <a href="/admin/reports" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-muted/50 transition-colors">
+                  <Flag className="h-4 w-4 text-red-500" />举报管理 {adminStats.reports > 0 && <Badge className="bg-red-500 h-5 px-1.5">{adminStats.reports}</Badge>} <ArrowRight className="h-3 w-3 ml-auto text-muted-foreground" />
+                </a>
+                {user.role === 'ADMIN' && (
+                  <a href="/admin/users" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-muted/50 transition-colors">
+                    <Users className="h-4 w-4 text-blue-500" />用户管理 <ArrowRight className="h-3 w-3 ml-auto text-muted-foreground" />
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // 普通用户 — 原有消息列表
   return (
     <div className="flex h-[calc(100vh-8rem)] flex-col">
       <div className="shrink-0 space-y-3">
