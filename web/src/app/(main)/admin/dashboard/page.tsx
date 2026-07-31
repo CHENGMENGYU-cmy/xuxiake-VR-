@@ -57,7 +57,7 @@ function DashboardContent() {
     { label: '待审核', value: stats.pendingReviews, icon: Shield, color: 'text-amber-500', bg: 'bg-amber-100 dark:bg-amber-900/30', href: '/admin/reviews' },
     { label: '待处理举报', value: stats.pendingReports, icon: Flag, color: 'text-red-500', bg: 'bg-red-100 dark:bg-red-900/30', href: '/admin/reports' },
     { label: '用户数', value: stats.totalUsers, icon: Users, color: 'text-blue-500', bg: 'bg-blue-100 dark:bg-blue-900/30', href: '/admin/users' },
-    { label: '内容数', value: stats.totalPosts, icon: FileText, color: 'text-green-500', bg: 'bg-green-100 dark:bg-green-900/30', href: '/' },
+    { label: '内容数', value: stats.totalPosts, icon: FileText, color: 'text-green-500', bg: 'bg-green-100 dark:bg-green-900/30', href: '/feed' },
   ];
 
   return (
