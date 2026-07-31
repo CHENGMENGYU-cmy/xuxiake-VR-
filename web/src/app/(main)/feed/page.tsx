@@ -18,8 +18,17 @@ const filterTabs: FilterTab[] = [
 ];
 
 export default function FeedPage() {
+  const router = useRouter();
+  const { user, isAuthenticated } = useAuthStore();
   const [activeFilter, setActiveFilter] = useState('all');
   const [feedMode, setFeedMode] = useState<'discover' | 'following'>('discover');
+
+  // 管理员/审核员重定向到管理仪表板
+  useEffect(() => {
+    if (isAuthenticated && user?.role !== 'USER') {
+      router.replace('/admin/dashboard');
+    }
+  }, [isAuthenticated, user, router]);
 
   const currentFilter = filterTabs.find((t) => t.id === activeFilter);
 
