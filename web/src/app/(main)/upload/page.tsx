@@ -145,19 +145,25 @@ function UploadContent() {
 
     // 只有有内容时才保存
     if (content.trim() || media || images.length > 0 || linkData) {
+      const formData = {
+        activeTab,
+        location,
+        visibility,
+        vrFormat,
+        hasMedia: !!media,
+        imageCount: images.length,
+        hasLink: !!linkData,
+      };
       autoSaveTimerRef.current = setTimeout(() => {
-        saveDraftToLocal({
+        saveDraftToLocal({ content, postType: media?.type === 'VIDEO' ? 'VR_MEDIA' : 'NOTE', formData });
+        // 同时保存到草稿列表，以便草稿箱中恢复
+        saveDraftToList({
+          id: `auto-${Date.now()}`,
+          title: content.slice(0, 30) || '无标题',
           content,
           postType: media?.type === 'VIDEO' ? 'VR_MEDIA' : 'NOTE',
-          formData: {
-            activeTab,
-            location,
-            visibility,
-            vrFormat,
-            hasMedia: !!media,
-            imageCount: images.length,
-            hasLink: !!linkData,
-          },
+          formData,
+          preview: content.slice(0, 80),
         });
       }, 2000); // 2秒后自动保存
     }
