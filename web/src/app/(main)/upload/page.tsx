@@ -545,6 +545,7 @@ function UploadContent() {
     try {
       await publishPost(payload);
       clearLocalDraft();
+      if (currentDraftId) { deleteDraftFromList(currentDraftId); setDraftRefreshKey(k => k + 1); }
       setCurrentDraftId(null);
       if (activeTab === 'DIARY') {
         toast.success('日记已保存');
