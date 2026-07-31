@@ -72,11 +72,14 @@ function JourneysContent() {
     setLoading(true);
     getContentHierarchy({
       level: 'ESSAY',
-      userId: activeTab === 'private' ? user.id : undefined,
+      userId: user.id,
       limit: 100,
       currentUserId: user.id,
     })
-      .then(result => setPosts(result.posts || []))
+      .then(result => {
+        const all = result.posts || [];
+        setPosts(activeTab === 'private' ? all.filter(p => p.visibility === 'PRIVATE') : all.filter(p => p.visibility !== 'PRIVATE'));
+      })
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [user?.id, activeTab]);
