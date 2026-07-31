@@ -714,7 +714,7 @@ function CalendarView({ posts, currentMonth, setCurrentMonth, onDateClick }: {
                                   key={media.id}
                                   className="relative w-16 h-16 rounded-md overflow-hidden bg-muted"
                                 >
-                                  {media.type === 'IMAGE' && media.thumbnailUrl ? (
+                                  {media.type === 'IMAGE' && (media.thumbnailUrl || media.url) ? (
                                     <img
                                       src={media.thumbnailUrl}
                                       alt=""
