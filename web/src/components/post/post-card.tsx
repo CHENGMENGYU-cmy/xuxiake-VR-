@@ -59,9 +59,10 @@ const postTypeConfig: Record<string, { label: string; icon: React.ReactNode; col
 interface PostCardProps {
   post: Post;
   onLikeChange?: (isLiked: boolean, likeCount: number) => void;
+  onDelete?: () => void;
 }
 
-export function PostCard({ post, onLikeChange }: PostCardProps) {
+export function PostCard({ post, onLikeChange, onDelete }: PostCardProps) {
   const { user: currentUser } = useAuthStore();
   const removePost = usePostStore((s) => s.removePost);
   const { requireAuth, showPrompt, setShowPrompt, action } = useRequireAuth();
