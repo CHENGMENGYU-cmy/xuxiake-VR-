@@ -19,9 +19,10 @@ const postTypeFilters = [
 interface PostsTabProps {
   username: string;
   isOwnProfile: boolean;
+  onDeletePost?: () => void;
 }
 
-export function PostsTab({ username, isOwnProfile }: PostsTabProps) {
+export function PostsTab({ username, isOwnProfile, onDeletePost }: PostsTabProps) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
