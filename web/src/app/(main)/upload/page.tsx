@@ -164,7 +164,7 @@ function UploadContent() {
           formData,
           preview: content.slice(0, 80),
         });
-      }, 2000); // 2秒后自动保存
+      }, 5000); // 5秒后自动保存
     }
 
     return () => {
