@@ -112,32 +112,27 @@ export function Sidebar() {
 
             <Separator />
 
-            {/* 浏览发现 */}
-            <div className="space-y-1 p-3">
-              <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
-                浏览
-              </p>
-              {(isAdmin ? adminNavItems : navItems).map((item) => {
-                const Icon = item.icon;
-                const isActive = pathname === item.href;
-                return (
-                  <Link key={item.href} href={item.href}>
-                    <Button
-                      variant="ghost"
-                      className={cn(
-                        'w-full justify-start gap-3',
-                        isActive && 'bg-primary/10 text-primary hover:bg-primary/10'
-                      )}
-                    >
-                      <Icon className={cn('h-5 w-5', isActive && 'text-primary')} />
-                      <span>{item.label}</span>
-                    </Button>
-                  </Link>
-                );
-              })}
-            </div>
-
-            <Separator />
+            {/* 浏览发现 — 仅普通用户显示 */}
+            {!isAdmin && (
+              <>
+                <div className="space-y-1 p-3">
+                  <p className="px-2 text-xs font-medium uppercase text-muted-foreground">浏览</p>
+                  {navItems.map((item) => {
+                    const Icon = item.icon;
+                    const isActive = pathname === item.href;
+                    return (
+                      <Link key={item.href} href={item.href}>
+                        <Button variant="ghost" className={cn('w-full justify-start gap-3', isActive && 'bg-primary/10 text-primary hover:bg-primary/10')}>
+                          <Icon className={cn('h-5 w-5', isActive && 'text-primary')} />
+                          <span>{item.label}</span>
+                        </Button>
+                      </Link>
+                    );
+                  })}
+                </div>
+                <Separator />
+              </>
+            )}
 
             {/* 我的内容 — 仅普通用户显示 */}
             {!isAdmin && (
