@@ -826,15 +826,15 @@ function UploadContent() {
                       const files = e.dataTransfer.files;
                       if (files.length > 0) handleAudioSelect(files);
                     }}
-                    className="flex flex-col items-center gap-3 rounded-lg border-2 border-dashed border-accent/30 bg-accent/5 p-8 text-center transition-all hover:border-accent hover:bg-accent/10">
+                    className="flex flex-col items-center gap-2 rounded-lg border-2 border-dashed border-accent/30 bg-accent/5 p-4 text-center transition-all hover:border-accent hover:bg-accent/10">
                     {uploading ? (
-                      <Loader2 className="h-8 w-8 animate-spin text-accent" />
+                      <Loader2 className="h-6 w-6 animate-spin text-accent" />
                     ) : (
-                      <Mic className="h-10 w-10 text-accent" />
+                      <Mic className="h-6 w-6 text-accent" />
                     )}
                     <div>
-                      <p className="text-base font-medium">{uploading ? '上传中...' : '上传或录制音频'}</p>
-                      <p className="text-sm text-muted-foreground mt-1">支持 MP3、WAV、AAC、OGG 格式，最大 100MB</p>
+                      <p className="text-sm font-medium">{uploading ? '上传中...' : '上传或录制音频'}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">MP3、WAV、AAC、OGG，最大 100MB</p>
                     </div>
                     <div className="flex gap-3">
                       <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()}>
