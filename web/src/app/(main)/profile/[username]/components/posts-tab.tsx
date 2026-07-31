@@ -120,7 +120,7 @@ export function PostsTab({ username, isOwnProfile, onDeletePost }: PostsTabProps
             <PostCard
               key={post.id}
               post={post}
-              onDelete={() => setPosts(prev => prev.filter(p => p.id !== post.id))}
+              onDelete={() => { setPosts(prev => prev.filter(p => p.id !== post.id)); onDeletePost?.(); }}
             />
           ))}
           {loadingMore && (
