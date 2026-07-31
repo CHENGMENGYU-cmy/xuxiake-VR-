@@ -36,6 +36,7 @@ function ProfileContent({ username }: { username: string }) {
   const [followLoading, setFollowLoading] = useState(false);
   const [followerCount, setFollowerCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
+  const [postCount, setPostCount] = useState(0);
 
   useEffect(() => {
     if (currentUser && currentUser.username === username) {
