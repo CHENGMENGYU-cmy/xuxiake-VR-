@@ -100,6 +100,8 @@ export default function JourneyCreatorPage() {
       content: content.trim() || title.trim(),
       visibility: 'PUBLIC',
       postType: 'JOURNEY',
+      contentLevel: 'ESSAY',
+      vrMetadata: { tab: 'JOURNEY' },
       journey: {
         title: title.trim(),
         startDate: startDate || undefined,
