@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { BookOpen, PenLine, Lock, Globe, MapPin, Edit, Trash2, Sparkles, Calendar } from 'lucide-react';
+import { BookOpen, PenLine, Lock, Globe, MapPin, Edit, Trash2, Sparkles, Calendar, Share2, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
