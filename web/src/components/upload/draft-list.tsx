@@ -29,13 +29,13 @@ const postTypeLabels: Record<string, string> = {
   MOMENT: '瞬间',
 };
 
-export function DraftList({ onSelectDraft }: DraftListProps) {
+export function DraftList({ onSelectDraft, refreshKey }: DraftListProps) {
   const [drafts, setDrafts] = useState<DraftItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     loadDrafts();
-  }, []);
+  }, [refreshKey]);
 
   const loadDrafts = () => {
     const list = getDraftList();
