@@ -155,11 +155,19 @@ function ProfileContent({ username }: { username: string }) {
 
             <div className="flex gap-2">
               {isOwnProfile ? (
-                <Link href="/settings">
-                  <Button variant="outline" size="sm">
-                    编辑资料
-                  </Button>
-                </Link>
+                <>
+                  <Link href="/settings">
+                    <Button variant="outline" size="sm">编辑资料</Button>
+                  </Link>
+                  {user.role !== 'USER' && (
+                    <Link href="/admin/dashboard">
+                      <Button size="sm" variant="default" className="gap-1.5">
+                        <Shield className="h-3.5 w-3.5" />
+                        管理面板
+                      </Button>
+                    </Link>
+                  )}
+                </>
               ) : (
                 <>
                   {isMutualFollow && (
