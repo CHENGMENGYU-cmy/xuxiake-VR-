@@ -260,13 +260,23 @@ export default function JourneyCreatorPage() {
             )}
           </div>
 
-          {/* 发布 */}
-          <div className="flex justify-end gap-3 pt-2">
-            <Button variant="outline" size="lg" onClick={() => router.push('/upload')}>取消</Button>
-            <Button size="lg" className="gap-2" disabled={!canPublish} onClick={handlePublish}>
-              {isPublishing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-              {isPublishing ? '发布中...' : '发布游记'}
-            </Button>
+          {/* 可见性 + 发布 */}
+          <div className="flex items-center justify-between pt-2">
+            <select
+              value={visibility}
+              onChange={(e) => setVisibility(e.target.value as 'PUBLIC' | 'PRIVATE')}
+              className="h-9 rounded-lg border border-border bg-background px-2 text-sm"
+            >
+              <option value="PUBLIC">🌐 公开发布</option>
+              <option value="PRIVATE">🔒 仅自己可见</option>
+            </select>
+            <div className="flex gap-3">
+              <Button variant="outline" size="lg" onClick={() => router.push('/journeys')}>取消</Button>
+              <Button size="lg" className="gap-2" disabled={!canPublish} onClick={handlePublish}>
+                {isPublishing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                {isPublishing ? '发布中...' : '发布游记'}
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>
