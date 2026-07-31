@@ -215,6 +215,15 @@ function JourneysContent() {
                           <Button variant="ghost" size="sm" onClick={() => handleEdit(post.id)} className="gap-1.5">
                             <Edit className="h-3.5 w-3.5" />编辑
                           </Button>
+                          {post.visibility === 'PRIVATE' ? (
+                            <Button variant="ghost" size="sm" onClick={() => handleToggleVisibility(post.id, false)} className="gap-1.5 text-green-600">
+                              <Share2 className="h-3.5 w-3.5" />公开发布
+                            </Button>
+                          ) : (
+                            <Button variant="ghost" size="sm" onClick={() => handleToggleVisibility(post.id, true)} className="gap-1.5 text-amber-600">
+                              <EyeOff className="h-3.5 w-3.5" />转为私密
+                            </Button>
+                          )}
                           <Button variant="ghost" size="sm" onClick={() => handleDelete(post.id)} className="gap-1.5 text-destructive">
                             <Trash2 className="h-3.5 w-3.5" />删除
                           </Button>
