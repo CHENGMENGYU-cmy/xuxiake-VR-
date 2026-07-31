@@ -1043,20 +1043,20 @@ function UploadContent() {
               <Button
                 variant={showLinkAddon ? 'default' : 'outline'}
                 size="sm"
-                className="gap-2"
+                className="gap-1.5"
                 onClick={() => setShowLinkAddon(!showLinkAddon)}
               >
-                <Link2 className="h-4 w-4" />
-                添加链接
+                <Link2 className="h-3.5 w-3.5" />
+                {showLinkAddon ? '收起链接' : '添加链接'}
               </Button>
               <Button
                 variant={showTranslationAddon ? 'default' : 'outline'}
                 size="sm"
-                className="gap-2"
+                className="gap-1.5"
                 onClick={() => setShowTranslationAddon(!showTranslationAddon)}
               >
-                <Languages className="h-4 w-4" />
-                翻译内容
+                <Languages className="h-3.5 w-3.5" />
+                {showTranslationAddon ? '收起翻译' : '翻译内容'}
               </Button>
             </div>
           )}
