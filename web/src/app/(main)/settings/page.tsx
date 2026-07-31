@@ -231,25 +231,29 @@ function SettingsContent() {
         {/* 左侧标签导航 */}
         <TabsList className="h-auto min-w-[110px] flex-col items-start justify-start bg-transparent p-0 pr-2 rounded-none">
           <TabsTrigger value="profile" className="w-full justify-start gap-2 data-active:bg-primary/10 data-active:text-primary">
-            <User className="h-4 w-4" />
-            个人资料
+            <User className="h-4 w-4" />个人资料
           </TabsTrigger>
-          <TabsTrigger value="interests" className="w-full justify-start gap-2 data-active:bg-primary/10 data-active:text-primary">
-            <Heart className="h-4 w-4" />
-            兴趣标签
-          </TabsTrigger>
+          {user?.role === 'USER' && (
+            <TabsTrigger value="interests" className="w-full justify-start gap-2 data-active:bg-primary/10 data-active:text-primary">
+              <Heart className="h-4 w-4" />兴趣标签
+            </TabsTrigger>
+          )}
           <TabsTrigger value="privacy" className="w-full justify-start gap-2 data-active:bg-primary/10 data-active:text-primary">
-            <Lock className="h-4 w-4" />
-            隐私设置
+            <Lock className="h-4 w-4" />安全设置
           </TabsTrigger>
           <TabsTrigger value="notifications" className="w-full justify-start gap-2 data-active:bg-primary/10 data-active:text-primary">
-            <Bell className="h-4 w-4" />
-            通知设置
+            <Bell className="h-4 w-4" />通知设置
           </TabsTrigger>
-          <TabsTrigger value="appearance" className="w-full justify-start gap-2 data-active:bg-primary/10 data-active:text-primary">
-            <Palette className="h-4 w-4" />
-            外观设置
-          </TabsTrigger>
+          {user?.role === 'ADMIN' && (
+            <TabsTrigger value="system" className="w-full justify-start gap-2 data-active:bg-primary/10 data-active:text-primary">
+              <Shield className="h-4 w-4" />系统管理
+            </TabsTrigger>
+          )}
+          {user?.role === 'MODERATOR' && (
+            <TabsTrigger value="review" className="w-full justify-start gap-2 data-active:bg-primary/10 data-active:text-primary">
+              <ClipboardCheck className="h-4 w-4" />审核设置
+            </TabsTrigger>
+          )}
         </TabsList>
 
         {/* 右侧内容 */}
