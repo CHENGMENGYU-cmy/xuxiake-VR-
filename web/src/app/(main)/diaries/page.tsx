@@ -151,6 +151,14 @@ function DiariesContent() {
     }
   };
 
+  const handleDelete = async (postId: string) => {
+    if (!confirm('确定要删除这篇日记吗？删除后不可恢复。')) return;
+    try {
+      await deletePost(postId);
+      setPosts(prev => prev.filter(p => p.id !== postId));
+    } catch { /* 忽略 */ }
+  };
+
   const handlePromoteToJourney = (post: Post) => {
     // 导航到 AI 游记生成页面，预选这篇日记
     router.push(`/journeys/generate?ids=${post.id}`);
