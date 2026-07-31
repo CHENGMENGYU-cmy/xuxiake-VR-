@@ -1063,24 +1063,30 @@ function UploadContent() {
             <>
               <Separator />
 
-              <div className="space-y-4">
-                <h3 className="text-sm font-semibold flex items-center gap-2">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    <span className="text-xs font-bold">⚙</span>
-                  </span>
-                  发布设置
-                </h3>
+              <div className="space-y-3">
+                <h3 className="text-sm font-semibold">发布设置</h3>
 
-                <VisibilityControl
-                  visibility={visibility}
-                  onVisibilityChange={setVisibility}
-                />
+                {/* 可见性 + 位置并排 */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-medium">可见范围</label>
+                    <select
+                      value={visibility}
+                      onChange={(e) => setVisibility(e.target.value as Visibility)}
+                      className="h-9 w-full rounded-lg border border-border bg-background px-2 text-sm focus:border-primary"
+                    >
+                      <option value="PUBLIC">🌐 公开</option>
+                      <option value="FOLLOWERS">👥 关注可见</option>
+                      <option value="PRIVATE">🔒 仅自己</option>
+                    </select>
+                  </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">位置信息</label>
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                    <Input type="text" placeholder="添加拍摄地点..." className="pl-10" value={location} onChange={(e) => setLocation(e.target.value)} />
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-medium">位置信息</label>
+                    <div className="relative">
+                      <MapPin className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+                      <Input type="text" placeholder="添加拍摄地点..." className="h-9 pl-8 text-sm" value={location} onChange={(e) => setLocation(e.target.value)} />
+                    </div>
                   </div>
                 </div>
 
