@@ -716,7 +716,7 @@ function CalendarView({ posts, currentMonth, setCurrentMonth, onDateClick }: {
                                 >
                                   {media.type === 'IMAGE' && (media.thumbnailUrl || media.url) ? (
                                     <img
-                                      src={media.thumbnailUrl}
+                                      src={media.thumbnailUrl || media.url}
                                       alt=""
                                       className="w-full h-full object-cover"
                                     />
