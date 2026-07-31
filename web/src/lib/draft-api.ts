@@ -72,12 +72,14 @@ export function saveDraftToList(draft: {
   title: string;
   content: string;
   postType: string;
+  formData?: Record<string, any>;
   preview?: string;
 }): void {
   try {
     const existingList = getDraftList();
     const newDraft = {
       ...draft,
+      formData: draft.formData || {},
       savedAt: new Date().toISOString(),
     };
 
