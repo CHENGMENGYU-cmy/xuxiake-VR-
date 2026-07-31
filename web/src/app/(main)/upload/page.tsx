@@ -479,8 +479,15 @@ function UploadContent() {
       contentLevel = 'DIARY';
     } else if (media?.type === 'VIDEO') {
       postType = 'VR_MEDIA';
+      contentLevel = 'SNAPSHOT';
+    } else if (media?.type === 'AUDIO') {
+      postType = 'MOMENT';
+      contentLevel = 'SNAPSHOT';
     } else if (images.length > 0) {
       postType = 'VR_MEDIA';
+      contentLevel = 'SNAPSHOT';
+    } else if (content.trim()) {
+      contentLevel = 'SNAPSHOT';
     }
 
     const payload: CreatePostPayload = {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { BookOpen, PenLine, Lock, Globe, Users, Image as ImageIcon, Video, Music, Edit, Share2, Calendar, MapPin, Sparkles } from 'lucide-react';
+import { BookOpen, PenLine, Lock, Globe, Users, Image as ImageIcon, Video, Music, Edit, Share2, Calendar, MapPin, Sparkles, List, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
@@ -67,6 +67,27 @@ function formatMonthKey(key: string): string {
   return `${year}年${parseInt(month)}月`;
 }
 
+function getDaysInMonth(date: Date): number {
+  return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+}
+
+function getFirstDayOfMonth(date: Date): number {
+  return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+}
+
+function groupPostsByDate(posts: Post[]): Record<string, Post[]> {
+  const groups: Record<string, Post[]> = {};
+  posts.forEach(post => {
+    const date = new Date(post.createdAt);
+    const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    if (!groups[key]) {
+      groups[key] = [];
+    }
+    groups[key].push(post);
+  });
+  return groups;
+}
+
 export default function DiariesPage() {
   return (
     <AuthGuard>
@@ -81,6 +102,8 @@ function DiariesContent() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<FilterType>('all');
+  const [viewMode, setViewMode] = useState<'timeline' | 'calendar'>('timeline');
+  const [currentMonth, setCurrentMonth] = useState(new Date());
 
   useEffect(() => {
     if (!user?.id) return;
@@ -141,17 +164,109 @@ function DiariesContent() {
           <BookOpen className="h-6 w-6 text-indigo-500" />
           <h1 className="text-xl font-bold">我的日记</h1>
         </div>
-        <Link href="/upload?level=DIARY">
-          <Button size="sm" className="gap-1.5 bg-indigo-600 hover:bg-indigo-700">
-            <PenLine className="h-4 w-4" />
-            写日记
-          </Button>
-        </Link>
+        <div className="flex items-center gap-2">
+          <div className="flex rounded-lg border border-border">
+            <Button
+              variant={viewMode === 'timeline' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setViewMode('timeline')}
+              className="gap-1"
+            >
+              <List className="h-4 w-4" />
+              时间线
+            </Button>
+            <Button
+              variant={viewMode === 'calendar' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setViewMode('calendar')}
+              className="gap-1"
+            >
+              <Calendar className="h-4 w-4" />
+              日历
+            </Button>
+          </div>
+          <Link href="/upload?level=DIARY">
+            <Button size="sm" className="gap-1.5 bg-indigo-600 hover:bg-indigo-700">
+              <PenLine className="h-4 w-4" />
+              写日记
+            </Button>
+          </Link>
+        </div>
       </div>
 
       <p className="text-sm text-muted-foreground">
         记录旅途中的点滴心情与感悟，这是属于你的私密空间。
       </p>
+
+      {/* 那年今日 */}
+      {(() => {
+        const today = new Date();
+        const todayMonth = today.getMonth();
+        const todayDay = today.getDate();
+        const todayYear = today.getFullYear();
+
+        const onThisDayPosts = posts.filter(post => {
+          const postDate = new Date(post.createdAt);
+          return postDate.getMonth() === todayMonth &&
+                 postDate.getDate() === todayDay &&
+                 postDate.getFullYear() !== todayYear;
+        }).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+        if (onThisDayPosts.length === 0) return null;
+
+        return (
+          <Card className="border-indigo-200 bg-gradient-to-r from-indigo-50 to-purple-50 dark:border-indigo-900 dark:from-indigo-950/30 dark:to-purple-950/30">
+            <CardContent className="p-4 space-y-3">
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-indigo-500" />
+                <h3 className="font-semibold text-indigo-900 dark:text-indigo-100">那年今日</h3>
+                <Badge variant="secondary" className="text-xs">
+                  {onThisDayPosts.length}篇回忆
+                </Badge>
+              </div>
+              <div className="space-y-2">
+                {onThisDayPosts.slice(0, 3).map(post => {
+                  const postYear = new Date(post.createdAt).getFullYear();
+                  const yearsAgo = todayYear - postYear;
+                  const visibility = visibilityConfig[post.visibility];
+
+                  return (
+                    <button
+                      key={post.id}
+                      onClick={() => router.push(`/diaries/${post.id}`)}
+                      className="w-full text-left rounded-lg border border-indigo-200/50 bg-white/50 dark:border-indigo-800/50 dark:bg-gray-900/50 p-3 hover:bg-white/80 dark:hover:bg-gray-900/80 transition-colors"
+                    >
+                      <div className="flex items-start justify-between gap-2 mb-1">
+                        <span className="text-xs font-medium text-indigo-600 dark:text-indigo-400">
+                          {postYear}年 · {yearsAgo}年前
+                        </span>
+                        <div className={`flex items-center gap-1 text-xs ${visibility.color}`}>
+                          <visibility.icon className="h-3 w-3" />
+                          <span>{visibility.label}</span>
+                        </div>
+                      </div>
+                      <p className="text-sm line-clamp-2 text-foreground">
+                        {post.content || '(无内容)'}
+                      </p>
+                      {post.vrMetadata?.mood && (
+                        <div className="flex items-center gap-1 mt-2 text-xs text-muted-foreground">
+                          <span>{MoodEmoji[post.vrMetadata.mood as MoodType]}</span>
+                          <span>{post.vrMetadata.mood}</span>
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
+                {onThisDayPosts.length > 3 && (
+                  <p className="text-xs text-center text-muted-foreground">
+                    还有 {onThisDayPosts.length - 3} 篇回忆
+                  </p>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        );
+      })()}
 
       {/* 状态筛选 */}
       <div className="flex gap-2 overflow-x-auto pb-2">
@@ -191,7 +306,7 @@ function DiariesContent() {
             {filter === 'all' ? '还没有日记，点击「写日记」开始记录吧' : '该分类下暂无日记'}
           </p>
         </div>
-      ) : (
+      ) : viewMode === 'timeline' ? (
         <div className="space-y-6">
           {monthKeys.map(monthKey => (
             <div key={monthKey}>
@@ -370,7 +485,288 @@ function DiariesContent() {
             </div>
           ))}
         </div>
+      ) : (
+        <CalendarView
+          posts={filteredPosts}
+          currentMonth={currentMonth}
+          setCurrentMonth={setCurrentMonth}
+          onDateClick={(date) => {
+            // TODO: 可以在这里添加日期点击后的操作，比如筛选该日期的日记
+            console.log('Clicked date:', date);
+          }}
+        />
       )}
+    </div>
+  );
+}
+
+function CalendarView({ posts, currentMonth, setCurrentMonth, onDateClick }: {
+  posts: Post[];
+  currentMonth: Date;
+  setCurrentMonth: (date: Date) => void;
+  onDateClick: (date: Date) => void;
+}) {
+  const router = useRouter();
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const daysInMonth = getDaysInMonth(currentMonth);
+  const firstDay = getFirstDayOfMonth(currentMonth);
+  const postsByDate = groupPostsByDate(posts);
+
+  const prevMonth = () => {
+    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1));
+    setSelectedDate(null);
+  };
+
+  const nextMonth = () => {
+    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1));
+    setSelectedDate(null);
+  };
+
+  const goToToday = () => {
+    setCurrentMonth(new Date());
+    setSelectedDate(new Date());
+  };
+
+  const handleDateClick = (day: number) => {
+    const clickedDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+    setSelectedDate(clickedDate);
+    onDateClick(clickedDate);
+  };
+
+  const formatDateKey = (year: number, month: number, day: number) => {
+    return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  };
+
+  const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
+
+  return (
+    <div className="space-y-4">
+      {/* 月份导航 */}
+      <div className="flex items-center justify-between">
+        <Button variant="outline" size="sm" onClick={prevMonth}>
+          <ChevronLeft className="h-4 w-4" />
+        </Button>
+        <div className="flex items-center gap-3">
+          <h2 className="text-lg font-semibold">
+            {currentMonth.getFullYear()}年{currentMonth.getMonth() + 1}月
+          </h2>
+          <Button variant="ghost" size="sm" onClick={goToToday}>
+            今天
+          </Button>
+        </div>
+        <Button variant="outline" size="sm" onClick={nextMonth}>
+          <ChevronRight className="h-4 w-4" />
+        </Button>
+      </div>
+
+      {/* 日历网格 */}
+      <Card>
+        <CardContent className="p-4">
+          {/* 星期标题 */}
+          <div className="grid grid-cols-7 gap-1 mb-2">
+            {weekDays.map(day => (
+              <div key={day} className="text-center text-xs font-medium text-muted-foreground py-2">
+                {day}
+              </div>
+            ))}
+          </div>
+
+          {/* 日期网格 */}
+          <div className="grid grid-cols-7 gap-1">
+            {/* 空白填充 */}
+            {Array.from({ length: firstDay }).map((_, i) => (
+              <div key={`empty-${i}`} className="aspect-square" />
+            ))}
+
+            {/* 日期格子 */}
+            {Array.from({ length: daysInMonth }).map((_, i) => {
+              const day = i + 1;
+              const dateKey = formatDateKey(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+              const dayPosts = postsByDate[dateKey] || [];
+              const hasMood = dayPosts.some(p => p.vrMetadata?.mood);
+              const isToday = new Date().toDateString() === new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day).toDateString();
+
+              return (
+                <button
+                  key={day}
+                  onClick={() => handleDateClick(day)}
+                  className={`aspect-square rounded-lg border p-1 transition-colors hover:bg-accent/50 ${
+                    isToday ? 'border-primary bg-primary/5' : 'border-transparent'
+                  }`}
+                >
+                  <div className="h-full flex flex-col items-center justify-start gap-0.5">
+                    <span className={`text-sm ${isToday ? 'font-bold text-primary' : ''}`}>
+                      {day}
+                    </span>
+                    {dayPosts.length > 0 && (
+                      <div className="flex gap-0.5">
+                        {dayPosts.slice(0, 3).map((post, idx) => (
+                          <div
+                            key={idx}
+                            className={`w-1.5 h-1.5 rounded-full ${
+                              post.vrMetadata?.mood ? 'bg-indigo-500' : 'bg-muted-foreground/40'
+                            }`}
+                          />
+                        ))}
+                        {dayPosts.length > 3 && (
+                          <span className="text-[8px] text-muted-foreground">+{dayPosts.length - 3}</span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* 统计信息 */}
+      <div className="text-sm text-muted-foreground text-center">
+        本月共 {Object.values(postsByDate).flat().filter(p => {
+          const postDate = new Date(p.createdAt);
+          return postDate.getFullYear() === currentMonth.getFullYear() &&
+                 postDate.getMonth() === currentMonth.getMonth();
+        }).length} 篇日记
+      </div>
+
+      {/* 选中日期的日记列表 */}
+      {selectedDate && (() => {
+        const dateKey = formatDateKey(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
+        const selectedPosts = postsByDate[dateKey] || [];
+
+        if (selectedPosts.length === 0) {
+          return (
+            <Card>
+              <CardContent className="p-6 text-center">
+                <p className="text-sm text-muted-foreground">
+                  {selectedDate.getMonth() + 1}月{selectedDate.getDate()}日暂无日记
+                </p>
+              </CardContent>
+            </Card>
+          );
+        }
+
+        return (
+          <div className="space-y-3">
+            <h3 className="text-sm font-medium text-muted-foreground">
+              {selectedDate.getMonth() + 1}月{selectedDate.getDate()}日的日记 ({selectedPosts.length}篇)
+            </h3>
+            {selectedPosts.map(post => {
+              const visibility = visibilityConfig[post.visibility];
+              const VisibilityIcon = visibility.icon;
+
+              return (
+                <Card key={post.id} className="overflow-hidden hover:shadow-md transition-shadow">
+                  <CardContent className="p-4">
+                    {/* 顶部：时间 + 地点 + 隐私状态 */}
+                    <div className="flex items-start justify-between gap-2 mb-3">
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <span>{new Date(post.createdAt).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}</span>
+                        {post.vrMetadata?.mood && (
+                          <>
+                            <span>·</span>
+                            <span className="flex items-center gap-1">
+                              {MoodEmoji[post.vrMetadata.mood as MoodType]}
+                            </span>
+                          </>
+                        )}
+                        {post.vrMetadata?.weather && (
+                          <>
+                            <span>·</span>
+                            <span className="flex items-center gap-1">
+                              {WeatherEmoji[post.vrMetadata.weather as WeatherType]}
+                            </span>
+                          </>
+                        )}
+                        {post.location?.name && (
+                          <>
+                            <span>·</span>
+                            <span className="flex items-center gap-1">
+                              <MapPin className="h-3 w-3" />
+                              {post.location.name}
+                            </span>
+                          </>
+                        )}
+                      </div>
+
+                      <div className={`flex items-center gap-1 text-xs ${visibility.color}`}>
+                        <VisibilityIcon className="h-3.5 w-3.5" />
+                        <span>{visibility.label}</span>
+                      </div>
+                    </div>
+
+                    {/* 内容区 */}
+                    <div className="flex gap-3">
+                      {/* 文字内容 */}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm leading-relaxed line-clamp-3 mb-3">
+                          {post.content || '(无内容)'}
+                        </p>
+
+                        {/* 媒体缩略图 */}
+                        {post.mediaItems.length > 0 && (
+                          <div className="flex gap-1.5 mb-3">
+                            {post.mediaItems.slice(0, 4).map((media, idx) => {
+                              const MediaIcon = getMediaIcon(media.type);
+                              return (
+                                <div
+                                  key={media.id}
+                                  className="relative w-16 h-16 rounded-md overflow-hidden bg-muted"
+                                >
+                                  {media.type === 'IMAGE' && media.thumbnailUrl ? (
+                                    <img
+                                      src={media.thumbnailUrl}
+                                      alt=""
+                                      className="w-full h-full object-cover"
+                                    />
+                                  ) : (
+                                    <div className="w-full h-full flex items-center justify-center">
+                                      <MediaIcon className="h-5 w-5 text-muted-foreground/50" />
+                                    </div>
+                                  )}
+                                  {idx === 3 && post.mediaItems.length > 4 && (
+                                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center text-white text-xs font-medium">
+                                      +{post.mediaItems.length - 4}
+                                    </div>
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* 右侧大图（如果有） */}
+                      {post.mediaItems.length > 0 && post.mediaItems[0].type === 'IMAGE' && post.mediaItems[0].thumbnailUrl && (
+                        <div className="shrink-0 w-24 h-24 rounded-md overflow-hidden bg-muted">
+                          <img
+                            src={post.mediaItems[0].thumbnailUrl}
+                            alt=""
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* 底部：操作按钮 */}
+                    <div className="flex items-center justify-end gap-2 pt-3 border-t border-border/50">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => router.push(`/diaries/${post.id}`)}
+                        className="gap-1.5"
+                      >
+                        查看详情
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        );
+      })()}
     </div>
   );
 }
