@@ -36,10 +36,8 @@ const navItems = [
   { href: '/discover', label: '寻找搭子', icon: UserPlus },
 ];
 
-// 浏览发现（管理员精简版）
-const adminNavItems = [
-  { href: '/feed', label: '首页', icon: Home },
-];
+// 管理员：不显示浏览区，管理为中心
+const adminNavItems: { href: string; label: string; icon: any }[] = [];
 
 // 我的内容
 const contentItems = [
