@@ -23,7 +23,7 @@ import { TopicSelector } from '@/components/upload/topic-selector';
 import { CommunitySelector } from '@/components/upload/community-selector';
 import { DraftList } from '@/components/upload/draft-list';
 import { PublishPreview } from '@/components/upload/publish-preview';
-import { saveDraftToLocal, saveDraftToList, clearLocalDraft } from '@/lib/draft-api';
+import { saveDraftToLocal, saveDraftToList, clearLocalDraft, deleteDraftFromList } from '@/lib/draft-api';
 import { translateText, detectLanguage } from '@/lib/translation-api';
 
 type UploadTab = 'VIDEO' | 'IMAGE' | 'AUDIO' | 'DIARY' | 'JOURNEY';
