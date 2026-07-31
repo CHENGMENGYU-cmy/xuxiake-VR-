@@ -61,6 +61,7 @@ export default function JourneysPage() {
 
 function JourneysContent() {
   const { user } = useAuthStore();
+  const removePost = usePostStore(s => s.removePost);
   const router = useRouter();
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
