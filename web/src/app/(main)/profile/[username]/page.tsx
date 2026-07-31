@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter, usePathname, notFound } from 'next/navigation';
 import Link from 'next/link';
-import { Link2, Calendar, Loader2 } from 'lucide-react';
+import { Link2, Calendar, Loader2, Shield } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
