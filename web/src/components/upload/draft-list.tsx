@@ -1,11 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { FileText, Trash2, Clock, ArrowRight } from 'lucide-react';
+import { FileText, Trash2, Clock, ChevronDown, ChevronRight } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { getDraftList, deleteDraftFromList } from '@/lib/draft-api';
-import { cn } from '@/lib/utils';
 
 interface DraftItem {
   id: string;
@@ -28,11 +27,15 @@ const postTypeLabels: Record<string, string> = {
   '语音记录': '语音记录',
   '日记': '日记',
   '游记': '游记',
-  // 兼容旧格式
   NOTE: '随记',
   VR_MEDIA: '第一视角',
   JOURNEY: '游记',
   MOMENT: '瞬间',
+};
+
+const contentPreview = (text: string | undefined, maxLen = 35) => {
+  const t = (text || '').replace(/\n/g, ' ');
+  return t.length > maxLen ? t.slice(0, maxLen) + '...' : t;
 };
 
 export function DraftList({ onSelectDraft, refreshKey }: DraftListProps) {
@@ -48,7 +51,8 @@ export function DraftList({ onSelectDraft, refreshKey }: DraftListProps) {
     setDrafts(list);
   };
 
-  const handleDelete = (draftId: string) => {
+  const handleDelete = (e: React.MouseEvent, draftId: string) => {
+    e.stopPropagation();
     deleteDraftFromList(draftId);
     loadDrafts();
   };
@@ -74,7 +78,7 @@ export function DraftList({ onSelectDraft, refreshKey }: DraftListProps) {
 
   return (
     <Card>
-      <CardHeader className="pb-2">
+      <CardHeader className="py-2 px-4">
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-sm">
             <FileText className="h-4 w-4 text-muted-foreground" />
@@ -83,56 +87,43 @@ export function DraftList({ onSelectDraft, refreshKey }: DraftListProps) {
           <Button
             variant="ghost"
             size="sm"
+            className="h-7 text-xs gap-1"
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? '收起' : '展开'}
+            {isOpen ? <ChevronDown className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
           </Button>
         </div>
       </CardHeader>
       {isOpen && (
-        <CardContent>
-          <div className="space-y-2">
+        <CardContent className="px-2 pb-2 pt-0">
+          <div className="space-y-0.5">
             {drafts.map((draft) => (
-              <div
+              <button
                 key={draft.id}
-                className="flex items-start gap-3 rounded-lg border p-3 hover:bg-muted/50 transition-colors"
+                onClick={() => onSelectDraft(draft)}
+                className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left hover:bg-muted/50 transition-colors"
               >
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <span className="shrink-0 rounded bg-muted px-1.5 py-0.5 font-medium">
                       {postTypeLabels[draft.postType] || draft.postType}
                     </span>
-                    <span className="text-xs text-muted-foreground flex items-center gap-1">
-                      <Clock className="h-3 w-3" />
-                      {formatDate(draft.savedAt)}
-                    </span>
+                    <Clock className="h-3 w-3 shrink-0" />
+                    <span className="shrink-0">{formatDate(draft.savedAt)}</span>
                   </div>
-                  <p className="text-sm font-medium mt-1 truncate">
-                    {draft.title || '无标题'}
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
-                    {draft.content || draft.preview || '暂无内容'}
+                  <p className="text-sm mt-0.5 truncate">
+                    {contentPreview(draft.content, 35)}
                   </p>
                 </div>
-                <div className="flex items-center gap-1">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => onSelectDraft(draft)}
-                    className="h-8 w-8 p-0"
-                  >
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleDelete(draft.id)}
-                    className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
+                <span
+                  className="shrink-0 rounded p-1 text-muted-foreground hover:text-destructive transition-colors"
+                  onClick={(e) => handleDelete(e, draft.id)}
+                  role="button"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                </span>
+              </button>
             ))}
           </div>
         </CardContent>
