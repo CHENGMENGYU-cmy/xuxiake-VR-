@@ -201,6 +201,11 @@ function UploadContent() {
   const handleTabChange = (tab: UploadTab) => {
     if (tab === 'JOURNEY') { router.push('/upload/journey-creator'); return; }
     setActiveTab(tab);
+    // 切换Tab时清空所有内容
+    setContent('');
+    setLocation('');
+    setSelectedTopics([]);
+    setSelectedCommunity(null);
     resetMedia();
     setLinkData(null);
     setLinkUrl('');
@@ -208,10 +213,8 @@ function UploadContent() {
     setShowTranslationAddon(false);
     setMood('');
     setWeather('');
-    // 日记Tab默认私密
-    if (tab === 'DIARY') {
-      setVisibility('PRIVATE');
-    }
+    // 日记Tab默认私密，其他公开
+    setVisibility(tab === 'DIARY' ? 'PRIVATE' : 'PUBLIC');
   };
 
   // Video upload
