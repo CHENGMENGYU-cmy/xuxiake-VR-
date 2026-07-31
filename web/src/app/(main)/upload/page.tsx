@@ -195,7 +195,7 @@ function UploadContent() {
       JOURNEY: '游记',
     };
     saveDraftToList({
-      id: `draft-${Date.now()}`,
+      id: currentDraftId || `draft-${Date.now()}`,
       title: content.slice(0, 30) || '无标题',
       content,
       postType: postTypeMap[activeTab] || 'NOTE',
