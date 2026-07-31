@@ -150,6 +150,62 @@ function NotificationsContent() {
     );
   }
 
+  // 管理员/审核员 — 管理通知
+  if (isAdmin) {
+    const adminIconMap: Record<string, any> = { REVIEW: Shield, REPORT: Flag };
+    const adminIconColor: Record<string, string> = {
+      REVIEW: 'text-amber-500 bg-amber-100 dark:bg-amber-900/30',
+      REPORT: 'text-red-500 bg-red-100 dark:bg-red-900/30',
+    };
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Bell className="h-6 w-6 text-primary" />
+            <h1 className="text-xl font-bold">系统通知</h1>
+          </div>
+        </div>
+
+        {isLoading ? (
+          <div className="flex justify-center py-12"><Loader2 className="h-6 w-6 animate-spin" /></div>
+        ) : (
+          <div className="rounded-lg border bg-card">
+            {adminItems.length === 0 ? (
+              <div className="flex flex-col items-center py-12 text-muted-foreground">
+                <Bell className="h-8 w-8 opacity-30 mb-2" />
+                <p className="text-sm">暂无待处理事项</p>
+              </div>
+            ) : (
+              <div>
+                {adminItems.map((item: any, idx: number) => {
+                  const Icon = adminIconMap[item.type] || Info;
+                  const colorClass = adminIconColor[item.type] || '';
+                  const link = item.type === 'REVIEW' ? '/admin/reviews' : '/admin/reports';
+                  return (
+                    <div key={item.id}>
+                      {idx > 0 && <Separator />}
+                      <Link href={link} className="flex items-start gap-3 p-4 transition-colors hover:bg-muted/50">
+                        <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${colorClass}`}>
+                          <Icon className="h-4 w-4" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm">{item.message}</p>
+                          {item.detail && <p className="mt-0.5 text-xs text-muted-foreground line-clamp-1">{item.detail}</p>}
+                          <p className="mt-0.5 text-xs text-muted-foreground">{formatTime(item.createdAt)}</p>
+                        </div>
+                      </Link>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // 普通用户 — 原通知列表
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
