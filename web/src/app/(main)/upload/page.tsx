@@ -170,9 +170,15 @@ function UploadContent() {
   }, [content, media, images, linkData, activeTab, location, visibility, vrFormat]);
 
   // 选择草稿
-  const handleSelectDraft = (draft: { content: string; postType: string }) => {
+  const handleSelectDraft = (draft: { content: string; postType: string; formData?: Record<string, any> }) => {
     setContent(draft.content);
-    // 可以根据 postType 恢复更多状态
+    // 恢复更多状态
+    if (draft.formData) {
+      if (draft.formData.activeTab) setActiveTab(draft.formData.activeTab);
+      if (draft.formData.location) setLocation(draft.formData.location);
+      if (draft.formData.visibility) setVisibility(draft.formData.visibility);
+      if (draft.formData.vrFormat) setVrFormat(draft.formData.vrFormat);
+    }
   };
 
   // 发布后清除草稿
