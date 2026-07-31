@@ -537,6 +537,7 @@ function UploadContent() {
     try {
       await publishPost(payload);
       clearLocalDraft();
+      setCurrentDraftId(null);
       if (activeTab === 'DIARY') {
         toast.success('日记已保存');
         router.push('/diaries');
