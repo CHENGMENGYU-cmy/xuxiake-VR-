@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Settings, User, Lock, Bell, Palette, Heart } from 'lucide-react';
+import { Settings, User, Lock, Bell, Shield, ClipboardCheck } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuthStore } from '@/stores/auth-store';
 import apiClient from '@/lib/api-client';
