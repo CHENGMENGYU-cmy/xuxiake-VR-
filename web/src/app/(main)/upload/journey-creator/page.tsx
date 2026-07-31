@@ -127,7 +127,7 @@ export default function JourneyCreatorPage() {
 
     const payload: CreatePostPayload = {
       content: content.trim() || title.trim(),
-      visibility: 'PUBLIC',
+      visibility,
       postType: 'JOURNEY',
       contentLevel: 'ESSAY',
       vrMetadata: { tab: 'JOURNEY' },
