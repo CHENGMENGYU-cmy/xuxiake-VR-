@@ -65,12 +65,14 @@ function ProfileContent({ username }: { username: string }) {
   useEffect(() => {
     const fetchFollowData = async () => {
       try {
-        const [followersRes, followingRes] = await Promise.all([
+        const [followersRes, followingRes, postsRes] = await Promise.all([
           getFollowers(username),
           getFollowing(username),
+          apiClient.get(`/users/${username}/posts`, { params: { limit: '1' } }),
         ]);
         setFollowerCount(followersRes.total || 0);
         setFollowingCount(followingRes.total || 0);
+        setPostCount(postsRes.data?.total || postsRes.data?.data?.length || 0);
 
         if (currentUser) {
           const amFollowing = followersRes.data?.some((u: User) => u.id === currentUser.id);
