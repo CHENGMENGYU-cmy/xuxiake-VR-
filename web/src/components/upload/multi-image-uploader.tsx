@@ -237,17 +237,14 @@ export function MultiImageUploader({
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
             className={cn(
-              'aspect-square rounded-md border-2 border-dashed border-muted-foreground/20 flex flex-col items-center justify-center gap-0.5 transition-colors hover:border-primary/50 hover:bg-primary/5',
+              'aspect-square flex items-center justify-center rounded-md border-2 border-dashed border-muted-foreground/20 transition-colors hover:border-primary/50 hover:bg-primary/5',
               uploading && 'opacity-50 cursor-not-allowed'
             )}
           >
             {uploading ? (
               <Loader2 className="h-4 w-4 animate-spin text-primary" />
             ) : (
-              <>
-                <Plus className="h-4 w-4 text-muted-foreground/40" />
-                <span className="text-[10px] text-muted-foreground/60">添加</span>
-              </>
+              <Plus className="h-4 w-4 text-muted-foreground/30" />
             )}
           </button>
         )}
