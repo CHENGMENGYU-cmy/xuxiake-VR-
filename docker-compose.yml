@@ -8,8 +8,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: xuxiake-root-2026
       MYSQL_DATABASE: xuxiake
-      MYSQL_CHARACTER_SET_SERVER: utf8mb4
-      MYSQL_COLLATION_SERVER: utf8mb4_unicode_ci
     volumes:
       - mysql_data:/var/lib/mysql
       - ./server/sql/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
@@ -22,13 +20,10 @@ services:
       - ./server/sql/migrate-guide-collection.sql:/docker-entrypoint-initdb.d/08-guides.sql
       - ./server/sql/migrate-media-upload.sql:/docker-entrypoint-initdb.d/09-media.sql
       - ./server/sql/migrate-conversation-status.sql:/docker-entrypoint-initdb.d/10-conversations.sql
-      - ./server/sql/migrate-content-hierarchy.sql:/docker-entrypoint-initdb.d/11-hierarchy.sql
       - ./server/sql/migrate-content-review.sql:/docker-entrypoint-initdb.d/12-review.sql
-      - ./server/sql/migrate-user-roles.sql:/docker-entrypoint-initdb.d/13-roles.sql
       - ./server/sql/migrate-recommendation-feedback.sql:/docker-entrypoint-initdb.d/14-recommend.sql
       - ./server/sql/migrate-ar-p2.sql:/docker-entrypoint-initdb.d/15-ar-p2.sql
       - ./server/sql/migrate-danmaku-playlist.sql:/docker-entrypoint-initdb.d/16-danmaku.sql
-      - ./server/sql/migrate-vrmetadata-tab.sql:/docker-entrypoint-initdb.d/17-vrmetadata.sql
       - ./server/sql/seed.sql:/docker-entrypoint-initdb.d/20-seed.sql
       - ./server/sql/seed-notifications.sql:/docker-entrypoint-initdb.d/21-seed-notifications.sql
     networks:
