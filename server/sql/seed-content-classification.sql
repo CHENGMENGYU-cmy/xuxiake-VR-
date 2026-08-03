@@ -90,64 +90,33 @@ INSERT INTO guide_details (post_id, destination, category, best_season, budget_l
 ('post-seed-015', '黄山', 'TRANSPORT', '春秋最佳', 'MID', '# 黄山交通攻略\n\n## 如何到达\n- 高铁：各地→黄山北站\n- 飞机：各地→黄山屯溪机场\n\n## 景区交通\n- 黄山北站→汤口换乘中心：班车20元\n- 汤口→慈光阁/云谷寺：景区大巴19元\n\n## 索道选择\n- 玉屏索道（前山上）：90元\n- 云谷索道（后山上）：80元\n- 建议前山上后山下');
 
 -- ============================================================
--- 7. 帖子标签关联（interest_tags 通过 community_tags 关联社群，此处跳过）
--- 注：schema 中无 post_tags 表，标签关联通过 community_tags 实现
+-- 7. 帖子标签关联
+-- 注：schema 中无 post_tags 表，兴趣标签通过 community_tags 关联社群
+-- 此处跳过帖子-兴趣标签直接关联，由运行时动态创建
 -- ============================================================
--- INSERT INTO community_tags (id, community_id, tag_id) VALUES
-INSERT INTO post_hashtags (post_id, hashtag_id)
-SELECT 'post-seed-001', id FROM hashtags WHERE name = '自然风光' LIMIT 1;
--- 简化：跳过标签关联，由运行时动态创建
-(uuid(), 'post-seed-001', 'tag-001'),
-(uuid(), 'post-seed-001', 'tag-020'),
-(uuid(), 'post-seed-002', 'tag-002'),
-(uuid(), 'post-seed-002', 'tag-024'),
-(uuid(), 'post-seed-003', 'tag-003'),
-(uuid(), 'post-seed-004', 'tag-021'),
-(uuid(), 'post-seed-004', 'tag-003'),
-(uuid(), 'post-seed-005', 'tag-001'),
-(uuid(), 'post-seed-005', 'tag-009'),
-(uuid(), 'post-seed-005', 'tag-010'),
-(uuid(), 'post-seed-006', 'tag-001'),
-(uuid(), 'post-seed-006', 'tag-011'),
-(uuid(), 'post-seed-007', 'tag-001'),
-(uuid(), 'post-seed-007', 'tag-011'),
-(uuid(), 'post-seed-008', 'tag-015'),
-(uuid(), 'post-seed-008', 'tag-001'),
-(uuid(), 'post-seed-009', 'tag-017'),
-(uuid(), 'post-seed-009', 'tag-001'),
-(uuid(), 'post-seed-010', 'tag-015'),
-(uuid(), 'post-seed-011', 'tag-001'),
-(uuid(), 'post-seed-011', 'tag-026'),
-(uuid(), 'post-seed-012', 'tag-003'),
-(uuid(), 'post-seed-012', 'tag-021'),
-(uuid(), 'post-seed-013', 'tag-021'),
-(uuid(), 'post-seed-013', 'tag-026'),
-(uuid(), 'post-seed-014', 'tag-026'),
-(uuid(), 'post-seed-015', 'tag-026'),
-(uuid(), 'post-seed-015', 'tag-016');
 
 -- ============================================================
--- 8. 帖子话题关联
+-- 8. 帖子话题关联（topic_posts 表，复合主键 topic_id + post_id）
 -- ============================================================
-INSERT INTO post_topics (id, post_id, topic_id) VALUES
-(uuid(), 'post-seed-001', 'topic-003'),
-(uuid(), 'post-seed-002', 'topic-005'),
-(uuid(), 'post-seed-004', 'topic-008'),
-(uuid(), 'post-seed-005', 'topic-003'),
-(uuid(), 'post-seed-005', 'topic-007'),
-(uuid(), 'post-seed-006', 'topic-003'),
-(uuid(), 'post-seed-008', 'topic-007'),
-(uuid(), 'post-seed-011', 'topic-002'),
-(uuid(), 'post-seed-012', 'topic-001'),
-(uuid(), 'post-seed-013', 'topic-001'),
-(uuid(), 'post-seed-013', 'topic-008'),
-(uuid(), 'post-seed-014', 'topic-002'),
-(uuid(), 'post-seed-015', 'topic-007');
+INSERT INTO topic_posts (topic_id, post_id) VALUES
+('topic-003', 'post-seed-001'),
+('topic-005', 'post-seed-002'),
+('topic-008', 'post-seed-004'),
+('topic-003', 'post-seed-005'),
+('topic-007', 'post-seed-005'),
+('topic-003', 'post-seed-006'),
+('topic-007', 'post-seed-008'),
+('topic-002', 'post-seed-011'),
+('topic-001', 'post-seed-012'),
+('topic-001', 'post-seed-013'),
+('topic-008', 'post-seed-013'),
+('topic-002', 'post-seed-014'),
+('topic-007', 'post-seed-015');
 
 -- ============================================================
 -- 9. 更新话题帖子数
 -- ============================================================
-UPDATE topics SET post_count = (SELECT COUNT(*) FROM post_topics WHERE topic_id = topics.id);
+UPDATE topics SET post_count = (SELECT COUNT(*) FROM topic_posts WHERE topic_id = topics.id);
 
 -- ============================================================
 -- 10. 更新媒体数据（给部分帖子添加图片）
