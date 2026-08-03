@@ -209,3 +209,48 @@ CREATE TABLE IF NOT EXISTS messages (
   CONSTRAINT fk_msg_conv   FOREIGN KEY (conversation_id) REFERENCES conversations(id) ON DELETE CASCADE,
   CONSTRAINT fk_msg_sender FOREIGN KEY (sender_id)       REFERENCES users(id)         ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================================
+-- 11. topics
+-- ============================================================
+CREATE TABLE IF NOT EXISTS topics (
+  id          VARCHAR(36) NOT NULL PRIMARY KEY,
+  name        VARCHAR(100) NOT NULL,
+  icon        VARCHAR(50) DEFAULT NULL,
+  description TEXT,
+  cover_url   VARCHAR(500),
+  post_count  INT NOT NULL DEFAULT 0,
+  is_hot      TINYINT(1) NOT NULL DEFAULT 0,
+  created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE INDEX idx_topic_name (name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================================
+-- 12. topic_posts
+-- ============================================================
+CREATE TABLE IF NOT EXISTS topic_posts (
+  topic_id VARCHAR(36) NOT NULL,
+  post_id  VARCHAR(36) NOT NULL,
+  PRIMARY KEY (topic_id, post_id),
+  INDEX idx_tp_post (post_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================================
+-- 13. hashtags
+-- ============================================================
+CREATE TABLE IF NOT EXISTS hashtags (
+  id         VARCHAR(36) NOT NULL PRIMARY KEY,
+  name       VARCHAR(100) NOT NULL,
+  post_count INT NOT NULL DEFAULT 0,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE INDEX idx_hashtag_name (name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================================
+-- 14. post_hashtags
+-- ============================================================
+CREATE TABLE IF NOT EXISTS post_hashtags (
+  post_id    VARCHAR(36) NOT NULL,
+  hashtag_id VARCHAR(36) NOT NULL,
+  PRIMARY KEY (post_id, hashtag_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
