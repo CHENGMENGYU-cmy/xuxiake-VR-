@@ -8,11 +8,7 @@ ALTER TABLE communities
   ADD COLUMN category VARCHAR(50) DEFAULT NULL COMMENT '社群分类' AFTER status,
   ADD COLUMN location_name VARCHAR(200) DEFAULT NULL COMMENT '社群地理位置' AFTER category;
 
--- 2. posts 表添加 community_id 关联
-ALTER TABLE posts
-  ADD COLUMN community_id VARCHAR(36) DEFAULT NULL COMMENT '关联社群ID' AFTER author_id,
-  ADD KEY idx_posts_community (community_id),
-  ADD CONSTRAINT fk_posts_community FOREIGN KEY (community_id) REFERENCES communities(id) ON DELETE SET NULL;
+-- 2. posts 表 community_id 已在 schema.sql 中定义，无需迁移
 
 -- 3. 社群公告表
 CREATE TABLE IF NOT EXISTS community_announcements (
