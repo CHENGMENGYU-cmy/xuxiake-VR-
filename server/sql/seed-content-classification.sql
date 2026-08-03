@@ -90,9 +90,13 @@ INSERT INTO guide_details (post_id, destination, category, best_season, budget_l
 ('post-seed-015', '黄山', 'TRANSPORT', '春秋最佳', 'MID', '# 黄山交通攻略\n\n## 如何到达\n- 高铁：各地→黄山北站\n- 飞机：各地→黄山屯溪机场\n\n## 景区交通\n- 黄山北站→汤口换乘中心：班车20元\n- 汤口→慈光阁/云谷寺：景区大巴19元\n\n## 索道选择\n- 玉屏索道（前山上）：90元\n- 云谷索道（后山上）：80元\n- 建议前山上后山下');
 
 -- ============================================================
--- 7. 帖子标签关联
+-- 7. 帖子标签关联（interest_tags 通过 community_tags 关联社群，此处跳过）
+-- 注：schema 中无 post_tags 表，标签关联通过 community_tags 实现
 -- ============================================================
-INSERT INTO post_tags (id, post_id, tag_id) VALUES
+-- INSERT INTO community_tags (id, community_id, tag_id) VALUES
+INSERT INTO post_hashtags (post_id, hashtag_id)
+SELECT 'post-seed-001', id FROM hashtags WHERE name = '自然风光' LIMIT 1;
+-- 简化：跳过标签关联，由运行时动态创建
 (uuid(), 'post-seed-001', 'tag-001'),
 (uuid(), 'post-seed-001', 'tag-020'),
 (uuid(), 'post-seed-002', 'tag-002'),
