@@ -31,9 +31,9 @@ for local_rel, remote_rel in files_to_upload:
     remote_path = REMOTE_ROOT + '/' + remote_rel
     try:
         sftp.put(local_path, remote_path)
-        print(f'  ✓ {local_rel}')
+        print(f'  [OK] {local_rel}')
     except Exception as e:
-        print(f'  ✗ {local_rel}: {e}')
+        print(f'  [ERR] {local_rel}: {e}')
 sftp.close()
 
 # Step 2: Stop old containers
