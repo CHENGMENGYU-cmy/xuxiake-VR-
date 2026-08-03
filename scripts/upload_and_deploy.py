@@ -1,12 +1,17 @@
 import paramiko
 import os
 
-HOST = '47.108.175.253'
-PORT = 12200
-USER = 'greatwall'
-PASS = 'Gw-123123'
+HOST = os.environ.get('DEPLOY_HOST', '')
+PORT = int(os.environ.get('DEPLOY_PORT', '12200'))
+USER = os.environ.get('DEPLOY_USER', '')
+PASS = os.environ.get('DEPLOY_PASS', '')
 REMOTE_ROOT = '/home/greatwall/xuxiake'
 LOCAL_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+if not HOST or not USER or not PASS:
+    print('请设置环境变量: DEPLOY_HOST, DEPLOY_USER, DEPLOY_PASS')
+    print('示例: $env:DEPLOY_HOST="47.108.175.253"; $env:DEPLOY_USER="greatwall"; $env:DEPLOY_PASS="xxx"')
+    exit(1)
 
 ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
