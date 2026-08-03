@@ -89,8 +89,11 @@ def run_remote(cmd, label, timeout=600):
 
 DC = 'docker-compose'
 
+# Docker 18.09 不支持 buildkit，需要禁用
+ENV_PREFIX = 'DOCKER_BUILDKIT=0 COMPOSE_DOCKER_CLI_BUILD=0'
+
 run_remote(f'cd {REMOTE_ROOT} && {DC} down', 'Step 2: 停止旧容器', timeout=60)
-exit_code = run_remote(f'cd {REMOTE_ROOT} && {DC} build --no-cache 2>&1', 'Step 3: 重建镜像', timeout=600)
+exit_code = run_remote(f'cd {REMOTE_ROOT} && {ENV_PREFIX} {DC} build --no-cache 2>&1', 'Step 3: 重建镜像', timeout=600)
 
 if exit_code == 0:
     run_remote(f'cd {REMOTE_ROOT} && {DC} up -d', 'Step 4: 启动容器', timeout=120)
