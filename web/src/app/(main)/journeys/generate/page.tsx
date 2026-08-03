@@ -36,7 +36,7 @@ function GenerateContent() {
   const [status, setStatus] = useState('');
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<string | null>(null);
-  const pollRef = useRef<ReturnType<typeof setInterval>>();
+  const pollRef = useRef<ReturnType<typeof setInterval>>(undefined);
 
   // 加载种子内容
   useEffect(() => {

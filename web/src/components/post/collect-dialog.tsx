@@ -41,7 +41,7 @@ export function CollectDialog({ postId, open, onClose }: CollectDialogProps) {
           setCollections(cols);
           // 检查哪些收藏夹已包含此帖子
           const results = await Promise.allSettled(
-            cols.map((c) => getCollectionPosts(c.id, 1))
+            cols.map((c: any) => getCollectionPosts(c.id, 1))
           );
           const ids = new Set<string>();
           results.forEach((r, i) => {
@@ -130,7 +130,7 @@ export function CollectDialog({ postId, open, onClose }: CollectDialogProps) {
                       {isSelected && <Check className="h-3 w-3" />}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium">{col.name || col.title}</p>
+                      <p className="truncate text-sm font-medium">{col.name}</p>
                     </div>
                   </button>
                 );

@@ -42,7 +42,7 @@ function AvatarImage({ className, src, ...props }: AvatarPrimitive.Image.Props) 
     if (!src) return;
     const img = new window.Image();
     img.onerror = handleError;
-    img.src = src;
+    img.src = typeof src === 'string' ? src : '';
     // 如果图片已缓存但无效（naturalWidth === 0），也需要触发 fallback
     if (img.complete && img.naturalWidth === 0) {
       handleError();

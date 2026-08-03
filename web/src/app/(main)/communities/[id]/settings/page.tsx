@@ -103,7 +103,7 @@ function SettingsContent() {
     } catch { toast.error('操作失败'); }
   };
 
-  const isAdmin = community && user && community.creatorId === user.id;
+  const isAdmin = community && user && community.creator?.id === user.id;
 
   if (loading) {
     return <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin" /></div>;
@@ -188,7 +188,7 @@ function SettingsContent() {
               <div key={r.id} className="flex items-center justify-between rounded-lg border p-3">
                 <div className="flex items-center gap-3">
                   <Avatar className="h-9 w-9">
-                    <AvatarImage src={r.user?.avatarUrl} />
+                    <AvatarImage src={r.user?.avatarUrl ?? undefined} />
                     <AvatarFallback>{r.user?.displayName?.[0]}</AvatarFallback>
                   </Avatar>
                   <div>

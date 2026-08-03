@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Map, Loader2, Send, Plus, Trash2, ImagePlus, X } from 'lucide-react';
 import { toast } from 'sonner';
@@ -26,6 +26,14 @@ interface JourneyStop {
 }
 
 export default function JourneyCreatorPage() {
+  return (
+    <Suspense fallback={<div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin" /></div>}>
+      <JourneyCreatorContent />
+    </Suspense>
+  );
+}
+
+function JourneyCreatorContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const editId = searchParams.get('edit');

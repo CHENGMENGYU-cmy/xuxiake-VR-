@@ -74,7 +74,7 @@ function JourneysContent() {
       level: 'ESSAY',
       userId: user.id,
       limit: 100,
-      currentUserId: user.id,
+      // currentUserId removed - server gets user from JWT
     })
       .then(result => {
         const all = result.posts || [];

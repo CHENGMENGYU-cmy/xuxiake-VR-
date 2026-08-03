@@ -264,7 +264,7 @@ export function ImageCropper({
               <ZoomOut className="h-4 w-4 text-muted-foreground" />
               <Slider
                 value={[scale * 100]}
-                onValueChange={([value]) => setScale(value / 100)}
+                onValueChange={(vals: number[]) => setScale(vals[0] / 100)}
                 min={50}
                 max={200}
                 step={1}

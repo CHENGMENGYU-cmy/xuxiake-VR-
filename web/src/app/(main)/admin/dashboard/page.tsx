@@ -69,7 +69,7 @@ function DashboardContent() {
         <div>
           <h1 className="text-2xl font-bold">管理仪表板</h1>
           <p className="text-sm text-muted-foreground">
-            {user.role === 'ADMIN' ? '系统管理员' : '审核员'} · 欢迎回来，{user.displayName}
+            {user?.role === 'ADMIN' ? '系统管理员' : '审核员'} · 欢迎回来，{user?.displayName}
           </p>
         </div>
       </div>

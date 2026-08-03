@@ -48,7 +48,7 @@ function JourneyDetailContent() {
   }, [postId]);
 
   // 权限检查
-  if (post && user && post.authorId !== user.id && post.visibility === 'PRIVATE') {
+  if (post && user && post.author?.id !== user.id && post.visibility === 'PRIVATE') {
     return (
       <div className="mx-auto max-w-2xl py-16 text-center text-muted-foreground">
         无权访问此游记
@@ -112,7 +112,7 @@ function JourneyDetailContent() {
   };
 
   const isPublic = post?.visibility === 'PUBLIC';
-  const isOwner = post && user && post.authorId === user.id;
+  const isOwner = post && user && post.author?.id === user.id;
 
   if (loading) {
     return (

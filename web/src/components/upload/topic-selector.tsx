@@ -194,6 +194,8 @@ export function TopicSelector({
       id: `new-${Date.now()}`,
       name: name.startsWith('#') ? name.slice(1) : name,
       postCount: 0,
+      isHot: false,
+      createdAt: new Date().toISOString(),
     };
 
     onTopicsChange([...selectedTopics, newTopic]);

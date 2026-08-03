@@ -27,6 +27,7 @@ export interface CreatePostPayload {
     linkFavicon?: string;
     sortOrder?: number;
   }[];
+  vrMetadata?: Record<string, unknown>;
   journey?: {
     title: string;
     startDate?: string;

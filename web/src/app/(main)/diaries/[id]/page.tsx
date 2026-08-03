@@ -44,7 +44,7 @@ function DiaryDetailContent() {
   }, [postId]);
 
   // 权限检查：只能查看自己的日记
-  if (post && user && post.authorId !== user.id) {
+  if (post && user && post.author?.id !== user.id) {
     return (
       <div className="mx-auto max-w-2xl py-16 text-center text-muted-foreground">
         无权访问此日记

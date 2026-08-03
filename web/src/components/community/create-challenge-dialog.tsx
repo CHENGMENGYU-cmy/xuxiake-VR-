@@ -34,13 +34,11 @@ export function CreateChallengeDialog({ communityId, open, onClose, onCreated }:
     setSubmitting(true);
     try {
       await createCommunityChallenge(communityId, {
-        name: name.trim(),
+        title: name.trim(),
         description: description || undefined,
-        startDate: startDate || undefined,
-        endDate: endDate || undefined,
+        startDate: startDate || new Date().toISOString(),
+        endDate: endDate || new Date(Date.now() + 30 * 86400000).toISOString(),
         maxParticipants: parseInt(maxParticipants) || 0,
-        reward: reward || undefined,
-        coverUrl: coverUrl || undefined,
       });
       toast.success('挑战创建成功');
       setName(''); setDescription(''); setStartDate(''); setEndDate(''); setMaxParticipants('0'); setReward(''); setCoverUrl('');

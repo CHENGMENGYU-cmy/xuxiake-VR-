@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { BookOpen, PenLine, Lock, Globe, Users, Image as ImageIcon, Video, Music, Edit, Share2, Calendar, MapPin, Sparkles, List, ChevronLeft, ChevronRight, Trash2 } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
@@ -256,10 +257,10 @@ function DiariesContent() {
                       <p className="text-sm line-clamp-2 text-foreground">
                         {post.content || '(无内容)'}
                       </p>
-                      {post.vrMetadata?.mood && (
+                      {!!post.vrMetadata?.mood && (
                         <div className="flex items-center gap-1 mt-2 text-xs text-muted-foreground">
                           <span>{MoodEmoji[post.vrMetadata.mood as MoodType]}</span>
-                          <span>{post.vrMetadata.mood}</span>
+                          <span>{String(post.vrMetadata.mood)}</span>
                         </div>
                       )}
                     </button>
@@ -342,7 +343,7 @@ function DiariesContent() {
                         <div className="flex items-start justify-between gap-2 mb-3">
                           <div className="flex items-center gap-2 text-xs text-muted-foreground">
                             <span>{formatRelativeTime(post.createdAt)}</span>
-                            {post.vrMetadata?.mood && (
+                            {!!post.vrMetadata?.mood && (
                               <>
                                 <span>·</span>
                                 <span className="flex items-center gap-1">
@@ -350,7 +351,7 @@ function DiariesContent() {
                                 </span>
                               </>
                             )}
-                            {post.vrMetadata?.weather && (
+                            {!!post.vrMetadata?.weather && (
                               <>
                                 <span>·</span>
                                 <span className="flex items-center gap-1">
@@ -663,7 +664,7 @@ function CalendarView({ posts, currentMonth, setCurrentMonth, onDateClick }: {
                     <div className="flex items-start justify-between gap-2 mb-3">
                       <div className="flex items-center gap-2 text-xs text-muted-foreground">
                         <span>{new Date(post.createdAt).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}</span>
-                        {post.vrMetadata?.mood && (
+                        {!!post.vrMetadata?.mood && (
                           <>
                             <span>·</span>
                             <span className="flex items-center gap-1">
@@ -671,7 +672,7 @@ function CalendarView({ posts, currentMonth, setCurrentMonth, onDateClick }: {
                             </span>
                           </>
                         )}
-                        {post.vrMetadata?.weather && (
+                        {!!post.vrMetadata?.weather && (
                           <>
                             <span>·</span>
                             <span className="flex items-center gap-1">
