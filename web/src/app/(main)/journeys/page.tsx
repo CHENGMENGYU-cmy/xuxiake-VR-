@@ -64,6 +64,7 @@ function JourneysContent() {
   const removePost = usePostStore(s => s.removePost);
   const router = useRouter();
   const [posts, setPosts] = useState<Post[]>([]);
+  const [allPosts, setAllPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<StatusTab>('public');
 
@@ -74,15 +75,24 @@ function JourneysContent() {
       level: 'ESSAY',
       userId: user.id,
       limit: 100,
-      // currentUserId removed - server gets user from JWT
     })
       .then(result => {
         const all = result.posts || [];
-        setPosts(activeTab === 'private' ? all.filter(p => p.visibility === 'PRIVATE') : all.filter(p => p.visibility !== 'PRIVATE'));
+        setAllPosts(all);
+        filterPosts(all, activeTab);
       })
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [user?.id, activeTab]);
+  }, [user?.id]);
+
+  const filterPosts = (source: Post[], tab: StatusTab) => {
+    setPosts(tab === 'private' ? source.filter(p => p.visibility === 'PRIVATE') : source.filter(p => p.visibility !== 'PRIVATE'));
+  };
+
+  const handleTabSwitch = (tab: StatusTab) => {
+    setActiveTab(tab);
+    filterPosts(allPosts, tab);
+  };
 
   const groupedPosts = groupByMonth(posts);
   const monthKeys = Object.keys(groupedPosts).sort((a, b) => b.localeCompare(a));
