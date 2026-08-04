@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-04
+修改位置：server/sql/seed.sql, users 表
+修改原因：users 表全部用户均为普通用户（USER），缺少系统管理员和审核员角色
+修改内容：u1 徐霞客设为系统管理员(ADMIN)，u3 李四设为审核员(MODERATOR)，其余保持 USER；同步更新当前数据库
+修改效果：管理端用户管理（仅 ADMIN）与内容审核（ADMIN/MODERATOR）权限生效，三种角色权限矩阵验证通过
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-04
 修改位置：server/sql/schema.sql, seed.sql, seed-content-classification.sql, seed-community-experience.sql, seed-log-diary-travelogue.sql
 修改原因：种子数据为"群聊时代"产物，与当前"社群=内容社区"开发逻辑脱节——社群动态为空、社群字段缺失、内容层级混乱、话题关联表名错误
 修改内容：社群升级为内容社区（补封面/分类/规则/位置，各新增6条专属动态）；posts 内容层级统一（CLASSIFIED/LOG/DIARY/TRAVELOGUE）；修复 topic_posts→post_topics、DELETE 语句 bug；schema 补齐 post_tags/post_topics 表
