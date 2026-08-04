@@ -247,6 +247,17 @@ export class PostsController {
     return { success: true, data };
   }
 
+  /** 查询指定素材的已有日记草稿 */
+  @Get('diary/draft/:snapId')
+  async getDiaryDraft(
+    @Headers('authorization') auth: string,
+    @Param('snapId') snapId: string,
+  ) {
+    const userId = this.getUserId(auth);
+    const draft = await this.postsService.getDiaryDraft(userId, snapId);
+    return { success: true, data: draft };
+  }
+
   @Post('diary/generate')
   async generateDiary(
     @Headers('authorization') auth: string,
