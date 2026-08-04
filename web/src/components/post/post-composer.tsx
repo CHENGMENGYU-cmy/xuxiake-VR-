@@ -643,7 +643,7 @@ export function PostComposer() {
                         : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                     }`}
                   >
-                    随记
+                    动态
                   </button>
                   <Link
                     href="/upload"
