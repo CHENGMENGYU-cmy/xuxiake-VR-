@@ -176,7 +176,7 @@ export class PostsController {
     return { success: true, data };
   }
 
-  // ===== 日记功能 =====
+  // ===== 素材查询 =====
 
   @Get('snaps')
   async getUserSnaps(@Headers('authorization') auth: string) {
@@ -184,6 +184,35 @@ export class PostsController {
     const data = await this.postsService.getUserSnaps(userId);
     return { success: true, data };
   }
+
+  @Get('logs')
+  async getUserLogs(@Headers('authorization') auth: string) {
+    const userId = this.getUserId(auth);
+    const data = await this.postsService.getUserLogs(userId);
+    return { success: true, data };
+  }
+
+  @Get('diaries')
+  async getUserDiaries(
+    @Headers('authorization') auth: string,
+    @Query('userId') queryUserId?: string,
+  ) {
+    const viewerId = this.getUserId(auth);
+    const data = await this.postsService.getUserDiaries(queryUserId || viewerId, viewerId);
+    return { success: true, data };
+  }
+
+  @Get('travelogues')
+  async getUserTravelogues(
+    @Headers('authorization') auth: string,
+    @Query('userId') queryUserId?: string,
+  ) {
+    const viewerId = this.getUserId(auth);
+    const data = await this.postsService.getUserTravelogues(queryUserId || viewerId, viewerId);
+    return { success: true, data };
+  }
+
+  // ===== 日记功能 =====
 
   @Get('diary-square')
   async getDiarySquare(
