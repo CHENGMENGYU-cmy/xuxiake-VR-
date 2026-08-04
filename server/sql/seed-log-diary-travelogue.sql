@@ -7,8 +7,13 @@
 USE xuxiake;
 SET NAMES utf8mb4;
 
--- 清除旧的快照/日记种子数据
-DELETE FROM posts WHERE author_id = 'u1' AND content_level IN ('SNAPSHOT', 'DIARY', 'LOG', 'TRAVELOGUE');
+-- 清除旧的日志/日记/游记种子数据（u2-u10，本文件插入的普通用户）
+DELETE FROM posts
+WHERE author_id IN ('u2','u3','u4','u5','u6','u7','u8','u9','u10')
+  AND content_level IN ('LOG','DIARY','TRAVELOGUE');
+-- 清理本文件产生的游记话题关联
+DELETE FROM post_topics
+WHERE post_id IN (SELECT id FROM posts WHERE content_level = 'TRAVELOGUE');
 
 -- ============================================================
 -- u2 张三 (VR摄影师, 北京) — 漓江光影
