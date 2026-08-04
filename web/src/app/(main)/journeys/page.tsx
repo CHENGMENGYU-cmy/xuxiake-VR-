@@ -109,11 +109,21 @@ function JourneysContent() {
     } catch {}
   };
 
-  const handleToggleVisibility = async (postId: string, visible: boolean) => {
+  const handleToggleVisibility = async (postId: string, makePrivate: boolean) => {
     try {
-      const newVis = visible ? 'PRIVATE' : 'PUBLIC';
+      const newVis = makePrivate ? 'PRIVATE' : 'PUBLIC';
       await publishPost(postId, undefined, newVis as any);
-      setPosts(prev => prev.map(p => p.id === postId ? { ...p, visibility: newVis } : p));
+
+      // 更新 allPosts
+      setAllPosts(prev => prev.map(p => p.id === postId ? { ...p, visibility: newVis } : p));
+
+      // 如果可见性变更后不再匹配当前标签，从当前列表移除；否则更新
+      setPosts(prev => {
+        const shouldStay =
+          activeTab === 'private' ? newVis === 'PRIVATE' : newVis !== 'PRIVATE';
+        if (!shouldStay) return prev.filter(p => p.id !== postId);
+        return prev.map(p => p.id === postId ? { ...p, visibility: newVis } : p);
+      });
     } catch {}
   };
 
