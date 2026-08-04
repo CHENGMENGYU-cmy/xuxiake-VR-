@@ -95,3 +95,16 @@ export async function getTravelogueJob(jobId: string): Promise<{
   const { data } = await apiClient.get(`/posts/travelogue/job/${jobId}`);
   return data.data;
 }
+
+// ===== 闪拍数据同步 =====
+
+/** 同步闪拍 App 数据（幂等，按 originalId 去重） */
+export async function syncSnapshots(input: {
+  trips?: any[];
+  moments?: any[];
+  reflections?: any[];
+  activityCategories?: any[];
+}): Promise<{ imported: number; skipped: number }> {
+  const { data } = await apiClient.post('/sync/snapshots', input);
+  return data.data;
+}
