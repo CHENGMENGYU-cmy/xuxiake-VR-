@@ -43,8 +43,8 @@ function DiaryDetailContent() {
     }).catch(() => setLoading(false));
   }, [postId]);
 
-  // 权限检查：只能查看自己的日记
-  if (post && user && post.author?.id !== user.id) {
+  // 权限检查：私密日记只能查看自己的，公开日记所有人可查看
+  if (post && user && post.author?.id !== user.id && post.visibility === 'PRIVATE') {
     return (
       <div className="mx-auto max-w-2xl py-16 text-center text-muted-foreground">
         无权访问此日记
