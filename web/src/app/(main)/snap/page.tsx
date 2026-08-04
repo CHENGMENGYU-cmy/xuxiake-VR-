@@ -102,13 +102,28 @@ function SnapContent() {
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-100 text-orange-600 dark:bg-orange-900/30">
               <Camera className="h-4 w-4" />
             </span>
-            <h1 className="text-xl font-bold">我的闪拍</h1>
+            <h1 className="text-xl font-bold">素材库</h1>
           </div>
           <p className="mt-1.5 text-sm text-muted-foreground">
-            闪拍和日志记录。作为日记的素材来源，选择一条记录由 AI 一键生成日记。
+            你的闪拍和日志素材。点击卡片可由 AI 一键生成日记。
           </p>
         </div>
-        <Badge variant="secondary" className="shrink-0">{totalCount} 条</Badge>
+        <div className="flex items-center gap-2">
+          <Badge variant="secondary" className="shrink-0">{totalCount} 条</Badge>
+          <Button
+            size="sm"
+            className="gap-1.5 bg-gradient-to-r from-teal-500 to-orange-400 text-white shadow-sm hover:from-teal-600 hover:to-orange-500"
+            onClick={() => {
+              if (allItems.length > 0) {
+                router.push(`/snap/generate/${allItems[0].id}`);
+              }
+            }}
+            disabled={allItems.length === 0}
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+            AI 写日记
+          </Button>
+        </div>
       </div>
 
       {/* 分类筛选 */}
