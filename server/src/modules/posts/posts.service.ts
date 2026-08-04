@@ -910,8 +910,12 @@ export class PostsService {
     if (!draft) return null;
 
     // 只有 vrMetadata.status 为 draft 的才算草稿
-    const meta = this.parseVrMeta(draft);
-    if (meta.status !== 'draft') return null;
+    try {
+      const meta = typeof draft.vrMetadata === 'string' ? JSON.parse(draft.vrMetadata) : (draft.vrMetadata || {});
+      if (meta.status !== 'draft') return null;
+    } catch {
+      return null;
+    }
 
     return this.formatPost(draft);
   }
