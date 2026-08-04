@@ -41,7 +41,7 @@ export class AiService {
   private jobs = new Map<string, GenerationJob>();
 
   constructor(
-    private readonly aiClient: AiClientService,
+    @Inject(AiClientService) private readonly aiClient: AiClientService,
     @InjectRepository(Post) private readonly postRepo: Repository<Post>,
     @InjectRepository(MediaItem) private readonly mediaRepo: Repository<MediaItem>,
     @InjectRepository(Journey) private readonly journeyRepo: Repository<Journey>,
