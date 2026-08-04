@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-04
+修改位置：server/src/modules/posts/posts.controller.ts, posts.service.ts; web/src/lib/snap-api.ts, stores/snap-store.ts, app/(main)/snap/generate/[id]/page.tsx
+修改原因：AI日记生成页面的草稿保存逻辑有缺陷——每次进入都重新生成不恢复草稿、每次保存都创建新帖子、401错误码误用
+修改内容：1) 后端新增 GET diary/draft/:snapId 草稿查询端点；2) 重构 saveDiary 支持 diaryId 更新已有帖子而非重复创建；3) 修复 diary/generate 素材不存在时返回 404 而非 401；4) 前端新增 fetchDiaryDraft action 和 existingDraftId 状态管理；5) 生成页面进入时先检查草稿→有则恢复、无则AI生成；6) 草稿保存后留在页面继续编辑，发布/私密后跳转
+修改效果：借鉴真实社区平台模式，草稿创建→编辑→发布完整流程打通，不再重复创建帖子，401错误修复
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-04
 修改位置：web/src/app/(main)/snap/square/page.tsx, web/src/app/(main)/diaries/[id]/page.tsx
 修改原因：日记广场页面的日记卡片无法点击查看详情，且缺少对公开日记的查看支持
 修改内容：1) 日记广场卡片添加 cursor-pointer 和 onClick 导航到 /diaries/[id]；2) 日记详情页权限检查改为公开日记所有人可查看、私密日记仅作者可查看；3) 非作者查看时隐藏编辑/删除按钮并显示公开日记提示；4) 返回按钮根据是否为作者跳转到不同页面
