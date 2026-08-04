@@ -132,7 +132,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     const token = getSavedToken();
     const user = getSavedUser();
     if (!token || !user) {
-      set({ user: null, isAuthenticated: false });
+      set({ user: null, isAuthenticated: false, authReady: true });
       return;
     }
     set({ user, isAuthenticated: true });
@@ -150,6 +150,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         set({ user: null, isAuthenticated: false });
       }
     }
+    set({ authReady: true });
   },
 
   clearError: () => set({ error: null }),
