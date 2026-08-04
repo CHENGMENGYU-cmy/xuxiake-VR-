@@ -52,7 +52,7 @@ export function RightPanel() {
         .then((res) => setSuggestedUsers(shuffleAndPick(res.data || [], 3)))
         .catch(() => {});
     }
-  }, [isAuthenticated]);
+  }, [authReady, isAuthenticated]);
 
   // 管理员不显示右侧面板
   if (!mounted || isStaff) return null;
