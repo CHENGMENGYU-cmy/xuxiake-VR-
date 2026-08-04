@@ -214,6 +214,11 @@ function SnapContent() {
                         <Badge className={`border text-[10px] ${isLog ? 'bg-slate-100 text-slate-600' : 'bg-orange-100 text-orange-600'}`}>
                           {isLog ? '日志' : '闪拍'}
                         </Badge>
+                        {meta.hasDiary && (
+                          <Badge className="border text-[10px] bg-indigo-100 text-indigo-600 dark:bg-indigo-950/50 dark:text-indigo-400">
+                            <Check className="h-2.5 w-2.5" />已生成
+                          </Badge>
+                        )}
                       </div>
                       {scene && (
                         <Badge variant="secondary" className="absolute right-3 top-3 bg-white/80 backdrop-blur-sm text-xs">{scene}</Badge>
