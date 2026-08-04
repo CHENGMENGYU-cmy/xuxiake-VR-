@@ -11,10 +11,15 @@ import select
 import sys
 import time
 
+import os
+
 SSH_HOST = '47.108.175.253'
 SSH_PORT = 12200
-SSH_USER = 'greatwall'
-SSH_PASS = 'Gw-123123'
+SSH_USER = os.getenv('SSH_USER', 'greatwall')
+SSH_PASS = os.getenv('SSH_PASS', '')
+
+if not SSH_PASS:
+    SSH_PASS = input('请输入 SSH 密码: ').strip()
 
 LOCAL_PORT = 8888
 REMOTE_HOST = '127.0.0.1'
