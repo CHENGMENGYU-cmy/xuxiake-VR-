@@ -25,6 +25,7 @@ services:
       - ./server/sql/migrate-ar-p2.sql:/docker-entrypoint-initdb.d/15-ar-p2.sql
       - ./server/sql/migrate-danmaku-playlist.sql:/docker-entrypoint-initdb.d/16-danmaku.sql
       - ./server/sql/migrate-vrmetadata-tab.sql:/docker-entrypoint-initdb.d/17-vrmetadata.sql
+      - ./server/sql/migrate-content-level.sql:/docker-entrypoint-initdb.d/18-content-level.sql
       - ./server/sql/seed.sql:/docker-entrypoint-initdb.d/20-seed.sql
       - ./server/sql/seed-notifications.sql:/docker-entrypoint-initdb.d/21-seed-notifications.sql
       - ./server/sql/seed-content-classification.sql:/docker-entrypoint-initdb.d/22-seed-classification.sql
