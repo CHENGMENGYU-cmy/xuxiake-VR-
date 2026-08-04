@@ -1,13 +1,25 @@
 'use client';
 
 import { create } from 'zustand';
-import type { DiaryStyle, GeneratedDiary, DiaryEntry } from '@/types/snap';
-import { getUserSnaps, generateDiary, saveDiary, getDiarySquare } from '@/lib/snap-api';
+import type { DiaryStyle, GeneratedDiary, DiaryEntry, TravelogueJob } from '@/types/snap';
+import {
+  getUserSnaps, getUserLogs, getUserDiaries, getUserTravelogues,
+  generateDiary, saveDiary, getDiarySquare,
+  generateTravelogue, getTravelogueJob,
+} from '@/lib/snap-api';
 
 interface SnapState {
   // 闪拍列表
   snaps: any[];
   snapsLoading: boolean;
+
+  // 素材列表（日志 + 日记）
+  logs: any[];
+  logsLoading: boolean;
+  diaries: any[];
+  diariesLoading: boolean;
+  travelogues: any[];
+  traveloguesLoading: boolean;
 
   // 日记生成
   generatedDiary: GeneratedDiary | null;
@@ -26,8 +38,16 @@ interface SnapState {
   myDiaries: DiaryEntry[];
   myDiariesLoading: boolean;
 
+  // 游记生成任务
+  travelogueJobId: string | null;
+  travelogueJob: TravelogueJob | null;
+  travelogueGenerating: boolean;
+
   // Actions
   fetchSnaps: () => Promise<void>;
+  fetchLogs: () => Promise<void>;
+  fetchDiaries: (userId?: string) => Promise<void>;
+  fetchTravelogues: (userId?: string) => Promise<void>;
   generateDiary: (snapId: string, style?: string, includeMemory?: boolean) => Promise<void>;
   setStyle: (style: DiaryStyle) => void;
   setIncludeMemory: (include: boolean) => void;
@@ -45,11 +65,26 @@ interface SnapState {
   fetchSquareDiaries: (reset?: boolean) => Promise<void>;
   fetchMyDiaries: () => Promise<void>;
   resetGeneration: () => void;
+
+  // 游记生成
+  startTravelogueGeneration: (input: {
+    logIds: string[]; diaryIds: string[]; prompt?: string;
+    style?: string; tone?: string; length?: string;
+  }) => Promise<string>;
+  pollTravelogueJob: (jobId: string) => Promise<TravelogueJob | null>;
+  clearTravelogueJob: () => void;
 }
 
 export const useSnapStore = create<SnapState>((set, get) => ({
   snaps: [],
   snapsLoading: false,
+
+  logs: [],
+  logsLoading: false,
+  diaries: [],
+  diariesLoading: false,
+  travelogues: [],
+  traveloguesLoading: false,
 
   generatedDiary: null,
   generating: false,
@@ -65,6 +100,10 @@ export const useSnapStore = create<SnapState>((set, get) => ({
   myDiaries: [],
   myDiariesLoading: false,
 
+  travelogueJobId: null,
+  travelogueJob: null,
+  travelogueGenerating: false,
+
   fetchSnaps: async () => {
     set({ snapsLoading: true });
     try {
@@ -72,6 +111,36 @@ export const useSnapStore = create<SnapState>((set, get) => ({
       set({ snaps, snapsLoading: false });
     } catch {
       set({ snapsLoading: false });
+    }
+  },
+
+  fetchLogs: async () => {
+    set({ logsLoading: true });
+    try {
+      const logs = await getUserLogs();
+      set({ logs, logsLoading: false });
+    } catch {
+      set({ logsLoading: false });
+    }
+  },
+
+  fetchDiaries: async (userId) => {
+    set({ diariesLoading: true });
+    try {
+      const diaries = await getUserDiaries(userId);
+      set({ diaries, diariesLoading: false });
+    } catch {
+      set({ diariesLoading: false });
+    }
+  },
+
+  fetchTravelogues: async (userId) => {
+    set({ traveloguesLoading: true });
+    try {
+      const travelogues = await getUserTravelogues(userId);
+      set({ travelogues, traveloguesLoading: false });
+    } catch {
+      set({ traveloguesLoading: false });
     }
   },
 
@@ -126,9 +195,8 @@ export const useSnapStore = create<SnapState>((set, get) => ({
   fetchMyDiaries: async () => {
     set({ myDiariesLoading: true });
     try {
-      const { data } = await (await import('@/lib/snap-api')).getDiarySquare();
-      // 这里后续可用专门的用户日记接口
-      set({ myDiaries: [], myDiariesLoading: false });
+      const result = await getUserDiaries();
+      set({ myDiaries: result, myDiariesLoading: false });
     } catch {
       set({ myDiariesLoading: false });
     }
@@ -139,5 +207,57 @@ export const useSnapStore = create<SnapState>((set, get) => ({
     currentStyle: '生活碎片风',
     memorySnap: null,
     includeMemory: false,
+  }),
+
+  // ===== 游记生成 =====
+
+  startTravelogueGeneration: async (input) => {
+    set({ travelogueGenerating: true, travelogueJob: null });
+    try {
+      const { jobId } = await generateTravelogue(input);
+      set({ travelogueJobId: jobId });
+
+      // 轮询任务状态
+      const poll = async () => {
+        const job = await getTravelogueJob(jobId);
+        set({ travelogueJob: job });
+        if (job.status === 'DONE' || job.status === 'ERROR') {
+          set({ travelogueGenerating: false });
+          // 生成完成后刷新游记列表
+          if (job.status === 'DONE') {
+            get().fetchTravelogues();
+          }
+          return job;
+        }
+        // 继续轮询
+        await new Promise(r => setTimeout(r, 2000));
+        return poll();
+      };
+
+      poll().catch(() => set({ travelogueGenerating: false }));
+      return jobId;
+    } catch {
+      set({ travelogueGenerating: false });
+      return '';
+    }
+  },
+
+  pollTravelogueJob: async (jobId) => {
+    try {
+      const job = await getTravelogueJob(jobId);
+      set({ travelogueJob: job });
+      if (job.status === 'DONE' || job.status === 'ERROR') {
+        set({ travelogueGenerating: false });
+      }
+      return job;
+    } catch {
+      return null;
+    }
+  },
+
+  clearTravelogueJob: () => set({
+    travelogueJobId: null,
+    travelogueJob: null,
+    travelogueGenerating: false,
   }),
 }));
