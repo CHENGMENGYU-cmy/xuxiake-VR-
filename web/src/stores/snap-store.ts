@@ -4,7 +4,7 @@ import { create } from 'zustand';
 import type { DiaryStyle, GeneratedDiary, DiaryEntry, TravelogueJob } from '@/types/snap';
 import {
   getUserSnaps, getUserLogs, getUserDiaries, getUserTravelogues,
-  generateDiary, saveDiary, getDiarySquare,
+  generateDiary, saveDiary, getDiaryDraft, getDiarySquare,
   generateTravelogue, getTravelogueJob,
 } from '@/lib/snap-api';
 
