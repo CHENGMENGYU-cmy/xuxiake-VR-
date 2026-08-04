@@ -231,6 +231,7 @@ export class PostsController {
   async saveDiary(
     @Headers('authorization') auth: string,
     @Body() dto: {
+      diaryId?: string;
       snapId?: string;
       title: string;
       content: string;
