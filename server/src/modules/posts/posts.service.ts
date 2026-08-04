@@ -618,39 +618,40 @@ export class PostsService {
   }
 
   async getClassifiedDimensions(userId?: string) {
-    const qb = this.postRepo
-      .createQueryBuilder('post')
+    const buildBase = (qb: any) => {
+      qb.where('post.contentLevel IN (:...levels)', { levels: ['SNAPSHOT', 'LOG'] });
+      if (userId) {
+        qb.andWhere('post.authorId = :userId', { userId });
+      }
+    };
+
+    const byLocationQb = this.postRepo.createQueryBuilder('post')
       .select('post.locationName', 'location')
-      .addSelect('COUNT(post.id)', 'count')
-      .where('post.contentLevel = :level', { level: 'SNAPSHOT' })
-      .andWhere('post.visibility = :vis', { vis: 'PUBLIC' });
+      .addSelect('COUNT(post.id)', 'count');
+    buildBase(byLocationQb);
 
-    if (userId) {
-      qb.andWhere('post.authorId = :userId', { userId });
-    }
-
-    const byLocation = await qb
+    const byLocation = await byLocationQb
       .groupBy('post.locationName')
       .having('post.locationName IS NOT NULL')
       .orderBy('count', 'DESC')
       .take(10)
       .getRawMany();
 
-    const byType = await this.postRepo
-      .createQueryBuilder('post')
+    const byTypeQb = this.postRepo.createQueryBuilder('post')
       .select('post.postType', 'type')
-      .addSelect('COUNT(post.id)', 'count')
-      .where('post.contentLevel = :level', { level: 'SNAPSHOT' })
-      .andWhere('post.visibility = :vis', { vis: 'PUBLIC' })
+      .addSelect('COUNT(post.id)', 'count');
+    buildBase(byTypeQb);
+
+    const byType = await byTypeQb
       .groupBy('post.postType')
       .getRawMany();
 
-    const byTime = await this.postRepo
-      .createQueryBuilder('post')
+    const byTimeQb = this.postRepo.createQueryBuilder('post')
       .select("DATE_FORMAT(post.createdAt, '%Y-%m')", 'month')
-      .addSelect('COUNT(post.id)', 'count')
-      .where('post.contentLevel = :level', { level: 'SNAPSHOT' })
-      .andWhere('post.visibility = :vis', { vis: 'PUBLIC' })
+      .addSelect('COUNT(post.id)', 'count');
+    buildBase(byTimeQb);
+
+    const byTime = await byTimeQb
       .groupBy('month')
       .orderBy('month', 'DESC')
       .take(12)
