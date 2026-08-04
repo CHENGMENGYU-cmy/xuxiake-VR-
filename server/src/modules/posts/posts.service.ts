@@ -802,6 +802,131 @@ export class PostsService {
     };
   }
 
+  // ===== 日记功能 =====
+
+  /** 获取用户的闪拍记录列表 */
+  async getUserSnaps(userId: string, limit = 20) {
+    const snaps = await this.postRepo.find({
+      where: { authorId: userId, contentLevel: 'SNAPSHOT' },
+      relations: { mediaItems: true },
+      order: { createdAt: 'DESC' },
+      take: limit,
+    });
+    return snaps.map((p) => this.formatPost(p));
+  }
+
+  /** 获取日记广场（所有公开日记） */
+  async getDiarySquare(limit = 20, cursor?: string) {
+    const qb = this.postRepo
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.author', 'author')
+      .leftJoinAndSelect('post.mediaItems', 'mediaItems')
+      .leftJoinAndSelect('post.tags', 'tags')
+      .where('post.contentLevel = :level', { level: 'DIARY' })
+      .andWhere('post.visibility = :vis', { vis: 'PUBLIC' })
+      .orderBy('post.createdAt', 'DESC')
+      .take(limit + 1);
+
+    if (cursor) {
+      const cursorPost = await this.postRepo.findOne({ where: { id: cursor } });
+      if (cursorPost) {
+        qb.andWhere('post.createdAt < :cursorDate', { cursorDate: cursorPost.createdAt });
+      }
+    }
+
+    const posts = await qb.getMany();
+    const hasMore = posts.length > limit;
+    const data = posts.slice(0, limit);
+
+    return {
+      data: data.map((p) => this.formatPost(p)),
+      nextCursor: hasMore ? data[data.length - 1].id : null,
+      hasMore,
+    };
+  }
+
+  /** 保存/发布日记 */
+  async saveDiary(userId: string, dto: {
+    snapId?: string;
+    title: string;
+    content: string;
+    insight?: string;
+    style?: string;
+    tags?: string[];
+    visibility?: 'PUBLIC' | 'PRIVATE' | 'FOLLOWERS';
+    status?: 'draft' | 'private' | 'public';
+    image?: string;
+  }) {
+    // status=draft 存为 PRIVATE visibility
+    const visibility = dto.status === 'public'
+      ? 'PUBLIC'
+      : dto.status === 'draft'
+        ? 'PRIVATE'
+        : (dto.visibility || 'PRIVATE');
+
+    const vrMetadata: Record<string, unknown> = {
+      insight: dto.insight || '',
+      style: dto.style || '',
+      generatorTags: dto.tags || [],
+      status: dto.status || 'private',
+    };
+
+    if (dto.image) {
+      vrMetadata.coverImage = dto.image;
+    }
+
+    const post = this.postRepo.create({
+      id: uuidv4(),
+      authorId: userId,
+      postType: 'NOTE',
+      contentLevel: 'DIARY',
+      parentPostId: dto.snapId || null,
+      title: dto.title,
+      content: dto.content,
+      vrMetadata: JSON.stringify(vrMetadata),
+      visibility,
+      likeCount: 0,
+      commentCount: 0,
+      viewCount: 0,
+    });
+
+    await this.postRepo.save(post);
+
+    // 如果有 snapId，复制闪拍的媒体和位置到日记
+    if (dto.snapId) {
+      const snap = await this.postRepo.findOne({
+        where: { id: dto.snapId },
+        relations: { mediaItems: true },
+      });
+      if (snap) {
+        post.locationLat = snap.locationLat;
+        post.locationLng = snap.locationLng;
+        post.locationName = snap.locationName;
+        await this.postRepo.save(post);
+
+        if (snap.mediaItems?.length) {
+          const copiedMedia = snap.mediaItems.map((m) =>
+            this.mediaRepo.create({
+              id: uuidv4(),
+              postId: post.id,
+              type: m.type,
+              url: m.url,
+              thumbnailUrl: m.thumbnailUrl,
+              duration: m.duration,
+              width: m.width,
+              height: m.height,
+              vrFormat: m.vrFormat,
+              sortOrder: m.sortOrder,
+            }),
+          );
+          await this.mediaRepo.save(copiedMedia);
+        }
+      }
+    }
+
+    return this.getPostById(post.id, userId);
+  }
+
   async getAllTopics(limit = 50) {
     return this.topicRepo.find({
       order: { postCount: 'DESC' },
