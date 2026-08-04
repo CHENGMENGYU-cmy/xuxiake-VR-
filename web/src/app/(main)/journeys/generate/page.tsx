@@ -454,14 +454,32 @@ function GenerateContent() {
                   className="min-h-[50px] text-sm resize-none"
                 />
 
-                <div className="flex gap-2">
-                  <Button onClick={() => handleGenerate(tone, length, prompt)} disabled={generating} className="flex-1 gap-2 bg-gradient-to-r from-primary to-violet-500">
+                <div className="flex flex-col gap-2">
+                  <Button onClick={() => handleGenerate(tone, length, prompt)} disabled={generating} className="gap-2 bg-gradient-to-r from-primary to-violet-500">
                     {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
                     用当前风格重新生成
                   </Button>
-                  <Button onClick={() => router.push('/journeys')} variant="outline" className="gap-2">
-                    <Eye className="h-4 w-4" /> 我的游记
-                  </Button>
+
+                  {/* 发布操作 */}
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button
+                      onClick={() => handlePublish('PRIVATE')}
+                      disabled={publishing || !postId}
+                      variant="outline"
+                      className="gap-2"
+                    >
+                      {publishing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lock className="h-4 w-4" />}
+                      保存为私密
+                    </Button>
+                    <Button
+                      onClick={() => handlePublish('PUBLIC')}
+                      disabled={publishing || !postId}
+                      className="gap-2 bg-green-600 hover:bg-green-700"
+                    >
+                      {publishing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                      发布到社区
+                    </Button>
+                  </div>
                 </div>
               </div>
             )}
