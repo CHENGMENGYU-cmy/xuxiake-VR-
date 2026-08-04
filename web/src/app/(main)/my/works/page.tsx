@@ -207,7 +207,6 @@ function DiariesTab({ userId }: { userId: string }) {
                           </div>
                         </div>
 
-                        {post.title && <h3 className="font-semibold text-sm mb-1">{post.title}</h3>}
                         <p className="text-sm leading-relaxed line-clamp-3 mb-3">{post.content || '(无内容)'}</p>
 
                         {!!post.vrMetadata?.mood && (
@@ -225,7 +224,7 @@ function DiariesTab({ userId }: { userId: string }) {
                                   <img src={media.thumbnailUrl || media.url} alt="" className="w-full h-full object-cover" />
                                 ) : (
                                   <div className="w-full h-full flex items-center justify-center">
-                                    {(mediaTypeIcons[media.type] || ImageIcon) && (() => { const Icon = mediaTypeIcons[media.type] || ImageIcon; return <Icon className="h-4 w-4 text-muted-foreground/50" />; })()}
+                                    {(() => { const Icon = mediaTypeIcons[media.type] || ImageIcon; return <Icon className="h-4 w-4 text-muted-foreground/50" />; })()}
                                   </div>
                                 )}
                                 {idx === 3 && post.mediaItems.length > 4 && (

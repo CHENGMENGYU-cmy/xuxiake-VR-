@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-04
+修改位置：web/src/components/layout/sidebar.tsx, navbar.tsx; web/src/app/(main)/discover/page.tsx; web/src/app/(main)/my/works/page.tsx（新建）
+修改原因：侧栏导航项多达11个，浏览/我的/创作三区功能重叠（AI日记=我的闪拍同一页面、日记广场和话题广场同为浏览区、创建入口分散5处），借鉴YouTube/小红书三段模型重构
+修改内容：1) 侧栏从11项精简至7项：浏览区(首页+发现)、我的区(素材库+我的作品)、个人区(消息/通知/设置)；2) /discover页面合并日记广场+话题广场+寻找搭子为三个tab；3) 新建/my/works页面合并日记+游记管理为tab切换；4) 顶栏新增渐变色"+"创建按钮下拉菜单（上传媒体/AI写日记/AI写游记/手写日记/手写游记），移除侧栏创作区
+修改效果：导航逻辑清晰——浏览=消费别人内容、我的=管理自己内容、创建=顶栏统一入口，侧栏项减少36%
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-04
 修改位置：server/src/modules/posts/posts.controller.ts; web/src/components/layout/sidebar.tsx, app/(main)/snap/page.tsx, app/(main)/diaries/page.tsx
 修改原因：1) 游记AI生成页面 /journeys/generate 报401错误导致生成失败；2) 左侧栏"我的内容"三项和"分享见闻"功能逻辑混乱，借鉴真实社区平台梳理导航
 修改内容：1) 修复 ai/jobs/:jobId 和 travelogue/job/:jobId 两个端点的 UnauthorizedException→NotFoundException，避免job不存在时触发前端auth-refresh链路；2) 侧栏"游记散文"统一命名为"我的游记"；3) 创作区新增"AI日记"独立入口；4) /snap页面标题改为"素材库"并新增醒目的"AI写日记"按钮；5) /diaries页面移除"从闪拍生成"按钮，精简创建入口
