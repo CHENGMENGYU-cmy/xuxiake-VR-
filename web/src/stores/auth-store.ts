@@ -75,6 +75,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         user,
         isAuthenticated: true,
         isLoading: false,
+        authReady: true,
         error: null,
       });
     } catch (err: any) {
@@ -106,6 +107,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         user,
         isAuthenticated: true,
         isLoading: false,
+        authReady: true,
         error: null,
       });
     } catch (err: any) {
