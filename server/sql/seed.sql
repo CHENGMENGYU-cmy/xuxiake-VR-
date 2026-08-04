@@ -652,3 +652,10 @@ INSERT INTO community_tags (id, community_id, tag_id) VALUES
 ('ct6', 'com2', 'tag-018'),
 ('ct7', 'com3', 'tag-021'),
 ('ct8', 'com3', 'tag-003');
+
+-- ============================================================
+-- 内容层级统一：公开帖子显式标记为 CLASSIFIED（内容分类）
+-- 不再依赖默认 SNAPSHOT（闪拍为私人素材定位）
+-- ============================================================
+UPDATE posts SET content_level = 'CLASSIFIED'
+WHERE visibility = 'PUBLIC' AND content_level = 'SNAPSHOT';
