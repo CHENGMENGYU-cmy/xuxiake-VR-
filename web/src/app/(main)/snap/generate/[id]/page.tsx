@@ -375,6 +375,46 @@ function GenerateContent({ snapId }: { snapId: string }) {
           </div>
         </div>
       </div>
+
+      {/* 底部固定操作栏（移动端式） */}
+      <div className="fixed inset-x-0 bottom-0 z-20 border-t bg-background/90 backdrop-blur-lg">
+        <div className="mx-auto max-w-5xl px-4 py-3">
+          <div className="flex items-center gap-2">
+            <span className="hidden text-xs text-muted-foreground/70 sm:block">
+              {generating ? 'AI 正在生成...' : generatedDiary ? '修改满意后即可保存发布' : '正在准备...'}
+            </span>
+            <div className="ml-auto flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleSave('draft')}
+                disabled={saving || !generatedDiary}
+                className="h-9 gap-1.5 text-xs text-muted-foreground"
+              >
+                <FileText className="h-3.5 w-3.5" />草稿
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleSave('private')}
+                disabled={saving || !generatedDiary}
+                className="h-9 gap-1.5 text-xs text-amber-600"
+              >
+                <Lock className="h-3.5 w-3.5" />存为私密
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => handleSave('public')}
+                disabled={saving || !generatedDiary}
+                className="h-9 gap-1.5 bg-gradient-to-r from-teal-500 to-emerald-500 px-5 text-xs font-medium shadow-md shadow-teal-500/25 hover:from-teal-600 hover:to-emerald-600"
+              >
+                {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Globe className="h-3.5 w-3.5" />}
+                发布
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
