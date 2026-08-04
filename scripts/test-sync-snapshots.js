@@ -137,11 +137,12 @@ async function main() {
   const snaps = json.data || [];
   console.log('闪拍总数:', snaps.length);
   const synced = snaps.filter((s) => {
-    try { return JSON.parse(s.vrMetadata || '{}').originalId; } catch { return false; }
+    const meta = s.vrMetadata || {};
+    return meta.originalId;
   });
   console.log('同步导入的闪拍:', synced.length);
   synced.forEach((s) => {
-    const meta = JSON.parse(s.vrMetadata);
+    const meta = s.vrMetadata || {};
     console.log(`  - [${meta.originalId}] ${s.locationName} | ${s.content?.slice(0, 30) || '(无感悟文字)'} | 媒体${s.mediaItems?.length || 0}个`);
   });
 }
