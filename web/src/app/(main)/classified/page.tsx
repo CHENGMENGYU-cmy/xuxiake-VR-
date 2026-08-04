@@ -15,7 +15,7 @@ const typeLabels: Record<string, string> = {
   AUDIO: '语音记录',
   JOURNEY: '游记',
   MOMENT: '瞬间',
-  NOTE: '随记',
+  NOTE: '笔记',
 };
 
 export default function ClassifiedPage() {
