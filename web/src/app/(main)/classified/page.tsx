@@ -52,11 +52,11 @@ export default function ClassifiedPage() {
     <div className="space-y-5">
       <div className="flex items-center gap-2">
         <FolderOpen className="h-6 w-6 text-amber-500" />
-        <h1 className="text-xl font-bold">旅途档案</h1>
+        <h1 className="text-xl font-bold">旅途分类</h1>
       </div>
 
       <p className="text-sm text-muted-foreground">
-        所有内容的归档整理，多维度浏览。
+        我的闪拍和日志，按目的地、内容形式、时间分类浏览。
       </p>
 
       {/* 分类维度切换 */}
