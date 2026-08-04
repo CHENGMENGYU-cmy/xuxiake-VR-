@@ -20,6 +20,7 @@ const typeLabels: Record<string, string> = {
 };
 
 export default function ClassifiedPage() {
+  const { user } = useAuthStore();
   const [activeDim, setActiveDim] = useState<'location' | 'type' | 'time'>('location');
   const [byLocation, setByLocation] = useState<Dimension[]>([]);
   const [byType, setByType] = useState<TypeDim[]>([]);
