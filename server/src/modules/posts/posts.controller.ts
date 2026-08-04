@@ -176,6 +176,99 @@ export class PostsController {
     return { success: true, data };
   }
 
+  // ===== 日记功能 =====
+
+  @Get('snaps')
+  async getUserSnaps(@Headers('authorization') auth: string) {
+    const userId = this.getUserId(auth);
+    const data = await this.postsService.getUserSnaps(userId);
+    return { success: true, data };
+  }
+
+  @Get('diary-square')
+  async getDiarySquare(
+    @Query('cursor') cursor?: string,
+    @Query('limit') limit?: string,
+  ) {
+    const result = await this.postsService.getDiarySquare(
+      limit ? parseInt(limit) : 20,
+      cursor,
+    );
+    return { success: true, ...result };
+  }
+
+  @Post('diary/save')
+  async saveDiary(
+    @Headers('authorization') auth: string,
+    @Body() dto: {
+      snapId?: string;
+      title: string;
+      content: string;
+      insight?: string;
+      style?: string;
+      tags?: string[];
+      visibility?: 'PUBLIC' | 'PRIVATE' | 'FOLLOWERS';
+      status?: 'draft' | 'private' | 'public';
+      image?: string;
+    },
+  ) {
+    const userId = this.getUserId(auth);
+    const data = await this.postsService.saveDiary(userId, dto);
+    return { success: true, data };
+  }
+
+  @Post('diary/generate')
+  async generateDiary(
+    @Headers('authorization') auth: string,
+    @Body() body: { snapId: string; style?: string; includeMemory?: boolean },
+  ) {
+    const userId = this.getUserId(auth);
+    const snap = await this.postsService.getPostById(body.snapId, userId);
+    if (!snap || (snap as any).contentLevel !== 'SNAPSHOT') {
+      throw new UnauthorizedException('闪拍记录不存在');
+    }
+
+    // 类型转换：API返回的formatPost结果需要转回Post entity风格供生成器使用
+    const snapPost = { content: (snap as any).content, locationName: (snap as any).locationName, createdAt: (snap as any).createdAt, vrMetadata: (snap as any).vrMetadata } as any;
+
+    const style = (body.style || this.diaryGenerator.recommendStyle(snapPost)) as DiaryStyle;
+    const generated = this.diaryGenerator.generateDiary(snapPost, style, body.includeMemory);
+
+    // 查找回忆反差
+    let memorySnap: Record<string, unknown> | null = null;
+    if (!body.includeMemory) {
+      const snapMeta = this.parseVrMeta(snapPost);
+      const keywords: string[] = snapMeta.keywords || [];
+      const memoryPost = await this.diaryGenerator.findMemoryContrast(userId, keywords);
+      if (memoryPost) {
+        memorySnap = {
+          id: memoryPost.id,
+          text: memoryPost.content,
+          createdAt: memoryPost.createdAt,
+        };
+      }
+    }
+
+    return {
+      success: true,
+      data: {
+        ...generated,
+        style,
+        memorySnap,
+        snapId: body.snapId,
+      },
+    };
+  }
+
+  private parseVrMeta(post: any): Record<string, unknown> {
+    try {
+      if (post.vrMetadata) {
+        return typeof post.vrMetadata === 'string' ? JSON.parse(post.vrMetadata) : post.vrMetadata;
+      }
+    } catch { /* ignore */ }
+    return {};
+  }
+
   @Get(':id')
   async getPost(@Param('id') id: string, @Headers('authorization') auth?: string) {
     let userId: string | undefined;
