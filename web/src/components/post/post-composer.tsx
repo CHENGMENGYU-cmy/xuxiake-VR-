@@ -639,17 +639,17 @@ export function PostComposer() {
                     onClick={() => setPostType('MOMENT')}
                     className={`rounded-full px-2.5 py-0.5 text-[11px] font-medium transition-colors ${
                       postType === 'MOMENT'
-                        ? 'bg-pink-500/10 text-pink-500'
+                        ? 'bg-violet-500/10 text-violet-500'
                         : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                     }`}
                   >
-                    动态
+                    随记
                   </button>
                   <Link
                     href="/upload"
                     className="rounded-full px-2.5 py-0.5 text-[11px] font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                   >
-                    + 更多类型
+                    + 更多
                   </Link>
                 </div>
 
