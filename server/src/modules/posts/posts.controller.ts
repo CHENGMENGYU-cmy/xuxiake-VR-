@@ -711,7 +711,7 @@ export class PostsController {
   @Get('ai/jobs/:jobId')
   async getJobStatus(@Param('jobId') jobId: string): Promise<{ success: boolean; data: GenerationJob | null }> {
     const job = this.aiService.getJobStatus(jobId);
-    if (!job) throw new UnauthorizedException('任务不存在');
+    if (!job) throw new NotFoundException('任务不存在');
     return { success: true, data: job };
   }
 
