@@ -397,3 +397,18 @@ export interface RecommendedUser extends User {
     names: string[];
   };
 }
+
+// ===== 闪拍/日记类型（重新导出） =====
+export type {
+  DiaryStyle,
+  SnapRecord,
+  GeneratedDiary,
+  DiaryEntry,
+  DiaryStatus,
+} from './snap';
+
+export {
+  DiaryStyleLabel,
+  ALL_DIARY_STYLES,
+  DiaryStatusLabel,
+} from './snap';
