@@ -340,6 +340,14 @@ export class UsersController {
     const hasMore = posts.length > take;
     const data = posts.slice(0, take);
 
+    // 查询总数
+    const countQb = this.postRepo.createQueryBuilder('post')
+      .where('post.authorId = :userId', { userId: user.id });
+    if (!isOwner) {
+      countQb.andWhere('post.visibility = :vis', { vis: 'PUBLIC' });
+    }
+    const total = await countQb.getCount();
+
     // 查询当前用户的点赞状态
     let likedIds = new Set<string>();
     if (currentUserId && data.length > 0) {
@@ -354,6 +362,7 @@ export class UsersController {
       data: data.map((p) => this.formatPost(p, likedIds.has(p.id))),
       nextCursor: hasMore ? data[data.length - 1].id : null,
       hasMore,
+      total,
     };
   }
 
