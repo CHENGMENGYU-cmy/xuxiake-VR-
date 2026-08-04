@@ -44,7 +44,7 @@ export function RightPanel() {
   }, []);
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (authReady && isAuthenticated) {
       getRecommendedCommunities(1, 20)
         .then((res) => setRecommendedCommunities(shuffleAndPick(res.data || [], COMMUNITY_PICK_COUNT)))
         .catch(() => {});
