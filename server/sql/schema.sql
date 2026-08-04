@@ -226,13 +226,29 @@ CREATE TABLE IF NOT EXISTS topics (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
--- 12. topic_posts
+-- 12. post_topics（帖子-话题关联，与 Post 实体 @JoinTable 一致）
 -- ============================================================
-CREATE TABLE IF NOT EXISTS topic_posts (
-  topic_id VARCHAR(36) NOT NULL,
-  post_id  VARCHAR(36) NOT NULL,
-  PRIMARY KEY (topic_id, post_id),
-  INDEX idx_tp_post (post_id)
+CREATE TABLE IF NOT EXISTS post_topics (
+  id         VARCHAR(36) NOT NULL PRIMARY KEY,
+  post_id    VARCHAR(36) NOT NULL,
+  topic_id   VARCHAR(36) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_pt_post  (post_id),
+  INDEX idx_pt_topic (topic_id),
+  CONSTRAINT fk_pt_post  FOREIGN KEY (post_id)  REFERENCES posts(id)    ON DELETE CASCADE,
+  CONSTRAINT fk_pt_topic FOREIGN KEY (topic_id) REFERENCES topics(id)   ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================================
+-- 12b. post_tags（帖子-兴趣标签关联，与 Post 实体 @JoinTable 一致）
+-- ============================================================
+CREATE TABLE IF NOT EXISTS post_tags (
+  post_id VARCHAR(36) NOT NULL,
+  tag_id  VARCHAR(36) NOT NULL,
+  PRIMARY KEY (post_id, tag_id),
+  INDEX idx_ptag_tag (tag_id),
+  CONSTRAINT fk_ptag_post FOREIGN KEY (post_id) REFERENCES posts(id)         ON DELETE CASCADE,
+  CONSTRAINT fk_ptag_tag  FOREIGN KEY (tag_id)  REFERENCES interest_tags(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
