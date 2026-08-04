@@ -12,7 +12,12 @@ import {
   LogOut,
   Settings,
   User,
+  Plus,
   Upload,
+  PenLine,
+  BookOpen,
+  Sparkles,
+  Image,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
