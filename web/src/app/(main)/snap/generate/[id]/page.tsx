@@ -401,7 +401,9 @@ function GenerateContent({ snapId }: { snapId: string }) {
         <div className="mx-auto max-w-5xl px-4 py-3">
           <div className="flex items-center gap-2">
             <span className="hidden text-xs text-muted-foreground/70 sm:block">
-              {generating ? 'AI 正在生成...' : generatedDiary ? '修改满意后即可保存发布' : '正在准备...'}
+              {generating ? 'AI 正在生成...' : generatedDiary
+                ? (existingDraftId ? '草稿已保存，可继续编辑或发布' : '修改满意后即可保存发布')
+                : '正在准备...'}
             </span>
             <div className="ml-auto flex items-center gap-2">
               <Button
@@ -411,7 +413,7 @@ function GenerateContent({ snapId }: { snapId: string }) {
                 disabled={saving || !generatedDiary}
                 className="h-9 gap-1.5 text-xs text-muted-foreground"
               >
-                <FileText className="h-3.5 w-3.5" />草稿
+                <FileText className="h-3.5 w-3.5" />{existingDraftId ? '更新草稿' : '存草稿'}
               </Button>
               <Button
                 variant="outline"
