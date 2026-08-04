@@ -7,6 +7,24 @@ export async function getUserSnaps(): Promise<any[]> {
   return data.data ?? [];
 }
 
+/** 获取用户日志列表（私人素材） */
+export async function getUserLogs(): Promise<any[]> {
+  const { data } = await apiClient.get('/posts/logs');
+  return data.data ?? [];
+}
+
+/** 获取用户日记列表 */
+export async function getUserDiaries(userId?: string): Promise<any[]> {
+  const { data } = await apiClient.get('/posts/diaries', { params: userId ? { userId } : {} });
+  return data.data ?? [];
+}
+
+/** 获取用户游记列表 */
+export async function getUserTravelogues(userId?: string): Promise<any[]> {
+  const { data } = await apiClient.get('/posts/travelogues', { params: userId ? { userId } : {} });
+  return data.data ?? [];
+}
+
 /** 获取日记广场 */
 export async function getDiarySquare(cursor?: string, limit = 20): Promise<{
   data: any[];
