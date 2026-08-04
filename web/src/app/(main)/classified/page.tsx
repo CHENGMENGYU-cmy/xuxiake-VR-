@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { FolderOpen, MapPin, Calendar, Tag } from 'lucide-react';
 import { HierarchyList } from '@/components/feed/hierarchy-list';
+import { useAuthStore } from '@/stores/auth-store';
 import apiClient from '@/lib/api-client';
 
 type Dimension = { name: string; count: number };
