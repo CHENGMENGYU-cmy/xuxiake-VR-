@@ -540,7 +540,12 @@ INSERT INTO conversation_participants (id, conversation_id, user_id, joined_at) 
 ('cp19', 'conv8', 'u1',  '2026-06-10 18:00:00'),
 ('cp20', 'conv8', 'u6',  '2026-06-10 18:00:00'),
 ('cp21', 'conv8', 'u4',  '2026-06-10 18:00:00'),
-('cp22', 'conv8', 'u9',  '2026-06-10 18:00:00');
+('cp22', 'conv8', 'u9',  '2026-06-10 18:00:00'),
+-- 社群扩展成员（与 communities.member_count 对齐）
+('cp23', 'conv3', 'u7',  '2026-06-24 10:00:00'),
+('cp24', 'conv3', 'u10', '2026-06-24 10:00:00'),
+('cp25', 'conv6', 'u4',  '2026-06-16 09:00:00'),
+('cp26', 'conv8', 'u3',  '2026-06-11 10:00:00');
 
 INSERT INTO messages (id, conversation_id, sender_id, content, created_at) VALUES
 -- conv1: 徐霞客 <-> 张三
