@@ -320,7 +320,7 @@ function GenerateContent({ snapId }: { snapId: string }) {
         </div>
 
         {/* 右栏：风格选择 */}
-        <div className="lg:sticky lg:top-[70px] lg:self-start">
+        <div>
           <div className="rounded-2xl border bg-card p-4 shadow-sm">
             <div className="mb-3 flex items-center gap-2">
               <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-orange-400 to-amber-400 text-white shadow-sm">
