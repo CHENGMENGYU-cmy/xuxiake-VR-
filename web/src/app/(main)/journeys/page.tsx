@@ -105,6 +105,7 @@ function JourneysContent() {
     if (!confirm('确定要删除这篇游记吗？')) return;
     try {
       await removePost(postId);
+      setAllPosts(prev => prev.filter(p => p.id !== postId));
       setPosts(prev => prev.filter(p => p.id !== postId));
     } catch {}
   };
