@@ -197,12 +197,6 @@
 修改效果：前端完整支持攻略和合集
 --------------------------------------------------------------------------------
 
-修改时间：2026-07-18
-修改位置：server/sql/migrate-route-journey.sql, server/src/entities/, server/src/modules/posts/
-修改原因：为路线和旅程内容类型创建结构化数据支持
-修改内容：新建route_details/journeys/journey_stops表和实体，后端支持路线/旅程创建和查询
-修改效果：发布ROUTE/JOURNEY类型帖子时自动保存结构化数据
---------------------------------------------------------------------------------
 
 修改时间：2026-07-18
 修改位置：server/src/modules/posts/posts.controller.ts, posts.service.ts, web/src/app/(main)/topics/
