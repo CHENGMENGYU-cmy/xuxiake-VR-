@@ -276,4 +276,26 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
 
 UPDATE posts SET vr_metadata = REPLACE(REPLACE(vr_metadata, '"__LOG_ID__"', CONCAT('"', @logId, '"')), '"__DIARY_ID__"', CONCAT('"', @diaryId, '"')) WHERE id = @travelogueId;
 
+-- ============================================================
+-- 游记(TRAVELOGUE) → 话题(post_topics) 关联
+-- 按作者映射到对应旅行话题，让公开游记进入社区话题流
+-- ============================================================
+INSERT INTO post_topics (id, post_id, topic_id)
+SELECT UUID(), p.id, t.topic_id
+FROM posts p
+JOIN (
+  SELECT 'u2' AS author_id, 'topic-003' AS topic_id UNION ALL  -- 漓江光影 → VR拍摄技巧
+  SELECT 'u3', 'topic-003' UNION ALL                            -- 西湖VR → VR拍摄技巧
+  SELECT 'u4', 'topic-007' UNION ALL                            -- 稻城亚丁 → 徒步挑战
+  SELECT 'u5', 'topic-007' UNION ALL                            -- 哈巴雪山 → 徒步挑战
+  SELECT 'u6', 'topic-008' UNION ALL                            -- 长沙美食 → 美食地图
+  SELECT 'u7', 'topic-005' UNION ALL                            -- 苏州园林 → 古镇探秘
+  SELECT 'u8', 'topic-006' UNION ALL                            -- 蜈支洲岛 → 海岛度假
+  SELECT 'u9', 'topic-005' UNION ALL                            -- 兵马俑 → 古镇探秘
+  SELECT 'u10', 'topic-007'                                     -- 亚布力 → 徒步挑战
+) t ON p.author_id = t.author_id
+WHERE p.content_level = 'TRAVELOGUE';
+
+UPDATE topics SET post_count = (SELECT COUNT(*) FROM post_topics WHERE topic_id = topics.id);
+
 SELECT 'Seed LOG + DIARY + TRAVELOGUE data inserted for u2-u10!' AS result;
