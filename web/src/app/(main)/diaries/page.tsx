@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { BookOpen, PenLine, Lock, Globe, Users, Image as ImageIcon, Video, Music, Edit, Share2, Calendar, MapPin, Sparkles, List, ChevronLeft, ChevronRight, Trash2 } from 'lucide-react';
+import { BookOpen, PenLine, Lock, Globe, Users, Image as ImageIcon, Video, Music, Edit, Share2, Calendar, MapPin, Sparkles, List, ChevronLeft, ChevronRight, Trash2, Camera } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
