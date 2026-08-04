@@ -205,13 +205,6 @@
 --------------------------------------------------------------------------------
 
 修改时间：2026-07-18
-修改位置：web/src/types/index.ts, web/src/lib/post-api.ts, web/src/components/post/post-composer.tsx, post-card.tsx
-修改原因：前端类型同步路线/旅程功能
-修改内容：新增Difficulty/RouteType/Journey等接口，发布器支持路线/旅程专属字段，卡片展示详情
-修改效果：前端完整支持路线和旅程
---------------------------------------------------------------------------------
-
-修改时间：2026-07-18
 修改位置：server/src/modules/posts/posts.controller.ts, posts.service.ts, web/src/app/(main)/topics/
 修改原因：扩展话题API，支持话题详情和帖子列表查询
 修改内容：新增话题详情/帖子列表/全部话题API端点，创建话题广场和详情页面
