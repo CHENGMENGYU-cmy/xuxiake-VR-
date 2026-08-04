@@ -672,4 +672,30 @@ export class PostsController {
     if (!job) throw new UnauthorizedException('任务不存在');
     return { success: true, data: job };
   }
+
+  // ===== 游记生成（LOG + DIARY + prompt → TRAVELOGUE） =====
+
+  @Post('travelogue/generate')
+  async generateTravelogue(
+    @Headers('authorization') auth: string,
+    @Body() body: { logIds: string[]; diaryIds: string[]; prompt?: string; style?: string; tone?: string; length?: string },
+  ) {
+    const userId = this.getUserId(auth);
+    const jobId = await this.aiService.generateTravelogue(userId, {
+      logIds: body.logIds || [],
+      diaryIds: body.diaryIds || [],
+      prompt: body.prompt,
+      style: body.style,
+      tone: body.tone,
+      length: body.length,
+    });
+    return { success: true, data: { jobId } };
+  }
+
+  @Get('travelogue/job/:jobId')
+  async getTravelogueJobStatus(@Param('jobId') jobId: string): Promise<{ success: boolean; data: GenerationJob | null }> {
+    const job = this.aiService.getJobStatus(jobId);
+    if (!job) throw new UnauthorizedException('任务不存在');
+    return { success: true, data: job };
+  }
 }
