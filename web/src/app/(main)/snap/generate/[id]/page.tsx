@@ -37,30 +37,48 @@ const styleMeta: Record<string, { emoji: string; desc: string; grad: string }> =
 function GenerateContent({ snapId }: { snapId: string }) {
   const router = useRouter();
   const {
-    generatedDiary, generating, currentStyle, memorySnap, includeMemory,
-    generateDiary, setStyle, setIncludeMemory, editGeneratedDiary, saveDiary, resetGeneration,
+    generatedDiary, generating, currentStyle, memorySnap, includeMemory, existingDraftId,
+    generateDiary, setStyle, setIncludeMemory, editGeneratedDiary, saveDiary,
+    fetchDiaryDraft, resetGeneration,
   } = useSnapStore();
 
   const [snap, setSnap] = useState<any>(null);
   const [snapLoading, setSnapLoading] = useState(true);
-  const [hasGenerated, setHasGenerated] = useState(false);
+  const [initialized, setInitialized] = useState(false);
   const [saving, setSaving] = useState(false);
 
+  // 初始化：加载素材 + 检查已有草稿
   useEffect(() => {
     setSnapLoading(true);
-    getPostDetail(snapId)
-      .then(setSnap)
-      .catch(() => toast.error('加载闪拍失败'))
+    Promise.all([
+      getPostDetail(snapId).catch(() => null),
+      fetchDiaryDraft(snapId).catch(() => false),
+    ])
+      .then(([snapData, hasDraft]) => {
+        if (snapData) {
+          setSnap(snapData);
+        } else {
+          toast.error('加载闪拍失败');
+        }
+        // 如果没有草稿，标记需要自动生成
+        if (!hasDraft) {
+          setInitialized(false);
+        } else {
+          setInitialized(true);
+          toast.info('已恢复上次保存的草稿');
+        }
+      })
       .finally(() => setSnapLoading(false));
     return () => { resetGeneration(); };
   }, [snapId]);
 
+  // 如果没有草稿，自动 AI 生成
   useEffect(() => {
-    if (snap && !hasGenerated) {
-      setHasGenerated(true);
+    if (snap && !initialized && !generating && !generatedDiary) {
+      setInitialized(true);
       generateDiary(snapId);
     }
-  }, [snap, hasGenerated]);
+  }, [snap, initialized, generating, generatedDiary]);
 
   const snapMeta = (() => {
     try {
@@ -107,13 +125,15 @@ function GenerateContent({ snapId }: { snapId: string }) {
         image: snapImage || undefined,
       });
 
-      const statusMsg = status === 'draft' ? '草稿已保存' : status === 'private' ? '已保存为私密日记' : '已发布到日记广场';
-      toast.success(statusMsg);
-
-      if (status === 'public') {
-        router.push('/snap/square');
-      } else {
+      if (status === 'draft') {
+        toast.success('草稿已保存');
+        // 草稿保存后留在当前页面继续编辑
+      } else if (status === 'private') {
+        toast.success('已保存为私密日记');
         router.push('/diaries');
+      } else {
+        toast.success('已发布到日记广场');
+        router.push('/snap/square');
       }
     } catch {
       toast.error('保存失败，请重试');
