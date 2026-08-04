@@ -108,7 +108,8 @@ function SquareContent() {
               return (
                 <Card
                   key={diary.id}
-                  className="overflow-hidden hover:shadow-md transition-all group"
+                  className="overflow-hidden hover:shadow-md transition-all group cursor-pointer"
+                  onClick={() => router.push(`/snap/generate/${diary.id}`)}
                 >
                   {/* 封面图 */}
                   {coverImage && (
