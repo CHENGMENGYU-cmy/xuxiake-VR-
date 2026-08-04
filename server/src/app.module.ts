@@ -74,6 +74,6 @@ import { JwtModule } from '@nestjs/jwt';
     UsersController,
     SocialController,
   ],
-  providers: [SocialService, StorageService],
+  providers: [SocialService, StorageService, AiClientService],
 })
 export class AppModule {}
