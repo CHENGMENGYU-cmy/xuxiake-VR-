@@ -18,6 +18,9 @@ DELETE FROM community_roles;
 DELETE FROM collection_posts;
 DELETE FROM collections;
 DELETE FROM comments WHERE id LIKE 'c-seed-%';
+-- 清理社群动态帖子及其话题关联（固定前缀 cp-）
+DELETE FROM post_topics WHERE post_id LIKE 'cp-%';
+DELETE FROM posts WHERE id LIKE 'cp-%';
 -- 清理补充点赞（按 user+post 匹配）
 DELETE FROM likes WHERE user_id IN ('u4','u6','u7','u9','u10') AND post_id = 'post-seed-005';
 DELETE FROM likes WHERE user_id IN ('u2','u3','u7','u8','u9') AND post_id = 'post-seed-011';
