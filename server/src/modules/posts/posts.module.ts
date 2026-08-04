@@ -5,6 +5,7 @@ import { PostsService } from './posts.service.js';
 import { ReviewService } from './review.service.js';
 import { AiService } from './ai.service.js';
 import { DiaryGeneratorService } from './diary-generator.service.js';
+import { AiClientService } from '../../common/ai-client.service.js';
 import { AuthModule } from '../auth/auth.module.js';
 import { NotificationsModule } from '../notifications/notifications.module.js';
 import { Post } from '../../entities/post.entity.js';
