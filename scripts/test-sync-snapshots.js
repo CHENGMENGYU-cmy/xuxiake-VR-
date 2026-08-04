@@ -21,7 +21,7 @@ async function main() {
     console.error('登录失败:', JSON.stringify(loginJson));
     process.exit(1);
   }
-  const token = loginJson.data.accessToken;
+  const token = loginJson.data.tokens.accessToken;
   console.log('✅ 登录成功:', username);
 
   // 2. 构造闪拍格式测试数据
