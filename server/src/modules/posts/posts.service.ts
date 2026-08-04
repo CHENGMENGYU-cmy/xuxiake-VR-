@@ -619,7 +619,7 @@ export class PostsService {
 
   async getClassifiedDimensions(userId?: string) {
     const buildBase = (qb: any) => {
-      qb.where('post.contentLevel = :level', { level: 'LOG' });
+      qb.where('post.contentLevel IN (:...levels)', { levels: ['SNAPSHOT', 'LOG'] });
       if (userId) {
         qb.andWhere('post.authorId = :userId', { userId });
       }
