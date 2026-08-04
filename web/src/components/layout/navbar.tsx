@@ -72,11 +72,11 @@ export function Navbar() {
     };
     socket.on('chat:message:new', handleNewMessage);
     return () => { socket.off('chat:message:new', handleNewMessage); };
-  }, [user, isAuthenticated, setTotalUnread]);
+  }, [user, isAuthenticated, authReady, setTotalUnread]);
 
   // 加载未读通知数 + WebSocket实时更新
   useEffect(() => {
-    if (!user || !isAuthenticated) return;
+    if (!authReady || !user || !isAuthenticated) return;
     apiClient.get('/notifications/unread-count').then((res) => {
       if (res.data?.success) {
         setNotifUnreadCount(res.data.data?.count || 0);
