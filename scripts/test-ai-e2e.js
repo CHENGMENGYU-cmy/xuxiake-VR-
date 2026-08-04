@@ -1,5 +1,9 @@
 // 端到端测试：LOG + DIARY + prompt → AI 生成游记
-const API_KEY = 'sk-6baa1e0616284546aaa6120fd665b806';
+const API_KEY = process.env.AI_API_KEY;
+if (!API_KEY) {
+  console.error('请设置 AI_API_KEY 环境变量');
+  process.exit(1);
+}
 const BASE_URL = 'https://api.deepseek.com/v1';
 const MODEL = 'deepseek-chat';
 
