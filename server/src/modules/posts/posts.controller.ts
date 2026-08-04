@@ -238,7 +238,7 @@ export class PostsController {
     let memorySnap: Record<string, unknown> | null = null;
     if (!body.includeMemory) {
       const snapMeta = this.parseVrMeta(snapPost);
-      const keywords: string[] = snapMeta.keywords || [];
+      const keywords: string[] = (snapMeta.keywords as string[]) || [];
       const memoryPost = await this.diaryGenerator.findMemoryContrast(userId, keywords);
       if (memoryPost) {
         memorySnap = {

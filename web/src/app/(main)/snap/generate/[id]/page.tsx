@@ -4,7 +4,7 @@ import { useEffect, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   ArrowLeft, Sparkles, RefreshCw, BookOpen, Camera, MapPin, Clock,
-  Tag, Edit3, Save, Globe, Lock, FileText, Memory, Check, ChevronRight,
+  Tag, Edit3, Save, Globe, Lock, FileText, Brain, Check, ChevronRight,
   Loader2, ImageIcon,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -360,7 +360,7 @@ function GenerateContent({ snapId }: { snapId: string }) {
             <Card className="border-purple-200 bg-purple-50/50 dark:border-purple-900 dark:bg-purple-950/20">
               <CardContent className="p-4 space-y-3">
                 <div className="flex items-center gap-2 text-sm font-semibold text-purple-700 dark:text-purple-300">
-                  <Memory className="h-4 w-4" />
+                  <Brain className="h-4 w-4" />
                   回忆反差
                 </div>
                 <p className="text-xs text-purple-600/80 dark:text-purple-400/80">
@@ -385,7 +385,7 @@ function GenerateContent({ snapId }: { snapId: string }) {
                     </>
                   ) : (
                     <>
-                      <Memory className="h-4 w-4" />
+                      <Brain className="h-4 w-4" />
                       加入回忆反差
                     </>
                   )}
