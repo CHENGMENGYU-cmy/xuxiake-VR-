@@ -161,7 +161,7 @@ function JourneysContent() {
           return (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => handleTabSwitch(tab.id)}
               className={`flex items-center gap-1.5 px-4 py-2 text-sm font-medium transition-colors ${
                 activeTab === tab.id ? 'border-b-2 border-primary text-primary' : 'text-muted-foreground hover:text-foreground'
               }`}
