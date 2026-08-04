@@ -157,44 +157,20 @@ function GenerateContent({ snapId }: { snapId: string }) {
   }
 
   return (
-    <div className="mx-auto max-w-5xl px-2">
-      {/* 顶部栏 */}
+    <div className="mx-auto max-w-5xl px-2 pb-24">
+      {/* 顶部栏：只留返回 + 标题 */}
       <div className="sticky top-0 z-20 -mx-2 mb-6 border-b bg-background/85 px-2 py-3 backdrop-blur-lg">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <Button variant="ghost" size="icon" onClick={() => router.push('/snap')} className="h-9 w-9">
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <div className="flex items-center gap-2">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-teal-500 to-orange-400 text-white shadow-md shadow-teal-500/20">
-                <PenLine className="h-4.5 w-4.5" />
-              </span>
-              <div>
-                <h1 className="text-base font-bold leading-tight">AI 日记创作</h1>
-                <p className="text-[11px] leading-tight text-muted-foreground">从闪拍素材智能生成</p>
-              </div>
-            </div>
+        <div className="flex items-center gap-2.5">
+          <Button variant="ghost" size="icon" onClick={() => router.push('/snap')} className="h-9 w-9">
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-teal-500 to-orange-400 text-white shadow-md shadow-teal-500/20">
+            <PenLine className="h-4.5 w-4.5" />
+          </span>
+          <div>
+            <h1 className="text-base font-bold leading-tight">AI 日记创作</h1>
+            <p className="text-[11px] leading-tight text-muted-foreground">从闪拍素材智能生成</p>
           </div>
-
-          {generatedDiary && (
-            <div className="flex items-center gap-1.5">
-              <Button variant="ghost" size="sm" onClick={() => handleSave('draft')} disabled={saving} className="h-9 gap-1 text-xs text-muted-foreground">
-                <FileText className="h-3.5 w-3.5" />草稿
-              </Button>
-              <Button variant="outline" size="sm" onClick={() => handleSave('private')} disabled={saving} className="h-9 gap-1 text-xs text-amber-600">
-                <Lock className="h-3.5 w-3.5" />私密
-              </Button>
-              <Button
-                size="sm"
-                onClick={() => handleSave('public')}
-                disabled={saving}
-                className="h-9 gap-1.5 bg-gradient-to-r from-teal-500 to-emerald-500 px-4 text-xs font-medium shadow-md shadow-teal-500/25 hover:from-teal-600 hover:to-emerald-600"
-              >
-                {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Globe className="h-3.5 w-3.5" />}
-                发布
-              </Button>
-            </div>
-          )}
         </div>
       </div>
 
