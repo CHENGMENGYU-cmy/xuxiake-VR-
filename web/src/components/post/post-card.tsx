@@ -49,19 +49,28 @@ const mediaTypeIcons: Record<string, React.ReactNode> = {
   AUDIO: <Volume2 className="h-3 w-3" />,
 };
 
-const postTypeConfig: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
-  NOTE: { label: '随记', icon: <FileText className="h-3 w-3" />, color: 'bg-primary/10 text-primary' },
-  VR_MEDIA: { label: '第一视角', icon: <Play className="h-3 w-3" />, color: 'bg-violet-500/10 text-violet-500' },
-  JOURNEY: { label: '游记', icon: <Compass className="h-3 w-3" />, color: 'bg-amber-500/10 text-amber-500' },
-  MOMENT: { label: '瞬间', icon: <MessageSquare className="h-3 w-3" />, color: 'bg-pink-500/10 text-pink-500' },
+// 内容层级标签（优先）
+const contentLevelConfig: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
+  LOG:        { label: '日志', icon: <FileText className="h-3 w-3" />, color: 'bg-slate-500/10 text-slate-600 dark:text-slate-400' },
+  DIARY:      { label: '日记', icon: <PenLine className="h-3 w-3" />, color: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400' },
+  TRAVELOGUE: { label: '游记', icon: <BookOpen className="h-3 w-3" />, color: 'bg-amber-500/10 text-amber-600 dark:text-amber-400' },
+  ESSAY:      { label: '游记', icon: <BookOpen className="h-3 w-3" />, color: 'bg-amber-500/10 text-amber-600 dark:text-amber-400' },
+  SNAPSHOT:   { label: '闪拍', icon: <Image className="h-3 w-3" />, color: 'bg-orange-500/10 text-orange-600 dark:text-orange-400' },
 };
 
+// 帖子类型标签（兜底）
+const postTypeConfig: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
+  NOTE:     { label: '笔记', icon: <FileText className="h-3 w-3" />, color: 'bg-primary/10 text-primary' },
+  VR_MEDIA: { label: '第一视角', icon: <Play className="h-3 w-3" />, color: 'bg-violet-500/10 text-violet-500' },
+  JOURNEY:  { label: '游记', icon: <Compass className="h-3 w-3" />, color: 'bg-amber-500/10 text-amber-500' },
+  MOMENT:   { label: '动态', icon: <MessageSquare className="h-3 w-3" />, color: 'bg-pink-500/10 text-pink-500' },
+};
+
+// 媒体类型标签
 const tabLabelConfig: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
-  VIDEO:   { label: '第一视角', icon: <Play className="h-3 w-3" />, color: 'bg-teal-500/10 text-teal-500' },
-  IMAGE:   { label: '瞬间捕获', icon: <Image className="h-3 w-3" />, color: 'bg-orange-500/10 text-orange-500' },
-  AUDIO:   { label: '语音记录', icon: <Volume2 className="h-3 w-3" />, color: 'bg-pink-500/10 text-pink-500' },
-  DIARY:   { label: '日记', icon: <PenLine className="h-3 w-3" />, color: 'bg-indigo-500/10 text-indigo-500' },
-  JOURNEY: { label: '游记', icon: <Compass className="h-3 w-3" />, color: 'bg-amber-500/10 text-amber-500' },
+  VIDEO: { label: '第一视角', icon: <Play className="h-3 w-3" />, color: 'bg-teal-500/10 text-teal-500' },
+  IMAGE: { label: '瞬间捕获', icon: <Image className="h-3 w-3" />, color: 'bg-orange-500/10 text-orange-500' },
+  AUDIO: { label: '语音记录', icon: <Volume2 className="h-3 w-3" />, color: 'bg-pink-500/10 text-pink-500' },
 };
 
 interface PostCardProps {
