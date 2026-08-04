@@ -132,7 +132,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       return;
     }
     set({ user, isAuthenticated: true });
-    // Refresh user data from server so avatar and profile stay up to date
+    // 刷新用户数据（拦截器已处理 token 刷新）
     try {
       const { data } = await apiClient.get('/users/profile');
       if (data.success && data.data) {
@@ -140,11 +140,9 @@ export const useAuthStore = create<AuthState>((set) => ({
         set({ user: data.data });
       }
     } catch (err: any) {
-      if (err.response?.status === 401) {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('user');
-        removeCookie('auth_token');
+      // 拦截器已处理 401 自动刷新，这里只在 refresh 也失败后兜底
+      // 检查 localStorage 中是否还有 token（拦截器刷新失败会清空）
+      if (!localStorage.getItem('accessToken')) {
         set({ user: null, isAuthenticated: false });
       }
     }
