@@ -2,29 +2,42 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Hash, TrendingUp, Search, X, Clock, Loader2 } from 'lucide-react';
+import { Hash, TrendingUp, Search, X, Clock, Loader2, Flame, ListFilter } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { getHotTopics, searchTopics } from '@/lib/post-api';
+import { Button } from '@/components/ui/button';
+import { getHotTopics, searchTopics, getAllTopics } from '@/lib/post-api';
 import type { Topic } from '@/types';
 
 const HISTORY_KEY = 'xuxiake_topic_search_history';
 const MAX_HISTORY = 8;
 
+type SortMode = 'hot' | 'latest' | 'all';
+
 export default function TopicsPage() {
   const [topics, setTopics] = useState<Topic[]>([]);
+  const [allTopics, setAllTopics] = useState<Topic[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Topic[]>([]);
   const [loading, setLoading] = useState(true);
   const [searching, setSearching] = useState(false);
   const [history, setHistory] = useState<string[]>([]);
+  const [sortMode, setSortMode] = useState<SortMode>('hot');
 
   useEffect(() => {
-    getHotTopics(50)
-      .then(setTopics)
+    setLoading(true);
+    Promise.all([
+      getHotTopics(50),
+      getAllTopics().catch(() => [] as Topic[]),
+    ])
+      .then(([hot, all]) => {
+        setTopics(hot);
+        setAllTopics(all);
+      })
       .catch(() => {})
       .finally(() => setLoading(false));
+
     try {
       const saved = localStorage.getItem(HISTORY_KEY);
       if (saved) setHistory(JSON.parse(saved));
@@ -41,7 +54,6 @@ export default function TopicsPage() {
       searchTopics(searchQuery)
         .then((results) => {
           setSearchResults(results);
-          // 搜索成功后保存历史
           if (results.length > 0) {
             setHistory((prev) => {
               const next = [searchQuery.trim(), ...prev.filter((t) => t !== searchQuery.trim())].slice(0, MAX_HISTORY);
@@ -61,10 +73,26 @@ export default function TopicsPage() {
     try { localStorage.removeItem(HISTORY_KEY); } catch {}
   };
 
-  const displayTopics = searchQuery.trim() ? searchResults : topics;
+  // 按排序方式选择数据源
+  const getDisplayTopics = (): Topic[] => {
+    if (searchQuery.trim()) return searchResults;
+    switch (sortMode) {
+      case 'hot': return topics;
+      case 'latest': return [...allTopics].sort((a, b) => (b.postCount || 0) - (a.postCount || 0));
+      case 'all': return allTopics;
+    }
+  };
+
+  const displayTopics = getDisplayTopics();
+
+  const sortTabs: { mode: SortMode; label: string; icon: React.ReactNode }[] = [
+    { mode: 'hot', label: '热门', icon: <Flame className="h-3.5 w-3.5" /> },
+    { mode: 'latest', label: '活跃', icon: <TrendingUp className="h-3.5 w-3.5" /> },
+    { mode: 'all', label: '全部', icon: <ListFilter className="h-3.5 w-3.5" /> },
+  ];
 
   return (
-    <div className="space-y-4">
+    <div className="mx-auto max-w-4xl space-y-4">
       <div className="flex items-center gap-2">
         <Hash className="h-6 w-6 text-primary" />
         <h1 className="text-xl font-bold">话题广场</h1>
@@ -87,6 +115,24 @@ export default function TopicsPage() {
           </button>
         )}
       </div>
+
+      {/* 排序标签 */}
+      {!searchQuery.trim() && (
+        <div className="flex gap-1.5 border-b pb-2">
+          {sortTabs.map(({ mode, label, icon }) => (
+            <Button
+              key={mode}
+              variant={sortMode === mode ? 'default' : 'ghost'}
+              size="sm"
+              className="gap-1.5"
+              onClick={() => setSortMode(mode)}
+            >
+              {icon}
+              {label}
+            </Button>
+          ))}
+        </div>
+      )}
 
       {/* 搜索历史 */}
       {!searchQuery.trim() && history.length > 0 && !loading && (
@@ -137,7 +183,7 @@ export default function TopicsPage() {
                     <span className="text-xs text-muted-foreground">{topic.postCount} 篇内容</span>
                     {topic.isHot && (
                       <Badge variant="secondary" className="gap-0.5 text-[10px]">
-                        <TrendingUp className="h-3 w-3" />
+                        <Flame className="h-3 w-3" />
                         热门
                       </Badge>
                     )}
