@@ -2,22 +2,27 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Sparkles, Loader2, Eye, ArrowLeft, Check, FileText, BookOpen, Wind, Thermometer, Clock, Hash, Search } from 'lucide-react';
+import { Sparkles, Loader2, Eye, ArrowLeft, Check, FileText, BookOpen, Wind, Thermometer, Hash, Search, Layers, PenLine, RefreshCw, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
-import { getContentHierarchy } from '@/lib/post-api';
-import apiClient from '@/lib/api-client';
+import { getUserLogs, getUserDiaries, generateTravelogue, getTravelogueJob } from '@/lib/snap-api';
 import { useAuthStore } from '@/stores/auth-store';
 import { AuthGuard } from '@/components/auth-guard';
 import { toast } from 'sonner';
-import type { Post } from '@/types';
 
-const STYLES = [
-  { value: '游记', icon: BookOpen, desc: '按时间线和地点推进，注重行程完整性', color: 'blue' },
-  { value: '日记', icon: FileText, desc: '第一人称内心体验，注重情感反思', color: 'violet' },
-];
+interface SourceItem {
+  id: string;
+  content: string | null;
+  location?: { name?: string } | null;
+  locationName?: string | null;
+  createdAt: string;
+  mediaItems?: { thumbnailUrl?: string | null; url?: string }[];
+  title?: string | null;
+  type: 'LOG' | 'DIARY';
+}
+
 const TONES = [
   { value: '纪实', icon: Thermometer, desc: '客观如实记录', color: 'slate' },
   { value: '温暖', icon: Wind, desc: '温馨治愈有温度', color: 'amber' },
@@ -47,9 +52,9 @@ function GenerateContent() {
   const searchParams = useSearchParams();
   const { user } = useAuthStore();
 
-  const [seedPosts, setSeedPosts] = useState<Post[]>([]);
+  const [items, setItems] = useState<SourceItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<Set<string>>(new Set());
-  const [style, setStyle] = useState('游记');
   const [tone, setTone] = useState('温暖');
   const [length, setLength] = useState('标准');
   const [prompt, setPrompt] = useState('');
@@ -61,47 +66,78 @@ function GenerateContent() {
   const [searchQuery, setSearchQuery] = useState('');
   const pollRef = useRef<ReturnType<typeof setInterval>>(undefined);
 
+  // 加载素材：日志 + 日记
   useEffect(() => {
-    getContentHierarchy({ level: 'DIARY', userId: user?.id, limit: 50 }).then((r) => {
-      setSeedPosts(r.posts || []);
-      const ids = searchParams.get('ids')?.split(',') || [];
-      if (ids.length > 0) setSelected(new Set(ids));
-    }).catch(() => {});
-  }, [user]);
+    if (!user?.id) return;
+    setLoading(true);
+    Promise.all([getUserLogs(), getUserDiaries()])
+      .then(([logs, diaries]) => {
+        const logItems: SourceItem[] = (logs || []).map((l: any) => ({
+          id: l.id, content: l.content, location: l.location, locationName: l.locationName,
+          createdAt: l.createdAt, mediaItems: l.mediaItems, title: l.title, type: 'LOG',
+        }));
+        const diaryItems: SourceItem[] = (diaries || []).map((d: any) => ({
+          id: d.id, content: d.content, location: d.location, locationName: d.locationName,
+          createdAt: d.createdAt, mediaItems: d.mediaItems, title: d.title, type: 'DIARY',
+        }));
+        const all = [...logItems, ...diaryItems]
+          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        setItems(all);
 
+        // URL 参数预选
+        const ids = searchParams.get('ids')?.split(',') || [];
+        if (ids.length > 0) setSelected(new Set(ids));
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [user, searchParams]);
+
+  // 轮询任务状态
   useEffect(() => {
     if (!jobId) return;
     pollRef.current = setInterval(async () => {
       try {
-        const res = await apiClient.get(`/posts/ai/jobs/${jobId}`);
-        if (res.data?.success) {
-          const j = res.data.data;
-          setStatus(j.status); setProgress(j.progress);
-          if (j.status === 'DONE') {
-            setResult(j.result || '游记已生成！');
-            clearInterval(pollRef.current);
-          } else if (j.status === 'ERROR') {
-            toast.error(j.error || '生成失败');
-            clearInterval(pollRef.current);
-          }
+        const job = await getTravelogueJob(jobId);
+        setStatus(job.status); setProgress(job.progress);
+        if (job.status === 'DONE') {
+          setResult(job.result || '游记已生成！');
+          clearInterval(pollRef.current);
+          setGenerating(false);
+          toast.success('游记生成完成');
+        } else if (job.status === 'ERROR') {
+          toast.error(job.error || '生成失败');
+          clearInterval(pollRef.current);
+          setGenerating(false);
         }
-      } catch { clearInterval(pollRef.current); }
+      } catch {
+        clearInterval(pollRef.current);
+        setGenerating(false);
+      }
     }, 1000);
     return () => clearInterval(pollRef.current);
   }, [jobId]);
 
-  const handleGenerate = async () => {
-    if (selected.size === 0) { toast.error('请至少选择一篇日记作为素材'); return; }
+  const selectedLogIds = items.filter(i => selected.has(i.id) && i.type === 'LOG').map(i => i.id);
+  const selectedDiaryIds = items.filter(i => selected.has(i.id) && i.type === 'DIARY').map(i => i.id);
+
+  const handleGenerate = async (overrideTone?: string, overrideLength?: string, overridePrompt?: string) => {
+    if (selected.size === 0) { toast.error('请至少选择一条日志或日记作为素材'); return; }
     setGenerating(true); setResult(null);
     try {
-      const res = await apiClient.post('/posts/ai/generate', {
-        seedPostIds: [...selected], style, tone, length,
+      const { jobId: newJobId } = await generateTravelogue({
+        logIds: selectedLogIds,
+        diaryIds: selectedDiaryIds,
+        prompt: overridePrompt !== undefined ? overridePrompt : prompt,
+        style: '游记',
+        tone: overrideTone || tone,
+        length: overrideLength || length,
       });
-      if (res.data?.success) {
-        setJobId(res.data.data.jobId);
-        setStatus('QUEUED'); setProgress(0);
-      }
-    } catch { toast.error('提交失败'); setGenerating(false); }
+      setJobId(newJobId);
+      setStatus('QUEUED'); setProgress(0);
+    } catch {
+      toast.error('提交失败，请重试');
+      setGenerating(false);
+    }
   };
 
   const toggleSelect = (id: string) => {
@@ -113,16 +149,22 @@ function GenerateContent() {
   };
 
   const selectAll = () => {
-    const filtered = seedPosts.filter(p =>
-      !searchQuery || (p.content || '').includes(searchQuery) || (p.location?.name || '').includes(searchQuery)
+    const filtered = items.filter(i =>
+      !searchQuery || (i.content || '').includes(searchQuery) || (i.location?.name || i.locationName || '').includes(searchQuery)
     );
-    setSelected(new Set(filtered.map(p => p.id)));
+    setSelected(new Set(filtered.map(i => i.id)));
   };
   const deselectAll = () => setSelected(new Set());
 
-  const filteredPosts = seedPosts.filter(p =>
-    !searchQuery || (p.content || '').includes(searchQuery) || (p.location?.name || '').includes(searchQuery)
+  const filteredItems = items.filter(i =>
+    !searchQuery || (i.content || '').includes(searchQuery) || (i.location?.name || i.locationName || '').includes(searchQuery)
   );
+
+  const logCount = items.filter(i => i.type === 'LOG').length;
+  const diaryCount = items.filter(i => i.type === 'DIARY').length;
+
+  // 生成结果后显示风格切换
+  const showRegenerate = !!result && !generating;
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
@@ -134,7 +176,7 @@ function GenerateContent() {
           </Button>
           <div>
             <h1 className="text-xl font-bold">AI 游记生成</h1>
-            <p className="text-xs text-muted-foreground">选择日记素材，选择风格和语气，AI 帮你写游记</p>
+            <p className="text-xs text-muted-foreground">从你的日志和日记中，由 AI 综合生成一篇游记</p>
           </div>
         </div>
       </div>
@@ -145,11 +187,13 @@ function GenerateContent() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                <FileText className="h-3.5 w-3.5" />
+                <Layers className="h-3.5 w-3.5" />
               </span>
               <div>
                 <h2 className="font-semibold text-sm">选择素材</h2>
-                <p className="text-xs text-muted-foreground">选择你的日记作为游记的素材来源</p>
+                <p className="text-xs text-muted-foreground">
+                  日志 <Badge variant="secondary" className="text-[10px]">{logCount}</Badge> · 日记 <Badge variant="secondary" className="text-[10px]">{diaryCount}</Badge>
+                </p>
               </div>
             </div>
             <div className="flex items-center gap-1 text-xs">
@@ -158,20 +202,21 @@ function GenerateContent() {
             </div>
           </div>
 
-          {seedPosts.length === 0 ? (
+          {loading ? (
+            <div className="py-8 text-center text-sm text-muted-foreground">加载素材中...</div>
+          ) : items.length === 0 ? (
             <div className="flex flex-col items-center py-12">
               <FileText className="h-10 w-10 text-muted-foreground/20 mb-3" />
-              <p className="text-sm text-muted-foreground">还没有日记，先写一篇吧</p>
-              <Button size="sm" className="mt-3" onClick={() => router.push('/snap')}>去写日记</Button>
+              <p className="text-sm text-muted-foreground">还没有日志和日记素材</p>
+              <Button size="sm" className="mt-3" onClick={() => router.push('/snap')}>去记录闪拍</Button>
             </div>
           ) : (
             <>
-              {/* 搜索框 */}
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <input
                   type="text"
-                  placeholder="搜索日记..."
+                  placeholder="搜索素材..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full rounded-lg border bg-muted/40 py-2 pl-9 pr-3 text-sm placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/20"
@@ -179,42 +224,47 @@ function GenerateContent() {
               </div>
 
               <div className="grid gap-2 max-h-72 overflow-y-auto">
-                {filteredPosts.map((p) => (
+                {filteredItems.map((item) => (
                   <button
-                    key={p.id}
-                    onClick={() => toggleSelect(p.id)}
+                    key={item.id}
+                    onClick={() => toggleSelect(item.id)}
                     className={`flex items-center gap-3 text-left rounded-xl border-2 p-3 transition-all duration-200 ${
-                      selected.has(p.id)
+                      selected.has(item.id)
                         ? 'border-primary/50 bg-primary/5 shadow-sm'
                         : 'border-transparent hover:bg-muted/60 hover:border-muted-foreground/10'
                     }`}
                   >
                     <div className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 transition-colors ${
-                      selected.has(p.id) ? 'border-primary bg-primary text-primary-foreground' : 'border-muted-foreground/30'
+                      selected.has(item.id) ? 'border-primary bg-primary text-primary-foreground' : 'border-muted-foreground/30'
                     }`}>
-                      {selected.has(p.id) && <Check className="h-3 w-3" />}
+                      {selected.has(item.id) && <Check className="h-3 w-3" />}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <span className="text-sm line-clamp-1">{p.content?.slice(0, 80) || '(无内容)'}</span>
+                      <div className="flex items-center gap-1.5 mb-0.5">
+                        {item.type === 'LOG' ? (
+                          <Badge variant="outline" className="text-[10px] bg-slate-100 text-slate-600 dark:bg-slate-900">日志</Badge>
+                        ) : (
+                          <Badge variant="outline" className="text-[10px] bg-indigo-100 text-indigo-600 dark:bg-indigo-950">日记</Badge>
+                        )}
+                        {item.title && <span className="text-xs text-muted-foreground truncate">{item.title}</span>}
+                      </div>
+                      <span className="text-sm line-clamp-1">{item.content?.slice(0, 80) || '(无内容)'}</span>
                       <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
-                        {p.location?.name && <span>{p.location.name}</span>}
-                        <span>{new Date(p.createdAt).toLocaleDateString('zh-CN')}</span>
+                        {item.location?.name || item.locationName && <span>{item.location?.name || item.locationName}</span>}
+                        <span>{new Date(item.createdAt).toLocaleDateString('zh-CN')}</span>
                       </div>
                     </div>
-                    {p.mediaItems?.[0]?.thumbnailUrl && (
+                    {item.mediaItems?.[0]?.thumbnailUrl && (
                       <div className="h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-muted">
-                        <img src={p.mediaItems[0].thumbnailUrl} alt="" className="h-full w-full object-cover" />
+                        <img src={item.mediaItems[0].thumbnailUrl} alt="" className="h-full w-full object-cover" />
                       </div>
                     )}
                   </button>
                 ))}
               </div>
 
-              <div className="flex items-center justify-between text-sm">
-                <Badge variant="secondary">已选 {selected.size} 篇</Badge>
-                {filteredPosts.length < seedPosts.length && (
-                  <span className="text-xs text-muted-foreground">共 {seedPosts.length} 篇，筛选出 {filteredPosts.length} 篇</span>
-                )}
+              <div className="flex items-center justify-between">
+                <Badge variant="secondary">已选 {selected.size} 条（日志{selectedLogIds.length} · 日记{selectedDiaryIds.length}）</Badge>
               </div>
             </>
           )}
@@ -230,31 +280,7 @@ function GenerateContent() {
             </span>
             <div>
               <h2 className="font-semibold text-sm">风格设置</h2>
-              <p className="text-xs text-muted-foreground">选择文体、语气和篇幅，AI 会据此调整写作风格</p>
-            </div>
-          </div>
-
-          {/* 文体 */}
-          <div className="space-y-2">
-            <label className="text-xs font-medium text-muted-foreground">文体</label>
-            <div className="grid grid-cols-2 gap-2">
-              {STYLES.map(({ value, icon: Icon, desc, color }) => (
-                <button
-                  key={value}
-                  onClick={() => setStyle(value)}
-                  className={`flex items-start gap-3 rounded-xl border-2 p-3 text-left transition-all duration-200 ${
-                    style === value
-                      ? `${colorMap[color]} border-current shadow-sm`
-                      : 'border-transparent hover:bg-muted/60'
-                  }`}
-                >
-                  <Icon className={`h-5 w-5 shrink-0 mt-0.5 ${style === value ? '' : 'text-muted-foreground'}`} />
-                  <div>
-                    <span className="text-sm font-medium block">{value}</span>
-                    <span className="text-[11px] opacity-70">{desc}</span>
-                  </div>
-                </button>
-              ))}
+              <p className="text-xs text-muted-foreground">选择语气和篇幅，AI 会据此调整写作风格</p>
             </div>
           </div>
 
@@ -316,15 +342,15 @@ function GenerateContent() {
         </CardContent>
       </Card>
 
-      {/* 生成 */}
-      {!jobId ? (
+      {/* 生成 / 结果区 */}
+      {!result ? (
         <Button
-          onClick={handleGenerate}
+          onClick={() => handleGenerate()}
           disabled={generating || selected.size === 0}
           className="w-full gap-2 h-12 text-base font-medium bg-gradient-to-r from-primary to-violet-500 hover:from-primary/90 hover:to-violet-500/90 shadow-lg shadow-primary/20"
         >
           {generating ? (
-            <><Loader2 className="h-5 w-5 animate-spin" /> AI 正在思考...</>
+            <><Loader2 className="h-5 w-5 animate-spin" /> AI 正在创作中...</>
           ) : (
             <><Sparkles className="h-5 w-5" /> 开始 AI 生成</>
           )}
@@ -333,25 +359,17 @@ function GenerateContent() {
         <Card className="shadow-sm border-primary/20">
           <CardContent className="p-5 space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="font-semibold">
-                {status === 'DONE' ? '游记已生成' : status === 'ERROR' ? '生成失败' : 'AI 正在创作...'}
-              </h3>
-              <Badge variant={
-                status === 'DONE' ? 'default' :
-                status === 'ERROR' ? 'destructive' : 'secondary'
-              }>
+              <h3 className="font-semibold">生成的游记</h3>
+              <Badge variant={status === 'DONE' ? 'default' : status === 'ERROR' ? 'destructive' : 'secondary'}>
                 {status === 'DONE' ? '完成' : status === 'ERROR' ? '失败' : status}
               </Badge>
             </div>
 
-            {/* 进度条 */}
-            {status !== 'DONE' && status !== 'ERROR' && (
+            {/* 生成中进度 */}
+            {generating && (
               <div className="space-y-2">
                 <div className="h-3 rounded-full bg-muted overflow-hidden">
-                  <div
-                    className="h-full rounded-full bg-gradient-to-r from-primary to-violet-500 transition-all duration-700 ease-out"
-                    style={{ width: `${progress}%` }}
-                  />
+                  <div className="h-full rounded-full bg-gradient-to-r from-primary to-violet-500 transition-all duration-700 ease-out" style={{ width: `${progress}%` }} />
                 </div>
                 <div className="flex justify-between text-xs text-muted-foreground">
                   <span>{status === 'ANALYZING' ? '分析素材中...' : '生成文本中...'}</span>
@@ -361,18 +379,70 @@ function GenerateContent() {
             )}
 
             {result && (
-              <div className="space-y-4">
-                <div className="rounded-xl border bg-muted/30 p-5 max-h-96 overflow-y-auto">
-                  <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap text-sm leading-relaxed">
-                    {result}
-                  </div>
+              <div className="rounded-xl border bg-muted/30 p-5 max-h-96 overflow-y-auto">
+                <div className="whitespace-pre-wrap text-sm leading-relaxed">{result}</div>
+              </div>
+            )}
+
+            {/* 重新生成区域 */}
+            {showRegenerate && (
+              <div className="space-y-3 border-t pt-4">
+                <div className="flex items-center gap-2 text-sm">
+                  <RefreshCw className="h-4 w-4 text-primary" />
+                  <span className="font-medium">换种风格重新生成</span>
                 </div>
+
+                {/* 语气快速切换 */}
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span className="text-xs text-muted-foreground">语气:</span>
+                  {TONES.map(({ value, color }) => (
+                    <button
+                      key={value}
+                      onClick={() => setTone(value)}
+                      className={`rounded-full border px-3 py-1 text-xs transition-all ${
+                        tone === value
+                          ? `${colorMap[color]} border-current font-medium`
+                          : 'hover:bg-muted'
+                      }`}
+                    >
+                      {value}
+                    </button>
+                  ))}
+                </div>
+
+                {/* 篇幅快速切换 */}
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span className="text-xs text-muted-foreground">篇幅:</span>
+                  {LENGTHS.map(({ value, color }) => (
+                    <button
+                      key={value}
+                      onClick={() => setLength(value)}
+                      className={`rounded-full border px-3 py-1 text-xs transition-all ${
+                        length === value
+                          ? `${colorMap[color]} border-current font-medium`
+                          : 'hover:bg-muted'
+                      }`}
+                    >
+                      {value}
+                    </button>
+                  ))}
+                </div>
+
+                {/* 提示词编辑 */}
+                <Textarea
+                  placeholder="输入新的写作方向，覆盖之前的提示词..."
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  className="min-h-[50px] text-sm resize-none"
+                />
+
                 <div className="flex gap-2">
-                  <Button onClick={() => router.push('/journeys')} className="flex-1 gap-2" variant="outline">
-                    <Eye className="h-4 w-4" /> 查看我的游记
+                  <Button onClick={() => handleGenerate(tone, length, prompt)} disabled={generating} className="flex-1 gap-2 bg-gradient-to-r from-primary to-violet-500">
+                    {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+                    用当前风格重新生成
                   </Button>
-                  <Button onClick={() => { setJobId(null); setResult(null); setGenerating(false); }} variant="ghost" size="icon">
-                    <Sparkles className="h-4 w-4" />
+                  <Button onClick={() => router.push('/journeys')} variant="outline" className="gap-2">
+                    <Eye className="h-4 w-4" /> 我的游记
                   </Button>
                 </div>
               </div>

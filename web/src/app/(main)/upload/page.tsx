@@ -404,7 +404,7 @@ function UploadContent() {
     try {
       const preview = await fetchLinkPreview(url);
       setLinkData({ url, title: preview.title || url, description: preview.description, favicon: preview.favicon });
-      toast.success('链接预览已获取');
+      toast.success('获取链接预览成功');
     } catch {
       setLinkData({ url, title: url, description: '', favicon: '' });
       toast.warning('无法获取链接预览');
