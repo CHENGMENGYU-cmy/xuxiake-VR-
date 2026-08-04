@@ -177,7 +177,7 @@ function GenerateContent({ snapId }: { snapId: string }) {
       {/* 布局：左素材 | 中编辑 | 右风格 */}
       <div className="grid gap-4 xl:grid-cols-[170px_minmax(0,1fr)_190px] lg:grid-cols-[150px_minmax(0,1fr)_170px]">
         {/* 左栏：素材 */}
-        <div className="space-y-4 lg:sticky lg:top-[70px] lg:self-start">
+        <div className="space-y-4">
           <div className="rounded-2xl border bg-card shadow-sm overflow-hidden">
             {/* 素材封面 */}
             <div className="relative">
