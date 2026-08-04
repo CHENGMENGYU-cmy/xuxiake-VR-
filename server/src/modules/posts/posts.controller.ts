@@ -10,6 +10,7 @@ import { AudioPlaylist } from '../../entities/audio-playlist.entity.js';
 import { PostsService } from './posts.service.js';
 import { ReviewService } from './review.service.js';
 import { AiService, type GenerationJob } from './ai.service.js';
+import { DiaryGeneratorService, type DiaryStyle } from './diary-generator.service.js';
 import { AuthService } from '../auth/auth.service.js';
 import type { CreatePostDto, CreateCommentDto } from '../../common/interfaces.js';
 
