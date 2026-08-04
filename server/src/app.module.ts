@@ -12,6 +12,7 @@ import { UsersController } from './modules/users/users.controller.js';
 import { SocialController } from './modules/social/social.controller.js';
 import { SocialService } from './modules/social/social.service.js';
 import { StorageService } from './common/storage.service.js';
+import { AiClientService } from './common/ai-client.service.js';
 import { User } from './entities/user.entity.js';
 import { Post } from './entities/post.entity.js';
 import { MediaItem } from './entities/media-item.entity.js';
