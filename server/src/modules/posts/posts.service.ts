@@ -74,6 +74,8 @@ export class PostsService {
     } else {
       qb.where('post.visibility = :vis', { vis: 'PUBLIC' });
     }
+    // 排除私人素材（LOG 日志不进入任何公开信息流）
+    qb.andWhere('post.contentLevel != :log', { log: 'LOG' });
 
     if (postType) {
       qb.andWhere('post.postType = :postType', { postType });
