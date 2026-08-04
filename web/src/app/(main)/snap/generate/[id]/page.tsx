@@ -286,7 +286,7 @@ function GenerateContent({ snapId }: { snapId: string }) {
         </div>
 
         {/* 中栏：日记编辑器 */}
-        <div className="overflow-hidden rounded-2xl border bg-card shadow-sm">
+        <div className="min-w-0 overflow-hidden rounded-2xl border bg-card shadow-sm">
           {generatedDiary ? (
             <>
               {/* 标题 */}
@@ -383,15 +383,12 @@ function GenerateContent({ snapId }: { snapId: string }) {
                         : 'border-border/60 hover:border-teal-300 hover:bg-teal-50/50 dark:hover:bg-teal-950/30'
                     }`}
                   >
-                    <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-lg ${active ? 'bg-white/25' : 'bg-muted'}`}>
+                    <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-base ${active ? 'bg-white/25' : 'bg-muted'}`}>
                       {meta.emoji}
                     </span>
-                    <div className="min-w-0 flex-1">
-                      <span className={`block text-sm ${active ? 'font-semibold' : 'font-medium'}`}>{style}</span>
-                      <span className={`block truncate text-[10px] ${active ? 'text-white/80' : 'text-muted-foreground/70'}`}>
-                        {meta.desc}
-                      </span>
-                    </div>
+                    <span className={`min-w-0 flex-1 truncate text-sm ${active ? 'font-semibold' : 'font-medium'}`}>
+                      {style}
+                    </span>
                     {active && <Check className="h-4 w-4 shrink-0" />}
                   </button>
                 );
