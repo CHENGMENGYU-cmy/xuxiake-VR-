@@ -67,6 +67,7 @@ import { JwtModule } from '@nestjs/jwt';
     PostsModule,
     ChatModule,
     NotificationsModule,
+    SyncModule,
   ],
   controllers: [
     ConversationsController,
