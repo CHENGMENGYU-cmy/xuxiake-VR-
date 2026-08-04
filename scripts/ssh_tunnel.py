@@ -91,7 +91,7 @@ def main():
         sys.exit(1)
 
     print()
-    print('✓ 隧道已建立！')
+    print('[OK] 隧道已建立！')
     print(f'请在浏览器访问: http://localhost:{LOCAL_PORT}')
     print('按 Ctrl+C 停止隧道')
     print('=' * 60)
