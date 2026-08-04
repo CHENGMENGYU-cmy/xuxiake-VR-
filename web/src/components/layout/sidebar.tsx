@@ -11,7 +11,6 @@ import {
   UserPlus,
   MessageCircle,
   Hash,
-  FolderOpen,
   PenLine,
   BookOpen,
   Shield,
