@@ -142,7 +142,8 @@ export class PostsController {
   }
 
   @Get('classified/dimensions')
-  async getClassifiedDimensions(@Query('userId') userId?: string) {
+  async getClassifiedDimensions(@Headers('authorization') auth: string) {
+    const userId = this.getUserId(auth);
     const dimensions = await this.postsService.getClassifiedDimensions(userId);
     return { success: true, data: dimensions };
   }
