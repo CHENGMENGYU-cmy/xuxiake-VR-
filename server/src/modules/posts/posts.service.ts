@@ -895,8 +895,30 @@ export class PostsService {
     };
   }
 
-  /** 保存/发布日记 */
+  /** 查询指定素材的已有日记草稿（仅查草稿状态的） */
+  async getDiaryDraft(userId: string, snapId: string) {
+    const draft = await this.postRepo.findOne({
+      where: {
+        authorId: userId,
+        parentPostId: snapId,
+        contentLevel: 'DIARY',
+        visibility: 'PRIVATE',
+      },
+      relations: { mediaItems: true },
+      order: { updatedAt: 'DESC' },
+    });
+    if (!draft) return null;
+
+    // 只有 vrMetadata.status 为 draft 的才算草稿
+    const meta = this.parseVrMeta(draft);
+    if (meta.status !== 'draft') return null;
+
+    return this.formatPost(draft);
+  }
+
+  /** 保存/发布日记（支持新建和更新已有草稿） */
   async saveDiary(userId: string, dto: {
+    diaryId?: string;
     snapId?: string;
     title: string;
     content: string;
@@ -907,12 +929,10 @@ export class PostsService {
     status?: 'draft' | 'private' | 'public';
     image?: string;
   }) {
-    // status=draft 存为 PRIVATE visibility
+    // 状态映射：public→PUBLIC, draft/private→PRIVATE
     const visibility = dto.status === 'public'
       ? 'PUBLIC'
-      : dto.status === 'draft'
-        ? 'PRIVATE'
-        : (dto.visibility || 'PRIVATE');
+      : (dto.visibility || 'PRIVATE');
 
     const vrMetadata: Record<string, unknown> = {
       insight: dto.insight || '',
@@ -925,25 +945,47 @@ export class PostsService {
       vrMetadata.coverImage = dto.image;
     }
 
-    const post = this.postRepo.create({
-      id: uuidv4(),
-      authorId: userId,
-      postType: 'NOTE',
-      contentLevel: 'DIARY',
-      parentPostId: dto.snapId || null,
-      title: dto.title,
-      content: dto.content,
-      vrMetadata: JSON.stringify(vrMetadata),
-      visibility,
-      likeCount: 0,
-      commentCount: 0,
-      viewCount: 0,
-    });
+    let post: any;
+    let isUpdate = false;
+
+    // 如果提供了 diaryId，更新已有帖子
+    if (dto.diaryId) {
+      post = await this.postRepo.findOne({
+        where: { id: dto.diaryId, authorId: userId, contentLevel: 'DIARY' },
+        relations: { mediaItems: true },
+      });
+      if (post) {
+        isUpdate = true;
+        post.title = dto.title;
+        post.content = dto.content;
+        post.visibility = visibility;
+        post.vrMetadata = JSON.stringify(vrMetadata);
+        post.updatedAt = new Date();
+      }
+    }
+
+    // 如果没有找到已有帖子，创建新的
+    if (!post) {
+      post = this.postRepo.create({
+        id: uuidv4(),
+        authorId: userId,
+        postType: 'NOTE',
+        contentLevel: 'DIARY',
+        parentPostId: dto.snapId || null,
+        title: dto.title,
+        content: dto.content,
+        vrMetadata: JSON.stringify(vrMetadata),
+        visibility,
+        likeCount: 0,
+        commentCount: 0,
+        viewCount: 0,
+      });
+    }
 
     await this.postRepo.save(post);
 
-    // 如果有 snapId，复制闪拍的媒体和位置到日记
-    if (dto.snapId) {
+    // 仅首次创建时复制闪拍媒体和位置
+    if (!isUpdate && dto.snapId) {
       const snap = await this.postRepo.findOne({
         where: { id: dto.snapId },
         relations: { mediaItems: true },
