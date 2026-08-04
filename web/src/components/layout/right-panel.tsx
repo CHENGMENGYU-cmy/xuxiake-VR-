@@ -24,7 +24,7 @@ function shuffleAndPick<T>(arr: T[], count: number): T[] {
 
 export function RightPanel() {
   const { rightPanelOpen } = useUIStore();
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated, authReady, user } = useAuthStore();
   // 管理员和审核员不显示右侧面板
   const isStaff = !!(user?.role && user.role !== 'USER');
   const [mounted, setMounted] = useState(false);
