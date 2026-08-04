@@ -1,5 +1,11 @@
 // 测试 AI API 连接
-const API_KEY = process.env.AI_API_KEY || 'sk-6baa1e0616284546aaa6120fd665b806';
+const API_KEY = process.env.AI_API_KEY;
+if (!API_KEY) {
+  console.error('请设置 AI_API_KEY 环境变量');
+  console.error('  PowerShell: $env:AI_API_KEY="sk-xxx"');
+  console.error('  或读取 server/.env 中的配置');
+  process.exit(1);
+}
 const BASE_URL = 'https://api.deepseek.com/v1';
 const MODEL = 'deepseek-chat';
 
