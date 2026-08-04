@@ -4,7 +4,7 @@ import { useEffect, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   ArrowLeft, Sparkles, RefreshCw, MapPin, Clock,
-  Save, Globe, Lock, FileText, Brain, Check,
+  Globe, Lock, FileText, Brain, Check,
   Loader2, Heart, X, Wand2, Camera, PenLine, Layers, ChevronRight,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
