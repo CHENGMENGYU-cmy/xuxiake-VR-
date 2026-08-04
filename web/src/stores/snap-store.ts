@@ -94,6 +94,7 @@ export const useSnapStore = create<SnapState>((set, get) => ({
   currentStyle: '生活碎片风',
   memorySnap: null,
   includeMemory: false,
+  existingDraftId: null,
 
   squareDiaries: [],
   squareLoading: false,
