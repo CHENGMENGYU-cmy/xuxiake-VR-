@@ -254,8 +254,8 @@ export class PostsController {
   ) {
     const userId = this.getUserId(auth);
     const snap = await this.postsService.getPostById(body.snapId, userId);
-    if (!snap || (snap as any).contentLevel !== 'SNAPSHOT') {
-      throw new UnauthorizedException('闪拍记录不存在');
+    if (!snap || !['SNAPSHOT', 'LOG'].includes((snap as any).contentLevel)) {
+      throw new UnauthorizedException('素材记录不存在');
     }
 
     // 类型转换：API返回的formatPost结果需要转回Post entity风格供生成器使用
