@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Camera, MapPin, Clock, Sparkles, ChevronRight, ImageIcon, FileText, ListFilter, FolderOpen, Tag } from 'lucide-react';
+import { Camera, MapPin, Clock, Sparkles, ChevronRight, ImageIcon, FileText, ListFilter, FolderOpen, Check } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
