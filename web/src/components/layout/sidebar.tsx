@@ -26,25 +26,19 @@ import { useChatStore } from '@/stores/chat-store';
 import { useNotificationStore } from '@/stores/notification-store';
 import { cn } from '@/lib/utils';
 
-// 浏览发现（普通用户完整版）
-const navItems = [
+// 浏览
+const browseItems = [
   { href: '/feed', label: '首页', icon: Home },
-  { href: '/topics', label: '话题广场', icon: Hash },
-  { href: '/snap/square', label: '日记广场', icon: LayoutGrid },
-  { href: '/discover', label: '寻找搭子', icon: UserPlus },
+  { href: '/discover', label: '发现', icon: Compass },
 ];
 
-// 管理员：不显示浏览区，管理为中心
-const adminNavItems: { href: string; label: string; icon: any }[] = [];
-
-// 我的内容
-const contentItems = [
-  { href: '/snap', label: '我的闪拍', icon: Camera, color: 'text-orange-500' },
-  { href: '/diaries', label: '我的日记', icon: PenLine, color: 'text-indigo-500' },
-  { href: '/journeys', label: '我的游记', icon: BookOpen, color: 'text-primary' },
+// 我的
+const myItems = [
+  { href: '/snap', label: '素材库', icon: Camera, color: 'text-orange-500' },
+  { href: '/my/works', label: '我的作品', icon: FolderOpen, color: 'text-indigo-500' },
 ];
 
-// 个人中心
+// 个人
 const personalItems = [
   { href: '/messages', label: '消息', icon: MessageCircle },
   { href: '/notifications', label: '通知', icon: Bell },
