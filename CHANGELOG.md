@@ -225,17 +225,3 @@
 修改效果：用户可从多个入口访问话题功能
 --------------------------------------------------------------------------------
 
-修改时间：2026-07-18
-修改位置：server/sql/migrate-content-classification.sql, server/src/entities/post.entity.ts, topic.entity.ts
-修改原因：为帖子添加内容分类能力
-修改内容：posts表新增post_type枚举字段，新建post_tags/topics/post_topics表，Post实体新增postType/tags/topics关联
-修改效果：数据库支持内容形式分类、标签关联、话题聚合三层分类体系
---------------------------------------------------------------------------------
-
-修改时间：2026-07-18
-修改位置：server/src/modules/posts/posts.service.ts, posts.controller.ts, posts.module.ts, web/src/
-修改原因：后端服务层和前端支持标签/话题CRUD和筛选查询
-修改内容：createPost支持tagIds/topicNames，getPosts支持postType/tagId筛选，新增标签/话题API，前端类型同步
-修改效果：帖子发布支持标签和话题，列表查询支持按类型和标签筛选
---------------------------------------------------------------------------------
-
