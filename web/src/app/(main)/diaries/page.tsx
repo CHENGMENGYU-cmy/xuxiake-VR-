@@ -343,10 +343,14 @@ function DiariesContent() {
                   const VisibilityIcon = visibility.icon;
 
                   return (
-                    <Card key={post.id} className="overflow-hidden hover:shadow-md transition-shadow">
+                    <Card
+                      key={post.id}
+                      className="overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
+                      onClick={() => router.push(`/diaries/${post.id}`)}
+                    >
                       <CardContent className="p-4">
                         {/* 顶部：时间 + 地点 + 隐私状态 */}
-                        <div className="flex items-start justify-between gap-2 mb-3">
+                        <div className="flex items-start justify-between gap-2 mb-2">
                           <div className="flex items-center gap-2 text-xs text-muted-foreground">
                             <span>{formatRelativeTime(post.createdAt)}</span>
                             {!!post.vrMetadata?.mood && (
@@ -354,14 +358,6 @@ function DiariesContent() {
                                 <span>·</span>
                                 <span className="flex items-center gap-1">
                                   {MoodEmoji[post.vrMetadata.mood as MoodType]}
-                                </span>
-                              </>
-                            )}
-                            {!!post.vrMetadata?.weather && (
-                              <>
-                                <span>·</span>
-                                <span className="flex items-center gap-1">
-                                  {WeatherEmoji[post.vrMetadata.weather as WeatherType]}
                                 </span>
                               </>
                             )}
@@ -375,40 +371,29 @@ function DiariesContent() {
                               </>
                             )}
                           </div>
-
                           <div className={`flex items-center gap-1 text-xs ${visibility.color}`}>
                             <VisibilityIcon className="h-3.5 w-3.5" />
                             <span>{visibility.label}</span>
                           </div>
                         </div>
 
-                        {/* 内容区 */}
-                        <div className="flex gap-3">
-                          {/* 文字内容 */}
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm leading-relaxed line-clamp-3 mb-3">
-                              {post.content || '(无内容)'}
-                            </p>
-
-                            {/* 媒体缩略图 */}
-                            {post.mediaItems.length > 0 && (
-                              <div className="flex gap-1.5 mb-3">
+                        {/* 有图片：图文布局 */}
+                        {post.mediaItems.length > 0 ? (
+                          <div className="flex gap-3">
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm leading-relaxed line-clamp-3 mb-2">
+                                {post.content || '(无内容)'}
+                              </p>
+                              <div className="flex gap-1.5">
                                 {post.mediaItems.slice(0, 4).map((media, idx) => {
                                   const MediaIcon = getMediaIcon(media.type);
                                   return (
-                                    <div
-                                      key={media.id}
-                                      className="relative w-16 h-16 rounded-md overflow-hidden bg-muted"
-                                    >
+                                    <div key={media.id} className="relative w-14 h-14 rounded-md overflow-hidden bg-muted">
                                       {media.type === 'IMAGE' && (media.thumbnailUrl || media.url) ? (
-                                        <img
-                                          src={media.thumbnailUrl || media.url}
-                                          alt=""
-                                          className="w-full h-full object-cover"
-                                        />
+                                        <img src={media.thumbnailUrl || media.url} alt="" className="w-full h-full object-cover" />
                                       ) : (
                                         <div className="w-full h-full flex items-center justify-center">
-                                          <MediaIcon className="h-5 w-5 text-muted-foreground/50" />
+                                          <MediaIcon className="h-4 w-4 text-muted-foreground/50" />
                                         </div>
                                       )}
                                       {idx === 3 && post.mediaItems.length > 4 && (
@@ -420,85 +405,38 @@ function DiariesContent() {
                                   );
                                 })}
                               </div>
+                            </div>
+                            {post.mediaItems[0].type === 'IMAGE' && (post.mediaItems[0].thumbnailUrl || post.mediaItems[0].url) && (
+                              <div className="shrink-0 w-20 h-20 rounded-md overflow-hidden bg-muted">
+                                <img src={post.mediaItems[0].thumbnailUrl || post.mediaItems[0].url} alt="" className="w-full h-full object-cover" />
+                              </div>
                             )}
                           </div>
+                        ) : (
+                          /* 纯文字：紧凑布局 */
+                          <p className="text-sm leading-relaxed line-clamp-2">{post.content || '(无内容)'}</p>
+                        )}
 
-                          {/* 右侧大图（如果有） */}
-                          {post.mediaItems.length > 0 && post.mediaItems[0].type === 'IMAGE' && (post.mediaItems[0].thumbnailUrl || post.mediaItems[0].url) && (
-                            <div className="shrink-0 w-24 h-24 rounded-md overflow-hidden bg-muted">
-                              <img
-                                src={post.mediaItems[0].thumbnailUrl || post.mediaItems[0].url}
-                                alt=""
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
-                          )}
-                        </div>
-
-                        {/* 底部：操作按钮 */}
-                        <div className="flex items-center justify-end gap-2 pt-3 border-t border-border/50">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleEdit(post.id)}
-                            className="gap-1.5"
-                          >
-                            <Edit className="h-3.5 w-3.5" />
-                            编辑
+                        {/* 底部操作 */}
+                        <div className="flex items-center gap-1 pt-2 mt-2 border-t border-border/50" onClick={(e) => e.stopPropagation()}>
+                          <Button variant="ghost" size="sm" className="h-7 text-xs gap-1" onClick={() => handleEdit(post.id)}>
+                            <Edit className="h-3 w-3" />编辑
                           </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleDelete(post.id)}
-                            className="gap-1.5 text-destructive hover:text-destructive"
-                          >
-                            <Trash2 className="h-3.5 w-3.5" />
-                            删除
-                          </Button>
-
                           {post.visibility === 'PRIVATE' && (
-                            <>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => handlePublish(post.id, 'FOLLOWERS')}
-                                className="gap-1.5 text-blue-600 hover:text-blue-700"
-                              >
-                                <Users className="h-3.5 w-3.5" />
-                                关注可见
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => handlePublish(post.id, 'PUBLIC')}
-                                className="gap-1.5 text-green-600 hover:text-green-700"
-                              >
-                                <Share2 className="h-3.5 w-3.5" />
-                                公开发布
-                              </Button>
-                            </>
-                          )}
-
-                          {post.visibility !== 'PRIVATE' && (
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handlePublish(post.id, 'PRIVATE')}
-                              className="gap-1.5 text-amber-600 hover:text-amber-700"
-                            >
-                              <Lock className="h-3.5 w-3.5" />
-                              转为私密
+                            <Button variant="ghost" size="sm" className="h-7 text-xs gap-1 text-green-600" onClick={() => handlePublish(post.id, 'PUBLIC')}>
+                              <Share2 className="h-3 w-3" />公开
                             </Button>
                           )}
-
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handlePromoteToJourney(post)}
-                            className="gap-1.5 text-purple-600 hover:text-purple-700"
-                          >
-                            <Sparkles className="h-3.5 w-3.5" />
-                            升华为游记
+                          {post.visibility !== 'PRIVATE' && (
+                            <Button variant="ghost" size="sm" className="h-7 text-xs gap-1 text-amber-600" onClick={() => handlePublish(post.id, 'PRIVATE')}>
+                              <Lock className="h-3 w-3" />私密
+                            </Button>
+                          )}
+                          <Button variant="ghost" size="sm" className="h-7 text-xs gap-1 text-purple-600 ml-auto" onClick={() => handlePromoteToJourney(post)}>
+                            <Sparkles className="h-3 w-3" />升华为游记
+                          </Button>
+                          <Button variant="ghost" size="sm" className="h-7 text-xs gap-1 text-destructive" onClick={() => handleDelete(post.id)}>
+                            <Trash2 className="h-3 w-3" />
                           </Button>
                         </div>
                       </CardContent>
