@@ -35,6 +35,7 @@ import { cn } from '@/lib/utils';
 const navItems = [
   { href: '/feed', label: '首页', icon: Home },
   { href: '/topics', label: '话题广场', icon: Hash },
+  { href: '/snap/square', label: '日记广场', icon: LayoutGrid },
   { href: '/discover', label: '寻找搭子', icon: UserPlus },
 ];
 
