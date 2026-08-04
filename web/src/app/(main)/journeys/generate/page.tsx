@@ -102,6 +102,7 @@ function GenerateContent() {
       try {
         const job = await getTravelogueJob(jobId);
         setStatus(job.status); setProgress(job.progress);
+        if (job.postId) setPostId(job.postId);
         if (job.status === 'DONE') {
           setResult(job.result || '游记已生成！');
           clearInterval(pollRef.current);
