@@ -45,7 +45,7 @@ const adminNavItems: { href: string; label: string; icon: any }[] = [];
 const contentItems = [
   { href: '/snap', label: '我的闪拍', icon: Camera, color: 'text-orange-500' },
   { href: '/diaries', label: '我的日记', icon: PenLine, color: 'text-indigo-500' },
-  { href: '/journeys', label: '游记散文', icon: BookOpen, color: 'text-primary' },
+  { href: '/journeys', label: '我的游记', icon: BookOpen, color: 'text-primary' },
 ];
 
 // 个人中心
