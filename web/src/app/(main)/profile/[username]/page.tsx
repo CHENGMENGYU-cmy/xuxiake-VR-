@@ -73,7 +73,7 @@ function ProfileContent({ username }: { username: string }) {
         ]);
         setFollowerCount(followersRes.total || 0);
         setFollowingCount(followingRes.total || 0);
-        setPostCount((postsRes.data?.data || []).length);
+        setPostCount(postsRes.data?.total ?? (postsRes.data?.data || []).length);
 
         if (currentUser) {
           const amFollowing = followersRes.data?.some((u: User) => u.id === currentUser.id);
