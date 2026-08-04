@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-04
+修改位置：server/src/modules/posts/posts.controller.ts; web/src/components/layout/sidebar.tsx, app/(main)/snap/page.tsx, app/(main)/diaries/page.tsx
+修改原因：1) 游记AI生成页面 /journeys/generate 报401错误导致生成失败；2) 左侧栏"我的内容"三项和"分享见闻"功能逻辑混乱，借鉴真实社区平台梳理导航
+修改内容：1) 修复 ai/jobs/:jobId 和 travelogue/job/:jobId 两个端点的 UnauthorizedException→NotFoundException，避免job不存在时触发前端auth-refresh链路；2) 侧栏"游记散文"统一命名为"我的游记"；3) 创作区新增"AI日记"独立入口；4) /snap页面标题改为"素材库"并新增醒目的"AI写日记"按钮；5) /diaries页面移除"从闪拍生成"按钮，精简创建入口
+修改效果：游记AI生成不再误报401；导航逻辑清晰——"我的内容"为内容库管理，"创作"为统一创建入口
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-04
 修改位置：server/src/modules/posts/posts.controller.ts, posts.service.ts; web/src/lib/snap-api.ts, stores/snap-store.ts, app/(main)/snap/generate/[id]/page.tsx
 修改原因：AI日记生成页面的草稿保存逻辑有缺陷——每次进入都重新生成不恢复草稿、每次保存都创建新帖子、401错误码误用
 修改内容：1) 后端新增 GET diary/draft/:snapId 草稿查询端点；2) 重构 saveDiary 支持 diaryId 更新已有帖子而非重复创建；3) 修复 diary/generate 素材不存在时返回 404 而非 401；4) 前端新增 fetchDiaryDraft action 和 existingDraftId 状态管理；5) 生成页面进入时先检查草稿→有则恢复、无则AI生成；6) 草稿保存后留在页面继续编辑，发布/私密后跳转
