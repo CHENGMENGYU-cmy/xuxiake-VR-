@@ -659,3 +659,10 @@ INSERT INTO community_tags (id, community_id, tag_id) VALUES
 -- ============================================================
 UPDATE posts SET content_level = 'CLASSIFIED'
 WHERE visibility = 'PUBLIC' AND content_level = 'SNAPSHOT';
+
+-- ============================================================
+-- 系统角色：u1 徐霞客 = 系统管理员(ADMIN)，u3 李四 = 审核员(MODERATOR)
+-- 其余用户保持默认 USER
+-- ============================================================
+UPDATE users SET role = 'ADMIN'      WHERE id = 'u1';
+UPDATE users SET role = 'MODERATOR'  WHERE id = 'u3';
