@@ -64,7 +64,9 @@ function GenerateContent() {
   const [status, setStatus] = useState('');
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<string | null>(null);
+  const [postId, setPostId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [publishing, setPublishing] = useState(false);
   const pollRef = useRef<ReturnType<typeof setInterval>>(undefined);
 
   // 加载素材：日志 + 日记
