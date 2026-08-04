@@ -52,7 +52,7 @@ function SnapContent() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Camera className="h-6 w-6 text-orange-500" />
-          <h1 className="text-xl font-bold">闪拍记录</h1>
+          <h1 className="text-xl font-bold">我的闪拍</h1>
         </div>
         <Badge variant="secondary" className="text-xs">
           {snaps.length} 条记录
@@ -60,7 +60,7 @@ function SnapContent() {
       </div>
 
       <p className="text-sm text-muted-foreground">
-        从闪拍 App 同步的快速记录。选择一条闪拍，AI 帮你生成一篇完整的日记。
+        从闪拍 App 同步的快速记录，是生成日记的素材来源。选择一条闪拍，AI 帮你一键生成完整日记。
       </p>
 
       {/* 闪拍列表 */}
