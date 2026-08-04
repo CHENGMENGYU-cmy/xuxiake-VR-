@@ -194,12 +194,6 @@ function DiariesContent() {
               日历
             </Button>
           </div>
-          <Link href="/snap">
-            <Button variant="outline" size="sm" className="gap-1.5">
-              <Camera className="h-4 w-4" />
-              从闪拍生成
-            </Button>
-          </Link>
           <Link href="/upload?level=DIARY">
             <Button size="sm" className="gap-1.5 bg-indigo-600 hover:bg-indigo-700">
               <PenLine className="h-4 w-4" />
