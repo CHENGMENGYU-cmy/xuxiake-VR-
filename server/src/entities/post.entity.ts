@@ -27,6 +27,9 @@ export class Post {
   @Column({ name: 'parent_post_id', type: 'varchar', length: 36, nullable: true })
   parentPostId: string | null;
 
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  title: string | null;
+
   @Column({ type: 'text', nullable: true })
   content: string | null;
 
