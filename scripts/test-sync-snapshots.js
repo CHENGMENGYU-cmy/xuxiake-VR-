@@ -110,7 +110,8 @@ async function main() {
     body: JSON.stringify(payload),
   });
   let json = await res.json();
-  console.log('响应:', JSON.stringify(json.data));
+  console.log('HTTP状态:', res.status);
+  console.log('完整响应:', JSON.stringify(json));
   console.log('导入条数:', json.data.imported, '(期望 3)');
 
   // 4. 第二次同步（幂等测试）
