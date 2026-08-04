@@ -75,3 +75,41 @@ export const DiaryStatusLabel: Record<DiaryStatus, string> = {
   private: '私密',
   public: '已发布',
 };
+
+// ===== 游记生成相关类型 =====
+
+export interface TravelogueGenerateInput {
+  logIds: string[];
+  diaryIds: string[];
+  prompt?: string;
+  style?: string;
+  tone?: string;
+  length?: string;
+}
+
+export interface TravelogueJob {
+  id: string;
+  status: 'QUEUED' | 'ANALYZING' | 'GENERATING' | 'DONE' | 'ERROR';
+  progress: number;
+  result?: string;
+  postId?: string;
+  error?: string;
+  createdAt: string;
+}
+
+export const TravelogueStyleOptions = [
+  { value: '游记', label: '游记' },
+  { value: '日记', label: '日记' },
+];
+
+export const TravelogueToneOptions = [
+  { value: '纪实', label: '纪实' },
+  { value: '温暖', label: '温暖' },
+  { value: '轻松', label: '轻松' },
+];
+
+export const TravelogueLengthOptions = [
+  { value: '简短', label: '简短' },
+  { value: '标准', label: '标准' },
+  { value: '详细', label: '详细' },
+];
