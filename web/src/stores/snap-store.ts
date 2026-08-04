@@ -174,8 +174,40 @@ export const useSnapStore = create<SnapState>((set, get) => ({
     }
   },
 
+  fetchDiaryDraft: async (snapId) => {
+    try {
+      const draft = await getDiaryDraft(snapId);
+      if (draft) {
+        // 解析草稿内容恢复到编辑器
+        const meta = typeof draft.vrMetadata === 'string'
+          ? JSON.parse(draft.vrMetadata) : (draft.vrMetadata || {});
+        set({
+          existingDraftId: draft.id,
+          generatedDiary: {
+            title: draft.title || '',
+            content: draft.content || '',
+            insight: meta.insight || '',
+            tags: meta.generatorTags || [],
+            style: meta.style || '生活碎片风',
+          },
+          currentStyle: (meta.style as DiaryStyle) || '生活碎片风',
+        });
+        return true;
+      }
+      return false;
+    } catch {
+      return false;
+    }
+  },
+
   saveDiary: async (dto) => {
-    const result = await saveDiary(dto);
+    // 如果有已有草稿 ID，传入以更新而非新建
+    const draftId = dto.diaryId || get().existingDraftId;
+    const result = await saveDiary({ ...dto, diaryId: draftId || undefined });
+    // 保存后记录帖子 ID
+    if (result?.id) {
+      set({ existingDraftId: result.id });
+    }
     return result;
   },
 
