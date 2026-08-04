@@ -58,7 +58,7 @@ services:
       STORAGE_TYPE: local
       STORAGE_BASE_URL: /uploads
       PORT: 3001
-      CORS_ALLOWED_ORIGINS: http://47.108.175.253,http://47.108.175.253:3000
+      CORS_ALLOWED_ORIGINS: http://47.108.175.253,http://47.108.175.253:8080,http://47.108.175.253:3000
     volumes:
       - uploads_data:/app/uploads
     networks:
