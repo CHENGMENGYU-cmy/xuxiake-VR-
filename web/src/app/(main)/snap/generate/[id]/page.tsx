@@ -199,7 +199,7 @@ function GenerateContent({ snapId }: { snapId: string }) {
       </div>
 
       {/* 布局：左素材 | 中编辑 | 右风格 */}
-      <div className="grid gap-5 lg:grid-cols-[280px_1fr_250px]">
+      <div className="grid gap-5 lg:grid-cols-[220px_minmax(0,1fr)_220px]">
         {/* 左栏：素材 */}
         <div className="space-y-4 lg:sticky lg:top-[70px] lg:self-start">
           <div className="rounded-2xl border bg-card shadow-sm overflow-hidden">
