@@ -5,6 +5,7 @@ import { AuthModule } from './modules/auth/auth.module.js';
 import { PostsModule } from './modules/posts/posts.module.js';
 import { ChatModule } from './modules/chat/chat.module.js';
 import { NotificationsModule } from './modules/notifications/notifications.module.js';
+import { SyncModule } from './modules/sync/sync.module.js';
 import { ConversationsController } from './modules/conversations/conversations.controller.js';
 import { FeedController } from './modules/feed/feed.controller.js';
 import { UploadController } from './modules/upload/upload.controller.js';
