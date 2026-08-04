@@ -2,12 +2,13 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Sparkles, Loader2, Eye, ArrowLeft, Check, FileText, BookOpen, Wind, Thermometer, Hash, Search, Layers, PenLine, RefreshCw, X } from 'lucide-react';
+import { Sparkles, Loader2, Eye, ArrowLeft, Check, FileText, Wind, Thermometer, Hash, Search, Layers, RefreshCw, Send, Globe, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { getUserLogs, getUserDiaries, generateTravelogue, getTravelogueJob } from '@/lib/snap-api';
+import { publishPost } from '@/lib/post-api';
 import { useAuthStore } from '@/stores/auth-store';
 import { AuthGuard } from '@/components/auth-guard';
 import { toast } from 'sonner';
