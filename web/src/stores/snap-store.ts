@@ -53,7 +53,9 @@ interface SnapState {
   setStyle: (style: DiaryStyle) => void;
   setIncludeMemory: (include: boolean) => void;
   editGeneratedDiary: (updates: Partial<GeneratedDiary>) => void;
+  fetchDiaryDraft: (snapId: string) => Promise<boolean>;
   saveDiary: (dto: {
+    diaryId?: string;
     snapId?: string;
     title: string;
     content: string;
