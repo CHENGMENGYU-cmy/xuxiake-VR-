@@ -633,10 +633,10 @@ INSERT INTO user_interests (id, user_id, tag_id) VALUES
 -- ============================================================
 -- 社群
 -- ============================================================
-INSERT INTO communities (id, conversation_id, name, description, avatar_url, creator_id, member_count, is_public) VALUES
-('com1', 'conv3', 'VR旅行爱好者群', '热爱VR旅行拍摄的小伙伴们，分享你的VR作品！', 'https://api.dicebear.com/9.x/identicon/svg?seed=vr-travel', 'u1', 4, 1),
-('com2', 'conv6', '户外探险小队', '一起去征服大自然！登山、徒步、露营、潜水...', 'https://api.dicebear.com/9.x/identicon/svg?seed=outdoor', 'u5', 4, 1),
-('com3', 'conv8', '美食探店群', '寻找各地美食，用VR记录美食之旅', 'https://api.dicebear.com/9.x/identicon/svg?seed=food', 'u6', 4, 1);
+INSERT INTO communities (id, conversation_id, name, description, avatar_url, cover_url, rules, category, location_name, creator_id, member_count, is_public) VALUES
+('com1', 'conv3', 'VR旅行社区', '用VR镜头丈量世界，分享第一视角的旅行见闻、拍摄技巧与设备测评。', 'https://api.dicebear.com/9.x/identicon/svg?seed=vr-travel', 'https://picsum.photos/seed/com-vr-cover/1600/600', '1. 作品请标注拍摄设备与地点\n2. 友善交流，互相尊重\n3. 每周五为 VR 作品分享日', 'TRAVEL', '北京', 'u1', 6, 1),
+('com2', 'conv6', '户外探险社区', '一起征服山河湖海：徒步、登山、露营、潜水，安全第一。', 'https://api.dicebear.com/9.x/identicon/svg?seed=outdoor', 'https://picsum.photos/seed/com-outdoor-cover/1600/600', '1. 户外安全第一，禁止单独冒险\n2. 出行前检查装备清单\n3. 尊重自然，不留垃圾', 'OUTDOOR', '云南', 'u5', 5, 1),
+('com3', 'conv8', '美食社区', '用味蕾丈量世界，记录每一次探店打卡与美食之旅。', 'https://api.dicebear.com/9.x/identicon/svg?seed=food', 'https://picsum.photos/seed/com-food-cover/1600/600', '1. 发帖请附店名+地址+人均消费\n2. 每帖推荐至少 2 道菜\n3. 必须为亲身探店经历', 'FOOD', '长沙', 'u6', 5, 1);
 
 INSERT INTO community_tags (id, community_id, tag_id) VALUES
 ('ct1', 'com1', 'tag-009'),
