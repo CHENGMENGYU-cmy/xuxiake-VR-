@@ -9,7 +9,12 @@ async function main() {
   const loginRes = await fetch(`${BASE}/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password }),
+    body: JSON.stringify({
+      account: username,
+      password,
+      captchaKey: 'test-key',
+      captchaCode: 'TEST1234',
+    }),
   });
   const loginJson = await loginRes.json();
   if (!loginJson.success) {
