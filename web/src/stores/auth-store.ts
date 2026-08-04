@@ -52,6 +52,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   user: savedUser,
   isAuthenticated: !!savedToken && !!savedUser,
   isLoading: false,
+  authReady: false,
   error: null,
 
   login: async (account: string, password: string, captchaKey: string, captchaCode: string) => {
