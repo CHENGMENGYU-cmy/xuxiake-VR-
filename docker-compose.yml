@@ -30,6 +30,7 @@ services:
       - ./server/sql/seed-notifications.sql:/docker-entrypoint-initdb.d/21-seed-notifications.sql
       - ./server/sql/seed-content-classification.sql:/docker-entrypoint-initdb.d/22-seed-classification.sql
       - ./server/sql/seed-community-experience.sql:/docker-entrypoint-initdb.d/23-seed-community.sql
+      - ./server/sql/seed-log-diary-travelogue.sql:/docker-entrypoint-initdb.d/24-seed-content.sql
     networks:
       - xuxiake-net
     healthcheck:
