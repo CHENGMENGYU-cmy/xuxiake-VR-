@@ -971,6 +971,15 @@ export class PostsService {
           );
           await this.mediaRepo.save(copiedMedia);
         }
+
+        // 标记闪拍已生成过日记
+        try {
+          const snapMeta = snap.vrMetadata ? JSON.parse(snap.vrMetadata) : {};
+          snapMeta.hasDiary = true;
+          snapMeta.diaryId = post.id;
+          snap.vrMetadata = JSON.stringify(snapMeta);
+          await this.postRepo.save(snap);
+        } catch { /* ignore */ }
       }
     }
 
