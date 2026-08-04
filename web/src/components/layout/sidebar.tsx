@@ -5,21 +5,16 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   Home,
-  Upload,
   Bell,
   Settings,
-  UserPlus,
   MessageCircle,
-  Hash,
-  PenLine,
-  BookOpen,
   Shield,
   Flag,
   Users,
   TrendingUp,
   Camera,
-  LayoutGrid,
-  Sparkles,
+  Compass,
+  FolderOpen,
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
