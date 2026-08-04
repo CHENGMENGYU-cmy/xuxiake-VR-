@@ -307,18 +307,6 @@ function GenerateContent({ snapId }: { snapId: string }) {
                     ))}
                   </div>
                 )}
-
-                <div className="mt-4 flex items-center gap-2">
-                  <span className="text-[11px] text-muted-foreground/60">Ctrl/⌘ + Enter 保存</span>
-                  <div className="ml-auto flex items-center gap-1.5">
-                    <Button variant="outline" size="sm" onClick={() => handleSave('private')} disabled={saving} className="h-8 gap-1 text-xs">
-                      <Lock className="h-3 w-3" />存私密
-                    </Button>
-                    <Button size="sm" onClick={() => handleSave('public')} disabled={saving} className="h-8 gap-1 bg-gradient-to-r from-teal-500 to-emerald-500 text-xs hover:from-teal-600 hover:to-emerald-600">
-                      {saving ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />}发布
-                    </Button>
-                  </div>
-                </div>
               </div>
             </>
           ) : (
