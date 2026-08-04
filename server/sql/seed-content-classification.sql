@@ -96,27 +96,36 @@ INSERT INTO guide_details (post_id, destination, category, best_season, budget_l
 -- ============================================================
 
 -- ============================================================
--- 8. 帖子话题关联（topic_posts 表，复合主键 topic_id + post_id）
+-- 8. 帖子话题关联（post_topics 表，与 Post 实体一致）
 -- ============================================================
-INSERT INTO topic_posts (topic_id, post_id) VALUES
-('topic-003', 'post-seed-001'),
-('topic-005', 'post-seed-002'),
-('topic-008', 'post-seed-004'),
-('topic-003', 'post-seed-005'),
-('topic-007', 'post-seed-005'),
-('topic-003', 'post-seed-006'),
-('topic-007', 'post-seed-008'),
-('topic-002', 'post-seed-011'),
-('topic-001', 'post-seed-012'),
-('topic-001', 'post-seed-013'),
-('topic-008', 'post-seed-013'),
-('topic-002', 'post-seed-014'),
-('topic-007', 'post-seed-015');
+-- 幂等清理：避免重复执行时主键冲突
+DELETE FROM post_topics WHERE post_id LIKE 'post-seed-%';
+
+INSERT INTO post_topics (id, post_id, topic_id) VALUES
+(UUID(), 'post-seed-001', 'topic-003'),
+(UUID(), 'post-seed-002', 'topic-005'),
+(UUID(), 'post-seed-004', 'topic-008'),
+(UUID(), 'post-seed-005', 'topic-003'),
+(UUID(), 'post-seed-005', 'topic-007'),
+(UUID(), 'post-seed-006', 'topic-003'),
+(UUID(), 'post-seed-008', 'topic-007'),
+(UUID(), 'post-seed-011', 'topic-002'),
+(UUID(), 'post-seed-012', 'topic-001'),
+(UUID(), 'post-seed-013', 'topic-001'),
+(UUID(), 'post-seed-013', 'topic-008'),
+(UUID(), 'post-seed-014', 'topic-002'),
+(UUID(), 'post-seed-015', 'topic-007');
 
 -- ============================================================
 -- 9. 更新话题帖子数
 -- ============================================================
-UPDATE topics SET post_count = (SELECT COUNT(*) FROM topic_posts WHERE topic_id = topics.id);
+UPDATE topics SET post_count = (SELECT COUNT(*) FROM post_topics WHERE topic_id = topics.id);
+
+-- ============================================================
+-- 内容层级统一：分类帖子显式标记为 CLASSIFIED（内容分类）
+-- ============================================================
+UPDATE posts SET content_level = 'CLASSIFIED'
+WHERE id LIKE 'post-seed-%' AND content_level = 'SNAPSHOT';
 
 -- ============================================================
 -- 10. 更新媒体数据（给部分帖子添加图片）
