@@ -202,8 +202,12 @@ export function PostCard({ post, onLikeChange, onDelete }: PostCardProps) {
               {post.author.displayName}
             </Link>
             {(() => {
+              // 优先 contentLevel（日志/日记/游记），再 tab VR 标签，最后 postType 兜底
               const tab = post.vrMetadata?.tab as string;
-              const config = tab ? tabLabelConfig[tab] : postTypeConfig[post.postType];
+              const config =
+                contentLevelConfig[post.contentLevel] ||
+                (tab ? tabLabelConfig[tab] : undefined) ||
+                postTypeConfig[post.postType];
               if (!config) return null;
               return (
                 <span className={`inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${config.color}`}>
