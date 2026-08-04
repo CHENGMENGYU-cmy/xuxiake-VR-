@@ -130,11 +130,11 @@ async function main() {
   json = await res.json();
   const snaps = json.data || [];
   console.log('闪拍总数:', snaps.length);
-  const synced = snaps.filter((s: any) => {
+  const synced = snaps.filter((s) => {
     try { return JSON.parse(s.vrMetadata || '{}').originalId; } catch { return false; }
   });
   console.log('同步导入的闪拍:', synced.length);
-  synced.forEach((s: any) => {
+  synced.forEach((s) => {
     const meta = JSON.parse(s.vrMetadata);
     console.log(`  - [${meta.originalId}] ${s.locationName} | ${s.content?.slice(0, 30) || '(无感悟文字)'} | 媒体${s.mediaItems?.length || 0}个`);
   });
