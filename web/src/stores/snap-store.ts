@@ -27,6 +27,7 @@ interface SnapState {
   currentStyle: DiaryStyle;
   memorySnap: { id: string; text: string | null; createdAt: string } | null;
   includeMemory: boolean;
+  existingDraftId: string | null; // 已有草稿的帖子 ID
 
   // 日记广场
   squareDiaries: DiaryEntry[];
