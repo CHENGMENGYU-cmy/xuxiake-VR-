@@ -45,8 +45,15 @@ export async function generateDiary(snapId: string, style?: string, includeMemor
   return data.data;
 }
 
-/** 保存/发布日记 */
+/** 查询指定素材的已有日记草稿 */
+export async function getDiaryDraft(snapId: string): Promise<any | null> {
+  const { data } = await apiClient.get(`/posts/diary/draft/${snapId}`);
+  return data.data ?? null;
+}
+
+/** 保存/发布日记（支持更新已有草稿） */
 export async function saveDiary(dto: {
+  diaryId?: string;
   snapId?: string;
   title: string;
   content: string;
