@@ -50,9 +50,9 @@ time.sleep(5)
 run('docker ps --filter "name=xuxiake"', 'Container status', 30)
 
 # Test access
-run('curl -s http://localhost:8080/ 2>&1 | head -3', 'Test localhost:8080', 15)
-run('curl -s -o /dev/null -w "HTTP %{http_code}" http://47.108.175.253:8080/ 2>&1', 'Test external:8080', 15)
+run('curl -s http://localhost:8888/ 2>&1 | head -3', 'Test localhost:8888', 15)
+run('curl -s -o /dev/null -w "HTTP %{http_code}" http://47.108.175.253:8888/ 2>&1', 'Test external:8888', 15)
 
 ssh.close()
 print('\n=== Done ===')
-print('访问: http://47.108.175.253:8080')
+print('访问: http://47.108.175.253:8888')
