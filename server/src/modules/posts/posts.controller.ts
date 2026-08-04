@@ -229,7 +229,7 @@ export class PostsController {
     }
 
     // 类型转换：API返回的formatPost结果需要转回Post entity风格供生成器使用
-    const snapPost = { content: (snap as any).content, locationName: (snap as any).locationName, createdAt: (snap as any).createdAt, vrMetadata: (snap as any).vrMetadata } as any;
+    const snapPost = { content: (snap as any).content, locationName: (snap as any).location?.name || '', createdAt: (snap as any).createdAt, vrMetadata: (snap as any).vrMetadata } as any;
 
     const style = (body.style || this.diaryGenerator.recommendStyle(snapPost)) as DiaryStyle;
     const generated = this.diaryGenerator.generateDiary(snapPost, style, body.includeMemory);
