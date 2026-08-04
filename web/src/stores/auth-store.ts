@@ -125,7 +125,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('user');
     removeCookie('auth_token');
-    set({ user: null, isAuthenticated: false, error: null });
+    set({ user: null, isAuthenticated: false, authReady: true, error: null });
   },
 
   checkAuth: async () => {
