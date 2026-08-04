@@ -104,12 +104,12 @@ export function Sidebar() {
 
             <Separator />
 
-            {/* 浏览发现 — 仅普通用户显示 */}
+            {/* 浏览 — 仅普通用户显示 */}
             {!isAdmin && (
               <>
                 <div className="space-y-1 p-3">
                   <p className="px-2 text-xs font-medium uppercase text-muted-foreground">浏览</p>
-                  {navItems.map((item) => {
+                  {browseItems.map((item) => {
                     const Icon = item.icon;
                     const isActive = pathname === item.href;
                     return (
@@ -126,16 +126,14 @@ export function Sidebar() {
               </>
             )}
 
-            {/* 我的内容 — 仅普通用户显示 */}
+            {/* 我的 — 仅普通用户显示 */}
             {!isAdmin && (
               <>
                 <div className="space-y-1 p-3">
-                  <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
-                    我的内容
-                  </p>
-                  {contentItems.map((item) => {
+                  <p className="px-2 text-xs font-medium uppercase text-muted-foreground">我的</p>
+                  {myItems.map((item) => {
                     const Icon = item.icon;
-                    const isActive = pathname === item.href;
+                    const isActive = pathname === item.href || (item.href === '/my/works' && (pathname.startsWith('/my/works') || pathname === '/diaries' || pathname === '/journeys'));
                     return (
                       <Link key={item.href} href={item.href}>
                         <Button
