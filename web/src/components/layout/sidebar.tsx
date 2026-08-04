@@ -44,7 +44,6 @@ const adminNavItems: { href: string; label: string; icon: any }[] = [];
 
 // 我的内容
 const contentItems = [
-  { href: '/classified', label: '我的日志', icon: FolderOpen, color: 'text-amber-500' },
   { href: '/snap', label: '我的闪拍', icon: Camera, color: 'text-orange-500' },
   { href: '/diaries', label: '我的日记', icon: PenLine, color: 'text-indigo-500' },
   { href: '/journeys', label: '游记散文', icon: BookOpen, color: 'text-primary' },
