@@ -246,6 +246,18 @@ export function Sidebar() {
                     <span>分享见闻</span>
                   </Button>
                 </Link>
+                <Link href="/snap">
+                  <Button
+                    variant="ghost"
+                    className={cn(
+                      'w-full justify-start gap-3',
+                      pathname.startsWith('/snap/generate') && 'bg-primary/10 text-primary hover:bg-primary/10'
+                    )}
+                  >
+                    <Sparkles className="h-5 w-5 text-teal-500" />
+                    <span>AI 日记</span>
+                  </Button>
+                </Link>
               </div>
             )}
 
