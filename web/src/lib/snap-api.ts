@@ -48,3 +48,32 @@ export async function getPostDetail(postId: string): Promise<any> {
   const { data } = await apiClient.get(`/posts/${postId}`);
   return data.data;
 }
+
+// ===== 游记生成 =====
+
+/** 提交游记生成任务（LOG + DIARY + prompt → TRAVELOGUE） */
+export async function generateTravelogue(input: {
+  logIds: string[];
+  diaryIds: string[];
+  prompt?: string;
+  style?: string;
+  tone?: string;
+  length?: string;
+}): Promise<{ jobId: string }> {
+  const { data } = await apiClient.post('/posts/travelogue/generate', input);
+  return data.data;
+}
+
+/** 查询游记生成任务状态 */
+export async function getTravelogueJob(jobId: string): Promise<{
+  id: string;
+  status: string;
+  progress: number;
+  result?: string;
+  postId?: string;
+  error?: string;
+  createdAt: string;
+}> {
+  const { data } = await apiClient.get(`/posts/travelogue/job/${jobId}`);
+  return data.data;
+}
