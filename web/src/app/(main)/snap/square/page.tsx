@@ -18,6 +18,7 @@ export default function DiarySquarePage() {
 }
 
 function SquareContent() {
+  const router = useRouter();
   const {
     squareDiaries, squareLoading, squareHasMore,
     fetchSquareDiaries,
