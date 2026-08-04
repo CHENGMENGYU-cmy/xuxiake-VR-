@@ -4,8 +4,8 @@ import { useEffect, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   ArrowLeft, Sparkles, RefreshCw, MapPin, Clock,
-  Edit3, Save, Globe, Lock, FileText, Brain, Check,
-  Loader2, Heart, PenLine, X, Wand2, ImagePlus, Type,
+  Save, Globe, Lock, FileText, Brain, Check,
+  Loader2, Heart, X, Wand2, Camera, PenLine, Layers, ChevronRight,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -26,19 +26,12 @@ export default function GeneratePage({ params }: { params: Promise<{ id: string 
   );
 }
 
-const styleEmoji: Record<string, string> = {
-  '温柔治愈风': '🕊️',
-  '生活碎片风': '🧩',
-  '成长复盘风': '🌱',
-  '诗意散文风': '🪶',
-  '轻松口语风': '☕',
-};
-const styleDesc: Record<string, string> = {
-  '温柔治愈风': '温暖抚慰，如微风',
-  '生活碎片风': '记录细碎日常',
-  '成长复盘风': '反思与总结',
-  '诗意散文风': '散文诗般优美',
-  '轻松口语风': '轻松随性的口吻',
+const styleMeta: Record<string, { emoji: string; desc: string; grad: string }> = {
+  '温柔治愈风': { emoji: '🕊️', desc: '温暖抚慰，如沐春风', grad: 'from-amber-400 to-orange-400' },
+  '生活碎片风': { emoji: '🧩', desc: '细碎日常，真实可爱', grad: 'from-sky-400 to-teal-400' },
+  '成长复盘风': { emoji: '🌱', desc: '反思总结，向内生长', grad: 'from-emerald-400 to-teal-500' },
+  '诗意散文风': { emoji: '🪶', desc: '散文诗般，意境悠远', grad: 'from-teal-400 to-cyan-500' },
+  '轻松口语风': { emoji: '☕', desc: '轻松随性，像老朋友', grad: 'from-orange-400 to-amber-500' },
 };
 
 function GenerateContent({ snapId }: { snapId: string }) {
@@ -132,19 +125,18 @@ function GenerateContent({ snapId }: { snapId: string }) {
   if (snapLoading || generating) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="text-center space-y-5">
-          <div className="relative mx-auto h-16 w-16">
-            <div className="absolute inset-0 animate-spin rounded-full border-4 border-indigo-200 border-t-indigo-500" />
-            <Sparkles className="absolute inset-0 m-auto h-6 w-6 text-indigo-500" />
+        <div className="text-center">
+          <div className="relative mx-auto h-20 w-20">
+            <div className="absolute inset-0 animate-spin rounded-full border-4 border-teal-100 border-t-teal-500 dark:border-teal-900/40" />
+            <div className="absolute inset-2 animate-spin rounded-full border-4 border-orange-100 border-b-orange-400 dark:border-orange-900/40" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }} />
+            <Wand2 className="absolute inset-0 m-auto h-7 w-7 text-teal-600" />
           </div>
-          <div>
-            <p className="text-base font-medium">
-              {snapLoading ? '正在加载闪拍记录' : 'AI 正在为你撰写日记'}
-            </p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {snapLoading ? '从服务器获取素材...' : '分析闪拍内容，融入你的心情与感悟...'}
-            </p>
-          </div>
+          <p className="mt-5 text-base font-semibold">
+            {snapLoading ? '正在加载闪拍记录' : 'AI 正在撰写你的日记'}
+          </p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {snapLoading ? '从服务器获取素材...' : '读懂你的心情，把瞬间写成文字...'}
+          </p>
         </div>
       </div>
     );
@@ -165,47 +157,40 @@ function GenerateContent({ snapId }: { snapId: string }) {
   }
 
   return (
-    <div className="mx-auto max-w-6xl">
+    <div className="mx-auto max-w-6xl px-2">
       {/* 顶部栏 */}
-      <div className="sticky top-0 z-20 -mx-4 mb-6 border-b bg-background/80 px-4 py-3 backdrop-blur-md">
+      <div className="sticky top-0 z-20 -mx-2 mb-6 border-b bg-background/85 px-2 py-3 backdrop-blur-lg">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" onClick={() => router.push('/snap')}>
+          <div className="flex items-center gap-2.5">
+            <Button variant="ghost" size="icon" onClick={() => router.push('/snap')} className="h-9 w-9">
               <ArrowLeft className="h-5 w-5" />
             </Button>
-            <div>
-              <h1 className="text-base font-bold">AI 创作日记</h1>
-              <p className="text-[11px] text-muted-foreground">从闪拍素材智能生成 · 可自由编辑</p>
+            <div className="flex items-center gap-2">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-teal-500 to-orange-400 text-white shadow-md shadow-teal-500/20">
+                <PenLine className="h-4.5 w-4.5" />
+              </span>
+              <div>
+                <h1 className="text-base font-bold leading-tight">AI 日记创作</h1>
+                <p className="text-[11px] leading-tight text-muted-foreground">从闪拍素材智能生成</p>
+              </div>
             </div>
           </div>
 
           {generatedDiary && (
-            <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => handleSave('draft')}
-                disabled={saving}
-                className="gap-1.5 text-muted-foreground"
-              >
-                <FileText className="h-4 w-4" />草稿
+            <div className="flex items-center gap-1.5">
+              <Button variant="ghost" size="sm" onClick={() => handleSave('draft')} disabled={saving} className="h-9 gap-1 text-xs text-muted-foreground">
+                <FileText className="h-3.5 w-3.5" />草稿
               </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => handleSave('private')}
-                disabled={saving}
-                className="gap-1.5 text-amber-600"
-              >
-                <Lock className="h-4 w-4" />私密
+              <Button variant="outline" size="sm" onClick={() => handleSave('private')} disabled={saving} className="h-9 gap-1 text-xs text-amber-600">
+                <Lock className="h-3.5 w-3.5" />私密
               </Button>
               <Button
                 size="sm"
                 onClick={() => handleSave('public')}
                 disabled={saving}
-                className="gap-1.5 bg-gradient-to-r from-indigo-500 to-violet-500 hover:from-indigo-600 hover:to-violet-600 shadow-md shadow-indigo-500/20"
+                className="h-9 gap-1.5 bg-gradient-to-r from-teal-500 to-emerald-500 px-4 text-xs font-medium shadow-md shadow-teal-500/25 hover:from-teal-600 hover:to-emerald-600"
               >
-                {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Globe className="h-4 w-4" />}
+                {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Globe className="h-3.5 w-3.5" />}
                 发布
               </Button>
             </div>
@@ -213,58 +198,57 @@ function GenerateContent({ snapId }: { snapId: string }) {
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[300px_1fr_260px]">
-        {/* 左栏：素材卡片 */}
-        <div className="lg:sticky lg:top-20 lg:self-start">
-          <div className="mb-3 flex items-center gap-2">
-            <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-orange-100 text-orange-600 dark:bg-orange-900/30">
-              <ImagePlus className="h-3.5 w-3.5" />
-            </span>
-            <span className="text-sm font-semibold">素材</span>
-            <Badge variant="outline" className="ml-auto text-[10px]">闪拍</Badge>
-          </div>
-
-          <div className="overflow-hidden rounded-2xl border bg-card shadow-sm">
-            {snapImage ? (
-              <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-                <img src={snapImage} alt="" className="h-full w-full object-cover" />
-                {scene && (
-                  <span className="absolute left-2 top-2 rounded-full bg-black/50 px-2 py-0.5 text-[10px] text-white backdrop-blur-sm">
-                    {scene}
-                  </span>
-                )}
+      {/* 布局：左素材 | 中编辑 | 右风格 */}
+      <div className="grid gap-5 lg:grid-cols-[280px_1fr_250px]">
+        {/* 左栏：素材 */}
+        <div className="space-y-4 lg:sticky lg:top-[70px] lg:self-start">
+          <div className="rounded-2xl border bg-card shadow-sm overflow-hidden">
+            {/* 素材封面 */}
+            <div className="relative">
+              {snapImage ? (
+                <div className="aspect-[4/3] overflow-hidden bg-muted">
+                  <img src={snapImage} alt="" className="h-full w-full object-cover" />
+                </div>
+              ) : (
+                <div className="flex aspect-[4/3] items-center justify-center bg-gradient-to-br from-muted to-muted/40">
+                  <Camera className="h-10 w-10 text-muted-foreground/20" />
+                </div>
+              )}
+              {/* 底部渐变遮罩 */}
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-3">
+                <div className="flex items-center gap-1.5">
+                  <Badge className="border-0 bg-white/20 text-white backdrop-blur-sm">📷 闪拍素材</Badge>
+                  {scene && <Badge className="border-0 bg-white/20 text-white backdrop-blur-sm">{scene}</Badge>}
+                </div>
               </div>
-            ) : (
-              <div className="flex aspect-[4/3] items-center justify-center bg-muted/40">
-                <span className="text-4xl">📷</span>
-              </div>
-            )}
+            </div>
 
             <div className="space-y-3 p-4">
-              <p className="text-sm leading-relaxed">{snap.content || '(无内容)'}</p>
+              <p className="text-sm leading-relaxed text-foreground/90">{snap.content || '(无内容)'}</p>
 
               <div className="space-y-1.5 text-xs text-muted-foreground">
                 {snap.location?.name && (
                   <div className="flex items-center gap-1.5">
-                    <MapPin className="h-3 w-3 shrink-0" />{snap.location.name}
+                    <MapPin className="h-3.5 w-3.5 shrink-0 text-teal-500" />
+                    <span className="truncate">{snap.location.name}</span>
                   </div>
                 )}
                 <div className="flex items-center gap-1.5">
-                  <Clock className="h-3 w-3 shrink-0" />
+                  <Clock className="h-3.5 w-3.5 shrink-0 text-orange-400" />
                   {new Date(snap.createdAt).toLocaleString('zh-CN')}
                 </div>
                 {mood && (
                   <div className="flex items-center gap-1.5">
-                    <Heart className="h-3 w-3 shrink-0 text-rose-400" />
+                    <Heart className="h-3.5 w-3.5 shrink-0 fill-rose-400 text-rose-400" />
                     <span>心情：{mood}</span>
                   </div>
                 )}
               </div>
 
               {keywords.length > 0 && (
-                <div className="flex flex-wrap gap-1">
+                <div className="flex flex-wrap gap-1.5">
                   {keywords.map((kw: string) => (
-                    <span key={kw} className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground">
+                    <span key={kw} className="rounded-full bg-teal-50 px-2 py-0.5 text-[10px] font-medium text-teal-700 dark:bg-teal-950/50 dark:text-teal-400">
                       #{kw}
                     </span>
                   ))}
@@ -275,142 +259,158 @@ function GenerateContent({ snapId }: { snapId: string }) {
 
           {/* 回忆反差 */}
           {memorySnap && (
-            <div className="mt-3 rounded-2xl border border-purple-200 bg-purple-50/50 p-4 dark:border-purple-800 dark:bg-purple-950/20">
+            <div className="rounded-2xl border border-orange-200 bg-gradient-to-br from-orange-50 to-amber-50/50 p-4 dark:border-orange-900/50 dark:from-orange-950/20 dark:to-transparent">
               <div className="flex items-center gap-1.5">
-                <Brain className="h-4 w-4 text-purple-600" />
-                <span className="text-sm font-medium text-purple-700 dark:text-purple-300">回忆反差</span>
+                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-orange-100 text-orange-600 dark:bg-orange-900/40">
+                  <Brain className="h-4 w-4" />
+                </span>
+                <span className="text-sm font-semibold text-orange-800 dark:text-orange-300">回忆反差</span>
               </div>
-              <p className="mt-2 text-xs leading-relaxed text-purple-600/70">
-                找到一条相似回忆，加入后日记会更深刻地对比过去与现在
+              <p className="mt-2 text-xs leading-relaxed text-orange-700/70 dark:text-orange-400/70">
+                找到一条相似的旧日回忆，加入后让今天的自己与过去对话
               </p>
-              <div className="mt-2 line-clamp-2 rounded-lg bg-white/70 p-2 text-xs text-muted-foreground dark:bg-black/20">
+              <div className="mt-2 rounded-xl bg-white/70 p-2.5 text-xs leading-relaxed text-muted-foreground line-clamp-2 dark:bg-black/20">
                 {memorySnap.text || '(无内容)'}
               </div>
               <Button
                 size="sm"
                 variant={includeMemory ? 'default' : 'outline'}
-                className={`mt-2 w-full gap-1 ${includeMemory ? 'bg-purple-600 hover:bg-purple-700' : ''}`}
+                className={`mt-2.5 w-full gap-1.5 ${includeMemory ? 'bg-orange-500 hover:bg-orange-600' : 'text-orange-600 hover:text-orange-700'}`}
                 onClick={handleMemoryToggle}
               >
                 {includeMemory ? <Check className="h-3.5 w-3.5" /> : <Brain className="h-3.5 w-3.5" />}
-                {includeMemory ? '已加入' : '加入回忆反差'}
+                {includeMemory ? '已加入回忆' : '加入回忆反差'}
               </Button>
             </div>
           )}
         </div>
 
-        {/* 中栏：编辑器 */}
+        {/* 中栏：日记编辑器 */}
         <div className="overflow-hidden rounded-2xl border bg-card shadow-sm">
           {generatedDiary ? (
-            <div className="flex flex-col">
-              {/* 标题区 */}
-              <div className="border-b px-6 py-4">
+            <>
+              {/* 标题 */}
+              <div className="border-b border-border/60 px-6 py-5">
                 <Input
                   value={generatedDiary.title}
                   onChange={(e) => editGeneratedDiary({ title: e.target.value })}
-                  placeholder="给日记起个标题..."
-                  className="border-0 bg-transparent px-0 text-xl font-bold placeholder:text-muted-foreground/40 focus-visible:ring-0"
+                  placeholder="给这篇日记起个标题..."
+                  className="border-0 bg-transparent px-0 text-2xl font-bold tracking-tight placeholder:text-muted-foreground/30 focus-visible:ring-0"
                 />
               </div>
 
-              {/* 正文区 */}
-              <div className="flex-1 px-6 py-5">
+              {/* 正文 */}
+              <div className="px-6 py-5">
                 <Textarea
                   value={generatedDiary.content}
                   onChange={(e) => editGeneratedDiary({ content: e.target.value })}
-                  placeholder="AI 已为你生成初稿，可以自由修改..."
-                  className="min-h-[360px] resize-none border-0 bg-transparent px-0 leading-relaxed text-[15px] focus-visible:ring-0"
+                  placeholder="AI 已为你写好初稿，可以自由润色..."
+                  className="min-h-[320px] resize-none border-0 bg-transparent px-0 text-[15px] leading-8 text-foreground/90 placeholder:text-muted-foreground/30 focus-visible:ring-0"
                 />
               </div>
 
-              {/* 底部：感悟 + 标签 */}
-              <div className="border-t px-6 py-4">
+              {/* 底部：感悟 + 标签 + 保存 */}
+              <div className="border-t border-border/60 bg-muted/30 px-6 py-4">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="h-3.5 w-3.5 shrink-0 text-indigo-500" />
+                  <Sparkles className="h-4 w-4 shrink-0 text-orange-400" />
                   <Input
                     value={generatedDiary.insight}
                     onChange={(e) => editGeneratedDiary({ insight: e.target.value })}
-                    placeholder="一句话感悟（可选）..."
-                    className="border-0 bg-transparent px-0 text-sm italic text-muted-foreground focus-visible:ring-0"
+                    placeholder="写下一句感悟..."
+                    className="border-0 bg-transparent px-0 text-sm italic text-foreground/70 placeholder:text-muted-foreground/40 focus-visible:ring-0"
                   />
                 </div>
 
                 {generatedDiary.tags.length > 0 && (
                   <div className="mt-3 flex flex-wrap items-center gap-1.5">
-                    <PenLine className="h-3.5 w-3.5 shrink-0 text-muted-foreground/50" />
+                    <Layers className="h-3.5 w-3.5 shrink-0 text-teal-500" />
                     {generatedDiary.tags.map((t, i) => (
-                      <span key={i} className="rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs text-indigo-600 dark:bg-indigo-950/40">
+                      <span key={i} className="rounded-full bg-teal-50 px-2.5 py-0.5 text-xs text-teal-700 dark:bg-teal-950/40 dark:text-teal-400">
                         {t}
                       </span>
                     ))}
                   </div>
                 )}
+
+                <div className="mt-4 flex items-center gap-2">
+                  <span className="text-[11px] text-muted-foreground/60">Ctrl/⌘ + Enter 保存</span>
+                  <div className="ml-auto flex items-center gap-1.5">
+                    <Button variant="outline" size="sm" onClick={() => handleSave('private')} disabled={saving} className="h-8 gap-1 text-xs">
+                      <Lock className="h-3 w-3" />存私密
+                    </Button>
+                    <Button size="sm" onClick={() => handleSave('public')} disabled={saving} className="h-8 gap-1 bg-gradient-to-r from-teal-500 to-emerald-500 text-xs hover:from-teal-600 hover:to-emerald-600">
+                      {saving ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />}发布
+                    </Button>
+                  </div>
+                </div>
               </div>
-            </div>
+            </>
           ) : (
-            <div className="flex min-h-[400px] flex-col items-center justify-center text-center">
-              <Wand2 className="h-10 w-10 text-muted-foreground/20" />
-              <p className="mt-3 text-sm text-muted-foreground">等待 AI 生成...</p>
+            <div className="flex min-h-[420px] flex-col items-center justify-center">
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-teal-100 to-orange-100 text-3xl dark:from-teal-900/30 dark:to-orange-900/30">
+                ✨
+              </div>
+              <p className="mt-4 text-sm text-muted-foreground">正在为你的瞬间创作文字...</p>
             </div>
           )}
         </div>
 
         {/* 右栏：风格选择 */}
-        <div className="lg:sticky lg:top-20 lg:self-start">
-          <div className="mb-3 flex items-center gap-2">
-            <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30">
-              <Type className="h-3.5 w-3.5" />
-            </span>
-            <span className="text-sm font-semibold">写作风格</span>
-          </div>
+        <div className="lg:sticky lg:top-[70px] lg:self-start">
+          <div className="rounded-2xl border bg-card p-4 shadow-sm">
+            <div className="mb-3 flex items-center gap-2">
+              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-orange-400 to-amber-400 text-white shadow-sm">
+                <Wand2 className="h-4 w-4" />
+              </span>
+              <div>
+                <p className="text-sm font-semibold leading-tight">选择风格</p>
+                <p className="text-[11px] leading-tight text-muted-foreground">决定日记的语气与气质</p>
+              </div>
+            </div>
 
-          <div className="rounded-2xl border bg-card p-3 shadow-sm">
             <div className="space-y-1.5">
               {ALL_DIARY_STYLES.map((style) => {
                 const active = style === currentStyle;
+                const meta = styleMeta[style] || { emoji: '✨', desc: '', grad: 'from-teal-400 to-cyan-500' };
                 return (
                   <button
                     key={style}
                     onClick={() => handleStyleChange(style)}
                     disabled={generating}
-                    className={`flex w-full items-center gap-3 rounded-xl border-2 px-3 py-2.5 text-left transition-all duration-200 ${
+                    className={`group flex w-full items-center gap-3 rounded-xl border p-2.5 text-left transition-all duration-200 ${
                       active
-                        ? 'border-indigo-500 bg-indigo-50/70 shadow-sm dark:bg-indigo-950/30'
-                        : 'border-transparent hover:border-muted-foreground/10 hover:bg-muted/40'
+                        ? `border-transparent bg-gradient-to-r ${meta.grad} bg-origin-border text-white shadow-md`
+                        : 'border-border/60 hover:border-teal-300 hover:bg-teal-50/50 dark:hover:bg-teal-950/30'
                     }`}
                   >
-                    <span className="text-xl">{styleEmoji[style]}</span>
+                    <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-lg ${active ? 'bg-white/25' : 'bg-muted'}`}>
+                      {meta.emoji}
+                    </span>
                     <div className="min-w-0 flex-1">
-                      <span className={`block text-sm ${active ? 'font-medium text-indigo-700 dark:text-indigo-300' : ''}`}>
-                        {style}
-                      </span>
-                      <span className="block truncate text-[10px] text-muted-foreground/70">
-                        {styleDesc[style]}
+                      <span className={`block text-sm ${active ? 'font-semibold' : 'font-medium'}`}>{style}</span>
+                      <span className={`block truncate text-[10px] ${active ? 'text-white/80' : 'text-muted-foreground/70'}`}>
+                        {meta.desc}
                       </span>
                     </div>
-                    {active && <Check className="h-4 w-4 shrink-0 text-indigo-500" />}
+                    {active && <Check className="h-4 w-4 shrink-0" />}
                   </button>
                 );
               })}
             </div>
 
-            <Button
-              variant="outline"
-              size="sm"
-              className="mt-3 w-full gap-1.5"
-              onClick={handleRegenerate}
-              disabled={generating}
-            >
-              {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
-              换风格重写
-            </Button>
-
-            {generating && (
-              <div className="mt-2 flex items-center justify-center gap-2 text-xs text-indigo-600">
-                <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                正在重写...
-              </div>
-            )}
+            <div className="mt-3 border-t border-border/50 pt-3">
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full gap-1.5 border-teal-200 text-teal-700 hover:bg-teal-50 dark:border-teal-900 dark:text-teal-400 dark:hover:bg-teal-950/40"
+                onClick={handleRegenerate}
+                disabled={generating}
+              >
+                {generating ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RefreshCw className="h-3.5 w-3.5" />}
+                换风格重写
+                <ChevronRight className="h-3.5 w-3.5 ml-auto" />
+              </Button>
+            </div>
           </div>
         </div>
       </div>
