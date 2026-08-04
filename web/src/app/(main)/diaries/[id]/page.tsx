@@ -100,41 +100,57 @@ function DiaryDetailContent() {
     );
   }
 
+  const isOwner = user && post.author?.id === user.id;
+
   return (
     <div className="mx-auto max-w-2xl space-y-4">
       {/* 返回按钮 */}
       <div className="flex items-center justify-between">
-        <Button variant="ghost" size="sm" className="gap-1" onClick={() => router.push('/diaries')}>
+        <Button variant="ghost" size="sm" className="gap-1" onClick={() => router.push(isOwner ? '/diaries' : '/snap/square')}>
           <ArrowLeft className="h-4 w-4" />
-          返回日记列表
+          {isOwner ? '返回日记列表' : '返回日记广场'}
         </Button>
-        <div className="flex gap-2">
-          {!editing && (
-            <Button variant="outline" size="sm" className="gap-1" onClick={() => setEditing(true)}>
-              <Edit3 className="h-4 w-4" />
-              编辑
+        {isOwner && (
+          <div className="flex gap-2">
+            {!editing && (
+              <Button variant="outline" size="sm" className="gap-1" onClick={() => setEditing(true)}>
+                <Edit3 className="h-4 w-4" />
+                编辑
+              </Button>
+            )}
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-1 text-red-500 hover:text-red-600"
+              onClick={handleDelete}
+              disabled={deleting}
+            >
+              {deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+              删除
             </Button>
-          )}
-          <Button
-            variant="outline"
-            size="sm"
-            className="gap-1 text-red-500 hover:text-red-600"
-            onClick={handleDelete}
-            disabled={deleting}
-          >
-            {deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
-            删除
-          </Button>
-        </div>
+          </div>
+        )}
       </div>
 
-      {/* 私密提示 */}
-      <div className="flex items-center gap-2 rounded-lg border border-indigo-200 bg-indigo-50 dark:border-indigo-900 dark:bg-indigo-950/30 px-3 py-2">
-        <Lock className="h-4 w-4 text-indigo-500 shrink-0" />
-        <p className="text-xs text-indigo-600 dark:text-indigo-400">
-          这是你的私密日记，仅自己可见
-        </p>
-      </div>
+      {/* 可见性提示 */}
+      {post.visibility === 'PUBLIC' ? (
+        <div className="flex items-center gap-2 rounded-lg border border-teal-200 bg-teal-50 dark:border-teal-900 dark:bg-teal-950/30 px-3 py-2">
+          <Globe className="h-4 w-4 text-teal-500 shrink-0" />
+          <p className="text-xs text-teal-600 dark:text-teal-400">
+            这是一篇公开日记
+            {!isOwner && post.author && (
+              <span className="ml-1">来自 <span className="font-medium">{post.author.displayName}</span></span>
+            )}
+          </p>
+        </div>
+      ) : isOwner ? (
+        <div className="flex items-center gap-2 rounded-lg border border-indigo-200 bg-indigo-50 dark:border-indigo-900 dark:bg-indigo-950/30 px-3 py-2">
+          <Lock className="h-4 w-4 text-indigo-500 shrink-0" />
+          <p className="text-xs text-indigo-600 dark:text-indigo-400">
+            这是你的私密日记，仅自己可见
+          </p>
+        </div>
+      ) : null}
 
       {/* 日记内容卡片 */}
       <div className="rounded-lg border bg-card p-6">
