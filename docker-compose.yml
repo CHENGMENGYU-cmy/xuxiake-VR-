@@ -73,8 +73,8 @@ services:
     depends_on:
       - server
     environment:
-      NEXT_PUBLIC_API_URL: http://xuxiake.com:9000/api
-      NEXT_PUBLIC_WS_URL: http://xuxiake.com:9000
+      NEXT_PUBLIC_API_URL: http://xuxiake.com/api
+      NEXT_PUBLIC_WS_URL: http://xuxiake.com
     networks:
       - xuxiake-net
     ports:
