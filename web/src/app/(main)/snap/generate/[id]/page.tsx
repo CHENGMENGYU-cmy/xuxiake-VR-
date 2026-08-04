@@ -3,11 +3,10 @@
 import { useEffect, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  ArrowLeft, Sparkles, RefreshCw, BookOpen, Camera, MapPin, Clock,
+  ArrowLeft, Sparkles, RefreshCw, MapPin, Clock,
   Edit3, Save, Globe, Lock, FileText, Brain, Check,
-  Loader2, ImageIcon, Tag, Heart, ChevronRight,
+  Loader2, Heart, PenLine, X, Wand2, ImagePlus, Type,
 } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,6 +25,21 @@ export default function GeneratePage({ params }: { params: Promise<{ id: string 
     </AuthGuard>
   );
 }
+
+const styleEmoji: Record<string, string> = {
+  '温柔治愈风': '🕊️',
+  '生活碎片风': '🧩',
+  '成长复盘风': '🌱',
+  '诗意散文风': '🪶',
+  '轻松口语风': '☕',
+};
+const styleDesc: Record<string, string> = {
+  '温柔治愈风': '温暖抚慰，如微风',
+  '生活碎片风': '记录细碎日常',
+  '成长复盘风': '反思与总结',
+  '诗意散文风': '散文诗般优美',
+  '轻松口语风': '轻松随性的口吻',
+};
 
 function GenerateContent({ snapId }: { snapId: string }) {
   const router = useRouter();
@@ -117,16 +131,18 @@ function GenerateContent({ snapId }: { snapId: string }) {
 
   if (snapLoading || generating) {
     return (
-      <div className="flex items-center justify-center py-32">
+      <div className="flex min-h-[60vh] items-center justify-center">
         <div className="text-center space-y-5">
-          <div className="relative mx-auto">
-            <div className="h-16 w-16 animate-spin rounded-full border-4 border-orange-200 border-t-orange-500" />
-            <Sparkles className="absolute inset-0 m-auto h-6 w-6 text-orange-500" />
+          <div className="relative mx-auto h-16 w-16">
+            <div className="absolute inset-0 animate-spin rounded-full border-4 border-indigo-200 border-t-indigo-500" />
+            <Sparkles className="absolute inset-0 m-auto h-6 w-6 text-indigo-500" />
           </div>
           <div>
-            <p className="text-base font-medium">{snapLoading ? '加载闪拍记录...' : 'AI 正在生成日记'}</p>
-            <p className="text-sm text-muted-foreground mt-1">
-              {snapLoading ? '正在从服务器获取数据' : '正在分析你的闪拍内容，生成个性化日记'}
+            <p className="text-base font-medium">
+              {snapLoading ? '正在加载闪拍记录' : 'AI 正在为你撰写日记'}
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {snapLoading ? '从服务器获取素材...' : '分析闪拍内容，融入你的心情与感悟...'}
             </p>
           </div>
         </div>
@@ -136,282 +152,266 @@ function GenerateContent({ snapId }: { snapId: string }) {
 
   if (!snap) {
     return (
-      <div className="flex flex-col items-center py-20">
+      <div className="flex min-h-[50vh] flex-col items-center justify-center">
         <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-muted/50">
           <Camera className="h-8 w-8 text-muted-foreground/30" />
         </div>
         <p className="mt-4 text-sm font-medium text-muted-foreground">闪拍记录不存在</p>
         <Button variant="ghost" className="mt-3" onClick={() => router.push('/snap')}>
-          <ArrowLeft className="h-4 w-4 mr-1" />返回闪拍列表
+          <ArrowLeft className="mr-1 h-4 w-4" />返回闪拍列表
         </Button>
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6">
-      {/* 顶部导航 */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" onClick={() => router.push('/snap')}>
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <div>
-            <h1 className="text-xl font-bold">AI 日记生成</h1>
-            <p className="text-xs text-muted-foreground">从闪拍生成个性化日记，可编辑后保存或发布</p>
+    <div className="mx-auto max-w-6xl">
+      {/* 顶部栏 */}
+      <div className="sticky top-0 z-20 -mx-4 mb-6 border-b bg-background/80 px-4 py-3 backdrop-blur-md">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="icon" onClick={() => router.push('/snap')}>
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <div>
+              <h1 className="text-base font-bold">AI 创作日记</h1>
+              <p className="text-[11px] text-muted-foreground">从闪拍素材智能生成 · 可自由编辑</p>
+            </div>
           </div>
+
+          {generatedDiary && (
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleSave('draft')}
+                disabled={saving}
+                className="gap-1.5 text-muted-foreground"
+              >
+                <FileText className="h-4 w-4" />草稿
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleSave('private')}
+                disabled={saving}
+                className="gap-1.5 text-amber-600"
+              >
+                <Lock className="h-4 w-4" />私密
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => handleSave('public')}
+                disabled={saving}
+                className="gap-1.5 bg-gradient-to-r from-indigo-500 to-violet-500 hover:from-indigo-600 hover:to-violet-600 shadow-md shadow-indigo-500/20"
+              >
+                {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Globe className="h-4 w-4" />}
+                发布
+              </Button>
+            </div>
+          )}
         </div>
-        {generatedDiary && (
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleSave('draft')}
-              disabled={saving}
-              className="gap-1.5"
-            >
-              <FileText className="h-4 w-4" />
-              草稿
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleSave('private')}
-              disabled={saving}
-              className="gap-1.5"
-            >
-              <Lock className="h-4 w-4" />
-              私密
-            </Button>
-            <Button
-              size="sm"
-              onClick={() => handleSave('public')}
-              disabled={saving}
-              className="gap-1.5 bg-gradient-to-r from-indigo-500 to-violet-500 hover:from-indigo-600 hover:to-violet-600"
-            >
-              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Globe className="h-4 w-4" />}
-              发布
-            </Button>
-          </div>
-        )}
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-[240px_1fr_240px]">
-        {/* 左栏：原始闪拍 */}
-        <Card className="h-fit border-0 bg-muted/40 shadow-none lg:sticky lg:top-20">
-          <CardContent className="p-4 space-y-4">
-            <div className="flex items-center gap-2">
-              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-orange-100 text-orange-600 dark:bg-orange-900/30">
-                <Camera className="h-3.5 w-3.5" />
-              </span>
-              <span className="text-sm font-semibold">原始闪拍</span>
-            </div>
+      <div className="grid gap-6 lg:grid-cols-[300px_1fr_260px]">
+        {/* 左栏：素材卡片 */}
+        <div className="lg:sticky lg:top-20 lg:self-start">
+          <div className="mb-3 flex items-center gap-2">
+            <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-orange-100 text-orange-600 dark:bg-orange-900/30">
+              <ImagePlus className="h-3.5 w-3.5" />
+            </span>
+            <span className="text-sm font-semibold">素材</span>
+            <Badge variant="outline" className="ml-auto text-[10px]">闪拍</Badge>
+          </div>
 
+          <div className="overflow-hidden rounded-2xl border bg-card shadow-sm">
             {snapImage ? (
-              <div className="aspect-[4/3] rounded-xl overflow-hidden bg-muted shadow-sm">
+              <div className="relative aspect-[4/3] overflow-hidden bg-muted">
                 <img src={snapImage} alt="" className="h-full w-full object-cover" />
+                {scene && (
+                  <span className="absolute left-2 top-2 rounded-full bg-black/50 px-2 py-0.5 text-[10px] text-white backdrop-blur-sm">
+                    {scene}
+                  </span>
+                )}
               </div>
             ) : (
-              <div className="flex aspect-[4/3] items-center justify-center rounded-xl bg-background border">
-                <ImageIcon className="h-8 w-8 text-muted-foreground/25" />
+              <div className="flex aspect-[4/3] items-center justify-center bg-muted/40">
+                <span className="text-4xl">📷</span>
               </div>
             )}
 
-            <p className="text-sm leading-relaxed">{snap.content || '(无内容)'}</p>
+            <div className="space-y-3 p-4">
+              <p className="text-sm leading-relaxed">{snap.content || '(无内容)'}</p>
 
-            <div className="space-y-2 text-xs text-muted-foreground">
-              {snap.location?.name && (
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-3.5 w-3.5 shrink-0" />
-                  <span className="truncate">{snap.location.name}</span>
+              <div className="space-y-1.5 text-xs text-muted-foreground">
+                {snap.location?.name && (
+                  <div className="flex items-center gap-1.5">
+                    <MapPin className="h-3 w-3 shrink-0" />{snap.location.name}
+                  </div>
+                )}
+                <div className="flex items-center gap-1.5">
+                  <Clock className="h-3 w-3 shrink-0" />
+                  {new Date(snap.createdAt).toLocaleString('zh-CN')}
                 </div>
-              )}
-              <div className="flex items-center gap-2">
-                <Clock className="h-3.5 w-3.5 shrink-0" />
-                {new Date(snap.createdAt).toLocaleString('zh-CN')}
+                {mood && (
+                  <div className="flex items-center gap-1.5">
+                    <Heart className="h-3 w-3 shrink-0 text-rose-400" />
+                    <span>心情：{mood}</span>
+                  </div>
+                )}
               </div>
-              {mood && (
-                <div className="flex items-center gap-2">
-                  <Heart className="h-3.5 w-3.5 shrink-0 text-rose-400" />
-                  情绪：{mood}
-                </div>
-              )}
-              {scene && (
-                <div className="flex items-center gap-2">
-                  <BookOpen className="h-3.5 w-3.5 shrink-0" />
-                  场景：{scene}
+
+              {keywords.length > 0 && (
+                <div className="flex flex-wrap gap-1">
+                  {keywords.map((kw: string) => (
+                    <span key={kw} className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground">
+                      #{kw}
+                    </span>
+                  ))}
                 </div>
               )}
             </div>
+          </div>
 
-            {keywords.length > 0 && (
-              <div className="flex flex-wrap gap-1">
-                {keywords.map((kw: string) => (
-                  <Badge key={kw} variant="outline" className="text-[10px]">{kw}</Badge>
-                ))}
+          {/* 回忆反差 */}
+          {memorySnap && (
+            <div className="mt-3 rounded-2xl border border-purple-200 bg-purple-50/50 p-4 dark:border-purple-800 dark:bg-purple-950/20">
+              <div className="flex items-center gap-1.5">
+                <Brain className="h-4 w-4 text-purple-600" />
+                <span className="text-sm font-medium text-purple-700 dark:text-purple-300">回忆反差</span>
               </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* 中栏：日记编辑器 */}
-        <Card className="shadow-sm">
-          <CardContent className="p-5 space-y-4">
-            <div className="flex items-center gap-3">
-              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30">
-                <Edit3 className="h-3.5 w-3.5" />
-              </span>
-              <h2 className="font-semibold">日记内容</h2>
-              {generatedDiary && (
-                <Badge className="ml-auto" variant="secondary">
-                  {generatedDiary.style}
-                </Badge>
-              )}
+              <p className="mt-2 text-xs leading-relaxed text-purple-600/70">
+                找到一条相似回忆，加入后日记会更深刻地对比过去与现在
+              </p>
+              <div className="mt-2 line-clamp-2 rounded-lg bg-white/70 p-2 text-xs text-muted-foreground dark:bg-black/20">
+                {memorySnap.text || '(无内容)'}
+              </div>
+              <Button
+                size="sm"
+                variant={includeMemory ? 'default' : 'outline'}
+                className={`mt-2 w-full gap-1 ${includeMemory ? 'bg-purple-600 hover:bg-purple-700' : ''}`}
+                onClick={handleMemoryToggle}
+              >
+                {includeMemory ? <Check className="h-3.5 w-3.5" /> : <Brain className="h-3.5 w-3.5" />}
+                {includeMemory ? '已加入' : '加入回忆反差'}
+              </Button>
             </div>
+          )}
+        </div>
 
-            {generatedDiary ? (
-              <>
-                {/* 标题 */}
-                <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-muted-foreground">标题</label>
-                  <Input
-                    value={generatedDiary.title}
-                    onChange={(e) => editGeneratedDiary({ title: e.target.value })}
-                    className="text-base font-semibold border-0 border-b rounded-none px-0 focus-visible:ring-0 focus-visible:border-primary"
-                  />
-                </div>
+        {/* 中栏：编辑器 */}
+        <div className="overflow-hidden rounded-2xl border bg-card shadow-sm">
+          {generatedDiary ? (
+            <div className="flex flex-col">
+              {/* 标题区 */}
+              <div className="border-b px-6 py-4">
+                <Input
+                  value={generatedDiary.title}
+                  onChange={(e) => editGeneratedDiary({ title: e.target.value })}
+                  placeholder="给日记起个标题..."
+                  className="border-0 bg-transparent px-0 text-xl font-bold placeholder:text-muted-foreground/40 focus-visible:ring-0"
+                />
+              </div>
 
-                {/* 正文 */}
-                <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-muted-foreground">正文</label>
-                  <Textarea
-                    value={generatedDiary.content}
-                    onChange={(e) => editGeneratedDiary({ content: e.target.value })}
-                    className="min-h-[300px] leading-relaxed text-sm resize-y border-0 rounded-none px-0 focus-visible:ring-0 bg-transparent"
-                  />
-                </div>
+              {/* 正文区 */}
+              <div className="flex-1 px-6 py-5">
+                <Textarea
+                  value={generatedDiary.content}
+                  onChange={(e) => editGeneratedDiary({ content: e.target.value })}
+                  placeholder="AI 已为你生成初稿，可以自由修改..."
+                  className="min-h-[360px] resize-none border-0 bg-transparent px-0 leading-relaxed text-[15px] focus-visible:ring-0"
+                />
+              </div>
 
-                {/* 感悟 */}
-                <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-muted-foreground flex items-center gap-1">
-                    <Sparkles className="h-3 w-3" />一句感悟
-                  </label>
+              {/* 底部：感悟 + 标签 */}
+              <div className="border-t px-6 py-4">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="h-3.5 w-3.5 shrink-0 text-indigo-500" />
                   <Input
                     value={generatedDiary.insight}
                     onChange={(e) => editGeneratedDiary({ insight: e.target.value })}
-                    className="text-sm italic border-0 border-b rounded-none px-0 focus-visible:ring-0 focus-visible:border-primary text-muted-foreground"
+                    placeholder="一句话感悟（可选）..."
+                    className="border-0 bg-transparent px-0 text-sm italic text-muted-foreground focus-visible:ring-0"
                   />
                 </div>
 
-                {/* 标签 */}
                 {generatedDiary.tags.length > 0 && (
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-medium text-muted-foreground flex items-center gap-1">
-                      <Tag className="h-3 w-3" />标签
-                    </label>
-                    <div className="flex flex-wrap gap-1.5">
-                      {generatedDiary.tags.map((t, i) => (
-                        <Badge key={i} variant="secondary" className="text-xs px-2 py-0.5">
-                          {t}
-                        </Badge>
-                      ))}
-                    </div>
+                  <div className="mt-3 flex flex-wrap items-center gap-1.5">
+                    <PenLine className="h-3.5 w-3.5 shrink-0 text-muted-foreground/50" />
+                    {generatedDiary.tags.map((t, i) => (
+                      <span key={i} className="rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs text-indigo-600 dark:bg-indigo-950/40">
+                        {t}
+                      </span>
+                    ))}
                   </div>
                 )}
-              </>
-            ) : (
-              <div className="flex flex-col items-center justify-center py-20 text-center">
-                <Sparkles className="h-10 w-10 text-muted-foreground/20 mb-3" />
-                <p className="text-sm text-muted-foreground">等待 AI 生成...</p>
               </div>
-            )}
-          </CardContent>
-        </Card>
+            </div>
+          ) : (
+            <div className="flex min-h-[400px] flex-col items-center justify-center text-center">
+              <Wand2 className="h-10 w-10 text-muted-foreground/20" />
+              <p className="mt-3 text-sm text-muted-foreground">等待 AI 生成...</p>
+            </div>
+          )}
+        </div>
 
-        {/* 右栏：风格 + 回忆 */}
-        <div className="space-y-3 lg:sticky lg:top-20">
-          {/* 风格选择 */}
-          <Card className="shadow-sm">
-            <CardContent className="p-4 space-y-3">
-              <div className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-orange-500" />
-                <span className="text-sm font-semibold">选择风格</span>
-              </div>
-              <div className="space-y-1">
-                {ALL_DIARY_STYLES.map((style) => (
+        {/* 右栏：风格选择 */}
+        <div className="lg:sticky lg:top-20 lg:self-start">
+          <div className="mb-3 flex items-center gap-2">
+            <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30">
+              <Type className="h-3.5 w-3.5" />
+            </span>
+            <span className="text-sm font-semibold">写作风格</span>
+          </div>
+
+          <div className="rounded-2xl border bg-card p-3 shadow-sm">
+            <div className="space-y-1.5">
+              {ALL_DIARY_STYLES.map((style) => {
+                const active = style === currentStyle;
+                return (
                   <button
                     key={style}
                     onClick={() => handleStyleChange(style)}
                     disabled={generating}
-                    className={`w-full text-left px-3 py-2.5 rounded-lg text-sm transition-all duration-200 ${
-                      style === currentStyle
-                        ? 'bg-orange-50 text-orange-700 border-2 border-orange-200 shadow-sm dark:bg-orange-950/20 dark:text-orange-300 dark:border-orange-700'
-                        : 'border-2 border-transparent hover:bg-muted/60 hover:border-muted-foreground/10'
+                    className={`flex w-full items-center gap-3 rounded-xl border-2 px-3 py-2.5 text-left transition-all duration-200 ${
+                      active
+                        ? 'border-indigo-500 bg-indigo-50/70 shadow-sm dark:bg-indigo-950/30'
+                        : 'border-transparent hover:border-muted-foreground/10 hover:bg-muted/40'
                     }`}
                   >
-                    <div className="flex items-center gap-2">
-                      {style === currentStyle && <Check className="h-3.5 w-3.5 shrink-0 text-orange-500" />}
-                      <span className={style === currentStyle ? 'font-medium' : ''}>{style}</span>
+                    <span className="text-xl">{styleEmoji[style]}</span>
+                    <div className="min-w-0 flex-1">
+                      <span className={`block text-sm ${active ? 'font-medium text-indigo-700 dark:text-indigo-300' : ''}`}>
+                        {style}
+                      </span>
+                      <span className="block truncate text-[10px] text-muted-foreground/70">
+                        {styleDesc[style]}
+                      </span>
                     </div>
+                    {active && <Check className="h-4 w-4 shrink-0 text-indigo-500" />}
                   </button>
-                ))}
+                );
+              })}
+            </div>
+
+            <Button
+              variant="outline"
+              size="sm"
+              className="mt-3 w-full gap-1.5"
+              onClick={handleRegenerate}
+              disabled={generating}
+            >
+              {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+              换风格重写
+            </Button>
+
+            {generating && (
+              <div className="mt-2 flex items-center justify-center gap-2 text-xs text-indigo-600">
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                正在重写...
               </div>
-
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full gap-1.5"
-                onClick={handleRegenerate}
-                disabled={generating}
-              >
-                {generating ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <RefreshCw className="h-4 w-4" />
-                )}
-                重新生成
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* 回忆反差 */}
-          {memorySnap && (
-            <Card className="border-purple-200 bg-purple-50/50 shadow-sm dark:border-purple-800 dark:bg-purple-950/20">
-              <CardContent className="p-4 space-y-3">
-                <div className="flex items-center gap-2">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-md bg-purple-100 text-purple-600 dark:bg-purple-900/50">
-                    <Brain className="h-3.5 w-3.5" />
-                  </span>
-                  <span className="text-sm font-semibold text-purple-700 dark:text-purple-300">回忆反差</span>
-                </div>
-                <p className="text-xs text-purple-600/70 dark:text-purple-400/70 leading-relaxed">
-                  找到一条相似的旧日回忆。加入后 AI 会更深刻地对比如今的你和过去的你。
-                </p>
-                <div className="rounded-lg bg-white/70 dark:bg-black/20 p-2.5 text-xs text-muted-foreground line-clamp-2 border border-purple-100 dark:border-purple-800/50">
-                  {memorySnap.text || '(无内容)'}
-                  <div className="text-[10px] mt-1 text-purple-500">
-                    {memorySnap.createdAt ? new Date(memorySnap.createdAt).toLocaleDateString('zh-CN') : ''}
-                  </div>
-                </div>
-                <Button
-                  size="sm"
-                  variant={includeMemory ? 'default' : 'outline'}
-                  className={`w-full gap-1.5 ${includeMemory ? 'bg-purple-600 hover:bg-purple-700' : ''}`}
-                  onClick={handleMemoryToggle}
-                >
-                  {includeMemory ? (
-                    <>
-                      <Check className="h-3.5 w-3.5" /> 已加入
-                    </>
-                  ) : (
-                    <>
-                      <Brain className="h-3.5 w-3.5" /> 加入回忆反差
-                    </>
-                  )}
-                </Button>
-              </CardContent>
-            </Card>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>
