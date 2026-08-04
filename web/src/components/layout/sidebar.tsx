@@ -213,41 +213,6 @@ export function Sidebar() {
               </div>
             )}
 
-            <Separator />
-
-            {/* 创作 — 仅普通用户显示 */}
-            {!isAdmin && mounted && user && (
-              <div className="space-y-1 p-3">
-                <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
-                  创作
-                </p>
-                <Link href="/upload">
-                  <Button
-                    variant="ghost"
-                    className={cn(
-                      'w-full justify-start gap-3',
-                      (pathname === '/upload' || pathname.startsWith('/upload/')) && 'bg-primary/10 text-primary hover:bg-primary/10'
-                    )}
-                  >
-                    <Upload className="h-5 w-5" />
-                    <span>分享见闻</span>
-                  </Button>
-                </Link>
-                <Link href="/snap">
-                  <Button
-                    variant="ghost"
-                    className={cn(
-                      'w-full justify-start gap-3',
-                      pathname.startsWith('/snap/generate') && 'bg-primary/10 text-primary hover:bg-primary/10'
-                    )}
-                  >
-                    <Sparkles className="h-5 w-5 text-teal-500" />
-                    <span>AI 日记</span>
-                  </Button>
-                </Link>
-              </div>
-            )}
-
             {/* 个人中心 - 仅登录后显示 */}
             {mounted && user && (
             <div className="space-y-1 px-3 pb-3">
