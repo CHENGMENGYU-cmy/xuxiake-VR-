@@ -158,7 +158,7 @@ export default function ClassifiedPage() {
           </h3>
           <HierarchyList
             key={`${activeDim}-${selectedValue}`}
-            level="SNAPSHOT"
+            level="LOG"
             userId={user?.id}
             emptyText="该分类下暂无内容"
             {...filterParams}
