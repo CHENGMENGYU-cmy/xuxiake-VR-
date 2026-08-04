@@ -157,7 +157,7 @@ function GenerateContent({ snapId }: { snapId: string }) {
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-2">
+    <div className="mx-auto max-w-5xl px-2">
       {/* 顶部栏 */}
       <div className="sticky top-0 z-20 -mx-2 mb-6 border-b bg-background/85 px-2 py-3 backdrop-blur-lg">
         <div className="flex items-center justify-between">
