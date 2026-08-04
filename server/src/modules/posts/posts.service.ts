@@ -806,7 +806,7 @@ export class PostsService {
     };
   }
 
-  // ===== 日记功能 =====
+  // ===== 素材查询 =====
 
   /** 获取用户的闪拍记录列表 */
   async getUserSnaps(userId: string, limit = 20) {
@@ -818,6 +818,51 @@ export class PostsService {
     });
     return snaps.map((p) => this.formatPost(p));
   }
+
+  /** 获取用户的日志列表（仅本人，私人素材） */
+  async getUserLogs(userId: string, limit = 50) {
+    const logs = await this.postRepo.find({
+      where: { authorId: userId, contentLevel: 'LOG' },
+      relations: { mediaItems: true },
+      order: { createdAt: 'DESC' },
+      take: limit,
+    });
+    return logs.map((p) => this.formatPost(p));
+  }
+
+  /** 获取用户的日记列表（本人可查看自己的私密日记，他人只能看公开的） */
+  async getUserDiaries(userId: string, viewerId?: string) {
+    const isOwner = viewerId === userId;
+    const diaries = await this.postRepo.find({
+      where: {
+        authorId: userId,
+        contentLevel: 'DIARY',
+        ...(isOwner ? {} : { visibility: 'PUBLIC' as const }),
+      },
+      relations: { mediaItems: true },
+      order: { createdAt: 'DESC' },
+      take: 50,
+    });
+    return diaries.map((p) => this.formatPost(p));
+  }
+
+  /** 获取用户的游记列表 */
+  async getUserTravelogues(userId: string, viewerId?: string) {
+    const isOwner = viewerId === userId;
+    const travelogues = await this.postRepo.find({
+      where: {
+        authorId: userId,
+        contentLevel: 'TRAVELOGUE',
+        ...(isOwner ? {} : { visibility: 'PUBLIC' as const }),
+      },
+      relations: { mediaItems: true },
+      order: { createdAt: 'DESC' },
+      take: 50,
+    });
+    return travelogues.map((p) => this.formatPost(p));
+  }
+
+  // ===== 日记功能 =====
 
   /** 获取日记广场（所有公开日记） */
   async getDiarySquare(limit = 20, cursor?: string) {
