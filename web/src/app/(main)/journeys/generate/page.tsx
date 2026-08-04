@@ -144,6 +144,20 @@ function GenerateContent() {
     }
   };
 
+  const handlePublish = async (visibility: 'PRIVATE' | 'PUBLIC') => {
+    if (!postId) { toast.error('游记尚未生成完成，请稍候'); return; }
+    setPublishing(true);
+    try {
+      await publishPost(postId, undefined, visibility);
+      toast.success(visibility === 'PUBLIC' ? '游记已公开发布' : '游记已保存为私密草稿');
+      router.push('/journeys');
+    } catch {
+      toast.error('发布失败，请重试');
+    } finally {
+      setPublishing(false);
+    }
+  };
+
   const toggleSelect = (id: string) => {
     setSelected((prev) => {
       const next = new Set(prev);
