@@ -35,16 +35,16 @@ const browseItems = [
   { href: '/discover', label: '发现', icon: Compass },
 ];
 
-// 我的
+// 我的（内容生成链条：素材→日记→游记）
 const myItems = [
   { href: '/snap', label: '素材库', icon: Camera, color: 'text-orange-500' },
-  { href: '/my/works', label: '我的作品', icon: FolderOpen, color: 'text-indigo-500' },
+  { href: '/diaries', label: '我的日记', icon: PenLine, color: 'text-indigo-500' },
+  { href: '/journeys', label: '我的游记', icon: BookOpen, color: 'text-primary' },
 ];
 
 // 创作
 const createItems = [
-  { href: '/upload', label: '分享见闻', icon: Upload },
-  { href: '/snap', label: 'AI 写日记', icon: Sparkles, color: 'text-teal-500' },
+  { href: '/upload', label: '发布见闻', icon: Upload },
   { href: '/journeys/generate', label: 'AI 写游记', icon: Sparkles, color: 'text-amber-500' },
 ];
 
