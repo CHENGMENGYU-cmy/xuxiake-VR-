@@ -657,11 +657,76 @@ export class PostsService {
       .take(12)
       .getRawMany();
 
+    const byTripQb = this.postRepo.createQueryBuilder('post')
+      .select('post.tripId', 'tripId')
+      .addSelect('post.tripTitle', 'tripTitle')
+      .addSelect('COUNT(post.id)', 'count');
+    buildBase(byTripQb);
+
+    const byTrip = await byTripQb
+      .andWhere('post.tripId IS NOT NULL')
+      .groupBy('post.tripId, post.tripTitle')
+      .orderBy('count', 'DESC')
+      .getRawMany();
+
     return {
       byLocation: byLocation.map((r) => ({ name: r.location, count: Number(r.count) })),
       byType: byType.map((r) => ({ type: r.type, count: Number(r.count) })),
       byTime: byTime.map((r) => ({ month: r.month, count: Number(r.count) })),
+      byTrip: byTrip.map((r) => ({ tripId: r.tripId, name: r.tripTitle || '未命名行程', count: Number(r.count) })),
     };
+  }
+
+  // ===== 行程 =====
+
+  /** 当前用户的行程列表（按 tripId 分组 SNAPSHOT） */
+  async getUserTrips(userId: string) {
+    const rows = await this.postRepo.createQueryBuilder('post')
+      .select('post.tripId', 'tripId')
+      .addSelect('post.tripTitle', 'tripTitle')
+      .addSelect('COUNT(post.id)', 'count')
+      .addSelect('MIN(post.createdAt)', 'startTime')
+      .addSelect('MAX(post.createdAt)', 'endTime')
+      .where('post.contentLevel = :lv', { lv: 'SNAPSHOT' })
+      .andWhere('post.authorId = :uid', { uid: userId })
+      .andWhere('post.tripId IS NOT NULL')
+      .groupBy('post.tripId, post.tripTitle')
+      .orderBy('endTime', 'DESC')
+      .getRawMany();
+
+    const tripIds = rows.map((r) => r.tripId);
+    const coverMap = new Map<string, string>();
+    if (tripIds.length > 0) {
+      const media = await this.mediaRepo.createQueryBuilder('m')
+        .innerJoin('m.post', 'post')
+        .select('post.tripId', 'tripId')
+        .addSelect('COALESCE(m.thumbnail_url, m.url)', 'thumb')
+        .where('post.tripId IN (:...tripIds)', { tripIds })
+        .andWhere('m.type = :mt', { mt: 'IMAGE' })
+        .orderBy('m.sort_order', 'ASC')
+        .getRawMany();
+      for (const row of media) {
+        if (!coverMap.has(row.tripId)) coverMap.set(row.tripId, row.thumb);
+      }
+    }
+
+    return rows.map((r) => ({
+      tripId: r.tripId,
+      tripTitle: r.tripTitle || '未命名行程',
+      count: Number(r.count),
+      startTime: r.startTime,
+      endTime: r.endTime,
+      cover: coverMap.get(r.tripId) || null,
+    }));
+  }
+
+  /** 行程下所有 SNAPSHOT 的 id（供 AI 生成游记） */
+  async getTripSnapshotIds(userId: string, tripId: string): Promise<string[]> {
+    const posts = await this.postRepo.find({
+      where: { authorId: userId, contentLevel: 'SNAPSHOT', tripId },
+      select: { id: true },
+    });
+    return posts.map((p) => p.id);
   }
 
   // ===== 发布/撤回 =====
