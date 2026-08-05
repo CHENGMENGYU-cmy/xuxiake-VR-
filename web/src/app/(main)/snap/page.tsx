@@ -208,100 +208,38 @@ function SnapContent() {
       } catch { return {}; }
     })();
     const image = getMediaImage(item);
-    const keywords: string[] = meta.keywords || [];
-    const mood = meta.mood || '';
-    const scene = meta.scene || '';
     const isLog = item._type === 'LOG';
     const isSelected = selectedIds.has(item.id);
 
     return (
-      <Card
+      <div
         key={item.id}
-        className={`group relative overflow-hidden transition-all duration-300 cursor-pointer ${
-          isSelected ? 'border-primary ring-2 ring-primary/30' : ''
-        } ${selectMode ? '' : 'hover:shadow-lg hover:border-primary/30'}`}
+        className={`group relative aspect-square cursor-pointer overflow-hidden rounded-xl border transition-all ${
+          isSelected ? 'border-primary ring-2 ring-primary/30' : 'border-transparent hover:border-primary/40'
+        }`}
         onClick={() => (selectMode ? toggleSelect(item.id) : router.push(`/snap/generate/${item.id}`))}
       >
+        {image ? (
+          <img src={image} alt="" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-muted">
+            <FileText className="h-8 w-8 text-muted-foreground/40" />
+          </div>
+        )}
+        <div className="absolute left-1.5 top-1.5 flex gap-1">
+          {isLog && <Badge className="border bg-black/50 text-[10px] text-white backdrop-blur-sm">日志</Badge>}
+          {meta.hasDiary && (
+            <Badge className="border bg-black/50 text-[10px] text-white backdrop-blur-sm">
+              <Check className="h-2.5 w-2.5" />日记
+            </Badge>
+          )}
+        </div>
         {selectMode && (
-          <div className={`absolute left-2 top-2 z-20 flex h-5 w-5 items-center justify-center rounded-full border-2 ${isSelected ? 'border-primary bg-primary text-white' : 'border-white bg-black/30 text-transparent'}`}>
+          <div className={`absolute bottom-1.5 right-1.5 z-10 flex h-5 w-5 items-center justify-center rounded-full border-2 bg-white ${isSelected ? 'border-primary bg-primary text-white' : 'border-slate-300 text-transparent'}`}>
             {isSelected && <Check className="h-3 w-3" />}
           </div>
         )}
-        {image ? (
-          <>
-            <div className="relative aspect-[3/2] bg-muted overflow-hidden">
-              <img src={image} alt="" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-              <div className="absolute left-3 top-3 flex items-center gap-1.5">
-                {mood && <Badge className={`border text-[10px] ${getMoodColor(mood)}`}>{mood}</Badge>}
-                <Badge className={`border text-[10px] ${isLog ? 'bg-slate-100 text-slate-600' : 'bg-orange-100 text-orange-600'}`}>
-                  {isLog ? '日志' : '闪拍'}
-                </Badge>
-                {meta.hasDiary && (
-                  <Badge className="border text-[10px] bg-indigo-100 text-indigo-600 dark:bg-indigo-950/50 dark:text-indigo-400">
-                    <Check className="h-2.5 w-2.5" />已生成
-                  </Badge>
-                )}
-              </div>
-              {scene && (
-                <Badge variant="secondary" className="absolute right-3 top-3 bg-white/80 backdrop-blur-sm text-xs">{scene}</Badge>
-              )}
-            </div>
-            <CardContent className="p-4 space-y-3">
-              <p className="text-sm leading-relaxed line-clamp-2">{item.content || '(无内容)'}</p>
-              <div className="flex flex-wrap gap-1">
-                {keywords.slice(0, 4).map((kw: string) => (
-                  <Badge key={kw} variant="outline" className="text-[10px]">{kw}</Badge>
-                ))}
-              </div>
-              <SnapFooter item={item} />
-              {!selectMode && (
-                <Button className="w-full gap-1.5 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-xs font-medium" size="sm">
-                  <Sparkles className="h-3.5 w-3.5" />
-                  生成日记
-                  <ChevronRight className="h-3.5 w-3.5 ml-auto" />
-                </Button>
-              )}
-            </CardContent>
-          </>
-        ) : (
-          <CardContent className="p-5 space-y-4">
-            <div className="flex items-start gap-3">
-              <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${isLog ? 'bg-slate-100 text-slate-500' : 'bg-orange-50 text-orange-500'}`}>
-                {isLog ? <FolderOpen className="h-5 w-5" /> : <FileText className="h-5 w-5" />}
-              </span>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2 mb-1">
-                  <Badge className={`text-[10px] border ${isLog ? 'bg-slate-100 text-slate-600' : 'bg-orange-100 text-orange-600'}`}>
-                    {isLog ? '日志' : '闪拍'}
-                  </Badge>
-                  {meta.hasDiary && (
-                    <Badge className="text-[10px] border bg-indigo-100 text-indigo-600 dark:bg-indigo-950/50 dark:text-indigo-400">
-                      <Check className="h-2.5 w-2.5" />已生成
-                    </Badge>
-                  )}
-                </div>
-                <p className="text-sm leading-relaxed">{item.content || '(无内容)'}</p>
-                <div className="mt-2 flex flex-wrap items-center gap-2">
-                  {mood && <Badge className={`text-[10px] border ${getMoodColor(mood)}`}>{mood}</Badge>}
-                  {scene && <Badge variant="secondary" className="text-[10px]">{scene}</Badge>}
-                  {keywords.slice(0, 3).map((kw: string) => (
-                    <Badge key={kw} variant="outline" className="text-[10px]">{kw}</Badge>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <SnapFooter item={item} />
-            {!selectMode && (
-              <Button className="w-full gap-1.5 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600" size="sm">
-                <Sparkles className="h-3.5 w-3.5" />
-                生成日记
-                <ChevronRight className="h-3.5 w-3.5 ml-auto" />
-              </Button>
-            )}
-          </CardContent>
-        )}
-      </Card>
+      </div>
     );
   };
 
