@@ -12,7 +12,6 @@ export function MobileNav() {
   const pathname = usePathname();
   const { user } = useAuthStore();
   const totalUnread = useChatStore((s) => s.totalUnread);
-  const notifUnreadCount = useNotificationStore((s) => s.unreadCount);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
