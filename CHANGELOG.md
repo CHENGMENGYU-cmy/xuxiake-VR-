@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-05
+修改位置：web/src/components/layout/sidebar.tsx
+修改原因：侧边栏创作区"发布见闻"与页面标题"分享见闻"命名不一致
+修改内容：侧边栏创作区第一个入口标签从"发布见闻"改为"分享见闻"，与 /upload 页面标题统一
+修改效果：菜单名称与页面标题完全一致，命名规范统一
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-05
 修改位置：web/src/app/(main)/upload/page.tsx, discover/page.tsx, topics/page.tsx, snap/square/page.tsx, journeys/page.tsx, topics/[id]/page.tsx, diaries/[id]/page.tsx
 修改原因：检查发现侧边栏各功能页面存在5处功能重复——手写日记/手写游记双入口、AI写游记双入口、话题广场和日记广场在聚合页与独立页重复展示、/journeys标题命名不一致
 修改内容：1) /upload精简为纯多媒体分享，移除「写日记」「写游记」tab，日记编辑仅从/diaries「写日记」按钮进入；2) 话题/日记广场统一到/discover（Tabs改为受控支持?tab=参数），/topics和/snap/square改为重定向；3) /journeys移除页面内「AI生成」按钮（侧边栏已有），标题"游记散文"改"我的游记"；4) 更新/topics/[id]和/diaries/[id]返回链接指向/discover对应tab
