@@ -35,9 +35,15 @@ export default function DiscoverPage() {
 }
 
 function DiscoverContent() {
+  const searchParams = useSearchParams();
+  const initialTab = searchParams.get('tab') === 'topics' ? 'topics'
+    : searchParams.get('tab') === 'social' ? 'social'
+    : 'diary';
+  const [activeTab, setActiveTab] = useState(initialTab);
+
   return (
     <div className="mx-auto max-w-4xl space-y-5">
-      <Tabs defaultValue="diary" className="w-full">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="diary" className="gap-1.5">
             <Globe className="h-4 w-4" />
