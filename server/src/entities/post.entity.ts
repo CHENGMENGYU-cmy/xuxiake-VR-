@@ -27,6 +27,12 @@ export class Post {
   @Column({ name: 'parent_post_id', type: 'varchar', length: 36, nullable: true })
   parentPostId: string | null;
 
+  @Column({ name: 'trip_id', type: 'varchar', length: 36, nullable: true })
+  tripId: string | null;
+
+  @Column({ name: 'trip_title', type: 'varchar', length: 200, nullable: true })
+  tripTitle: string | null;
+
   @Column({ type: 'varchar', length: 500, nullable: true })
   title: string | null;
 
