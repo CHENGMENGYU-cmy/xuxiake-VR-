@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-05
+修改位置：server/sql/migrate-add-trip.sql（新建）, schema.sql, docker-compose.yml, src/entities/post.entity.ts, modules/sync/sync.service.ts, modules/posts/ai.service.ts, posts.service.ts, posts.controller.ts, scripts/backfill-trips.js（新建）; web/src/lib/snap-api.ts, app/(main)/snap/page.tsx; Android 闪拍App（非本仓库git）
+修改原因：闪拍App一天内拍摄的照片同步到社区时行程归属被丢弃（sync只消费moments/reflections，帖子无trip字段），素材库62条SNAPSHOT平铺展示、无"一次旅程"语境，也无法批量升华成内容
+修改内容：1) P0行程分组——posts新增trip_id/trip_title字段（migration+entity+docker挂载），sync.service幂等补全行程（originalId已存在仅补全不重建），Android同步携带tripId/tripTitle，素材库新增"按行程"视图（classified/dimensions加byTrip维度）；2) P1行程一键生成游记——新增GET /posts/trips（行程列表含封面）与POST /posts/travelogue/generate-by-trip，素材库行程选中态"AI生成游记"按钮+进度轮询；3) 修复ai.service生成游记不复制媒体（加mediaItems relations）与标题"undefined游记"的||优先级bug；4) 新增backfill-trips.js按连续日期分桶回填历史62条为1段行程
+修改效果：素材库按行程分组（62张→1段行程），行程一键生成带62张图片的游记，内容从零散照片自动升华；端到端验证通过
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-05
 修改位置：web/next.config.ts
 修改原因：本地开发模式下前端未把 /uploads 静态目录代理到后端，闪拍App上传的图片/缩略图在 Web 端全部 404（生产有 nginx alias 兜底，本地 dev 缺失）
 修改内容：next.config 新增 rewrites，将 /uploads/:path* 代理到后端（按 NEXT_PUBLIC_API_URL 推导后端 origin，默认 http://localhost:3001）
