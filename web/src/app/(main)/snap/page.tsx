@@ -525,27 +525,25 @@ function SnapContent() {
             </p>
           </CardContent>
         </Card>
-      ) : (
-        {dayGroups ? (
-          <div className="space-y-6">
-            {dayGroups.map(([key, items]) => (
-              <div key={key}>
-                <div className="mb-3 flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm font-semibold">{dayLabel(key)}</span>
-                  <Badge variant="secondary" className="text-[10px]">{items.length} 张</Badge>
-                </div>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  {items.map(renderCard)}
-                </div>
+      ) : dayGroups ? (
+        <div className="space-y-6">
+          {dayGroups.map(([key, items]) => (
+            <div key={key}>
+              <div className="mb-3 flex items-center gap-2">
+                <Clock className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm font-semibold">{dayLabel(key)}</span>
+                <Badge variant="secondary" className="text-[10px]">{items.length} 张</Badge>
               </div>
-            ))}
-          </div>
-        ) : (
-          <div className="grid gap-4 sm:grid-cols-2">
-            {filteredItems.map(renderCard)}
-          </div>
-        )}
+              <div className="grid gap-4 sm:grid-cols-2">
+                {items.map(renderCard)}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="grid gap-4 sm:grid-cols-2">
+          {filteredItems.map(renderCard)}
+        </div>
       )}
 
       {/* 多选底部操作栏 */}
