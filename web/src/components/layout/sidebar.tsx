@@ -44,7 +44,7 @@ const myItems = [
 
 // 创作
 const createItems = [
-  { href: '/upload', label: '发布见闻', icon: Upload },
+  { href: '/upload', label: '分享见闻', icon: Upload },
   { href: '/journeys/generate', label: 'AI 写游记', icon: Sparkles, color: 'text-amber-500' },
 ];
 
