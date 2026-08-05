@@ -271,8 +271,38 @@ function SnapContent() {
     return allItems;
   })();
 
-  const dayGroups = viewMode === 'location' || viewMode === 'trip' ? null : groupByDay(filteredItems);
-  const dayItems = viewingDay ? (groupByDay(filteredItems).find(([k]) => k === viewingDay)?.[1] || []) : [];
+  // 各视图的集合列表（未打开任何集合时展示）
+  const collections = (() => {
+    if (viewMode === 'location') {
+      const map = new Map<string, any[]>();
+      for (const item of allItems) {
+        const key = item.location?.name || item.locationName || '未标注地点';
+        const list = map.get(key) || [];
+        list.push(item);
+        map.set(key, list);
+      }
+      return [...map.entries()].map(([key, items]) => ({ key, label: key, items }));
+    }
+    if (viewMode === 'trip') {
+      const map = new Map<string, { label: string; items: any[] }>();
+      for (const item of allItems) {
+        if (!item.tripId) continue;
+        const cur = map.get(item.tripId) || { label: item.tripTitle || '未命名行程', items: [] };
+        cur.items.push(item);
+        map.set(item.tripId, cur);
+      }
+      return [...map.entries()].map(([key, v]) => ({ key, label: v.label, items: v.items }));
+    }
+    return groupByDay(allItems).map(([key, items]) => ({ key, label: dayLabel(key), items }));
+  })();
+
+  const isCollectionOpen = viewMode === 'trip' ? !!selectedTrip
+    : viewMode === 'location' ? !!selectedFilter
+    : !!viewingDay;
+
+  const collectionTitle = viewMode === 'trip' ? (selectedTrip?.name || '')
+    : viewMode === 'location' ? (selectedFilter || '')
+    : (viewingDay ? dayLabel(viewingDay) : '');
 
   // 相册式全屏预览（点击照片墙某张 → 全屏大图，左右切换）
   const openPreview = (item: any) => {
