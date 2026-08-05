@@ -7,6 +7,24 @@ export async function getUserSnaps(): Promise<any[]> {
   return data.data ?? [];
 }
 
+/** 获取当前用户的行程列表（按 tripId 分组） */
+export async function getUserTrips(): Promise<any[]> {
+  const { data } = await apiClient.get('/posts/trips');
+  return data.data ?? [];
+}
+
+/** 按行程一键生成游记 */
+export async function generateTravelogueByTrip(input: {
+  tripId: string;
+  prompt?: string;
+  style?: string;
+  tone?: string;
+  length?: string;
+}): Promise<{ jobId: string }> {
+  const { data } = await apiClient.post('/posts/travelogue/generate-by-trip', input);
+  return data.data;
+}
+
 /** 获取用户日志列表（私人素材） */
 export async function getUserLogs(): Promise<any[]> {
   const { data } = await apiClient.get('/posts/logs');

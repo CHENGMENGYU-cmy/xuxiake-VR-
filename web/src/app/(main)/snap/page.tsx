@@ -8,10 +8,13 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { AuthGuard } from '@/components/auth-guard';
 import { useSnapStore } from '@/stores/snap-store';
+import { generateTravelogueByTrip, getTravelogueJob } from '@/lib/snap-api';
+import { toast } from 'sonner';
 import apiClient from '@/lib/api-client';
 
 type Dimension = { name: string; count: number };
-type ViewMode = 'all' | 'location' | 'time';
+type TripDimension = { tripId: string; name: string; count: number };
+type ViewMode = 'all' | 'location' | 'time' | 'trip';
 
 export default function SnapPage() {
   return <AuthGuard><SnapContent /></AuthGuard>;
@@ -23,7 +26,13 @@ function SnapContent() {
   const [viewMode, setViewMode] = useState<ViewMode>('all');
   const [byLocation, setByLocation] = useState<Dimension[]>([]);
   const [byTime, setByTime] = useState<Dimension[]>([]);
+  const [byTrip, setByTrip] = useState<TripDimension[]>([]);
   const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
+  const [selectedTrip, setSelectedTrip] = useState<{ tripId: string; name: string } | null>(null);
+  const [tripGenerating, setTripGenerating] = useState(false);
+  const [tripGenStatus, setTripGenStatus] = useState('');
+  const [tripGenProgress, setTripGenProgress] = useState(0);
+  const [tripGenPostId, setTripGenPostId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchSnaps();
@@ -35,9 +44,62 @@ function SnapContent() {
       if (res.data?.success) {
         setByLocation(res.data.data.byLocation || []);
         setByTime((res.data.data.byTime || []).map((d: any) => ({ name: d.month, count: d.count })));
+        setByTrip(res.data.data.byTrip || []);
       }
     }).catch(() => {});
   }, []);
+
+  // 行程一键生成游记：提交 → 轮询进度 → 完成
+  const startTripGeneration = async () => {
+    if (!selectedTrip || tripGenerating) return;
+    setTripGenerating(true);
+    setTripGenPostId(null);
+    setTripGenStatus('正在提交生成任务...');
+    setTripGenProgress(0);
+    try {
+      const { jobId } = await generateTravelogueByTrip({
+        tripId: selectedTrip.tripId,
+        style: '游记',
+        tone: '温暖',
+        length: '标准',
+      });
+      const timer = setInterval(async () => {
+        try {
+          const job = await getTravelogueJob(jobId);
+          setTripGenProgress(job.progress || 0);
+          setTripGenStatus(statusLabel(job.status, job.progress));
+          if (job.status === 'DONE' || job.status === 'ERROR') {
+            clearInterval(timer);
+            setTripGenerating(false);
+            if (job.status === 'DONE') {
+              setTripGenPostId(job.postId || null);
+              toast.success('游记生成完成，已保存到我的游记');
+            } else {
+              toast.error(job.error || '游记生成失败');
+            }
+          }
+        } catch {
+          clearInterval(timer);
+          setTripGenerating(false);
+          toast.error('查询生成进度失败');
+        }
+      }, 1500);
+    } catch {
+      setTripGenerating(false);
+      toast.error('游记生成提交失败，请重试');
+    }
+  };
+
+  const statusLabel = (status: string, progress?: number) => {
+    switch (status) {
+      case 'QUEUED': return '排队中...';
+      case 'ANALYZING': return '分析行程素材...';
+      case 'GENERATING': return `AI 写作中 ${progress ?? 0}%`;
+      case 'DONE': return '生成完成';
+      case 'ERROR': return '生成失败';
+      default: return status || '处理中...';
+    }
+  };
 
   const getMoodColor = (mood: string) => {
     if (/开心|满足|兴奋/.test(mood)) return 'bg-emerald-50 text-emerald-700 border-emerald-200';
@@ -67,6 +129,10 @@ function SnapContent() {
 
   // 按筛选条件过滤
   const filteredItems = (() => {
+    if (viewMode === 'trip') {
+      if (!selectedTrip) return allItems.filter((item: any) => !!item.tripId);
+      return allItems.filter((item: any) => item.tripId === selectedTrip.tripId);
+    }
     if (!selectedFilter) return allItems;
     if (viewMode === 'location') {
       return allItems.filter((item: any) => item.location?.name === selectedFilter || item.locationName === selectedFilter);
@@ -88,6 +154,7 @@ function SnapContent() {
     { id: 'all', label: '全部' },
     { id: 'location', label: '按地点' },
     { id: 'time', label: '按时间' },
+    { id: 'trip', label: '按行程' },
   ];
 
   const filters = viewMode === 'location' ? byLocation :
@@ -136,7 +203,7 @@ function SnapContent() {
               variant={viewMode === m.id ? 'default' : 'ghost'}
               size="sm"
               className="h-7 text-xs"
-              onClick={() => { setViewMode(m.id); setSelectedFilter(null); }}
+              onClick={() => { setViewMode(m.id); setSelectedFilter(null); setSelectedTrip(null); }}
             >
               {m.label}
             </Button>
@@ -144,29 +211,96 @@ function SnapContent() {
         </div>
 
         {/* 筛选芯片 */}
-        {filters.length > 0 && (
+        {(filters.length > 0 || (viewMode === 'trip' && byTrip.length > 0)) && (
           <div className="flex flex-wrap gap-1.5">
-            <button
-              onClick={() => setSelectedFilter(null)}
-              className={`rounded-full border px-2.5 py-1 text-[11px] transition-colors ${
-                !selectedFilter ? 'border-primary bg-primary/10 text-primary' : 'hover:bg-muted'
-              }`}
-            >
-              全部 ({totalCount})
-            </button>
-            {filters.map((f) => (
-              <button
-                key={f.name}
-                onClick={() => setSelectedFilter(selectedFilter === f.name ? null : f.name)}
-                className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] transition-colors ${
-                  selectedFilter === f.name ? 'border-primary bg-primary/10 text-primary' : 'hover:bg-muted'
-                }`}
-              >
-                {viewMode === 'location' ? <MapPin className="h-3 w-3" /> : <Clock className="h-3 w-3" />}
-                {f.name}
-                <span className="text-muted-foreground">{f.count}</span>
-              </button>
-            ))}
+            {viewMode === 'trip' ? (
+              <>
+                <button
+                  onClick={() => setSelectedTrip(null)}
+                  className={`rounded-full border px-2.5 py-1 text-[11px] transition-colors ${
+                    !selectedTrip ? 'border-primary bg-primary/10 text-primary' : 'hover:bg-muted'
+                  }`}
+                >
+                  全部行程 ({byTrip.reduce((s, t) => s + t.count, 0)})
+                </button>
+                {byTrip.map((t) => (
+                  <button
+                    key={t.tripId}
+                    onClick={() => setSelectedTrip(selectedTrip?.tripId === t.tripId ? null : { tripId: t.tripId, name: t.name })}
+                    className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] transition-colors ${
+                      selectedTrip?.tripId === t.tripId ? 'border-primary bg-primary/10 text-primary' : 'hover:bg-muted'
+                    }`}
+                  >
+                    <FolderOpen className="h-3 w-3" />
+                    {t.name}
+                    <span className="text-muted-foreground">{t.count}</span>
+                  </button>
+                ))}
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => setSelectedFilter(null)}
+                  className={`rounded-full border px-2.5 py-1 text-[11px] transition-colors ${
+                    !selectedFilter ? 'border-primary bg-primary/10 text-primary' : 'hover:bg-muted'
+                  }`}
+                >
+                  全部 ({totalCount})
+                </button>
+                {filters.map((f) => (
+                  <button
+                    key={f.name}
+                    onClick={() => setSelectedFilter(selectedFilter === f.name ? null : f.name)}
+                    className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] transition-colors ${
+                      selectedFilter === f.name ? 'border-primary bg-primary/10 text-primary' : 'hover:bg-muted'
+                    }`}
+                  >
+                    {viewMode === 'location' ? <MapPin className="h-3 w-3" /> : <Clock className="h-3 w-3" />}
+                    {f.name}
+                    <span className="text-muted-foreground">{f.count}</span>
+                  </button>
+                ))}
+              </>
+            )}
+          </div>
+        )}
+
+        {/* 行程选中态：AI 生成游记 */}
+        {viewMode === 'trip' && selectedTrip && (
+          <div className="rounded-xl border bg-card p-3 space-y-2">
+            <div className="flex items-center justify-between gap-2">
+              <div className="min-w-0">
+                <div className="text-sm font-medium truncate">已选行程：{selectedTrip.name}</div>
+                <div className="text-xs text-muted-foreground">{tripGenStatus || `共 ${filteredItems.length} 张素材`}</div>
+              </div>
+              {!tripGenerating && !tripGenPostId && (
+                <Button
+                  size="sm"
+                  onClick={startTripGeneration}
+                  disabled={filteredItems.length === 0}
+                  className="shrink-0 gap-1.5 bg-gradient-to-r from-teal-500 to-orange-400 text-white hover:from-teal-600 hover:to-orange-500"
+                >
+                  <Sparkles className="h-3.5 w-3.5" />
+                  AI 生成游记
+                </Button>
+              )}
+              {tripGenerating && (
+                <span className="shrink-0 text-xs text-muted-foreground">{tripGenStatus}</span>
+              )}
+              {tripGenPostId && (
+                <Button size="sm" variant="outline" onClick={() => router.push('/journeys')} className="shrink-0">
+                  查看游记 →
+                </Button>
+              )}
+            </div>
+            {tripGenerating && (
+              <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-teal-500 to-orange-400 transition-all"
+                  style={{ width: `${tripGenProgress}%` }}
+                />
+              </div>
+            )}
           </div>
         )}
       </div>

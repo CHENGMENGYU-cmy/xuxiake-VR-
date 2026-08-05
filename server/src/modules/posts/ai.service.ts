@@ -104,9 +104,8 @@ export class AiService {
       job.progress = 80;
 
       // 阶段3: 保存游记
-      const title = this.extractTitle(generated) || material.locations[0]
-        ? `${material.locations[0]}游记`
-        : '我的游记';
+      const loc = material.locations[0];
+      const title = this.extractTitle(generated) || (loc ? `${loc}游记` : '我的游记');
 
       const vrMetadata = JSON.stringify({
         sourceLogIds: logs.map(l => l.id),
