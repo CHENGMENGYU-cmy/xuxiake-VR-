@@ -66,6 +66,8 @@ CREATE TABLE IF NOT EXISTS posts (
   community_id   VARCHAR(36) NULL COMMENT '关联社群ID',
   content_level  ENUM('SNAPSHOT','CLASSIFIED','DIARY','ESSAY','LOG','TRAVELOGUE') NOT NULL DEFAULT 'SNAPSHOT' COMMENT '内容层级：SNAPSHOT闪拍|CLASSIFIED分类|DIARY日记|ESSAY散文|LOG日志|TRAVELOGUE游记',
   parent_post_id VARCHAR(36) NULL COMMENT '上级内容ID',
+  trip_id        VARCHAR(36) NULL COMMENT '行程ID（闪拍App tripId）',
+  trip_title     VARCHAR(200) NULL COMMENT '行程标题',
   content        TEXT,
   title          VARCHAR(500) NULL COMMENT '标题（游记用）',
   location_lat   DECIMAL(10,7),
