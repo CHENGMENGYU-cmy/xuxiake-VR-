@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { AuthGuard } from '@/components/auth-guard';
 import { useSnapStore } from '@/stores/snap-store';
-import { generateTravelogueByTrip, getTravelogueJob } from '@/lib/snap-api';
+import { generateDiaryBatch, generateTravelogueByTrip, getAiJob, getTravelogueJob } from '@/lib/snap-api';
 import { toast } from 'sonner';
 import apiClient from '@/lib/api-client';
 
