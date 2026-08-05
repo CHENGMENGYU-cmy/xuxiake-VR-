@@ -586,33 +586,35 @@ function UploadContent() {
       {/* 草稿列表 */}
       <DraftList onSelectDraft={handleSelectDraft} refreshKey={draftRefreshKey} />
 
-      {/* 内容类型选择卡片 */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
-        {tabs.map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeTab === tab.key;
-          return (
-            <button
-              key={tab.key}
-              onClick={() => handleTabChange(tab.key)}
-              className={cn(
-                'flex flex-col items-center gap-1.5 rounded-lg border p-3 transition-all',
-                isActive
-                  ? 'border-primary bg-primary/5 shadow-sm'
-                  : 'border-muted bg-card hover:border-primary/30 hover:bg-accent/50'
-              )}
-            >
-              <Icon className={cn('h-4 w-4', isActive ? 'text-primary' : tab.color)} />
-              <span className={cn(
-                'text-sm font-medium',
-                isActive ? 'text-primary' : 'text-foreground'
-              )}>
-                {tab.label}
-              </span>
-            </button>
-          );
-        })}
-      </div>
+      {/* 内容类型选择卡片（日记编辑时隐藏，仅多媒体分享展示） */}
+      {activeTab !== 'DIARY' && (
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.key;
+            return (
+              <button
+                key={tab.key}
+                onClick={() => handleTabChange(tab.key)}
+                className={cn(
+                  'flex flex-col items-center gap-1.5 rounded-lg border p-3 transition-all',
+                  isActive
+                    ? 'border-primary bg-primary/5 shadow-sm'
+                    : 'border-muted bg-card hover:border-primary/30 hover:bg-accent/50'
+                )}
+              >
+                <Icon className={cn('h-4 w-4', isActive ? 'text-primary' : tab.color)} />
+                <span className={cn(
+                  'text-sm font-medium',
+                  isActive ? 'text-primary' : 'text-foreground'
+                )}>
+                  {tab.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       {/* 主要内容区域 */}
       <Card className="shadow-sm">
