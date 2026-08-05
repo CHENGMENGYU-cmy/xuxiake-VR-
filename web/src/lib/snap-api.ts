@@ -63,6 +63,31 @@ export async function generateDiary(snapId: string, style?: string, includeMemor
   return data.data;
 }
 
+/** 多张闪拍 → AI 生成一篇日记（异步 job） */
+export async function generateDiaryBatch(input: {
+  snapIds: string[];
+  style?: string;
+  tone?: string;
+  length?: string;
+}): Promise<{ jobId: string }> {
+  const { data } = await apiClient.post('/posts/diary/generate-batch', input);
+  return data.data;
+}
+
+/** 查询 AI 生成任务状态（travelogue / multi-diary 通用） */
+export async function getAiJob(jobId: string): Promise<{
+  id: string;
+  status: string;
+  progress: number;
+  result?: string;
+  postId?: string;
+  error?: string;
+  createdAt: string;
+}> {
+  const { data } = await apiClient.get(`/posts/ai/jobs/${jobId}`);
+  return data.data;
+}
+
 /** 查询指定素材的已有日记草稿 */
 export async function getDiaryDraft(snapId: string): Promise<any | null> {
   const { data } = await apiClient.get(`/posts/diary/draft/${snapId}`);
