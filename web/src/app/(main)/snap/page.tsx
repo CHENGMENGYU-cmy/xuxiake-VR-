@@ -331,6 +331,8 @@ function SnapContent() {
     return allItems;
   })();
 
+  const dayGroups = viewMode === 'location' || viewMode === 'trip' ? null : groupByDay(filteredItems);
+
   const loading = snapsLoading || logsLoading;
   const totalCount = allItems.length;
 
