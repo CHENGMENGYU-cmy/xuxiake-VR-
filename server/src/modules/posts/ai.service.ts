@@ -324,6 +324,175 @@ export class AiService {
     return map[length] || map['标准'];
   }
 
+  // ===== MULTI_DIARY 模式（多张闪拍 → 一篇日记，真实 AI） =====
+
+  private async executeMultiDiaryJob(jobId: string, userId: string, input: MultiDiaryGenerateInput) {
+    const job = this.jobs.get(jobId)!;
+    try {
+      job.status = 'ANALYZING'; job.progress = 10;
+
+      const snaps = input.snapIds.length > 0
+        ? await this.postRepo.find({ where: { id: In(input.snapIds), authorId: userId }, relations: { mediaItems: true } })
+        : [];
+      if (snaps.length === 0) throw new Error('没有可用的闪拍素材');
+
+      const material = this.extractMaterial(snaps, []);
+      job.progress = 30;
+
+      job.status = 'GENERATING'; job.progress = 40;
+      let generated: string;
+      try {
+        generated = await this.callAiForDiary(material, input);
+        console.log(`[MultiDiary] AI 生成完成，${generated.length} 字符`);
+      } catch (aiErr: any) {
+        console.warn(`[MultiDiary] AI 调用失败，回退到模板生成: ${aiErr.message}`);
+        generated = this.buildDiaryContent(material, input);
+      }
+      job.progress = 80;
+
+      const title = this.extractTitle(generated) || this.buildDiaryTitle(material);
+      const vrMetadata = JSON.stringify({
+        sourceSnapIds: snaps.map((s) => s.id),
+        style: input.style || '温柔治愈',
+        tone: input.tone || '温暖',
+        keywords: material.keywords,
+        aiGenerated: true,
+        status: 'private',
+      });
+
+      const post = this.postRepo.create({
+        id: uuidv4(), authorId: userId,
+        postType: 'NOTE', contentLevel: 'DIARY',
+        parentPostId: snaps[0].id,
+        title, content: generated,
+        locationName: material.locations[0] || null,
+        vrMetadata,
+        visibility: 'PRIVATE',
+        likeCount: 0, commentCount: 0, viewCount: 0,
+      });
+      await this.postRepo.save(post);
+
+      const seedMedia = snaps.flatMap((s, si) =>
+        (s.mediaItems || []).map((m, mi) => ({
+          id: uuidv4(), postId: post.id, type: m.type, url: m.url,
+          thumbnailUrl: m.thumbnailUrl, duration: m.duration,
+          vrFormat: m.vrFormat, sortOrder: si * 10 + mi,
+        }))
+      );
+      if (seedMedia.length > 0) await this.mediaRepo.save(seedMedia);
+
+      for (const snap of snaps) {
+        try {
+          const meta = snap.vrMetadata ? JSON.parse(snap.vrMetadata) : {};
+          meta.hasDiary = true;
+          meta.diaryId = post.id;
+          await this.postRepo.update(snap.id, { vrMetadata: JSON.stringify(meta) });
+        } catch { /* ignore */ }
+      }
+
+      job.status = 'DONE'; job.progress = 100;
+      job.result = generated;
+      job.postId = post.id;
+    } catch (err: any) {
+      job.status = 'ERROR';
+      job.error = err.message || '生成失败';
+      job.progress = 0;
+    }
+  }
+
+  private async callAiForDiary(material: SourceMaterial, input: MultiDiaryGenerateInput): Promise<string> {
+    return this.aiClient.generate({
+      messages: [
+        { role: 'system', content: this.buildDiarySystemPrompt(input) },
+        { role: 'user', content: this.buildDiaryUserPrompt(material) },
+      ],
+      temperature: 0.9,
+      maxTokens: 2048,
+      timeout: 120000,
+    });
+  }
+
+  private buildDiarySystemPrompt(input: MultiDiaryGenerateInput): string {
+    const styleGuide = this.getDiaryStyleGuide(input.style || '温柔治愈');
+    const toneGuide = this.getToneGuide(input.tone || '温暖');
+    const lengthGuide = this.getLengthGuide(input.length || '标准');
+
+    return `你是一位细腻的生活记录者，擅长把零散的旅行瞬间写成真挚的个人日记。
+
+## 写作要求
+- 风格：${styleGuide}
+- 语气：${toneGuide}
+- 篇幅：${lengthGuide}
+
+## 核心原则
+1. 基于用户提供的真实闪拍素材（时间、地点、关键词、心情、感悟）写作，不虚构地点、人物、事件
+2. 以第一人称"我"的视角，记录当下的感受和反思
+3. 把多个瞬间有机串联成一篇有温度的日记，而不是机械罗列
+4. 如果信息不足，用模糊表达而非编造
+
+## 输出格式
+使用 Markdown 格式：
+# [日记标题]
+
+[正文 —— 2-4 个自然段，每段围绕一个瞬间或一个感受]
+
+---
+*本文由 AI 辅助生成，素材来源于个人闪拍。*`;
+  }
+
+  private buildDiaryUserPrompt(material: SourceMaterial): string {
+    const parts: string[] = [];
+    parts.push('## 我的闪拍瞬间');
+    for (let i = 0; i < material.logs.length; i++) {
+      const snap = material.logs[i];
+      const meta = snap.vrMetadata ? JSON.parse(snap.vrMetadata) : {};
+      const line: string[] = [];
+      if (snap.locationName) line.push(`地点：${snap.locationName}`);
+      if (snap.content) line.push(`感悟：${snap.content}`);
+      if (meta.keywords) line.push(`关键词：${(meta.keywords as string[]).join('、')}`);
+      if (meta.mood) line.push(`心情：${meta.mood}`);
+      parts.push(`### 瞬间${i + 1}${snap.createdAt ? `（${this.formatDate(snap.createdAt)}）` : ''}`);
+      parts.push(line.length > 0 ? line.join('\n') : '（仅有照片）');
+      parts.push('');
+    }
+    parts.push('\n请根据以上瞬间，写一篇真诚的个人日记。');
+    return parts.join('\n');
+  }
+
+  private buildDiaryTitle(material: SourceMaterial): string {
+    const loc = material.locations[0];
+    return loc ? `${loc}的一天` : '今天的小日记';
+  }
+
+  private buildDiaryContent(material: SourceMaterial, input: MultiDiaryGenerateInput): string {
+    const loc = material.locations[0];
+    const mood = material.moods[0] || '值得记录的瞬间';
+    const keywords = material.keywords.slice(0, 5).join('、');
+    let diary = `# ${loc ? `${loc}的一天` : '今天'}\n\n`;
+    diary += `今天记录的这些瞬间${keywords ? `，围绕着「${keywords}」` : ''}，简单而真实。\n\n`;
+    material.logs.forEach((snap, i) => {
+      diary += `${snap.content || `第${i + 1}个瞬间`}${snap.locationName ? `（在${snap.locationName}）` : ''}\n\n`;
+    });
+    diary += `带着${mood}的心情，我把这些片段记录成日记。\n\n---\n*本文由 AI 辅助生成，素材来源于个人闪拍。*`;
+    return diary;
+  }
+
+  private getDiaryStyleGuide(style: string): string {
+    const map: Record<string, string> = {
+      '温柔治愈': '温柔细腻，治愈人心，语言柔软有温度',
+      '生活碎片': '记录生活细节，真实自然，像随手写下的片段',
+      '成长复盘': '以反思为主，从经历中提炼成长',
+      '诗意散文': '语言优美，富有诗意和画面感',
+      '轻松口语': '轻松随意，口语化，像和朋友聊天',
+    };
+    return map[style] || map['温柔治愈'];
+  }
+
+  private formatDate(date: Date): string {
+    const d = new Date(date);
+    return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
+  }
+
   // ===== 模板生成（AI 调用失败时的回退） =====
 
   private buildTravelogueContent(material: SourceMaterial, input: TravelogueGenerateInput): string {
