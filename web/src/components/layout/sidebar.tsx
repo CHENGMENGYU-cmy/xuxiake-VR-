@@ -143,7 +143,10 @@ export function Sidebar() {
                   <p className="px-2 text-xs font-medium uppercase text-muted-foreground">我的</p>
                   {myItems.map((item) => {
                     const Icon = item.icon;
-                    const isActive = pathname === item.href || (item.href === '/my/works' && (pathname.startsWith('/my/works') || pathname === '/diaries' || pathname === '/journeys'));
+                    const isActive =
+                      (item.href === '/snap' && (pathname === '/snap' || pathname.startsWith('/snap/generate'))) ||
+                      (item.href === '/diaries' && (pathname === '/diaries' || pathname.startsWith('/diaries/'))) ||
+                      (item.href === '/journeys' && (pathname === '/journeys' || (pathname.startsWith('/journeys/') && !pathname.startsWith('/journeys/generate'))));
                     return (
                       <Link key={item.href} href={item.href}>
                         <Button
