@@ -195,7 +195,6 @@ function UploadContent() {
       IMAGE: '瞬间捕获',
       AUDIO: '语音记录',
       DIARY: '日记',
-      JOURNEY: '游记',
     };
     saveDraftToList({
       id: currentDraftId || `draft-${Date.now()}`,
