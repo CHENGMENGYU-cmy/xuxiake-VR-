@@ -506,6 +506,48 @@ function SnapContent() {
         </div>
       )}
 
+      {/* 相册式全屏预览 */}
+      {previewItems && previewIndex !== null && (
+        <div className="fixed inset-0 z-50 flex flex-col bg-black/95" onClick={closePreview}>
+          <div className="flex items-center justify-between p-4 text-white" onClick={(e) => e.stopPropagation()}>
+            <span className="text-sm text-white/80">{previewIndex + 1} / {previewItems.length}</span>
+            <X className="h-5 w-5 cursor-pointer" onClick={closePreview} />
+          </div>
+          <div className="relative flex flex-1 items-center justify-center px-14" onClick={(e) => e.stopPropagation()}>
+            <img
+              src={getMediaImage(previewItems[previewIndex]) || ''}
+              alt=""
+              className="max-h-full max-w-full rounded-lg object-contain"
+            />
+            {previewItems.length > 1 && (
+              <>
+                <button
+                  className="absolute left-3 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
+                  onClick={prevPreview}
+                  aria-label="上一张"
+                >
+                  <ChevronLeft className="h-6 w-6" />
+                </button>
+                <button
+                  className="absolute right-3 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
+                  onClick={nextPreview}
+                  aria-label="下一张"
+                >
+                  <ChevronRight className="h-6 w-6" />
+                </button>
+              </>
+            )}
+            <button
+              className="absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-white/10 px-4 py-2 text-sm text-white transition-colors hover:bg-white/20"
+              onClick={() => router.push(`/snap/generate/${previewItems[previewIndex].id}`)}
+            >
+              <Sparkles className="h-4 w-4" />
+              AI 写日记
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* 多选底部操作栏 */}
       {selectMode && (
         <div className="fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 p-3 backdrop-blur">
