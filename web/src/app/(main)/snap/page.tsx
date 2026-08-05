@@ -363,7 +363,7 @@ function SnapContent() {
               variant={viewMode === m.id ? 'default' : 'ghost'}
               size="sm"
               className="h-7 text-xs"
-              onClick={() => { setViewMode(m.id); setSelectedFilter(null); setSelectedTrip(null); }}
+              onClick={() => { setViewMode(m.id); setSelectedFilter(null); setSelectedTrip(null); setViewingDay(null); }}
             >
               {m.label}
             </Button>
