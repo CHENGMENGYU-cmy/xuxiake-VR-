@@ -526,99 +526,63 @@ function SnapContent() {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2">
-          {filteredItems.map((item: any) => {
-            const meta = (() => {
-              try {
-                return typeof item.vrMetadata === 'string' ? JSON.parse(item.vrMetadata) : (item.vrMetadata || {});
-              } catch { return {}; }
-            })();
+        {dayGroups ? (
+          <div className="space-y-6">
+            {dayGroups.map(([key, items]) => (
+              <div key={key}>
+                <div className="mb-3 flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm font-semibold">{dayLabel(key)}</span>
+                  <Badge variant="secondary" className="text-[10px]">{items.length} 张</Badge>
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {items.map(renderCard)}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid gap-4 sm:grid-cols-2">
+            {filteredItems.map(renderCard)}
+          </div>
+        )}
+      )}
 
-            const image = getMediaImage(item);
-            const keywords: string[] = meta.keywords || [];
-            const mood = meta.mood || '';
-            const scene = meta.scene || '';
-            const isLog = item._type === 'LOG';
-
-            return (
-              <Card
-                key={item.id}
-                className="group overflow-hidden hover:shadow-lg hover:border-primary/30 transition-all duration-300 cursor-pointer"
-                onClick={() => router.push(`/snap/generate/${item.id}`)}
-              >
-                {image ? (
-                  <>
-                    <div className="relative aspect-[3/2] bg-muted overflow-hidden">
-                      <img src={image} alt="" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                      <div className="absolute left-3 top-3 flex items-center gap-1.5">
-                        {mood && <Badge className={`border text-[10px] ${getMoodColor(mood)}`}>{mood}</Badge>}
-                        <Badge className={`border text-[10px] ${isLog ? 'bg-slate-100 text-slate-600' : 'bg-orange-100 text-orange-600'}`}>
-                          {isLog ? '日志' : '闪拍'}
-                        </Badge>
-                        {meta.hasDiary && (
-                          <Badge className="border text-[10px] bg-indigo-100 text-indigo-600 dark:bg-indigo-950/50 dark:text-indigo-400">
-                            <Check className="h-2.5 w-2.5" />已生成
-                          </Badge>
-                        )}
-                      </div>
-                      {scene && (
-                        <Badge variant="secondary" className="absolute right-3 top-3 bg-white/80 backdrop-blur-sm text-xs">{scene}</Badge>
-                      )}
-                    </div>
-                    <CardContent className="p-4 space-y-3">
-                      <p className="text-sm leading-relaxed line-clamp-2">{item.content || '(无内容)'}</p>
-                      <div className="flex flex-wrap gap-1">
-                        {keywords.slice(0, 4).map((kw: string) => (
-                          <Badge key={kw} variant="outline" className="text-[10px]">{kw}</Badge>
-                        ))}
-                      </div>
-                      <SnapFooter item={item} />
-                      <Button className="w-full gap-1.5 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-xs font-medium" size="sm">
-                        <Sparkles className="h-3.5 w-3.5" />
-                        生成日记
-                        <ChevronRight className="h-3.5 w-3.5 ml-auto" />
-                      </Button>
-                    </CardContent>
-                  </>
-                ) : (
-                  <CardContent className="p-5 space-y-4">
-                    <div className="flex items-start gap-3">
-                      <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${isLog ? 'bg-slate-100 text-slate-500' : 'bg-orange-50 text-orange-500'}`}>
-                        {isLog ? <FolderOpen className="h-5 w-5" /> : <FileText className="h-5 w-5" />}
-                      </span>
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <Badge className={`text-[10px] border ${isLog ? 'bg-slate-100 text-slate-600' : 'bg-orange-100 text-orange-600'}`}>
-                            {isLog ? '日志' : '闪拍'}
-                          </Badge>
-                          {meta.hasDiary && (
-                            <Badge className="text-[10px] border bg-indigo-100 text-indigo-600 dark:bg-indigo-950/50 dark:text-indigo-400">
-                              <Check className="h-2.5 w-2.5" />已生成
-                            </Badge>
-                          )}
-                        </div>
-                        <p className="text-sm leading-relaxed">{item.content || '(无内容)'}</p>
-                        <div className="mt-2 flex flex-wrap items-center gap-2">
-                          {mood && <Badge className={`text-[10px] border ${getMoodColor(mood)}`}>{mood}</Badge>}
-                          {scene && <Badge variant="secondary" className="text-[10px]">{scene}</Badge>}
-                          {keywords.slice(0, 3).map((kw: string) => (
-                            <Badge key={kw} variant="outline" className="text-[10px]">{kw}</Badge>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                    <SnapFooter item={item} />
-                    <Button className="w-full gap-1.5 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600" size="sm">
-                      <Sparkles className="h-3.5 w-3.5" />
-                      生成日记
-                      <ChevronRight className="h-3.5 w-3.5 ml-auto" />
-                    </Button>
-                  </CardContent>
-                )}
-              </Card>
-            );
-          })}
+      {/* 多选底部操作栏 */}
+      {selectMode && (
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 p-3 backdrop-blur">
+          <div className="mx-auto flex max-w-4xl items-center justify-between gap-3">
+            <span className="text-sm text-muted-foreground">已选 {selectedIds.size} 张</span>
+            <div className="flex items-center gap-2">
+              {multiGenPostId ? (
+                <Button size="sm" onClick={() => router.push('/diaries')} className="shrink-0">查看日记 →</Button>
+              ) : (
+                <Button
+                  size="sm"
+                  onClick={startMultiDiary}
+                  disabled={selectedIds.size === 0 || multiGen}
+                  className="shrink-0 gap-1.5 bg-gradient-to-r from-teal-500 to-orange-400 text-white hover:from-teal-600 hover:to-orange-500"
+                >
+                  <Sparkles className="h-3.5 w-3.5" />
+                  AI 写日记
+                </Button>
+              )}
+              <Button size="sm" variant="ghost" onClick={() => { setSelectMode(false); setSelectedIds(new Set()); setMultiGenStatus(''); }}>
+                取消
+              </Button>
+            </div>
+          </div>
+          {(multiGen || multiGenStatus) && (
+            <div className="mx-auto mt-2 max-w-4xl">
+              <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-teal-500 to-orange-400 transition-all"
+                  style={{ width: `${multiGenProgress}%` }}
+                />
+              </div>
+              <div className="mt-1 text-xs text-muted-foreground">{multiGenStatus}</div>
+            </div>
+          )}
         </div>
       )}
     </div>
