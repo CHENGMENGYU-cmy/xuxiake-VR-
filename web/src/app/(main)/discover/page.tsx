@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
   Globe, BookOpen, Clock, User, Loader2,
   Hash, TrendingUp, Search, X, Flame, ListFilter,
