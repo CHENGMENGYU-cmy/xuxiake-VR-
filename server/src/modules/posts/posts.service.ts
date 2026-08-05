@@ -875,7 +875,7 @@ export class PostsService {
   // ===== 素材查询 =====
 
   /** 获取用户的闪拍记录列表 */
-  async getUserSnaps(userId: string, limit = 20) {
+  async getUserSnaps(userId: string, limit = 500) {
     const snaps = await this.postRepo.find({
       where: { authorId: userId, contentLevel: 'SNAPSHOT' },
       relations: { mediaItems: true },
