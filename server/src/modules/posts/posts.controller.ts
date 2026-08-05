@@ -741,6 +741,26 @@ export class PostsController {
     return { success: true, data: { jobId } };
   }
 
+  @Post('travelogue/generate-by-trip')
+  async generateTravelogueByTrip(
+    @Headers('authorization') auth: string,
+    @Body() body: { tripId: string; prompt?: string; style?: string; tone?: string; length?: string },
+  ) {
+    const userId = this.getUserId(auth);
+    if (!body.tripId) throw new NotFoundException('缺少行程ID');
+    const snapshotIds = await this.postsService.getTripSnapshotIds(userId, body.tripId);
+    if (snapshotIds.length === 0) throw new NotFoundException('该行程没有可生成的素材');
+    const jobId = await this.aiService.generateTravelogue(userId, {
+      logIds: snapshotIds,
+      diaryIds: [],
+      prompt: body.prompt,
+      style: body.style,
+      tone: body.tone,
+      length: body.length,
+    });
+    return { success: true, data: { jobId } };
+  }
+
   @Get('travelogue/job/:jobId')
   async getTravelogueJobStatus(@Param('jobId') jobId: string): Promise<{ success: boolean; data: GenerationJob | null }> {
     const job = this.aiService.getJobStatus(jobId);
