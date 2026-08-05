@@ -23,9 +23,10 @@ export function MobileNav() {
   const navItems = [
     { href: '/feed', label: '首页', icon: Home },
     ...(user ? [
-      { href: '/upload', label: '分享', icon: Upload },
+      { href: '/discover', label: '发现', icon: Compass },
+      { href: '/upload', label: '发布', icon: Upload },
       { href: '/messages', label: '消息', icon: MessageCircle },
-      { href: '/notifications', label: '通知', icon: Bell },
+      { href: '/my', label: '我的', icon: User },
     ] : [
       { href: '/login', label: '登录', icon: LogIn },
     ]),
