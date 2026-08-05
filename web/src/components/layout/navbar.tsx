@@ -169,44 +169,12 @@ export function Navbar() {
             </Button>
           </Link>
 
-          {/* 创建按钮 - 下拉菜单 */}
-          {user && mounted && (
-            <DropdownMenu>
-              <DropdownMenuTrigger
-                className="hidden sm:inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-r from-teal-500 to-orange-400 text-white shadow-sm hover:from-teal-600 hover:to-orange-500 transition-all"
-                openOnHover
-                delay={200}
-                closeDelay={150}
-              >
-                <Plus className="h-5 w-5" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuLabel className="text-xs text-muted-foreground">创建内容</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => router.push('/upload')}>
-                  <Upload className="mr-2 h-4 w-4" />
-                  上传媒体
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push('/snap')}>
-                  <Sparkles className="mr-2 h-4 w-4 text-teal-500" />
-                  AI 写日记
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push('/journeys/generate')}>
-                  <Sparkles className="mr-2 h-4 w-4 text-amber-500" />
-                  AI 写游记
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => router.push('/upload?level=DIARY')}>
-                  <PenLine className="mr-2 h-4 w-4 text-indigo-500" />
-                  手写日记
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push('/upload/journey-creator')}>
-                  <BookOpen className="mr-2 h-4 w-4" />
-                  手写游记
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
+          {/* 上传 */}
+          <Link href="/upload">
+            <Button variant="ghost" size="icon" className="hidden sm:inline-flex">
+              <Upload className="h-5 w-5" />
+            </Button>
+          </Link>
 
           {/* 消息 - 仅登录后显示 */}
           {user && mounted && (
