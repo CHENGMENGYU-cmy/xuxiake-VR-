@@ -41,6 +41,7 @@ function SnapContent() {
   const [multiGenPostId, setMultiGenPostId] = useState<string | null>(null);
   const [previewItems, setPreviewItems] = useState<any[] | null>(null);
   const [previewIndex, setPreviewIndex] = useState<number | null>(null);
+  const [viewingDay, setViewingDay] = useState<string | null>(null);
 
   useEffect(() => {
     fetchSnaps();
