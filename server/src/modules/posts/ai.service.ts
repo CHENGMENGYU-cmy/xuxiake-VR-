@@ -74,6 +74,17 @@ export class AiService {
     return jobId;
   }
 
+  /** N 张闪拍 → 一篇日记（真实 AI） */
+  async generateMultiDiary(userId: string, input: MultiDiaryGenerateInput): Promise<string> {
+    const jobId = uuidv4();
+    const job: GenerationJob = {
+      id: jobId, userId, status: 'QUEUED', progress: 0, createdAt: new Date(), jobType: 'MULTI_DIARY',
+    };
+    this.jobs.set(jobId, job);
+    this.executeMultiDiaryJob(jobId, userId, input).catch(() => {});
+    return jobId;
+  }
+
   /** 查询任务状态 */
   getJobStatus(jobId: string): GenerationJob | null {
     return this.jobs.get(jobId) || null;
