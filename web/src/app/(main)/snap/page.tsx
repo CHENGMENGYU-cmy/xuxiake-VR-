@@ -252,22 +252,21 @@ function SnapContent() {
     ...logs.map((l: any) => ({ ...l, _type: 'LOG' })),
   ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
-  // 按筛选条件过滤
+  // 按当前打开的集合过滤：优先"天"，其次行程/地点
   const filteredItems = (() => {
+    if (viewingDay) {
+      return allItems.filter((item: any) => {
+        const d = new Date(item.createdAt);
+        const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        return key === viewingDay;
+      });
+    }
     if (viewMode === 'trip') {
       if (!selectedTrip) return allItems.filter((item: any) => !!item.tripId);
       return allItems.filter((item: any) => item.tripId === selectedTrip.tripId);
     }
-    if (!selectedFilter) return allItems;
-    if (viewMode === 'location') {
+    if (selectedFilter) {
       return allItems.filter((item: any) => item.location?.name === selectedFilter || item.locationName === selectedFilter);
-    }
-    if (viewMode === 'time') {
-      return allItems.filter((item: any) => {
-        const d = new Date(item.createdAt);
-        const m = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-        return m === selectedFilter;
-      });
     }
     return allItems;
   })();
