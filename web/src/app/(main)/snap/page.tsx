@@ -96,6 +96,82 @@ function SnapContent() {
     }
   };
 
+  // 多选闪拍 → AI 生成一篇日记：提交 → 轮询 → 完成
+  const startMultiDiary = async () => {
+    if (selectedIds.size === 0 || multiGen) return;
+    setMultiGen(true);
+    setMultiGenPostId(null);
+    setMultiGenStatus('正在提交...');
+    setMultiGenProgress(0);
+    try {
+      const { jobId } = await generateDiaryBatch({
+        snapIds: Array.from(selectedIds),
+        style: '温柔治愈',
+        tone: '温暖',
+        length: '标准',
+      });
+      const timer = setInterval(async () => {
+        try {
+          const job = await getAiJob(jobId);
+          setMultiGenProgress(job.progress || 0);
+          setMultiGenStatus(statusLabel(job.status, job.progress));
+          if (job.status === 'DONE' || job.status === 'ERROR') {
+            clearInterval(timer);
+            setMultiGen(false);
+            if (job.status === 'DONE') {
+              setMultiGenPostId(job.postId || null);
+              setSelectMode(false);
+              setSelectedIds(new Set());
+              toast.success('日记生成完成，已保存到我的日记');
+            } else {
+              toast.error(job.error || '日记生成失败');
+            }
+          }
+        } catch {
+          clearInterval(timer);
+          setMultiGen(false);
+          toast.error('查询生成进度失败');
+        }
+      }, 1500);
+    } catch {
+      setMultiGen(false);
+      toast.error('日记生成提交失败，请重试');
+    }
+  };
+
+  const toggleSelect = (id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+
+  // 按天分组（时间线）：全部/按时间 视图下按日期分块展示
+  const groupByDay = (items: any[]) => {
+    const map = new Map<string, any[]>();
+    for (const item of items) {
+      const d = new Date(item.createdAt);
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      const list = map.get(key) || [];
+      list.push(item);
+      map.set(key, list);
+    }
+    return Array.from(map.entries()).sort((a, b) => b[0].localeCompare(a[0]));
+  };
+
+  const dayLabel = (key: string) => {
+    const fmt = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    const today = fmt(new Date());
+    const yesterday = fmt(new Date(Date.now() - 86400000));
+    if (key === today) return '今天';
+    if (key === yesterday) return '昨天';
+    const [y, m, d] = key.split('-').map(Number);
+    return `${y}年${m}月${d}日`;
+  };
+
+  const dayGroups = viewMode === 'location' || viewMode === 'trip' ? null : groupByDay(filteredItems);
+
   const statusLabel = (status: string, progress?: number) => {
     switch (status) {
       case 'QUEUED': return '排队中...';
