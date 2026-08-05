@@ -14,7 +14,8 @@ import {
   TrendingUp,
   Camera,
   Compass,
-  FolderOpen,
+  PenLine,
+  BookOpen,
   Upload,
   Sparkles,
 } from 'lucide-react';
