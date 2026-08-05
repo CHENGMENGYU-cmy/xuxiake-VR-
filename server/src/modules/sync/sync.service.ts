@@ -59,16 +59,16 @@ export class SyncService {
       if (r.momentId) reflectionMap.set(r.momentId, r);
     }
 
-    // 查询已导入的 originalId 用于去重
+    // 查询已导入的 originalId 用于去重（Map: originalId → postId，便于幂等补全）
     const existing = await this.postRepo.find({
       where: { authorId: userId, contentLevel: 'SNAPSHOT' },
       select: { id: true, vrMetadata: true },
     });
-    const existingOriginals = new Set<string>();
+    const originals = new Map<string, string>();
     for (const p of existing) {
       try {
         const meta = p.vrMetadata ? JSON.parse(p.vrMetadata) : {};
-        if (meta.originalId) existingOriginals.add(meta.originalId);
+        if (meta.originalId) originals.set(meta.originalId, p.id);
       } catch { /* ignore */ }
     }
 
@@ -76,7 +76,14 @@ export class SyncService {
 
     for (const m of moments) {
       const originalId = m.id;
-      if (originalId && existingOriginals.has(originalId)) {
+      if (originalId && originals.has(originalId)) {
+        // 已存在：不重复建帖，仅当 App 明确携带 trip 信息时补全行程字段
+        if (m.tripId) {
+          await this.postRepo.update(originals.get(originalId)!, {
+            tripId: m.tripId,
+            tripTitle: m.tripTitle || null,
+          });
+        }
         result.skipped++;
         continue;
       }
@@ -102,6 +109,8 @@ export class SyncService {
         postType: 'NOTE',
         contentLevel: 'SNAPSHOT',
         content,
+        tripId: m.tripId || null,
+        tripTitle: m.tripTitle || null,
         locationLat: m.gpsLat ?? null,
         locationLng: m.gpsLng ?? null,
         locationName: m.locationName || null,
