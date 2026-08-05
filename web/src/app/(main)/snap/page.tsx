@@ -273,6 +273,7 @@ function SnapContent() {
   })();
 
   const dayGroups = viewMode === 'location' || viewMode === 'trip' ? null : groupByDay(filteredItems);
+  const dayItems = viewingDay ? (groupByDay(filteredItems).find(([k]) => k === viewingDay)?.[1] || []) : [];
 
   // 相册式全屏预览（点击照片墙某张 → 全屏大图，左右切换）
   const openPreview = (item: any) => {
