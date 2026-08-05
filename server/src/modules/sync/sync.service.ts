@@ -24,6 +24,8 @@ interface FlashMoment {
   keywords?: string[];
   mood?: string;
   scene?: string;
+  tripId?: string;
+  tripTitle?: string;
 }
 
 interface FlashReflection {
