@@ -17,12 +17,20 @@ export interface GenerationJob {
   postId?: string;
   error?: string;
   createdAt: Date;
+  jobType?: 'TRAVELOGUE' | 'ESSAY' | 'MULTI_DIARY';
 }
 
 export interface TravelogueGenerateInput {
   logIds: string[];
   diaryIds: string[];
   prompt?: string;
+  style?: string;
+  tone?: string;
+  length?: string;
+}
+
+export interface MultiDiaryGenerateInput {
+  snapIds: string[];
   style?: string;
   tone?: string;
   length?: string;
