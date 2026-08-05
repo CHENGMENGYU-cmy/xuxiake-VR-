@@ -33,6 +33,12 @@ function SnapContent() {
   const [tripGenStatus, setTripGenStatus] = useState('');
   const [tripGenProgress, setTripGenProgress] = useState(0);
   const [tripGenPostId, setTripGenPostId] = useState<string | null>(null);
+  const [selectMode, setSelectMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [multiGen, setMultiGen] = useState(false);
+  const [multiGenStatus, setMultiGenStatus] = useState('');
+  const [multiGenProgress, setMultiGenProgress] = useState(0);
+  const [multiGenPostId, setMultiGenPostId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchSnaps();
