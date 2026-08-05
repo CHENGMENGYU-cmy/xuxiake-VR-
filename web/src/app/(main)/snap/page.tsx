@@ -487,6 +487,42 @@ function SnapContent() {
             </p>
           </CardContent>
         </Card>
+      ) : viewMode === 'all' ? (
+        viewingDay ? (
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <Button size="sm" variant="ghost" onClick={() => setViewingDay(null)} className="gap-1">
+                <ChevronLeft className="h-4 w-4" /> 全部
+              </Button>
+              <span className="text-sm font-semibold">{dayLabel(viewingDay)}</span>
+              <Badge variant="secondary" className="text-[10px]">{dayItems.length} 张</Badge>
+            </div>
+            <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+              {dayItems.map(renderCard)}
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+            {groupByDay(filteredItems).map(([key, items]) => (
+              <div key={key} className="group cursor-pointer overflow-hidden rounded-xl border" onClick={() => setViewingDay(key)}>
+                <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+                  {getMediaImage(items[0]) ? (
+                    <img src={getMediaImage(items[0])} alt="" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center">
+                      <FolderOpen className="h-8 w-8 text-muted-foreground/40" />
+                    </div>
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <div className="absolute bottom-2 left-2 right-2">
+                    <div className="text-sm font-semibold text-white">{dayLabel(key)}</div>
+                    <div className="text-xs text-white/70">{items.length} 张</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )
       ) : dayGroups ? (
         <div className="space-y-6">
           {dayGroups.map(([key, items]) => (
