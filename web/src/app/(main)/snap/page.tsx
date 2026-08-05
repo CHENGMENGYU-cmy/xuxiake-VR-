@@ -273,6 +273,32 @@ function SnapContent() {
 
   const dayGroups = viewMode === 'location' || viewMode === 'trip' ? null : groupByDay(filteredItems);
 
+  // 相册式全屏预览（点击照片墙某张 → 全屏大图，左右切换）
+  const openPreview = (item: any) => {
+    const idx = filteredItems.findIndex((i: any) => i.id === item.id);
+    setPreviewItems(filteredItems);
+    setPreviewIndex(idx >= 0 ? idx : 0);
+  };
+  const closePreview = () => { setPreviewItems(null); setPreviewIndex(null); };
+  const prevPreview = () => {
+    if (previewItems) setPreviewIndex((p) => (p === null ? p : (p - 1 + previewItems.length) % previewItems.length));
+  };
+  const nextPreview = () => {
+    if (previewItems) setPreviewIndex((p) => (p === null ? p : (p + 1) % previewItems.length));
+  };
+
+  // 键盘：ESC 关闭，←/→ 切换
+  useEffect(() => {
+    if (previewIndex === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closePreview();
+      if (e.key === 'ArrowLeft') prevPreview();
+      if (e.key === 'ArrowRight') nextPreview();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [previewIndex, previewItems]);
+
   const loading = snapsLoading || logsLoading;
   const totalCount = allItems.length;
 
