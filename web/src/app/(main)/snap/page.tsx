@@ -439,14 +439,8 @@ function SnapContent() {
       {/* 列表 */}
       {loading ? (
         <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
-          {[1, 2, 3, 4].map((i) => (
-            <Card key={i} className="overflow-hidden">
-              <div className="aspect-[3/2] animate-pulse bg-muted" />
-              <CardContent className="p-4 space-y-2">
-                <div className="h-4 w-3/4 animate-pulse rounded bg-muted" />
-                <div className="h-3 w-1/2 animate-pulse rounded bg-muted" />
-              </CardContent>
-            </Card>
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+            <div key={i} className="aspect-square animate-pulse rounded-xl bg-muted" />
           ))}
         </div>
       ) : filteredItems.length === 0 ? (
