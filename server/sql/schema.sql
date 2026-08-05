@@ -85,6 +85,7 @@ CREATE TABLE IF NOT EXISTS posts (
   INDEX idx_posts_type (post_type),
   INDEX idx_posts_content_level (content_level),
   INDEX idx_posts_parent (parent_post_id),
+  INDEX idx_posts_trip (trip_id),
   INDEX idx_posts_created (created_at DESC),
   INDEX idx_posts_view (view_count DESC),
   INDEX idx_posts_like (like_count DESC),
