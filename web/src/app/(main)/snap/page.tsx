@@ -219,7 +219,7 @@ function SnapContent() {
         className={`group relative aspect-square cursor-pointer overflow-hidden rounded-xl border transition-all ${
           isSelected ? 'border-primary ring-2 ring-primary/30' : 'border-transparent hover:border-primary/40'
         }`}
-        onClick={() => (selectMode ? toggleSelect(item.id) : router.push(`/snap/generate/${item.id}`))}
+        onClick={() => (selectMode ? toggleSelect(item.id) : openPreview(item))}
       >
         {image ? (
           <img src={image} alt="" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
