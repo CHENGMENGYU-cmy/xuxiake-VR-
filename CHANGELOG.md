@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-05
+修改位置：server/src/modules/posts/ai.service.ts, posts.controller.ts; web/src/lib/snap-api.ts, app/(main)/snap/page.tsx
+修改原因：素材库每张闪拍都单独生成日记不符合真实内容创作逻辑——一天拍摄大量照片，应"精选素材→生成一篇内容"，借鉴相册时间线+多选交互
+修改内容：1) 后端 ai.service 新增 MULTI_DIARY 任务：N张闪拍→DeepSeek生成一篇日记（复用任务队列+模板回退），保存 DIARY 并关联 sourceSnapIds、复制选中照片媒体；2) 新增 POST /posts/diary/generate-batch 端点；3) 前端素材库新增按天时间线分组（今天/昨天/日期照片墙）与多选模式（勾选→底部操作栏"AI写日记"→进度轮询→保存到我的日记）
+修改效果：用户可在素材库按天浏览照片，多选任意几张一键生成一篇真实文风的AI日记（带选中照片），避免逐张生成
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-05
 修改位置：server/sql/migrate-add-trip.sql（新建）, schema.sql, docker-compose.yml, src/entities/post.entity.ts, modules/sync/sync.service.ts, modules/posts/ai.service.ts, posts.service.ts, posts.controller.ts, scripts/backfill-trips.js（新建）; web/src/lib/snap-api.ts, app/(main)/snap/page.tsx; Android 闪拍App（非本仓库git）
 修改原因：闪拍App一天内拍摄的照片同步到社区时行程归属被丢弃（sync只消费moments/reflections，帖子无trip字段），素材库62条SNAPSHOT平铺展示、无"一次旅程"语境，也无法批量升华成内容
 修改内容：1) P0行程分组——posts新增trip_id/trip_title字段（migration+entity+docker挂载），sync.service幂等补全行程（originalId已存在仅补全不重建），Android同步携带tripId/tripTitle，素材库新增"按行程"视图（classified/dimensions加byTrip维度）；2) P1行程一键生成游记——新增GET /posts/trips（行程列表含封面）与POST /posts/travelogue/generate-by-trip，素材库行程选中态"AI生成游记"按钮+进度轮询；3) 修复ai.service生成游记不复制媒体（加mediaItems relations）与标题"undefined游记"的||优先级bug；4) 新增backfill-trips.js按连续日期分桶回填历史62条为1段行程
