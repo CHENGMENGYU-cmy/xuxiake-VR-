@@ -80,10 +80,10 @@ export class AiService {
       job.status = 'ANALYZING'; job.progress = 10;
 
       const logs = input.logIds.length > 0
-        ? await this.postRepo.find({ where: { id: In(input.logIds), authorId: userId } })
+        ? await this.postRepo.find({ where: { id: In(input.logIds), authorId: userId }, relations: { mediaItems: true } })
         : [];
       const diaries = input.diaryIds.length > 0
-        ? await this.postRepo.find({ where: { id: In(input.diaryIds), authorId: userId } })
+        ? await this.postRepo.find({ where: { id: In(input.diaryIds), authorId: userId }, relations: { mediaItems: true } })
         : [];
 
       const material = this.extractMaterial(logs, diaries);
