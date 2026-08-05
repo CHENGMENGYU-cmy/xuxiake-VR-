@@ -51,7 +51,7 @@ export default function TopicDetailPage() {
 
   return (
     <div className="space-y-4">
-      <Link href="/topics" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+      <Link href="/discover?tab=topics" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
         <ArrowLeft className="h-4 w-4" />
         话题广场
       </Link>
