@@ -46,10 +46,10 @@ export class UploadController {
     }
   }
 
-  /** 生成图片缩略图 */
+  /** 生成图片缩略图（唯一文件名，避免多图互相覆盖） */
   private async generateThumbnail(filePath: string): Promise<string> {
     try {
-      const thumbName = `thumb_${extname(filePath)}`;
+      const thumbName = `${uuidv4()}_thumb${extname(filePath)}`;
       const thumbPath = join(THUMB_DIR, thumbName);
       await sharp(filePath)
         .resize(400, 300, { fit: 'cover' })
