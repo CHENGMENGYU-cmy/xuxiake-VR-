@@ -170,8 +170,6 @@ function SnapContent() {
     return `${y}年${m}月${d}日`;
   };
 
-  const dayGroups = viewMode === 'location' || viewMode === 'trip' ? null : groupByDay(filteredItems);
-
   const statusLabel = (status: string, progress?: number) => {
     switch (status) {
       case 'QUEUED': return '排队中...';
