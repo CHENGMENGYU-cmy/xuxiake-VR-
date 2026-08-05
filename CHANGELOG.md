@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-05
+修改位置：Android 闪拍App工程（Kuaishan-Android-Source-0.8.2-20260724，非本仓库git）— 新增 data/CommunityModels.kt、CommunityBackendClient.kt、CommunityTokenStore.kt、CommunitySyncManager.kt、ui/SyncToCommunityActivity.kt、res/layout/activity_sync_to_community.xml；修改 app/build.gradle.kts、AndroidManifest.xml、NoahApplication.kt、MainActivity.kt、activity_main.xml；文档 内容生成逻辑链条.md
+修改原因：闪拍App本地采集的旅行瞬间数据无法接入社区——后端 /api/sync/snapshots 与 /api/upload/* 接口已就绪，但App端无调用代码
+修改内容：1) Android端新增"同步到社区"功能：主界面入口按钮→SyncToCommunityActivity（社区账号+密码+图形验证码登录）→手动触发批量同步；2) CommunitySyncManager 独立单线程协调登录/媒体上传/幂等记录/token刷新（401自动refresh重试）；3) 素材经 /api/upload/{image,video,audio} + /api/sync/snapshots 入库为 SNAPSHOT 素材（PRIVATE，按moment.id幂等）；4) 社区后端地址 COMMUNITY_BASE_URL 在 app/build.gradle.kts 配置（当前指向本机 192.168.1.134:3001 供真机联调）；5) 已用 gradle assembleDebug 构建验证通过，APK已生成
+修改效果：闪拍App数据可经登录后手动同步接入社区，成为素材库SNAPSHOT素材，再走AI日记/游记发布链路；设计文档"App端上传调用代码"状态由 ❌ 更新为 ✅ 已实现
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-05
 修改位置：web/src/components/layout/sidebar.tsx
 修改原因：侧边栏创作区"发布见闻"与页面标题"分享见闻"命名不一致
 修改内容：侧边栏创作区第一个入口标签从"发布见闻"改为"分享见闻"，与 /upload 页面标题统一
