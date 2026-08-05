@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-05
+修改位置：web/next.config.ts
+修改原因：本地开发模式下前端未把 /uploads 静态目录代理到后端，闪拍App上传的图片/缩略图在 Web 端全部 404（生产有 nginx alias 兜底，本地 dev 缺失）
+修改内容：next.config 新增 rewrites，将 /uploads/:path* 代理到后端（按 NEXT_PUBLIC_API_URL 推导后端 origin，默认 http://localhost:3001）
+修改效果：本地开发时上传的媒体和缩略图可正常显示，不再 404
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-05
 修改位置：server/src/modules/upload/upload.controller.ts, server/scripts/fix-thumbnails.js（新建）
 修改原因：图片上传接口缩略图用固定文件名（thumb_.jpg/thumb_.png），多张图片互相覆盖，导致 media_items 里 62 条 thumbnail_url 引用同一文件、其余 404（闪拍App同步多张真实图片后暴露）
 修改内容：1) generateThumbnail 改用 uuid 唯一缩略图名，后续上传不再互相覆盖；2) 新建 server/scripts/fix-thumbnails.js，为已有 62 条记录重新生成唯一缩略图并更新 thumbnail_url，删除旧固定文件
