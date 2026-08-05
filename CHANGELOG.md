@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-05
+修改位置：server/src/modules/upload/upload.controller.ts, server/scripts/fix-thumbnails.js（新建）
+修改原因：图片上传接口缩略图用固定文件名（thumb_.jpg/thumb_.png），多张图片互相覆盖，导致 media_items 里 62 条 thumbnail_url 引用同一文件、其余 404（闪拍App同步多张真实图片后暴露）
+修改内容：1) generateThumbnail 改用 uuid 唯一缩略图名，后续上传不再互相覆盖；2) 新建 server/scripts/fix-thumbnails.js，为已有 62 条记录重新生成唯一缩略图并更新 thumbnail_url，删除旧固定文件
+修改效果：闪拍App同步上来的多张图片缩略图不再 404，素材库正常展示
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-05
 修改位置：Android 闪拍App工程（Kuaishan-Android-Source-0.8.2-20260724，非本仓库git）— 新增 data/CommunityModels.kt、CommunityBackendClient.kt、CommunityTokenStore.kt、CommunitySyncManager.kt、ui/SyncToCommunityActivity.kt、res/layout/activity_sync_to_community.xml；修改 app/build.gradle.kts、AndroidManifest.xml、NoahApplication.kt、MainActivity.kt、activity_main.xml；文档 内容生成逻辑链条.md
 修改原因：闪拍App本地采集的旅行瞬间数据无法接入社区——后端 /api/sync/snapshots 与 /api/upload/* 接口已就绪，但App端无调用代码
 修改内容：1) Android端新增"同步到社区"功能：主界面入口按钮→SyncToCommunityActivity（社区账号+密码+图形验证码登录）→手动触发批量同步；2) CommunitySyncManager 独立单线程协调登录/媒体上传/幂等记录/token刷新（401自动refresh重试）；3) 素材经 /api/upload/{image,video,audio} + /api/sync/snapshots 入库为 SNAPSHOT 素材（PRIVATE，按moment.id幂等）；4) 社区后端地址 COMMUNITY_BASE_URL 在 app/build.gradle.kts 配置（当前指向本机 192.168.1.134:3001 供真机联调）；5) 已用 gradle assembleDebug 构建验证通过，APK已生成
@@ -202,11 +209,4 @@
 修改原因：搜索页应回归纯粹的关键词搜索，媒体浏览应独立
 修改内容：搜索页移除媒体类型筛选，搜索建议新增媒体发现快捷入口
 修改效果：搜索页专注于关键词搜索，媒体浏览职责分离
---------------------------------------------------------------------------------
-
-修改时间：2026-07-19
-修改位置：web/src/app/(main)/upload/page.tsx
-修改原因：上传页所有Tab均为UI占位，未连接实际功能
-修改内容：完整重写上传页，接入真实视频/音频/图片上传，支持预览、VR格式选择、发布
-修改效果：用户可通过上传页发布视频/图片/音频/链接内容
 --------------------------------------------------------------------------------
