@@ -365,6 +365,13 @@ function SnapContent() {
           <Badge variant="secondary" className="shrink-0">{totalCount} 条</Badge>
           <Button
             size="sm"
+            variant={selectMode ? 'default' : 'outline'}
+            onClick={() => { setSelectMode(!selectMode); setSelectedIds(new Set()); }}
+          >
+            {selectMode ? '完成' : '多选'}
+          </Button>
+          <Button
+            size="sm"
             className="gap-1.5 bg-gradient-to-r from-teal-500 to-orange-400 text-white shadow-sm hover:from-teal-600 hover:to-orange-500"
             onClick={() => {
               if (allItems.length > 0) {
