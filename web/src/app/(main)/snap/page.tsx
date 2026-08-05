@@ -400,61 +400,6 @@ function SnapContent() {
           ))}
         </div>
 
-        {/* 筛选芯片 */}
-        {(filters.length > 0 || (viewMode === 'trip' && byTrip.length > 0)) && (
-          <div className="flex flex-wrap gap-1.5">
-            {viewMode === 'trip' ? (
-              <>
-                <button
-                  onClick={() => setSelectedTrip(null)}
-                  className={`rounded-full border px-2.5 py-1 text-[11px] transition-colors ${
-                    !selectedTrip ? 'border-primary bg-primary/10 text-primary' : 'hover:bg-muted'
-                  }`}
-                >
-                  全部行程 ({byTrip.reduce((s, t) => s + t.count, 0)})
-                </button>
-                {byTrip.map((t) => (
-                  <button
-                    key={t.tripId}
-                    onClick={() => setSelectedTrip(selectedTrip?.tripId === t.tripId ? null : { tripId: t.tripId, name: t.name })}
-                    className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] transition-colors ${
-                      selectedTrip?.tripId === t.tripId ? 'border-primary bg-primary/10 text-primary' : 'hover:bg-muted'
-                    }`}
-                  >
-                    <FolderOpen className="h-3 w-3" />
-                    {t.name}
-                    <span className="text-muted-foreground">{t.count}</span>
-                  </button>
-                ))}
-              </>
-            ) : (
-              <>
-                <button
-                  onClick={() => setSelectedFilter(null)}
-                  className={`rounded-full border px-2.5 py-1 text-[11px] transition-colors ${
-                    !selectedFilter ? 'border-primary bg-primary/10 text-primary' : 'hover:bg-muted'
-                  }`}
-                >
-                  全部 ({totalCount})
-                </button>
-                {filters.map((f) => (
-                  <button
-                    key={f.name}
-                    onClick={() => setSelectedFilter(selectedFilter === f.name ? null : f.name)}
-                    className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] transition-colors ${
-                      selectedFilter === f.name ? 'border-primary bg-primary/10 text-primary' : 'hover:bg-muted'
-                    }`}
-                  >
-                    {viewMode === 'location' ? <MapPin className="h-3 w-3" /> : <Clock className="h-3 w-3" />}
-                    {f.name}
-                    <span className="text-muted-foreground">{f.count}</span>
-                  </button>
-                ))}
-              </>
-            )}
-          </div>
-        )}
-
         {/* 行程选中态：AI 生成游记 */}
         {viewMode === 'trip' && selectedTrip && (
           <div className="rounded-xl border bg-card p-3 space-y-2">
