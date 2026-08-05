@@ -213,6 +213,13 @@ export class PostsController {
     return { success: true, data };
   }
 
+  @Get('trips')
+  async getUserTrips(@Headers('authorization') auth: string) {
+    const userId = this.getUserId(auth);
+    const data = await this.postsService.getUserTrips(userId);
+    return { success: true, data };
+  }
+
   // ===== 日记功能 =====
 
   @Get('diary-square')
