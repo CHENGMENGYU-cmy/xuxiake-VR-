@@ -174,9 +174,8 @@ export function Sidebar() {
                   <p className="px-2 text-xs font-medium uppercase text-muted-foreground">创作</p>
                   {createItems.map((item) => {
                     const Icon = item.icon;
-                    const isActive = (pathname === item.href) ||
-                      (item.href === '/snap' && pathname.startsWith('/snap/generate')) ||
-                      (item.href === '/upload' && pathname.startsWith('/upload/')) ||
+                    const isActive =
+                      (item.href === '/upload' && (pathname === '/upload' || pathname.startsWith('/upload/'))) ||
                       (item.href === '/journeys/generate' && pathname.startsWith('/journeys/generate'));
                     return (
                       <Link key={item.href} href={item.href}>
