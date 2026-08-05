@@ -106,7 +106,7 @@ function DiaryDetailContent() {
     <div className="mx-auto max-w-2xl space-y-4">
       {/* 返回按钮 */}
       <div className="flex items-center justify-between">
-        <Button variant="ghost" size="sm" className="gap-1" onClick={() => router.push(isOwner ? '/diaries' : '/snap/square')}>
+        <Button variant="ghost" size="sm" className="gap-1" onClick={() => router.push(isOwner ? '/diaries' : '/discover?tab=diary')}>
           <ArrowLeft className="h-4 w-4" />
           {isOwner ? '返回日记列表' : '返回日记广场'}
         </Button>
