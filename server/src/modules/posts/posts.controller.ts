@@ -255,6 +255,23 @@ export class PostsController {
     return { success: true, data };
   }
 
+  /** 多张闪拍 → AI 生成一篇日记（真实 AI，异步 job） */
+  @Post('diary/generate-batch')
+  async generateDiaryBatch(
+    @Headers('authorization') auth: string,
+    @Body() body: { snapIds: string[]; style?: string; tone?: string; length?: string },
+  ) {
+    const userId = this.getUserId(auth);
+    if (!body.snapIds?.length) throw new NotFoundException('请选择要生成日记的闪拍');
+    const jobId = await this.aiService.generateMultiDiary(userId, {
+      snapIds: body.snapIds,
+      style: body.style,
+      tone: body.tone,
+      length: body.length,
+    });
+    return { success: true, data: { jobId } };
+  }
+
   /** 查询指定素材的已有日记草稿 */
   @Get('diary/draft/:snapId')
   async getDiaryDraft(
