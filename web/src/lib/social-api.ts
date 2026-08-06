@@ -127,14 +127,34 @@ export async function getUserProfile(username: string): Promise<User> {
   return data.data;
 }
 
-export async function getFollowers(username: string): Promise<{ data: User[]; total: number }> {
-  const { data } = await apiClient.get(`/users/${username}/followers`);
+export async function getFollowers(username: string, page = 1, limit = 50): Promise<{
+  data: User[];
+  total: number;
+  page: number;
+  hasMore: boolean;
+}> {
+  const { data } = await apiClient.get(`/users/${username}/followers`, { params: { page, limit } });
   return data;
 }
 
-export async function getFollowing(username: string): Promise<{ data: User[]; total: number }> {
-  const { data } = await apiClient.get(`/users/${username}/following`);
+export async function getFollowing(username: string, page = 1, limit = 50): Promise<{
+  data: User[];
+  total: number;
+  page: number;
+  hasMore: boolean;
+}> {
+  const { data } = await apiClient.get(`/users/${username}/following`, { params: { page, limit } });
   return data;
+}
+
+export async function getFollowStatus(username: string): Promise<{
+  followerCount: number;
+  followingCount: number;
+  isFollowing: boolean;
+  isFollowedBy: boolean;
+}> {
+  const { data } = await apiClient.get(`/users/${username}/follow-status`);
+  return data.data;
 }
 
 // ==================== 私聊 ====================
