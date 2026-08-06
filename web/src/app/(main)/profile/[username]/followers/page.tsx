@@ -78,10 +78,10 @@ export default function FollowersPage() {
   const [myFollowerIds, setMyFollowerIds] = useState<Set<string>>(new Set());
   useEffect(() => {
     if (!currentUser) return;
-    getFollowing(currentUser.username).then((res) => {
+    getFollowing(currentUser.username, 1, 100).then((res) => {
       setMyFollowingIds(new Set((res.data || []).map((u) => u.id)));
     }).catch(() => {});
-    getFollowers(currentUser.username).then((res) => {
+    getFollowers(currentUser.username, 1, 100).then((res) => {
       setMyFollowerIds(new Set((res.data || []).map((u) => u.id)));
     }).catch(() => {});
   }, [currentUser]);
