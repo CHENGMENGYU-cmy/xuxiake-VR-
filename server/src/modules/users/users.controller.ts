@@ -404,7 +404,10 @@ export class UsersController {
       .leftJoinAndSelect('post.author', 'author')
       .where('post.authorId = :userId', { userId: user.id })
       .andWhere('media.type IN (:...types)', { types: ['IMAGE', 'VIDEO'] })
-      .orderBy('post.createdAt', 'DESC')
+      // 与「在路上」保持一致：排除素材库专属层级（SNAPSHOT/LOG）
+      .andWhere('post.contentLevel NOT IN (:...excludeLevels)', { excludeLevels: ['SNAPSHOT', 'LOG'] })
+      // 排序字段与游标字段必须一致，否则翻页会重复/遗漏
+      .orderBy('media.createdAt', 'DESC')
       .take(take + 1);
 
     if (!isOwner) {
