@@ -184,45 +184,109 @@ export class UsersController {
     };
   }
 
-  @Get(':username/followers')
-  async getFollowers(@Param('username') username: string) {
+  @Get(':username/follow-status')
+  async getFollowStatus(
+    @Param('username') username: string,
+    @Headers('authorization') auth?: string,
+  ) {
     const user = await this.userRepo.findOne({ where: { username } });
     if (!user) throw new NotFoundException('用户不存在');
 
-    const follows = await this.followRepo.find({ where: { followingId: user.id } });
-    const followerIds = follows.map((f) => f.followerId);
-    const followers = followerIds.length
-      ? await this.userRepo.findBy({ id: In(followerIds) })
-      : [];
+    const currentUserId = this.getUserId(auth || '');
+
+    const [followerCount, followingCount] = await Promise.all([
+      this.followRepo.count({ where: { followingId: user.id } }),
+      this.followRepo.count({ where: { followerId: user.id } }),
+    ]);
+
+    let isFollowing = false;
+    let isFollowedBy = false;
+    if (currentUserId) {
+      const [iFollow, followMe] = await Promise.all([
+        this.followRepo.findOne({ where: { followerId: currentUserId, followingId: user.id } }),
+        this.followRepo.findOne({ where: { followerId: user.id, followingId: currentUserId } }),
+      ]);
+      isFollowing = !!iFollow;
+      isFollowedBy = !!followMe;
+    }
 
     return {
       success: true,
-      data: followers.map((u) => {
+      data: { followerCount, followingCount, isFollowing, isFollowedBy },
+    };
+  }
+
+  @Get(':username/followers')
+  async getFollowers(
+    @Param('username') username: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    const user = await this.userRepo.findOne({ where: { username } });
+    if (!user) throw new NotFoundException('用户不存在');
+
+    const pageNum = page ? Math.max(1, parseInt(page)) : 1;
+    const limitNum = limit ? Math.min(Math.max(1, parseInt(limit)), 100) : 50;
+
+    const [follows, total] = await this.followRepo.findAndCount({
+      where: { followingId: user.id },
+      order: { createdAt: 'DESC' },
+      skip: (pageNum - 1) * limitNum,
+      take: limitNum,
+    });
+    const followerIds = follows.map((f) => f.followerId);
+    const users = followerIds.length
+      ? await this.userRepo.findBy({ id: In(followerIds) })
+      : [];
+    const userMap = new Map(users.map((u) => [u.id, u] as const));
+    const data = followerIds.map((id) => userMap.get(id)).filter((u): u is User => !!u);
+
+    return {
+      success: true,
+      data: data.map((u) => {
         const { passwordHash, ...uDto } = u;
         return uDto;
       }),
-      total: followers.length,
+      total,
+      page: pageNum,
+      hasMore: pageNum * limitNum < total,
     };
   }
 
   @Get(':username/following')
-  async getFollowing(@Param('username') username: string) {
+  async getFollowing(
+    @Param('username') username: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
     const user = await this.userRepo.findOne({ where: { username } });
     if (!user) throw new NotFoundException('用户不存在');
 
-    const follows = await this.followRepo.find({ where: { followerId: user.id } });
+    const pageNum = page ? Math.max(1, parseInt(page)) : 1;
+    const limitNum = limit ? Math.min(Math.max(1, parseInt(limit)), 100) : 50;
+
+    const [follows, total] = await this.followRepo.findAndCount({
+      where: { followerId: user.id },
+      order: { createdAt: 'DESC' },
+      skip: (pageNum - 1) * limitNum,
+      take: limitNum,
+    });
     const followingIds = follows.map((f) => f.followingId);
-    const following = followingIds.length
+    const users = followingIds.length
       ? await this.userRepo.findBy({ id: In(followingIds) })
       : [];
+    const userMap = new Map(users.map((u) => [u.id, u] as const));
+    const data = followingIds.map((id) => userMap.get(id)).filter((u): u is User => !!u);
 
     return {
       success: true,
-      data: following.map((u) => {
+      data: data.map((u) => {
         const { passwordHash, ...uDto } = u;
         return uDto;
       }),
-      total: following.length,
+      total,
+      page: pageNum,
+      hasMore: pageNum * limitNum < total,
     };
   }
 
