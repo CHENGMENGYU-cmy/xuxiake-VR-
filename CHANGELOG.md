@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-06
+修改位置：web/src/app/(main)/journeys/page.tsx, server/src/modules/users/users.controller.ts, web/src/app/(main)/profile/[username]/components/posts-tab.tsx
+修改原因：1) 我的游记页面查询 level='ESSAY' 但 AI 生成游记是 TRAVELOGUE，导致新游记看不到；2) 个人主页 token 过期时接口静默降级为游客（只返回 PUBLIC 7篇）且不触发前端刷新；3) "在路上"标签按 postType 分类，而内容按 contentLevel 分层，游记/日记混在一起
+修改内容：1) journeys/page.tsx 查询层级 ESSAY→TRAVELOGUE；2) users.controller getUserPosts 携带 Authorization 但 token 无效时抛 401 触发前端自动刷新；3) posts-tab 标签改为按 contentLevel 分类（全部/分类/日记/游记），后端 getUserPosts 新增 contentLevel 筛选参数（list+count 同步）
+修改效果：我的游记能显示 AI 生成的 TRAVELOGUE；个人主页 token 过期自动刷新后显示完整帖子（sunqi 7→10 篇）；"在路上"标签正确分类（游记在游记、日记在日记）
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-06
 修改位置：server/src/modules/users/users.controller.ts
 修改原因：个人主页帖子数量不对（sunqi 显示 72，包含 62 张闪拍素材+日志），因为 count/list 查询没排除 SNAPSHOT/LOG 这类素材库专属层级
 修改内容：getUserPosts 的 list 和 count 查询都加过滤 `contentLevel NOT IN ('SNAPSHOT','LOG')`——这两类是素材库专属（已在素材库展示），不属于个人主页"在路上"的发布内容
