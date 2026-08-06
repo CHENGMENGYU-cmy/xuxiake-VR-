@@ -488,6 +488,8 @@ export class UsersController {
       .leftJoinAndSelect('post.tags', 'tags')
       .leftJoinAndSelect('post.topics', 'topics')
       .where('like.userId = :userId', { userId: user.id })
+      // 与「在路上」保持一致：排除素材库专属层级（SNAPSHOT/LOG）
+      .andWhere('post.contentLevel NOT IN (:...excludeLevels)', { excludeLevels: ['SNAPSHOT', 'LOG'] })
       .orderBy('like.createdAt', 'DESC')
       .take(take + 1);
 
