@@ -69,7 +69,7 @@ function ProfileContent({ username }: { username: string }) {
         const [followersRes, followingRes, postsRes] = await Promise.all([
           getFollowers(username),
           getFollowing(username),
-          apiClient.get(`/users/${username}/posts`, { params: { limit: '100' } }),
+          apiClient.get(`/users/${username}/posts`, { params: { limit: '1' } }),
         ]);
         setFollowerCount(followersRes.total || 0);
         setFollowingCount(followingRes.total || 0);
