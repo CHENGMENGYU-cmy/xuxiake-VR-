@@ -246,7 +246,7 @@ function ProfileContent({ username }: { username: string }) {
       </Card>
 
       {/* 内容标签页 */}
-      <Tabs defaultValue="posts" className="w-full">
+      <Tabs value={effectiveTab} onValueChange={handleTabChange} className="w-full">
         <TabsList className="w-full justify-start border-b bg-transparent p-0">
           <TabsTrigger value="posts" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-primary">
             在路上
