@@ -29,34 +29,47 @@ export default function FollowersPage() {
   const [followers, setFollowers] = useState<User[]>([]);
   const [following, setFollowing] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [followersPage, setFollowersPage] = useState(1);
+  const [followingPage, setFollowingPage] = useState(1);
+  const [followersHasMore, setFollowersHasMore] = useState(false);
+  const [followingHasMore, setFollowingHasMore] = useState(false);
+  const [loadingMore, setLoadingMore] = useState<'followers' | 'following' | null>(null);
   const [followMap, setFollowMap] = useState<Record<string, boolean>>({});
   const [actionLoading, setActionLoading] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     if (!username) return;
     setLoading(true);
-    Promise.all([getFollowers(username), getFollowing(username)])
+    Promise.all([getFollowers(username, 1, PAGE_SIZE), getFollowing(username, 1, PAGE_SIZE)])
       .then(([followersRes, followingRes]) => {
-        const followerList = followersRes.data || [];
-        const followingList = followingRes.data || [];
-        setFollowers(followerList);
-        setFollowing(followingList);
-
-        // 构建我关注了谁的 map
-        if (currentUser) {
-          // 我关注的人 = 我的 following 列表，但这里用 followerList 判断（粉丝列表里谁关注了我）
-          // 需要知道我关注了哪些人 —— 通过 followerList 中的用户来反查不够
-          // 直接用 followingRes（我访问的用户的关注列表）不准确
-          // 最准确的方式：我自己关注了谁，需要单独查
-          // 但可以简化：如果当前用户在某人的粉丝列表中，说明我关注了他
-          // getFollowers(username) = 谁关注了 username
-          // 如果我在 followers 中，说明我关注了该用户
-          // 但这里 followers/following 是 username 的，不是 current user 的
-        }
+        setFollowers(followersRes.data || []);
+        setFollowersHasMore(followersRes.hasMore);
+        setFollowing(followingRes.data || []);
+        setFollowingHasMore(followingRes.hasMore);
       })
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [username, currentUser]);
+  }, [username]);
+
+  const loadMore = async (type: 'followers' | 'following') => {
+    if (loadingMore) return;
+    setLoadingMore(type);
+    const nextPage = type === 'followers' ? followersPage + 1 : followingPage + 1;
+    try {
+      if (type === 'followers') {
+        const res = await getFollowers(username, nextPage, PAGE_SIZE);
+        setFollowers((prev) => [...prev, ...(res.data || [])]);
+        setFollowersPage(nextPage);
+        setFollowersHasMore(res.hasMore);
+      } else {
+        const res = await getFollowing(username, nextPage, PAGE_SIZE);
+        setFollowing((prev) => [...prev, ...(res.data || [])]);
+        setFollowingPage(nextPage);
+        setFollowingHasMore(res.hasMore);
+      }
+    } catch {}
+    finally { setLoadingMore(null); }
+  };
 
   // 获取我（当前用户）的关注列表与粉丝列表，用于判断互关
   const [myFollowingIds, setMyFollowingIds] = useState<Set<string>>(new Set());
