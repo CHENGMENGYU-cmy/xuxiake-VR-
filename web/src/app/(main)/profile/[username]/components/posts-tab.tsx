@@ -1,21 +1,18 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Play, Compass, MessageSquare, Loader2, Image, Mic, PenLine, BookOpen } from 'lucide-react';
+import { Loader2, PenLine, BookOpen } from 'lucide-react';
 import { PostCard } from '@/components/post/post-card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import apiClient from '@/lib/api-client';
 import type { Post } from '@/types';
 
-// 内容层级标签（contentLevel）为主，第一视角/语音按 postType
+// 「在路上」只展示发布内容（排除素材/日志），真实分类为 日记 / 游记（TRAVELOGUE 与 ESSAY 同属游记）
 const postFilters = [
   { value: '', param: 'contentLevel', label: '全部', icon: null },
-  { value: 'CLASSIFIED', param: 'contentLevel', label: '分类', icon: <Compass className="h-3.5 w-3.5" /> },
   { value: 'DIARY', param: 'contentLevel', label: '日记', icon: <PenLine className="h-3.5 w-3.5" /> },
-  { value: 'TRAVELOGUE', param: 'contentLevel', label: '游记', icon: <BookOpen className="h-3.5 w-3.5" /> },
-  { value: 'VR_MEDIA', param: 'type', label: '第一视角', icon: <Play className="h-3.5 w-3.5" /> },
-  { value: 'MOMENT', param: 'type', label: '语音记录', icon: <Mic className="h-3.5 w-3.5" /> },
+  { value: 'TRAVELOGUE,ESSAY', param: 'contentLevel', label: '游记', icon: <BookOpen className="h-3.5 w-3.5" /> },
 ];
 
 interface PostsTabProps {

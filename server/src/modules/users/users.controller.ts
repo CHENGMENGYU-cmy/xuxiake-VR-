@@ -402,7 +402,11 @@ export class UsersController {
     }
 
     if (contentLevel) {
-      qb.andWhere('post.contentLevel = :contentLevel', { contentLevel });
+      // 支持逗号分隔多值（如 TRAVELOGUE,ESSAY 同属游记）
+      const levels = contentLevel.split(',').filter(Boolean);
+      if (levels.length) {
+        qb.andWhere('post.contentLevel IN (:...levels)', { levels });
+      }
     }
 
     if (cursor) {
@@ -424,7 +428,10 @@ export class UsersController {
       countQb.andWhere('post.visibility = :vis', { vis: 'PUBLIC' });
     }
     if (contentLevel) {
-      countQb.andWhere('post.contentLevel = :contentLevel', { contentLevel });
+      const levels = contentLevel.split(',').filter(Boolean);
+      if (levels.length) {
+        countQb.andWhere('post.contentLevel IN (:...levels)', { levels });
+      }
     }
     const total = await countQb.getCount();
 
