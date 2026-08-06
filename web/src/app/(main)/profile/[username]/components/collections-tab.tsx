@@ -17,6 +17,9 @@ export function CollectionsTab() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
   const [postsLoading, setPostsLoading] = useState(false);
+  const [postsPage, setPostsPage] = useState(1);
+  const [hasMorePosts, setHasMorePosts] = useState(false);
+  const [postsLoadingMore, setPostsLoadingMore] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState('');
   const [creating, setCreating] = useState(false);
