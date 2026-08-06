@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-06
+修改位置：server/src/modules/users/users.controller.ts, posts.controller.ts, posts.service.ts; web/src/app/(main)/profile/[username]/page.tsx, followers/page.tsx, components/collections-tab.tsx, web/src/lib/post-api.ts
+修改原因：检查社区个人主页流转逻辑发现多处缺陷——1) 影像库/喜欢列表未排除素材库层级（SNAPSHOT/LOG），与"在路上"口径不一致，素材的媒体却显示在影像库；2) 影像库按 post.createdAt 排序但游标按 media.createdAt 过滤，翻页会重复/遗漏；3) 查看他人粉丝/关注列表时用"被查看者的粉丝"判断互关，导致私信按钮误显示（后端又拦截未互关消息，体验断裂）；4) 收藏夹内容接口无权限校验，私有收藏夹可被越权读取，且帖子无翻页只能看到前20条；5) 帖子计数请求一次拉取100条只为拿 total，浪费带宽
+修改内容：1) getUserMedia/getUserLikes 增加 `contentLevel NOT IN ('SNAPSHOT','LOG')` 过滤，与"在路上"口径统一；2) getUserMedia 排序字段改为 media.createdAt 与游标字段一致；3) followers 页面新增"我的粉丝列表"状态，互关判断改为"我关注了他且他在我的粉丝中"；4) getCollectionPosts 增加 auth 身份与私有收藏夹权限校验（非创建者不可读私有内容），后端返回 hasMore，前端收藏夹新增"加载更多"分页；5) 帖子计数请求 limit 100→1
+修改效果：个人主页各标签页内容口径一致；影像库翻页稳定无重复；他人粉丝页私信按钮判断准确；私有收藏夹防越权、收藏内容可完整浏览；计数请求轻量化
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-06
 修改位置：web/src/app/(main)/journeys/page.tsx, server/src/modules/users/users.controller.ts, web/src/app/(main)/profile/[username]/components/posts-tab.tsx
 修改原因：1) 我的游记页面查询 level='ESSAY' 但 AI 生成游记是 TRAVELOGUE，导致新游记看不到；2) 个人主页 token 过期时接口静默降级为游客（只返回 PUBLIC 7篇）且不触发前端刷新；3) "在路上"标签按 postType 分类，而内容按 contentLevel 分层，游记/日记混在一起
 修改内容：1) journeys/page.tsx 查询层级 ESSAY→TRAVELOGUE；2) users.controller getUserPosts 携带 Authorization 但 token 无效时抛 401 触发前端自动刷新；3) posts-tab 标签改为按 contentLevel 分类（全部/分类/日记/游记），后端 getUserPosts 新增 contentLevel 筛选参数（list+count 同步）
