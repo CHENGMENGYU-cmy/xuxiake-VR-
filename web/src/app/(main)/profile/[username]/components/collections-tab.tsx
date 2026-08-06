@@ -218,20 +218,34 @@ export function CollectionsTab() {
           {postsLoading ? (
             <div className="flex justify-center py-8"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>
           ) : posts.length > 0 ? (
-            <div className="space-y-3">
-              {posts.map((post) => (
-                <div key={post.id} className="relative">
-                  <PostCard post={post} />
-                  <Button
-                    size="icon" variant="ghost"
-                    className="absolute right-2 top-2 h-7 w-7 text-muted-foreground hover:text-destructive"
-                    onClick={() => handleRemovePost(activeId, post.id)}
-                  >
-                    <BookmarkMinus className="h-4 w-4" />
+            <>
+              <div className="space-y-3">
+                {posts.map((post) => (
+                  <div key={post.id} className="relative">
+                    <PostCard post={post} />
+                    <Button
+                      size="icon" variant="ghost"
+                      className="absolute right-2 top-2 h-7 w-7 text-muted-foreground hover:text-destructive"
+                      onClick={() => handleRemovePost(activeId, post.id)}
+                    >
+                      <BookmarkMinus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+              {postsLoadingMore && (
+                <div className="flex justify-center py-4">
+                  <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                </div>
+              )}
+              {hasMorePosts && !postsLoadingMore && (
+                <div className="mt-4 text-center">
+                  <Button variant="outline" size="sm" onClick={loadMorePosts}>
+                    加载更多
                   </Button>
                 </div>
-              ))}
-            </div>
+              )}
+            </>
           ) : (
             <p className="py-8 text-center text-sm text-muted-foreground">收藏夹为空</p>
           )}
