@@ -57,18 +57,22 @@ export default function FollowersPage() {
       .finally(() => setLoading(false));
   }, [username, currentUser]);
 
-  // 获取我（当前用户）的关注列表，用于判断互关
+  // 获取我（当前用户）的关注列表与粉丝列表，用于判断互关
   const [myFollowingIds, setMyFollowingIds] = useState<Set<string>>(new Set());
+  const [myFollowerIds, setMyFollowerIds] = useState<Set<string>>(new Set());
   useEffect(() => {
     if (!currentUser) return;
     getFollowing(currentUser.username).then((res) => {
       setMyFollowingIds(new Set((res.data || []).map((u) => u.id)));
     }).catch(() => {});
+    getFollowers(currentUser.username).then((res) => {
+      setMyFollowerIds(new Set((res.data || []).map((u) => u.id)));
+    }).catch(() => {});
   }, [currentUser]);
 
   const isMutual = (userId: string) => {
-    // 互关 = 我关注了他 + 他关注了我（他在 followers 列表中）
-    return myFollowingIds.has(userId) && followers.some((u) => u.id === userId);
+    // 互关 = 我关注了他 + 他关注了我（在我的粉丝列表中）
+    return myFollowingIds.has(userId) && myFollowerIds.has(userId);
   };
 
   const handleFollow = async (userId: string) => {
