@@ -343,9 +343,10 @@ export class UsersController {
     const hasMore = posts.length > take;
     const data = posts.slice(0, take);
 
-    // 查询总数
+    // 查询总数（与列表查询保持一致的过滤条件）
     const countQb = this.postRepo.createQueryBuilder('post')
-      .where('post.authorId = :userId', { userId: user.id });
+      .where('post.authorId = :userId', { userId: user.id })
+      .andWhere('post.contentLevel NOT IN (:...excludeLevels)', { excludeLevels: ['SNAPSHOT', 'LOG'] });
     if (!isOwner) {
       countQb.andWhere('post.visibility = :vis', { vis: 'PUBLIC' });
     }
