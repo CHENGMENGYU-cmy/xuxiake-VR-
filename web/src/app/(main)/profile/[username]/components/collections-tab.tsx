@@ -36,11 +36,27 @@ export function CollectionsTab() {
     if (activeId === col.id) { setActiveId(null); return; }
     setActiveId(col.id);
     setPostsLoading(true);
+    setPostsPage(1);
+    setHasMorePosts(false);
     try {
       const result = await getCollectionPosts(col.id, 1);
       setPosts(result.posts || []);
+      setHasMorePosts(result.hasMore);
     } catch { setPosts([]); }
     finally { setPostsLoading(false); }
+  };
+
+  const loadMorePosts = async () => {
+    if (!activeId || postsLoadingMore) return;
+    const nextPage = postsPage + 1;
+    setPostsLoadingMore(true);
+    try {
+      const result = await getCollectionPosts(activeId, nextPage);
+      setPosts((prev) => [...prev, ...(result.posts || [])]);
+      setPostsPage(nextPage);
+      setHasMorePosts(result.hasMore);
+    } catch { toast.error('加载失败'); }
+    finally { setPostsLoadingMore(false); }
   };
 
   const handleRemovePost = async (colId: string, postId: string) => {
