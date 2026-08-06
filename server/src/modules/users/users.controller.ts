@@ -320,6 +320,9 @@ export class UsersController {
       .orderBy('post.createdAt', 'DESC')
       .take(take + 1);
 
+    // 排除素材库专属层级（SNAPSHOT/LOG 是素材，不是发布内容，已在素材库展示）
+    qb.andWhere('post.contentLevel NOT IN (:...excludeLevels)', { excludeLevels: ['SNAPSHOT', 'LOG'] });
+
     // 非本人只能看到公开内容
     if (!isOwner) {
       qb.andWhere('post.visibility = :vis', { vis: 'PUBLIC' });
