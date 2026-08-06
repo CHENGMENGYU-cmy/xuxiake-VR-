@@ -493,10 +493,13 @@ export class PostsController {
 
   @Get('collections/:id/posts')
   async getCollectionPosts(
+    @Headers('authorization') auth: string,
     @Param('id') id: string,
     @Query('page') page?: string,
   ) {
-    const result = await this.postsService.getCollectionPosts(id, page ? parseInt(page) : 1);
+    let userId: string | undefined;
+    try { userId = this.getUserId(auth); } catch {}
+    const result = await this.postsService.getCollectionPosts(id, userId, page ? parseInt(page) : 1);
     return { success: true, ...result };
   }
 
