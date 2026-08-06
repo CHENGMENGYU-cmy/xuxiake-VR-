@@ -137,6 +137,14 @@ function ProfileContent({ username }: { username: string }) {
   const user = profileUser;
   const isOwnProfile = currentUser?.username === username;
 
+  // Tab 状态同步到 URL，刷新/分享可保留当前标签
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    const url = value === 'posts' ? `/profile/${username}` : `/profile/${username}?tab=${value}`;
+    router.replace(url, { scroll: false });
+  };
+  const effectiveTab = activeTab === 'collections' && !isOwnProfile ? 'posts' : activeTab;
+
   return (
     <div className="space-y-4">
       <Card className="overflow-hidden">
