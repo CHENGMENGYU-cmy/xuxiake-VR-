@@ -72,7 +72,7 @@ function JourneysContent() {
     if (!user?.id) return;
     setLoading(true);
     getContentHierarchy({
-      level: 'ESSAY',
+      level: 'TRAVELOGUE',
       userId: user.id,
       limit: 100,
     })
