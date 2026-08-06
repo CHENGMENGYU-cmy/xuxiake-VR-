@@ -64,25 +64,19 @@ function ProfileContent({ username }: { username: string }) {
     fetchUser();
   }, [username, currentUser]);
 
-  // 获取关注状态和粉丝/关注数
+  // 获取关注状态和粉丝/关注数（follow-status 独立判断，不受粉丝列表分页影响）
   useEffect(() => {
     const fetchFollowData = async () => {
       try {
-        const [followersRes, followingRes, postsRes] = await Promise.all([
-          getFollowers(username),
-          getFollowing(username),
+        const [statusRes, postsRes] = await Promise.all([
+          getFollowStatus(username),
           apiClient.get(`/users/${username}/posts`, { params: { limit: '1' } }),
         ]);
-        setFollowerCount(followersRes.total || 0);
-        setFollowingCount(followingRes.total || 0);
+        setFollowerCount(statusRes.followerCount || 0);
+        setFollowingCount(statusRes.followingCount || 0);
         setPostCount(postsRes.data?.total ?? (postsRes.data?.data || []).length);
-
-        if (currentUser) {
-          const amFollowing = followersRes.data?.some((u: User) => u.id === currentUser.id);
-          setIsFollowing(!!amFollowing);
-          const isFollowedBack = followingRes.data?.some((u: User) => u.id === currentUser.id);
-          setIsFollowedBy(!!isFollowedBack);
-        }
+        setIsFollowing(!!statusRes.isFollowing);
+        setIsFollowedBy(!!statusRes.isFollowedBy);
       } catch (err) {
         console.error('Failed to fetch follow data:', err);
       }
