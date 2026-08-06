@@ -38,6 +38,8 @@ function ProfileContent({ username }: { username: string }) {
   const [followerCount, setFollowerCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
   const [postCount, setPostCount] = useState(0);
+  const searchParams = useSearchParams();
+  const [activeTab, setActiveTab] = useState<string>(() => searchParams.get('tab') || 'posts');
 
   useEffect(() => {
     if (currentUser && currentUser.username === username) {
