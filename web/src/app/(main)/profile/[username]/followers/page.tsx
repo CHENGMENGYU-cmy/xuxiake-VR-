@@ -18,6 +18,8 @@ import {
 import { toast } from 'sonner';
 import type { User } from '@/types';
 
+const PAGE_SIZE = 50;
+
 export default function FollowersPage() {
   const params = useParams();
   const searchParams = useSearchParams();
