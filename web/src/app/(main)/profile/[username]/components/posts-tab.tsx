@@ -1,19 +1,21 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Play, Compass, MessageSquare, Loader2, Image, Mic, PenLine } from 'lucide-react';
+import { Play, Compass, MessageSquare, Loader2, Image, Mic, PenLine, BookOpen } from 'lucide-react';
 import { PostCard } from '@/components/post/post-card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import apiClient from '@/lib/api-client';
 import type { Post } from '@/types';
 
-const postTypeFilters = [
-  { value: '', label: '全部', icon: null },
-  { value: 'VR_MEDIA', label: '第一视角', icon: <Play className="h-3.5 w-3.5" /> },
-  { value: 'MOMENT', label: '语音记录', icon: <Mic className="h-3.5 w-3.5" /> },
-  { value: 'NOTE', label: '日记', icon: <PenLine className="h-3.5 w-3.5" /> },
-  { value: 'JOURNEY', label: '游记', icon: <Compass className="h-3.5 w-3.5" /> },
+// 内容层级标签（contentLevel）为主，第一视角/语音按 postType
+const postFilters = [
+  { value: '', param: 'contentLevel', label: '全部', icon: null },
+  { value: 'CLASSIFIED', param: 'contentLevel', label: '分类', icon: <Compass className="h-3.5 w-3.5" /> },
+  { value: 'DIARY', param: 'contentLevel', label: '日记', icon: <PenLine className="h-3.5 w-3.5" /> },
+  { value: 'TRAVELOGUE', param: 'contentLevel', label: '游记', icon: <BookOpen className="h-3.5 w-3.5" /> },
+  { value: 'VR_MEDIA', param: 'type', label: '第一视角', icon: <Play className="h-3.5 w-3.5" /> },
+  { value: 'MOMENT', param: 'type', label: '语音记录', icon: <Mic className="h-3.5 w-3.5" /> },
 ];
 
 interface PostsTabProps {
@@ -33,7 +35,8 @@ export function PostsTab({ username, isOwnProfile, onDeletePost }: PostsTabProps
 
   const fetchPosts = useCallback(async (type: string, cursor?: string) => {
     const params: Record<string, string> = { limit: '20' };
-    if (type) params.type = type;
+    const filter = postFilters.find(f => f.value === type);
+    if (filter?.value) params[filter.param] = filter.value;
     if (cursor) params.cursor = cursor;
 
     const res = await apiClient.get(`/users/${username}/posts`, { params });
@@ -93,7 +96,7 @@ export function PostsTab({ username, isOwnProfile, onDeletePost }: PostsTabProps
     <div className="space-y-4">
       {/* 类型筛选栏 */}
       <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-none">
-        {postTypeFilters.map((filter) => (
+        {postFilters.map((filter) => (
           <Button
             key={filter.value}
             variant={activeType === filter.value ? 'default' : 'outline'}

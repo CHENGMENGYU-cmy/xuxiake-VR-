@@ -299,6 +299,7 @@ export class UsersController {
   async getUserPosts(
     @Param('username') username: string,
     @Query('type') postType?: string,
+    @Query('contentLevel') contentLevel?: string,
     @Query('cursor') cursor?: string,
     @Query('limit') limit?: string,
     @Headers('authorization') auth?: string,
@@ -306,7 +307,11 @@ export class UsersController {
     const user = await this.userRepo.findOne({ where: { username } });
     if (!user) throw new NotFoundException('用户不存在');
 
+    // 携带了 Authorization 但 token 无效（过期/篡改）时抛 401，触发前端自动刷新
     const currentUserId = this.getUserId(auth || '');
+    if (auth && !currentUserId) {
+      throw new UnauthorizedException('登录已过期，请重新登录');
+    }
     const isOwner = currentUserId === user.id;
     const take = limit ? parseInt(limit) : 20;
 
@@ -332,6 +337,10 @@ export class UsersController {
       qb.andWhere('post.postType = :postType', { postType });
     }
 
+    if (contentLevel) {
+      qb.andWhere('post.contentLevel = :contentLevel', { contentLevel });
+    }
+
     if (cursor) {
       const cursorPost = await this.postRepo.findOne({ where: { id: cursor } });
       if (cursorPost) {
@@ -349,6 +358,9 @@ export class UsersController {
       .andWhere('post.contentLevel NOT IN (:...excludeLevels)', { excludeLevels: ['SNAPSHOT', 'LOG'] });
     if (!isOwner) {
       countQb.andWhere('post.visibility = :vis', { vis: 'PUBLIC' });
+    }
+    if (contentLevel) {
+      countQb.andWhere('post.contentLevel = :contentLevel', { contentLevel });
     }
     const total = await countQb.getCount();
 
