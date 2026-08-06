@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-06
+修改位置：server/src/modules/users/users.controller.ts; web/src/lib/social-api.ts, app/(main)/profile/[username]/page.tsx, followers/page.tsx
+修改原因：1) 粉丝/关注列表接口一次性全量返回，大粉丝量账号接口变慢、前端一次渲染全部；2) 个人主页互关判断依赖粉丝列表全量数据，列表分页后会误判关注状态；3) 个人主页 Tab 状态不随 URL 记忆，刷新/分享丢失当前标签
+修改内容：1) 后端 getFollowers/getFollowing 增加 page/limit 分页（按关注时间倒序，返回 total/hasMore），新增 GET /users/:username/follow-status 轻量接口返回关注数/粉丝数/是否关注/是否被关注；2) 个人主页互关状态与计数改用 follow-status，与粉丝列表分页解耦；3) 粉丝/关注页改为每页50条 + "加载更多"分页；4) 个人主页 Tab 状态同步到 URL（?tab=posts|media|likes|collections），刷新/分享保留当前标签，收藏 Tab 对非本人自动回退
+修改效果：大粉丝量账号粉丝/关注列表分页加载不再卡顿；个人主页关注状态判断准确；Tab 可刷新/分享直达
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-06
 修改位置：server/src/modules/users/users.controller.ts, posts.controller.ts, posts.service.ts; web/src/app/(main)/profile/[username]/page.tsx, followers/page.tsx, components/collections-tab.tsx, web/src/lib/post-api.ts
 修改原因：检查社区个人主页流转逻辑发现多处缺陷——1) 影像库/喜欢列表未排除素材库层级（SNAPSHOT/LOG），与"在路上"口径不一致，素材的媒体却显示在影像库；2) 影像库按 post.createdAt 排序但游标按 media.createdAt 过滤，翻页会重复/遗漏；3) 查看他人粉丝/关注列表时用"被查看者的粉丝"判断互关，导致私信按钮误显示（后端又拦截未互关消息，体验断裂）；4) 收藏夹内容接口无权限校验，私有收藏夹可被越权读取，且帖子无翻页只能看到前20条；5) 帖子计数请求一次拉取100条只为拿 total，浪费带宽
 修改内容：1) getUserMedia/getUserLikes 增加 `contentLevel NOT IN ('SNAPSHOT','LOG')` 过滤，与"在路上"口径统一；2) getUserMedia 排序字段改为 media.createdAt 与游标字段一致；3) followers 页面新增"我的粉丝列表"状态，互关判断改为"我关注了他且他在我的粉丝中"；4) getCollectionPosts 增加 auth 身份与私有收藏夹权限校验（非创建者不可读私有内容），后端返回 hasMore，前端收藏夹新增"加载更多"分页；5) 帖子计数请求 limit 100→1
