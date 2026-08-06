@@ -1168,7 +1168,14 @@ export class PostsService {
     return collection;
   }
 
-  async getCollectionPosts(collectionId: string, page = 1, limit = 20) {
+  async getCollectionPosts(collectionId: string, userId?: string, page = 1, limit = 20) {
+    const collection = await this.collectionRepo.findOne({ where: { id: collectionId } });
+    if (!collection) throw new NotFoundException('合集不存在');
+    // 私有收藏夹仅创建者可查看内容
+    if (!collection.isPublic && collection.creatorId !== userId) {
+      throw new NotFoundException('合集不存在');
+    }
+
     const qb = this.collectionPostRepo
       .createQueryBuilder('cp')
       .leftJoinAndSelect('cp.post', 'post')
