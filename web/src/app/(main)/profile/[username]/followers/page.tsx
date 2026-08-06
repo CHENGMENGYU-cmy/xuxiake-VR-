@@ -164,6 +164,13 @@ export default function FollowersPage() {
             isMutual={isMutual}
             emptyText="暂无粉丝"
           />
+          {followersHasMore && (
+            <div className="mt-4 flex justify-center">
+              <Button variant="outline" size="sm" onClick={() => loadMore('followers')} disabled={loadingMore === 'followers'}>
+                {loadingMore === 'followers' ? <Loader2 className="h-4 w-4 animate-spin" /> : '加载更多'}
+              </Button>
+            </div>
+          )}
         </TabsContent>
 
         <TabsContent value="following">
@@ -178,6 +185,13 @@ export default function FollowersPage() {
             isMutual={isMutual}
             emptyText="暂无关注"
           />
+          {followingHasMore && (
+            <div className="mt-4 flex justify-center">
+              <Button variant="outline" size="sm" onClick={() => loadMore('following')} disabled={loadingMore === 'following'}>
+                {loadingMore === 'following' ? <Loader2 className="h-4 w-4 animate-spin" /> : '加载更多'}
+              </Button>
+            </div>
+          )}
         </TabsContent>
       </Tabs>
     </div>
