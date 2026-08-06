@@ -1186,12 +1186,14 @@ export class PostsService {
       .where('cp.collectionId = :cid', { cid: collectionId })
       .orderBy('cp.sortOrder', 'ASC')
       .skip((page - 1) * limit)
-      .take(limit);
+      .take(limit + 1);
 
     const items = await qb.getMany();
+    const hasMore = items.length > limit;
     return {
-      data: items.map((cp) => this.formatPost(cp.post)),
+      data: items.slice(0, limit).map((cp) => this.formatPost(cp.post)),
       page,
+      hasMore,
     };
   }
 
