@@ -232,9 +232,10 @@ export async function getCollectionById(id: string): Promise<Collection> {
 export async function getCollectionPosts(id: string, page = 1): Promise<{
   posts: Post[];
   page: number;
+  hasMore: boolean;
 }> {
   const { data } = await apiClient.get(`/posts/collections/${id}/posts`, { params: { page } });
-  return { posts: data.data ?? [], page: data.page ?? 1 };
+  return { posts: data.data ?? [], page: data.page ?? 1, hasMore: data.hasMore ?? false };
 }
 
 export async function updateCollection(
