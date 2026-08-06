@@ -70,6 +70,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       localStorage.setItem('refreshToken', tokens.refreshToken);
       localStorage.setItem('user', JSON.stringify(user));
       setCookie('auth_token', tokens.accessToken);
+      if (typeof sessionStorage !== 'undefined') sessionStorage.removeItem('xxk-auth-expired');
 
       set({
         user,
@@ -102,6 +103,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       localStorage.setItem('refreshToken', tokens.refreshToken);
       localStorage.setItem('user', JSON.stringify(user));
       setCookie('auth_token', tokens.accessToken);
+      if (typeof sessionStorage !== 'undefined') sessionStorage.removeItem('xxk-auth-expired');
 
       set({
         user,
@@ -125,6 +127,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('user');
     removeCookie('auth_token');
+    if (typeof sessionStorage !== 'undefined') sessionStorage.removeItem('xxk-auth-expired');
     set({ user: null, isAuthenticated: false, authReady: true, error: null });
   },
 
@@ -169,3 +172,14 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
 }));
+
+// 登录彻底失效（access + refresh 都过期）：清除登录态并刷新页面，以游客身份访问公开内容
+if (typeof window !== 'undefined') {
+  window.addEventListener('auth:expired', () => {
+    useAuthStore.setState({ user: null, isAuthenticated: false, authReady: true });
+    if (!sessionStorage.getItem('xxk-auth-expired')) {
+      sessionStorage.setItem('xxk-auth-expired', '1');
+      window.location.reload();
+    }
+  });
+}

@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-06
+修改位置：web/src/lib/api-client.ts, web/src/stores/auth-store.ts
+修改原因：access token（15分钟）与 refresh token（7天）均过期时，原逻辑只清除 localStorage 不通知 UI，个人主页帖子静默加载失败并在控制台暴露 401 报错，用户无任何提示
+修改内容：1) api-client 在 refresh 彻底失败（登录过期）后 dispatch 全局 `auth:expired` 事件；2) auth-store 监听该事件，立即清除登录态并刷新页面，以游客身份重新加载公开内容；3) 登录/注册/登出时重置 sessionStorage 防重入标志，避免无限刷新
+修改效果：token 彻底过期时页面自动降级为游客访问，公开内容正常展示，登录态正确清除，不再出现无提示的 401 空内容
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-06
 修改位置：server/src/modules/users/users.controller.ts; web/src/lib/social-api.ts, app/(main)/profile/[username]/page.tsx, followers/page.tsx
 修改原因：1) 粉丝/关注列表接口一次性全量返回，大粉丝量账号接口变慢、前端一次渲染全部；2) 个人主页互关判断依赖粉丝列表全量数据，列表分页后会误判关注状态；3) 个人主页 Tab 状态不随 URL 记忆，刷新/分享丢失当前标签
 修改内容：1) 后端 getFollowers/getFollowing 增加 page/limit 分页（按关注时间倒序，返回 total/hasMore），新增 GET /users/:username/follow-status 轻量接口返回关注数/粉丝数/是否关注/是否被关注；2) 个人主页互关状态与计数改用 follow-status，与粉丝列表分页解耦；3) 粉丝/关注页改为每页50条 + "加载更多"分页；4) 个人主页 Tab 状态同步到 URL（?tab=posts|media|likes|collections），刷新/分享保留当前标签，收藏 Tab 对非本人自动回退

@@ -29,6 +29,17 @@ function clearAuth() {
   document.cookie = 'auth_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
 }
 
+// 登录彻底失效（access + refresh 都过期）时通知全局，触发 UI 降级
+let authExpiredNotified = false;
+function notifyAuthExpired() {
+  if (authExpiredNotified) return;
+  authExpiredNotified = true;
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('auth:expired'));
+  }
+  setTimeout(() => { authExpiredNotified = false; }, 2000);
+}
+
 // 请求拦截器：自动附加 token
 apiClient.interceptors.request.use((config) => {
   if (typeof window !== 'undefined') {
@@ -80,6 +91,7 @@ apiClient.interceptors.response.use(
           isRefreshing = false;
           refreshSubscribers = [];
           clearAuth();
+          notifyAuthExpired();
         }
       }
     }
