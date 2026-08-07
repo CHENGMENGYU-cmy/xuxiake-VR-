@@ -154,8 +154,10 @@ function DiariesContent() {
       setPosts(prev => prev.map(p =>
         p.id === postId ? { ...p, visibility } : p
       ));
+      toast.success(visibility === 'PRIVATE' ? '已转为私密' : visibility === 'PUBLIC' ? '已转为公开' : '已设为关注可见');
     } catch (error) {
       console.error('发布失败:', error);
+      toast.error('发布失败，请重试');
     }
   };
 
