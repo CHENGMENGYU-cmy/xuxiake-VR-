@@ -377,8 +377,8 @@ function DiariesContent() {
                               <>
                                 <span>·</span>
                                 <span className="flex items-center gap-1">
-                                  {MoodEmoji[post.vrMetadata.mood as MoodType]}
-                                  {MoodLabel[post.vrMetadata.mood as MoodType]}
+                                  {MoodEmoji[post.vrMetadata.mood as MoodType] && <span>{MoodEmoji[post.vrMetadata.mood as MoodType]}</span>}
+                                  {MoodLabel[post.vrMetadata.mood as MoodType] || String(post.vrMetadata.mood)}
                                 </span>
                               </>
                             )}
