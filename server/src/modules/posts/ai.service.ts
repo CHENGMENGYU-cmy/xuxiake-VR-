@@ -72,6 +72,7 @@ export class AiService {
     @InjectRepository(MediaItem) private readonly mediaRepo: Repository<MediaItem>,
     @InjectRepository(Journey) private readonly journeyRepo: Repository<Journey>,
     @InjectRepository(JourneyStop) private readonly journeyStopRepo: Repository<JourneyStop>,
+    @InjectRepository(JourneyStopMedia) private readonly journeyStopMediaRepo: Repository<JourneyStopMedia>,
   ) {}
 
   /** 根据种子内容生成游记（旧 ESSAY 模式） */
