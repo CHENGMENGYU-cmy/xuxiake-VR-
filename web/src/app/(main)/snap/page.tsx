@@ -543,6 +543,13 @@ function SnapContent() {
           </div>
         </div>
       )}
+
+      {/* 写日记统一创作引导 */}
+      <DiaryComposeDialog
+        open={composeOpen}
+        onOpenChange={setComposeOpen}
+        initialSelectedIds={composeInitIds}
+      />
     </div>
   );
 }
