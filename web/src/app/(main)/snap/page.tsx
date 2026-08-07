@@ -88,17 +88,6 @@ function SnapContent() {
     return `${y}年${m}月${d}日`;
   };
 
-  const statusLabel = (status: string, progress?: number) => {
-    switch (status) {
-      case 'QUEUED': return '排队中...';
-      case 'ANALYZING': return '分析行程素材...';
-      case 'GENERATING': return `AI 写作中 ${progress ?? 0}%`;
-      case 'DONE': return '生成完成';
-      case 'ERROR': return '生成失败';
-      default: return status || '处理中...';
-    }
-  };
-
   const getMoodColor = (mood: string) => {
     if (/开心|满足|兴奋/.test(mood)) return 'bg-emerald-50 text-emerald-700 border-emerald-200';
     if (/疲惫|累/.test(mood)) return 'bg-amber-50 text-amber-700 border-amber-200';
