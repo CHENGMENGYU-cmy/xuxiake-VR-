@@ -90,6 +90,7 @@ function UploadContent() {
   const [visibility, setVisibility] = useState<Visibility>('PUBLIC');
   const [media, setMedia] = useState<UploadedMedia | null>(null);
   const [images, setImages] = useState<UploadedImage[]>([]);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const [selectedTopics, setSelectedTopics] = useState<Topic[]>([]);
   const [selectedCommunity, setSelectedCommunity] = useState<Community | null>(null);
   const [uploading, setUploading] = useState(false);
