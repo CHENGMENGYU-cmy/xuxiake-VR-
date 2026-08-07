@@ -91,6 +91,8 @@ function BatchContent() {
       setInsight(meta.insight || '');
       setTags(meta.generatorTags || []);
       setStyle(normalizeStyle(meta.style || ''));
+      setCreatedAt(post.createdAt || '');
+      setMood(meta.mood || '');
       setPostId(pid);
     }
   };
