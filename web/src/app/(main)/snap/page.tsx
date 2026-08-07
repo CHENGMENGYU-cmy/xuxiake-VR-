@@ -529,15 +529,12 @@ function SnapContent() {
             <div className="flex items-center gap-2">
               <Button
                 size="sm"
-                onClick={() => {
-                  const ids = Array.from(selectedIds);
-                  if (ids.length > 0) router.push(`/snap/generate/batch?ids=${ids.join(',')}`);
-                }}
+                onClick={() => openCompose(Array.from(selectedIds))}
                 disabled={selectedIds.size === 0}
                 className="shrink-0 gap-1.5 bg-gradient-to-r from-teal-500 to-orange-400 text-white hover:from-teal-600 hover:to-orange-500"
               >
-                <Sparkles className="h-3.5 w-3.5" />
-                AI 写日记
+                <PenLine className="h-3.5 w-3.5" />
+                写日记
               </Button>
               <Button size="sm" variant="ghost" onClick={() => { setSelectMode(false); setSelectedIds(new Set()); }}>
                 取消
