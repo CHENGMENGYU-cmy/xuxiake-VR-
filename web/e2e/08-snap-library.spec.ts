@@ -75,6 +75,26 @@ test.describe('素材库（左侧菜单栏 → 素材库）', () => {
     await page.getByRole('button', { name: '多选' }).click();
     await page.locator('.aspect-square.cursor-pointer').first().click();
     await expect(page.getByText('已选 1 张')).toBeVisible();
+
+    // 选中态视觉增强：照片蒙层 + 圆圈白描边阴影 + 加粗勾选图标
+    const selState = await page.evaluate(() => {
+      const card = document.querySelector('.aspect-square.cursor-pointer');
+      if (!card) return { overlay: '', circle: '', check: '' };
+      const overlay = card.querySelector('.absolute.inset-0');
+      const circles = card.querySelectorAll('div');
+      let circle = '';
+      for (const c of circles as any) {
+        const cls = c.className || '';
+        if (cls.includes('rounded-full') && cls.includes('border-2')) circle = cls;
+      }
+      const svg = card.querySelector('svg');
+      return { overlay: overlay ? overlay.className : '', circle, check: svg ? (svg.getAttribute('stroke-width') || '') : '' };
+    });
+    expect(selState.overlay).toContain('bg-primary/30');
+    expect(selState.circle).toContain('ring-white/80');
+    expect(selState.circle).toContain('shadow-md');
+    expect(selState.check).toBe('3');
+
     await page.getByRole('button', { name: '取消' }).click();
     await expect(page.getByText('已选 1 张')).not.toBeVisible();
 

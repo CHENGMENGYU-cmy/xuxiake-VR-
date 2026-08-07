@@ -229,6 +229,7 @@ function SnapContent() {
             <FileText className="h-8 w-8 text-muted-foreground/40" />
           </div>
         )}
+        {selectMode && isSelected && <div className="absolute inset-0 bg-primary/30" />}
         <div className="absolute left-1.5 top-1.5 flex gap-1">
           {isLog && <Badge className="border bg-black/50 text-[10px] text-white backdrop-blur-sm">日志</Badge>}
           {meta.hasDiary && (
@@ -238,8 +239,12 @@ function SnapContent() {
           )}
         </div>
         {selectMode && (
-          <div className={`absolute bottom-1.5 right-1.5 z-10 flex h-5 w-5 items-center justify-center rounded-full border-2 bg-white ${isSelected ? 'border-primary bg-primary text-white' : 'border-slate-300 text-transparent'}`}>
-            {isSelected && <Check className="h-3 w-3" />}
+          <div className={`absolute bottom-1.5 right-1.5 z-10 flex h-5 w-5 items-center justify-center rounded-full border-2 transition-all ${
+            isSelected
+              ? 'border-primary bg-primary text-white shadow-md ring-2 ring-white/80'
+              : 'border-slate-300 bg-white/90 text-transparent shadow-sm'
+          }`}>
+            {isSelected && <Check className="h-3.5 w-3.5" strokeWidth={3} />}
           </div>
         )}
       </div>
