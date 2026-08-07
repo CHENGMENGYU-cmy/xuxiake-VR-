@@ -338,24 +338,40 @@ export class PostsService {
         endDate: dto.journey.endDate || null,
         destination: dto.journey.destination || null,
         coverUrl: dto.journey.coverUrl || null,
+        summary: dto.journey.summary || null,
+        transport: dto.journey.transport || null,
+        budget: dto.journey.budget || null,
+        theme: dto.journey.theme || null,
+        insight: dto.journey.insight || null,
         stopCount: dto.journey.stops?.length || 0,
       });
       await this.journeyRepo.save(journey);
 
       if (dto.journey.stops?.length) {
-        const stops = dto.journey.stops.map((s, i) =>
-          this.journeyStopRepo.create({
+        for (let i = 0; i < dto.journey.stops.length; i++) {
+          const s = dto.journey.stops[i];
+          const stop = await this.journeyStopRepo.save(this.journeyStopRepo.create({
             journeyId: journey.id,
             dayNumber: s.dayNumber || null,
+            dayDate: s.dayDate || null,
             locationName: s.locationName || null,
             locationLat: s.locationLat || null,
             locationLng: s.locationLng || null,
             description: s.description || null,
             mediaUrl: s.mediaUrl || null,
             sortOrder: i,
-          }),
-        );
-        await this.journeyStopRepo.save(stops);
+          }));
+          if (s.mediaItems?.length) {
+            await this.journeyStopMediaRepo.save(s.mediaItems.map((m, mi) =>
+              this.journeyStopMediaRepo.create({
+                stopId: stop.id,
+                url: m.url,
+                thumbnailUrl: m.thumbnailUrl || null,
+                sortOrder: mi,
+              }),
+            ));
+          }
+        }
       }
     }
 
