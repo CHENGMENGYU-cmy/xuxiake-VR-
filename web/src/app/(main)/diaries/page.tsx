@@ -414,6 +414,11 @@ function DiariesContent() {
                           )}
                         </div>
 
+                        {/* 标题 */}
+                        {post.title && (
+                          <h3 className="mb-1.5 text-sm font-semibold leading-snug line-clamp-1">{post.title}</h3>
+                        )}
+
                         {/* 有图片：图文布局 */}
                         {post.mediaItems.length > 0 ? (
                           <div className="flex gap-3">
