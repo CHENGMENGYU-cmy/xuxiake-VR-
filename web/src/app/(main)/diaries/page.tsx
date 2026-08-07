@@ -105,6 +105,7 @@ function DiariesContent() {
   const [filter, setFilter] = useState<FilterType>('all');
   const [viewMode, setViewMode] = useState<'timeline' | 'calendar'>('timeline');
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [composeOpen, setComposeOpen] = useState(false);
 
   useEffect(() => {
     if (!user?.id) return;
