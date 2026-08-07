@@ -479,6 +479,13 @@ function DiariesContent() {
           onDateClick={() => {}}
         />
       )}
+
+      {/* 写日记统一创作引导 */}
+      <DiaryComposeDialog
+        open={composeOpen}
+        onOpenChange={setComposeOpen}
+        initialSelectedIds={[]}
+      />
     </div>
   );
 }
@@ -736,13 +743,6 @@ function CalendarView({ posts, currentMonth, setCurrentMonth, onDateClick }: {
           </div>
         );
       })()}
-
-      {/* 写日记统一创作引导 */}
-      <DiaryComposeDialog
-        open={composeOpen}
-        onOpenChange={setComposeOpen}
-        initialSelectedIds={[]}
-      />
     </div>
   );
 }

@@ -27,8 +27,9 @@ test.describe('素材库多选日记流转', () => {
     }
     await expect(page.getByText('已选 3 张')).toBeVisible();
 
-    // 5. 点底部"AI 写日记" → 跳批量编辑页（不再是直接发布）
-    await page.locator('.fixed.inset-x-0.bottom-0').getByRole('button', { name: 'AI 写日记' }).click();
+    // 5. 点底部"写日记" → 打开创作引导 → 选"AI帮我写" → 跳批量编辑页（已选素材直接进模式步）
+    await page.locator('.fixed.inset-x-0.bottom-0').getByRole('button', { name: '写日记' }).click();
+    await page.getByRole('button', { name: /AI 帮我写/ }).click();
     await page.waitForURL(/\/snap\/generate\/batch\?ids=/, { timeout: 15000 });
     await expect(page.getByRole('heading', { name: '批量日记创作' })).toBeVisible();
 

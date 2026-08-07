@@ -42,7 +42,7 @@ test.describe('素材库（左侧菜单栏 → 素材库）', () => {
     // 8. 点击素材卡片 → 打开全屏预览（相册式 1/1），ESC 关闭
     await snapCard.click();
     await expect(page.locator('text=1 / 1')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'AI 写日记' }).first()).toBeVisible();
+    await expect(page.getByRole('button', { name: '写日记' }).first()).toBeVisible();
     await page.keyboard.press('Escape');
     await expect(page.locator('text=1 / 1')).not.toBeVisible();
 
@@ -98,8 +98,8 @@ test.describe('素材库（左侧菜单栏 → 素材库）', () => {
     await page.getByRole('button', { name: '取消' }).click();
     await expect(page.getByText('已选 1 张')).not.toBeVisible();
 
-    // 14. AI 写日记主按钮存在且可用
-    const aiBtn = page.getByRole('button', { name: 'AI 写日记' }).first();
+    // 14. 写日记主按钮存在且可用
+    const aiBtn = page.getByRole('button', { name: '写日记' }).first();
     await expect(aiBtn).toBeVisible();
     await expect(aiBtn).toBeEnabled();
   });
