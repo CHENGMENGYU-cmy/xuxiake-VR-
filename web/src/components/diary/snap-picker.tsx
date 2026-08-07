@@ -14,6 +14,7 @@ export interface SnapPickerItem {
   image: string | null;
   locationName: string;
   content: string | null;
+  createdAt?: string;
   _type?: string;
 }
 
