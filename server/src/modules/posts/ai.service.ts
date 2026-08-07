@@ -564,36 +564,109 @@ Day 2：<第2天的正文>
 
   // ===== 模板生成（AI 调用失败时的回退） =====
 
-  private buildTravelogueContent(material: SourceMaterial, input: TravelogueGenerateInput): string {
+  private buildTravelogueContent(material: SourceMaterial, input: TravelogueGenerateInput, days: DayGroup[]): string {
     const { locations, keywords, moods } = material;
     const mainLocation = locations[0] || '未知地点';
-    const locationText = locations.join('、');
     const moodText = moods.length > 0 ? moods.join('、') : '值得记录';
     const keywordText = keywords.length > 0 ? keywords.join('、') : '旅行';
 
-    let essay = `# ${mainLocation}游记\n\n`;
-    essay += `> 记录了在${locationText}的旅程。心情：${moodText}。\n\n`;
+    let out = `标题：${mainLocation}游记\n`;
+    out += `导语：记录了在${locations.join('、')}的旅程，心情${moodText}。\n`;
+    out += `目的地：${mainLocation}\n`;
+    out += `出行方式：未知\n`;
+    out += `人均：未知\n`;
+    out += `主题：${keywordText}\n\n`;
 
-    if (input.prompt) {
-      essay += `*写作方向：${input.prompt}*\n\n`;
+    days.forEach((d, i) => {
+      const text = d.locationName
+        ? `抵达${d.locationName}，这里的风景与人文令人难忘。`
+        : `旅程的第${i + 1}天，继续探索未知的风景。`;
+      out += `Day ${i + 1}：${text}\n`;
+    });
+
+    out += `\n结尾：这次${mainLocation}之行，关键词是${keywordText}。带着${moodText}的心情，我把这些片段记录下来。\n`;
+    return out;
+  }
+
+  // ===== 结构化游记辅助 =====
+
+  /** 素材按创建日期分天 */
+  private groupByDay(posts: Post[]): DayGroup[] {
+    const map = new Map<string, DayGroup>();
+    const sorted = [...posts].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+    for (const p of sorted) {
+      const d = new Date(p.createdAt);
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      if (!map.has(key)) map.set(key, { date: key, locationName: null, media: [] });
+      const day = map.get(key)!;
+      if (!day.locationName && p.locationName) day.locationName = p.locationName;
+      for (const m of p.mediaItems || []) {
+        if (m.type === 'IMAGE') day.media.push({ url: m.url, thumbnailUrl: m.thumbnailUrl });
+      }
+    }
+    return [...map.values()];
+  }
+
+  /** 解析 AI 输出的结构化字段 */
+  private parseStructuredTravelogue(generated: string, days: DayGroup[]): StructuredTravelogue {
+    const out: StructuredTravelogue = {
+      title: '', summary: '', destination: '', transport: '', budget: '', theme: '', insight: '',
+      dayTexts: new Array(days.length).fill(''),
+    };
+    let currentDay = -1;
+    const lines = generated.split('\n');
+    for (const raw of lines) {
+      const line = raw.trim();
+      if (!line) continue;
+      const field = line.match(/^(标题|导语|目的地|出行方式|人均|主题|结尾)[：:]\s*(.+)$/);
+      if (field) {
+        const key = field[1];
+        const val = field[2].trim();
+        if (key === '标题') out.title = val;
+        else if (key === '导语') out.summary = val;
+        else if (key === '目的地') out.destination = val;
+        else if (key === '出行方式') out.transport = val;
+        else if (key === '人均') out.budget = val;
+        else if (key === '主题') out.theme = val;
+        else if (key === '结尾') out.insight = (out.insight ? out.insight + '\n' : '') + val;
+        continue;
+      }
+      const dayMatch = line.match(/^Day\s*(\d+)[：:]\s*(.*)$/i);
+      if (dayMatch) {
+        const idx = parseInt(dayMatch[1], 10) - 1;
+        currentDay = idx;
+        out.dayTexts[idx] = dayMatch[2].trim();
+        continue;
+      }
+      // 归属当前章节的续行
+      if (currentDay >= 0 && out.dayTexts[currentDay]) {
+        out.dayTexts[currentDay] += '\n' + line;
+      }
+    }
+    return out;
+  }
+
+  /** 组装完整 Markdown 游记（content 字段，与结构化章节一致） */
+  private assembleTravelogueContent(structured: StructuredTravelogue, days: DayGroup[]): string {
+    let md = `# ${structured.title || '我的游记'}\n\n`;
+    if (structured.summary) md += `> ${structured.summary}\n\n`;
+    const info = [
+      structured.destination && `目的地：${structured.destination}`,
+      structured.transport && `出行方式：${structured.transport}`,
+      structured.budget && `人均：${structured.budget}`,
+      structured.theme && `主题：${structured.theme}`,
+    ].filter(Boolean) as string[];
+    if (info.length > 0) md += info.join(' · ') + '\n\n';
+
+    for (let i = 0; i < days.length; i++) {
+      const d = days[i];
+      md += `## Day ${i + 1}${d.locationName ? `｜${d.locationName}` : ''}${d.date ? `（${d.date}）` : ''}\n\n`;
+      md += `${structured.dayTexts[i] || ''}\n\n`;
     }
 
-    essay += `## 出发\n\n`;
-    if (material.logs.length > 0) {
-      essay += `${material.logs[0].content}\n\n`;
-    }
-
-    essay += `## 在路上\n\n`;
-    if (material.diaries.length > 0) {
-      essay += `${material.diaries[0].content}\n\n`;
-    }
-
-    essay += `## 写在最后\n\n`;
-    essay += `这次${mainLocation}之行，关键词是${keywordText}。`;
-    essay += `带着${moodText}的心情，我把这些片段记录下来。`;
-    essay += `\n\n---\n*本文由 AI 辅助生成，素材来源于个人日志和日记。*`;
-
-    return essay;
+    if (structured.insight) md += `## 写在最后\n\n${structured.insight}\n\n`;
+    md += `---\n*本文由 AI 辅助生成，素材来源于个人日志和日记。*`;
+    return md;
   }
 
   // ===== 辅助方法 =====
