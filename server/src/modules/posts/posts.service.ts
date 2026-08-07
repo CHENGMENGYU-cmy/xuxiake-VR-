@@ -252,7 +252,7 @@ export class PostsService {
     if (post.postType === 'JOURNEY') {
       journey = await this.journeyRepo.findOne({
         where: { postId: id },
-        relations: { stops: true },
+        relations: { stops: { mediaItems: true } },
       });
     }
 
