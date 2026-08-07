@@ -25,6 +25,21 @@ export class Journey {
   @Column({ name: 'cover_url', type: 'varchar', length: 500, nullable: true })
   coverUrl: string | null;
 
+  @Column({ type: 'text', nullable: true })
+  summary: string | null;
+
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  transport: string | null;
+
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  budget: string | null;
+
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  theme: string | null;
+
+  @Column({ type: 'text', nullable: true })
+  insight: string | null;
+
   @Column({ name: 'stop_count', type: 'int', default: 0 })
   stopCount: number;
 
