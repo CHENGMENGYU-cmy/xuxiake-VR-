@@ -200,12 +200,14 @@ function DiariesContent() {
               日历
             </Button>
           </div>
-          <Link href="/upload?level=DIARY">
-            <Button size="sm" className="gap-1.5 bg-indigo-600 hover:bg-indigo-700">
-              <PenLine className="h-4 w-4" />
-              写日记
-            </Button>
-          </Link>
+          <Button
+            size="sm"
+            className="gap-1.5 bg-indigo-600 hover:bg-indigo-700"
+            onClick={() => setComposeOpen(true)}
+          >
+            <PenLine className="h-4 w-4" />
+            写日记
+          </Button>
         </div>
       </div>
 
