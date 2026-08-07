@@ -445,9 +445,14 @@ function SnapContent() {
             >
               <ChevronLeft className="h-4 w-4" /> 全部
             </Button>
-            <span className="text-sm font-semibold">{collectionTitle}</span>
+            <span className="text-sm font-semibold">{selectMode ? '全部素材' : collectionTitle}</span>
             <Badge variant="secondary" className="text-[10px]">{filteredItems.length} 张</Badge>
           </div>
+          {selectMode && (
+            <p className="text-[11px] text-muted-foreground">
+              多选模式下显示全部素材，可跨月份选择图片
+            </p>
+          )}
           <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
             {filteredItems.map(renderCard)}
           </div>
