@@ -198,77 +198,111 @@ function DiaryDetailContent() {
         </div>
       ) : null}
 
-      {/* 日记内容卡片 */}
-      <div className="rounded-lg border bg-card p-6">
-        {/* 元信息 */}
-        <div className="mb-4 flex items-center gap-3 text-sm text-muted-foreground">
-          {post.location?.name && (
-            <div className="flex items-center gap-1">
-              <MapPin className="h-3.5 w-3.5" />
-              <span>{post.location.name}</span>
+      {/* 日记内容卡片：统一完整卡片（标题+时间+天气+心情+内容+图片） */}
+      <div className="overflow-hidden rounded-lg border bg-card">
+        {/* 封面图 */}
+        {coverImage && (
+          <div className="aspect-[16/9] bg-muted">
+            <img src={coverImage} alt="" className="h-full w-full object-cover" />
+          </div>
+        )}
+
+        <div className="p-6">
+          {editing ? (
+            <div className="space-y-4">
+              <Textarea
+                value={editContent}
+                onChange={(e) => setEditContent(e.target.value)}
+                className="min-h-[300px] text-base leading-relaxed"
+                placeholder="写下你的感想..."
+              />
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" size="sm" onClick={handleCancel} disabled={saving}>
+                  <X className="mr-1 h-4 w-4" />
+                  取消
+                </Button>
+                <Button size="sm" onClick={handleSave} disabled={saving || !editContent.trim()}>
+                  {saving ? <Loader2 className="mr-1 h-4 w-4 animate-spin" /> : <Save className="mr-1 h-4 w-4" />}
+                  保存
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* 标题 */}
+              <h1 className="mb-2 text-2xl font-bold tracking-tight">{displayTitle}</h1>
+
+              {/* 元信息：时间 + 天气 + 心情 + 地点 + 风格 */}
+              <div className="mb-5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
+                <span className="flex items-center gap-1">
+                  <Calendar className="h-3.5 w-3.5" />
+                  {new Date(post.createdAt).toLocaleString('zh-CN')}
+                </span>
+                {weather && (
+                  <span className="flex items-center gap-1">
+                    <span className="text-base">{WeatherEmoji[weather]}</span>
+                    {WeatherLabel[weather]}
+                  </span>
+                )}
+                {mood && (
+                  <span className="flex items-center gap-1">
+                    <span className="text-base">{MoodEmoji[mood]}</span>
+                    {MoodLabel[mood]}
+                  </span>
+                )}
+                {post.location?.name && (
+                  <span className="flex items-center gap-1">
+                    <MapPin className="h-3.5 w-3.5" />
+                    {post.location.name}
+                  </span>
+                )}
+                {style && <Badge variant="secondary" className="text-[10px]">{style}</Badge>}
+              </div>
+
+              {/* 正文 */}
+              <div className="prose prose-sm max-w-none dark:prose-invert">
+                <p className="whitespace-pre-wrap text-base leading-relaxed">{post.content}</p>
+              </div>
+
+              {/* 感悟 */}
+              {insight && (
+                <blockquote className="mt-5 border-l-2 border-indigo-300 pl-3 text-sm italic text-indigo-700/80 dark:border-indigo-800 dark:text-indigo-400/80">
+                  {insight}
+                </blockquote>
+              )}
+            </>
+          )}
+
+          {/* 媒体附件 */}
+          {post.mediaItems && post.mediaItems.length > 0 && (
+            <div className="mt-6 grid grid-cols-3 gap-2">
+              {post.mediaItems.map((media, i) => (
+                <div key={i} className="aspect-square overflow-hidden rounded-lg">
+                  {media.type === 'IMAGE' && (
+                    <img src={media.url} alt="" className="h-full w-full object-cover" />
+                  )}
+                  {media.type === 'VIDEO' && (
+                    <video src={media.url} className="h-full w-full object-cover" controls />
+                  )}
+                  {media.type === 'AUDIO' && (
+                    <div className="flex h-full items-center justify-center bg-muted">
+                      <audio src={media.url} controls className="w-full" />
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           )}
-          <div className="flex items-center gap-1">
-            <Calendar className="h-3.5 w-3.5" />
-            <span>{new Date(post.createdAt).toLocaleString('zh-CN')}</span>
-          </div>
-        </div>
 
-        {/* 内容区 */}
-        {editing ? (
-          <div className="space-y-4">
-            <Textarea
-              value={editContent}
-              onChange={(e) => setEditContent(e.target.value)}
-              className="min-h-[300px] text-base leading-relaxed"
-              placeholder="写下你的感想..."
-            />
-            <div className="flex justify-end gap-2">
-              <Button variant="outline" size="sm" onClick={handleCancel} disabled={saving}>
-                <X className="mr-1 h-4 w-4" />
-                取消
-              </Button>
-              <Button size="sm" onClick={handleSave} disabled={saving || !editContent.trim()}>
-                {saving ? <Loader2 className="mr-1 h-4 w-4 animate-spin" /> : <Save className="mr-1 h-4 w-4" />}
-                保存
-              </Button>
+          {/* 话题标签 */}
+          {post.topics && post.topics.length > 0 && (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {post.topics.map((topic) => (
+                <Badge key={topic.id} variant="secondary">#{topic.name}</Badge>
+              ))}
             </div>
-          </div>
-        ) : (
-          <div className="prose prose-sm max-w-none dark:prose-invert">
-            <p className="whitespace-pre-wrap text-base leading-relaxed">{post.content}</p>
-          </div>
-        )}
-
-        {/* 媒体附件 */}
-        {post.mediaItems && post.mediaItems.length > 0 && (
-          <div className="mt-6 grid grid-cols-3 gap-2">
-            {post.mediaItems.map((media, i) => (
-              <div key={i} className="aspect-square overflow-hidden rounded-lg">
-                {media.type === 'IMAGE' && (
-                  <img src={media.url} alt="" className="h-full w-full object-cover" />
-                )}
-                {media.type === 'VIDEO' && (
-                  <video src={media.url} className="h-full w-full object-cover" controls />
-                )}
-                {media.type === 'AUDIO' && (
-                  <div className="flex h-full items-center justify-center bg-muted">
-                    <audio src={media.url} controls className="w-full" />
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* 话题标签 */}
-        {post.topics && post.topics.length > 0 && (
-          <div className="mt-4 flex flex-wrap gap-2">
-            {post.topics.map((topic) => (
-              <Badge key={topic.id} variant="secondary">#{topic.name}</Badge>
-            ))}
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* 所有者操作区：草稿引导继续写；已发布则切换可见性 + 升华为游记 */}
