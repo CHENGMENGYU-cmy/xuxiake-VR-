@@ -185,16 +185,12 @@ function UploadContent() {
     clearLocalDraft();
   };
 
-  // 从素材库引用配图（通过 getPostDetail 拉素材封面，去重后并入 images）
+  // 从素材库引用配图（通过 getPostDetail 拉素材封面；去重与上限在 setImages 内基于最新状态判断，避免重复加载）
   const loadRefSnaps = async (ids: string[]) => {
     const validIds = ids.filter(Boolean);
     if (validIds.length === 0) return;
-    const existing = new Set(images.filter(i => i.snapId).map(i => i.snapId));
-    const remaining = 9 - images.length;
-    const toLoad = validIds.filter(id => !existing.has(id)).slice(0, remaining);
-    if (toLoad.length === 0) return;
 
-    const results = await Promise.all(toLoad.map(id => getPostDetail(id).catch(() => null)));
+    const results = await Promise.all(validIds.map(id => getPostDetail(id).catch(() => null)));
     const refImages: UploadedImage[] = results
       .filter(Boolean)
       .map((post: any) => {
@@ -223,18 +219,23 @@ function UploadContent() {
       return;
     }
     setImages(prev => {
-      const merged = [...prev, ...refImages].slice(0, 9);
-      if (merged.length > 0 && !merged.some(i => i.isCover)) {
+      const existing = new Set(prev.filter(i => i.snapId).map(i => i.snapId));
+      const fresh = refImages.filter(img => img.snapId && !existing.has(img.snapId)).slice(0, 9 - prev.length);
+      if (fresh.length === 0) return prev;
+      const merged = [...prev, ...fresh].slice(0, 9);
+      if (!merged.some(i => i.isCover)) {
         merged[0].isCover = true;
       }
       return merged;
     });
   };
 
-  // 从创作引导带入的素材：挂载时加载为配图
+  // 从创作引导带入的素材：挂载时加载为配图（ref 防 StrictMode 双调用导致重复加载）
   const snapIdsParam = searchParams.get('snapIds') || '';
+  const refLoadedRef = useRef(false);
   useEffect(() => {
-    if (activeTab === 'DIARY' && snapIdsParam) {
+    if (activeTab === 'DIARY' && snapIdsParam && !refLoadedRef.current) {
+      refLoadedRef.current = true;
       loadRefSnaps(snapIdsParam.split(','));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

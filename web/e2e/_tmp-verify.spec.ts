@@ -28,9 +28,9 @@ test('统一创作流程·素材库入口→选素材→手写→配图引用', 
   await dialog.getByRole('button', { name: /自己写/ }).click();
   await page.waitForURL(/\/upload\?level=DIARY&snapIds=/, { timeout: 15000 });
 
-  // upload 页：从素材库选择按钮 + 配图加载
+  // upload 页：从素材库选择按钮 + 引用素材已加载为配图（严格断言 1/9）
   await expect(page.getByRole('button', { name: '从素材库选择' })).toBeVisible({ timeout: 15000 });
-  await expect(page.getByText(/图片 \(/)).toBeVisible({ timeout: 15000 });
+  await expect(page.getByText('图片 (1/9)')).toBeVisible({ timeout: 15000 });
 });
 
 test('统一创作流程·我的日记入口→选素材→AI帮我写→batch', async ({ page }) => {
@@ -51,4 +51,41 @@ test('统一创作流程·我的日记入口→选素材→AI帮我写→batch',
   await dialog.getByRole('button', { name: /AI 帮我写/ }).click();
   await page.waitForURL(/\/snap\/generate\/batch\?ids=/, { timeout: 15000 });
   await expect(page.getByRole('heading', { name: '批量日记创作' })).toBeVisible({ timeout: 15000 });
+});
+
+test('统一创作流程·素材库多选→直接进模式步→AI', async ({ page }) => {
+  await loginAsUser(page);
+  await page.goto('http://localhost:3000/snap');
+  await page.waitForURL('**/snap');
+
+  // 多选勾选 1 张素材
+  await page.getByRole('button', { name: '多选' }).click();
+  const card = page.locator('.aspect-square.cursor-pointer').first();
+  await expect(card).toBeVisible({ timeout: 15000 });
+  await card.click();
+  await expect(page.getByText('已选 1 张')).toBeVisible();
+
+  // 底部"写日记" → 引导直接进 mode 步（已选素材，跳过选素材）
+  await page.locator('.fixed.inset-x-0.bottom-0').getByRole('button', { name: '写日记' }).click();
+  const dialog = page.locator('[data-slot="dialog-content"]');
+  await expect(dialog.getByRole('heading', { name: '选择创作方式' })).toBeVisible();
+  await dialog.getByRole('button', { name: /AI 帮我写/ }).click();
+  await page.waitForURL(/\/snap\/generate\/batch\?ids=/, { timeout: 15000 });
+});
+
+test('手写编辑器·从素材库选择补充配图', async ({ page }) => {
+  await loginAsUser(page);
+  await page.goto('http://localhost:3000/upload?level=DIARY');
+  await page.waitForURL('**/upload?level=DIARY');
+
+  // "从素材库选择"按钮 → 弹选择器 → 勾选 → 确认 → 配图增加
+  await expect(page.getByRole('button', { name: '从素材库选择' })).toBeVisible({ timeout: 15000 });
+  await page.getByRole('button', { name: '从素材库选择' }).click();
+  const dialog = page.locator('[data-slot="dialog-content"]');
+  await expect(dialog.getByRole('heading', { name: '选择素材' })).toBeVisible();
+  const card = dialog.locator('button.aspect-square').first();
+  await expect(card).toBeVisible({ timeout: 15000 });
+  await card.click();
+  await dialog.getByRole('button', { name: /确认/ }).click();
+  await expect(page.getByText('图片 (1/9)')).toBeVisible({ timeout: 15000 });
 });
