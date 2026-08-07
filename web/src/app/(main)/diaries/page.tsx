@@ -444,19 +444,30 @@ function DiariesContent() {
                           <p className="text-sm leading-relaxed line-clamp-2">{post.content || '(无内容)'}</p>
                         )}
 
-                        {/* 底部操作 */}
+                        {/* 底部操作：按草稿/可见性差异化 */}
                         <div className="flex items-center gap-1 pt-2 mt-2 border-t border-border/50" onClick={(e) => e.stopPropagation()}>
-                          <Button variant="ghost" size="sm" className="h-7 text-xs gap-1" onClick={() => handleEdit(post.id)}>
-                            <Edit className="h-3 w-3" />编辑
-                          </Button>
-                          {post.visibility === 'PRIVATE' && (
+                          {draft ? (
+                            <Button variant="ghost" size="sm" className="h-7 text-xs gap-1 text-indigo-600" onClick={() => openPost()}>
+                              <PenLine className="h-3 w-3" />继续写
+                            </Button>
+                          ) : (
+                            <Button variant="ghost" size="sm" className="h-7 text-xs gap-1" onClick={() => handleEdit(post.id)}>
+                              <Edit className="h-3 w-3" />编辑
+                            </Button>
+                          )}
+                          {!draft && post.visibility !== 'PUBLIC' && (
                             <Button variant="ghost" size="sm" className="h-7 text-xs gap-1 text-green-600" onClick={() => handlePublish(post.id, 'PUBLIC')}>
                               <Share2 className="h-3 w-3" />公开
                             </Button>
                           )}
-                          {post.visibility !== 'PRIVATE' && (
+                          {!draft && post.visibility !== 'PRIVATE' && (
                             <Button variant="ghost" size="sm" className="h-7 text-xs gap-1 text-amber-600" onClick={() => handlePublish(post.id, 'PRIVATE')}>
                               <Lock className="h-3 w-3" />私密
+                            </Button>
+                          )}
+                          {!draft && post.visibility !== 'FOLLOWERS' && (
+                            <Button variant="ghost" size="sm" className="h-7 text-xs gap-1 text-blue-600" onClick={() => handlePublish(post.id, 'FOLLOWERS')}>
+                              <Users className="h-3 w-3" />关注可见
                             </Button>
                           )}
                           <Button variant="ghost" size="sm" className="h-7 text-xs gap-1 text-purple-600 ml-auto" onClick={() => handlePromoteToJourney(post)}>
