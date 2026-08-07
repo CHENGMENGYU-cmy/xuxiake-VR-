@@ -378,6 +378,16 @@ function DiariesContent() {
                                 <span>·</span>
                                 <span className="flex items-center gap-1">
                                   {MoodEmoji[post.vrMetadata.mood as MoodType]}
+                                  {MoodLabel[post.vrMetadata.mood as MoodType]}
+                                </span>
+                              </>
+                            )}
+                            {!!post.vrMetadata?.weather && (
+                              <>
+                                <span>·</span>
+                                <span className="flex items-center gap-1">
+                                  {WeatherEmoji[post.vrMetadata.weather as WeatherType]}
+                                  {WeatherLabel[post.vrMetadata.weather as WeatherType]}
                                 </span>
                               </>
                             )}
