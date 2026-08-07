@@ -37,4 +37,7 @@ export class JourneyStop {
   @ManyToOne(() => Journey, (journey) => journey.stops, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'journey_id' })
   journey: Journey;
+
+  @OneToMany(() => JourneyStopMedia, (media) => media.stop, { cascade: true })
+  mediaItems: JourneyStopMedia[];
 }
