@@ -11,7 +11,8 @@ import { toast } from 'sonner';
 import { getPostById, updatePost, deletePost, publishPost } from '@/lib/post-api';
 import { useAuthStore } from '@/stores/auth-store';
 import { AuthGuard } from '@/components/auth-guard';
-import type { Post } from '@/types';
+import type { Post, MoodType, WeatherType } from '@/types';
+import { MoodEmoji, WeatherEmoji, MoodLabel, WeatherLabel } from '@/types';
 
 export default function DiaryDetailPage() {
   return (
