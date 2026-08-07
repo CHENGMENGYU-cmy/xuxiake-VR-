@@ -84,6 +84,32 @@ function DiaryDetailContent() {
     setEditing(false);
   };
 
+  const changeVisibility = async (visibility: 'PRIVATE' | 'PUBLIC' | 'FOLLOWERS') => {
+    if (!post || changing) return;
+    setChanging(true);
+    try {
+      await publishPost(post.id, undefined, visibility);
+      setPost({ ...post, visibility });
+      toast.success(visibility === 'PRIVATE' ? '已转为私密' : visibility === 'PUBLIC' ? '已转为公开' : '已设为关注可见');
+    } catch {
+      toast.error('切换可见性失败，请重试');
+    } finally {
+      setChanging(false);
+    }
+  };
+
+  const continueEdit = () => {
+    if (!post) return;
+    const meta = post.vrMetadata || {};
+    if (Array.isArray(meta.sourceSnapIds) && meta.sourceSnapIds.length > 1) {
+      router.push(`/snap/generate/batch?ids=${meta.sourceSnapIds.join(',')}&postId=${post.id}`);
+    } else if (post.parentPostId) {
+      router.push(`/snap/generate/${post.parentPostId}`);
+    } else {
+      router.push(`/upload?edit=${post.id}`);
+    }
+  };
+
   if (loading) {
     return (
       <div className="mx-auto max-w-2xl space-y-4">
