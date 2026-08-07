@@ -131,6 +131,23 @@ function DiaryDetailContent() {
   const isOwner = user && post.author?.id === user.id;
   const isDraft = post.vrMetadata?.status === 'draft';
 
+  // 统一完整卡片所需的元数据（手写/AI 两种来源都能提取）
+  const diaryMeta = (() => {
+    try {
+      if (!post.vrMetadata) return {};
+      return typeof post.vrMetadata === 'string' ? JSON.parse(post.vrMetadata) : post.vrMetadata;
+    } catch { return {}; }
+  })();
+  const mood = diaryMeta.mood as MoodType | undefined;
+  const weather = diaryMeta.weather as WeatherType | undefined;
+  const insight = diaryMeta.insight as string | undefined;
+  const style = diaryMeta.style as string | undefined;
+  const firstImage = post.mediaItems?.find((m) => m.type === 'IMAGE');
+  const coverImage = firstImage
+    ? (firstImage.thumbnailUrl || firstImage.url)
+    : (diaryMeta.coverImage || null);
+  const displayTitle = post.title || '日记';
+
   return (
     <div className="mx-auto max-w-2xl space-y-4">
       {/* 返回按钮 */}
