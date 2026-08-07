@@ -6,6 +6,7 @@ import { Post } from '../../entities/post.entity.js';
 import { MediaItem } from '../../entities/media-item.entity.js';
 import { Journey } from '../../entities/journey.entity.js';
 import { JourneyStop } from '../../entities/journey-stop.entity.js';
+import { JourneyStopMedia } from '../../entities/journey-stop-media.entity.js';
 import { AiClientService } from '../../common/ai-client.service.js';
 
 export interface GenerationJob {
