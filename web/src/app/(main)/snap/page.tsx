@@ -220,6 +220,10 @@ function SnapContent() {
 
   // 按当前打开的集合过滤：优先"天"，其次行程/地点
   const filteredItems = (() => {
+    if (selectMode) {
+      // 多选模式展示全部素材，便于跨月份/跨集合选择
+      return allItems;
+    }
     if (viewingDay) {
       return allItems.filter((item: any) => {
         const d = new Date(item.createdAt);
