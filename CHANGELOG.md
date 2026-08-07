@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-07
+修改位置：web/src/app/(main)/snap/page.tsx
+修改原因：素材库「按行程」视图的"AI 生成游记"入口违背《内容生成逻辑链条》（闪拍→日志/日记→游记），把行程内全部 SNAPSHOT 直接生成游记、缺失"日志事实+日记情感"归集；且与 /journeys/generate（选日志+日记→游记）功能重复、能力更弱（参数硬编码、无素材选择、无结果预览、状态残留、轮询泄漏）
+修改内容：删除素材库按行程「AI 生成游记」入口——移除 startTripGeneration 内联逻辑与 setInterval 轮询、tripGen* 状态、"已选行程+AI 生成游记"UI 条；清理不再使用的 generateTravelogueByTrip/getTravelogueJob/useRouter/toast/Sparkles 等引用；后端 generate-by-trip 接口保留不动，snap-api.ts 同步保留
+修改效果：素材库专注「闪拍→日记」，游记统一从「我的日记→升华为游记」与 /journeys/generate 生成，链路清晰、无重复入口；消除状态残留与轮询泄漏隐患；Playwright 验证通过（按行程不再出现 AI 生成游记按钮、照片墙/多选/写日记正常；日记→升华为游记→生成→保存私密→我的游记全链路）
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-07
 修改位置：web/src/app/(main)/snap/generate/batch/page.tsx, diaries/[id]/page.tsx, diaries/page.tsx, discover/page.tsx；server/src/modules/posts/ai.service.ts
 修改原因：1) 批量生成页生成后只有「标题+内容」的简单编辑区，无封面图/时间/心情展示，与详情页完整卡片不一致；2) 素材心情为中文值、手写心情为 MoodType key，两套格式导致详情页/列表/广场心情展示不统一
 修改内容：1) batch 编辑器顶部加大封面图（首张素材）、标题下显示生成时间与心情，展示向完整卡片靠拢；2) 后端 executeMultiDiaryJob 生成时把素材心情写入 vrMetadata.mood，详情页可完整展示；3) 详情页/我的日记列表/日记广场的心情展示兼容两种格式（能匹配 MoodEmoji 时显示表情，否则直接显示文字心情）
