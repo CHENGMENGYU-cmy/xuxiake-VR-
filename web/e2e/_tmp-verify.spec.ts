@@ -58,11 +58,13 @@ test('统一创作流程·素材库多选→直接进模式步→AI', async ({ p
   await page.goto('http://localhost:3000/snap');
   await page.waitForURL('**/snap');
 
-  // 多选勾选 1 张素材
+  // 进入集合视图（点"2026年8月4日 1 张"集合卡片），出现素材卡片
+  await page.getByText(/2026年8月4日\s*1 张/).click();
+  await expect(page.locator('.aspect-square.cursor-pointer')).toHaveCount(1);
+
+  // 多选勾选素材
   await page.getByRole('button', { name: '多选' }).click();
-  const card = page.locator('.aspect-square.cursor-pointer').first();
-  await expect(card).toBeVisible({ timeout: 15000 });
-  await card.click();
+  await page.locator('.aspect-square.cursor-pointer').first().click();
   await expect(page.getByText('已选 1 张')).toBeVisible();
 
   // 底部"写日记" → 引导直接进 mode 步（已选素材，跳过选素材）
