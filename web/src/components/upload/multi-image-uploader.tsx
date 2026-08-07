@@ -14,6 +14,8 @@ export interface UploadedImage {
   originalName: string;
   size: number;
   isCover: boolean;
+  /** 引用自素材库的素材 ID（本地上传无此字段） */
+  snapId?: string;
 }
 
 interface MultiImageUploaderProps {
