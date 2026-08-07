@@ -127,6 +127,8 @@ function BatchContent() {
     setContent('');
     setInsight('');
     setTags([]);
+    setCreatedAt('');
+    setMood('');
     setGenStatus('正在提交生成任务...');
     setProgress(0);
     try {
