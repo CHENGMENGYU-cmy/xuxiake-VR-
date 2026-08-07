@@ -386,7 +386,7 @@ export class PostsService {
     return { message: '删除成功' };
   }
 
-  async updatePost(userId: string, postId: string, dto: { content: string }) {
+  async updatePost(userId: string, postId: string, dto: { content?: string; journey?: CreatePostDto['journey'] }) {
     const post = await this.postRepo.findOne({
       where: { id: postId },
       relations: { author: true, mediaItems: true, tags: true, topics: true },
@@ -394,9 +394,68 @@ export class PostsService {
     if (!post) throw new NotFoundException('内容不存在');
     if (post.authorId !== userId) throw new NotFoundException('无权编辑此内容');
 
-    post.content = dto.content;
+    if (dto.content !== undefined) post.content = dto.content;
     await this.postRepo.save(post);
-    return this.formatPost(post);
+
+    // 更新游记结构：先删旧 stops/media，再按新结构重建
+    if (dto.journey) {
+      const old = await this.journeyRepo.findOne({ where: { postId } });
+      if (old) {
+        const oldStops = await this.journeyStopRepo.find({ where: { journeyId: old.id } });
+        if (oldStops.length > 0) {
+          await this.journeyStopMediaRepo.delete({ stopId: In(oldStops.map((s) => s.id)) });
+          await this.journeyStopRepo.delete({ journeyId: old.id });
+        }
+        await this.journeyRepo.update(old.id, {
+          title: dto.journey.title,
+          startDate: dto.journey.startDate || null,
+          endDate: dto.journey.endDate || null,
+          destination: dto.journey.destination || null,
+          coverUrl: dto.journey.coverUrl || null,
+          summary: dto.journey.summary || null,
+          transport: dto.journey.transport || null,
+          budget: dto.journey.budget || null,
+          theme: dto.journey.theme || null,
+          insight: dto.journey.insight || null,
+          stopCount: dto.journey.stops?.length || 0,
+        });
+        if (dto.journey.stops?.length) {
+          for (let i = 0; i < dto.journey.stops.length; i++) {
+            const s = dto.journey.stops[i];
+            const stop = await this.journeyStopRepo.save(this.journeyStopRepo.create({
+              journeyId: old.id,
+              dayNumber: s.dayNumber || null,
+              dayDate: s.dayDate || null,
+              locationName: s.locationName || null,
+              locationLat: s.locationLat || null,
+              locationLng: s.locationLng || null,
+              description: s.description || null,
+              mediaUrl: s.mediaUrl || null,
+              sortOrder: i,
+            }));
+            if (s.mediaItems?.length) {
+              await this.journeyStopMediaRepo.save(s.mediaItems.map((m, mi) =>
+                this.journeyStopMediaRepo.create({
+                  stopId: stop.id,
+                  url: m.url,
+                  thumbnailUrl: m.thumbnailUrl || null,
+                  sortOrder: mi,
+                }),
+              ));
+            }
+          }
+        }
+      }
+    }
+
+    const updated = { ...this.formatPost(post), journey: null };
+    if (post.postType === 'JOURNEY') {
+      updated.journey = await this.journeyRepo.findOne({
+        where: { postId },
+        relations: { stops: { mediaItems: true } },
+      });
+    }
+    return updated;
   }
 
   async likePost(userId: string, postId: string) {
