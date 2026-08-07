@@ -194,7 +194,7 @@ function DiarySquareTab() {
                 )}
                 <div className="flex flex-wrap items-center gap-2">
                   {style && <Badge className={`text-[10px] px-1.5 ${getStyleColor(style)}`}>{style}</Badge>}
-                  {mood && <span className="text-[10px] text-muted-foreground">{MoodEmoji[mood as MoodType]} {MoodLabel[mood as MoodType]}</span>}
+                  {mood && <span className="text-[10px] text-muted-foreground">{MoodEmoji[mood as MoodType] ? `${MoodEmoji[mood as MoodType]} ` : ''}{MoodLabel[mood as MoodType] || mood}</span>}
                   {weather && <span className="text-[10px] text-muted-foreground">{WeatherEmoji[weather as WeatherType]} {WeatherLabel[weather as WeatherType]}</span>}
                 </div>
                 <div className="flex items-center justify-between text-[10px] text-muted-foreground">
