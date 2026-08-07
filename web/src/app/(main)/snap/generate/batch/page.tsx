@@ -232,6 +232,7 @@ function BatchContent() {
   }
 
   const showEditor = !!postId || generating;
+  const editorCover = snaps.length > 0 ? getMediaImage(snaps[0]) : null;
 
   return (
     <div className="mx-auto max-w-4xl px-2 pb-24">
