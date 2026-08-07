@@ -479,13 +479,19 @@ export class AiService {
 
   private getDiaryStyleGuide(style: string): string {
     const map: Record<string, string> = {
+      '温柔治愈风': '温柔细腻，治愈人心，语言柔软有温度',
+      '生活碎片风': '记录生活细节，真实自然，像随手写下的片段',
+      '成长复盘风': '以反思为主，从经历中提炼成长',
+      '诗意散文风': '语言优美，富有诗意和画面感',
+      '轻松口语风': '轻松随意，口语化，像和朋友聊天',
+      // 兼容旧数据（不带"风"后缀）
       '温柔治愈': '温柔细腻，治愈人心，语言柔软有温度',
       '生活碎片': '记录生活细节，真实自然，像随手写下的片段',
       '成长复盘': '以反思为主，从经历中提炼成长',
       '诗意散文': '语言优美，富有诗意和画面感',
       '轻松口语': '轻松随意，口语化，像和朋友聊天',
     };
-    return map[style] || map['温柔治愈'];
+    return map[style] || map['温柔治愈风'];
   }
 
   private formatDate(date: Date): string {
