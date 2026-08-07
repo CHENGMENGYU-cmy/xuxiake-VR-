@@ -173,6 +173,8 @@ function DiarySquareTab() {
           const coverImage = getCoverImage(diary);
           const style = getStyle(diary);
           const insight = getInsight(diary);
+          const mood = getMood(diary);
+          const weather = getWeather(diary);
           return (
             <Card
               key={diary.id}
