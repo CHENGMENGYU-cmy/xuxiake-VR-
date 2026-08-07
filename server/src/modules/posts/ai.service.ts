@@ -45,6 +45,23 @@ interface SourceMaterial {
   moods: string[];
 }
 
+interface DayGroup {
+  date: string;
+  locationName: string | null;
+  media: { url: string; thumbnailUrl: string | null }[];
+}
+
+interface StructuredTravelogue {
+  title: string;
+  summary: string;
+  destination: string;
+  transport: string;
+  budget: string;
+  theme: string;
+  insight: string;
+  dayTexts: string[];
+}
+
 @Injectable()
 export class AiService {
   private jobs = new Map<string, GenerationJob>();
