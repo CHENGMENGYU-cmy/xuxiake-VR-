@@ -352,6 +352,12 @@ function BatchContent() {
       {/* 编辑器 */}
       {showEditor && !generating && (
         <div className="overflow-hidden rounded-2xl border bg-card shadow-sm">
+          {/* 封面图 */}
+          {editorCover && (
+            <div className="aspect-[16/9] bg-muted">
+              <img src={editorCover} alt="" className="h-full w-full object-cover" />
+            </div>
+          )}
           <div className="border-b border-border/60 px-6 py-4">
             <Input
               value={title}
@@ -359,6 +365,13 @@ function BatchContent() {
               placeholder="给这篇日记起个标题..."
               className="border-0 bg-transparent px-0 text-xl font-bold tracking-tight placeholder:text-muted-foreground/30 focus-visible:ring-0"
             />
+            <div className="mt-1.5 flex items-center gap-3 text-[11px] text-muted-foreground">
+              <span className="flex items-center gap-1">
+                <Clock className="h-3 w-3" />
+                {createdAt ? new Date(createdAt).toLocaleString('zh-CN') : '刚刚'}
+              </span>
+              {mood && <span className="flex items-center gap-1">心情：{mood}</span>}
+            </div>
           </div>
           <div className="px-6 py-4">
             <Textarea
