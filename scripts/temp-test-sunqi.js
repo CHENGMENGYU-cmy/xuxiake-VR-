@@ -17,7 +17,7 @@ async function j(url, opts = {}) {
   });
   console.log('login status:', login.status);
   console.log('login body:', JSON.stringify(login.body).slice(0, 400));
-  const token = login.body?.data?.accessToken;
+  const token = login.body?.data?.tokens?.accessToken;
   if (!token) return;
   console.log('token len:', token.length);
 
