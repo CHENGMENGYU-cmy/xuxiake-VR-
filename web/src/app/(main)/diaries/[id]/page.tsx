@@ -246,8 +246,8 @@ function DiaryDetailContent() {
                 )}
                 {mood && (
                   <span className="flex items-center gap-1">
-                    <span className="text-base">{MoodEmoji[mood]}</span>
-                    {MoodLabel[mood]}
+                    {MoodEmoji[mood as MoodType] && <span className="text-base">{MoodEmoji[mood as MoodType]}</span>}
+                    {MoodLabel[mood as MoodType] || mood}
                   </span>
                 )}
                 {post.location?.name && (
