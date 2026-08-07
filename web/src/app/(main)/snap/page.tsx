@@ -29,10 +29,6 @@ function SnapContent() {
   const [byTrip, setByTrip] = useState<TripDimension[]>([]);
   const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
   const [selectedTrip, setSelectedTrip] = useState<{ tripId: string; name: string } | null>(null);
-  const [tripGenerating, setTripGenerating] = useState(false);
-  const [tripGenStatus, setTripGenStatus] = useState('');
-  const [tripGenProgress, setTripGenProgress] = useState(0);
-  const [tripGenPostId, setTripGenPostId] = useState<string | null>(null);
   const [selectMode, setSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [previewItems, setPreviewItems] = useState<any[] | null>(null);
