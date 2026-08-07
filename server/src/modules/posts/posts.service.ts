@@ -30,6 +30,7 @@ export class PostsService {
     @InjectRepository(Topic) private readonly topicRepo: Repository<Topic>,
     @InjectRepository(Journey) private readonly journeyRepo: Repository<Journey>,
     @InjectRepository(JourneyStop) private readonly journeyStopRepo: Repository<JourneyStop>,
+    @InjectRepository(JourneyStopMedia) private readonly journeyStopMediaRepo: Repository<JourneyStopMedia>,
     @InjectRepository(Collection) private readonly collectionRepo: Repository<Collection>,
     @InjectRepository(CollectionPost) private readonly collectionPostRepo: Repository<CollectionPost>,
     @InjectRepository(UserFollow) private readonly followRepo: Repository<UserFollow>,
