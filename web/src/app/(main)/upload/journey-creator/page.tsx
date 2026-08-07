@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Map, Loader2, Send, Plus, Trash2, ImagePlus, X } from 'lucide-react';
+import { Map, Loader2, Send, Plus, Trash2, ImagePlus, X, Sparkles, Calendar, MapPin } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,19 +11,23 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { usePostStore } from '@/stores/post-store';
 import { uploadImage } from '@/lib/media-api';
-import { getPostById } from '@/lib/post-api';
+import { getPostById, updatePost } from '@/lib/post-api';
 import { CreatePostPayload } from '@/lib/post-api';
-import apiClient from '@/lib/api-client';
+import { SnapPickerDialog, useSnapItems } from '@/components/diary/snap-picker';
+import type { JourneyStop } from '@/types';
 
-interface JourneyStop {
+interface EditorStopMedia { url: string; thumbnailUrl?: string }
+interface EditorStop {
   id: string;
   dayNumber: number;
+  dayDate: string;
   locationName: string;
-  locationLat?: number;
-  locationLng?: number;
   description: string;
-  mediaUrl?: string;
+  mediaItems: EditorStopMedia[];
 }
+
+const TRANSPORT_OPTIONS = ['飞机', '高铁', '自驾', '火车', '大巴', '徒步', '骑行', '轮渡'];
+const THEME_OPTIONS = ['美食', '人文', '自然', '亲子', '冒险', '摄影', '城市', '古镇'];
 
 export default function JourneyCreatorPage() {
   return (
@@ -38,43 +42,55 @@ function JourneyCreatorContent() {
   const searchParams = useSearchParams();
   const editId = searchParams.get('edit');
   const { publishPost, isPublishing } = usePostStore();
+  const { items, ensureLoaded } = useSnapItems();
 
   const [title, setTitle] = useState('');
+  const [summary, setSummary] = useState('');
   const [content, setContent] = useState('');
   const [destination, setDestination] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [transport, setTransport] = useState('');
+  const [budget, setBudget] = useState('');
+  const [theme, setTheme] = useState('');
+  const [insight, setInsight] = useState('');
   const [coverUrl, setCoverUrl] = useState('');
-  const [stops, setStops] = useState<JourneyStop[]>([]);
+  const [stops, setStops] = useState<EditorStop[]>([]);
   const [visibility, setVisibility] = useState<'PUBLIC' | 'PRIVATE'>('PUBLIC');
   const [uploadingCover, setUploadingCover] = useState(false);
   const [uploadingStopMedia, setUploadingStopMedia] = useState<string | null>(null);
+  const [pickerForStop, setPickerForStop] = useState<string | null>(null);
 
   // 编辑模式：加载已有游记数据
   useEffect(() => {
     if (!editId) return;
+    ensureLoaded();
     getPostById(editId).then(post => {
-      setTitle(post.journey?.title || '');
+      setTitle(post.journey?.title || post.title || '');
       setContent(post.content || '');
+      setSummary(post.journey?.summary || '');
       setDestination(post.journey?.destination || '');
       setStartDate(post.journey?.startDate || '');
       setEndDate(post.journey?.endDate || '');
-      setCoverUrl(post.journey?.coverUrl || '');
+      setTransport(post.journey?.transport || '');
+      setBudget(post.journey?.budget || '');
+      setTheme(post.journey?.theme || '');
+      setInsight(post.journey?.insight || '');
+      setCoverUrl(post.journey?.coverUrl || post.mediaItems?.[0]?.url || '');
       if (post.journey?.stops) {
-        setStops(post.journey.stops.map((s: any) => ({
+        setStops(post.journey.stops.map((s: JourneyStop) => ({
           id: `stop-${Date.now()}-${Math.random()}`,
           dayNumber: s.dayNumber || 1,
+          dayDate: s.dayDate || '',
           locationName: s.locationName || '',
-          locationLat: s.locationLat,
-          locationLng: s.locationLng,
           description: s.description || '',
-          mediaUrl: s.mediaUrl,
+          mediaItems: (s.mediaItems || []).map(m => ({ url: m.url, thumbnailUrl: m.thumbnailUrl || undefined })),
         })));
       }
     }).catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editId]);
 
-  // 上传封面
   const handleCoverUpload = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
     setUploadingCover(true);
@@ -88,80 +104,128 @@ function JourneyCreatorContent() {
     setUploadingCover(false);
   };
 
-  // 添加行程站点
   const addStop = () => {
-    const newStop: JourneyStop = {
+    const nextDay = stops.length + 1;
+    setStops([...stops, {
       id: `stop-${Date.now()}`,
-      dayNumber: stops.length + 1,
+      dayNumber: nextDay,
+      dayDate: '',
       locationName: '',
       description: '',
-    };
-    setStops([...stops, newStop]);
+      mediaItems: [],
+    }]);
   };
 
-  // 删除行程站点
   const removeStop = (id: string) => {
-    const newStops = stops.filter((s) => s.id !== id).map((s, i) => ({
-      ...s,
-      dayNumber: i + 1,
-    }));
-    setStops(newStops);
+    setStops(stops.filter((s) => s.id !== id).map((s, i) => ({ ...s, dayNumber: i + 1 })));
   };
 
-  // 更新行程站点
-  const updateStop = (id: string, updates: Partial<JourneyStop>) => {
+  const updateStop = (id: string, updates: Partial<EditorStop>) => {
     setStops(stops.map((s) => (s.id === id ? { ...s, ...updates } : s)));
   };
 
-  // 上传站点媒体
   const handleStopMediaUpload = async (stopId: string, files: FileList | null) => {
     if (!files || files.length === 0) return;
     setUploadingStopMedia(stopId);
     try {
       const result = await uploadImage(files[0]);
-      updateStop(stopId, { mediaUrl: result.url });
-      toast.success('图片上传成功');
+      const media = { url: result.url, thumbnailUrl: result.url };
+      const stop = stops.find((s) => s.id === stopId);
+      if (stop) updateStop(stopId, { mediaItems: [...stop.mediaItems, media] });
+      toast.success('图片已添加');
     } catch {
       toast.error('图片上传失败');
     }
     setUploadingStopMedia(null);
   };
 
-  // 发布
+  const removeStopMedia = (stopId: string, idx: number) => {
+    const stop = stops.find((s) => s.id === stopId);
+    if (!stop) return;
+    updateStop(stopId, { mediaItems: stop.mediaItems.filter((_, i) => i !== idx) });
+  };
+
+  // 从素材库选图加入章节
+  const handlePickImages = (ids: string[]) => {
+    if (!pickerForStop) return;
+    const chosen = ids.map((id) => items.find((it) => it.id === id)).filter(Boolean) as { image: string | null; locationName: string }[];
+    const stop = stops.find((s) => s.id === pickerForStop);
+    if (!stop) return;
+    const added: EditorStopMedia[] = [];
+    for (const c of chosen) {
+      if (c.image) added.push({ url: c.image, thumbnailUrl: c.image });
+    }
+    updateStop(pickerForStop, { mediaItems: [...stop.mediaItems, ...added] });
+    if (!stop.locationName && chosen[0]?.locationName) {
+      updateStop(pickerForStop, { locationName: chosen[0].locationName });
+    }
+    setPickerForStop(null);
+  };
+
+  const dayCount = startDate && endDate
+    ? Math.max(1, Math.round((new Date(endDate).getTime() - new Date(startDate).getTime()) / 86400000) + 1)
+    : (stops.length || null);
+
+  const assembleContent = () => {
+    let md = `# ${title.trim() || '我的游记'}\n\n`;
+    if (summary.trim()) md += `> ${summary.trim()}\n\n`;
+    const info = [destination, transport, budget, theme].map((v) => v.trim()).filter(Boolean).join(' · ');
+    if (info) md += info + '\n\n';
+    stops.forEach((s) => {
+      md += `## Day ${s.dayNumber}${s.locationName ? `｜${s.locationName}` : ''}${s.dayDate ? `（${s.dayDate}）` : ''}\n\n`;
+      md += `${s.description || ''}\n\n`;
+    });
+    if (insight.trim()) md += `## 写在最后\n\n${insight.trim()}\n`;
+    return md;
+  };
+
   const canPublish = title.trim().length > 0 && !isPublishing;
 
   const handlePublish = async () => {
     if (!canPublish) return;
-
-    const payload: CreatePostPayload = {
-      content: content.trim() || title.trim(),
-      visibility,
-      postType: 'JOURNEY',
-      contentLevel: 'ESSAY',
-      vrMetadata: { tab: 'JOURNEY' },
-      journey: {
-        title: title.trim(),
-        startDate: startDate || undefined,
-        endDate: endDate || undefined,
-        destination: destination || undefined,
-        coverUrl: coverUrl || undefined,
-        stops: stops.map((s) => ({
-          dayNumber: s.dayNumber,
-          locationName: s.locationName,
-          locationLat: s.locationLat,
-          locationLng: s.locationLng,
-          description: s.description,
-          mediaUrl: s.mediaUrl,
-        })),
-      },
+    const journeyPayload = {
+      title: title.trim(),
+      startDate: startDate || undefined,
+      endDate: endDate || undefined,
+      destination: destination.trim() || undefined,
+      coverUrl: coverUrl || undefined,
+      summary: summary.trim() || undefined,
+      transport: transport || undefined,
+      budget: budget.trim() || undefined,
+      theme: theme || undefined,
+      insight: insight.trim() || undefined,
+      stops: stops.map((s) => ({
+        dayNumber: s.dayNumber,
+        dayDate: s.dayDate || undefined,
+        locationName: s.locationName.trim() || undefined,
+        description: s.description.trim() || undefined,
+        mediaItems: s.mediaItems.map((m) => ({ url: m.url, thumbnailUrl: m.thumbnailUrl })),
+      })),
     };
 
     try {
-      await publishPost(payload);
-      toast.success('旅程发布成功');
-      router.push('/feed');
+      if (editId) {
+        await updatePost(editId, {
+          content: assembleContent(),
+          journey: journeyPayload,
+        });
+        toast.success('游记已更新');
+        router.push(`/journeys/${editId}`);
+      } else {
+        const payload: CreatePostPayload = {
+          content: assembleContent(),
+          visibility,
+          postType: 'JOURNEY',
+          contentLevel: 'ESSAY',
+          vrMetadata: { tab: 'JOURNEY' },
+          journey: journeyPayload,
+        };
+        const post = await publishPost(payload);
+        toast.success('旅程发布成功');
+        router.push(`/journeys/${post.id}`);
+      }
     } catch {
-      toast.error('发布失败，请重试');
+      toast.error(editId ? '保存失败，请重试' : '发布失败，请重试');
     }
   };
 
@@ -173,14 +237,14 @@ function JourneyCreatorContent() {
           <Map className="h-4 w-4 text-white" />
         </div>
         <div>
-          <h1 className="text-xl font-bold">创建游记</h1>
-          <p className="text-sm text-muted-foreground">记录旅程的每一个精彩瞬间</p>
+          <h1 className="text-xl font-bold">{editId ? '编辑游记' : '写游记'}</h1>
+          <p className="text-sm text-muted-foreground">标题 + 信息卡 + 按天章节（文字 & 多图）+ 结尾感悟，图文叙事式游记</p>
         </div>
       </div>
 
       <Card className="shadow-sm">
         <CardContent className="p-6 space-y-5">
-          {/* 标题+封面 */}
+          {/* 标题 + 封面 */}
           <div className="grid gap-4 sm:grid-cols-3">
             <div className="sm:col-span-2 space-y-2">
               <label className="text-sm font-medium">游记标题 *</label>
@@ -203,11 +267,13 @@ function JourneyCreatorContent() {
             </div>
           </div>
 
-          {/* 描述+日期 */}
+          {/* 导语 */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">游记正文</label>
-            <Textarea placeholder="写下你的旅程故事..." className="min-h-[120px] resize-none" value={content} onChange={(e) => setContent(e.target.value)} />
+            <label className="text-sm font-medium">导语（一句话简介）</label>
+            <Input placeholder="如：在漓江晨雾里醒来，用三天把桂林的山水与烟火装进行囊" value={summary} onChange={(e) => setSummary(e.target.value)} />
           </div>
+
+          {/* 信息卡 */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             <div className="space-y-1.5">
               <label className="text-sm font-medium">目的地</label>
@@ -221,51 +287,87 @@ function JourneyCreatorContent() {
               <label className="text-sm font-medium">结束日期</label>
               <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
             </div>
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium">出行方式</label>
+              <select value={transport} onChange={(e) => setTransport(e.target.value)} className="h-9 w-full rounded-lg border border-border bg-background px-2 text-sm">
+                <option value="">选择出行方式</option>
+                {TRANSPORT_OPTIONS.map((t) => <option key={t} value={t}>{t}</option>)}
+              </select>
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium">人均消费</label>
+              <Input placeholder="如：3000元" value={budget} onChange={(e) => setBudget(e.target.value)} />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium">旅行主题</label>
+              <select value={theme} onChange={(e) => setTheme(e.target.value)} className="h-9 w-full rounded-lg border border-border bg-background px-2 text-sm">
+                <option value="">选择主题</option>
+                {THEME_OPTIONS.map((t) => <option key={t} value={t}>{t}</option>)}
+              </select>
+            </div>
           </div>
+          {dayCount && (
+            <p className="text-xs text-muted-foreground flex items-center gap-1">
+              <Calendar className="h-3.5 w-3.5" />共 {dayCount} 天行程
+            </p>
+          )}
 
           <Separator />
 
-          {/* 行程站点 */}
+          {/* 章节（按天） */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="font-semibold">行程安排</h3>
-              <Button variant="outline" size="sm" onClick={addStop} className="gap-1"><Plus className="h-4 w-4" />添加站点</Button>
+              <h3 className="font-semibold">游记正文（按天分章节）</h3>
+              <Button variant="outline" size="sm" onClick={addStop} className="gap-1"><Plus className="h-4 w-4" />添加 Day</Button>
             </div>
             {stops.length === 0 ? (
               <div className="rounded-lg border-2 border-dashed py-12 text-center text-muted-foreground">
                 <Map className="h-10 w-10 mx-auto mb-2 opacity-30" />
-                <p className="text-sm">点击「添加站点」规划你的旅程路线</p>
+                <p className="text-sm">点击「添加 Day」，每天写一段文字并配上照片，组成图文并茂的游记</p>
               </div>
             ) : (
               <div className="space-y-3">
                 {stops.map((stop) => (
                   <div key={stop.id} className="flex gap-3 rounded-lg border bg-card p-4">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary text-sm font-bold">{stop.dayNumber}</div>
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary text-sm font-bold">D{stop.dayNumber}</div>
                     <div className="flex-1 space-y-2">
                       <div className="flex gap-2">
+                        <Input type="date" value={stop.dayDate} onChange={(e) => updateStop(stop.id, { dayDate: e.target.value })} className="w-40 text-xs" />
                         <Input placeholder="地点名称" value={stop.locationName} onChange={(e) => updateStop(stop.id, { locationName: e.target.value })} className="flex-1" />
-                        <Input type="number" step="0.0001" placeholder="纬度" value={stop.locationLat || ''} onChange={(e) => updateStop(stop.id, { locationLat: parseFloat(e.target.value) || undefined })} className="w-24 text-xs" />
-                        <Input type="number" step="0.0001" placeholder="经度" value={stop.locationLng || ''} onChange={(e) => updateStop(stop.id, { locationLng: parseFloat(e.target.value) || undefined })} className="w-24 text-xs" />
                       </div>
-                      <Textarea placeholder="描述这一站..." value={stop.description} onChange={(e) => updateStop(stop.id, { description: e.target.value })} className="min-h-[50px] resize-none" />
-                      {stop.mediaUrl ? (
-                        <div className="relative h-24 rounded-lg overflow-hidden">
-                          <img src={stop.mediaUrl} alt="" className="h-full w-full object-cover" />
-                          <button onClick={() => updateStop(stop.id, { mediaUrl: undefined })} className="absolute right-2 top-2 rounded-full bg-black/60 p-1 text-white"><X className="h-3 w-3" /></button>
+                      <Textarea placeholder="这一天的旅程故事、所见所感..." value={stop.description} onChange={(e) => updateStop(stop.id, { description: e.target.value })} className="min-h-[60px] resize-none" />
+                      {stop.mediaItems.length > 0 && (
+                        <div className="grid grid-cols-4 gap-1.5">
+                          {stop.mediaItems.map((m, mi) => (
+                            <div key={mi} className="relative aspect-square overflow-hidden rounded-lg">
+                              <img src={m.url} alt="" className="h-full w-full object-cover" />
+                              <button onClick={() => removeStopMedia(stop.id, mi)} className="absolute right-1 top-1 rounded-full bg-black/60 p-0.5 text-white"><X className="h-3 w-3" /></button>
+                            </div>
+                          ))}
                         </div>
-                      ) : (
-                        <label className="flex items-center justify-center gap-1.5 h-16 rounded-lg border border-dashed cursor-pointer hover:bg-muted/50 transition-colors">
-                          {uploadingStopMedia === stop.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImagePlus className="h-4 w-4 text-muted-foreground" />}
-                          <span className="text-xs text-muted-foreground">{uploadingStopMedia === stop.id ? '上传中' : '添加图片'}</span>
+                      )}
+                      <div className="flex items-center gap-2">
+                        <label className="flex items-center gap-1.5 h-9 rounded-lg border border-dashed px-3 text-xs text-muted-foreground cursor-pointer hover:bg-muted/50 transition-colors">
+                          {uploadingStopMedia === stop.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <ImagePlus className="h-3.5 w-3.5" />}
+                          {uploadingStopMedia === stop.id ? '上传中' : '本地上传'}
                           <input type="file" accept="image/*" className="hidden" onChange={(e) => handleStopMediaUpload(stop.id, e.target.files)} />
                         </label>
-                      )}
+                        <Button variant="ghost" size="sm" className="h-9 text-xs gap-1" onClick={() => setPickerForStop(stop.id)}>
+                          <Sparkles className="h-3.5 w-3.5 text-teal-500" />从素材库选图
+                        </Button>
+                      </div>
                     </div>
                     <button onClick={() => removeStop(stop.id)} className="shrink-0 rounded-full p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10"><Trash2 className="h-4 w-4" /></button>
                   </div>
                 ))}
               </div>
             )}
+          </div>
+
+          {/* 结尾感悟 */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">结尾感悟</label>
+            <Textarea placeholder="给这次旅程一个温暖的收尾..." value={insight} onChange={(e) => setInsight(e.target.value)} className="min-h-[60px] resize-none" />
           </div>
 
           {/* 可见性 + 发布 */}
@@ -282,12 +384,20 @@ function JourneyCreatorContent() {
               <Button variant="outline" size="lg" onClick={() => router.push('/journeys')}>取消</Button>
               <Button size="lg" className="gap-2" disabled={!canPublish} onClick={handlePublish}>
                 {isPublishing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-                {isPublishing ? '发布中...' : '发布游记'}
+                {isPublishing ? '发布中...' : editId ? '保存修改' : '发布游记'}
               </Button>
             </div>
           </div>
         </CardContent>
       </Card>
+
+      {/* 素材库选图弹层 */}
+      <SnapPickerDialog
+        open={pickerForStop !== null}
+        onOpenChange={(open) => !open && setPickerForStop(null)}
+        max={12}
+        onConfirm={handlePickImages}
+      />
     </div>
   );
 }

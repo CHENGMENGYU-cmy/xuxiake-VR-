@@ -601,7 +601,7 @@ Day 2：<第2天的正文>
       const day = map.get(key)!;
       if (!day.locationName && p.locationName) day.locationName = p.locationName;
       for (const m of p.mediaItems || []) {
-        if (m.type === 'IMAGE') day.media.push({ url: m.url, thumbnailUrl: m.thumbnailUrl });
+        if (m.type === 'IMAGE') day.media.push({ url: m.url || '', thumbnailUrl: m.thumbnailUrl });
       }
     }
     return [...map.values()];

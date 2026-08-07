@@ -105,15 +105,25 @@ export const WeatherEmoji: Record<WeatherType, string> = {
   foggy: '🌫️',
 };
 
+export interface JourneyStopMedia {
+  id: number;
+  stopId: number;
+  url: string;
+  thumbnailUrl?: string | null;
+  sortOrder: number;
+}
+
 export interface JourneyStop {
   id: number;
   journeyId: number;
   dayNumber?: number | null;
+  dayDate?: string | null;
   locationName?: string | null;
   locationLat?: number | null;
   locationLng?: number | null;
   description?: string | null;
   mediaUrl?: string | null;
+  mediaItems?: JourneyStopMedia[];
   sortOrder: number;
 }
 
@@ -125,6 +135,11 @@ export interface Journey {
   endDate?: string | null;
   destination?: string | null;
   coverUrl?: string | null;
+  summary?: string | null;
+  transport?: string | null;
+  budget?: string | null;
+  theme?: string | null;
+  insight?: string | null;
   stopCount: number;
   stops?: JourneyStop[];
 }

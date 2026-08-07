@@ -34,13 +34,20 @@ export interface CreatePostPayload {
     endDate?: string;
     destination?: string;
     coverUrl?: string;
+    summary?: string;
+    transport?: string;
+    budget?: string;
+    theme?: string;
+    insight?: string;
     stops?: {
       dayNumber?: number;
+      dayDate?: string;
       locationName?: string;
       locationLat?: number;
       locationLng?: number;
       description?: string;
       mediaUrl?: string;
+      mediaItems?: { url: string; thumbnailUrl?: string }[];
     }[];
   };
 }
@@ -79,7 +86,7 @@ export async function deletePost(postId: string): Promise<void> {
   await apiClient.delete(`/posts/${postId}`);
 }
 
-export async function updatePost(postId: string, payload: { content: string }): Promise<Post> {
+export async function updatePost(postId: string, payload: { content?: string; journey?: CreatePostPayload['journey'] }): Promise<Post> {
   const { data } = await apiClient.put(`/posts/${postId}`, payload);
   return data.data;
 }

@@ -2,13 +2,12 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Sparkles, Loader2, ArrowLeft, Check, FileText, Wind, Thermometer, Hash, Search, Layers, RefreshCw, Send, Lock } from 'lucide-react';
+import { Sparkles, Loader2, ArrowLeft, Check, FileText, Wind, Thermometer, Hash, Search, Layers, RefreshCw, PenLine } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { getUserLogs, getUserDiaries, generateTravelogue, getTravelogueJob } from '@/lib/snap-api';
-import { publishPost } from '@/lib/post-api';
 import { useAuthStore } from '@/stores/auth-store';
 import { AuthGuard } from '@/components/auth-guard';
 import { toast } from 'sonner';
@@ -66,7 +65,6 @@ function GenerateContent() {
   const [result, setResult] = useState<string | null>(null);
   const [postId, setPostId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [publishing, setPublishing] = useState(false);
   const pollRef = useRef<ReturnType<typeof setInterval>>(undefined);
 
   // 加载素材：日志 + 日记
@@ -141,20 +139,6 @@ function GenerateContent() {
     } catch {
       toast.error('提交失败，请重试');
       setGenerating(false);
-    }
-  };
-
-  const handlePublish = async (visibility: 'PRIVATE' | 'PUBLIC') => {
-    if (!postId) { toast.error('游记尚未生成完成，请稍候'); return; }
-    setPublishing(true);
-    try {
-      await publishPost(postId, undefined, visibility);
-      toast.success(visibility === 'PUBLIC' ? '游记已公开发布' : '游记已保存为私密草稿');
-      router.push('/journeys');
-    } catch {
-      toast.error('发布失败，请重试');
-    } finally {
-      setPublishing(false);
     }
   };
 
@@ -460,26 +444,14 @@ function GenerateContent() {
                     用当前风格重新生成
                   </Button>
 
-                  {/* 发布操作 */}
-                  <div className="grid grid-cols-2 gap-2">
-                    <Button
-                      onClick={() => handlePublish('PRIVATE')}
-                      disabled={publishing || !postId}
-                      variant="outline"
-                      className="gap-2"
-                    >
-                      {publishing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lock className="h-4 w-4" />}
-                      保存为私密
-                    </Button>
-                    <Button
-                      onClick={() => handlePublish('PUBLIC')}
-                      disabled={publishing || !postId}
-                      className="gap-2 bg-green-600 hover:bg-green-700"
-                    >
-                      {publishing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-                      发布到社区
-                    </Button>
-                  </div>
+                  {/* 编辑发布：落入章节式游记编辑器 */}
+                  <Button
+                    onClick={() => postId && router.push(`/upload/journey-creator?edit=${postId}`)}
+                    disabled={!postId}
+                    className="gap-2 bg-green-600 hover:bg-green-700"
+                  >
+                    <PenLine className="h-4 w-4" />去编辑游记并发布
+                  </Button>
                 </div>
               </div>
             )}

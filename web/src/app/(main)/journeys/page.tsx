@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { BookOpen, PenLine, Lock, Globe, MapPin, Edit, Trash2, Calendar, Share2, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -194,40 +195,44 @@ function JourneysContent() {
                   return (
                     <Card key={post.id} className="overflow-hidden hover:shadow-md transition-shadow">
                       <CardContent className="p-4">
-                        <div className="flex items-start justify-between gap-2 mb-3">
-                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                            <span>{formatRelativeTime(post.createdAt)}</span>
-                            {post.location?.name && (
-                              <>
-                                <span>·</span>
-                                <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{post.location.name}</span>
-                              </>
-                            )}
-                          </div>
-                          <div className={`flex items-center gap-1 text-xs ${vis.color}`}>
-                            <vis.icon className="h-3.5 w-3.5" />
-                            <span>{vis.label}</span>
-                          </div>
-                        </div>
-
-                        <p className="text-sm leading-relaxed line-clamp-3 mb-3">{post.content || '(无内容)'}</p>
-
-                        {post.mediaItems.length > 0 && (
-                          <div className="flex gap-1.5 mb-3">
-                            {post.mediaItems.slice(0, 4).map((media, idx) => (
-                              <div key={media.id} className="relative w-16 h-16 rounded-md overflow-hidden bg-muted">
-                                {media.type === 'IMAGE' && (media.thumbnailUrl || media.url) ? (
-                                  <img src={media.thumbnailUrl || media.url} alt="" className="w-full h-full object-cover" />
-                                ) : (
-                                  <div className="w-full h-full flex items-center justify-center text-[10px] text-muted-foreground/50" />
+                        {(() => {
+                          const cover = post.journey?.coverUrl || post.mediaItems?.[0]?.thumbnailUrl || post.mediaItems?.[0]?.url;
+                          const jtitle = post.journey?.title || post.title || '我的游记';
+                          const summary = post.journey?.summary || post.content;
+                          const days = post.journey?.startDate && post.journey?.endDate
+                            ? Math.max(1, Math.round((new Date(post.journey.endDate).getTime() - new Date(post.journey.startDate).getTime()) / 86400000) + 1)
+                            : null;
+                          return (
+                            <>
+                              {cover ? (
+                                <div className="relative h-40 overflow-hidden rounded-lg mb-3">
+                                  <img src={cover} alt="" className="h-full w-full object-cover" />
+                                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                                  <div className="absolute bottom-2 left-2 right-2 flex items-end justify-between gap-2">
+                                    <h3 className="text-white font-semibold line-clamp-1 text-base">{jtitle}</h3>
+                                    <div className="flex gap-1.5 shrink-0">
+                                      {post.journey?.destination && <Badge className="bg-black/50 text-white">{post.journey.destination}</Badge>}
+                                      {days && <Badge className="bg-black/50 text-white">{days}天</Badge>}
+                                    </div>
+                                  </div>
+                                </div>
+                              ) : (
+                                <h3 className="text-base font-semibold mb-2 line-clamp-1">{jtitle}</h3>
+                              )}
+                              <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
+                                <span>{formatRelativeTime(post.createdAt)}</span>
+                                {post.location?.name && (
+                                  <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{post.location.name}</span>
                                 )}
-                                {idx === 3 && post.mediaItems.length > 4 && (
-                                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center text-white text-xs font-medium">+{post.mediaItems.length - 4}</div>
-                                )}
+                                <span className={`ml-auto flex items-center gap-1 ${vis.color}`}>
+                                  <vis.icon className="h-3.5 w-3.5" />
+                                  {vis.label}
+                                </span>
                               </div>
-                            ))}
-                          </div>
-                        )}
+                              {summary && <p className="text-sm leading-relaxed line-clamp-3 mb-3">{summary}</p>}
+                            </>
+                          );
+                        })()}
 
                         <div className="flex items-center justify-end gap-2 pt-3 border-t border-border/50">
                           <Button variant="ghost" size="sm" onClick={() => handleEdit(post.id)} className="gap-1.5">

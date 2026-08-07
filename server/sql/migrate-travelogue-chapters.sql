@@ -1,6 +1,8 @@
 -- 图文叙事章节式游记：journeys 扩展元信息字段 + journey_stops 支持日期 + 新增 journey_stop_media 多图表
 -- 2026-08-07
 
+USE xuxiake;
+
 ALTER TABLE journeys
   ADD COLUMN summary TEXT NULL AFTER cover_url,
   ADD COLUMN transport VARCHAR(50) NULL AFTER summary,

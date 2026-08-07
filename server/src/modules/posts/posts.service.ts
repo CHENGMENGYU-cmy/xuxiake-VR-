@@ -448,7 +448,7 @@ export class PostsService {
       }
     }
 
-    const updated = { ...this.formatPost(post), journey: null };
+    const updated = { ...this.formatPost(post), journey: null as Journey | null };
     if (post.postType === 'JOURNEY') {
       updated.journey = await this.journeyRepo.findOne({
         where: { postId },

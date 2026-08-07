@@ -2,14 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Loader2, Globe, Lock, MapPin, Calendar, Trash2, Edit3, Save, X, Eye, EyeOff, MapPinned } from 'lucide-react';
+import { ArrowLeft, Loader2, Globe, Lock, MapPin, Calendar, Trash2, Edit3, Eye, EyeOff, MapPinned } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { getPostById, updatePost, deletePost, publishPost, unpublishPost } from '@/lib/post-api';
+import { getPostById, deletePost, publishPost, unpublishPost } from '@/lib/post-api';
 import { useAuthStore } from '@/stores/auth-store';
 import { AuthGuard } from '@/components/auth-guard';
 import type { Post } from '@/types';
@@ -30,9 +28,6 @@ function JourneyDetailContent() {
 
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
-  const [editing, setEditing] = useState(false);
-  const [editContent, setEditContent] = useState('');
-  const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [showPublishDialog, setShowPublishDialog] = useState(false);
@@ -42,7 +37,6 @@ function JourneyDetailContent() {
     if (!postId) return;
     getPostById(postId).then((data) => {
       setPost(data);
-      setEditContent(data.content || '');
       setLoading(false);
     }).catch(() => setLoading(false));
   }, [postId]);
@@ -55,19 +49,6 @@ function JourneyDetailContent() {
       </div>
     );
   }
-
-  const handleSave = async () => {
-    setSaving(true);
-    try {
-      const updated = await updatePost(postId, { content: editContent });
-      setPost(updated);
-      setEditing(false);
-      toast.success('游记已更新');
-    } catch {
-      toast.error('保存失败');
-    }
-    setSaving(false);
-  };
 
   const handleDelete = async () => {
     if (!confirm('确定删除这篇游记？此操作不可恢复。')) return;
@@ -106,11 +87,6 @@ function JourneyDetailContent() {
     }
   };
 
-  const handleCancel = () => {
-    setEditContent(post?.content || '');
-    setEditing(false);
-  };
-
   const isPublic = post?.visibility === 'PUBLIC';
   const isOwner = post && user && post.author?.id === user.id;
 
@@ -141,12 +117,10 @@ function JourneyDetailContent() {
         </Button>
         {isOwner && (
           <div className="flex gap-2">
-            {!editing && (
-              <Button variant="outline" size="sm" className="gap-1" onClick={() => setEditing(true)}>
-                <Edit3 className="h-4 w-4" />
-                编辑
-              </Button>
-            )}
+            <Button variant="outline" size="sm" className="gap-1" onClick={() => router.push(`/upload/journey-creator?edit=${post.id}`)}>
+              <Edit3 className="h-4 w-4" />
+              编辑
+            </Button>
             <Button
               variant="outline"
               size="sm"
@@ -238,98 +212,100 @@ function JourneyDetailContent() {
       )}
 
       {/* 游记内容卡片 */}
-      <div className="rounded-lg border bg-card p-6">
-        {/* 元信息 */}
-        <div className="mb-4 flex items-center gap-3 text-sm text-muted-foreground">
-          {post.location?.name && (
-            <div className="flex items-center gap-1">
-              <MapPin className="h-3.5 w-3.5" />
-              <span>{post.location.name}</span>
+      <div className="overflow-hidden rounded-lg border bg-card">
+        {/* 封面图 */}
+        {(post.journey?.coverUrl || post.mediaItems?.[0]?.url) && (
+          <div className="aspect-[16/9] bg-muted">
+            <img
+              src={post.journey?.coverUrl || post.mediaItems[0].url}
+              alt=""
+              className="h-full w-full object-cover"
+            />
+          </div>
+        )}
+
+        <div className="p-6">
+          {/* 标题 + 元信息 */}
+          <h1 className="mb-2 text-2xl font-bold tracking-tight">{post.journey?.title || post.title || '我的游记'}</h1>
+          <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
+            {post.location?.name && (
+              <span className="flex items-center gap-1">
+                <MapPin className="h-3.5 w-3.5" />
+                {post.location.name}
+              </span>
+            )}
+            <span className="flex items-center gap-1">
+              <Calendar className="h-3.5 w-3.5" />
+              {new Date(post.createdAt).toLocaleString('zh-CN')}
+            </span>
+            <span className="flex items-center gap-1">
+              <Eye className="h-3.5 w-3.5" />
+              {post.viewCount} 浏览
+            </span>
+          </div>
+
+          {/* 导语 */}
+          {post.journey?.summary && (
+            <p className="mb-4 text-sm italic text-muted-foreground">{post.journey.summary}</p>
+          )}
+
+          {/* 信息卡 */}
+          {(post.journey?.destination || post.journey?.transport || post.journey?.budget || post.journey?.theme) && (
+            <div className="mb-5 flex flex-wrap gap-2">
+              {post.journey?.destination && <Badge variant="secondary">📍 {post.journey.destination}</Badge>}
+              {post.journey?.transport && <Badge variant="secondary">🚄 {post.journey.transport}</Badge>}
+              {post.journey?.budget && <Badge variant="secondary">💰 {post.journey.budget}</Badge>}
+              {post.journey?.theme && <Badge variant="secondary">🏷 {post.journey.theme}</Badge>}
             </div>
           )}
-          <div className="flex items-center gap-1">
-            <Calendar className="h-3.5 w-3.5" />
-            <span>{new Date(post.createdAt).toLocaleString('zh-CN')}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <Eye className="h-3.5 w-3.5" />
-            <span>{post.viewCount} 浏览</span>
-          </div>
-        </div>
 
-        {/* 内容区 */}
-        {editing ? (
-          <div className="space-y-4">
-            <Textarea
-              value={editContent}
-              onChange={(e) => setEditContent(e.target.value)}
-              className="min-h-[400px] text-base leading-relaxed"
-              placeholder="写下你的游记..."
-            />
-            <div className="flex justify-end gap-2">
-              <Button variant="outline" size="sm" onClick={handleCancel} disabled={saving}>
-                <X className="mr-1 h-4 w-4" />
-                取消
-              </Button>
-              <Button size="sm" onClick={handleSave} disabled={saving || !editContent.trim()}>
-                {saving ? <Loader2 className="mr-1 h-4 w-4 animate-spin" /> : <Save className="mr-1 h-4 w-4" />}
-                保存
-              </Button>
+          {/* 章节（图文叙事） */}
+          {post.journey?.stops && post.journey.stops.length > 0 ? (
+            <div className="space-y-6">
+              {post.journey.stops.map((stop) => (
+                <section key={stop.id}>
+                  <h2 className="mb-2 flex items-center gap-2 text-lg font-bold">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary text-sm font-bold">
+                      D{stop.dayNumber}
+                    </span>
+                    {stop.locationName && <span>{stop.locationName}</span>}
+                    {stop.dayDate && <span className="text-xs font-normal text-muted-foreground">{stop.dayDate}</span>}
+                  </h2>
+                  {stop.description && (
+                    <p className="mb-3 whitespace-pre-wrap text-base leading-relaxed">{stop.description}</p>
+                  )}
+                  {stop.mediaItems && stop.mediaItems.length > 0 && (
+                    <div className="grid grid-cols-2 gap-2">
+                      {stop.mediaItems.map((m, i) => (
+                        <img key={i} src={m.url} alt="" className="w-full rounded-lg object-cover" />
+                      ))}
+                    </div>
+                  )}
+                </section>
+              ))}
             </div>
-          </div>
-        ) : (
-          <div className="prose prose-sm max-w-none dark:prose-invert">
-            <p className="whitespace-pre-wrap text-base leading-relaxed">{post.content}</p>
-          </div>
-        )}
+          ) : (
+            <div className="prose prose-sm max-w-none dark:prose-invert">
+              <p className="whitespace-pre-wrap text-base leading-relaxed">{post.content}</p>
+            </div>
+          )}
 
-        {/* 媒体附件 */}
-        {post.mediaItems && post.mediaItems.length > 0 && (
-          <div className="mt-6 space-y-3">
-            {post.mediaItems.map((media, i) => (
-              <div key={i} className="overflow-hidden rounded-lg">
-                {media.type === 'IMAGE' && (
-                  <img src={media.url} alt="" className="w-full rounded-lg" />
-                )}
-                {media.type === 'VIDEO' && (
-                  <video src={media.url} className="w-full rounded-lg" controls />
-                )}
-                {media.type === 'AUDIO' && (
-                  <div className="flex items-center gap-3 rounded-lg border bg-muted/50 p-4">
-                    <audio src={media.url} controls className="w-full" />
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
+          {/* 结尾感悟 */}
+          {post.journey?.insight && (
+            <blockquote className="mt-6 border-l-2 border-indigo-300 pl-3 text-sm italic text-indigo-700/80 dark:border-indigo-800 dark:text-indigo-400/80">
+              {post.journey.insight}
+            </blockquote>
+          )}
 
-        {/* 旅程站点 */}
-        {post.journey?.stops && post.journey.stops.length > 0 && (
-          <div className="mt-6 space-y-3">
-            <h4 className="text-sm font-medium text-muted-foreground">旅程站点</h4>
-            {post.journey.stops.map((stop, i) => (
-              <div key={i} className="flex gap-3 rounded-lg border p-3">
-                {stop.dayNumber && (
-                  <Badge variant="outline" className="shrink-0">Day {stop.dayNumber}</Badge>
-                )}
-                <div>
-                  {stop.locationName && <p className="text-sm font-medium">{stop.locationName}</p>}
-                  {stop.description && <p className="text-xs text-muted-foreground">{stop.description}</p>}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* 话题标签 */}
-        {post.topics && post.topics.length > 0 && (
-          <div className="mt-4 flex flex-wrap gap-2">
-            {post.topics.map((topic) => (
-              <Badge key={topic.id} variant="secondary">#{topic.name}</Badge>
-            ))}
-          </div>
-        )}
+          {/* 话题标签 */}
+          {post.topics && post.topics.length > 0 && (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {post.topics.map((topic) => (
+                <Badge key={topic.id} variant="secondary">#{topic.name}</Badge>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
