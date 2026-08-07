@@ -235,9 +235,9 @@ export class AiService {
   }
 
   /** 调用 AI 生成游记 */
-  private async callAiForTravelogue(material: SourceMaterial, input: TravelogueGenerateInput): Promise<string> {
+  private async callAiForTravelogue(material: SourceMaterial, input: TravelogueGenerateInput, days: DayGroup[]): Promise<string> {
     const systemPrompt = this.buildSystemPrompt(input);
-    const userPrompt = this.buildUserPrompt(material, input);
+    const userPrompt = this.buildUserPrompt(material, input, days);
 
     return this.aiClient.generate({
       messages: [
