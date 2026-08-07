@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
   ArrowLeft, Sparkles, Camera, PenLine, FileText, Loader2,
-  Globe, Lock, Check, Wand2, RefreshCw,
+  Globe, Lock, Check, Wand2, RefreshCw, Clock,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
