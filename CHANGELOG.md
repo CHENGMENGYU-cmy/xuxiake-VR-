@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-07
+修改位置：新增 web/src/components/diary/snap-picker.tsx, diary-compose-dialog.tsx；改造 web/src/app/(main)/snap/page.tsx, diaries/page.tsx, upload/page.tsx, components/upload/multi-image-uploader.tsx；更新 web/e2e/08-snap-library.spec.ts, 09-diary-flow.spec.ts
+修改原因：两个「写日记」入口割裂——素材库右上角「AI 写日记」未选素材时直接拿列表第一张跳转（用户反馈"没选照片就跳走"），我的日记右上角「写日记」直接跳手写页且配图只能本地上传，无法用自己拍摄的素材；手写与 AI 两条路径没有统一的「先选素材」环节
+修改内容：借鉴小红书"先选素材再进编辑器"模式，统一为「选素材 → 选创作方式（自己写/AI帮我写）→ 进对应编辑器」：1) 新增 SnapPicker 素材多选网格与 SnapPickerDialog 素材选择弹层；2) 新增 DiaryComposeDialog 两步创作引导弹层（选素材→选手写/AI），两个入口统一进入；3) 素材库右上角/全屏预览/多选底部三处按钮改名「写日记」并统一走引导，已多选直接进模式步、未选进选素材步；4) 我的日记「写日记」按钮改为打开引导；5) 手写编辑器 /upload?level=DIARY 支持 snapIds 参数把素材库图片作为配图引用，配图区新增「从素材库选择」补充入口，发布时写入 vrMetadata.sourceSnapIds 溯源；6) 修复 StrictMode 下素材配图重复加载 bug（去重移入 setImages 内部 + ref 防双调用）
+修改效果：写日记从任意入口都先选素材再选创作方式，素材库不再无素材直接跳 AI 页；手写日记可用已拍摄素材配图并溯源；5 条 Playwright 验证通过（素材库入口→手写、我的日记入口→AI、多选直接进模式步、编辑器内补充配图、发布后 sourceSnapIds 与素材媒体写入校验），08-snap-library 测试同步通过
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-07
 修改位置：server/src/modules/posts/ai.service.ts, posts.service.ts；web/src/app/(main)/snap/page.tsx, snap/generate/batch/page.tsx（新增）, diaries/page.tsx；web/e2e/09-diary-flow.spec.ts（新增）
 修改原因：素材库多选「AI 写日记」两条入口流转割裂——顶部按钮忽略多选跳第一张素材；底部按钮批量生成后直接保存为私密日记（无编辑确认），用户以为"写日记"结果直接发布；存草稿后无草稿箱去向，草稿以私密混在日记列表无标记
 修改内容：统一为「选素材 → AI 生成草稿 → 人工编辑确认 → 存草稿/私密/发布」三段式：1) 新增批量编辑页 /snap/generate/batch，展示选中素材、调 AI 生成草稿、可编辑后保存；2) snap/page.tsx 顶部/底部「AI 写日记」多选时统一跳批量编辑页（顶部不再忽略多选、底部不再直接发布）；3) 后端 executeMultiDiaryJob 保存 status 由 private 改为 draft（先存草稿）；4) saveDiary 更新草稿时合并旧 vrMetadata，保留 sourceSnapIds/aiGenerated 溯源字段；5) getDiaryDraft 排除多素材批量草稿，避免单张生成页误恢复；6) /diaries 新增「草稿」筛选 tab、草稿卡片虚线边框+草稿角标，点击草稿回到对应编辑页继续编辑
