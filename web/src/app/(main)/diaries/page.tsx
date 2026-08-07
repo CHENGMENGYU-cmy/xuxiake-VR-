@@ -12,7 +12,7 @@ import { getContentHierarchy, publishPost, deletePost } from '@/lib/post-api';
 import { toast } from 'sonner';
 import { DiaryComposeDialog } from '@/components/diary/diary-compose-dialog';
 import type { Post, Visibility, MoodType, WeatherType } from '@/types';
-import { MoodEmoji, WeatherEmoji } from '@/types';
+import { MoodEmoji, WeatherEmoji, MoodLabel, WeatherLabel } from '@/types';
 
 type FilterType = 'all' | 'draft' | 'PRIVATE' | 'PUBLIC' | 'FOLLOWERS';
 
