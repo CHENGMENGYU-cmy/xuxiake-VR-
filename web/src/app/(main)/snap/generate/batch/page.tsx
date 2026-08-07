@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
   ArrowLeft, Sparkles, Camera, PenLine, FileText, Loader2,
-  Globe, Lock, Check, Wand2,
+  Globe, Lock, Check, Wand2, RefreshCw,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -12,10 +12,28 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { AuthGuard } from '@/components/auth-guard';
 import { generateDiaryBatch, getAiJob, getPostDetail, saveDiary } from '@/lib/snap-api';
+import { deletePost } from '@/lib/post-api';
+import { ALL_DIARY_STYLES, type DiaryStyle } from '@/types/snap';
 import { toast } from 'sonner';
 
 export default function BatchGeneratePage() {
   return <AuthGuard><BatchContent /></AuthGuard>;
+}
+
+const styleMeta: Record<string, { emoji: string; desc: string; grad: string }> = {
+  '温柔治愈风': { emoji: '🕊️', desc: '温暖抚慰，如沐春风', grad: 'from-amber-400 to-orange-400' },
+  '生活碎片风': { emoji: '🧩', desc: '细碎日常，真实可爱', grad: 'from-sky-400 to-teal-400' },
+  '成长复盘风': { emoji: '🌱', desc: '反思总结，向内生长', grad: 'from-emerald-400 to-teal-500' },
+  '诗意散文风': { emoji: '🪶', desc: '散文诗般，意境悠远', grad: 'from-teal-400 to-cyan-500' },
+  '轻松口语风': { emoji: '☕', desc: '轻松随性，像老朋友', grad: 'from-orange-400 to-amber-500' },
+};
+
+/** 兼容旧草稿里可能存的无"风"后缀风格名 */
+function normalizeStyle(s?: string): DiaryStyle {
+  if (s && (ALL_DIARY_STYLES as string[]).includes(s)) return s as DiaryStyle;
+  const withSuffix = s ? `${s}风` : '';
+  if (withSuffix && (ALL_DIARY_STYLES as string[]).includes(withSuffix)) return withSuffix as DiaryStyle;
+  return '温柔治愈风';
 }
 
 function getMediaImage(item: any) {
@@ -58,8 +76,9 @@ function BatchContent() {
   const [content, setContent] = useState('');
   const [insight, setInsight] = useState('');
   const [tags, setTags] = useState<string[]>([]);
+  const [style, setStyle] = useState<DiaryStyle>('温柔治愈风');
   const [saving, setSaving] = useState(false);
-  const startedRef = useRef(false);
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const loadDraft = async (pid: string) => {
     const post = await getPostDetail(pid).catch(() => null);
@@ -69,6 +88,7 @@ function BatchContent() {
       setContent(post.content || '');
       setInsight(meta.insight || '');
       setTags(meta.generatorTags || []);
+      setStyle(normalizeStyle(meta.style || ''));
       setPostId(pid);
     }
   };
@@ -81,51 +101,76 @@ function BatchContent() {
       .finally(() => setLoading(false));
   }, []);
 
-  // 已有草稿直接加载，否则自动生成草稿
+  // 已有草稿直接加载；否则停留在「选择风格」等待用户开始生成
   useEffect(() => {
     if (urlPostId) {
       loadDraft(urlPostId);
-      return;
     }
-    if (startedRef.current || ids.length === 0 || snaps.length === 0) return;
-    startedRef.current = true;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [urlPostId]);
+
+  // 卸载时清理轮询
+  useEffect(() => () => {
+    if (pollRef.current) clearInterval(pollRef.current);
+  }, []);
+
+  const startGeneration = async (targetStyle?: DiaryStyle) => {
+    if (generating || ids.length === 0) return;
+    const finalStyle = targetStyle ?? style;
     setGenerating(true);
+    setPostId(null);
+    setTitle('');
+    setContent('');
+    setInsight('');
+    setTags([]);
     setGenStatus('正在提交生成任务...');
-    (async () => {
-      try {
-        const { jobId } = await generateDiaryBatch({
-          snapIds: ids,
-          style: '温柔治愈',
-          tone: '温暖',
-          length: '标准',
-        });
-        const timer = setInterval(async () => {
-          try {
-            const job = await getAiJob(jobId);
-            setProgress(job.progress || 0);
-            setGenStatus(statusLabel(job.status, job.progress));
-            if (job.status === 'DONE' || job.status === 'ERROR') {
-              clearInterval(timer);
-              setGenerating(false);
-              if (job.status === 'DONE' && job.postId) {
-                await loadDraft(job.postId);
-                toast.success('日记草稿已生成，可编辑后保存');
-              } else {
-                toast.error(job.error || '日记生成失败');
-              }
-            }
-          } catch {
+    setProgress(0);
+    try {
+      const { jobId } = await generateDiaryBatch({
+        snapIds: ids,
+        style: finalStyle,
+        tone: '温暖',
+        length: '标准',
+      });
+      const timer = setInterval(async () => {
+        try {
+          const job = await getAiJob(jobId);
+          setProgress(job.progress || 0);
+          setGenStatus(statusLabel(job.status, job.progress));
+          if (job.status === 'DONE' || job.status === 'ERROR') {
             clearInterval(timer);
+            pollRef.current = null;
             setGenerating(false);
-            toast.error('查询生成进度失败');
+            if (job.status === 'DONE' && job.postId) {
+              await loadDraft(job.postId);
+              toast.success('日记草稿已生成，可编辑后保存');
+            } else {
+              toast.error(job.error || '日记生成失败');
+            }
           }
-        }, 1500);
-      } catch {
-        setGenerating(false);
-        toast.error('日记生成提交失败，请重试');
-      }
-    })();
-  }, [urlPostId, snaps.length, ids.length]);
+        } catch {
+          clearInterval(timer);
+          pollRef.current = null;
+          setGenerating(false);
+          toast.error('查询生成进度失败');
+        }
+      }, 1500);
+      pollRef.current = timer;
+    } catch {
+      setGenerating(false);
+      toast.error('日记生成提交失败，请重试');
+    }
+  };
+
+  const handleStyleChange = async (next: DiaryStyle) => {
+    if (generating) return;
+    setStyle(next);
+    if (!postId) return; // 尚未生成，仅记录所选风格
+    // 已有草稿：换风格重写，先清理旧草稿再重新生成
+    try { await deletePost(postId); } catch { /* 忽略删除失败 */ }
+    setPostId(null);
+    await startGeneration(next);
+  };
 
   const handleSave = async (status: 'draft' | 'private' | 'public') => {
     if (!postId) { toast.error('草稿尚未生成，请稍候'); return; }
@@ -137,7 +182,7 @@ function BatchContent() {
         title,
         content,
         insight,
-        style: '温柔治愈',
+        style,
         tags,
         status,
       });
@@ -224,6 +269,64 @@ function BatchContent() {
             </div>
           )}
         </div>
+      </div>
+
+      {/* 风格选择 */}
+      <div className="mb-4 rounded-2xl border bg-card p-4 shadow-sm">
+        <div className="mb-3 flex items-center gap-2">
+          <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-orange-400 to-amber-400 text-white shadow-sm">
+            <Wand2 className="h-4 w-4" />
+          </span>
+          <div>
+            <p className="text-sm font-semibold leading-tight">选择日记风格</p>
+            <p className="text-[11px] leading-tight text-muted-foreground">决定日记的语气与气质，生成后可切换重写</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">
+          {ALL_DIARY_STYLES.map((s) => {
+            const active = s === style;
+            const meta = styleMeta[s] || { emoji: '✨', desc: '', grad: 'from-teal-400 to-cyan-500' };
+            return (
+              <button
+                key={s}
+                type="button"
+                onClick={() => handleStyleChange(s)}
+                disabled={generating}
+                className={`group flex items-center gap-2.5 rounded-xl border p-2.5 text-left transition-all duration-200 ${
+                  active
+                    ? `border-transparent bg-gradient-to-r ${meta.grad} bg-origin-border text-white shadow-md`
+                    : 'border-border/60 hover:border-teal-300 hover:bg-teal-50/50 dark:hover:bg-teal-950/30'
+                } ${generating ? 'cursor-not-allowed opacity-60' : ''}`}
+              >
+                <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-base ${active ? 'bg-white/25' : 'bg-muted'}`}>
+                  {meta.emoji}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className={`block truncate text-sm ${active ? 'font-semibold' : 'font-medium'}`}>{s}</span>
+                  <span className={`block truncate text-[10px] ${active ? 'text-white/80' : 'text-muted-foreground/70'}`}>{meta.desc}</span>
+                </span>
+                {active && <Check className="h-4 w-4 shrink-0" />}
+              </button>
+            );
+          })}
+        </div>
+
+        {!generating && !postId && (
+          <Button
+            className="mt-3 w-full gap-1.5 bg-gradient-to-r from-teal-500 to-orange-400 text-white shadow-md shadow-teal-500/25 hover:from-teal-600 hover:to-orange-500"
+            onClick={() => startGeneration()}
+          >
+            <Sparkles className="h-4 w-4" />
+            用「{style}」生成日记
+          </Button>
+        )}
+        {!generating && postId && (
+          <p className="mt-3 flex items-center gap-1.5 text-[11px] text-muted-foreground">
+            <RefreshCw className="h-3.5 w-3.5 text-teal-500" />
+            点击其他风格可换风格重新生成
+          </p>
+        )}
       </div>
 
       {/* 生成进度 */}
