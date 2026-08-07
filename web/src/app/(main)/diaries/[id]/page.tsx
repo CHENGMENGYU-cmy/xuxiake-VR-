@@ -33,6 +33,7 @@ function DiaryDetailContent() {
   const [editContent, setEditContent] = useState('');
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [changing, setChanging] = useState(false);
 
   useEffect(() => {
     if (!postId) return;
