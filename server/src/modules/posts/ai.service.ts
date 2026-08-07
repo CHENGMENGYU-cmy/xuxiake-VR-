@@ -288,27 +288,38 @@ Day 2：<第2天的正文>
   }
 
   /** 构建用户提示词 */
-  private buildUserPrompt(material: SourceMaterial, input: TravelogueGenerateInput): string {
+  private buildUserPrompt(material: SourceMaterial, input: TravelogueGenerateInput, days: DayGroup[]): string {
     const parts: string[] = [];
 
-    // 日志（事实素材）
+    parts.push('## 旅程概况');
+    if (material.locations.length > 0) parts.push(`涉及地点：${material.locations.join('、')}`);
+    if (material.moods.length > 0) parts.push(`整体心情：${material.moods.join('、')}`);
+    if (material.keywords.length > 0) parts.push(`关键词：${material.keywords.join('、')}`);
+    parts.push('');
+
+    // 按天列出素材
+    parts.push('## 每天的行程与素材（按天分节，每节包含地点与当天记录/感悟）');
+    for (let i = 0; i < days.length; i++) {
+      const d = days[i];
+      parts.push(`### Day ${i + 1}（${d.date}）${d.locationName ? `· ${d.locationName}` : ''}`);
+      for (const p of [...material.logs, ...material.diaries]) {
+        const pd = new Date(p.createdAt);
+        const key = `${pd.getFullYear()}-${String(pd.getMonth() + 1).padStart(2, '0')}-${String(pd.getDate()).padStart(2, '0')}`;
+        if (key !== d.date) continue;
+        const tag = p.contentLevel === 'LOG' ? '记录' : '感悟';
+        const title = (p as any).title;
+        parts.push(`- 【${tag}】${title ? `${title}：` : ''}${(p.content || '').slice(0, 300)}`);
+      }
+      parts.push('');
+    }
+
+    // 日志（事实素材，未按天匹配的兜底补充）
     if (material.logs.length > 0) {
       parts.push('## 日志记录（事实素材）');
       for (let i = 0; i < material.logs.length; i++) {
         const log = material.logs[i];
         parts.push(`### 日志${i + 1}：${log.locationName || '未知地点'}`);
         parts.push(log.content || '');
-        parts.push('');
-      }
-    }
-
-    // 日记（情感素材）
-    if (material.diaries.length > 0) {
-      parts.push('## 日记记录（情感素材）');
-      for (let i = 0; i < material.diaries.length; i++) {
-        const diary = material.diaries[i];
-        parts.push(`### 日记${i + 1}${diary.title ? `：《${diary.title}》` : ''}`);
-        parts.push(diary.content || '');
         parts.push('');
       }
     }
@@ -320,18 +331,7 @@ Day 2：<第2天的正文>
       parts.push('');
     }
 
-    // 补充信息
-    if (material.locations.length > 0) {
-      parts.push(`涉及地点：${material.locations.join('、')}`);
-    }
-    if (material.moods.length > 0) {
-      parts.push(`整体心情：${material.moods.join('、')}`);
-    }
-    if (material.keywords.length > 0) {
-      parts.push(`关键词：${material.keywords.join('、')}`);
-    }
-
-    parts.push('\n请根据以上素材，撰写一篇完整的游记。');
+    parts.push('请根据以上素材，按输出格式撰写一篇完整的游记。');
 
     return parts.join('\n');
   }
