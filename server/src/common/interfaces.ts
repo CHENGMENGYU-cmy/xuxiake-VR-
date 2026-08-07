@@ -177,13 +177,20 @@ export interface CreatePostDto {
     endDate?: string;
     destination?: string;
     coverUrl?: string;
+    summary?: string;
+    transport?: string;
+    budget?: string;
+    theme?: string;
+    insight?: string;
     stops?: {
       dayNumber?: number;
+      dayDate?: string;
       locationName?: string;
       locationLat?: number;
       locationLng?: number;
       description?: string;
       mediaUrl?: string;
+      mediaItems?: { url: string; thumbnailUrl?: string }[];
     }[];
   };
   guideDetail?: {
