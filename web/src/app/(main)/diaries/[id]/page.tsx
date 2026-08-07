@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Loader2, Lock, MapPin, Calendar, Trash2, Edit3, Save, X, Globe, User } from 'lucide-react';
+import { ArrowLeft, Loader2, Lock, MapPin, Calendar, Trash2, Edit3, Save, X, Globe, User, Sparkles, PenLine, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { getPostById, updatePost, deletePost } from '@/lib/post-api';
+import { getPostById, updatePost, deletePost, publishPost } from '@/lib/post-api';
 import { useAuthStore } from '@/stores/auth-store';
 import { AuthGuard } from '@/components/auth-guard';
 import type { Post } from '@/types';
