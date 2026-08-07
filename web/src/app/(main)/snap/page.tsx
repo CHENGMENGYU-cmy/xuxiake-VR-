@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button';
 import { AuthGuard } from '@/components/auth-guard';
 import { useSnapStore } from '@/stores/snap-store';
 import { DiaryComposeDialog } from '@/components/diary/diary-compose-dialog';
-import { generateTravelogueByTrip, getTravelogueJob } from '@/lib/snap-api';
 import { toast } from 'sonner';
 import apiClient from '@/lib/api-client';
 
