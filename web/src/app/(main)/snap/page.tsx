@@ -52,47 +52,6 @@ function SnapContent() {
     }).catch(() => {});
   }, []);
 
-  // 行程一键生成游记：提交 → 轮询进度 → 完成
-  const startTripGeneration = async () => {
-    if (!selectedTrip || tripGenerating) return;
-    setTripGenerating(true);
-    setTripGenPostId(null);
-    setTripGenStatus('正在提交生成任务...');
-    setTripGenProgress(0);
-    try {
-      const { jobId } = await generateTravelogueByTrip({
-        tripId: selectedTrip.tripId,
-        style: '游记',
-        tone: '温暖',
-        length: '标准',
-      });
-      const timer = setInterval(async () => {
-        try {
-          const job = await getTravelogueJob(jobId);
-          setTripGenProgress(job.progress || 0);
-          setTripGenStatus(statusLabel(job.status, job.progress));
-          if (job.status === 'DONE' || job.status === 'ERROR') {
-            clearInterval(timer);
-            setTripGenerating(false);
-            if (job.status === 'DONE') {
-              setTripGenPostId(job.postId || null);
-              toast.success('游记生成完成，已保存到我的游记');
-            } else {
-              toast.error(job.error || '游记生成失败');
-            }
-          }
-        } catch {
-          clearInterval(timer);
-          setTripGenerating(false);
-          toast.error('查询生成进度失败');
-        }
-      }, 1500);
-    } catch {
-      setTripGenerating(false);
-      toast.error('游记生成提交失败，请重试');
-    }
-  };
-
   const toggleSelect = (id: string) => {
     setSelectedIds((prev) => {
       const next = new Set(prev);
