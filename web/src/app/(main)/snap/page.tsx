@@ -316,44 +316,6 @@ function SnapContent() {
           ))}
         </div>
 
-        {/* 行程选中态：AI 生成游记 */}
-        {viewMode === 'trip' && selectedTrip && (
-          <div className="rounded-xl border bg-card p-3 space-y-2">
-            <div className="flex items-center justify-between gap-2">
-              <div className="min-w-0">
-                <div className="text-sm font-medium truncate">已选行程：{selectedTrip.name}</div>
-                <div className="text-xs text-muted-foreground">{tripGenStatus || `共 ${filteredItems.length} 张素材`}</div>
-              </div>
-              {!tripGenerating && !tripGenPostId && (
-                <Button
-                  size="sm"
-                  onClick={startTripGeneration}
-                  disabled={filteredItems.length === 0}
-                  className="shrink-0 gap-1.5 bg-gradient-to-r from-teal-500 to-orange-400 text-white hover:from-teal-600 hover:to-orange-500"
-                >
-                  <Sparkles className="h-3.5 w-3.5" />
-                  AI 生成游记
-                </Button>
-              )}
-              {tripGenerating && (
-                <span className="shrink-0 text-xs text-muted-foreground">{tripGenStatus}</span>
-              )}
-              {tripGenPostId && (
-                <Button size="sm" variant="outline" onClick={() => router.push('/journeys')} className="shrink-0">
-                  查看游记 →
-                </Button>
-              )}
-            </div>
-            {tripGenerating && (
-              <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-teal-500 to-orange-400 transition-all"
-                  style={{ width: `${tripGenProgress}%` }}
-                />
-              </div>
-            )}
-          </div>
-        )}
       </div>
 
       {/* 列表 */}
