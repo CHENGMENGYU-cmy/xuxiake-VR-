@@ -968,6 +968,20 @@ function UploadContent() {
                     onImagesChange={setImages}
                     maxImages={9}
                   />
+                  <div className="flex items-center gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="gap-1.5"
+                      onClick={() => setPickerOpen(true)}
+                      disabled={images.length >= 9}
+                    >
+                      <Image className="h-3.5 w-3.5" />
+                      从素材库选择
+                    </Button>
+                    <span className="text-[10px] text-muted-foreground">使用已拍摄的素材作为配图</span>
+                  </div>
                 </div>
 
                 <div className="space-y-3">
@@ -1233,6 +1247,14 @@ function UploadContent() {
       {/* 隐藏的文件输入 */}
       <input ref={fileInputRef} type="file" accept={getAccept()} className="hidden"
         onChange={(e) => handleFileInput(e.target.files)} />
+
+      {/* 从素材库选择配图 */}
+      <SnapPickerDialog
+        open={pickerOpen}
+        onOpenChange={setPickerOpen}
+        max={9 - images.length}
+        onConfirm={(ids) => loadRefSnaps(ids)}
+      />
     </div>
   );
 }
