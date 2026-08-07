@@ -125,6 +125,9 @@ export class AiService {
         : [];
 
       const material = this.extractMaterial(logs, diaries);
+      const seeds = [...logs, ...diaries];
+      const days = this.groupByDay(seeds);
+      if (days.length === 0) throw new Error('没有可用的游记素材');
       job.progress = 30;
 
       // 阶段2: AI 生成
@@ -132,18 +135,20 @@ export class AiService {
 
       let generated: string;
       try {
-        generated = await this.callAiForTravelogue(material, input);
+        generated = await this.callAiForTravelogue(material, input, days);
         console.log(`[Travelogue] AI 生成完成，${generated.length} 字符`);
       } catch (aiErr: any) {
         console.warn(`[Travelogue] AI 调用失败，回退到模板生成: ${aiErr.message}`);
-        generated = this.buildTravelogueContent(material, input);
+        generated = this.buildTravelogueContent(material, input, days);
       }
 
       job.progress = 80;
 
-      // 阶段3: 保存游记
+      // 解析结构化输出 → 落库
+      const structured = this.parseStructuredTravelogue(generated, days);
       const loc = material.locations[0];
-      const title = this.extractTitle(generated) || (loc ? `${loc}游记` : '我的游记');
+      const title = structured.title || (loc ? `${loc}游记` : '我的游记');
+      const content = this.assembleTravelogueContent(structured, days);
 
       const vrMetadata = JSON.stringify({
         sourceLogIds: logs.map(l => l.id),
@@ -157,18 +162,18 @@ export class AiService {
 
       const post = this.postRepo.create({
         id: uuidv4(), authorId: userId,
-        postType: 'NOTE', contentLevel: 'TRAVELOGUE',
+        postType: 'JOURNEY', contentLevel: 'TRAVELOGUE',
         parentPostId: diaries[0]?.id || logs[0]?.id || null,
-        title, content: generated,
-        locationName: material.locations[0] || null,
+        title, content,
+        locationName: structured.destination || loc || null,
         vrMetadata,
         visibility: 'PRIVATE',
         likeCount: 0, commentCount: 0, viewCount: 0,
       });
       await this.postRepo.save(post);
 
-      // 复制素材媒体
-      const allSeeds = [...logs, ...diaries].filter(p => p.mediaItems?.length);
+      // 复制素材媒体到 post.mediaItems（列表/卡片兜底展示）
+      const allSeeds = seeds.filter(p => p.mediaItems?.length);
       if (allSeeds.length > 0) {
         const allMedia = allSeeds.flatMap((s, si) =>
           (s.mediaItems || []).map((m, mi) => ({
@@ -180,8 +185,47 @@ export class AiService {
         await this.mediaRepo.save(allMedia);
       }
 
+      // 创建 Journey 结构化章节（按天）
+      const journey = this.journeyRepo.create({
+        postId: post.id,
+        title,
+        startDate: days[0]?.date || null,
+        endDate: days[days.length - 1]?.date || null,
+        destination: structured.destination || loc || null,
+        coverUrl: days[0]?.media[0]?.url || null,
+        summary: structured.summary || null,
+        transport: structured.transport || null,
+        budget: structured.budget || null,
+        theme: structured.theme || null,
+        insight: structured.insight || null,
+        stopCount: days.length,
+      });
+      await this.journeyRepo.save(journey);
+
+      for (let i = 0; i < days.length; i++) {
+        const d = days[i];
+        const stop = await this.journeyStopRepo.save(this.journeyStopRepo.create({
+          journeyId: journey.id,
+          dayNumber: i + 1,
+          dayDate: d.date,
+          locationName: d.locationName || null,
+          description: structured.dayTexts[i] || null,
+          sortOrder: i,
+        }));
+        if (d.media.length > 0) {
+          await this.journeyStopMediaRepo.save(d.media.map((m, mi) =>
+            this.journeyStopMediaRepo.create({
+              stopId: stop.id,
+              url: m.url,
+              thumbnailUrl: m.thumbnailUrl,
+              sortOrder: mi,
+            }),
+          ));
+        }
+      }
+
       job.status = 'DONE'; job.progress = 100;
-      job.result = generated;
+      job.result = content;
       job.postId = post.id;
     } catch (err: any) {
       job.status = 'ERROR';
