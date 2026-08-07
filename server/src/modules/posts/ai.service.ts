@@ -356,6 +356,7 @@ export class AiService {
         style: input.style || '温柔治愈',
         tone: input.tone || '温暖',
         keywords: material.keywords,
+        mood: material.moods[0] || undefined,
         aiGenerated: true,
         status: 'draft',
       });
