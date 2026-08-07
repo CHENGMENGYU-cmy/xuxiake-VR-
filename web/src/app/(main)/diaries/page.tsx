@@ -5,11 +5,11 @@ import { BookOpen, PenLine, Lock, Globe, Users, Image as ImageIcon, Video, Music
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth-store';
 import { AuthGuard } from '@/components/auth-guard';
 import { getContentHierarchy, publishPost, deletePost } from '@/lib/post-api';
+import { DiaryComposeDialog } from '@/components/diary/diary-compose-dialog';
 import type { Post, Visibility, MoodType, WeatherType } from '@/types';
 import { MoodEmoji, WeatherEmoji } from '@/types';
 
