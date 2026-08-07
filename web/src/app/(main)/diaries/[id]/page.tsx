@@ -252,6 +252,65 @@ function DiaryDetailContent() {
           </div>
         )}
       </div>
+
+      {/* 所有者操作区：草稿引导继续写；已发布则切换可见性 + 升华为游记 */}
+      {isOwner && (
+        <div className="rounded-lg border bg-card p-4 space-y-3">
+          {isDraft ? (
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-sm text-muted-foreground">这是一篇未发布的草稿</p>
+              <Button size="sm" className="gap-1.5 shrink-0" onClick={continueEdit}>
+                <PenLine className="h-4 w-4" />继续写
+              </Button>
+            </div>
+          ) : (
+            <>
+              <div>
+                <p className="mb-2 text-sm font-medium">可见性</p>
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    size="sm"
+                    variant={post.visibility === 'PUBLIC' ? 'default' : 'outline'}
+                    onClick={() => changeVisibility('PUBLIC')}
+                    disabled={changing}
+                    className="gap-1.5"
+                  >
+                    <Globe className="h-3.5 w-3.5" />公开
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant={post.visibility === 'PRIVATE' ? 'default' : 'outline'}
+                    onClick={() => changeVisibility('PRIVATE')}
+                    disabled={changing}
+                    className="gap-1.5 text-amber-600"
+                  >
+                    <Lock className="h-3.5 w-3.5" />私密
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant={post.visibility === 'FOLLOWERS' ? 'default' : 'outline'}
+                    onClick={() => changeVisibility('FOLLOWERS')}
+                    disabled={changing}
+                    className="gap-1.5"
+                  >
+                    <Users className="h-3.5 w-3.5" />关注可见
+                  </Button>
+                </div>
+              </div>
+              <div className="border-t border-border/50 pt-3">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-1.5 text-purple-600"
+                  onClick={() => router.push(`/journeys/generate?ids=${post.id}`)}
+                >
+                  <Sparkles className="h-3.5 w-3.5" />升华为游记
+                </Button>
+              </div>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }
