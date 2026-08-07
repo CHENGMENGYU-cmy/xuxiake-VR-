@@ -595,6 +595,7 @@ function UploadContent() {
       vrMetadata: {
         tab: activeTab,
         ...(activeTab === 'DIARY' && (mood || weather) ? { mood: mood || undefined, weather: weather || undefined } : {}),
+        ...(activeTab === 'DIARY' && refSnapIds.length > 0 ? { sourceSnapIds: refSnapIds } : {}),
       },
     };
 
