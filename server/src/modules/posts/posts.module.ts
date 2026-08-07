@@ -17,6 +17,7 @@ import { InterestTag } from '../../entities/interest-tag.entity.js';
 import { Topic } from '../../entities/topic.entity.js';
 import { Journey } from '../../entities/journey.entity.js';
 import { JourneyStop } from '../../entities/journey-stop.entity.js';
+import { JourneyStopMedia } from '../../entities/journey-stop-media.entity.js';
 import { Collection } from '../../entities/collection.entity.js';
 import { CollectionPost } from '../../entities/collection-post.entity.js';
 import { UserFollow } from '../../entities/user-follow.entity.js';
