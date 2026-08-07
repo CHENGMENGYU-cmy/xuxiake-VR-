@@ -106,6 +106,11 @@ function SnapContent() {
     });
   };
 
+  const openCompose = (ids: string[]) => {
+    setComposeInitIds(ids);
+    setComposeOpen(true);
+  };
+
   // 按天分组（时间线）：全部/按时间 视图下按日期分块展示
   const groupByDay = (items: any[]) => {
     const map = new Map<string, any[]>();
