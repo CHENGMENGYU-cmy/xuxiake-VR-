@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, JoinColumn, CreateDateColumn } from 'typeorm';
 import { Journey } from './journey.entity.js';
+import { JourneyStopMedia } from './journey-stop-media.entity.js';
 
 @Entity('journey_stops')
 export class JourneyStop {
@@ -11,6 +12,9 @@ export class JourneyStop {
 
   @Column({ name: 'day_number', type: 'int', nullable: true })
   dayNumber: number | null;
+
+  @Column({ name: 'day_date', type: 'varchar', length: 20, nullable: true })
+  dayDate: string | null;
 
   @Column({ name: 'location_name', type: 'varchar', length: 200, nullable: true })
   locationName: string | null;
