@@ -339,15 +339,15 @@ function SnapContent() {
             onClick={() => {
               if (selectMode) {
                 const ids = Array.from(selectedIds);
-                if (ids.length > 0) router.push(`/snap/generate/batch?ids=${ids.join(',')}`);
-              } else if (allItems.length > 0) {
-                router.push(`/snap/generate/${allItems[0].id}`);
+                if (ids.length > 0) openCompose(ids);
+              } else {
+                openCompose([]);
               }
             }}
             disabled={selectMode ? selectedIds.size === 0 : allItems.length === 0}
           >
-            <Sparkles className="h-3.5 w-3.5" />
-            AI 写日记
+            <PenLine className="h-3.5 w-3.5" />
+            写日记
           </Button>
         </div>
       </div>
