@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth-store';
 import { AuthGuard } from '@/components/auth-guard';
 import { getContentHierarchy, publishPost, deletePost } from '@/lib/post-api';
+import { toast } from 'sonner';
 import { DiaryComposeDialog } from '@/components/diary/diary-compose-dialog';
 import type { Post, Visibility, MoodType, WeatherType } from '@/types';
 import { MoodEmoji, WeatherEmoji } from '@/types';
