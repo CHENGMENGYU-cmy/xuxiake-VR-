@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { AuthGuard } from '@/components/auth-guard';
 import { useSnapStore } from '@/stores/snap-store';
-import { generateDiaryBatch, generateTravelogueByTrip, getAiJob, getTravelogueJob } from '@/lib/snap-api';
+import { generateTravelogueByTrip, getTravelogueJob } from '@/lib/snap-api';
 import { toast } from 'sonner';
 import apiClient from '@/lib/api-client';
 
@@ -35,10 +35,6 @@ function SnapContent() {
   const [tripGenPostId, setTripGenPostId] = useState<string | null>(null);
   const [selectMode, setSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  const [multiGen, setMultiGen] = useState(false);
-  const [multiGenStatus, setMultiGenStatus] = useState('');
-  const [multiGenProgress, setMultiGenProgress] = useState(0);
-  const [multiGenPostId, setMultiGenPostId] = useState<string | null>(null);
   const [previewItems, setPreviewItems] = useState<any[] | null>(null);
   const [previewIndex, setPreviewIndex] = useState<number | null>(null);
   const [viewingDay, setViewingDay] = useState<string | null>(null);
@@ -96,49 +92,6 @@ function SnapContent() {
     } catch {
       setTripGenerating(false);
       toast.error('游记生成提交失败，请重试');
-    }
-  };
-
-  // 多选闪拍 → AI 生成一篇日记：提交 → 轮询 → 完成
-  const startMultiDiary = async () => {
-    if (selectedIds.size === 0 || multiGen) return;
-    setMultiGen(true);
-    setMultiGenPostId(null);
-    setMultiGenStatus('正在提交...');
-    setMultiGenProgress(0);
-    try {
-      const { jobId } = await generateDiaryBatch({
-        snapIds: Array.from(selectedIds),
-        style: '温柔治愈',
-        tone: '温暖',
-        length: '标准',
-      });
-      const timer = setInterval(async () => {
-        try {
-          const job = await getAiJob(jobId);
-          setMultiGenProgress(job.progress || 0);
-          setMultiGenStatus(statusLabel(job.status, job.progress));
-          if (job.status === 'DONE' || job.status === 'ERROR') {
-            clearInterval(timer);
-            setMultiGen(false);
-            if (job.status === 'DONE') {
-              setMultiGenPostId(job.postId || null);
-              setSelectMode(false);
-              setSelectedIds(new Set());
-              toast.success('日记生成完成，已保存到我的日记');
-            } else {
-              toast.error(job.error || '日记生成失败');
-            }
-          }
-        } catch {
-          clearInterval(timer);
-          setMultiGen(false);
-          toast.error('查询生成进度失败');
-        }
-      }, 1500);
-    } catch {
-      setMultiGen(false);
-      toast.error('日记生成提交失败，请重试');
     }
   };
 
@@ -292,7 +245,7 @@ function SnapContent() {
       const map = new Map<string, { label: string; items: any[] }>();
       for (const item of allItems) {
         if (!item.tripId) continue;
-        const cur = map.get(item.tripId) || { label: item.tripTitle || '未命名行程', items: [] };
+        const cur = map.get(item.tripId) || { label: item.tripTitle || '未命名行程', items: [] as any[] };
         cur.items.push(item);
         map.set(item.tripId, cur);
       }
@@ -376,11 +329,14 @@ function SnapContent() {
             size="sm"
             className="gap-1.5 bg-gradient-to-r from-teal-500 to-orange-400 text-white shadow-sm hover:from-teal-600 hover:to-orange-500"
             onClick={() => {
-              if (allItems.length > 0) {
+              if (selectMode) {
+                const ids = Array.from(selectedIds);
+                if (ids.length > 0) router.push(`/snap/generate/batch?ids=${ids.join(',')}`);
+              } else if (allItems.length > 0) {
                 router.push(`/snap/generate/${allItems[0].id}`);
               }
             }}
-            disabled={allItems.length === 0}
+            disabled={selectMode ? selectedIds.size === 0 : allItems.length === 0}
           >
             <Sparkles className="h-3.5 w-3.5" />
             AI 写日记
@@ -563,35 +519,23 @@ function SnapContent() {
           <div className="mx-auto flex max-w-4xl items-center justify-between gap-3">
             <span className="text-sm text-muted-foreground">已选 {selectedIds.size} 张</span>
             <div className="flex items-center gap-2">
-              {multiGenPostId ? (
-                <Button size="sm" onClick={() => router.push('/diaries')} className="shrink-0">查看日记 →</Button>
-              ) : (
-                <Button
-                  size="sm"
-                  onClick={startMultiDiary}
-                  disabled={selectedIds.size === 0 || multiGen}
-                  className="shrink-0 gap-1.5 bg-gradient-to-r from-teal-500 to-orange-400 text-white hover:from-teal-600 hover:to-orange-500"
-                >
-                  <Sparkles className="h-3.5 w-3.5" />
-                  AI 写日记
-                </Button>
-              )}
-              <Button size="sm" variant="ghost" onClick={() => { setSelectMode(false); setSelectedIds(new Set()); setMultiGenStatus(''); }}>
+              <Button
+                size="sm"
+                onClick={() => {
+                  const ids = Array.from(selectedIds);
+                  if (ids.length > 0) router.push(`/snap/generate/batch?ids=${ids.join(',')}`);
+                }}
+                disabled={selectedIds.size === 0}
+                className="shrink-0 gap-1.5 bg-gradient-to-r from-teal-500 to-orange-400 text-white hover:from-teal-600 hover:to-orange-500"
+              >
+                <Sparkles className="h-3.5 w-3.5" />
+                AI 写日记
+              </Button>
+              <Button size="sm" variant="ghost" onClick={() => { setSelectMode(false); setSelectedIds(new Set()); }}>
                 取消
               </Button>
             </div>
           </div>
-          {(multiGen || multiGenStatus) && (
-            <div className="mx-auto mt-2 max-w-4xl">
-              <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-teal-500 to-orange-400 transition-all"
-                  style={{ width: `${multiGenProgress}%` }}
-                />
-              </div>
-              <div className="mt-1 text-xs text-muted-foreground">{multiGenStatus}</div>
-            </div>
-          )}
         </div>
       )}
     </div>

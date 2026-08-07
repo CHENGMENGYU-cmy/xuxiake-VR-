@@ -357,7 +357,7 @@ export class AiService {
         tone: input.tone || '温暖',
         keywords: material.keywords,
         aiGenerated: true,
-        status: 'private',
+        status: 'draft',
       });
 
       const post = this.postRepo.create({

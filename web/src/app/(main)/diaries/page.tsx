@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { BookOpen, PenLine, Lock, Globe, Users, Image as ImageIcon, Video, Music, Edit, Share2, Calendar, MapPin, Sparkles, List, ChevronLeft, ChevronRight, Trash2 } from 'lucide-react';
+import { BookOpen, PenLine, Lock, Globe, Users, Image as ImageIcon, Video, Music, Edit, Share2, Calendar, MapPin, Sparkles, List, ChevronLeft, ChevronRight, Trash2, FileText } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -13,7 +13,7 @@ import { getContentHierarchy, publishPost, deletePost } from '@/lib/post-api';
 import type { Post, Visibility, MoodType, WeatherType } from '@/types';
 import { MoodEmoji, WeatherEmoji } from '@/types';
 
-type FilterType = 'all' | 'PRIVATE' | 'PUBLIC' | 'FOLLOWERS';
+type FilterType = 'all' | 'draft' | 'PRIVATE' | 'PUBLIC' | 'FOLLOWERS';
 
 const visibilityConfig: Record<Visibility, { icon: any; label: string; color: string }> = {
   PRIVATE: { icon: Lock, label: '私密', color: 'text-amber-600 dark:text-amber-400' },
@@ -122,16 +122,21 @@ function DiariesContent() {
       .finally(() => setLoading(false));
   }, [user?.id]);
 
+  const isDraft = (p: Post) => p.vrMetadata?.status === 'draft';
+
   const filteredPosts = filter === 'all'
     ? posts
-    : posts.filter(p => p.visibility === filter);
+    : filter === 'draft'
+      ? posts.filter(isDraft)
+      : posts.filter(p => p.visibility === filter && (filter !== 'PRIVATE' || !isDraft(p)));
 
   const groupedPosts = groupByMonth(filteredPosts);
   const monthKeys = Object.keys(groupedPosts).sort((a, b) => b.localeCompare(a));
 
   const filterOptions: { value: FilterType; label: string; count: number }[] = [
     { value: 'all', label: '全部', count: posts.length },
-    { value: 'PRIVATE', label: '私密', count: posts.filter(p => p.visibility === 'PRIVATE').length },
+    { value: 'draft', label: '草稿', count: posts.filter(isDraft).length },
+    { value: 'PRIVATE', label: '私密', count: posts.filter(p => p.visibility === 'PRIVATE' && !isDraft(p)).length },
     { value: 'PUBLIC', label: '公开', count: posts.filter(p => p.visibility === 'PUBLIC').length },
     { value: 'FOLLOWERS', label: '关注可见', count: posts.filter(p => p.visibility === 'FOLLOWERS').length },
   ];
@@ -335,12 +340,27 @@ function DiariesContent() {
                 {groupedPosts[monthKey].map(post => {
                   const visibility = visibilityConfig[post.visibility];
                   const VisibilityIcon = visibility.icon;
+                  const draft = isDraft(post);
+                  const openPost = () => {
+                    if (draft) {
+                      const meta = post.vrMetadata || {};
+                      if (Array.isArray(meta.sourceSnapIds) && meta.sourceSnapIds.length > 1) {
+                        router.push(`/snap/generate/batch?ids=${meta.sourceSnapIds.join(',')}&postId=${post.id}`);
+                      } else if (post.parentPostId) {
+                        router.push(`/snap/generate/${post.parentPostId}`);
+                      } else {
+                        router.push(`/diaries/${post.id}`);
+                      }
+                    } else {
+                      router.push(`/diaries/${post.id}`);
+                    }
+                  };
 
                   return (
                     <Card
                       key={post.id}
-                      className="overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
-                      onClick={() => router.push(`/diaries/${post.id}`)}
+                      className={`overflow-hidden hover:shadow-md transition-shadow cursor-pointer ${draft ? 'border-dashed border-amber-300 dark:border-amber-800' : ''}`}
+                      onClick={openPost}
                     >
                       <CardContent className="p-4">
                         {/* 顶部：时间 + 地点 + 隐私状态 */}
@@ -365,10 +385,17 @@ function DiariesContent() {
                               </>
                             )}
                           </div>
-                          <div className={`flex items-center gap-1 text-xs ${visibility.color}`}>
-                            <VisibilityIcon className="h-3.5 w-3.5" />
-                            <span>{visibility.label}</span>
-                          </div>
+                          {draft ? (
+                            <div className="flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400">
+                              <FileText className="h-3.5 w-3.5" />
+                              <span>草稿</span>
+                            </div>
+                          ) : (
+                            <div className={`flex items-center gap-1 text-xs ${visibility.color}`}>
+                              <VisibilityIcon className="h-3.5 w-3.5" />
+                              <span>{visibility.label}</span>
+                            </div>
+                          )}
                         </div>
 
                         {/* 有图片：图文布局 */}

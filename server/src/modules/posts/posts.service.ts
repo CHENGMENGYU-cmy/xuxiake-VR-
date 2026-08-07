@@ -978,6 +978,8 @@ export class PostsService {
     try {
       const meta = typeof draft.vrMetadata === 'string' ? JSON.parse(draft.vrMetadata) : (draft.vrMetadata || {});
       if (meta.status !== 'draft') return null;
+      // 批量草稿（多张素材合成）不在此单张入口恢复，避免单张生成页误加载
+      if (Array.isArray(meta.sourceSnapIds) && meta.sourceSnapIds.length > 1) return null;
     } catch {
       return null;
     }
@@ -1025,10 +1027,15 @@ export class PostsService {
       });
       if (post) {
         isUpdate = true;
+        let oldMeta: Record<string, unknown> = {};
+        try {
+          oldMeta = typeof post.vrMetadata === 'string' ? JSON.parse(post.vrMetadata) : (post.vrMetadata || {});
+        } catch {}
         post.title = dto.title;
         post.content = dto.content;
         post.visibility = visibility;
-        post.vrMetadata = JSON.stringify(vrMetadata);
+        // 合并旧元数据，保留 sourceSnapIds / aiGenerated / keywords 等 AI 溯源字段
+        post.vrMetadata = JSON.stringify({ ...oldMeta, ...vrMetadata });
         post.updatedAt = new Date();
       }
     }
