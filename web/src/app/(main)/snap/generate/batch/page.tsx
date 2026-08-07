@@ -77,6 +77,8 @@ function BatchContent() {
   const [insight, setInsight] = useState('');
   const [tags, setTags] = useState<string[]>([]);
   const [style, setStyle] = useState<DiaryStyle>('温柔治愈风');
+  const [createdAt, setCreatedAt] = useState('');
+  const [mood, setMood] = useState('');
   const [saving, setSaving] = useState(false);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
