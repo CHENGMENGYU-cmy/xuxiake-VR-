@@ -126,6 +126,20 @@ function DiarySquareTab() {
     } catch { return ''; }
   };
 
+  const getMood = (diary: any) => {
+    try {
+      const meta = typeof diary.vrMetadata === 'string' ? JSON.parse(diary.vrMetadata) : (diary.vrMetadata || {});
+      return (meta?.mood as string) || '';
+    } catch { return ''; }
+  };
+
+  const getWeather = (diary: any) => {
+    try {
+      const meta = typeof diary.vrMetadata === 'string' ? JSON.parse(diary.vrMetadata) : (diary.vrMetadata || {});
+      return (meta?.weather as string) || '';
+    } catch { return ''; }
+  };
+
   if (squareLoading && squareDiaries.length === 0) {
     return (
       <div className="py-16 text-center">
