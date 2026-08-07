@@ -144,6 +144,7 @@ export interface Collection {
 
 export interface Post {
   id: string;
+  title?: string | null;
   content: string | null;
   mediaItems: MediaItem[];
   author: User;
