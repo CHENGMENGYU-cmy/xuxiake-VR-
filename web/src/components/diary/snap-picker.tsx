@@ -44,6 +44,7 @@ export function useSnapItems() {
       image: getItemImage(item),
       locationName: item.locationName || item.location?.name || '',
       content: item.content || null,
+      createdAt: item.createdAt,
       _type: item._type,
     }));
   }, [snaps, logs]);
