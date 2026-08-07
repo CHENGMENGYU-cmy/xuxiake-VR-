@@ -39,6 +39,8 @@ function SnapContent() {
   const [previewItems, setPreviewItems] = useState<any[] | null>(null);
   const [previewIndex, setPreviewIndex] = useState<number | null>(null);
   const [viewingDay, setViewingDay] = useState<string | null>(null);
+  const [composeOpen, setComposeOpen] = useState(false);
+  const [composeInitIds, setComposeInitIds] = useState<string[]>([]);
 
   useEffect(() => {
     fetchSnaps();
