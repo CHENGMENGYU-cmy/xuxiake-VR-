@@ -128,6 +128,7 @@ function DiaryDetailContent() {
   }
 
   const isOwner = user && post.author?.id === user.id;
+  const isDraft = post.vrMetadata?.status === 'draft';
 
   return (
     <div className="mx-auto max-w-2xl space-y-4">
