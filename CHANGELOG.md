@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-07
+修改位置：web/src/app/(main)/snap/generate/batch/page.tsx, diaries/[id]/page.tsx, diaries/page.tsx, discover/page.tsx；server/src/modules/posts/ai.service.ts
+修改原因：1) 批量生成页生成后只有「标题+内容」的简单编辑区，无封面图/时间/心情展示，与详情页完整卡片不一致；2) 素材心情为中文值、手写心情为 MoodType key，两套格式导致详情页/列表/广场心情展示不统一
+修改内容：1) batch 编辑器顶部加大封面图（首张素材）、标题下显示生成时间与心情，展示向完整卡片靠拢；2) 后端 executeMultiDiaryJob 生成时把素材心情写入 vrMetadata.mood，详情页可完整展示；3) 详情页/我的日记列表/日记广场的心情展示兼容两种格式（能匹配 MoodEmoji 时显示表情，否则直接显示文字心情）
+修改效果：AI 批量生成日记后编辑器即有封面图+时间+心情的完整观感，发布后详情页心情字段完整；心情无论中文还是 MoodType 均正确显示
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-07
 修改位置：web/src/components/diary/snap-picker.tsx；web/src/app/(main)/diaries/[id]/page.tsx, diaries/page.tsx, discover/page.tsx；web/src/types/index.ts
 修改原因：1) 写日记素材弹窗（DiaryComposeDialog/SnapPickerDialog）素材按时间平铺，用户想跨月选图时无从下手；2) 手写日记（感想+心情+天气）与 AI 写日记（标题+正文+感悟+图片）展示格式不一致，用户要求统一
 修改内容：1) SnapPicker 素材多选网格新增月份分组筛选（顶部「全部」+各月份 chips，如2026年8月），可先切到某月再选该月素材，支持跨月选图；2) 日记详情页统一为完整卡片：封面图+标题+时间+天气+心情+地点+风格标签+正文+感悟（insight），手写与 AI 来源统一渲染；3) 我的日记列表卡片补天气/心情展示、有标题时显示标题；4) 日记广场卡片补天气/心情 chips；5) Post 类型补 title 字段（后端已有该字段）
