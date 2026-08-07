@@ -512,10 +512,10 @@ function SnapContent() {
             )}
             <button
               className="absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-white/10 px-4 py-2 text-sm text-white transition-colors hover:bg-white/20"
-              onClick={() => router.push(`/snap/generate/${previewItems[previewIndex].id}`)}
+              onClick={() => openCompose([previewItems[previewIndex].id])}
             >
-              <Sparkles className="h-4 w-4" />
-              AI 写日记
+              <PenLine className="h-4 w-4" />
+              写日记
             </button>
           </div>
         </div>
