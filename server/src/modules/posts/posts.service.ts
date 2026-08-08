@@ -227,7 +227,7 @@ export class PostsService {
 
   async getPostById(id: string, currentUserId?: string) {
     const post = await this.postRepo.findOne({
-      where: { id },
+      where: { id, deletedAt: IsNull() },
       relations: { author: true, mediaItems: true, tags: true, topics: true },
     });
     if (!post) throw new NotFoundException('内容不存在');
