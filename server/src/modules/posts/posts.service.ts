@@ -79,6 +79,9 @@ export class PostsService {
     // 排除私人素材（LOG 日志不进入任何公开信息流）
     qb.andWhere('post.contentLevel != :log', { log: 'LOG' });
 
+    // 软删内容不展示
+    qb.andWhere('post.deletedAt IS NULL');
+
     if (postType) {
       qb.andWhere('post.postType = :postType', { postType });
     }
