@@ -968,7 +968,7 @@ export class PostsService {
   /** 获取用户的闪拍记录列表 */
   async getUserSnaps(userId: string, limit = 500) {
     const snaps = await this.postRepo.find({
-      where: { authorId: userId, contentLevel: 'SNAPSHOT' },
+      where: { authorId: userId, contentLevel: 'SNAPSHOT', deletedAt: IsNull() },
       relations: { mediaItems: true },
       order: { createdAt: 'DESC' },
       take: limit,
@@ -979,7 +979,7 @@ export class PostsService {
   /** 获取用户的日志列表（仅本人，私人素材） */
   async getUserLogs(userId: string, limit = 50) {
     const logs = await this.postRepo.find({
-      where: { authorId: userId, contentLevel: 'LOG' },
+      where: { authorId: userId, contentLevel: 'LOG', deletedAt: IsNull() },
       relations: { mediaItems: true },
       order: { createdAt: 'DESC' },
       take: limit,
@@ -994,6 +994,7 @@ export class PostsService {
       where: {
         authorId: userId,
         contentLevel: 'DIARY',
+        deletedAt: IsNull(),
         ...(isOwner ? {} : { visibility: 'PUBLIC' as const }),
       },
       relations: { mediaItems: true },
@@ -1010,6 +1011,7 @@ export class PostsService {
       where: {
         authorId: userId,
         contentLevel: 'TRAVELOGUE',
+        deletedAt: IsNull(),
         ...(isOwner ? {} : { visibility: 'PUBLIC' as const }),
       },
       relations: { mediaItems: true },
