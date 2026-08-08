@@ -289,10 +289,10 @@ function JourneyCreatorContent() {
             </div>
             <div className="space-y-1.5">
               <label className="text-sm font-medium">出行方式</label>
-              <select value={transport} onChange={(e) => setTransport(e.target.value)} className="h-9 w-full rounded-lg border border-border bg-background px-2 text-sm">
-                <option value="">选择出行方式</option>
-                {TRANSPORT_OPTIONS.map((t) => <option key={t} value={t}>{t}</option>)}
-              </select>
+              <Input list="transport-options" placeholder="选择或输入出行方式" value={transport} onChange={(e) => setTransport(e.target.value)} />
+              <datalist id="transport-options">
+                {TRANSPORT_OPTIONS.map((t) => <option key={t} value={t} />)}
+              </datalist>
             </div>
             <div className="space-y-1.5">
               <label className="text-sm font-medium">人均消费</label>
@@ -300,10 +300,10 @@ function JourneyCreatorContent() {
             </div>
             <div className="space-y-1.5">
               <label className="text-sm font-medium">旅行主题</label>
-              <select value={theme} onChange={(e) => setTheme(e.target.value)} className="h-9 w-full rounded-lg border border-border bg-background px-2 text-sm">
-                <option value="">选择主题</option>
-                {THEME_OPTIONS.map((t) => <option key={t} value={t}>{t}</option>)}
-              </select>
+              <Input list="theme-options" placeholder="选择或输入主题" value={theme} onChange={(e) => setTheme(e.target.value)} />
+              <datalist id="theme-options">
+                {THEME_OPTIONS.map((t) => <option key={t} value={t} />)}
+              </datalist>
             </div>
           </div>
           {dayCount && (
