@@ -189,6 +189,7 @@ export class PostsService {
       qb.where('post.visibility = :vis', { vis: 'PUBLIC' });
     }
     qb.andWhere('post.contentLevel != :log', { log: 'LOG' });
+    qb.andWhere('post.deletedAt IS NULL');
 
     qb.addSelect('post.like_count + post.comment_count', 'engagement')
       .orderBy('engagement', 'DESC')
