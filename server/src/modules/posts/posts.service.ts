@@ -816,7 +816,7 @@ export class PostsService {
   /** 行程下所有 SNAPSHOT 的 id（供 AI 生成游记） */
   async getTripSnapshotIds(userId: string, tripId: string): Promise<string[]> {
     const posts = await this.postRepo.find({
-      where: { authorId: userId, contentLevel: 'SNAPSHOT', tripId },
+      where: { authorId: userId, contentLevel: 'SNAPSHOT', tripId, deletedAt: IsNull() },
       select: { id: true },
     });
     return posts.map((p) => p.id);
