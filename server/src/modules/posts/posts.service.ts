@@ -90,7 +90,7 @@ export class PostsService {
     }
 
     if (cursor) {
-      const cursorPost = await this.postRepo.findOne({ where: { id: cursor } });
+      const cursorPost = await this.postRepo.findOne({ where: { id: cursor, deletedAt: IsNull() } });
       if (cursorPost) {
         qb.andWhere('post.createdAt < :cursorDate', { cursorDate: cursorPost.createdAt });
       }
@@ -1039,7 +1039,7 @@ export class PostsService {
       .take(limit + 1);
 
     if (cursor) {
-      const cursorPost = await this.postRepo.findOne({ where: { id: cursor } });
+      const cursorPost = await this.postRepo.findOne({ where: { id: cursor, deletedAt: IsNull() } });
       if (cursorPost) {
         qb.andWhere('post.createdAt < :cursorDate', { cursorDate: cursorPost.createdAt });
       }
