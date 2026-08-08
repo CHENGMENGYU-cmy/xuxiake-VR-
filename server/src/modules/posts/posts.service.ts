@@ -714,6 +714,7 @@ export class PostsService {
       if (userId) {
         qb.andWhere('post.authorId = :userId', { userId });
       }
+      qb.andWhere('post.deletedAt IS NULL');
     };
 
     const byLocationQb = this.postRepo.createQueryBuilder('post')
