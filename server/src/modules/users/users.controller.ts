@@ -433,7 +433,7 @@ export class UsersController {
     const countQb = this.postRepo.createQueryBuilder('post')
       .where('post.authorId = :userId', { userId: user.id })
       .andWhere('post.contentLevel NOT IN (:...excludeLevels)', { excludeLevels: ['SNAPSHOT', 'LOG'] })
-      .andWhere("post.vrMetadata IS NULL OR post.vrMetadata NOT LIKE '%\"status\":\"draft\"%'")
+      .andWhere("(post.vrMetadata IS NULL OR post.vrMetadata NOT LIKE '%\"status\":\"draft\"%')")
       .andWhere('post.deletedAt IS NULL');
     if (!isOwner) {
       countQb.andWhere('post.visibility = :vis', { vis: 'PUBLIC' });
