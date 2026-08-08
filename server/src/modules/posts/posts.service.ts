@@ -485,7 +485,7 @@ export class PostsService {
   }
 
   async unlikePost(userId: string, postId: string) {
-    const post = await this.postRepo.findOne({ where: { id: postId } });
+    const post = await this.postRepo.findOne({ where: { id: postId, deletedAt: IsNull() } });
     if (!post) throw new NotFoundException('内容不存在');
 
     const existing = await this.likeRepo.findOne({ where: { userId, postId } });
