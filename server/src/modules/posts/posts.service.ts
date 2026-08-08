@@ -223,7 +223,7 @@ export class PostsService {
   }
 
   async incrementViewCount(id: string) {
-    const post = await this.postRepo.findOne({ where: { id } });
+    const post = await this.postRepo.findOne({ where: { id, deletedAt: IsNull() } });
     if (!post) throw new NotFoundException('内容不存在');
     post.viewCount += 1;
     await this.postRepo.save(post);
