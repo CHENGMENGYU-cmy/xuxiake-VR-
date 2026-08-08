@@ -422,9 +422,7 @@ export class UsersController {
       }
     }
 
-    console.log('[DEBUG getUserPosts] SQL=', qb.getSql());
     const posts = await qb.getMany();
-    console.log('[DEBUG getUserPosts] 列表条数=', posts.length);
     const hasMore = posts.length > take;
     const data = posts.slice(0, take);
 
