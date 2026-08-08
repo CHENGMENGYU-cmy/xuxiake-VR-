@@ -825,7 +825,7 @@ export class PostsService {
   // ===== 发布/撤回 =====
   async publishPost(userId: string, postId: string, dto?: { locationPrecision?: 'hidden' | 'city' | 'exact'; visibility?: 'PUBLIC' | 'FOLLOWERS' | 'PRIVATE' }) {
     const post = await this.postRepo.findOne({
-      where: { id: postId },
+      where: { id: postId, deletedAt: IsNull() },
       relations: { author: true, mediaItems: true, tags: true, topics: true },
     });
     if (!post) throw new NotFoundException('内容不存在');
