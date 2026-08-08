@@ -69,7 +69,7 @@ export class Post {
   @Column({ name: 'updated_at', type: 'timestamp', nullable: true })
   updatedAt: Date | null;
 
-  @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp', nullable: true })
+  @Column({ name: 'deleted_at', type: 'timestamp', nullable: true })
   deletedAt: Date | null;
 
   @ManyToOne(() => User, (user) => user.posts)
