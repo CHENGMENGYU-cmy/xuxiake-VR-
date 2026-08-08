@@ -865,7 +865,7 @@ export class PostsService {
   }
 
   async promoteContent(userId: string, postId: string, dto: { targetLevel: string; content?: string; title?: string }) {
-    const post = await this.postRepo.findOne({ where: { id: postId, authorId: userId } });
+    const post = await this.postRepo.findOne({ where: { id: postId, authorId: userId, deletedAt: IsNull() } });
     if (!post) throw new NotFoundException('内容不存在');
 
     const validLevels = ['SNAPSHOT', 'CLASSIFIED', 'DIARY', 'ESSAY', 'LOG', 'TRAVELOGUE'];
