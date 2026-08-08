@@ -9,23 +9,17 @@ async function j(url, opts = {}) {
   const lr = await j('/auth/login', { method: 'POST', body: JSON.stringify({ account: 'sunqi', password: 'password123', captchaKey: cap.body.data.key, captchaCode: 'TEST1234' }) });
   const token = lr.body?.data?.tokens?.accessToken;
   const H = { Authorization: 'Bearer ' + token };
-  const auth = { headers: H };
 
-  // 1. 创建一篇测试日记
-  const created = await j('/posts', {
-    method: 'POST', headers: H,
-    body: JSON.stringify({ content: '测试删除同步的日记', visibility: 'PRIVATE', contentLevel: 'DIARY', postType: 'NOTE' }),
+  const post = (await j('/posts/fde24594-6f21-4d4e-b4f3-ba704c76e6a3', { headers: H })).body?.data;
+  const jj = post?.journey;
+  console.log('title:', jj?.title);
+  console.log('summary:', jj?.summary);
+  console.log('destination:', jj?.destination, '| start:', jj?.startDate, '| end:', jj?.endDate);
+  console.log('transport:', jj?.transport, '| budget:', jj?.budget, '| theme:', jj?.theme);
+  console.log('insight:', jj?.insight);
+  console.log('coverUrl:', jj?.coverUrl);
+  console.log('stops count:', jj?.stops?.length);
+  jj?.stops?.forEach((s, i) => {
+    console.log(`  stop${i}: day=${s.dayNumber} date=${s.dayDate} loc=${s.locationName} desc=${(s.description || '').slice(0, 30)} mediaItems=${s.mediaItems?.length}`);
   });
-  const newId = created.body?.data?.id;
-  console.log('创建日记 id:', newId);
-  const before = await j('/users/sunqi/posts?limit=50&contentLevel=DIARY', auth);
-  console.log('删除前 日记 total:', before.body.total, '含新日记?', before.body.data?.some(p => p.id === newId));
-
-  // 2. 删除该日记
-  const del = await j(`/posts/${newId}`, { method: 'DELETE', headers: H });
-  console.log('删除 status:', del.status, del.body?.message);
-
-  // 3. 删除后再查
-  const after = await j('/users/sunqi/posts?limit=50&contentLevel=DIARY', auth);
-  console.log('删除后 日记 total:', after.body.total, '仍含新日记?', after.body.data?.some(p => p.id === newId));
 })();
