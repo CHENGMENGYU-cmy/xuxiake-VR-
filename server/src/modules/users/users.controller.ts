@@ -370,6 +370,7 @@ export class UsersController {
   ) {
     const user = await this.userRepo.findOne({ where: { username } });
     if (!user) throw new NotFoundException('用户不存在');
+    console.log('[DEBUG getUserPosts] username=', username, 'user.id=', user.id);
 
     // 携带了 Authorization 但 token 无效（过期/篡改）时抛 401，触发前端自动刷新
     const currentUserId = this.getUserId(auth || '');
