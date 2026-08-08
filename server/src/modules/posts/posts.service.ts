@@ -1288,6 +1288,7 @@ export class PostsService {
       .leftJoinAndSelect('post.tags', 'tags')
       .leftJoinAndSelect('post.topics', 'topics')
       .where('cp.collectionId = :cid', { cid: collectionId })
+      .andWhere('post.deletedAt IS NULL')
       .orderBy('cp.sortOrder', 'ASC')
       .skip((page - 1) * limit)
       .take(limit + 1);
