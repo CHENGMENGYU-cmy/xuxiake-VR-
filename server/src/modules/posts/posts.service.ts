@@ -1062,6 +1062,7 @@ export class PostsService {
         parentPostId: snapId,
         contentLevel: 'DIARY',
         visibility: 'PRIVATE',
+        deletedAt: IsNull(),
       },
       relations: { mediaItems: true },
       order: { updatedAt: 'DESC' },
