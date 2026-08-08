@@ -382,8 +382,8 @@ export class PostsService {
     const post = await this.postRepo.findOne({ where: { id: postId } });
     if (!post) throw new NotFoundException('内容不存在');
     if (post.authorId !== userId) throw new NotFoundException('无权删除此内容');
-    // 软删除：置 deleted_at，列表/统计/详情统一排除（TypeORM DeleteDateColumn），数据可恢复
-    await this.postRepo.softDelete({ id: postId });
+    // 软删除：置 deleted_at，列表/统计/详情统一按 deleted_at IS NULL 过滤，数据可恢复
+    await this.postRepo.update({ id: postId }, { deletedAt: new Date() });
     return { message: '删除成功' };
   }
 
