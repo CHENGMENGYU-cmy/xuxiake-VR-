@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn, ManyToOne, OneToMany, ManyToMany, JoinColumn, JoinTable, DeleteDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn, ManyToOne, OneToMany, ManyToMany, JoinColumn, JoinTable } from 'typeorm';
 import { User } from './user.entity.js';
 import { MediaItem } from './media-item.entity.js';
 import { Comment } from './comment.entity.js';
