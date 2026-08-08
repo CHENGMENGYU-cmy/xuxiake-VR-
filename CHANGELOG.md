@@ -1,6 +1,13 @@
 项目修改记录（最近30条）
 ================================================================================
 
+修改时间：2026-08-08
+修改位置：server/src/entities/journey.entity.ts, journey-stop.entity.ts（新增 journey-stop-media.entity.ts）；server/src/modules/posts/posts.service.ts, ai.service.ts, posts.module.ts, common/interfaces.ts；server/sql/migrate-travelogue-chapters.sql（新增）；web/src/app/(main)/upload/journey-creator/page.tsx（重构）, journeys/generate/page.tsx, journeys/[id]/page.tsx, journeys/page.tsx；web/src/types/index.ts, lib/post-api.ts
+修改原因：原有"写游记"两个割裂实现均不完整——手写是"表单式"（正文与行程站点分离、站点仅单图，写不出图文并茂的游记）；AI 生成产物是纯文本 Markdown、无 Journey 结构（无封面/信息卡/站点）；两条链路产物形态不一致，且 updatePost 编辑时只更新 content、不更新 journey 结构。对照《内容生成逻辑链条》（闪拍→日志/日记→游记）与真实游记形式（公众号/马蜂窝图文叙事章节式），需统一升级
+修改内容：1) 手写编辑器重构为「图文叙事章节式」：标题+封面+导语+信息卡（目的地/日期/出行方式/人均/主题）+ 按天章节（每章 日期+地点+正文+多图，支持本地上传/从素材库选图）+ 结尾感悟；2) AI 游记生成升级为结构化：后端按素材日期分天生成章节、自动配图、生成标题/导语/信息卡/结尾感悟，创建 Journey+stops+stop_media，生成后落回同款章节式编辑器继续手改再发布；3) 后端数据模型：journeys 扩展 summary/transport/budget/theme/insight，journey_stops 加 day_date，新增 journey_stop_media 多图表（迁移 migrate-travelogue-chapters.sql）；4) updatePost 支持整体更新 journey 结构（先删旧再重建）；5) 详情页图文叙事渲染（封面+导语+信息卡+Day 章节图墙+结尾感悟），列表页卡片显示封面+标题+目的地/天数徽标；6) 手写与 AI 统一 contentLevel=TRAVELOGUE，getContentHierarchy 对 TRAVELOGUE 兼容 ESSAY（旧数据可见）
+修改效果：手写与 AI 都能产出"图文交织、按天分章节、带信息卡与结尾感悟"的完整游记，且在同一编辑器内统一编辑发布；编辑游记时结构与正文一并更新；详情/列表展示与真实游记一致；接口层（createPost/getById/updatePost）+ AI 结构化生成 + Playwright 全链路（手写→发布→详情渲染→编辑回填→列表显示）验证通过
+--------------------------------------------------------------------------------
+
 修改时间：2026-08-07
 修改位置：web/src/app/(main)/snap/page.tsx
 修改原因：素材库「按行程」视图的"AI 生成游记"入口违背《内容生成逻辑链条》（闪拍→日志/日记→游记），把行程内全部 SNAPSHOT 直接生成游记、缺失"日志事实+日记情感"归集；且与 /journeys/generate（选日志+日记→游记）功能重复、能力更弱（参数硬编码、无素材选择、无结果预览、状态残留、轮询泄漏）
