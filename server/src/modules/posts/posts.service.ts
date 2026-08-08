@@ -558,7 +558,7 @@ export class PostsService {
   }
 
   async createComment(userId: string, postId: string, dto: CreateCommentDto) {
-    const post = await this.postRepo.findOne({ where: { id: postId } });
+    const post = await this.postRepo.findOne({ where: { id: postId, deletedAt: IsNull() } });
     if (!post) throw new NotFoundException('内容不存在');
 
     const comment = this.commentRepo.create({
