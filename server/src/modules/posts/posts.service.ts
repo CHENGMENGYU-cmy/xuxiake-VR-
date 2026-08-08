@@ -1032,6 +1032,7 @@ export class PostsService {
       .leftJoinAndSelect('post.tags', 'tags')
       .where('post.contentLevel = :level', { level: 'DIARY' })
       .andWhere('post.visibility = :vis', { vis: 'PUBLIC' })
+      .andWhere('post.deletedAt IS NULL')
       .orderBy('post.createdAt', 'DESC')
       .take(limit + 1);
 
