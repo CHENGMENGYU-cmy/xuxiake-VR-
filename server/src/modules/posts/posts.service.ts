@@ -852,7 +852,7 @@ export class PostsService {
 
   async unpublishPost(userId: string, postId: string) {
     const post = await this.postRepo.findOne({
-      where: { id: postId },
+      where: { id: postId, deletedAt: IsNull() },
       relations: { author: true, mediaItems: true, tags: true, topics: true },
     });
     if (!post) throw new NotFoundException('内容不存在');
