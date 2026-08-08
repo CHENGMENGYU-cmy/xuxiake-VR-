@@ -394,7 +394,7 @@ export class PostsService {
 
   async updatePost(userId: string, postId: string, dto: { content?: string; journey?: CreatePostDto['journey'] }) {
     const post = await this.postRepo.findOne({
-      where: { id: postId },
+      where: { id: postId, deletedAt: IsNull() },
       relations: { author: true, mediaItems: true, tags: true, topics: true },
     });
     if (!post) throw new NotFoundException('内容不存在');
