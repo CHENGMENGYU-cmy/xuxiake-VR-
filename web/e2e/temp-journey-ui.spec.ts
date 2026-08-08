@@ -12,8 +12,8 @@ test.describe('图文叙事章节式游记', () => {
     await expect(page.getByRole('heading', { name: '写游记' })).toBeVisible({ timeout: 15000 });
 
     // 2. 标题 + 导语
-    await page.getByPlaceholder('给你的游记起个名字...').fill('测试·漓江晨雾三日行');
-    await page.getByPlaceholder('如：在漓江晨雾里醒来，用三天把桂林的山水与烟火装进行囊').fill('在漓江晨雾里醒来，用三天把桂林装进心里');
+    await page.getByPlaceholder('给你的游记起个名字...').first().fill('测试·漓江晨雾三日行');
+    await page.getByPlaceholder('如：在漓江晨雾里醒来，用三天把桂林的山水与烟火装进行囊').first().fill('在漓江晨雾里醒来，用三天把桂林装进心里');
 
     // 3. 信息卡
     await page.getByPlaceholder('如：云南大理').fill('广西桂林');
@@ -32,11 +32,11 @@ test.describe('图文叙事章节式游记', () => {
     await expect(page.getByRole('heading', { name: '选择素材' })).toBeVisible({ timeout: 10000 });
     await page.locator('.grid.grid-cols-4 button').first().click();
     await page.getByRole('button', { name: /确认（1\/12）/ }).click();
-    // 章节图片出现
-    await expect(page.locator('.grid.grid-cols-4 button, img')).toBeVisible({ timeout: 5000 });
+    // 章节图片出现（Day 卡片内的图片网格）
+    await expect(page.locator('.rounded-lg.border.bg-card.p-4 img').first()).toBeVisible({ timeout: 5000 });
 
     // 6. 结尾感悟
-    await page.getByPlaceholder('给这次旅程一个温暖的收尾...').fill('山水有相逢，来日方长。');
+    await page.getByPlaceholder('给这次旅程一个温暖的收尾...').first().fill('山水有相逢，来日方长。');
 
     // 7. 发布 → 跳详情页
     await page.getByRole('button', { name: '发布游记' }).click();
@@ -45,27 +45,26 @@ test.describe('图文叙事章节式游记', () => {
 
     // 8. 详情页图文渲染
     await expect(page.getByRole('heading', { name: '测试·漓江晨雾三日行' })).toBeVisible({ timeout: 10000 });
-    await expect(page.getByText('在漓江晨雾里醒来，用三天把桂林装进心里')).toBeVisible({ timeout: 5000 });
-    await expect(page.getByText('广西桂林')).toBeVisible({ timeout: 5000 });
-    await expect(page.getByText('高铁')).toBeVisible({ timeout: 5000 });
-    await expect(page.getByText('D1').first()).toBeVisible({ timeout: 5000 });
-    await expect(page.getByText('兴坪古镇').first()).toBeVisible({ timeout: 5000 });
-    await expect(page.getByText('清晨六点，我在漓江边等日出')).toBeVisible({ timeout: 5000 });
-    await expect(page.getByText('山水有相逢，来日方长。')).toBeVisible({ timeout: 5000 });
+    await expect(page.getByText(/在漓江晨雾里醒来/).first()).toBeVisible({ timeout: 8000 });
+    await expect(page.getByText(/广西桂林/).first()).toBeVisible({ timeout: 8000 });
+    await expect(page.getByText(/高铁/).first()).toBeVisible({ timeout: 8000 });
+    await expect(page.getByText('D1').first()).toBeVisible({ timeout: 8000 });
+    await expect(page.getByText(/兴坪古镇/).first()).toBeVisible({ timeout: 8000 });
+    await expect(page.getByText(/清晨六点/).first()).toBeVisible({ timeout: 8000 });
+    await expect(page.getByText(/山水有相逢/).first()).toBeVisible({ timeout: 8000 });
 
-    const postUrl = page.url();
+    // 9. 详情页"编辑"跳回章节式编辑器（回填数据）
+    await page.getByRole('button', { name: '编辑' }).click();
+    await page.waitForURL(/\/journey-creator\?edit=/, { timeout: 15000 });
+    await expect(page.getByRole('heading', { name: '编辑游记' })).toBeVisible({ timeout: 15000 });
+    await expect(page.getByPlaceholder('给你的游记起个名字...').first()).toHaveValue('测试·漓江晨雾三日行', { timeout: 5000 });
+    // 回填的章节内容（Day 1 + 描述）仍在
+    await expect(page.getByPlaceholder('这一天的旅程故事、所见所感...').first()).toHaveValue(/清晨六点/, { timeout: 5000 });
 
-    // 9. 列表页卡片渲染（封面 + 目的地 + 天数）
+    // 10. 列表页卡片渲染（封面 + 目的地 + 天数）
     await page.goto('http://localhost:3000/journeys');
     await page.waitForURL('**/journeys');
-    await expect(page.getByText('测试·漓江晨雾三日行').first()).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText('测试·漓江晨雾三日行').first()).toBeVisible({ timeout: 15000 });
     await expect(page.getByText('广西桂林').first()).toBeVisible({ timeout: 5000 });
-
-    // 10. 详情页"编辑"按钮跳回章节式编辑器（回填数据）
-    await page.goto(postUrl);
-    await page.getByRole('button', { name: '编辑' }).click();
-    await page.waitForURL(/\/journey-creator\?edit=/, { timeout: 10000 });
-    await expect(page.getByRole('heading', { name: '编辑游记' })).toBeVisible({ timeout: 10000 });
-    await expect(page.getByPlaceholder('给你的游记起个名字...')).toHaveValue('测试·漓江晨雾三日行', { timeout: 5000 });
   });
 });

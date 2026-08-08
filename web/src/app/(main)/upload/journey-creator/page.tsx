@@ -216,7 +216,7 @@ function JourneyCreatorContent() {
           content: assembleContent(),
           visibility,
           postType: 'JOURNEY',
-          contentLevel: 'ESSAY',
+          contentLevel: 'TRAVELOGUE',
           vrMetadata: { tab: 'JOURNEY' },
           journey: journeyPayload,
         };

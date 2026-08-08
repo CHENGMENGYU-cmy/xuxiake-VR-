@@ -662,7 +662,12 @@ export class PostsService {
     }
 
     if (level) {
-      qb.andWhere('post.contentLevel = :level', { level });
+      if (level === 'TRAVELOGUE') {
+        // 游记层级兼容 ESSAY（手写章节式游记统一为 TRAVELOGUE，兼容旧数据）
+        qb.andWhere('post.contentLevel IN (:...levels)', { levels: ['TRAVELOGUE', 'ESSAY'] });
+      } else {
+        qb.andWhere('post.contentLevel = :level', { level });
+      }
     }
     if (userId) {
       qb.andWhere('post.authorId = :userId', { userId });
