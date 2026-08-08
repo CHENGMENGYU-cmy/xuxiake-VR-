@@ -392,6 +392,9 @@ export class UsersController {
     // 排除素材库专属层级（SNAPSHOT/LOG 是素材，不是发布内容，已在素材库展示）
     qb.andWhere('post.contentLevel NOT IN (:...excludeLevels)', { excludeLevels: ['SNAPSHOT', 'LOG'] });
 
+    // 统计/列表口径：排除草稿（vrMetadata.status=draft 的未发布内容，不计入帖子数与作品列表）
+    qb.andWhere("post.vrMetadata IS NULL OR COALESCE(JSON_UNQUOTE(JSON_EXTRACT(post.vrMetadata, '$.status')), '') <> 'draft'");
+
     // 非本人只能看到公开内容
     if (!isOwner) {
       qb.andWhere('post.visibility = :vis', { vis: 'PUBLIC' });
@@ -423,7 +426,8 @@ export class UsersController {
     // 查询总数（与列表查询保持一致的过滤条件）
     const countQb = this.postRepo.createQueryBuilder('post')
       .where('post.authorId = :userId', { userId: user.id })
-      .andWhere('post.contentLevel NOT IN (:...excludeLevels)', { excludeLevels: ['SNAPSHOT', 'LOG'] });
+      .andWhere('post.contentLevel NOT IN (:...excludeLevels)', { excludeLevels: ['SNAPSHOT', 'LOG'] })
+      .andWhere("post.vrMetadata IS NULL OR COALESCE(JSON_UNQUOTE(JSON_EXTRACT(post.vrMetadata, '$.status')), '') <> 'draft'");
     if (!isOwner) {
       countQb.andWhere('post.visibility = :vis', { vis: 'PUBLIC' });
     }

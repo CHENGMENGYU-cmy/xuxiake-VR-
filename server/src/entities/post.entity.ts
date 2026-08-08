@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn, ManyToOne, OneToMany, ManyToMany, JoinColumn, JoinTable } from 'typeorm';
+import { Entity, Column, PrimaryColumn, ManyToOne, OneToMany, ManyToMany, JoinColumn, JoinTable, DeleteDateColumn } from 'typeorm';
 import { User } from './user.entity.js';
 import { MediaItem } from './media-item.entity.js';
 import { Comment } from './comment.entity.js';
@@ -68,6 +68,9 @@ export class Post {
 
   @Column({ name: 'updated_at', type: 'timestamp', nullable: true })
   updatedAt: Date | null;
+
+  @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp', nullable: true })
+  deletedAt: Date | null;
 
   @ManyToOne(() => User, (user) => user.posts)
   @JoinColumn({ name: 'author_id' })
