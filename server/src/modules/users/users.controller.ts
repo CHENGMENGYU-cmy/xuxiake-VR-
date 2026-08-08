@@ -395,6 +395,9 @@ export class UsersController {
     // 统计/列表口径：排除草稿（vrMetadata.status=draft 的未发布内容，不计入帖子数与作品列表）
     qb.andWhere("post.vrMetadata IS NULL OR COALESCE(JSON_UNQUOTE(JSON_EXTRACT(post.vrMetadata, '$.status')), '') <> 'draft'");
 
+    // 软删内容不展示
+    qb.andWhere('post.deletedAt IS NULL');
+
     // 非本人只能看到公开内容
     if (!isOwner) {
       qb.andWhere('post.visibility = :vis', { vis: 'PUBLIC' });
