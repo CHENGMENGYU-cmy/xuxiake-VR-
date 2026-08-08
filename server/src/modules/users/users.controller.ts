@@ -394,7 +394,7 @@ export class UsersController {
     qb.andWhere('post.contentLevel NOT IN (:...excludeLevels)', { excludeLevels: ['SNAPSHOT', 'LOG'] });
 
     // 统计/列表口径：排除草稿（vrMetadata.status=draft 的未发布内容，不计入帖子数与作品列表）
-    qb.andWhere("post.vrMetadata IS NULL OR post.vrMetadata NOT LIKE '%\"status\":\"draft\"%'");
+    qb.andWhere("(post.vrMetadata IS NULL OR post.vrMetadata NOT LIKE '%\"status\":\"draft\"%')");
 
     // 软删内容不展示
     qb.andWhere('post.deletedAt IS NULL');
