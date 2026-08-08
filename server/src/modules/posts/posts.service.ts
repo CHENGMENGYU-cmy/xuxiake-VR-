@@ -667,6 +667,9 @@ export class PostsService {
       qb.where('post.visibility = :vis', { vis: 'PUBLIC' });
     }
 
+    // 软删内容不展示
+    qb.andWhere('post.deletedAt IS NULL');
+
     if (level) {
       if (level === 'TRAVELOGUE') {
         // 游记层级兼容 ESSAY（手写章节式游记统一为 TRAVELOGUE，兼容旧数据）
