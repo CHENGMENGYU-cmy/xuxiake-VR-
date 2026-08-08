@@ -782,6 +782,7 @@ export class PostsService {
       .where('post.contentLevel = :lv', { lv: 'SNAPSHOT' })
       .andWhere('post.authorId = :uid', { uid: userId })
       .andWhere('post.tripId IS NOT NULL')
+      .andWhere('post.deletedAt IS NULL')
       .groupBy('post.tripId, post.tripTitle')
       .orderBy('endTime', 'DESC')
       .getRawMany();
