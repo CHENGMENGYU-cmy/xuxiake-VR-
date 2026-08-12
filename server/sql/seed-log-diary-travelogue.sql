@@ -206,7 +206,7 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
 (@diaryId, @userId, 'NOTE', 'DIARY', @logId,
  '水下20米的世界是安静的。除了一呼一吸的气泡声，什么都没有。\n\n那只海龟从珊瑚礁后面游出来的时候，我们在水中对视了几秒。它的眼神很平静，像是在说："你又来了啊。"\n\n每次潜入海里，我都觉得陆地上的那些焦虑和烦恼变得很轻。不是消失了，而是——当你在一个比足球场还大的珊瑚礁面前，你会意识到自己多渺小，而世界多大。\n\n这是大海每次给我的礼物：放小自己，烦恼就小了。',
  '海龟看了我一眼，然后慢悠悠地游走了', '三亚蜈支洲岛',
- '{"keywords":["潜水","海龟","宁静","大海","渺小"],"mood":"宁静而开阔","style":"温柔治愈风","aiGenerated":true}',
+ '{"keywords":["潜水","海龟","宁静","大海","渺小"],"mood":"calm","weather":"sunny","insight":"放小自己，烦恼就小了。","style":"温柔治愈风","status":"public","aiGenerated":true}',
  'PUBLIC', 0, 0, 0, '2026-07-29 19:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
