@@ -101,14 +101,8 @@ function DiaryDetailContent() {
 
   const continueEdit = () => {
     if (!post) return;
-    const meta = post.vrMetadata || {};
-    if (Array.isArray(meta.sourceSnapIds) && meta.sourceSnapIds.length > 1) {
-      router.push(`/snap/generate/batch?ids=${meta.sourceSnapIds.join(',')}&postId=${post.id}`);
-    } else if (post.parentPostId) {
-      router.push(`/snap/generate/${post.parentPostId}`);
-    } else {
-      router.push(`/upload?edit=${post.id}`);
-    }
+    // 统一跳转新的日记编辑器
+    router.push(`/diaries/new?edit=${post.id}`);
   };
 
   if (loading) {
