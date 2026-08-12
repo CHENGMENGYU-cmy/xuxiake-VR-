@@ -286,6 +286,135 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
 UPDATE posts SET vr_metadata = REPLACE(REPLACE(vr_metadata, '"__LOG_ID__"', CONCAT('"', @logId, '"')), '"__DIARY_ID__"', CONCAT('"', @diaryId, '"')) WHERE id = @travelogueId;
 
 -- ============================================================
+-- Journey 结构化记录（为每篇游记创建 Journey + JourneyStop）
+-- ============================================================
+
+-- u2 张三：阳朔漓江（3天，AI生成）
+INSERT INTO journeys (post_id, title, start_date, end_date, destination, summary, transport, budget, theme, insight, tips, stop_count)
+SELECT p.id, '漓江光影日记：从日出到日落的十二小时', '2026-08-02', '2026-08-04', '阳朔兴坪镇', '在漓江边等光的人，用三天把桂林的光影装进镜头', '自驾', '人均2000元', '摄影', '摄影教会我的不是怎么拍好一张照片，而是怎么等待', '建议住在兴坪古镇，步行到江边约15分钟；夏季日出约5:10，需提前到达；带足电池和存储卡', 3
+FROM posts p WHERE p.author_id = 'u2' AND p.content_level = 'TRAVELOGUE';
+
+INSERT INTO journey_stops (journey_id, day_number, day_date, location_name, description, highlights, tips, sort_order)
+SELECT j.id, 1, '2026-08-02', '兴坪古镇', '抵达兴坪古镇，安顿设备后沿漓江踩点。傍晚在江边拍摄了第一组日落延时，喀斯特山峰的剪影在夕阳中层层叠叠。', '兴坪古镇老街、漓江日落', '提前一天到古镇熟悉拍摄点位；镇上住宿价格实惠，推荐江边客栈', 0
+FROM journeys j INNER JOIN posts p ON j.post_id = p.id WHERE p.author_id = 'u2' AND p.content_level = 'TRAVELOGUE';
+
+INSERT INTO journey_stops (journey_id, day_number, day_date, location_name, description, highlights, tips, sort_order)
+SELECT j.id, 2, '2026-08-03', '漓江边', '凌晨4:30到达拍摄点，从日出拍到日落。14组延时序列，记录了漓江光影的完整变化。中午在江边休息，看竹筏和游客来来往往。', '漓江日出（5:12）、日落延时、竹筏', '日出前20分钟天空最美，不要迟到；中午阳光太硬不适合拍摄', 1
+FROM journeys j INNER JOIN posts p ON j.post_id = p.id WHERE p.author_id = 'u2' AND p.content_level = 'TRAVELOGUE';
+
+INSERT INTO journey_stops (journey_id, day_number, day_date, location_name, description, highlights, tips, sort_order)
+SELECT j.id, 3, '2026-08-04', '兴坪码头', '最后一天补拍了一些细节素材。收拾设备，回望漓江最后一眼。', '兴坪码头晨景、渔翁', '可以找当地渔翁配合拍摄，需提前沟通', 2
+FROM journeys j INNER JOIN posts p ON j.post_id = p.id WHERE p.author_id = 'u2' AND p.content_level = 'TRAVELOGUE';
+
+-- u3 李四：西湖VR测评（2天，AI生成）
+INSERT INTO journeys (post_id, title, start_date, end_date, destination, summary, transport, budget, theme, insight, tips, stop_count)
+SELECT p.id, '当千年湖山撞上最新科技：西湖VR拍摄手记', '2026-08-02', '2026-08-03', '杭州西湖', '用最新VR相机拍最老的风景，六年后的西湖断桥', '高铁', '人均1500元', '摄影', '科技一直在进步，但西湖还是那个西湖', '断桥上午9点前光线最佳；VR拍摄建议用三脚架保持水平；白堤一侧可拍到雷峰塔远景', 2
+FROM posts p WHERE p.author_id = 'u3' AND p.content_level = 'TRAVELOGUE';
+
+INSERT INTO journey_stops (journey_id, day_number, day_date, location_name, description, highlights, tips, sort_order)
+SELECT j.id, 1, '2026-08-02', '断桥/白堤', '上午在断桥拍摄VR180素材，测试暗部细节和HDR表现。从白堤走到雷峰塔，一路走一路拍。', '断桥晨景、白堤荷花、雷峰塔远景', '上午9点前光线柔和；建议携带三脚架', 0
+FROM journeys j INNER JOIN posts p ON j.post_id = p.id WHERE p.author_id = 'u3' AND p.content_level = 'TRAVELOGUE';
+
+INSERT INTO journey_stops (journey_id, day_number, day_date, location_name, description, highlights, tips, sort_order)
+SELECT j.id, 2, '2026-08-03', '湖滨路', '下午在湖滨路咖啡馆整理素材，对比前三代设备画质。暗部细节提升明显。', '西湖湖面倒影、湖滨路咖啡馆', '下午光线适合拍倒影；咖啡馆可以充电整理素材', 1
+FROM journeys j INNER JOIN posts p ON j.post_id = p.id WHERE p.author_id = 'u3' AND p.content_level = 'TRAVELOGUE';
+
+-- u4 王五：稻城亚丁（3天，手写）
+INSERT INTO journeys (post_id, title, start_date, end_date, destination, summary, transport, budget, theme, insight, tips, stop_count)
+SELECT p.id, '稻城亚丁徒步全记录：在4700米与自己对话', '2026-07-31', '2026-08-02', '稻城亚丁', '身体在地狱，眼睛在天堂——18公里高海拔徒步全记录', '自驾', '人均3500元', '自然', '有些画面，镜头装不下', '必须提前一天到稻城适应海拔；每人至少2罐氧气瓶；牛奶海最佳拍摄时间上午11点前；高原天气多变，备好冲锋衣', 3
+FROM posts p WHERE p.author_id = 'u4' AND p.content_level = 'TRAVELOGUE';
+
+INSERT INTO journey_stops (journey_id, day_number, day_date, location_name, description, highlights, tips, sort_order)
+SELECT j.id, 1, '2026-07-31', '冲古寺', '从游客中心步行到冲古寺适应海拔。沿途高山松林空气带着松香，冲古寺正对仙乃日雪山。', '冲古寺、仙乃日雪山远景', '建议步行而非坐电瓶车，有助于适应海拔', 0
+FROM journeys j INNER JOIN posts p ON j.post_id = p.id WHERE p.author_id = 'u4' AND p.content_level = 'TRAVELOGUE';
+
+INSERT INTO journey_stops (journey_id, day_number, day_date, location_name, description, highlights, tips, sort_order)
+SELECT j.id, 2, '2026-08-01', '洛绒牛场', '从冲古寺到洛绒牛场三公里，沿途开阔草甸和溪流。三座神山轮流出现，看到了藏羚羊和土拨鼠。', '洛绒牛场、央迈勇雪山、野生动物', '这段是全程精华段，慢慢走多拍照', 1
+FROM journeys j INNER JOIN posts p ON j.post_id = p.id WHERE p.author_id = 'u4' AND p.content_level = 'TRAVELOGUE';
+
+INSERT INTO journey_stops (journey_id, day_number, day_date, location_name, description, highlights, tips, sort_order)
+SELECT j.id, 3, '2026-08-02', '牛奶海/五色海', '最艰难的爬升段，4200米到4700米。每走十步停下来深呼吸。到达牛奶海那一刻，碧蓝色让人说不出话。', '牛奶海、五色海、4700米俯瞰', '这是魔鬼爬升段，务必控制节奏；午后容易起云，尽量上午到达', 2
+FROM journeys j INNER JOIN posts p ON j.post_id = p.id WHERE p.author_id = 'u4' AND p.content_level = 'TRAVELOGUE';
+
+-- u5 赵六：哈巴雪山（2天，AI生成）
+INSERT INTO journeys (post_id, title, start_date, end_date, destination, summary, transport, budget, theme, insight, tips, stop_count)
+SELECT p.id, '第23次站在哈巴之巅：一座入门雪山的不入门哲学', '2026-07-31', '2026-08-01', '哈巴雪山', '带三个新手客户登顶5396米，比自己的第一次登顶更骄傲', '自驾', '人均5000元', '冒险', '带人看世界，可能比我自己看世界更有意义', '必备装备：高山靴、冰爪、冰镐、安全带、头盔、头灯；必须请向导；最佳季节4-6月和9-11月', 2
+FROM posts p WHERE p.author_id = 'u5' AND p.content_level = 'TRAVELOGUE';
+
+INSERT INTO journey_stops (journey_id, day_number, day_date, location_name, description, highlights, tips, sort_order)
+SELECT j.id, 1, '2026-07-31', '哈巴村→大本营', '从哈巴村出发徒步到4100米大本营，沿途经过原始森林和高山草甸。', '哈巴村、原始森林、大本营星空', '骑马或徒步4-5小时到达大本营；当晚早睡，凌晨3点冲顶', 0
+FROM journeys j INNER JOIN posts p ON j.post_id = p.id WHERE p.author_id = 'u5' AND p.content_level = 'TRAVELOGUE';
+
+INSERT INTO journey_stops (journey_id, day_number, day_date, location_name, description, highlights, tips, sort_order)
+SELECT j.id, 2, '2026-08-01', '哈巴雪山峰顶', '凌晨3点出发冲顶，6:48全队登顶5396米。天亮时太阳从云海中升起，雪地变成金色。', '云海日出、5396米峰顶、玉龙雪山远景', '走十步歇一口的节奏；天亮前后是最美的时刻；不要急着拍照，先用眼睛看', 1
+FROM journeys j INNER JOIN posts p ON j.post_id = p.id WHERE p.author_id = 'u5' AND p.content_level = 'TRAVELOGUE';
+
+-- u6 孙七：长沙美食（2天，手写）
+INSERT INTO journeys (post_id, title, start_date, end_date, destination, summary, transport, budget, theme, insight, tips, stop_count)
+SELECT p.id, '24小时吃遍长沙：从臭豆腐到剁椒鱼头的火辣之旅', '2026-07-31', '2026-08-01', '长沙', '一座为吃而生的城市，从早吃到晚的火辣体验', '高铁', '人均300-400元/天', '美食', '生活要够味，辣一点没关系', '火宫殿→太平街→坡子街→文和友，建议避开节假日；一天预算约300-400元', 2
+FROM posts p WHERE p.author_id = 'u6' AND p.content_level = 'TRAVELOGUE';
+
+INSERT INTO journey_stops (journey_id, day_number, day_date, location_name, description, highlights, tips, sort_order)
+SELECT j.id, 1, '2026-07-31', '火宫殿/太平街/坡子街', '早上从火宫殿开始，臭豆腐外酥里嫩配萝卜干绝了。太平街一路吃小吃，午餐在坡子街吃剁椒鱼头，鲜辣平衡9分。', '火宫殿臭豆腐、太平街小吃、坡子街剁椒鱼头', '臭豆腐选黑色经典；太平街刮凉粉夏天必吃；剁椒鱼头认准老店', 0
+FROM journeys j INNER JOIN posts p ON j.post_id = p.id WHERE p.author_id = 'u6' AND p.content_level = 'TRAVELOGUE';
+
+INSERT INTO journey_stops (journey_id, day_number, day_date, location_name, description, highlights, tips, sort_order)
+SELECT j.id, 2, '2026-08-01', '文和友/茶颜悦色', '晚餐去了文和友，六层楼复古街景像穿越回八十年代。口味虾是招牌，蒜蓉口味更推荐。配一杯茶颜悦色幽兰拿铁。', '文和友口味虾、茶颜悦色幽兰拿铁', '文和友排队很恐怖，建议提前1小时去；幽兰拿铁是招牌必点', 1
+FROM journeys j INNER JOIN posts p ON j.post_id = p.id WHERE p.author_id = 'u6' AND p.content_level = 'TRAVELOGUE';
+
+-- u7 周八：苏州园林（2天，AI生成）
+INSERT INTO journeys (post_id, title, start_date, end_date, destination, summary, transport, budget, theme, insight, tips, stop_count)
+SELECT p.id, '五百年了，苏州园林依然是沉浸式体验的最好教科书', '2026-07-29', '2026-07-30', '苏州', '一个建筑师带着VR眼镜逛园林，找到了空间设计的终极答案', '高铁', '人均1200元', '人文', '古典园林里，藏着最好的UX设计', '拙政园上午9点前入园避开人流；留园下午光线更佳；两园相距3公里可步行+公交；建议请导游或租讲解器', 2
+FROM posts p WHERE p.author_id = 'u7' AND p.content_level = 'TRAVELOGUE';
+
+INSERT INTO journey_stops (journey_id, day_number, day_date, location_name, description, highlights, tips, sort_order)
+SELECT j.id, 1, '2026-07-29', '拙政园', '游览3小时，测绘12处观景点。远香堂的借景手法令人惊叹——北寺塔被框在花窗里，但塔在园外一公里。', '远香堂借景、北寺塔框景、荷风四面亭', '上午9点前入园人最少；雨天反而增加园林意境', 0
+FROM journeys j INNER JOIN posts p ON j.post_id = p.id WHERE p.author_id = 'u7' AND p.content_level = 'TRAVELOGUE';
+
+INSERT INTO journey_stops (journey_id, day_number, day_date, location_name, description, highlights, tips, sort_order)
+SELECT j.id, 2, '2026-07-30', '留园', '游览2小时，重点记录步移景异的动线设计。冠云峰从不同角度看形态完全不同，造园师的巧思令人敬佩。', '冠云峰太湖石、步移景异动线、冠云楼', '下午去光线更好；留园比拙政园小但细节更精致', 1
+FROM journeys j INNER JOIN posts p ON j.post_id = p.id WHERE p.author_id = 'u7' AND p.content_level = 'TRAVELOGUE';
+
+-- u8 吴九：三亚蜈支洲岛（2天，AI生成）
+INSERT INTO journeys (post_id, title, start_date, end_date, destination, summary, transport, budget, theme, insight, tips, stop_count)
+SELECT p.id, '蔚蓝之下：蜈支洲岛潜水日记', '2026-07-28', '2026-07-29', '三亚蜈支洲岛', '在20米深的海底找到真正的宁静，与海龟对视的瞬间', '飞机', '人均3000元', '自然', '放小自己，烦恼就小了', '潜水需提前一天预约；初学者可选体验潜水（6-8米）不需潜水证；水下拍摄建议用红色滤镜；最佳季节4-10月', 2
+FROM posts p WHERE p.author_id = 'u8' AND p.content_level = 'TRAVELOGUE';
+
+INSERT INTO journey_stops (journey_id, day_number, day_date, location_name, description, highlights, tips, sort_order)
+SELECT j.id, 1, '2026-07-28', '情人桥潜点', '第一潜下潜到18米，水温27°C，能见度15米。鹿角珊瑚群像水下森林，小丑鱼在枝丫间钻进钻出。', '鹿角珊瑚群、小丑鱼、水下光束', '情人桥是入门潜点，适合热身；下潜前做好耳压平衡', 0
+FROM journeys j INNER JOIN posts p ON j.post_id = p.id WHERE p.author_id = 'u8' AND p.content_level = 'TRAVELOGUE';
+
+INSERT INTO journey_stops (journey_id, day_number, day_date, location_name, description, highlights, tips, sort_order)
+SELECT j.id, 2, '2026-07-29', '珊瑚花园潜点', '第二潜到22米，遇到了海龟和鳐鱼。海龟从珊瑚礁后游出来，在水中对视了几秒。', '海龟、鳐鱼、彩色软珊瑚', '珊瑚花园是最佳潜点；注意保护珊瑚不要触碰；红色滤镜矫正水下色差', 1
+FROM journeys j INNER JOIN posts p ON j.post_id = p.id WHERE p.author_id = 'u8' AND p.content_level = 'TRAVELOGUE';
+
+-- u9 郑十：兵马俑（2天，AI生成）
+INSERT INTO journeys (post_id, title, start_date, end_date, destination, summary, transport, budget, theme, insight, tips, stop_count)
+SELECT p.id, '站在兵马俑前，我看到了两千年前的"工匠精神"', '2026-07-27', '2026-07-28', '西安', '做了十五年历史教师，每次站在兵马俑前还是会被震撼', '高铁', '人均800元', '人文', '我们做的每一件认真的事，也许都会在某个遥远的未来被看见', '旺季门票120元建议提前公众号预约；强烈建议请官方讲解员（150元/次）；参观顺序一号坑→三号坑→二号坑；预留3-4小时', 2
+FROM posts p WHERE p.author_id = 'u9' AND p.content_level = 'TRAVELOGUE';
+
+INSERT INTO journey_stops (journey_id, day_number, day_date, location_name, description, highlights, tips, sort_order)
+SELECT j.id, 1, '2026-07-27', '一号坑/三号坑', '一号坑气势恢弘，六千陶俑列队站立。最震撼的是每个俑面部都不一样——千人千面。三号坑是指挥部，有指挥车。', '一号坑全景阵列、兵俑面部特写、三号坑指挥车', '一号坑最大最震撼，建议先去；VR拍摄建议中长焦拍面部特写', 0
+FROM journeys j INNER JOIN posts p ON j.post_id = p.id WHERE p.author_id = 'u9' AND p.content_level = 'TRAVELOGUE';
+
+INSERT INTO journey_stops (journey_id, day_number, day_date, location_name, description, highlights, tips, sort_order)
+SELECT j.id, 2, '2026-07-28', '二号坑/文物陈列厅', '二号坑最有名的是彩色陶俑，出土后几分钟内氧化褪色。讲解员说宁愿让它们多睡几年。', '彩色陶俑遗迹、文物陈列厅', '二号坑很多区域暂停挖掘，是保护的克制；陈列厅有近距离展品', 1
+FROM journeys j INNER JOIN posts p ON j.post_id = p.id WHERE p.author_id = 'u9' AND p.content_level = 'TRAVELOGUE';
+
+-- u10 钱一：亚布力滑雪（2天，AI生成）
+INSERT INTO journeys (post_id, title, start_date, end_date, destination, summary, transport, budget, theme, insight, tips, stop_count)
+SELECT p.id, '夏天在亚布力滑雪是一种什么体验？', '2026-07-26', '2026-07-27', '亚布力', '在旱雪道上冲到72km/h，体验绝对专注带来的自由', '自驾', '人均2000元', '冒险', '在雪道上，我只需要感受风和重力', '初学者建议请教练（2小时约400元）；夏季旱雪道人少适合训练；必须戴头盔；VR第一视角建议用头盔固定支架', 2
+FROM posts p WHERE p.author_id = 'u10' AND p.content_level = 'TRAVELOGUE';
+
+INSERT INTO journey_stops (journey_id, day_number, day_date, location_name, description, highlights, tips, sort_order)
+SELECT j.id, 1, '2026-07-26', '亚布力旱雪道', '热身两趟后开始正式训练。大回转+小回转组合练习，头盔GoPro拍第一视角VR。', '旱雪道高级道、第一视角VR', '夏季旱雪道和冬季雪感接近；人少可以反复冲', 0
+FROM journeys j INNER JOIN posts p ON j.post_id = p.id WHERE p.author_id = 'u10' AND p.content_level = 'TRAVELOGUE';
+
+INSERT INTO journey_stops (journey_id, day_number, day_date, location_name, description, highlights, tips, sort_order)
+SELECT j.id, 2, '2026-07-27', '亚布力高级道', '第五趟全速冲击，最高时速72km/h。在这个速度上视野变窄，只剩下雪道和呼吸声。', '72km/h全速冲刺、高级道全景', '全速冲刺前确保技术过硬；必须佩戴全套护具', 1
+FROM journeys j INNER JOIN posts p ON j.post_id = p.id WHERE p.author_id = 'u10' AND p.content_level = 'TRAVELOGUE';
+
+-- ============================================================
 -- 游记(TRAVELOGUE) → 话题(post_topics) 关联
 -- 按作者映射到对应旅行话题，让公开游记进入社区话题流
 -- ============================================================
