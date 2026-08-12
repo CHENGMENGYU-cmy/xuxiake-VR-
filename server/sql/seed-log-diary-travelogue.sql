@@ -148,7 +148,7 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
 (@diaryId, @userId, 'NOTE', 'DIARY', @logId,
  '今天在太平街吃臭豆腐的时候，旁边坐着一个老奶奶带着孙子。小朋友咬了一口被辣得直吐舌头，老奶奶笑着说："慢慢吃，辣味是要品的，不是要躲的。"\n\n突然觉得这句话很对。长沙的食物是"凶"的——辣椒、花椒、蒜，每一口都像在挑战你的味蕾。但正是这种"凶"，让人吃完之后全身发热，觉得活着真好。\n\n湘菜教我的事：生活要够味，辣一点没关系。',
  '长沙教会我：辣一点没关系', '长沙太平街',
- '{"keywords":["长沙美食","辣","人生哲学","湘菜","市井烟火"],"mood":"热辣而温暖","style":"轻松口语风","aiGenerated":true}',
+ '{"keywords":["长沙美食","辣","人生哲学","湘菜","市井烟火"],"mood":"happy","weather":"sunny","insight":"生活要够味，辣一点没关系。","style":"轻松口语风","status":"public","aiGenerated":true}',
  'PUBLIC', 0, 0, 0, '2026-07-31 23:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
