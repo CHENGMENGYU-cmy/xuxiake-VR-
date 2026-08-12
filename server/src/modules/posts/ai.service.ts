@@ -59,7 +59,10 @@ interface StructuredTravelogue {
   budget: string;
   theme: string;
   insight: string;
+  tips: string;
   dayTexts: string[];
+  dayHighlights: Record<number, string>;
+  dayTips: Record<number, string>;
 }
 
 @Injectable()
