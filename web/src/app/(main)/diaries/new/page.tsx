@@ -136,6 +136,73 @@ function DiaryEditor() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // 本地上传图片
+  const handleLocalUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    const remaining = 9 - images.length;
+    if (remaining <= 0) {
+      toast.warning('最多上传 9 张图片');
+      return;
+    }
+    const toUpload = Array.from(files).slice(0, remaining);
+    setUploading(true);
+    try {
+      const results = await Promise.all(
+        toUpload.map(async (file) => {
+          const uploaded = await uploadImage(file);
+          let { width, height } = uploaded;
+          if (!width || !height) {
+            try {
+              const dims = await getImageDimensions(uploaded.url);
+              width = dims.width;
+              height = dims.height;
+            } catch { /* ignore */ }
+          }
+          return {
+            id: `local-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+            url: uploaded.url,
+            width,
+            height,
+            originalName: uploaded.originalName,
+            size: uploaded.size,
+            isCover: false,
+          } as UploadedImage;
+        })
+      );
+      setImages((prev) => {
+        const next = [...prev, ...results];
+        // 第一张自动设为封面
+        if (next.length > 0) {
+          next.forEach((img, i) => { img.isCover = i === 0; });
+        }
+        return next;
+      });
+      toast.success(`已上传 ${results.length} 张图片`);
+    } catch {
+      toast.error('图片上传失败');
+    } finally {
+      setUploading(false);
+      e.target.value = '';
+    }
+  };
+
+  // 删除图片
+  const removeImage = (idx: number) => {
+    setImages((prev) => {
+      const next = prev.filter((_, i) => i !== idx);
+      if (next.length > 0) next[0].isCover = true;
+      return next;
+    });
+  };
+
+  // 设为封面
+  const setCover = (idx: number) => {
+    setImages((prev) =>
+      prev.map((img, i) => ({ ...img, isCover: i === idx }))
+    );
+  };
+
   // 素材选择器回调
   const handleSnapConfirm = (ids: string[]) => {
     setSnapIds(ids);
