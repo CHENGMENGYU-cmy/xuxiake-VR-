@@ -618,15 +618,17 @@ Day 2 贴士：<当天实用建议>
   /** 解析 AI 输出的结构化字段 */
   private parseStructuredTravelogue(generated: string, days: DayGroup[]): StructuredTravelogue {
     const out: StructuredTravelogue = {
-      title: '', summary: '', destination: '', transport: '', budget: '', theme: '', insight: '',
+      title: '', summary: '', destination: '', transport: '', budget: '', theme: '', insight: '', tips: '',
       dayTexts: new Array(days.length).fill(''),
+      dayHighlights: {},
+      dayTips: {},
     };
     let currentDay = -1;
     const lines = generated.split('\n');
     for (const raw of lines) {
       const line = raw.trim();
       if (!line) continue;
-      const field = line.match(/^(标题|导语|目的地|出行方式|人均|主题|结尾)[：:]\s*(.+)$/);
+      const field = line.match(/^(标题|导语|目的地|出行方式|人均|主题|结尾|旅行贴士)[：:]\s*(.+)$/);
       if (field) {
         const key = field[1];
         const val = field[2].trim();
@@ -637,6 +639,18 @@ Day 2 贴士：<当天实用建议>
         else if (key === '人均') out.budget = val;
         else if (key === '主题') out.theme = val;
         else if (key === '结尾') out.insight = (out.insight ? out.insight + '\n' : '') + val;
+        else if (key === '旅行贴士') out.tips = val;
+        continue;
+      }
+      // Day N 推荐： / Day N 贴士：
+      const dayHighlight = line.match(/^Day\s*(\d+)\s*推荐[：:]\s*(.+)$/i);
+      if (dayHighlight) {
+        out.dayHighlights[parseInt(dayHighlight[1], 10) - 1] = dayHighlight[2].trim();
+        continue;
+      }
+      const dayTip = line.match(/^Day\s*(\d+)\s*贴士[：:]\s*(.+)$/i);
+      if (dayTip) {
+        out.dayTips[parseInt(dayTip[1], 10) - 1] = dayTip[2].trim();
         continue;
       }
       const dayMatch = line.match(/^Day\s*(\d+)[：:]\s*(.*)$/i);
