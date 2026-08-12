@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-12
+修改位置：diaries/new/page.tsx、diaries/page.tsx、snap/generate/[id]/page.tsx
+修改原因：日记保存按钮401错误无提示、保存后跳转不合理、种子数据mood为中文非枚举值
+修改内容：①增加401鉴权过期提示并跳转登录页；②存草稿留页+replace更新URL、私密跳列表、发布跳日记详情页；③草稿点击统一进/diaries/new编辑器；④种子数据mood改为枚举值(calm/happy/excited)并补齐weather/insight/status字段；⑤新增migrate-diary-metadata.sql迁移脚本更新已有数据库
+修改效果：保存体验更合理，日记列表正确显示心情天气感悟徽标，种子数据与前端类型完全对齐
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-12
 修改位置：server/posts.controller.ts、server/posts.service.ts、web/snap-api.ts
 修改原因：手写日记和AI日记数据格式不统一，手写缺标题/感悟/心情/天气字段
 修改内容：后端 saveDiary 接口扩展 mood/weather 可选参数，前端 saveDiary 类型同步
