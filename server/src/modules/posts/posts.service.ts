@@ -426,6 +426,7 @@ export class PostsService {
           budget: dto.journey.budget || null,
           theme: dto.journey.theme || null,
           insight: dto.journey.insight || null,
+          tips: dto.journey.tips || null,
           stopCount: dto.journey.stops?.length || 0,
         });
         if (dto.journey.stops?.length) {
@@ -439,6 +440,8 @@ export class PostsService {
               locationLat: s.locationLat || null,
               locationLng: s.locationLng || null,
               description: s.description || null,
+              highlights: s.highlights || null,
+              tips: s.tips || null,
               mediaUrl: s.mediaUrl || null,
               sortOrder: i,
             }));
