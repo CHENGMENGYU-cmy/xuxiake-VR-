@@ -448,10 +448,10 @@ function DiaryEditor() {
           {/* 字数统计 */}
           <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
             <span>{content.length} 字</span>
-            {snapIds.length > 0 && (
+            {images.length > 0 && (
               <span className="flex items-center gap-1">
                 <ImageIcon className="h-3 w-3" />
-                关联 {snapIds.length} 张素材
+                {images.length} 张配图{snapIds.length > 0 ? ` · ${snapIds.length} 张来自素材库` : ''}
               </span>
             )}
           </div>
