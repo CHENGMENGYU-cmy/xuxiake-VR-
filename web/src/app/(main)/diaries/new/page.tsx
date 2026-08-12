@@ -152,8 +152,7 @@ function DiaryEditor() {
     setSaving(true);
     try {
       const coverImage = images[0]?.url || undefined;
-      const refSnapIds = images.filter(i => i.snapId).map(i => i.snapId as string);
-      await saveDiary({
+      const result = await saveDiary({
         diaryId: editId || undefined,
         snapId: snapIds[0] || undefined,
         title: title.trim() || '日记',
@@ -164,18 +163,32 @@ function DiaryEditor() {
         status,
         image: coverImage,
       });
+      const savedId = result?.id || editId;
 
       if (status === 'draft') {
         toast.success('草稿已保存');
+        // 草稿留在当前页面继续编辑；新创建的草稿需更新 URL
+        if (!editId && savedId) {
+          router.replace(`/diaries/new?edit=${savedId}`, { scroll: false });
+        }
       } else if (status === 'private') {
         toast.success('已保存为私密日记');
         router.push('/diaries');
       } else {
         toast.success('已发布到日记广场');
-        router.push('/diaries');
+        if (savedId) {
+          router.push(`/diaries/${savedId}`);
+        } else {
+          router.push('/diaries');
+        }
       }
-    } catch {
-      toast.error('保存失败，请重试');
+    } catch (err: any) {
+      if (err?.response?.status === 401) {
+        toast.error('登录已过期，请重新登录后再试');
+        router.push('/login');
+      } else {
+        toast.error('保存失败，请重试');
+      }
     } finally {
       setSaving(false);
     }
