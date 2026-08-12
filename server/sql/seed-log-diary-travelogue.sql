@@ -8,6 +8,19 @@ USE xuxiake;
 SET NAMES utf8mb4;
 
 -- 清除旧的日志/日记/游记种子数据（u2-u10，本文件插入的普通用户）
+-- 先清理 journey 关联表（journey_stop_media → journey_stops → journeys），再清 posts
+DELETE jsm FROM journey_stop_media jsm
+  INNER JOIN journey_stops js ON jsm.stop_id = js.id
+  INNER JOIN journeys j ON js.journey_id = j.id
+  INNER JOIN posts p ON j.post_id = p.id
+  WHERE p.author_id IN ('u2','u3','u4','u5','u6','u7','u8','u9','u10');
+DELETE js FROM journey_stops js
+  INNER JOIN journeys j ON js.journey_id = j.id
+  INNER JOIN posts p ON j.post_id = p.id
+  WHERE p.author_id IN ('u2','u3','u4','u5','u6','u7','u8','u9','u10');
+DELETE j FROM journeys j
+  INNER JOIN posts p ON j.post_id = p.id
+  WHERE p.author_id IN ('u2','u3','u4','u5','u6','u7','u8','u9','u10');
 DELETE FROM posts
 WHERE author_id IN ('u2','u3','u4','u5','u6','u7','u8','u9','u10')
   AND content_level IN ('LOG','DIARY','TRAVELOGUE');
