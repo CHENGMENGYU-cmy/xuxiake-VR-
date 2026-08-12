@@ -148,8 +148,9 @@ function BatchContent() {
             pollRef.current = null;
             setGenerating(false);
             if (job.status === 'DONE' && job.postId) {
-              await loadDraft(job.postId);
-              toast.success('日记草稿已生成，可编辑后保存');
+              toast.success('日记草稿已生成，正在跳转编辑器...');
+              router.push(`/diaries/new?edit=${job.postId}`);
+              return;
             } else {
               toast.error(job.error || '日记生成失败');
             }
