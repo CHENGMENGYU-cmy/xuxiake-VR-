@@ -90,7 +90,7 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
 (@diaryId, @userId, 'NOTE', 'DIARY', @logId,
  '在海拔4700米的五色海边，我突然理解了什么叫做"身体在地狱，眼睛在天堂"。\n\n走最后一段爬升的时候，每走十步就要停下来喘气。但一抬头，仙乃日雪山的山尖就在云层中若隐若现，像在说：快到了，再坚持一下。\n\n到了牛奶海的那一刻，我坐在石头上一句话都说不出来。那个蓝色——不是天蓝也不是海蓝，是只有在高原冰川融水里才能看到的碧蓝。我拿起VR相机，又放下。有些画面，镜头装不下。',
  '在4700米的高原上，我学会了呼吸', '稻城亚丁牛奶海',
- '{"keywords":["高海拔","牛奶海","坚持","震撼","自然之美"],"mood":"震撼而谦卑","style":"温柔治愈风","aiGenerated":true}',
+ '{"keywords":["高海拔","牛奶海","坚持","震撼","自然之美"],"mood":"excited","weather":"rainy","insight":"有些画面，镜头装不下。","style":"温柔治愈风","status":"public","aiGenerated":true}',
  'PUBLIC', 0, 0, 0, '2026-08-02 22:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
