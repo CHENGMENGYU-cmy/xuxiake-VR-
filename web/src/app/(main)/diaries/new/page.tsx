@@ -279,8 +279,6 @@ function DiaryEditor() {
     );
   }
 
-  const coverImage = images.length > 0 ? images[0] : null;
-
   return (
     <div className="mx-auto max-w-2xl px-4 pb-28">
       {/* 顶部栏 */}
