@@ -119,7 +119,7 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
 (@diaryId, @userId, 'NOTE', 'DIARY', @logId,
  '这是我的第23次哈巴登顶，但这次不太一样。\n\n以前登顶都是一个人或者带老手，这次带的是三个第一次爬雪山的客户。看到他们站在5396米的那一刻，眼睛里的光芒比我第一次登顶的时候还要亮。\n\n有个客户在峰顶哭了。她说从来没有想过自己能站在这个高度。我递了杯热水给她，说："山一直都在，是你选择了来。"\n\n带人看世界——这可能比我自己看世界，更有意义。',
  '带他们站在5396米，比我自己登顶更骄傲', '哈巴雪山',
- '{"keywords":["登顶","客户","向导","成就感","雪山"],"mood":"骄傲而感动","style":"成长复盘风","aiGenerated":true}',
+ '{"keywords":["登顶","客户","向导","成就感","雪山"],"mood":"excited","weather":"sunny","insight":"带人看世界，可能比我自己看世界，更有意义。","style":"成长复盘风","status":"public","aiGenerated":true}',
  'PUBLIC', 0, 0, 0, '2026-08-01 19:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
