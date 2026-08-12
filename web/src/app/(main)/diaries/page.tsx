@@ -349,14 +349,8 @@ function DiariesContent() {
                   const draft = isDraft(post);
                   const openPost = () => {
                     if (draft) {
-                      const meta = post.vrMetadata || {};
-                      if (Array.isArray(meta.sourceSnapIds) && meta.sourceSnapIds.length > 1) {
-                        router.push(`/snap/generate/batch?ids=${meta.sourceSnapIds.join(',')}&postId=${post.id}`);
-                      } else if (post.parentPostId) {
-                        router.push(`/snap/generate/${post.parentPostId}`);
-                      } else {
-                        router.push(`/diaries/${post.id}`);
-                      }
+                      // 草稿统一进入编辑器继续写
+                      router.push(`/diaries/new?edit=${post.id}`);
                     } else {
                       router.push(`/diaries/${post.id}`);
                     }
