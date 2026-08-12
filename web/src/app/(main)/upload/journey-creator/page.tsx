@@ -56,6 +56,7 @@ function JourneyCreatorContent() {
   const [budget, setBudget] = useState('');
   const [theme, setTheme] = useState('');
   const [insight, setInsight] = useState('');
+  const [journeyTips, setJourneyTips] = useState('');
   const [coverUrl, setCoverUrl] = useState('');
   const [stops, setStops] = useState<EditorStop[]>([]);
   const [visibility, setVisibility] = useState<'PUBLIC' | 'PRIVATE'>('PUBLIC');
