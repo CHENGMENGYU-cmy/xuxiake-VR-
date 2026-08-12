@@ -182,7 +182,10 @@ function JourneyCreatorContent() {
     stops.forEach((s) => {
       md += `## Day ${s.dayNumber}${s.locationName ? `｜${s.locationName}` : ''}${s.dayDate ? `（${s.dayDate}）` : ''}\n\n`;
       md += `${s.description || ''}\n\n`;
+      if (s.highlights.trim()) md += `**推荐亮点**：${s.highlights.trim()}\n\n`;
+      if (s.tips.trim()) md += `**实用贴士**：${s.tips.trim()}\n\n`;
     });
+    if (journeyTips.trim()) md += `## 旅行贴士\n\n${journeyTips.trim()}\n\n`;
     if (insight.trim()) md += `## 写在最后\n\n${insight.trim()}\n`;
     return md;
   };
