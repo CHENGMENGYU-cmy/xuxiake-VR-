@@ -23,6 +23,8 @@ interface EditorStop {
   dayDate: string;
   locationName: string;
   description: string;
+  highlights: string;
+  tips: string;
   mediaItems: EditorStopMedia[];
 }
 
