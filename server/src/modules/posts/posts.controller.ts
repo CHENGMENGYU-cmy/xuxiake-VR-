@@ -248,6 +248,8 @@ export class PostsController {
       visibility?: 'PUBLIC' | 'PRIVATE' | 'FOLLOWERS';
       status?: 'draft' | 'private' | 'public';
       image?: string;
+      mood?: string;
+      weather?: string;
     },
   ) {
     const userId = this.getUserId(auth);
