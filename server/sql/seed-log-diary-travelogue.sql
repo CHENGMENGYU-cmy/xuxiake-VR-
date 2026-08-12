@@ -177,7 +177,7 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
 (@diaryId, @userId, 'NOTE', 'DIARY', @logId,
  '在拙政园的远香堂坐了一个小时，看雨滴落在荷叶上，滚一圈又滑进池塘。\n\n做了十年建筑设计，第一次真正理解了"移步换景"不是设计手法，是一种世界观。造园的人相信，美不是一下子全部给你的，而是让你一步步发现。每扇窗是一个取景框，每个拐角是一个新的开始。\n\n这让我想到做VR空间设计——好的VR体验也不应该一下子把所有东西都给你，而应该让你在移动中发现。古典园林里，藏着最好的UX设计。',
  '拙政园教会我的事：美是让你一步步发现的', '苏州拙政园',
- '{"keywords":["园林","空间哲学","建筑","VR设计","借景"],"mood":"启发性平静","style":"诗意散文风","aiGenerated":true}',
+ '{"keywords":["园林","空间哲学","建筑","VR设计","借景"],"mood":"calm","weather":"rainy","insight":"古典园林里，藏着最好的UX设计。","style":"诗意散文风","status":"public","aiGenerated":true}',
  'PUBLIC', 0, 0, 0, '2026-07-30 20:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
