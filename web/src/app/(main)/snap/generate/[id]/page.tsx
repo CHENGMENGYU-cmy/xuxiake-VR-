@@ -114,7 +114,7 @@ function GenerateContent({ snapId }: { snapId: string }) {
     if (!generatedDiary) return;
     setSaving(true);
     try {
-      await saveDiary({
+      const result = await saveDiary({
         snapId,
         title: generatedDiary.title,
         content: generatedDiary.content,
@@ -124,6 +124,7 @@ function GenerateContent({ snapId }: { snapId: string }) {
         status,
         image: snapImage || undefined,
       });
+      const savedId = result?.id;
 
       if (status === 'draft') {
         toast.success('草稿已保存');
@@ -133,10 +134,15 @@ function GenerateContent({ snapId }: { snapId: string }) {
         router.push('/diaries');
       } else {
         toast.success('已发布到日记广场');
-        router.push('/snap/square');
+        router.push(savedId ? `/diaries/${savedId}` : '/diaries');
       }
-    } catch {
-      toast.error('保存失败，请重试');
+    } catch (err: any) {
+      if (err?.response?.status === 401) {
+        toast.error('登录已过期，请重新登录后再试');
+        router.push('/login');
+      } else {
+        toast.error('保存失败，请重试');
+      }
     } finally {
       setSaving(false);
     }
