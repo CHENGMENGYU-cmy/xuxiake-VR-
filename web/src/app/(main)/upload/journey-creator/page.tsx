@@ -118,6 +118,8 @@ function JourneyCreatorContent() {
       dayDate: '',
       locationName: '',
       description: '',
+      highlights: '',
+      tips: '',
       mediaItems: [],
     }]);
   };
