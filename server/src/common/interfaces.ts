@@ -182,6 +182,7 @@ export interface CreatePostDto {
     budget?: string;
     theme?: string;
     insight?: string;
+    tips?: string;
     stops?: {
       dayNumber?: number;
       dayDate?: string;
@@ -189,6 +190,8 @@ export interface CreatePostDto {
       locationLat?: number;
       locationLng?: number;
       description?: string;
+      highlights?: string;
+      tips?: string;
       mediaUrl?: string;
       mediaItems?: { url: string; thumbnailUrl?: string }[];
     }[];
