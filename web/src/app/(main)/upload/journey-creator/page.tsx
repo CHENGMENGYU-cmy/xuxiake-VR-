@@ -374,6 +374,12 @@ function JourneyCreatorContent() {
             )}
           </div>
 
+          {/* 整体旅行贴士 */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">整体旅行贴士</label>
+            <Textarea placeholder="整趟旅程的实用建议（如：最佳季节、必备装备、注意事项等）" value={journeyTips} onChange={(e) => setJourneyTips(e.target.value)} className="min-h-[60px] resize-none" />
+          </div>
+
           {/* 结尾感悟 */}
           <div className="space-y-2">
             <label className="text-sm font-medium">结尾感悟</label>
