@@ -266,7 +266,7 @@ function DiaryEditor() {
         mood: mood || undefined,
         weather: weather || undefined,
         status,
-        image: coverImage,
+        image: coverImg,
       });
       const savedId = result?.id || editId;
 
