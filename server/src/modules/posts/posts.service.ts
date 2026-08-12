@@ -1096,6 +1096,8 @@ export class PostsService {
     visibility?: 'PUBLIC' | 'PRIVATE' | 'FOLLOWERS';
     status?: 'draft' | 'private' | 'public';
     image?: string;
+    mood?: string;
+    weather?: string;
   }) {
     // 状态映射：public→PUBLIC, draft/private→PRIVATE
     const visibility = dto.status === 'public'
@@ -1108,6 +1110,10 @@ export class PostsService {
       generatorTags: dto.tags || [],
       status: dto.status || 'private',
     };
+
+    // mood/weather 仅显式提供时写入（undefined 则保留编辑时的旧值）
+    if (dto.mood !== undefined) vrMetadata.mood = dto.mood;
+    if (dto.weather !== undefined) vrMetadata.weather = dto.weather;
 
     if (dto.image) {
       vrMetadata.coverImage = dto.image;
