@@ -61,7 +61,7 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
 (@diaryId, @userId, 'NOTE', 'DIARY', @logId,
  '拿着新设备在西湖边走了一圈，突然想起六年前第一次来西湖——那时候拿的还是手机，拍了张糊掉的断桥。\n\n六年过去，设备从手机变成了VR相机，从平面变成了360度。但站在断桥上的那种感觉没变。科技一直在进步，但西湖还是那个西湖，断桥还是那个断桥。\n\n可能这就是科技的意义吧——不是替代真实的体验，而是让没来过的人，也能感受到那一刻的风和光。',
  '用最新的设备，拍最老的风景', '杭州西湖',
- '{"keywords":["西湖","科技","时间","断桥","VR"],"mood":"怀旧而温暖","style":"成长复盘风","aiGenerated":true}',
+ '{"keywords":["西湖","科技","时间","断桥","VR"],"mood":"calm","weather":"cloudy","insight":"科技一直在进步，但西湖还是那个西湖。","style":"成长复盘风","status":"public","aiGenerated":true}',
  'PUBLIC', 0, 0, 0, '2026-08-03 20:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
