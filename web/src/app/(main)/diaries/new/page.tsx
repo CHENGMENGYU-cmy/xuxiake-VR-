@@ -309,42 +309,90 @@ function DiaryEditor() {
 
       {/* 主内容卡片 */}
       <div className="overflow-hidden rounded-2xl border bg-card shadow-sm">
-        {/* 封面图区域 */}
-        <div className="border-b border-border/40">
-          {coverImage ? (
-            <div className="group relative">
-              <div className="aspect-[16/9] bg-muted">
-                <img
-                  src={coverImage.url}
-                  alt=""
-                  className="h-full w-full object-cover"
-                />
-              </div>
-              <div className="absolute inset-0 flex items-end justify-between bg-gradient-to-t from-black/40 via-transparent to-transparent p-4 opacity-0 transition-opacity group-hover:opacity-100">
-                <span className="text-xs text-white/80">
-                  {images.length} 张配图
-                </span>
-                <Button
-                  variant="secondary" size="sm"
-                  className="h-8 gap-1.5 text-xs"
+        {/* 配图区域 */}
+        <div className="border-b border-border/40 p-4">
+          {/* 图片网格 */}
+          {images.length > 0 && (
+            <div className="mb-3 grid grid-cols-4 gap-2 sm:grid-cols-5">
+              {images.map((img, i) => (
+                <div key={img.id} className="group relative aspect-square overflow-hidden rounded-lg border bg-muted">
+                  <img src={img.url} alt="" className="h-full w-full object-cover" />
+                  {img.isCover && (
+                    <span className="absolute top-0 left-0 rounded-br-lg bg-indigo-500 px-1.5 py-0.5 text-[9px] font-bold text-white">
+                      封面
+                    </span>
+                  )}
+                  <button type="button" onClick={() => removeImage(i)}
+                    className="absolute top-0 right-0 flex h-5 w-5 items-center justify-center rounded-bl-lg bg-black/50 text-white opacity-0 transition-opacity group-hover:opacity-100">
+                    <X className="h-3 w-3" />
+                  </button>
+                  {!img.isCover && (
+                    <button type="button" onClick={() => setCover(i)}
+                      className="absolute bottom-0 inset-x-0 flex items-center justify-center gap-0.5 bg-black/50 py-0.5 text-[9px] text-white opacity-0 transition-opacity group-hover:opacity-100">
+                      <Star className="h-2.5 w-2.5" />封面
+                    </button>
+                  )}
+                </div>
+              ))}
+
+              {/* 添加：电脑上传 */}
+              {images.length < 9 && (
+                <button type="button" disabled={uploading}
+                  onClick={() => fileInputRef.current?.click()}
+                  className="group/add flex aspect-square flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed border-border/60 text-muted-foreground transition-colors hover:border-indigo-300 hover:text-indigo-500 hover:bg-indigo-50/30">
+                  {uploading
+                    ? <Loader2 className="h-5 w-5 animate-spin" />
+                    : <Upload className="h-5 w-5" />
+                  }
+                  <span className="text-[10px] font-medium">
+                    {uploading ? '上传中' : '电脑上传'}
+                  </span>
+                </button>
+              )}
+
+              {/* 添加：素材库 */}
+              {images.length < 9 && (
+                <button type="button"
                   onClick={() => setPickerOpen(true)}
-                >
-                  <ImageIcon className="h-3.5 w-3.5" />
-                  更换配图
-                </Button>
-              </div>
+                  className="flex aspect-square flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed border-border/60 text-muted-foreground transition-colors hover:border-indigo-300 hover:text-indigo-500 hover:bg-indigo-50/30">
+                  <ImageIcon className="h-5 w-5" />
+                  <span className="text-[10px] font-medium">素材库</span>
+                </button>
+              )}
             </div>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setPickerOpen(true)}
-              className="flex w-full flex-col items-center gap-2 py-8 text-muted-foreground transition-colors hover:bg-muted/40"
-            >
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl border-2 border-dashed border-muted-foreground/20">
-                <ImageIcon className="h-5 w-5 text-muted-foreground/40" />
-              </div>
-              <span className="text-xs">添加封面配图（可选）</span>
-            </button>
+          )}
+
+          {/* 空状态：两个选择入口 */}
+          {images.length === 0 && (
+            <div className="grid grid-cols-2 gap-3">
+              <button type="button" disabled={uploading}
+                onClick={() => fileInputRef.current?.click()}
+                className="flex flex-col items-center gap-2.5 rounded-xl border-2 border-dashed border-border/60 py-7 text-muted-foreground transition-all hover:border-indigo-300 hover:bg-indigo-50/30 hover:text-indigo-600">
+                {uploading
+                  ? <Loader2 className="h-8 w-8 animate-spin" />
+                  : <Upload className="h-8 w-8" />
+                }
+                <div className="text-center">
+                  <p className="text-sm font-medium">{uploading ? '上传中...' : '电脑上传'}</p>
+                  <p className="mt-0.5 text-[11px] opacity-60">选择本地图片文件</p>
+                </div>
+              </button>
+              <button type="button"
+                onClick={() => setPickerOpen(true)}
+                className="flex flex-col items-center gap-2.5 rounded-xl border-2 border-dashed border-border/60 py-7 text-muted-foreground transition-all hover:border-indigo-300 hover:bg-indigo-50/30 hover:text-indigo-600">
+                <ImageIcon className="h-8 w-8" />
+                <div className="text-center">
+                  <p className="text-sm font-medium">从素材库选择</p>
+                  <p className="mt-0.5 text-[11px] opacity-60">使用已上传的拍摄素材</p>
+                </div>
+              </button>
+            </div>
+          )}
+
+          {images.length > 0 && (
+            <p className="text-center text-[11px] text-muted-foreground">
+              {images.length}/9 张配图 · 第一张为封面 · 可同时使用电脑上传和素材库
+            </p>
           )}
         </div>
 
