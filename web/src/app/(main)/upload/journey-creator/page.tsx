@@ -344,6 +344,8 @@ function JourneyCreatorContent() {
                         <Input placeholder="地点名称" value={stop.locationName} onChange={(e) => updateStop(stop.id, { locationName: e.target.value })} className="flex-1" />
                       </div>
                       <Textarea placeholder="这一天的旅程故事、所见所感..." value={stop.description} onChange={(e) => updateStop(stop.id, { description: e.target.value })} className="min-h-[60px] resize-none" />
+                      <Textarea placeholder="推荐亮点（如：象鼻山日落、阳朔西街夜市）" value={stop.highlights} onChange={(e) => updateStop(stop.id, { highlights: e.target.value })} className="min-h-[36px] resize-none text-xs" />
+                      <Textarea placeholder="实用贴士（如：建议早上8点前到，门票提前网上购买）" value={stop.tips} onChange={(e) => updateStop(stop.id, { tips: e.target.value })} className="min-h-[36px] resize-none text-xs" />
                       {stop.mediaItems.length > 0 && (
                         <div className="grid grid-cols-4 gap-1.5">
                           {stop.mediaItems.map((m, mi) => (
