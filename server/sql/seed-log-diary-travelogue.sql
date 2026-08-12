@@ -32,7 +32,7 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
 (@diaryId, @userId, 'NOTE', 'DIARY', @logId,
  '在漓江边站了15个小时，从漆黑等到漆黑。最美的其实是日出前那二十分钟——天空从深蓝变成浅紫，再变成橘红，整个过程安静得只听得见快门声和水流声。\n\n有时候觉得，摄影教会我的不是怎么拍好一张照片，而是怎么等待。很多东西急不来，光不会因为你着急就提前亮起来。\n\n今天拍了三千多张，最后可能只选十张。但这种"浪费"让我觉得奢侈而幸福。',
  '在漓江边等光的人', '阳朔兴坪镇',
- '{"keywords":["漓江","等待","摄影哲学","独处","光影"],"mood":"平静而满足","style":"诗意散文风","aiGenerated":true}',
+ '{"keywords":["漓江","等待","摄影哲学","独处","光影"],"mood":"calm","weather":"sunny","insight":"摄影教会我的不是怎么拍好一张照片，而是怎么等待。","style":"诗意散文风","status":"public","aiGenerated":true}',
  'PUBLIC', 0, 0, 0, '2026-08-04 21:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
