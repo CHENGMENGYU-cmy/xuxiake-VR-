@@ -79,6 +79,7 @@ function JourneyCreatorContent() {
       setBudget(post.journey?.budget || '');
       setTheme(post.journey?.theme || '');
       setInsight(post.journey?.insight || '');
+      setJourneyTips(post.journey?.tips || '');
       setCoverUrl(post.journey?.coverUrl || post.mediaItems?.[0]?.url || '');
       if (post.journey?.stops) {
         setStops(post.journey.stops.map((s: JourneyStop) => ({
@@ -87,6 +88,8 @@ function JourneyCreatorContent() {
           dayDate: s.dayDate || '',
           locationName: s.locationName || '',
           description: s.description || '',
+          highlights: s.highlights || '',
+          tips: s.tips || '',
           mediaItems: (s.mediaItems || []).map(m => ({ url: m.url, thumbnailUrl: m.thumbnailUrl || undefined })),
         })));
       }
