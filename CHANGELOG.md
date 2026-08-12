@@ -1,33 +1,23 @@
-﻿# 变更记录
+﻿项目修改记录（最近30条）
+================================================================================
 
----
+修改时间：2026-08-12
+修改位置：server/posts.controller.ts、server/posts.service.ts、web/snap-api.ts
+修改原因：手写日记和AI日记数据格式不统一，手写缺标题/感悟/心情/天气字段
+修改内容：后端 saveDiary 接口扩展 mood/weather 可选参数，前端 saveDiary 类型同步
+修改效果：手写日记的心情天气可通过统一API正确保存
+--------------------------------------------------------------------------------
 
-## 2026-08-12 统一日记编辑器
+修改时间：2026-08-12
+修改位置：web/src/app/(main)/diaries/new/page.tsx（新建）
+修改原因：手写日记用通用"分享见闻"表单，AI日记用专属页，编辑体验不一致
+修改内容：创建 /diaries/new 专属日记编辑器页（卡片式布局：封面图→标题→正文→感悟/心情/天气），支持 ?edit= 编辑和 ?snapIds= 从素材创建
+修改效果：手写和AI日记共用同一编辑器，借鉴小红书/简书的沉浸式写作体验
+--------------------------------------------------------------------------------
 
-1. **server/src/modules/posts/posts.controller.ts** — 统一手写/AI日记数据格式
-   - diary/save DTO 增加 mood、weather 可选字段
-
-2. **server/src/modules/posts/posts.service.ts** — saveDiary 支持心情天气
-   - saveDiary 方法增加 mood/weather 参数，仅显式提供时写入 vrMetadata
-
-3. **web/src/lib/snap-api.ts** — 前端 API 类型同步
-   - saveDiary 函数类型增加 mood/weather 可选参数
-
-4. **web/src/app/(main)/diaries/new/page.tsx** (新建) — 统一日记编辑器
-   - 卡片式布局：封面图、标题、正文、感悟/心情/天气
-   - 支持 edit/snapIds URL 参数
-   - 统一调用 saveDiary API
-
-5. **web/src/components/diary/diary-compose-dialog.tsx** — 创作引导跳转统一
-   - 自己写跳转改为 /diaries/new
-
-6. **web/src/app/(main)/diaries/page.tsx** — 日记列表编辑跳转统一
-   - handleEdit 跳转改为 /diaries/new?edit=
-
-7. **web/src/app/(main)/diaries/[id]/page.tsx** — 日记详情继续写跳转统一
-   - continueEdit 简化为 /diaries/new?edit=postId
-
-8. **web/src/app/(main)/snap/generate/batch/page.tsx** — AI 生成后衔接编辑器
-   - 生成完成后跳转 /diaries/new?edit=postId
-
-**效果**：手写日记和AI日记共用同一个编辑器，创建编辑体验一致，详情页展示统一。
+修改时间：2026-08-12
+修改位置：diary-compose-dialog.tsx、diaries/page.tsx、diaries/[id]/page.tsx、batch/page.tsx
+修改原因：日记创作/编辑入口分散在不同页面（upload/snap/generate），体验碎片化
+修改内容：所有"写日记""编辑""继续写"跳转统一指向 /diaries/new；AI批量生成完成后自动跳转新编辑器
+修改效果：用户无论从哪个入口写日记，都进入同一个编辑器，体验一致
+--------------------------------------------------------------------------------
