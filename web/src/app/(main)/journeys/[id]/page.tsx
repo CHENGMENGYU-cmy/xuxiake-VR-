@@ -240,7 +240,7 @@ function JourneyDetailContent() {
                 {post.journey?.title || post.title || '我的游记'}
               </h1>
               <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-white/80">
-                <span>{post.author?.nickname || post.author?.username}</span>
+                <span>{post.author?.displayName || post.author?.username}</span>
                 <span>·</span>
                 <span className="flex items-center gap-1">
                   <Calendar className="h-3 w-3" />
@@ -260,7 +260,7 @@ function JourneyDetailContent() {
               {post.journey?.title || post.title || '我的游记'}
             </h1>
             <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-              <span>{post.author?.nickname || post.author?.username}</span>
+              <span>{post.author?.displayName || post.author?.username}</span>
               <span>·</span>
               <span className="flex items-center gap-1">
                 <Calendar className="h-3 w-3" />
