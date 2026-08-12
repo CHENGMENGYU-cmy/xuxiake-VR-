@@ -122,6 +122,8 @@ export interface JourneyStop {
   locationLat?: number | null;
   locationLng?: number | null;
   description?: string | null;
+  highlights?: string | null;
+  tips?: string | null;
   mediaUrl?: string | null;
   mediaItems?: JourneyStopMedia[];
   sortOrder: number;
@@ -140,6 +142,7 @@ export interface Journey {
   budget?: string | null;
   theme?: string | null;
   insight?: string | null;
+  tips?: string | null;
   stopCount: number;
   stops?: JourneyStop[];
 }
