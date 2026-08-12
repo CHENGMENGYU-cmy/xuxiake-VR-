@@ -1,19 +1,21 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
   ArrowLeft, PenLine, Lock, Globe, FileText, Loader2,
-  Sparkles, Image as ImageIcon, ChevronDown, X,
+  Sparkles, Image as ImageIcon, ChevronDown, X, Upload,
+  Star,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { AuthGuard } from '@/components/auth-guard';
-import { MultiImageUploader, type UploadedImage } from '@/components/upload/multi-image-uploader';
+import type { UploadedImage } from '@/components/upload/multi-image-uploader';
 import { SnapPickerDialog } from '@/components/diary/snap-picker';
 import { getPostDetail, saveDiary } from '@/lib/snap-api';
+import { uploadImage, getImageDimensions } from '@/lib/media-api';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import type { MoodType, WeatherType } from '@/types';
