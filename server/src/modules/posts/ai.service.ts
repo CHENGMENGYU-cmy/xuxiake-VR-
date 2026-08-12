@@ -201,6 +201,7 @@ export class AiService {
         budget: structured.budget || null,
         theme: structured.theme || null,
         insight: structured.insight || null,
+        tips: structured.tips || null,
         stopCount: days.length,
       });
       await this.journeyRepo.save(journey);
@@ -213,6 +214,8 @@ export class AiService {
           dayDate: d.date,
           locationName: d.locationName || null,
           description: structured.dayTexts[i] || null,
+          highlights: structured.dayHighlights[i] || null,
+          tips: structured.dayTips[i] || null,
           sortOrder: i,
         }));
         if (d.media.length > 0) {
