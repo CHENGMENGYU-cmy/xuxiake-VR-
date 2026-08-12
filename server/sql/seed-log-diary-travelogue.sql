@@ -264,7 +264,7 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
 (@diaryId, @userId, 'NOTE', 'DIARY', @logId,
  '今天在高级道冲下来的时候，速度到了72。风在耳边呼啸，整个世界只剩下我和雪道。\n\n有人说滑雪是"白色鸦片"——上瘾。但对我来说，上瘾的不是速度本身，是在高速中必须保持的那种"绝对的专注"。生活中很少有这样的时刻：你必须百分之百地活在当下，因为一秒钟的分神就可能摔出去。\n\n这种专注，让我从所有的压力和焦虑中解脱出来。在雪道上，我不需要想任何事——只需要感受风和重力，还有自己呼吸的节奏。',
  '时速72公里的自由：滑雪教我的绝对专注', '亚布力滑雪场',
- '{"keywords":["滑雪","速度","专注","自由","极限运动"],"mood":"兴奋而专注","style":"轻松口语风","aiGenerated":true}',
+ '{"keywords":["滑雪","速度","专注","自由","极限运动"],"mood":"excited","weather":"sunny","insight":"在雪道上，我不需要想任何事——只需要感受风和重力。","style":"轻松口语风","status":"public","aiGenerated":true}',
  'PUBLIC', 0, 0, 0, '2026-07-27 18:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
