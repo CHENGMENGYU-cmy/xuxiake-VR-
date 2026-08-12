@@ -235,7 +235,7 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
 (@diaryId, @userId, 'NOTE', 'DIARY', @logId,
  '站在一号坑前，看着那排列整齐的陶俑军队，两千多年的时间好像一下子被抹掉了。\n\n我盯着其中一个兵俑的脸看了很久——他的眉毛微微上挑，嘴唇紧闭，表情严肃但年轻。两千多年前，有一个真实的工匠，用他的手捏出了这张脸。他不知道这张脸会在两千年后被无数人注视。\n\n他可能只是一个普通的工匠，但他的作品比他活得更久。这让我想到：我们做的每一件认真的事，也许都会在某个遥远的未来，被某个素未谋面的人看见。',
  '两千年前的工匠，比我们想象的更懂"永恒"', '秦始皇兵马俑博物馆',
- '{"keywords":["兵马俑","工匠","永恒","历史","传承"],"mood":"敬畏而感动","style":"诗意散文风","aiGenerated":true}',
+ '{"keywords":["兵马俑","工匠","永恒","历史","传承"],"mood":"calm","weather":"cloudy","insight":"我们做的每一件认真的事，也许都会在某个遥远的未来被看见。","style":"诗意散文风","status":"public","aiGenerated":true}',
  'PUBLIC', 0, 0, 0, '2026-07-28 21:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
