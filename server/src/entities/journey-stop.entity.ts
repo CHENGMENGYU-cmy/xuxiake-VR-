@@ -28,6 +28,12 @@ export class JourneyStop {
   @Column({ type: 'text', nullable: true })
   description: string | null;
 
+  @Column({ type: 'text', nullable: true })
+  highlights: string | null;
+
+  @Column({ type: 'text', nullable: true })
+  tips: string | null;
+
   @Column({ name: 'media_url', type: 'varchar', length: 500, nullable: true })
   mediaUrl: string | null;
 
