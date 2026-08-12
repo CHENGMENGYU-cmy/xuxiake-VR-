@@ -106,6 +106,8 @@ export async function saveDiary(dto: {
   visibility?: 'PUBLIC' | 'PRIVATE' | 'FOLLOWERS';
   status?: 'draft' | 'private' | 'public';
   image?: string;
+  mood?: string;
+  weather?: string;
 }): Promise<any> {
   const { data } = await apiClient.post('/posts/diary/save', dto);
   return data.data;
