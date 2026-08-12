@@ -205,11 +205,14 @@ function JourneyCreatorContent() {
       budget: budget.trim() || undefined,
       theme: theme || undefined,
       insight: insight.trim() || undefined,
+      tips: journeyTips.trim() || undefined,
       stops: stops.map((s) => ({
         dayNumber: s.dayNumber,
         dayDate: s.dayDate || undefined,
         locationName: s.locationName.trim() || undefined,
         description: s.description.trim() || undefined,
+        highlights: s.highlights.trim() || undefined,
+        tips: s.tips.trim() || undefined,
         mediaItems: s.mediaItems.map((m) => ({ url: m.url, thumbnailUrl: m.thumbnailUrl })),
       })),
     };
