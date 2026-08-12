@@ -256,7 +256,7 @@ function DiaryEditor() {
     }
     setSaving(true);
     try {
-      const coverImage = images[0]?.url || undefined;
+      const coverImg = images.find((img) => img.isCover)?.url || images[0]?.url || undefined;
       const result = await saveDiary({
         diaryId: editId || undefined,
         snapId: snapIds[0] || undefined,
