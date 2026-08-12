@@ -40,6 +40,9 @@ export class Journey {
   @Column({ type: 'text', nullable: true })
   insight: string | null;
 
+  @Column({ type: 'text', nullable: true })
+  tips: string | null;
+
   @Column({ name: 'stop_count', type: 'int', default: 0 })
   stopCount: number;
 
