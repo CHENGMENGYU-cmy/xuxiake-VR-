@@ -549,6 +549,16 @@ function DiaryEditor() {
         </div>
       </div>
 
+      {/* 隐藏的文件输入 */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        multiple
+        className="hidden"
+        onChange={handleLocalUpload}
+      />
+
       {/* 素材选择器 */}
       <SnapPickerDialog
         open={pickerOpen}
