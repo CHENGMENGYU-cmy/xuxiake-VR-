@@ -590,9 +590,12 @@ Day 2 贴士：<当天实用建议>
         ? `抵达${d.locationName}，这里的风景与人文令人难忘。`
         : `旅程的第${i + 1}天，继续探索未知的风景。`;
       out += `Day ${i + 1}：${text}\n`;
+      out += `Day ${i + 1} 推荐：${d.locationName || mainLocation}值得探索\n`;
+      out += `Day ${i + 1} 贴士：建议提前规划行程\n`;
     });
 
     out += `\n结尾：这次${mainLocation}之行，关键词是${keywordText}。带着${moodText}的心情，我把这些片段记录下来。\n`;
+    out += `旅行贴士：建议提前了解目的地天气和交通情况；准备舒适的出行装备；保持开放心态享受旅途。\n`;
     return out;
   }
 
