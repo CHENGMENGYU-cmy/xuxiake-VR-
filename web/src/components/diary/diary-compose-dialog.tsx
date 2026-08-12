@@ -47,7 +47,7 @@ export function DiaryComposeDialog({
   };
 
   const goWrite = () => {
-    router.push(`/upload?level=DIARY${ids.length ? `&snapIds=${ids.join(',')}` : ''}`);
+    router.push(`/diaries/new${ids.length ? `?snapIds=${ids.join(',')}` : ''}`);
     onOpenChange(false);
   };
 
