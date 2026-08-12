@@ -144,7 +144,7 @@ function DiariesContent() {
   ];
 
   const handleEdit = (postId: string) => {
-    router.push(`/upload?edit=${postId}`);
+    router.push(`/diaries/new?edit=${postId}`);
   };
 
   const handlePublish = async (postId: string, visibility: Visibility) => {
