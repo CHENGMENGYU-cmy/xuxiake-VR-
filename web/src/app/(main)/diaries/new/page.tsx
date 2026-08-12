@@ -203,14 +203,48 @@ function DiaryEditor() {
     );
   };
 
-  // 素材选择器回调
-  const handleSnapConfirm = (ids: string[]) => {
-    setSnapIds(ids);
+  // 素材选择器回调 — 从素材库加载的图片与本地上传的图片共存
+  const handleSnapConfirm = async (ids: string[]) => {
     setPickerOpen(false);
-    // 重新加载素材图片
-    if (ids.length > 0 && !editId) {
-      setLoading(true);
-      loadSnapImages(ids);
+    if (ids.length === 0) {
+      // 清空素材库选择，只保留本地上传的图片
+      setImages((prev) => {
+        const locals = prev.filter((img) => !img.snapId);
+        if (locals.length > 0) locals[0].isCover = true;
+        return locals;
+      });
+      setSnapIds([]);
+      return;
+    }
+    setSnapIds(ids);
+    // 从素材加载图片，与已有的本地图片合并
+    try {
+      const posts = await Promise.all(ids.map((id) => getPostDetail(id).catch(() => null)));
+      const snapImgs: UploadedImage[] = [];
+      posts.filter(Boolean).forEach((post: any) => {
+        post.mediaItems?.forEach((m: any) => {
+          if (m.type === 'IMAGE' && snapImgs.length < 9) {
+            snapImgs.push({
+              id: `snap-${post.id}-${m.id || m.url}`,
+              url: m.thumbnailUrl || m.url,
+              width: m.width || 0,
+              height: m.height || 0,
+              originalName: '',
+              size: 0,
+              isCover: false,
+              snapId: post.id,
+            });
+          }
+        });
+      });
+      setImages((prev) => {
+        const locals = prev.filter((img) => !img.snapId); // 保留本地上传的
+        const merged = [...snapImgs, ...locals].slice(0, 9);
+        if (merged.length > 0) merged[0].isCover = true;
+        return merged;
+      });
+    } catch {
+      toast.error('加载素材图片失败');
     }
   };
 
