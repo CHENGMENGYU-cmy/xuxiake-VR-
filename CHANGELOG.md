@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-12
+修改位置：server/sql/migrate-journey-tips-highlights.sql（新建）、server/entities/journey.entity.ts、server/entities/journey-stop.entity.ts、server/common/interfaces.ts、server/posts.service.ts、server/ai.service.ts、web/types/index.ts、web/journey-creator/page.tsx、web/journeys/[id]/page.tsx、server/sql/seed-log-diary-travelogue.sql
+修改原因：游记展示端视觉体验与主流社区差距大，种子数据缺少Journey结构化记录和手写游记样本
+修改内容：①数据库：journeys表增tips列，journey_stops表增highlights+tips列；②后端：DTO/Service/AI服务全链路支持新字段，AI提示词增加推荐/贴士输出；③编辑器：每章增加推荐亮点和实用贴士输入，整体旅行贴士字段；④详情页重设计为携程旅拍风格（全屏hero封面+渐变遮罩、AI辅助角标、精简信息仪表盘、大图+横滑画廊、推荐卡/贴士卡）；⑤种子数据：9篇游记全部创建Journey+JourneyStop记录(20个stop全含highlights/tips)，u4/u6改为手写游记(无AI标记)
+修改效果：游记详情页融合主流社区视觉体验，编辑器支持推荐亮点和实用贴士，AI生成游记自动填充新字段，种子数据包含AI+手写混合样本
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-12
 修改位置：web/src/app/(main)/diaries/new/page.tsx
 修改原因：日记配图只支持从素材库选择，用户无法上传本地电脑图片
 修改内容：配图区域重构为双来源支持：①电脑上传（本地文件→uploadImage API）；②素材库选择（SnapPickerDialog）；图片网格统一管理（封面标记/删除/设封面），两种来源图片可混用；隐藏file input支持多选图片上传
