@@ -687,8 +687,11 @@ Day 2 贴士：<当天实用建议>
       const d = days[i];
       md += `## Day ${i + 1}${d.locationName ? `｜${d.locationName}` : ''}${d.date ? `（${d.date}）` : ''}\n\n`;
       md += `${structured.dayTexts[i] || ''}\n\n`;
+      if (structured.dayHighlights[i]) md += `**推荐亮点**：${structured.dayHighlights[i]}\n\n`;
+      if (structured.dayTips[i]) md += `**实用贴士**：${structured.dayTips[i]}\n\n`;
     }
 
+    if (structured.tips) md += `## 旅行贴士\n\n${structured.tips}\n\n`;
     if (structured.insight) md += `## 写在最后\n\n${structured.insight}\n\n`;
     md += `---\n*本文由 AI 辅助生成，素材来源于个人日志和日记。*`;
     return md;
