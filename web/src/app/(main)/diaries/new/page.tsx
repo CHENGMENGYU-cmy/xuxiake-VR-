@@ -48,7 +48,9 @@ function DiaryEditor() {
   // 加载状态
   const [loading, setLoading] = useState(!!editId || urlSnapIds.length > 0);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // 编辑模式：回填字段
   const loadExistingDiary = useCallback(async (postId: string) => {
