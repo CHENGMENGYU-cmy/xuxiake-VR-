@@ -51,7 +51,6 @@ const mediaTypeIcons: Record<string, React.ReactNode> = {
 
 // 内容层级标签（优先）
 const contentLevelConfig: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
-  LOG:        { label: '日志', icon: <FileText className="h-3 w-3" />, color: 'bg-slate-500/10 text-slate-600 dark:text-slate-400' },
   DIARY:      { label: '日记', icon: <PenLine className="h-3 w-3" />, color: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400' },
   TRAVELOGUE: { label: '游记', icon: <BookOpen className="h-3 w-3" />, color: 'bg-amber-500/10 text-amber-600 dark:text-amber-400' },
   ESSAY:      { label: '游记', icon: <BookOpen className="h-3 w-3" />, color: 'bg-amber-500/10 text-amber-600 dark:text-amber-400' },
