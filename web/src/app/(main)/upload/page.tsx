@@ -645,6 +645,48 @@ function UploadContent() {
         </div>
       </div>
 
+      {/* 创作引导卡片：日记 / 手写游记 / AI 游记 */}
+      {activeTab !== 'DIARY' && (
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <button
+            onClick={() => router.push('/diaries/new')}
+            className="flex items-center gap-3 rounded-xl border bg-card p-4 text-left transition-all hover:border-indigo-300 hover:bg-indigo-50/50 dark:hover:border-indigo-800 dark:hover:bg-indigo-950/20"
+          >
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400">
+              <PenLine className="h-4 w-4" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-medium">写日记</p>
+              <p className="text-xs text-muted-foreground truncate">记录当下的情感与感受</p>
+            </div>
+          </button>
+          <button
+            onClick={() => router.push('/upload/journey-creator')}
+            className="flex items-center gap-3 rounded-xl border bg-card p-4 text-left transition-all hover:border-emerald-300 hover:bg-emerald-50/50 dark:hover:border-emerald-800 dark:hover:bg-emerald-950/20"
+          >
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400">
+              <BookOpen className="h-4 w-4" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-medium">写游记</p>
+              <p className="text-xs text-muted-foreground truncate">章节式图文创作游记</p>
+            </div>
+          </button>
+          <button
+            onClick={() => router.push('/journeys/generate')}
+            className="flex items-center gap-3 rounded-xl border bg-card p-4 text-left transition-all hover:border-amber-300 hover:bg-amber-50/50 dark:hover:border-amber-800 dark:hover:bg-amber-950/20"
+          >
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-600 dark:bg-amber-900/50 dark:text-amber-400">
+              <Sparkles className="h-4 w-4" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-medium">AI 写游记</p>
+              <p className="text-xs text-muted-foreground truncate">从素材和日记智能生成</p>
+            </div>
+          </button>
+        </div>
+      )}
+
       {/* 草稿列表 */}
       <DraftList onSelectDraft={handleSelectDraft} refreshKey={draftRefreshKey} />
 
