@@ -436,4 +436,4 @@ WHERE p.content_level = 'TRAVELOGUE';
 
 UPDATE topics SET post_count = (SELECT COUNT(*) FROM post_topics WHERE topic_id = topics.id);
 
-SELECT 'Seed LOG + DIARY + TRAVELOGUE data inserted for u2-u10!' AS result;
+SELECT 'Seed SNAPSHOT + DIARY + TRAVELOGUE data inserted for u2-u10!' AS result;
