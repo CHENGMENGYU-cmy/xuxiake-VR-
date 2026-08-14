@@ -158,11 +158,9 @@ function SnapContent() {
     );
   };
 
-  // 合并闪拍+日志，按时间排序
-  const allItems = [
-    ...snaps.map((s: any) => ({ ...s, _type: 'SNAPSHOT' })),
-    ...logs.map((l: any) => ({ ...l, _type: 'LOG' })),
-  ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  // 闪拍素材，按时间排序
+  const allItems = [...snaps]
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   // 按当前打开的集合过滤：优先"天"，其次行程/地点
   const filteredItems = (() => {
