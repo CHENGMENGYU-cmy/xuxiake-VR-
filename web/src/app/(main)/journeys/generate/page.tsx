@@ -162,7 +162,7 @@ function GenerateContent() {
     !searchQuery || (i.content || '').includes(searchQuery) || (i.location?.name || i.locationName || '').includes(searchQuery)
   );
 
-  const logCount = items.filter(i => i.type === 'LOG').length;
+  const snapCount = items.filter(i => i.type === 'SNAPSHOT').length;
   const diaryCount = items.filter(i => i.type === 'DIARY').length;
 
   // 生成结果后显示风格切换
