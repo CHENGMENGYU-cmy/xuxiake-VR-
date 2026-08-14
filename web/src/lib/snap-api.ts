@@ -1,5 +1,5 @@
 import apiClient from './api-client';
-import type { GeneratedDiary, DiaryEntry } from '@/types/snap';
+import type { GeneratedDiary, DiaryEntry, TravelogueJob } from '@/types/snap';
 
 /** 获取用户闪拍记录列表 */
 export async function getUserSnaps(): Promise<any[]> {
@@ -69,15 +69,7 @@ export async function generateDiaryBatch(input: {
 }
 
 /** 查询 AI 生成任务状态（travelogue / multi-diary 通用） */
-export async function getAiJob(jobId: string): Promise<{
-  id: string;
-  status: string;
-  progress: number;
-  result?: string;
-  postId?: string;
-  error?: string;
-  createdAt: string;
-}> {
+export async function getAiJob(jobId: string): Promise<TravelogueJob> {
   const { data } = await apiClient.get(`/posts/ai/jobs/${jobId}`);
   return data.data;
 }
@@ -129,15 +121,7 @@ export async function generateTravelogue(input: {
 }
 
 /** 查询游记生成任务状态 */
-export async function getTravelogueJob(jobId: string): Promise<{
-  id: string;
-  status: string;
-  progress: number;
-  result?: string;
-  postId?: string;
-  error?: string;
-  createdAt: string;
-}> {
+export async function getTravelogueJob(jobId: string): Promise<TravelogueJob> {
   const { data } = await apiClient.get(`/posts/travelogue/job/${jobId}`);
   return data.data;
 }

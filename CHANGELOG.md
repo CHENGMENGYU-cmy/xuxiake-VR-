@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-14
+修改位置：web/types/index.ts、web/lib/snap-api.ts、web/stores/snap-store.ts、web/app/(main)/snap/page.tsx、web/components/diary/snap-picker.tsx、web/components/post/post-card.tsx、web/app/(main)/journeys/[id]/page.tsx、web/app/(main)/my/page.tsx、web/components/layout/sidebar.tsx、web/app/(main)/classified/page.tsx、内容生成逻辑链条.md
+修改原因：彻底贯彻3级内容链条（闪拍→日记→游记），全面清理前端残留的LOG层代码和引用
+修改内容：①types/index.ts移除LOG类型定义和标签映射；②snap-api.ts删除getUserLogs接口，getAiJob/getTravelogueJob返回类型改为TravelogueJob（修复预存的status类型不匹配编译错误）；③snap-store.ts移除logs/logsLoading/fetchLogs状态和动作；④snap/page.tsx移除LOG合并、日志徽标、fetchLogs调用，loading只依赖snapsLoading；⑤snap-picker.tsx移除LOG合并，只展示闪拍素材；⑥post-card.tsx移除LOG标签配置；⑦journeys/[id]AI来源弹窗sourceLogIds改为sourceSnapIds（"条闪拍素材"）；⑧my/page.tsx"闪拍与日志素材"文案改为"闪拍素材（照片·视频·文字）"；⑨sidebar.tsx移除"日志分类"入口(/classified)及Layers图标引用；⑩设计文档移除"日志分类"侧边栏入口行
+修改效果：前端代码完全对齐3级内容链条，无任何LOG层残留引用；/classified页面保留但无导航入口（孤儿死代码）；TypeScript编译通过（仅剩e2e测试预存错误）
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-14
 修改位置：web/components/layout/sidebar.tsx、web/app/(main)/upload/page.tsx、web/app/(main)/snap/page.tsx
 修改原因：侧边栏导航7个问题中的3个待处理项修复（手写游记入口缺失、/upload与创作链条脱节、素材库→游记快捷路径缺失）
 修改内容：①侧边栏"创作"区增加"写游记"入口(/upload/journey-creator，Map图标)，与"AI写游记"并列，/upload路由高亮逻辑修正避免误匹配；②/upload页增加3个创作引导卡片（写日记→/diaries/new、写游记→/upload/journey-creator、AI写游记→/journeys/generate），点击直达对应创作入口；③素材库多选底部操作栏增加"生成游记"按钮，将选中素材ID作为ids参数跳转/journeys/generate?ids=...
