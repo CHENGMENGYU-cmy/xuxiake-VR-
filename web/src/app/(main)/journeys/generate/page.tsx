@@ -178,7 +178,7 @@ function GenerateContent() {
           </Button>
           <div>
             <h1 className="text-xl font-bold">AI 游记生成</h1>
-            <p className="text-xs text-muted-foreground">从你的日志和日记中，由 AI 综合生成一篇游记</p>
+            <p className="text-xs text-muted-foreground">从你的闪拍素材和日记中，由 AI 综合生成一篇游记</p>
           </div>
         </div>
       </div>
