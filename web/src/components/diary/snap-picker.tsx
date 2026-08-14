@@ -31,28 +31,25 @@ export function getItemImage(item: any): string | null {
   return null;
 }
 
-/** 合并闪拍+日志素材，供选择器/引导共用 */
+/** 合并闪拍素材，供选择器/引导共用 */
 export function useSnapItems() {
-  const { snaps, logs, snapsLoading, logsLoading, fetchSnaps, fetchLogs } = useSnapStore();
+  const { snaps, snapsLoading, fetchSnaps } = useSnapStore();
   const items = useMemo<SnapPickerItem[]>(() => {
-    const merged = [
-      ...snaps.map((s: any) => ({ ...s, _type: 'SNAPSHOT' })),
-      ...logs.map((l: any) => ({ ...l, _type: 'LOG' })),
-    ].sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    const merged = [...snaps]
+      .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     return merged.map((item: any) => ({
       id: item.id,
       image: getItemImage(item),
       locationName: item.locationName || item.location?.name || '',
       content: item.content || null,
       createdAt: item.createdAt,
-      _type: item._type,
+      _type: 'SNAPSHOT',
     }));
-  }, [snaps, logs]);
-  const loading = snapsLoading || logsLoading;
+  }, [snaps]);
+  const loading = snapsLoading;
   const ensureLoaded = useCallback(() => {
     if (snaps.length === 0) fetchSnaps();
-    if (logs.length === 0) fetchLogs();
-  }, [snaps.length, logs.length, fetchSnaps, fetchLogs]);
+  }, [snaps.length, fetchSnaps]);
   return { items, loading, ensureLoaded };
 }
 
