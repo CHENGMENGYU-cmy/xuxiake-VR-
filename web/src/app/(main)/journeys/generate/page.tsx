@@ -67,15 +67,15 @@ function GenerateContent() {
   const [searchQuery, setSearchQuery] = useState('');
   const pollRef = useRef<ReturnType<typeof setInterval>>(undefined);
 
-  // 加载素材：日志 + 日记
+  // 加载素材：闪拍 + 日记
   useEffect(() => {
     if (!user?.id) return;
     setLoading(true);
-    Promise.all([getUserLogs(), getUserDiaries()])
-      .then(([logs, diaries]) => {
-        const logItems: SourceItem[] = (logs || []).map((l: any) => ({
-          id: l.id, content: l.content, location: l.location, locationName: l.locationName,
-          createdAt: l.createdAt, mediaItems: l.mediaItems, title: l.title, type: 'LOG',
+    Promise.all([getUserSnaps(), getUserDiaries()])
+      .then(([snaps, diaries]) => {
+        const snapItems: SourceItem[] = (snaps || []).map((s: any) => ({
+          id: s.id, content: s.content, location: s.location, locationName: s.locationName,
+          createdAt: s.createdAt, mediaItems: s.mediaItems, title: s.title, type: 'SNAPSHOT',
         }));
         const diaryItems: SourceItem[] = (diaries || []).map((d: any) => ({
           id: d.id, content: d.content, location: d.location, locationName: d.locationName,
