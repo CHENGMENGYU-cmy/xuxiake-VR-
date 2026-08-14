@@ -13,6 +13,7 @@ interface FlashMoment {
   videoPath?: string;
   thumbnailPath?: string;
   durationMs?: number | null;
+  textNote?: string;
   activityCategoryId?: string;
   categorySource?: string;
   categoryLocked?: boolean;
