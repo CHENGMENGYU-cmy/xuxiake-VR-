@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
-import { getUserLogs, getUserDiaries, generateTravelogue, getTravelogueJob } from '@/lib/snap-api';
+import { getUserSnaps, getUserDiaries, generateTravelogue, getTravelogueJob } from '@/lib/snap-api';
 import { useAuthStore } from '@/stores/auth-store';
 import { AuthGuard } from '@/components/auth-guard';
 import { toast } from 'sonner';
