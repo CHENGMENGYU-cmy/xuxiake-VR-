@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Upload, Video, Image, Mic, Link2, Languages, FileUp, MapPin, X, Loader2, Play, Volume2, Send, ArrowLeftRight, PenLine, Lock } from 'lucide-react';
+import { Upload, Video, Image, Mic, Link2, Languages, FileUp, MapPin, X, Loader2, Play, Volume2, Send, ArrowLeftRight, PenLine, Lock, BookOpen, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
