@@ -327,12 +327,12 @@ Day 2 贴士：<当天实用建议>
       parts.push('');
     }
 
-    // 日志（事实素材，未按天匹配的兜底补充）
+    // 闪拍素材（事实骨架，未按天匹配的兜底补充）
     if (material.logs.length > 0) {
-      parts.push('## 日志记录（事实素材）');
+      parts.push('## 闪拍记录（事实素材）');
       for (let i = 0; i < material.logs.length; i++) {
         const log = material.logs[i];
-        parts.push(`### 日志${i + 1}：${log.locationName || '未知地点'}`);
+        parts.push(`### 闪拍${i + 1}：${log.locationName || '未知地点'}`);
         parts.push(log.content || '');
         parts.push('');
       }
