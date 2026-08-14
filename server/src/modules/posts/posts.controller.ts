@@ -774,7 +774,8 @@ export class PostsController {
     const snapshotIds = await this.postsService.getTripSnapshotIds(userId, body.tripId);
     if (snapshotIds.length === 0) throw new NotFoundException('该行程没有可生成的素材');
     const jobId = await this.aiService.generateTravelogue(userId, {
-      logIds: snapshotIds,
+      snapIds: snapshotIds,
+      logIds: [],
       diaryIds: [],
       prompt: body.prompt,
       style: body.style,
