@@ -81,7 +81,7 @@ export function FeedList({ showComposer = true, sort = 'latest', postType, tagId
                 发现旅伴
               </Button>
             </Link>
-            <Link href="/explore">
+            <Link href="/discover">
               <Button size="sm" variant="outline" className="gap-1.5">
                 <Compass className="h-4 w-4" />
                 探索发现
