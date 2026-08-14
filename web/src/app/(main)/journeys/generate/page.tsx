@@ -243,8 +243,8 @@ function GenerateContent() {
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-1.5 mb-0.5">
-                        {item.type === 'LOG' ? (
-                          <Badge variant="outline" className="text-[10px] bg-slate-100 text-slate-600 dark:bg-slate-900">日志</Badge>
+                        {item.type === 'SNAPSHOT' ? (
+                          <Badge variant="outline" className="text-[10px] bg-orange-100 text-orange-600 dark:bg-orange-950">闪拍</Badge>
                         ) : (
                           <Badge variant="outline" className="text-[10px] bg-indigo-100 text-indigo-600 dark:bg-indigo-950">日记</Badge>
                         )}
