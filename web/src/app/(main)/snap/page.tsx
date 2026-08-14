@@ -244,7 +244,7 @@ function SnapContent() {
     return () => window.removeEventListener('keydown', onKey);
   }, [previewIndex, previewItems]);
 
-  const loading = snapsLoading || logsLoading;
+  const loading = snapsLoading;
   const totalCount = allItems.length;
 
   const viewModes: { id: ViewMode; label: string }[] = [
