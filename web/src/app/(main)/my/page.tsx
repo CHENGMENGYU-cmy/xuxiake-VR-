@@ -19,7 +19,7 @@ function MyContent() {
   const { user } = useAuthStore();
 
   const sections = [
-    { href: '/snap', label: '素材库', desc: '闪拍与日志素材', icon: Camera, color: 'text-orange-500 bg-orange-50 dark:bg-orange-950/30' },
+    { href: '/snap', label: '素材库', desc: '闪拍素材（照片·视频·文字）', icon: Camera, color: 'text-orange-500 bg-orange-50 dark:bg-orange-950/30' },
     { href: '/diaries', label: '我的日记', desc: '情感反思文章', icon: PenLine, color: 'text-indigo-500 bg-indigo-50 dark:bg-indigo-950/30' },
     { href: '/journeys', label: '我的游记', desc: 'AI 综合生成的游记', icon: BookOpen, color: 'text-primary bg-primary/10' },
   ];
