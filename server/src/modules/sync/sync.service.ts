@@ -104,6 +104,9 @@ export class SyncService {
       if (m.mood) vrMetadata.mood = m.mood;
       if (m.scene) vrMetadata.scene = m.scene;
       if (m.keywords?.length) vrMetadata.keywords = m.keywords;
+      if (m.textNote) vrMetadata.hasTextNote = true;
+      // 标记纯文字闪拍（无照片无视频）
+      if (!m.photoPath && !m.videoPath) vrMetadata.mediaType = 'TEXT';
 
       const post = this.postRepo.create({
         id: uuidv4(),
