@@ -35,7 +35,7 @@ SET @userId = 'u2';
 SET @logId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@logId, @userId, 'NOTE', 'LOG', NULL,
+(@logId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年8月4日，阳朔兴坪镇。凌晨4:30到达拍摄点，架设Insta360 X4。5:12日出开始，晨雾从江面升起，喀斯特山峰在金色光线中渐次显现。拍摄持续到19:30日落，共拍摄14组延时素材。天气晴朗，气温34°C，湿度偏高。同行：无。设备电量消耗3块电池。',
  NULL, '阳朔兴坪镇漓江边',
  '{"keywords":["漓江","延时摄影","日出","日落","喀斯特"],"weather":"晴","activity":"摄影","companion":"独自"}',
@@ -64,7 +64,7 @@ SET @userId = 'u3';
 SET @logId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@logId, @userId, 'NOTE', 'LOG', NULL,
+(@logId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年8月3日，杭州西湖断桥。测试新VR相机的空间视频拍摄能力。拍摄参数：4K/60fps，VR180模式，白平衡自动，ISO 100-800。拍摄对象：断桥、白堤、雷峰塔远景、湖面倒影、游客动态。设备温度正常，未出现过热警告。视频文件共28GB。下午在湖滨路咖啡馆对比了前三代设备的画质表现，暗部细节提升明显。',
  NULL, '杭州西湖断桥',
  '{"keywords":["VR相机","测评","西湖","空间视频","画质对比"],"weather":"多云转晴","activity":"设备测评","companion":"独自"}',
@@ -93,7 +93,7 @@ SET @userId = 'u4';
 SET @logId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@logId, @userId, 'NOTE', 'LOG', NULL,
+(@logId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年8月2日，稻城亚丁景区。徒步路线：游客中心→冲古寺→洛绒牛场→牛奶海→五色海，全程18公里，海拔从3900米爬升到4700米。用时8.5小时。天气：上午晴，午后转多云，14:00开始下小雨。三神山（仙乃日、央迈勇、夏诺多吉）均有可见。牛奶海水色碧蓝，五色海因光线不足色彩不太明显。高反轻微，服用了红景天。',
  NULL, '稻城亚丁景区',
  '{"keywords":["稻城亚丁","徒步","高海拔","三神山","牛奶海"],"weather":"晴转小雨","activity":"高海拔徒步","companion":"独自"}',
@@ -120,7 +120,7 @@ SET @userId = 'u5';
 SET @logId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@logId, @userId, 'NOTE', 'LOG', NULL,
+(@logId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年8月1日，哈巴雪山登顶日。凌晨3:00从大本营（4100m）出发，6:48登顶（5396m）。天气：晴朗无风，气温-8°C，能见度极佳。登顶用时3小时48分。同行客户3人，均成功登顶。使用了冰爪、冰镐、安全带等技术装备。雪线以上约500米，冰裂缝较往年偏少。拍摄了登顶360°全景VR。下撤用时2.5小时，15:00返回哈巴村。',
  NULL, '哈巴雪山',
  '{"keywords":["哈巴雪山","登顶","5396米","雪山攀登","向导"],"weather":"晴","activity":"雪山攀登","companion":"带客户3人"}',
@@ -149,7 +149,7 @@ SET @userId = 'u6';
 SET @logId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@logId, @userId, 'NOTE', 'LOG', NULL,
+(@logId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年7月31日，长沙。探店路线：火宫殿（早餐）→ 太平街（小吃）→ 坡子街（午餐）→ 文和友（晚餐）。打卡菜品：臭豆腐（黑色经典）、糖油粑粑、口味虾、剁椒鱼头、茶颜悦色（幽兰拿铁）。共拍摄美食VR近景素材47组。花费：交通15元+餐饮286元。口味评价：臭豆腐外酥里嫩8.5分，口味虾辣度适中但虾肉偏老7分，剁椒鱼头鲜辣平衡9分。',
  NULL, '长沙火宫殿/太平街/文和友',
  '{"keywords":["长沙","美食探店","臭豆腐","口味虾","湘菜"],"activity":"美食探店","companion":"独自","spend":301}',
@@ -176,7 +176,7 @@ SET @userId = 'u7';
 SET @logId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@logId, @userId, 'NOTE', 'LOG', NULL,
+(@logId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年7月30日，苏州拙政园+留园。考察目的：研究古典园林的空间叙事手法对VR空间设计的启发。拙政园：游览3小时，测绘主要观景点12处，重点记录"借景"手法——北寺塔的框景、远香堂的对景。留园：游览2小时，重点记录"步移景异"的动线设计——每走几步就有新的构图出现。拍摄VR360参考素材86组。天气：阴有小雨，反而增加了园林的意境。',
  NULL, '苏州拙政园/留园',
  '{"keywords":["苏州园林","拙政园","留园","空间设计","建筑考察"],"weather":"阴雨","activity":"建筑考察","companion":"独自"}',
@@ -205,7 +205,7 @@ SET @userId = 'u8';
 SET @logId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@logId, @userId, 'NOTE', 'LOG', NULL,
+(@logId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年7月29日，三亚蜈支洲岛。潜水日志：第一潜9:30，潜点"情人桥"，水深18米，水温27°C，能见度15米，潜水时间42分钟。第二潜11:45，潜点"珊瑚花园"，水深22米，水温26°C，能见度12米，潜水时间38分钟。观察到：鹿角珊瑚群、小丑鱼、海龟1只、鳐鱼2条。水下VR拍摄设备：防水壳+Insta360 X4，共拍摄水下VR素材32分钟。',
  NULL, '三亚蜈支洲岛',
  '{"keywords":["潜水","蜈支洲岛","珊瑚","水下摄影","VR"],"weather":"晴","water_temp":"27°C","visibility":"15米","activity":"潜水"}',
@@ -234,7 +234,7 @@ SET @userId = 'u9';
 SET @logId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@logId, @userId, 'NOTE', 'LOG', NULL,
+(@logId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年7月28日，西安秦始皇兵马俑博物馆。参观路线：一号坑→三号坑→二号坑→文物陈列厅。一号坑：东西长230米，宽62米，约有6000个陶俑，已修复约1000余件。重点观察了兵俑的面部细节——每个俑的面部表情和发髻都不同，印证了"千人千面"的说法。拍摄VR近景素材重点：铠甲纹理、发髻结构、排列阵型。三号坑较小但有指挥车，二号坑有彩色陶俑遗迹。',
  NULL, '秦始皇兵马俑博物馆',
  '{"keywords":["兵马俑","秦朝","考古","千人千面","历史"],"activity":"历史考察","companion":"独自"}',
@@ -263,7 +263,7 @@ SET @userId = 'u10';
 SET @logId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@logId, @userId, 'NOTE', 'LOG', NULL,
+(@logId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年7月27日，亚布力滑雪场（夏季旱雪道）。训练内容：高级道技巧练习——大回转+小回转+急停。天气：晴，28°C。训练时间3小时。使用装备：Atomic Redster S9滑雪板+Atomic Hawx Ultra 130雪鞋。VR拍摄：头盔GoPro Max拍摄第一视角VR素材共45分钟，完整记录了高级道全程。滑行数据：最高时速72km/h，共完成12趟。',
  NULL, '亚布力滑雪场',
  '{"keywords":["滑雪","亚布力","高级道","训练","VR第一视角"],"weather":"晴","activity":"滑雪训练","speed":"72km/h","companion":"独自"}',
