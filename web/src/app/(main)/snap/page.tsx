@@ -456,6 +456,15 @@ function SnapContent() {
                 <PenLine className="h-3.5 w-3.5" />
                 写日记
               </Button>
+              <Button
+                size="sm"
+                onClick={() => router.push(`/journeys/generate?ids=${Array.from(selectedIds).join(',')}`)}
+                disabled={selectedIds.size === 0}
+                className="shrink-0 gap-1.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600"
+              >
+                <Sparkles className="h-3.5 w-3.5" />
+                生成游记
+              </Button>
               <Button size="sm" variant="ghost" onClick={() => { setSelectMode(false); setSelectedIds(new Set()); }}>
                 取消
               </Button>
