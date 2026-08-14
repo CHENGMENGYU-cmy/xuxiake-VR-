@@ -90,7 +90,8 @@ export class SyncService {
       }
 
       const reflection = originalId ? reflectionMap.get(originalId) : undefined;
-      const content = reflection?.recognizedText || null;
+      // 文字内容：手动备注优先，语音识别兜底，两者都有时拼接
+      const content = [m.textNote, reflection?.recognizedText].filter(Boolean).join('\n') || null;
 
       const vrMetadata: Record<string, unknown> = {
         originalId,
