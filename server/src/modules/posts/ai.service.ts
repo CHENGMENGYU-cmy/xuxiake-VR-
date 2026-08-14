@@ -320,7 +320,7 @@ Day 2 贴士：<当天实用建议>
         const pd = new Date(p.createdAt);
         const key = `${pd.getFullYear()}-${String(pd.getMonth() + 1).padStart(2, '0')}-${String(pd.getDate()).padStart(2, '0')}`;
         if (key !== d.date) continue;
-        const tag = p.contentLevel === 'LOG' ? '记录' : '感悟';
+        const tag = (p.contentLevel === 'LOG' || p.contentLevel === 'SNAPSHOT') ? '记录' : '感悟';
         const title = (p as any).title;
         parts.push(`- 【${tag}】${title ? `${title}：` : ''}${(p.content || '').slice(0, 300)}`);
       }
