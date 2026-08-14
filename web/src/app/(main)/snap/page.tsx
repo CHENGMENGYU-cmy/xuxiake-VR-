@@ -139,7 +139,6 @@ function SnapContent() {
         )}
         {selectMode && isSelected && <div className="absolute inset-0 bg-primary/30" />}
         <div className="absolute left-1.5 top-1.5 flex gap-1">
-          {isLog && <Badge className="border bg-black/50 text-[10px] text-white backdrop-blur-sm">日志</Badge>}
           {meta.hasDiary && (
             <Badge className="border bg-black/50 text-[10px] text-white backdrop-blur-sm">
               <Check className="h-2.5 w-2.5" />日记
