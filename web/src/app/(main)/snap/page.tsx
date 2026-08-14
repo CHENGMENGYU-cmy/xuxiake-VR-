@@ -336,7 +336,7 @@ function SnapContent() {
               <Camera className="h-8 w-8 text-muted-foreground/30" />
             </div>
             <p className="mt-4 text-sm font-medium text-muted-foreground">
-              {selectedFilter ? '该分类下暂无记录' : '暂无闪拍记录'}
+              {selectedFilter ? '该分类下暂无记录' : '暂无闪拍素材'}
             </p>
             <p className="mt-1 text-xs text-muted-foreground/60">
               使用闪拍 App 记录生活中的瞬间，记录将自动同步到这里
