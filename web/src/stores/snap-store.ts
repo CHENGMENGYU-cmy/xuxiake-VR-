@@ -3,7 +3,7 @@
 import { create } from 'zustand';
 import type { DiaryStyle, GeneratedDiary, DiaryEntry, TravelogueJob } from '@/types/snap';
 import {
-  getUserSnaps, getUserLogs, getUserDiaries, getUserTravelogues,
+  getUserSnaps, getUserDiaries, getUserTravelogues,
   generateDiary, saveDiary, getDiaryDraft, getDiarySquare,
   generateTravelogue, getTravelogueJob,
 } from '@/lib/snap-api';
@@ -13,9 +13,7 @@ interface SnapState {
   snaps: any[];
   snapsLoading: boolean;
 
-  // 素材列表（日志 + 日记）
-  logs: any[];
-  logsLoading: boolean;
+  // 素材列表（闪拍 + 日记）
   diaries: any[];
   diariesLoading: boolean;
   travelogues: any[];
