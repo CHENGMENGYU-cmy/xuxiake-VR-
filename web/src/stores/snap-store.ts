@@ -113,16 +113,6 @@ export const useSnapStore = create<SnapState>((set, get) => ({
     }
   },
 
-  fetchLogs: async () => {
-    set({ logsLoading: true });
-    try {
-      const logs = await getUserLogs();
-      set({ logs, logsLoading: false });
-    } catch {
-      set({ logsLoading: false });
-    }
-  },
-
   fetchDiaries: async (userId) => {
     set({ diariesLoading: true });
     try {
