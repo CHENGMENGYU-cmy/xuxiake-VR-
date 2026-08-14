@@ -118,18 +118,20 @@ export class AiService {
   private async executeTravelogueJob(jobId: string, userId: string, input: TravelogueGenerateInput) {
     const job = this.jobs.get(jobId)!;
     try {
-      // 阶段1: 收集素材
+      // 阶段1: 收集素材（闪拍 + 日记）
       job.status = 'ANALYZING'; job.progress = 10;
 
-      const logs = input.logIds.length > 0
-        ? await this.postRepo.find({ where: { id: In(input.logIds), authorId: userId }, relations: { mediaItems: true } })
+      // 兼容旧 logIds 参数：合并到 snapIds
+      const allSnapIds = [...(input.snapIds || []), ...(input.logIds || [])];
+      const snaps = allSnapIds.length > 0
+        ? await this.postRepo.find({ where: { id: In(allSnapIds), authorId: userId }, relations: { mediaItems: true } })
         : [];
       const diaries = input.diaryIds.length > 0
         ? await this.postRepo.find({ where: { id: In(input.diaryIds), authorId: userId }, relations: { mediaItems: true } })
         : [];
 
-      const material = this.extractMaterial(logs, diaries);
-      const seeds = [...logs, ...diaries];
+      const material = this.extractMaterial(snaps, diaries);
+      const seeds = [...snaps, ...diaries];
       const days = this.groupByDay(seeds);
       if (days.length === 0) throw new Error('没有可用的游记素材');
       job.progress = 30;
