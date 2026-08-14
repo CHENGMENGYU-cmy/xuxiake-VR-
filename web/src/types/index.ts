@@ -51,13 +51,12 @@ export interface MediaItem {
 // ===== 内容帖子 =====
 export type PostType = 'NOTE' | 'VR_MEDIA' | 'JOURNEY' | 'MOMENT';
 
-// 内容层级：瞬间捕获 → 内容分类 → 日志 → 日记 → 游记/散文
-export type ContentLevel = 'SNAPSHOT' | 'CLASSIFIED' | 'LOG' | 'DIARY' | 'ESSAY' | 'TRAVELOGUE';
+// 内容层级：闪拍 → 日记 → 游记（3级链条）
+export type ContentLevel = 'SNAPSHOT' | 'CLASSIFIED' | 'DIARY' | 'ESSAY' | 'TRAVELOGUE';
 
 export const ContentLevelLabel: Record<ContentLevel, string> = {
   SNAPSHOT: '瞬间捕获',
   CLASSIFIED: '内容分类',
-  LOG: '日志',
   DIARY: '日记',
   ESSAY: '游记',
   TRAVELOGUE: '游记',
