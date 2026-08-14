@@ -744,16 +744,17 @@ export class PostsController {
     return { success: true, data: job };
   }
 
-  // ===== 游记生成（LOG + DIARY + prompt → TRAVELOGUE） =====
+  // ===== 游记生成（SNAPSHOT + DIARY + prompt → TRAVELOGUE） =====
 
   @Post('travelogue/generate')
   async generateTravelogue(
     @Headers('authorization') auth: string,
-    @Body() body: { logIds: string[]; diaryIds: string[]; prompt?: string; style?: string; tone?: string; length?: string },
+    @Body() body: { snapIds?: string[]; logIds?: string[]; diaryIds: string[]; prompt?: string; style?: string; tone?: string; length?: string },
   ) {
     const userId = this.getUserId(auth);
     const jobId = await this.aiService.generateTravelogue(userId, {
-      logIds: body.logIds || [],
+      snapIds: body.snapIds || body.logIds || [],
+      logIds: [],
       diaryIds: body.diaryIds || [],
       prompt: body.prompt,
       style: body.style,
