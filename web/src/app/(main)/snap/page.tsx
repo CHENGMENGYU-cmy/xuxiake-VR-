@@ -126,8 +126,15 @@ function SnapContent() {
         {image ? (
           <img src={image} alt="" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-muted">
-            <FileText className="h-8 w-8 text-muted-foreground/40" />
+          <div className="flex h-full w-full flex-col items-start justify-between p-2.5 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900">
+            <FileText className="h-4 w-4 text-slate-400 shrink-0" />
+            <p className="text-[10px] leading-tight text-slate-600 dark:text-slate-300 line-clamp-4 w-full">
+              {item.content || item.title || '无文字内容'}
+            </p>
+            <div className="flex items-center gap-1 text-[8px] text-slate-400 w-full">
+              {item.locationName && <span className="truncate">{item.locationName}</span>}
+              <span className="ml-auto shrink-0">{new Date(item.createdAt).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })}</span>
+            </div>
           </div>
         )}
         {selectMode && isSelected && <div className="absolute inset-0 bg-primary/30" />}
