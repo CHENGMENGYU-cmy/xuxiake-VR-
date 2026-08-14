@@ -147,6 +147,7 @@ export function Sidebar() {
                     const Icon = item.icon;
                     const isActive =
                       (item.href === '/snap' && (pathname === '/snap' || pathname.startsWith('/snap/generate'))) ||
+                      (item.href === '/classified' && pathname === '/classified') ||
                       (item.href === '/diaries' && (pathname === '/diaries' || pathname.startsWith('/diaries/'))) ||
                       (item.href === '/journeys' && (pathname === '/journeys' || (pathname.startsWith('/journeys/') && !pathname.startsWith('/journeys/generate'))));
                     return (
