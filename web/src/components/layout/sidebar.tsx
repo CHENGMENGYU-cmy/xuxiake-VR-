@@ -40,7 +40,6 @@ const browseItems = [
 // 我的（内容生成链条：素材→日记→游记）
 const myItems = [
   { href: '/snap', label: '素材库', icon: Camera, color: 'text-orange-500' },
-  { href: '/classified', label: '日志分类', icon: Layers, color: 'text-teal-500' },
   { href: '/diaries', label: '我的日记', icon: PenLine, color: 'text-indigo-500' },
   { href: '/journeys', label: '我的游记', icon: BookOpen, color: 'text-primary' },
 ];
