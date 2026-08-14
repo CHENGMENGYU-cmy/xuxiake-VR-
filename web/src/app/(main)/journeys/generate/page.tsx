@@ -209,7 +209,7 @@ function GenerateContent() {
           ) : items.length === 0 ? (
             <div className="flex flex-col items-center py-12">
               <FileText className="h-10 w-10 text-muted-foreground/20 mb-3" />
-              <p className="text-sm text-muted-foreground">还没有日志和日记素材</p>
+              <p className="text-sm text-muted-foreground">还没有闪拍和日记素材</p>
               <Button size="sm" className="mt-3" onClick={() => router.push('/snap')}>去记录闪拍</Button>
             </div>
           ) : (
