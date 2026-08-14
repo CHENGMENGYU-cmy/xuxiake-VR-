@@ -71,7 +71,7 @@ interface SnapState {
 
   // 游记生成
   startTravelogueGeneration: (input: {
-    logIds: string[]; diaryIds: string[]; prompt?: string;
+    snapIds: string[]; diaryIds: string[]; prompt?: string;
     style?: string; tone?: string; length?: string;
   }) => Promise<string>;
   pollTravelogueJob: (jobId: string) => Promise<TravelogueJob | null>;

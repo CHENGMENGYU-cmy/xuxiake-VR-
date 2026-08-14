@@ -79,7 +79,7 @@ export const DiaryStatusLabel: Record<DiaryStatus, string> = {
 // ===== 游记生成相关类型 =====
 
 export interface TravelogueGenerateInput {
-  logIds: string[];
+  snapIds: string[];
   diaryIds: string[];
   prompt?: string;
   style?: string;
