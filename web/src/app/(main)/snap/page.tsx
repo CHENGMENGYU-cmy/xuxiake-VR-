@@ -113,7 +113,6 @@ function SnapContent() {
       } catch { return {}; }
     })();
     const image = getMediaImage(item);
-    const isLog = item._type === 'LOG';
     const isSelected = selectedIds.has(item.id);
 
     return (
