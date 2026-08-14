@@ -79,8 +79,6 @@ export const useSnapStore = create<SnapState>((set, get) => ({
   snaps: [],
   snapsLoading: false,
 
-  logs: [],
-  logsLoading: false,
   diaries: [],
   diariesLoading: false,
   travelogues: [],
