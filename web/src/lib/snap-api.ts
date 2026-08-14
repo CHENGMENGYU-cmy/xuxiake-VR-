@@ -121,9 +121,9 @@ export async function getPostDetail(postId: string): Promise<any> {
 
 // ===== 游记生成 =====
 
-/** 提交游记生成任务（LOG + DIARY + prompt → TRAVELOGUE） */
+/** 提交游记生成任务（SNAPSHOT + DIARY + prompt → TRAVELOGUE） */
 export async function generateTravelogue(input: {
-  logIds: string[];
+  snapIds: string[];
   diaryIds: string[];
   prompt?: string;
   style?: string;
