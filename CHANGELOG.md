@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-14
+修改位置：web/components/layout/sidebar.tsx、web/app/(main)/upload/page.tsx、web/app/(main)/snap/page.tsx
+修改原因：侧边栏导航7个问题中的3个待处理项修复（手写游记入口缺失、/upload与创作链条脱节、素材库→游记快捷路径缺失）
+修改内容：①侧边栏"创作"区增加"写游记"入口(/upload/journey-creator，Map图标)，与"AI写游记"并列，/upload路由高亮逻辑修正避免误匹配；②/upload页增加3个创作引导卡片（写日记→/diaries/new、写游记→/upload/journey-creator、AI写游记→/journeys/generate），点击直达对应创作入口；③素材库多选底部操作栏增加"生成游记"按钮，将选中素材ID作为ids参数跳转/journeys/generate?ids=...
+修改效果：手写游记有独立入口，/upload成为创作hub（分享见闻+日记+游记三种路径），素材库选完素材可直接生成游记，创作链路完整闭环
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-14
 修改位置：server/sync.service.ts、server/ai.service.ts、server/posts.controller.ts、web/snap-api.ts、web/types/snap.ts、web/stores/snap-store.ts、web/journeys/generate/page.tsx、web/snap/page.tsx、web/components/feed/feed-list.tsx、web/components/layout/sidebar.tsx、server/sql/seed-log-diary-travelogue.sql、内容生成逻辑链条.md、闪拍App改动清单-3级链条重构.md（新建）
 修改原因：内容链条中LOG层在真实数据链路中不存在（App不产生LOG数据），AI游记生成器依赖logIds但用户实际选不到LOG；同时闪拍App同步数据缺少手动文字备注字段
 修改内容：①内容链条从4级简化为3级：闪拍(SNAPSHOT)→日记(DIARY)→游记(TRAVELOGUE)，去掉LOG层；②后端sync.service.ts支持textNote字段（手动文字备注），优先级textNote>recognizedText，支持纯文字闪拍(TEXT mediaType)；③AI游记生成器从logIds改为snapIds（闪拍素材替代日志作为事实骨架来源），controller/api/store/types全链路同步；④前端游记生成器UI全部"日志"改为"闪拍"，素材选择从getUserLogs改为getUserSnaps；⑤素材库纯文字闪拍改为文字卡片展示（显示内容摘要+地点+日期）；⑥侧边栏增加"日志分类"入口(/classified)；⑦feed空状态"探索发现"按钮从/explore改为/discover修复循环重定向；⑧种子数据9个LOG帖子全部改为SNAPSHOT，游记sourceLogIds改为sourceSnapIds，旧LOG数据已删除；⑨设计文档更新至V1.2；⑩新建Android端改动清单文档
