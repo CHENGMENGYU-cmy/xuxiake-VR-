@@ -44,7 +44,6 @@ interface SnapState {
 
   // Actions
   fetchSnaps: () => Promise<void>;
-  fetchLogs: () => Promise<void>;
   fetchDiaries: (userId?: string) => Promise<void>;
   fetchTravelogues: (userId?: string) => Promise<void>;
   generateDiary: (snapId: string, style?: string, includeMemory?: boolean) => Promise<void>;
