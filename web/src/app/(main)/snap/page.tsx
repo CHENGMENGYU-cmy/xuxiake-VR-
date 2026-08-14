@@ -272,7 +272,7 @@ function SnapContent() {
             <h1 className="text-xl font-bold">素材库</h1>
           </div>
           <p className="mt-1.5 text-sm text-muted-foreground">
-            你的闪拍和日志素材。点击卡片可由 AI 一键生成日记。
+            你的闪拍素材（照片、视频、文字记录）。点击卡片可由 AI 一键生成日记。
           </p>
         </div>
         <div className="flex items-center gap-2">
