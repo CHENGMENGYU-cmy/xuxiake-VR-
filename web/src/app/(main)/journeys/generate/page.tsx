@@ -119,15 +119,15 @@ function GenerateContent() {
     return () => clearInterval(pollRef.current);
   }, [jobId]);
 
-  const selectedLogIds = items.filter(i => selected.has(i.id) && i.type === 'LOG').map(i => i.id);
+  const selectedSnapIds = items.filter(i => selected.has(i.id) && i.type === 'SNAPSHOT').map(i => i.id);
   const selectedDiaryIds = items.filter(i => selected.has(i.id) && i.type === 'DIARY').map(i => i.id);
 
   const handleGenerate = async (overrideTone?: string, overrideLength?: string, overridePrompt?: string) => {
-    if (selected.size === 0) { toast.error('请至少选择一条日志或日记作为素材'); return; }
+    if (selected.size === 0) { toast.error('请至少选择一条闪拍或日记作为素材'); return; }
     setGenerating(true); setResult(null);
     try {
       const { jobId: newJobId } = await generateTravelogue({
-        logIds: selectedLogIds,
+        snapIds: selectedSnapIds,
         diaryIds: selectedDiaryIds,
         prompt: overridePrompt !== undefined ? overridePrompt : prompt,
         style: '游记',
