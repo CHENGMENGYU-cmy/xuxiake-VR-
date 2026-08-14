@@ -38,8 +38,7 @@ function SnapContent() {
 
   useEffect(() => {
     fetchSnaps();
-    fetchLogs();
-  }, [fetchSnaps, fetchLogs]);
+  }, [fetchSnaps]);
 
   useEffect(() => {
     apiClient.get('/posts/classified/dimensions').then((res) => {
