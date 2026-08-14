@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Camera, MapPin, Clock, PenLine, ChevronLeft, ChevronRight, ImageIcon, FileText, ListFilter, FolderOpen, Check, X, Sparkles } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
