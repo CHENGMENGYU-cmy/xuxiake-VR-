@@ -20,7 +20,7 @@ interface SourceItem {
   createdAt: string;
   mediaItems?: { thumbnailUrl?: string | null; url?: string }[];
   title?: string | null;
-  type: 'LOG' | 'DIARY';
+  type: 'SNAPSHOT' | 'DIARY';
 }
 
 const TONES = [
