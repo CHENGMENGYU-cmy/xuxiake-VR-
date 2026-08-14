@@ -18,7 +18,6 @@ import {
   BookOpen,
   Upload,
   Sparkles,
-  Layers,
   Map,
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
