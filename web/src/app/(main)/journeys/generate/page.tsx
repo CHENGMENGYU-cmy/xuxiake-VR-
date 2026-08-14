@@ -194,7 +194,7 @@ function GenerateContent() {
               <div>
                 <h2 className="font-semibold text-sm">选择素材</h2>
                 <p className="text-xs text-muted-foreground">
-                  日志 <Badge variant="secondary" className="text-[10px]">{logCount}</Badge> · 日记 <Badge variant="secondary" className="text-[10px]">{diaryCount}</Badge>
+                  闪拍 <Badge variant="secondary" className="text-[10px]">{snapCount}</Badge> · 日记 <Badge variant="secondary" className="text-[10px]">{diaryCount}</Badge>
                 </p>
               </div>
             </div>
