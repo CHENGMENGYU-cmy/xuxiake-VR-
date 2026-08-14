@@ -180,7 +180,8 @@ export function Sidebar() {
                   {createItems.map((item) => {
                     const Icon = item.icon;
                     const isActive =
-                      (item.href === '/upload' && (pathname === '/upload' || pathname.startsWith('/upload/'))) ||
+                      (item.href === '/upload' && pathname === '/upload') ||
+                      (item.href === '/upload/journey-creator' && pathname.startsWith('/upload/journey-creator')) ||
                       (item.href === '/journeys/generate' && pathname.startsWith('/journeys/generate'));
                     return (
                       <Link key={item.href} href={item.href}>
