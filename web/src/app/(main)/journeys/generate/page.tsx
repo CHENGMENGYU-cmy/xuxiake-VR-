@@ -81,7 +81,7 @@ function GenerateContent() {
           id: d.id, content: d.content, location: d.location, locationName: d.locationName,
           createdAt: d.createdAt, mediaItems: d.mediaItems, title: d.title, type: 'DIARY',
         }));
-        const all = [...logItems, ...diaryItems]
+        const all = [...snapItems, ...diaryItems]
           .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
         setItems(all);
 
