@@ -157,7 +157,7 @@ export class AiService {
       const content = this.assembleTravelogueContent(structured, days);
 
       const vrMetadata = JSON.stringify({
-        sourceLogIds: logs.map(l => l.id),
+        sourceSnapIds: snaps.map(s => s.id),
         sourceDiaryIds: diaries.map(d => d.id),
         prompt: input.prompt || '',
         style: input.style || '游记',
@@ -169,7 +169,7 @@ export class AiService {
       const post = this.postRepo.create({
         id: uuidv4(), authorId: userId,
         postType: 'JOURNEY', contentLevel: 'TRAVELOGUE',
-        parentPostId: diaries[0]?.id || logs[0]?.id || null,
+        parentPostId: diaries[0]?.id || snaps[0]?.id || null,
         title, content,
         locationName: structured.destination || loc || null,
         vrMetadata,
