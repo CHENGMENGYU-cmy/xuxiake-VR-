@@ -266,7 +266,7 @@ function GenerateContent() {
               </div>
 
               <div className="flex items-center justify-between">
-                <Badge variant="secondary">已选 {selected.size} 条（日志{selectedLogIds.length} · 日记{selectedDiaryIds.length}）</Badge>
+                <Badge variant="secondary">已选 {selected.size} 条（闪拍{selectedSnapIds.length} · 日记{selectedDiaryIds.length}）</Badge>
               </div>
             </>
           )}
