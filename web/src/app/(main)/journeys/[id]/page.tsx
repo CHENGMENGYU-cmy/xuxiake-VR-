@@ -299,8 +299,8 @@ function JourneyDetailContent() {
               <p className="font-medium mb-1">AI 辅助生成</p>
               {post.vrMetadata && typeof post.vrMetadata === 'object' && (
                 <>
-                  {Array.isArray((post.vrMetadata as Record<string, unknown>).sourceLogIds) && (
-                    <p>基于 {((post.vrMetadata as Record<string, unknown>).sourceLogIds as unknown[]).length} 篇日志</p>
+                  {Array.isArray((post.vrMetadata as Record<string, unknown>).sourceSnapIds) && (
+                    <p>基于 {((post.vrMetadata as Record<string, unknown>).sourceSnapIds as unknown[]).length} 条闪拍素材</p>
                   )}
                   {Array.isArray((post.vrMetadata as Record<string, unknown>).sourceDiaryIds) && (
                     <p>和 {((post.vrMetadata as Record<string, unknown>).sourceDiaryIds as unknown[]).length} 篇日记生成</p>
