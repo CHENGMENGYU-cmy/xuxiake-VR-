@@ -22,7 +22,8 @@ export interface GenerationJob {
 }
 
 export interface TravelogueGenerateInput {
-  logIds: string[];
+  snapIds: string[];
+  logIds?: string[];
   diaryIds: string[];
   prompt?: string;
   style?: string;
