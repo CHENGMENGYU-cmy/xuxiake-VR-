@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>徐霞客社区功能逻辑框架图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    background: linear-gradient(170deg, #eff6f1 0%, #f6faf7 60%, #fbfdfc 100%);
+    padding: 24px 40px 28px;
+    min-width: 1080px;
+  }
+  .header { text-align: center; margin-bottom: 14px; }
+  .header h1 { font-size: 25px; color: #0b3d2e; letter-spacing: 2px; }
+  .header .tag {
+    display: inline-block; margin-top: 8px;
+    font-size: 12.5px; color: #2f6b52; letter-spacing: 3px;
+    background: rgba(255,255,255,0.75); border: 1px solid #b8e0cd;
+    padding: 5px 20px; border-radius: 30px;
+  }
+
+  /* 顶部核心闭环条 */
+  .flow {
+    display: flex; justify-content: center; align-items: center;
+    gap: 6px; flex-wrap: wrap; margin: 10px 0 4px;
+  }
+  .flow .step {
+    padding: 8px 16px; border-radius: 22px;
+    font-size: 13px; font-weight: 700; letter-spacing: 1px;
+    color: #fff; background: linear-gradient(135deg, #059669, #10b981);
+    box-shadow: 0 3px 10px rgba(6,95,70,0.25);
+    white-space: nowrap;
+  }
+  .flow .step.small { background: #0d9488; }
+  .flow .arrow { color: #059669; font-size: 18px; font-weight: 700; }
+
+  #lines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+
+  .tree { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
+  .wrap { display: flex; flex-direction: column; align-items: center; }
+  .row { display: flex; justify-content: center; align-items: flex-start; gap: 9px; padding-top: 20px; flex-wrap: wrap; }
+  .col { display: flex; flex-direction: column; align-items: center; gap: 14px; padding-top: 22px; }
+
+  .node {
+    position: relative;
+    white-space: nowrap;
+    padding: 7px 13px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    border: 1.5px solid #bce4d2;
+    background: #fff;
+    color: #14532d;
+  }
+  .node b { font-weight: 700; }
+  .node i { font-style: normal; color: #5b7a6a; font-size: 11.5px; margin-left: 2px; }
+  .lvl0 {
+    font-size: 18px; font-weight: 700; color: #fff; letter-spacing: 1px;
+    background: linear-gradient(135deg, #065f46, #10b981);
+    border: none; padding: 13px 26px; border-radius: 24px;
+    box-shadow: 0 6px 18px rgba(6,95,70,0.35);
+  }
+  .lvl1 { font-size: 14px; font-weight: 700; color: #fff; background: #059669; border: none; padding-right: 22px; }
+  .lvl2 { font-size: 12.5px; background: #ecfdf5; border-color: #a7f3d0; color: #14532d; }
+
+  /* 状态徽章 */
+  .badge {
+    position: absolute; top: -8px; right: -8px;
+    font-size: 10px; padding: 2px 7px; border-radius: 10px;
+    color: #fff; font-weight: 700; letter-spacing: 0; white-space: nowrap;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  }
+  .badge.done    { background: #10b981; }
+  .badge.partial { background: #f59e0b; }
+  .badge.todo    { background: #94a3b8; }
+
+  .foot {
+    margin-top: 24px; position: relative; z-index: 1;
+    background: rgba(255,255,255,0.88); border: 1px solid #bce4d2; border-radius: 10px;
+    padding: 10px 18px; font-size: 13.5px; color: #1c4a38; text-align: center; letter-spacing: 1px;
+  }
+  .foot b { color: #065f46; }
+  .legend { margin-top: 6px; font-size: 12px; color: #4b6b5c; }
+  .legend .lg { display: inline-block; padding: 1px 9px; border-radius: 9px; color: #fff; font-size: 11px; margin: 0 3px; }
+  .lg.done    { background: #10b981; }
+  .lg.partial { background: #f59e0b; }
+  .lg.todo    { background: #94a3b8; }
+</style>
+</head>
+<body>
+  <svg id="lines"></svg>
+
+  <div class="header">
+    <h1>徐霞客社区功能逻辑框架图</h1>
+    <div class="tag">记录 → 创作 → 社交：内容闭环与功能逻辑</div>
+  </div>
+
+  <!-- 核心功能闭环 -->
+  <div class="flow">
+    <div class="step small">闪拍采集</div><span class="arrow">→</span>
+    <div class="step">素材库 SNAPSHOT</div><span class="arrow">→</span>
+    <div class="step">日记 DIARY</div><span class="arrow">→</span>
+    <div class="step">游记 TRAVELOGUE</div><span class="arrow">→</span>
+    <div class="step small">社区发布</div><span class="arrow">→</span>
+    <div class="step small">社交互动</div>
+  </div>
+
+  <div class="tree" id="tree"></div>
+
+  <div class="foot">
+    说明：系统以 <b>"闪拍采集 → 三级内容链条 → 社区发布 → 社交互动"</b> 为功能主线，AI 生成贯穿其中、治理与权限横向保障，实现完整内容闭环。
+    <div class="legend">
+      状态图例：<span class="lg done">✅ 已完成</span><span class="lg partial">⚠️ 部分完成</span><span class="lg todo">📋 规划中</span>
+    </div>
+  </div>
+
+<script>
+const TREE = {
+  name: "徐霞客社区功能逻辑框架",
+  children: [
+    { name: "① 采集与同步", status: "done", children: [
+      { name: "闪拍App / AI眼镜", content: "照片·视频·语音·文字" },
+      { name: "元数据", content: "GPS·时间·天气·行程分组" },
+      { name: "同步链路", content: "账号登录·幂等去重·媒体上传" },
+      { name: "同步产物", content: "SNAPSHOT 私密素材", status: "done" },
+    ]},
+    { name: "② 三级内容链条", status: "done", children: [
+      { name: "素材库 SNAPSHOT", content: "相册聚合·按天/地点/时间/行程·多选" },
+      { name: "日记 DIARY", content: "手写+AI写·草稿/私密/公开·日记广场", status: "done" },
+      { name: "游记 TRAVELOGUE", content: "章节式编辑器·信息卡·发布控制", status: "done" },
+      { name: "升级链路", content: "素材→日记→游记 (parent_post_id)", status: "done" },
+    ]},
+    { name: "③ AI 内容生成", status: "done", children: [
+      { name: "AI 日记", content: "5 种风格·批量生成·回忆反差" },
+      { name: "AI 游记", content: "DeepSeek结构化·按天分章·自动配图", status: "done" },
+      { name: "生成原则", content: "基于真实素材不虚构·失败回退模板", status: "done" },
+    ]},
+    { name: "④ 社区展示", status: "done", children: [
+      { name: "Feed 首页", content: "发现/关注双模式·类型筛选" },
+      { name: "发现 / 搜索", content: "日记广场·话题·找搭子·全局搜索" },
+      { name: "AR 媒体", content: "上传VR180/360·沉浸浏览·类型筛选", status: "partial" },
+    ]},
+    { name: "⑤ 社交互动", status: "partial", children: [
+      { name: "社群", content: "动态流·公告·角色·挑战·空间页", status: "partial" },
+      { name: "消息", content: "WebSocket实时·富媒体卡片·陌生人请求·反应·语音/位置", status: "partial" },
+      { name: "推荐", content: "搭子匹配·推荐社群·反馈采集", status: "partial" },
+      { name: "通知", content: "SSE 实时推送" },
+    ]},
+    { name: "⑥ 治理与保障", status: "done", children: [
+      { name: "内容审核", content: "敏感词·隐私检测·审核队列·举报·下架" },
+      { name: "软删除", content: "deleted_at 逻辑删除·可恢复审计", status: "done" },
+      { name: "权限体系", content: "USER / MODERATOR / ADMIN" },
+      { name: "管理中心", content: "仪表板·审核·举报·用户管理", status: "done" },
+    ]},
+    { name: "⑦ 基础设施", status: "done", children: [
+      { name: "前端", content: "Next.js 16 · Tailwind · Zustand" },
+      { name: "后端", content: "NestJS 11 · WebSocket/SSE · JWT", status: "done" },
+      { name: "数据", content: "MySQL 8 · 26迁移+4种子" },
+      { name: "部署", content: "Docker 一键·Nginx·阿里云线上" },
+    ]},
+  ],
+};
+
+function nodeEl(node, level) {
+  const d = document.createElement('div');
+  d.className = 'node lvl' + Math.min(level, 2);
+  if (node.content) {
+    const b = document.createElement('b');
+    b.textContent = node.name;
+    const i = document.createElement('i');
+    i.textContent = ' · ' + node.content;
+    d.appendChild(b);
+    d.appendChild(i);
+  } else {
+    d.textContent = node.name;
+  }
+  if (node.status) {
+    const bd = document.createElement('span');
+    bd.className = 'badge ' + node.status;
+    bd.textContent = node.status === 'done' ? '已完成' : node.status === 'partial' ? '部分' : '规划中';
+    d.appendChild(bd);
+  }
+  return d;
+}
+function render(node, parent, level) {
+  const wrap = document.createElement('div');
+  wrap.className = 'wrap';
+  wrap.appendChild(nodeEl(node, level));
+  if (node.children && node.children.length) {
+    const box = document.createElement('div');
+    box.className = level % 2 === 0 ? 'col' : 'row';
+    node.children.forEach((c) => render(c, box, level + 1));
+    wrap.appendChild(box);
+  }
+  parent.appendChild(wrap);
+}
+render(TREE, document.getElementById('tree'), 0);
+
+function drawLines() {
+  const svg = document.getElementById('lines');
+  const ns = 'http://www.w3.org/2000/svg';
+  svg.innerHTML = '';
+  const bodyRect = document.body.getBoundingClientRect();
+  svg.setAttribute('width', document.body.scrollWidth);
+  svg.setAttribute('height', document.body.scrollHeight);
+
+  document.querySelectorAll('.wrap').forEach((w) => {
+    const box = w.querySelector(':scope > .row, :scope > .col');
+    if (!box) return;
+    const p = w.querySelector(':scope > .node');
+    const pRect = p.getBoundingClientRect();
+    const px = pRect.left + pRect.width / 2 - bodyRect.left;
+    const py = pRect.bottom - bodyRect.top;
+    box.querySelectorAll(':scope > .wrap > .node').forEach((cn) => {
+      const cRect = cn.getBoundingClientRect();
+      const cx = cRect.left + cRect.width / 2 - bodyRect.left;
+      const cy = cRect.top - bodyRect.top;
+      const midY = (py + cy) / 2;
+      const path = document.createElementNS(ns, 'path');
+      path.setAttribute('d', 'M ' + px + ' ' + py + ' L ' + px + ' ' + midY + ' L ' + cx + ' ' + midY + ' L ' + cx + ' ' + cy);
+      path.setAttribute('stroke', '#34d399');
+      path.setAttribute('stroke-width', '1.6');
+      path.setAttribute('fill', 'none');
+      svg.appendChild(path);
+    });
+  });
+}
+window.addEventListener('load', function () { setTimeout(drawLines, 160); });
+</script>
+</body>
+</html>
