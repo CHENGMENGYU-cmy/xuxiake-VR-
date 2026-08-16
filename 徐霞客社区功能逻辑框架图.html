@@ -11,63 +11,51 @@
     padding: 32px 44px 36px;
   }
 
-  .page { max-width: 1160px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+  .page { max-width: 1220px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
 
-  h1 {
-    font-size: 27px; color: #1e3a5f; font-weight: 800;
-    letter-spacing: 3px; margin-bottom: 26px; text-align: center;
-  }
+  h1 { font-size: 27px; color: #1e3a5f; font-weight: 800; letter-spacing: 3px; margin-bottom: 24px; text-align: center; }
 
-  /* 箭头 */
-  .down { font-size: 30px; color: #2563eb; font-weight: 700; line-height: 1; padding: 12px 0; }
+  .down { font-size: 28px; color: #2563eb; font-weight: 700; line-height: 1; padding: 11px 0; }
   .uprow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; width: 100%; padding: 10px 0 4px; }
   .uprow .up { text-align: center; font-size: 26px; color: #2563eb; font-weight: 700; line-height: 1; }
 
-  /* 方框通用 */
-  .frame {
-    background: #fff; border: 2px solid #1e3a5f; border-radius: 12px;
-    padding: 16px 34px; text-align: center;
-  }
-  .frame .t { font-size: 17px; font-weight: 800; color: #1e3a5f; letter-spacing: 1px; margin-bottom: 6px; }
-  .frame .s { font-size: 13px; color: #475569; line-height: 1.9; }
+  .frame { background: #fff; border: 2px solid #1e3a5f; border-radius: 12px; padding: 16px 34px; text-align: center; }
+  .frame .t { font-size: 17px; font-weight: 800; color: #1e3a5f; letter-spacing: 1px; }
+  .frame .s { font-size: 13px; color: #475569; line-height: 1.9; margin-top: 6px; }
 
-  /* 第1层：用户 */
   .user { border-radius: 40px; padding: 11px 76px; font-size: 17px; font-weight: 800; color: #1e3a5f; }
 
-  /* 第2层：交互方式 */
-  .interact { max-width: 640px; }
-
-  /* 第3层：核心系统 */
-  .core { width: 100%; border: 2px solid #1e3a5f; border-radius: 14px; background: #fff; overflow: hidden; }
-  .core .band {
-    background: #1e3a5f; color: #fff; text-align: center;
-    padding: 13px; font-size: 18px; font-weight: 800; letter-spacing: 3px;
-  }
-  .core .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 14px; }
-  .core .box {
-    background: #f8fafc; border: 1px solid #dbe2ea; border-radius: 10px;
-    padding: 16px 13px; text-align: center;
-  }
-  .core .box .bt { font-size: 15px; font-weight: 800; color: #2563eb; margin-bottom: 8px; }
-  .core .box .bd { font-size: 12px; color: #475569; line-height: 1.8; }
-  .core .box .st { font-size: 11px; font-weight: 700; margin-top: 9px; }
+  /* ===== 第2层：内容主线流转 ===== */
+  .mainline { width: 100%; border: 2px solid #1e3a5f; border-radius: 14px; background: #fff; overflow: hidden; }
+  .mainline .band { background: #1e3a5f; color: #fff; text-align: center; padding: 11px; font-size: 16px; font-weight: 800; letter-spacing: 3px; }
+  .mainline .flow { display: flex; align-items: center; justify-content: center; padding: 15px 18px; flex-wrap: nowrap; }
+  .fstep { min-width: 132px; text-align: center; background: #f8fafc; border: 1px solid #dbe2ea; border-radius: 10px; padding: 10px 8px 9px; }
+  .fstep .nm { font-size: 14px; font-weight: 800; color: #1e3a5f; }
+  .fstep .en { font-size: 9.5px; color: #94a3b8; letter-spacing: 1.5px; margin-top: 1px; }
+  .fstep .meta { margin-top: 7px; font-size: 10px; color: #475569; display: flex; justify-content: center; gap: 5px; align-items: center; }
+  .fstep .meta .role { font-weight: 700; color: #2563eb; }
+  .fstep .meta .st { font-weight: 700; }
   .st.ok      { color: #16a34a; }
   .st.partial { color: #d97706; }
+  .farr { color: #2563eb; font-weight: 700; font-size: 20px; padding: 0 5px; }
 
-  /* 第4层：支撑层 */
+  /* ===== 第3层：核心功能模块 ===== */
+  .core { width: 100%; border: 2px solid #1e3a5f; border-radius: 14px; background: #fff; overflow: hidden; }
+  .core .band { background: #1e3a5f; color: #fff; text-align: center; padding: 13px; font-size: 18px; font-weight: 800; letter-spacing: 3px; }
+  .core .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 14px; }
+  .core .box { background: #f8fafc; border: 1px solid #dbe2ea; border-radius: 10px; padding: 16px 13px; text-align: center; }
+  .core .box .bt { font-size: 15px; font-weight: 800; color: #2563eb; margin-bottom: 8px; }
+  .core .box .bd { font-size: 12px; color: #475569; line-height: 1.8; }
+  .core .box .roles { margin-top: 9px; font-size: 10.5px; font-weight: 700; color: #1d4ed8; }
+  .core .box .roles .guard { color: #475569; }
+
+  /* ===== 第4层：支撑层 ===== */
   .support { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; width: 100%; margin-top: 2px; }
-  .support .box {
-    background: #fff; border: 2px solid #1e3a5f; border-radius: 12px;
-    padding: 15px 13px; text-align: center;
-  }
+  .support .box { background: #fff; border: 2px solid #1e3a5f; border-radius: 12px; padding: 15px 13px; text-align: center; }
   .support .box .bt { font-size: 14px; font-weight: 800; color: #1e3a5f; margin-bottom: 7px; letter-spacing: 1px; }
   .support .box .bd { font-size: 12px; color: #475569; line-height: 1.8; }
 
-  /* 系统说明 */
-  .note {
-    align-self: flex-end; margin-top: 22px; max-width: 860px;
-    font-size: 12.5px; color: #64748b; line-height: 1.9; text-align: right;
-  }
+  .note { align-self: flex-end; margin-top: 22px; max-width: 900px; font-size: 12.5px; color: #64748b; line-height: 1.9; text-align: right; }
   .note b { color: #1e3a5f; }
 </style>
 </head>
@@ -80,36 +68,49 @@
     <div class="frame user">旅行者 · 创作者（徐霞客）</div>
     <div class="down">↓</div>
 
-    <!-- 第2层：交互方式 -->
-    <div class="frame interact">
-      <div class="t">交互方式</div>
-      <div class="s">闪拍App / AI 眼镜采集　·　语音记录（语音感悟）　·　Web 端浏览操作</div>
+    <!-- 第2层：内容主线流转（交互方式 → 用户主线） -->
+    <div class="mainline">
+      <div class="band">内容主线流转 · 用户使用流程</div>
+      <div class="flow">
+        <div class="fstep"><div class="nm">① 闪拍采集</div><div class="en">CAPTURE</div><div class="meta"><span class="role">USER</span><span class="st ok">✓</span></div></div>
+        <div class="farr">➜</div>
+        <div class="fstep"><div class="nm">② 素材库</div><div class="en">SNAPSHOT</div><div class="meta"><span class="role">USER</span><span class="st ok">✓</span></div></div>
+        <div class="farr">➜</div>
+        <div class="fstep"><div class="nm">③ 日记</div><div class="en">DIARY</div><div class="meta"><span class="role">USER</span><span class="st ok">✓</span></div></div>
+        <div class="farr">➜</div>
+        <div class="fstep"><div class="nm">④ 游记</div><div class="en">TRAVELOGUE</div><div class="meta"><span class="role">USER</span><span class="st ok">✓</span></div></div>
+        <div class="farr">➜</div>
+        <div class="fstep"><div class="nm">⑤ 社区发布</div><div class="en">PUBLISH</div><div class="meta"><span class="role">U/M/A</span><span class="st ok">✓</span></div></div>
+        <div class="farr">➜</div>
+        <div class="fstep"><div class="nm">⑥ 社交互动</div><div class="en">SOCIAL</div><div class="meta"><span class="role">USER</span><span class="st partial">△</span></div></div>
+      </div>
     </div>
+
     <div class="down">↓</div>
 
-    <!-- 第3层：核心系统 -->
+    <!-- 第3层：徐霞客社区系统（功能模块 + 角色分类） -->
     <div class="core">
       <div class="band">徐霞客社区系统</div>
       <div class="grid">
         <div class="box">
           <div class="bt">内容生产</div>
           <div class="bd">闪拍 → 素材 → 日记 → 游记<br>AI 生成（日记 5 风格 / 游记结构化）</div>
-          <div class="st ok">✓ 完成</div>
+          <div class="roles">角色：USER</div>
         </div>
         <div class="box">
           <div class="bt">社区内容</div>
           <div class="bd">Feed 首页 · 发现 · 搜索 · 话题<br>AR 媒体浏览（第一视角）</div>
-          <div class="st ok">✓ 完成</div>
+          <div class="roles">角色：USER</div>
         </div>
         <div class="box">
           <div class="bt">社交互动</div>
           <div class="bd">社群 · 消息 · 推荐搭子 · 通知<br>实时推送（WebSocket / SSE）</div>
-          <div class="st partial">△ 部分</div>
+          <div class="roles">角色：USER　<span class="st partial">△ 部分</span></div>
         </div>
         <div class="box">
           <div class="bt">治理管理</div>
-          <div class="bd">内容审核 · 举报 · 软删除<br>权限体系（USER / MOD / ADMIN）</div>
-          <div class="st ok">✓ 完成</div>
+          <div class="bd">内容审核 · 举报 · 软删除<br>权限体系（三角色）</div>
+          <div class="roles">角色：<span class="guard">MODERATOR / ADMIN</span></div>
         </div>
       </div>
     </div>
@@ -119,27 +120,14 @@
 
     <!-- 第4层：支撑层 -->
     <div class="support">
-      <div class="box">
-        <div class="bt">硬件与终端</div>
-        <div class="bd">AI 眼镜 · 闪拍App<br>手机端采集同步</div>
-      </div>
-      <div class="box">
-        <div class="bt">后端服务</div>
-        <div class="bd">NestJS 11 业务模块<br>REST / WebSocket / SSE</div>
-      </div>
-      <div class="box">
-        <div class="bt">本地 AI 能力</div>
-        <div class="bd">AI 日记 / AI 游记生成<br>内容生成引擎</div>
-      </div>
-      <div class="box">
-        <div class="bt">云端服务平台</div>
-        <div class="bd">MySQL 8 · 文件存储<br>Docker 部署 · 线上运行</div>
-      </div>
+      <div class="box"><div class="bt">硬件与终端</div><div class="bd">AI 眼镜 · 闪拍App<br>手机端采集同步</div></div>
+      <div class="box"><div class="bt">后端服务</div><div class="bd">NestJS 11 业务模块<br>REST / WebSocket / SSE</div></div>
+      <div class="box"><div class="bt">本地 AI 能力</div><div class="bd">AI 日记 / AI 游记生成<br>内容生成引擎</div></div>
+      <div class="box"><div class="bt">云端服务平台</div><div class="bd">MySQL 8 · 文件存储<br>Docker 部署 · 线上运行</div></div>
     </div>
 
-    <!-- 系统说明 -->
     <div class="note">
-      系统说明：徐霞客社区以 <b>"闪拍采集 → 素材 → 日记 → 游记 → 社区互动"</b> 为内容主线，AI 生成贯穿内容环节，硬件采集与云端服务共同支撑，实现 <b>"记录 → 创作 → 社交"</b> 完整闭环。
+      系统说明：徐霞客社区以 <b>"闪拍采集 → 素材 → 日记 → 游记 → 社区发布 → 社交互动"</b> 为主线流转，角色分类贯穿其中（USER 创作发布、MODERATOR 审核、ADMIN 治理），硬件采集与云端服务共同支撑，实现 <b>"记录 → 创作 → 社交"</b> 完整闭环。
     </div>
 
   </div>
