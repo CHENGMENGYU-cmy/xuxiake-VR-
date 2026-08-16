@@ -7,181 +7,176 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
-    background: linear-gradient(170deg, #eff6f1 0%, #f6faf7 60%, #fbfdfc 100%);
-    padding: 24px 40px 28px;
-    min-width: 1000px;
+    background: linear-gradient(180deg, #f6faf7 0%, #edf5f0 100%);
+    padding: 28px 40px 30px;
+    min-width: 1100px;
   }
-  .header { text-align: center; margin-bottom: 16px; }
-  .header h1 { font-size: 25px; color: #0b3d2e; letter-spacing: 2px; }
+
+  .header { text-align: center; margin-bottom: 22px; }
+  .header h1 { font-size: 25px; color: #0b3d2e; letter-spacing: 2px; font-weight: 800; }
   .header .tag {
     display: inline-block; margin-top: 8px;
     font-size: 12.5px; color: #2f6b52; letter-spacing: 3px;
-    background: rgba(255,255,255,0.75); border: 1px solid #b8e0cd;
+    background: #fff; border: 1px solid #cfe6da;
     padding: 5px 20px; border-radius: 30px;
   }
 
-  #lines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
-
-  .tree { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
-  .wrap { display: flex; flex-direction: column; align-items: center; }
-  .row { display: flex; justify-content: center; align-items: flex-start; gap: 9px; padding-top: 20px; flex-wrap: wrap; }
-  .col { display: flex; flex-direction: column; align-items: center; gap: 14px; padding-top: 22px; }
-
-  .node {
-    white-space: nowrap;
-    padding: 7px 13px;
-    border-radius: 10px;
-    font-size: 12.5px;
-    border: 1.5px solid #bce4d2;
-    background: #fff;
-    color: #14532d;
+  /* 流程主线 */
+  .chain { display: flex; align-items: stretch; justify-content: center; }
+  .arrow {
+    display: flex; align-items: center; padding: 0 4px;
+    color: #10b981; font-size: 21px; font-weight: 700;
   }
-  .node b { font-weight: 700; }
-  .node i { font-style: normal; color: #5b7a6a; font-size: 11.5px; margin-left: 2px; }
-  .lvl0 {
-    font-size: 18px; font-weight: 700; color: #fff; letter-spacing: 1px;
-    background: linear-gradient(135deg, #065f46, #10b981);
-    border: none; padding: 13px 26px; border-radius: 24px;
-    box-shadow: 0 6px 18px rgba(6,95,70,0.35);
+
+  .stage {
+    width: 176px;
+    background: #fff; border: 1px solid #e0eee6; border-radius: 12px;
+    padding: 13px 15px 11px;
+    display: flex; flex-direction: column; gap: 7px;
+    box-shadow: 0 3px 10px rgba(6,95,70,0.07);
+    position: relative;
+    border-left: 4px solid #10b981;
   }
-  .lvl1 { font-size: 14px; font-weight: 700; color: #fff; background: #059669; border: none; }
-  .lvl2 { font-size: 12.5px; background: #ecfdf5; border-color: #a7f3d0; color: #14532d; }
+  .stage h3 { font-size: 14.5px; color: #0b3d2e; font-weight: 700; letter-spacing: 0.5px; }
+  .stage h3 .no { color: #10b981; margin-right: 3px; }
+  .stage h3 .en {
+    font-size: 10px; color: #8aa898; font-weight: 600;
+    letter-spacing: 1.5px; margin-left: 4px;
+  }
+  .stage ul { list-style: none; flex: 1; }
+  .stage li { font-size: 11.5px; color: #4b6b5c; line-height: 1.7; padding-left: 13px; position: relative; }
+  .stage li::before { content: '·'; color: #34d399; font-weight: 700; position: absolute; left: 1px; }
+  .stage .meta {
+    border-top: 1px dashed #dcefe5; padding-top: 6px;
+    font-size: 10.5px; color: #7a9888;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .stage .meta .role { color: #0d9488; font-weight: 600; }
+  .stage .meta .st { font-weight: 600; }
+  .st.done { color: #059669; }
+  .st.partial { color: #d97706; }
+  .st.todo { color: #6b7280; }
+
+  /* 治理 / AI 注释条 */
+  .subnote {
+    margin: 16px auto 0; max-width: 1060px;
+    padding: 11px 22px; border-radius: 12px;
+    font-size: 12.5px; color: #14532d; text-align: center; line-height: 1.7;
+  }
+  .subnote b { color: #065f46; }
+  .subnote .muted { color: #8aa898; }
+  .gov { background: #f0fbf5; border: 1px solid #d0eade; }
+  .ai  { background: #f4faf7; border: 1px solid #d8ece1; }
 
   .foot {
-    margin-top: 24px; position: relative; z-index: 1;
-    background: rgba(255,255,255,0.88); border: 1px solid #bce4d2; border-radius: 10px;
-    padding: 10px 18px; font-size: 13.5px; color: #1c4a38; text-align: center; letter-spacing: 1px;
+    margin-top: 20px; text-align: center;
+    font-size: 12.5px; color: #3f5c50; letter-spacing: 0.5px;
   }
   .foot b { color: #065f46; }
-  .foot .lg { font-size: 12px; color: #4b6b5c; margin-top: 4px; letter-spacing: 0; }
+  .foot .lg { margin-top: 5px; font-size: 11.5px; color: #7a9888; }
 </style>
 </head>
 <body>
-  <svg id="lines"></svg>
 
   <div class="header">
     <h1>徐霞客社区功能逻辑框架图</h1>
     <div class="tag">内容链条为主线 · 角色与完成度标注</div>
   </div>
 
-  <div class="tree" id="tree"></div>
+  <!-- 内容链条主线 -->
+  <div class="chain">
 
-  <div class="foot">
-    主线：<b>"闪拍采集 → 素材→日记→游记 → 社区发布 → 社交互动"</b>，AI 生成贯穿内容环节，治理与保障横切保护全链路。
-    <div class="lg">状态：✅ 已完成　⚠️ 部分完成　|　角色：USER 普通用户 / MODERATOR 审核员 / ADMIN 管理员</div>
+    <div class="stage">
+      <h3><span class="no">①</span>闪拍采集<span class="en">CAPTURE</span></h3>
+      <ul>
+        <li>拍照 · 录像 · 语音 · 文字</li>
+        <li>GPS · 时间 · 天气 · 行程</li>
+        <li>闪拍App / AI 眼镜采集</li>
+      </ul>
+      <div class="meta"><span class="role">⚙ USER</span><span class="st done">✅ 完成</span></div>
+    </div>
+
+    <div class="arrow">➜</div>
+
+    <div class="stage">
+      <h3><span class="no">②</span>素材库<span class="en">SNAPSHOT</span></h3>
+      <ul>
+        <li>相册聚合：按天/地点/时间/行程</li>
+        <li>多选 · 全局上传弹窗</li>
+        <li>App 幂等同步（默认私密）</li>
+      </ul>
+      <div class="meta"><span class="role">⚙ USER</span><span class="st done">✅ 完成</span></div>
+    </div>
+
+    <div class="arrow">➜</div>
+
+    <div class="stage">
+      <h3><span class="no">③</span>日记<span class="en">DIARY</span></h3>
+      <ul>
+        <li>手写 + AI写 统一入口</li>
+        <li>草稿 / 私密 / 公开 三态</li>
+        <li>日记广场 · 升华游记</li>
+      </ul>
+      <div class="meta"><span class="role">⚙ USER</span><span class="st done">✅ 完成</span></div>
+    </div>
+
+    <div class="arrow">➜</div>
+
+    <div class="stage">
+      <h3><span class="no">④</span>游记<span class="en">TRAVELOGUE</span></h3>
+      <ul>
+        <li>章节式图文编辑器</li>
+        <li>信息卡 · 贴士 · 结尾感悟</li>
+        <li>发布 / 撤回 · 地点精度控制</li>
+      </ul>
+      <div class="meta"><span class="role">⚙ USER</span><span class="st done">✅ 完成</span></div>
+    </div>
+
+    <div class="arrow">➜</div>
+
+    <div class="stage">
+      <h3><span class="no">⑤</span>社区发布<span class="en">PUBLISH</span></h3>
+      <ul>
+        <li>Feed 发现/关注 · 类型筛选</li>
+        <li>点赞 · 评论 · 分享</li>
+        <li>公开传播 · 审核把关</li>
+      </ul>
+      <div class="meta"><span class="role">⚙ USER · MOD · ADMIN</span><span class="st done">✅ 完成</span></div>
+    </div>
+
+    <div class="arrow">➜</div>
+
+    <div class="stage">
+      <h3><span class="no">⑥</span>社交互动<span class="en">SOCIAL</span></h3>
+      <ul>
+        <li>社群：动态 / 公告 / 挑战</li>
+        <li>消息：实时 / 富媒体 / 语音</li>
+        <li>推荐搭子 · 通知（SSE）</li>
+      </ul>
+      <div class="meta"><span class="role">⚙ USER</span><span class="st partial">⚠️ 部分</span></div>
+    </div>
+
   </div>
 
-<script>
-const TREE = {
-  name: "徐霞客社区功能逻辑框架",
-  children: [
-    { name: "① 闪拍采集", status: "✅ 完成", children: [
-      { name: "拍照 · 录像 · 语音 · 文字" },
-      { name: "GPS · 时间 · 天气 · 行程" },
-      { name: "闪拍App / AI 眼镜采集" },
-    ]},
-    { name: "② 素材库 SNAPSHOT", status: "✅ 完成", children: [
-      { name: "相册聚合：按天/地点/时间/行程" },
-      { name: "多选 · 全局上传弹窗" },
-      { name: "App 幂等同步（默认私密）" },
-    ]},
-    { name: "③ 日记 DIARY", status: "✅ 完成", children: [
-      { name: "手写 + AI写 统一入口" },
-      { name: "草稿 / 私密 / 公开 三态" },
-      { name: "日记广场 · 升华游记" },
-    ]},
-    { name: "④ 游记 TRAVELOGUE", status: "✅ 完成", children: [
-      { name: "章节式图文编辑器" },
-      { name: "信息卡 · 贴士 · 结尾感悟" },
-      { name: "发布/撤回 · 地点精度控制" },
-    ]},
-    { name: "⑤ 社区发布", status: "✅ 完成", children: [
-      { name: "Feed 发现/关注 · 类型筛选" },
-      { name: "点赞 · 评论 · 分享" },
-      { name: "公开传播 · 审核把关（MOD/ADMIN）" },
-    ]},
-    { name: "⑥ 社交互动", status: "⚠️ 部分", children: [
-      { name: "社群：动态/公告/挑战/角色" },
-      { name: "消息：实时/富媒体/语音/位置" },
-      { name: "推荐搭子 · 通知（SSE）" },
-    ]},
-    { name: "🛡 治理与保障", status: "✅ 完成", children: [
-      { name: "内容审核：敏感词/队列/举报/下架" },
-      { name: "软删除：可恢复/可审计" },
-      { name: "权限体系：USER / MODERATOR / ADMIN" },
-    ]},
-    { name: "✨ AI 内容生成", status: "✅ 完成", children: [
-      { name: "AI日记：5风格/批量/回忆反差" },
-      { name: "AI游记：结构化章节/自动配图" },
-      { name: "真实素材不虚构 · 失败回退模板" },
-    ]},
-  ],
-};
+  <!-- 治理与保障：横切层 -->
+  <div class="subnote gov">
+    <b>🛡 治理与保障（横切保护全链路）</b>　|　内容审核（敏感词 / 审核队列 / 举报 / 下架）· 软删除（可恢复 / 可审计）· 权限体系
+    　<span class="muted">角色：</span>USER 举报 · MODERATOR 审核 · ADMIN 管理
+    　<span class="st done"><b>✅ 已完成</b></span>　<span class="muted">（运营看板 / 审计日志 📋 规划中）</span>
+  </div>
 
-function nodeEl(node, level) {
-  const d = document.createElement('div');
-  d.className = 'node lvl' + Math.min(level, 2);
-  if (node.content) {
-    const b = document.createElement('b');
-    b.textContent = node.name;
-    const i = document.createElement('i');
-    i.textContent = ' · ' + node.content;
-    d.appendChild(b);
-    d.appendChild(i);
-  } else {
-    d.textContent = node.name;
-  }
-  if (node.status) {
-    const i = document.createElement('i');
-    i.textContent = ' · ' + node.status;
-    d.appendChild(i);
-  }
-  return d;
-}
-function render(node, parent, level) {
-  const wrap = document.createElement('div');
-  wrap.className = 'wrap';
-  wrap.appendChild(nodeEl(node, level));
-  if (node.children && node.children.length) {
-    const box = document.createElement('div');
-    box.className = level % 2 === 0 ? 'col' : 'row';
-    node.children.forEach((c) => render(c, box, level + 1));
-    wrap.appendChild(box);
-  }
-  parent.appendChild(wrap);
-}
-render(TREE, document.getElementById('tree'), 0);
+  <!-- AI 生成：贯穿层 -->
+  <div class="subnote ai">
+    <b>✨ AI 内容生成（贯穿 ②③④）</b>　|　AI 日记（5 风格 / 批量 / 回忆反差）· AI 游记（DeepSeek 结构化 / 自动配图）
+    　<span class="muted">原则：</span>基于真实素材不虚构 · 失败回退模板
+    　<span class="muted">角色：</span>USER
+    　<span class="st done"><b>✅ 已完成</b></span>
+  </div>
 
-function drawLines() {
-  const svg = document.getElementById('lines');
-  const ns = 'http://www.w3.org/2000/svg';
-  svg.innerHTML = '';
-  const bodyRect = document.body.getBoundingClientRect();
-  svg.setAttribute('width', document.body.scrollWidth);
-  svg.setAttribute('height', document.body.scrollHeight);
+  <div class="foot">
+    主线：<b>"闪拍采集 → 素材→日记→游记 → 社区发布 → 社交互动"</b>
+    <div class="lg">状态：<span class="st done">✅ 已完成</span> · <span class="st partial">⚠️ 部分完成</span> · <span class="st todo">📋 规划中</span>　｜　角色：USER 普通用户 / MODERATOR 审核员 / ADMIN 管理员</div>
+  </div>
 
-  document.querySelectorAll('.wrap').forEach((w) => {
-    const box = w.querySelector(':scope > .row, :scope > .col');
-    if (!box) return;
-    const p = w.querySelector(':scope > .node');
-    const pRect = p.getBoundingClientRect();
-    const px = pRect.left + pRect.width / 2 - bodyRect.left;
-    const py = pRect.bottom - bodyRect.top;
-    box.querySelectorAll(':scope > .wrap > .node').forEach((cn) => {
-      const cRect = cn.getBoundingClientRect();
-      const cx = cRect.left + cRect.width / 2 - bodyRect.left;
-      const cy = cRect.top - bodyRect.top;
-      const midY = (py + cy) / 2;
-      const path = document.createElementNS(ns, 'path');
-      path.setAttribute('d', 'M ' + px + ' ' + py + ' L ' + px + ' ' + midY + ' L ' + cx + ' ' + midY + ' L ' + cx + ' ' + cy);
-      path.setAttribute('stroke', '#34d399');
-      path.setAttribute('stroke-width', '1.6');
-      path.setAttribute('fill', 'none');
-      svg.appendChild(path);
-    });
-  });
-}
-window.addEventListener('load', function () { setTimeout(drawLines, 160); });
-</script>
 </body>
 </html>
