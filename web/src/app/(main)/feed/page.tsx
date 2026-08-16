@@ -5,14 +5,15 @@ import { useRouter } from 'next/navigation';
 import { Home, FileText, Video, Compass, MessageSquare, Sparkles, Users } from 'lucide-react';
 import { FeedList } from '@/components/feed/feed-list';
 import { useAuthStore } from '@/stores/auth-store';
+import { cn } from '@/lib/utils';
 import type { PostType } from '@/types';
 
-type FilterTab = { id: string; label: string; icon: typeof FileText; postType?: PostType };
+type FilterTab = { id: string; label: string; icon: typeof FileText; postType?: PostType; excludeContentLevel?: string };
 
 const filterTabs: FilterTab[] = [
   { id: 'all', label: '全部', icon: Home },
   { id: 'VR_MEDIA', label: '第一视角', icon: Video, postType: 'VR_MEDIA' },
-  { id: 'NOTE', label: '随记', icon: FileText, postType: 'NOTE' },
+  { id: 'NOTE', label: '随记', icon: FileText, postType: 'NOTE', excludeContentLevel: 'DIARY' },
   { id: 'JOURNEY', label: '游记', icon: Compass, postType: 'JOURNEY' },
   { id: 'MOMENT', label: '瞬间', icon: MessageSquare, postType: 'MOMENT' },
 ];
