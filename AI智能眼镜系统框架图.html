@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>AI智能眼镜多模态生活与旅行助手系统框架图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1420px;
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    background: linear-gradient(150deg, #d6e2f2 0%, #e4ecf7 45%, #f2f6fb 100%);
+    padding: 26px 30px 30px;
+    position: relative;
+  }
+  .deco {
+    position: absolute; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.5), rgba(255,255,255,0.04));
+    pointer-events: none;
+  }
+  .d1 { width: 300px; height: 300px; top: -120px; left: -100px; }
+  .d2 { width: 220px; height: 220px; right: -80px; bottom: 60px; }
+  .d3 { width: 90px; height: 90px; right: 120px; top: 40px; border: 2px solid rgba(70,110,180,0.18); background: none; }
+
+  .header { text-align: center; margin-bottom: 20px; position: relative; z-index: 2; }
+  .header h1 { font-size: 30px; color: #16294a; letter-spacing: 2px; }
+  .header .tag {
+    display: inline-block; margin-top: 10px;
+    font-size: 15px; color: #3b5c8f; letter-spacing: 6px;
+    background: rgba(255,255,255,0.6); border: 1px solid rgba(70,110,180,0.30);
+    padding: 6px 26px; border-radius: 30px;
+  }
+
+  .cols { display: flex; gap: 18px; align-items: stretch; position: relative; z-index: 2; }
+
+  .col { border-radius: 14px; padding: 14px; }
+  .col-label {
+    text-align: center; color: #fff; font-size: 17px; font-weight: 700;
+    padding: 9px 0; border-radius: 9px; letter-spacing: 2px; margin-bottom: 12px;
+  }
+
+  /* 左列：用户 */
+  .col-user { width: 210px; flex-shrink: 0; background: rgba(255,255,255,0.55); border: 1px solid #c9d9ee; }
+  .col-user .col-label { background: #4a7bbf; }
+  .group-t { font-size: 13px; font-weight: 700; color: #3b5c8f; margin: 8px 2px 8px; }
+  .card {
+    background: #fff; border: 1px solid #d3e0f2; border-radius: 8px;
+    padding: 9px 12px; margin-bottom: 9px; font-size: 13px; color: #26354e;
+  }
+  .card b { display: block; font-size: 13px; color: #1f3schematic3a; margin-bottom: 2px; }
+  .mini { display: flex; flex-wrap: wrap; gap: 6px; }
+  .mini span {
+    background: #eef4fc; border: 1px solid #d0ddf0; color: #2a4370;
+    font-size: 12px; padding: 4px 9px; border-radius: 6px;
+  }
+
+  /* 中列：AI智能眼镜系统 */
+  .col-main { flex: 1; background: rgba(255,255,255,0.62); border: 1px solid #c6d8ef; }
+  .col-main .col-label { background: #2f5e9e; }
+  .mod {
+    background: #fbfdff; border: 1px solid #d3e0f2; border-radius: 10px;
+    margin-bottom: 11px; overflow: hidden;
+  }
+  .mod-h {
+    color: #fff; font-size: 14px; font-weight: 700; letter-spacing: 1px;
+    padding: 7px 13px;
+  }
+  .mod-b { padding: 10px 13px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .it {
+    background: #eef4fc; border: 1px solid #cfddf1; color: #27406e;
+    font-size: 12.5px; padding: 5px 10px; border-radius: 7px;
+  }
+  .it.strong { background: #e1ecf9; font-weight: 600; }
+  .note {
+    font-size: 12px; color: #7d8aa3; padding: 2px 13px 9px;
+  }
+
+  /* 右列：手机端APP + 云端 */
+  .col-right { width: 220px; flex-shrink: 0; display: flex; flex-direction: column; gap: 14px; }
+  .sub-col { background: rgba(255,255,255,0.55); border: 1px solid #c9d9ee; border-radius: 12px; padding: 13px; }
+  .sub-col .col-label { font-size: 15px; padding: 8px 0; margin-bottom: 10px; }
+  .sub-app .col-label { background: #67a0d8; }
+  .sub-cloud .col-label { background: #7aa3cf; }
+
+  /* 底部说明 */
+  .foot {
+    margin-top: 18px; position: relative; z-index: 2;
+    background: rgba(255,255,255,0.7); border: 1px solid #c9d9ee; border-radius: 10px;
+    padding: 12px 18px; font-size: 14px; color: #2c4269; text-align: center; letter-spacing: 1px;
+  }
+  .foot b { color: #2f5e9e; }
+
+  /* 箭头 */
+  .arrow { position: absolute; top: 50%; z-index: 3; color: #6f93c8; }
+  .a-left { left: 214px; margin-top: -8px; font-size: 22px; }
+  .a-right { right: 224px; margin-top: -8px; font-size: 22px; }
+</style>
+</head>
+<body>
+  <div class="deco d1"></div>
+  <div class="deco d2"></div>
+  <div class="deco d3"></div>
+
+  <div class="header">
+    <h1>AI 智能眼镜多模态生活与旅行助手系统框架图</h1>
+    <div class="tag">记录 · 翻译 · 导航 · 智能体协同</div>
+  </div>
+
+  <div class="cols">
+    <!-- 左：用户 -->
+    <div class="col col-user">
+      <div class="col-label">用户</div>
+      <div class="group-t">交互方式</div>
+      <div class="card">
+        <b>语音交互</b>
+      </div>
+      <div class="card">
+        <b>眼镜腿触控</b>
+      </div>
+      <div class="card">
+        <b>智能戒指控制</b>
+      </div>
+    </div>
+    <div class="arrow a-left">&#10148;</div>
+
+    <!-- 中：AI智能眼镜系统 -->
+    <div class="col col-main">
+      <div class="col-label">AI 智能眼镜系统</div>
+
+      <div class="mod">
+        <div class="mod-h" style="background:#3f6fae;">硬件层</div>
+        <div class="mod-b">
+          <span class="it strong">摄像头</span>
+          <span class="it strong">麦克风</span>
+          <span class="it strong">扬声器</span>
+          <span class="it strong">定位模块</span>
+          <span class="it strong">无线通信</span>
+        </div>
+      </div>
+
+      <div class="mod">
+        <div class="mod-h" style="background:#4a7bbf;">活动记录功能</div>
+        <div class="mod-b">
+          <span class="it">照片 / 视频采集</span>
+          <span class="it">时间 / 地点 / 天气标注</span>
+          <span class="it">语音感受记录</span>
+          <span class="it">日志 / 日记 / 游记生成</span>
+          <span class="it">社区展示</span>
+        </div>
+      </div>
+
+      <div class="mod">
+        <div class="mod-h" style="background:#5b8cc9;">翻译功能</div>
+        <div class="mod-b">
+          <span class="it">本地翻译模型</span>
+          <span class="it">云端翻译模型</span>
+          <span class="it">实时翻译</span>
+          <span class="it">同声传译</span>
+        </div>
+      </div>
+
+      <div class="mod">
+        <div class="mod-h" style="background:#6b98cf;">导航与 AI 导游功能</div>
+        <div class="mod-b">
+          <span class="it">路线规划</span>
+          <span class="it">语音播报</span>
+          <span class="it">室内外导航</span>
+          <span class="it">景点解说</span>
+        </div>
+      </div>
+
+      <div class="mod">
+        <div class="mod-h" style="background:#7aa6d8;">本地 AI 能力 · 小龙虾智能体</div>
+        <div class="mod-b">
+          <span class="it strong">任务理解</span>
+          <span class="it strong">功能调度</span>
+          <span class="it strong">信息查询</span>
+          <span class="it strong">行程总结</span>
+        </div>
+      </div>
+    </div>
+    <div class="arrow a-right">&#10148;</div>
+
+    <!-- 右：手机端APP + 云端 -->
+    <div class="col-right">
+      <div class="sub-col sub-app">
+        <div class="col-label">手机端 APP</div>
+        <div class="card" style="margin-bottom:0;">APP 联动控制与内容管理</div>
+      </div>
+      <div class="sub-col sub-cloud">
+        <div class="col-label">云端服务平台</div>
+        <div class="mini">
+          <span>内容生成</span>
+          <span>数据同步</span>
+          <span>社区平台</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    说明：系统以 <b>智能眼镜为核心入口</b>，联动本地 AI 与云端服务，实现 <b>记录、翻译、导航与智能体协同</b>。
+  </div>
+</body>
+</html>
