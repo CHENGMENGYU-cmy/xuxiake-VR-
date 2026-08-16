@@ -5,7 +5,7 @@ DELETE FROM reports WHERE reporter_id='u1';
 DELETE FROM collection_posts WHERE collection_id IN (SELECT id FROM collections WHERE creator_id='u1');
 DELETE FROM collections WHERE creator_id='u1';
 DELETE FROM user_follows WHERE follower_id='u1' OR following_id='u1';
-DELETE FROM notifications WHERE user_id='u1';
+DELETE FROM notifications WHERE recipient_id='u1';
 DELETE FROM messages WHERE sender_id='u1';
 DELETE FROM conversation_participants WHERE user_id='u1';
 DELETE FROM community_roles WHERE user_id='u1';
