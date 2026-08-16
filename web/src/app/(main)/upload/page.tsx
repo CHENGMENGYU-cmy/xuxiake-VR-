@@ -74,7 +74,6 @@ export default function UploadPage() {
 
 function UploadContent() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { user } = useAuthStore();
   const { publishPost, isPublishing } = usePostStore();
 
