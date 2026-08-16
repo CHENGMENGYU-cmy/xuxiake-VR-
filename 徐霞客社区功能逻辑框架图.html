@@ -2,130 +2,123 @@
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
-<title>徐霞客社区功能逻辑框架图</title>
+<title>徐霞客社区功能逻辑框架图（按角色分类）</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
-    background: linear-gradient(180deg, #f7fbf8 0%, #eef6f1 100%);
-    padding: 32px 40px 28px;
-    min-width: 1080px;
+    background: #fafafa;
+    color: #111;
+    padding: 30px 40px 32px;
+    min-width: 1000px;
   }
 
-  .header { text-align: center; margin-bottom: 18px; }
-  .header h1 { font-size: 24px; color: #0b3d2e; letter-spacing: 2px; font-weight: 800; }
-  .header .mainline { margin-top: 10px; font-size: 14px; color: #065f46; font-weight: 600; letter-spacing: 1px; }
-  .header .mainline .arr { color: #10b981; margin: 0 7px; font-weight: 700; }
-
-  .chain { display: flex; align-items: stretch; justify-content: center; }
-  .arrow { display: flex; align-items: center; padding: 0 5px; color: #10b981; font-size: 21px; font-weight: 700; }
-
-  .stage {
-    width: 165px;
-    background: #fff; border: 1.5px solid #cfe6da; border-radius: 12px;
-    padding: 12px 14px 10px;
-    display: flex; flex-direction: column; gap: 8px;
-    box-shadow: 0 3px 10px rgba(6,95,70,0.07);
-    border-left: 4px solid #10b981;
+  .header { text-align: center; margin-bottom: 26px; }
+  .header h1 { font-size: 24px; color: #000; letter-spacing: 2px; font-weight: 800; }
+  .header .tag {
+    display: inline-block; margin-top: 8px;
+    font-size: 12.5px; color: #555; letter-spacing: 3px;
+    background: #fff; border: 1px solid #ccc; padding: 5px 20px; border-radius: 30px;
   }
-  .stage .name { font-size: 14px; font-weight: 700; color: #0b3d2e; }
-  .stage .name .no { color: #10b981; margin-right: 3px; }
-  .stage .en { font-size: 10px; color: #8aa898; letter-spacing: 1.5px; font-weight: 600; }
-  .stage .f { font-size: 11.5px; color: #4b6b5c; line-height: 1.65; }
-  .stage .f b { color: #0d9488; font-weight: 600; }
-  .stage .meta {
-    border-top: 1px dashed #dcefe5; padding-top: 6px; margin-top: auto;
-    display: flex; justify-content: space-between; font-size: 10.5px;
-  }
-  .meta .role { color: #0d9488; font-weight: 600; }
-  .meta .st { font-weight: 600; }
-  .st.done { color: #059669; }
-  .st.partial { color: #d97706; }
 
-  .subnote {
-    margin: 20px auto 0; max-width: 1060px;
-    padding: 9px 18px; border-radius: 10px;
-    font-size: 12px; color: #3f5c50; text-align: center; line-height: 1.7;
+  .row { display: flex; align-items: stretch; justify-content: center; }
+  .rel {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 0 12px; color: #666; font-size: 12px; white-space: nowrap;
   }
-  .subnote b { color: #065f46; }
-  .subnote .sep { color: #b9d8c8; margin: 0 10px; }
-  .gov { background: #f0fbf5; border: 1px solid #d0eade; }
-  .ai  { background: #f4faf7; border: 1px solid #d8ece1; }
+  .rel .line { width: 1.5px; background: #999; flex: 1; margin: 6px 0; }
+  .rel b { letter-spacing: 1px; }
 
-  .foot { margin-top: 14px; text-align: center; font-size: 11.5px; color: #8aa898; }
-  .foot b { color: #065f46; }
+  .col {
+    width: 290px; background: #fff; border: 1.5px solid #333; border-radius: 8px;
+    display: flex; flex-direction: column;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    overflow: hidden;
+  }
+  .col .head {
+    background: #111; color: #fff; text-align: center;
+    padding: 11px 10px;
+  }
+  .col .head .role { font-size: 17px; font-weight: 800; letter-spacing: 2px; }
+  .col .head .cn { font-size: 11px; opacity: 0.75; margin-top: 2px; letter-spacing: 2px; }
+  .col .base {
+    text-align: center; font-size: 10.5px; color: #888;
+    padding: 6px 10px; border-bottom: 1px dashed #ddd; letter-spacing: 1px;
+  }
+  .col ul { list-style: none; padding: 10px 14px 12px; flex: 1; }
+  .col li {
+    font-size: 12px; color: #222; line-height: 1.7; padding-left: 14px;
+    position: relative; border-bottom: 1px dotted #eee;
+  }
+  .col li:last-child { border-bottom: none; }
+  .col li::before { content: '▸'; position: absolute; left: 0; color: #555; }
+  .col li .grp { font-weight: 700; color: #000; }
+  .col li .st { float: right; font-weight: 700; margin-left: 6px; }
+  .st.ok      { color: #111; }
+  .st.partial { color: #888; }
+  .st.todo    { color: #bbb; }
+
+  .foot {
+    margin: 24px auto 0; max-width: 900px;
+    background: #fff; border: 1px solid #ddd; border-radius: 8px;
+    padding: 9px 16px; font-size: 12px; color: #444; text-align: center; line-height: 1.8;
+  }
+  .foot b { color: #000; }
 </style>
 </head>
 <body>
 
   <div class="header">
     <h1>徐霞客社区功能逻辑框架图</h1>
-    <div class="mainline">主线：<span style="color:#0b3d2e">闪拍采集</span><span class="arr">➜</span><span style="color:#0b3d2e">素材库</span><span class="arr">➜</span><span style="color:#0b3d2e">日记</span><span class="arr">➜</span><span style="color:#0b3d2e">游记</span><span class="arr">➜</span><span style="color:#0b3d2e">社区发布</span><span class="arr">➜</span><span style="color:#0b3d2e">社交互动</span></div>
+    <div class="tag">按角色分类 · USER / MODERATOR / ADMIN</div>
   </div>
 
-  <!-- 内容链条主线 -->
-  <div class="chain">
+  <div class="row">
 
-    <div class="stage">
-      <div class="name"><span class="no">①</span>闪拍采集<span class="en">CAPTURE</span></div>
-      <div class="f"><b>采集</b>：照片 / 视频 / 语音 / 文字<br><b>元数据</b>：GPS · 时间 · 天气 · 行程</div>
-      <div class="meta"><span class="role">USER</span><span class="st done">✅ 完成</span></div>
+    <!-- USER 普通用户 -->
+    <div class="col">
+      <div class="head"><div class="role">USER</div><div class="cn">普通用户 · 基础角色</div></div>
+      <div class="base">全部内容功能</div>
+      <ul>
+        <li><span class="grp">内容创作</span>：闪拍→素材→日记→游记 · AI 生成 <span class="st ok">✓</span></li>
+        <li><span class="grp">内容发布</span>：发布/撤回 · 地点精度 · 三态可见 <span class="st ok">✓</span></li>
+        <li><span class="grp">内容浏览</span>：首页 / 发现 / 搜索 / 话题 / AR 媒体 <span class="st ok">✓</span></li>
+        <li><span class="grp">社交互动</span>：社群 · 消息 · 推荐搭子 · 通知 <span class="st partial">△</span></li>
+        <li><span class="grp">个人管理</span>：资料 / 兴趣 / 隐私 / 通知设置 <span class="st ok">✓</span></li>
+      </ul>
     </div>
 
-    <div class="arrow">➜</div>
+    <div class="rel"><div class="line"></div><b>⊂ 继承</b><div class="line"></div></div>
 
-    <div class="stage">
-      <div class="name"><span class="no">②</span>素材库<span class="en">SNAPSHOT</span></div>
-      <div class="f"><b>浏览</b>：相册聚合 · 按天/地点/行程<br><b>操作</b>：多选 · 全局上传 · 幂等同步</div>
-      <div class="meta"><span class="role">USER</span><span class="st done">✅ 完成</span></div>
+    <!-- MODERATOR 审核员 -->
+    <div class="col">
+      <div class="head"><div class="role">MODERATOR</div><div class="cn">审核员 · 内容治理</div></div>
+      <div class="base">含 USER 全部权限</div>
+      <ul>
+        <li><span class="grp">内容审核</span>：审核队列 · 通过/驳回 · 批量审核 <span class="st ok">✓</span></li>
+        <li><span class="grp">举报处理</span>：举报列表 · 解决 / 驳回 <span class="st ok">✓</span></li>
+        <li><span class="grp">内容治理</span>：强制下架 <span class="st ok">✓</span></li>
+      </ul>
     </div>
 
-    <div class="arrow">➜</div>
+    <div class="rel"><div class="line"></div><b>⊂ 继承</b><div class="line"></div></div>
 
-    <div class="stage">
-      <div class="name"><span class="no">③</span>日记<span class="en">DIARY</span></div>
-      <div class="f"><b>创作</b>：手写 + AI写 统一入口<br><b>可见</b>：草稿 / 私密 / 公开 · 广场</div>
-      <div class="meta"><span class="role">USER</span><span class="st done">✅ 完成</span></div>
+    <!-- ADMIN 管理员 -->
+    <div class="col">
+      <div class="head"><div class="role">ADMIN</div><div class="cn">管理员 · 平台运营</div></div>
+      <div class="base">含 MODERATOR 全部权限</div>
+      <ul>
+        <li><span class="grp">用户管理</span>：列表/搜索 · 角色分配 · 封禁/解封 <span class="st ok">✓</span></li>
+        <li><span class="grp">运营看板</span>：用户 / 内容 / 活跃度统计 <span class="st partial">△</span></li>
+        <li><span class="grp">审计日志</span> · 系统配置 <span class="st todo">○</span></li>
+      </ul>
     </div>
 
-    <div class="arrow">➜</div>
-
-    <div class="stage">
-      <div class="name"><span class="no">④</span>游记<span class="en">TRAVELOGUE</span></div>
-      <div class="f"><b>创作</b>：章节式编辑器 · 信息卡<br><b>发布</b>：发布/撤回 · 地点精度控制</div>
-      <div class="meta"><span class="role">USER</span><span class="st done">✅ 完成</span></div>
-    </div>
-
-    <div class="arrow">➜</div>
-
-    <div class="stage">
-      <div class="name"><span class="no">⑤</span>社区发布<span class="en">PUBLISH</span></div>
-      <div class="f"><b>展示</b>：Feed 发现/关注 · 类型筛选<br><b>互动</b>：点赞 · 评论 · 分享 · 审核把关</div>
-      <div class="meta"><span class="role">U/M/A</span><span class="st done">✅ 完成</span></div>
-    </div>
-
-    <div class="arrow">➜</div>
-
-    <div class="stage">
-      <div class="name"><span class="no">⑥</span>社交互动<span class="en">SOCIAL</span></div>
-      <div class="f"><b>社群</b>：动态 / 公告 / 挑战<br><b>消息/推荐</b>：实时 · 搭子 · 通知</div>
-      <div class="meta"><span class="role">USER</span><span class="st partial">⚠️ 部分</span></div>
-    </div>
-
-  </div>
-
-  <!-- 治理与保障 -->
-  <div class="subnote gov">
-    <b>🛡 治理与保障（横切）</b><span class="sep">|</span>内容审核（敏感词 / 队列 / 举报 / 下架）· 软删除 · 权限体系（USER / MODERATOR / ADMIN）<span class="sep">|</span><b>✅ 已完成</b>
-  </div>
-
-  <!-- AI 生成 -->
-  <div class="subnote ai">
-    <b>✨ AI 内容生成（贯穿 ②③④）</b><span class="sep">|</span>AI 日记（5 风格 / 批量）· AI 游记（DeepSeek 结构化 / 自动配图）· 真实素材不虚构<span class="sep">|</span><b>✅ 已完成</b>
   </div>
 
   <div class="foot">
-    状态：<span class="st done">✅ 已完成</span> · <span class="st partial">⚠️ 部分完成</span>　｜　角色：USER 普通用户 / MODERATOR 审核员 / ADMIN 管理员
+    继承关系：<b>ADMIN ⊃ MODERATOR ⊃ USER</b>，后一角色包含前一角色全部权限。<br>
+    状态：<b>✓ 已完成</b> · <b>△ 部分完成</b> · <b>○ 规划中</b>
   </div>
 
 </body>
