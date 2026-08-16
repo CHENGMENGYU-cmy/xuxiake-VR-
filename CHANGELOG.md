@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-16
+修改位置：web/src/app/(main)/upload/page.tsx、web/src/app/(main)/snap/page.tsx
+修改原因：发布-展示流程严重问题修复——①素材"公开/私有"语义矛盾（App同步闪拍私有，/upload发布素材却默认公开且同属SNAPSHOT混进素材库）；②写日记3入口3编辑器（/diaries/new、DiaryComposeDialog、/upload日记tab）体验不一致；③发布后跳转断裂（发布素材跳/feed不跳素材库）；④素材库无上传入口
+修改内容：①upload/page.tsx 彻底删除"日记"tab（UploadTab类型/tabContentTypes/initialTab/mood·weather状态/私密日记banner/心情/天气/配图/地点/话题渲染块/发布DIARY分支全部移除），清理SnapPickerDialog/loadRefSnaps/useSearchParams等死代码；②发布素材默认可见性改为PRIVATE（存入素材库），可见性选择处加提示"私密=存入素材库·公开=发布到社区"，发布按钮文案按可见性显示"存入素材库/发布内容"；③发布跳转修正：私密→/snap（提示"已存入素材库"）、公开→/feed（"已发布到社区"）、取消→/snap；④snap/page.tsx 素材库顶部增加"上传素材"按钮(/upload)，空状态增加"去上传素材"引导按钮
+修改效果：素材与公开动态语义彻底分离（素材默认私有存素材库，可选公开发布），写日记统一走 /diaries/new + DiaryComposeDialog 引导（删除重复的/upload日记tab），发布后按语义回到内容中心，素材库可直接上传素材，发布-展示链路闭环。TypeScript编译通过（仅剩e2e预存错误），/upload、/snap 等页面均200无编译错误
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-16
 修改位置：web/src/components/layout/sidebar.tsx、web/src/app/(main)/journeys/page.tsx
 修改原因：侧边栏"创作"分组与"我的"分组功能重叠——我的日记/游记在"我的"展示，写游记/AI写游记又出现在"创作"，同一批内容被拆到两处造成混乱；且各内容页内部本已有新建入口，侧边栏写游记/AI写游记属重复入口
 修改内容：①sidebar.tsx"创作"分组精简为单一入口"分享见闻"(/upload)，删除重复的"写游记"(/upload/journey-creator)与"AI写游记"(/journeys/generate)，高亮逻辑简化为pathname==='/upload'，清理未使用的Map/Sparkles图标导入；②journeys/page.tsx"我的游记"页顶部补充"AI写游记"按钮(/journeys/generate)，与手写"写游记"并列，保证删除侧边栏入口后写功能完整；③写功能入口收敛到内容页内部——写日记(我的日记页弹窗/素材库顶部)、写游记(我的游记页顶部)、AI写游记(我的游记页/分享见闻引导卡片/素材库多选"生成游记")，均不丢失
