@@ -89,6 +89,7 @@ export class PostsController {
     @Query('postType') postType?: string,
     @Query('tagId') tagId?: string,
     @Query('followingOnly') followingOnly?: string,
+    @Query('excludeContentLevel') excludeContentLevel?: string,
     @Headers('authorization') auth?: string,
   ) {
     // 可选认证：有 token 时提取 userId，无 token 时为 null
