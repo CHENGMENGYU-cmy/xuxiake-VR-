@@ -10,7 +10,9 @@ DELETE FROM messages WHERE sender_id='u1';
 DELETE FROM conversation_participants WHERE user_id='u1';
 DELETE FROM community_roles WHERE user_id='u1';
 DELETE FROM user_interests WHERE user_id='u1';
-DELETE FROM journeys WHERE user_id='u1';
+DELETE FROM journey_stop_media WHERE stop_id IN (SELECT id FROM journey_stops WHERE journey_id IN (SELECT id FROM journeys WHERE post_id IN (SELECT id FROM posts WHERE author_id='u1')));
+DELETE FROM journey_stops WHERE journey_id IN (SELECT id FROM journeys WHERE post_id IN (SELECT id FROM posts WHERE author_id='u1'));
+DELETE FROM journeys WHERE post_id IN (SELECT id FROM posts WHERE author_id='u1');
 DELETE FROM recommendation_feedback WHERE user_id='u1';
 DELETE FROM posts WHERE author_id='u1';
 
