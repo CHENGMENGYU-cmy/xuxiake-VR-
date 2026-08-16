@@ -220,7 +220,7 @@ export function Sidebar() {
 
             {/* 个人中心 - 仅登录后显示 */}
             {mounted && user && (
-            <div className="space-y-1 px-3 pb-3">
+            <div className="space-y-1 p-3">
               <p className="px-2 text-xs font-medium uppercase text-muted-foreground">
                 个人
               </p>
