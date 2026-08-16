@@ -177,7 +177,7 @@ export class PostsService {
     };
   }
 
-  private async getHotPosts(limit: number, page: number, postType?: string, tagId?: string, followingIds?: string[] | null, currentUserId?: string) {
+  private async getHotPosts(limit: number, page: number, postType?: string, tagId?: string, followingIds?: string[] | null, currentUserId?: string, excludeContentLevel?: string) {
     // 精选推荐：高互动量帖子（点赞 + 评论）
     const offset = (page - 1) * limit;
 
