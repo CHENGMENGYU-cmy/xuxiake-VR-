@@ -154,6 +154,9 @@ export class PostsService {
     if (tagId) {
       qb.innerJoin('post.tags', 'filterTag', 'filterTag.id = :tagId', { tagId });
     }
+    if (excludeContentLevel) {
+      qb.andWhere('(post.contentLevel IS NULL OR post.contentLevel != :excludeLevel)', { excludeLevel: excludeContentLevel });
+    }
 
     const [posts, total] = await qb.getManyAndCount();
     const hasMore = posts.length > limit;
