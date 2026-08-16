@@ -41,11 +41,6 @@ const myItems = [
   { href: '/journeys', label: '我的游记', icon: BookOpen, color: 'text-primary' },
 ];
 
-// 创作（唯一发布入口，写日记/写游记从各内容页顶部进入）
-const createItems = [
-  { href: '/upload', label: '分享见闻', icon: Upload },
-];
-
 // 个人
 const personalItems = [
   { href: '/messages', label: '消息', icon: MessageCircle },
