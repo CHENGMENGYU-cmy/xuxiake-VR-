@@ -16,15 +16,16 @@ interface FeedListProps {
   postType?: string;
   tagId?: string;
   followingOnly?: boolean;
+  excludeContentLevel?: string;
 }
 
-export function FeedList({ showComposer = true, sort = 'latest', postType, tagId, followingOnly }: FeedListProps) {
+export function FeedList({ showComposer = true, sort = 'latest', postType, tagId, followingOnly, excludeContentLevel }: FeedListProps) {
   const { posts = [], isLoading, isLoadingMore, hasMore, fetchPosts, loadMore } = usePostStore();
 
   // sort 或 filter 变化时重新获取数据
   useEffect(() => {
-    fetchPosts(sort, { postType, tagId, followingOnly });
-  }, [sort, postType, tagId, followingOnly, fetchPosts]);
+    fetchPosts(sort, { postType, tagId, followingOnly, excludeContentLevel });
+  }, [sort, postType, tagId, followingOnly, excludeContentLevel, fetchPosts]);
 
   // 从详情页返回时恢复滚动位置
   useEffect(() => {
