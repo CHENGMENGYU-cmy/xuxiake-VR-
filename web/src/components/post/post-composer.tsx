@@ -22,6 +22,7 @@ type MediaItem = NonNullable<CreatePostPayload['mediaItems']>[number];
 export function PostComposer() {
   const { user } = useAuthStore();
   const { isPublishing, publishError, publishPost, clearPublishError } = usePostStore();
+  const openUploadDialog = useUIStore((s) => s.openUploadDialog);
   const [mounted, setMounted] = useState(false);
   const [content, setContent] = useState('');
   const [expanded, setExpanded] = useState(false);
