@@ -1042,11 +1042,11 @@ function UploadContent() {
               }}
             />
             <div className="flex gap-3">
-              <Button variant="outline" size="lg" onClick={() => router.push(activeTab === 'DIARY' ? '/diaries' : '/feed')}>取消</Button>
+              <Button variant="outline" size="lg" onClick={() => router.push('/snap')}>取消</Button>
               <Button variant="outline" size="lg" onClick={handleSaveDraft}>存草稿</Button>
               <Button size="lg" className="gap-2 px-8" disabled={!canPublish} onClick={handlePublish}>
                 {isPublishing ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
-                {isPublishing ? '发布中...' : activeTab === 'DIARY' ? '发布日记' : '发布内容'}
+                {isPublishing ? '发布中...' : visibility === 'PRIVATE' ? '存入素材库' : '发布内容'}
               </Button>
             </div>
           </div>
