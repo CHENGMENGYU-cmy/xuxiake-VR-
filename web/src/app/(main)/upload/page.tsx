@@ -24,8 +24,6 @@ import { DraftList } from '@/components/upload/draft-list';
 import { PublishPreview } from '@/components/upload/publish-preview';
 import { saveDraftToLocal, saveDraftToList, clearLocalDraft, deleteDraftFromList } from '@/lib/draft-api';
 import { translateText, detectLanguage } from '@/lib/translation-api';
-import { getPostDetail } from '@/lib/snap-api';
-import { SnapPickerDialog } from '@/components/diary/snap-picker';
 
 type UploadTab = 'VIDEO' | 'IMAGE' | 'AUDIO';
 
