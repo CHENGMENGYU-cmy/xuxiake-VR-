@@ -653,16 +653,4 @@ INSERT INTO community_tags (id, community_id, tag_id) VALUES
 ('ct7', 'com3', 'tag-021'),
 ('ct8', 'com3', 'tag-003');
 
--- ============================================================
--- 内容层级统一：公开帖子显式标记为 CLASSIFIED（内容分类）
--- 不再依赖默认 SNAPSHOT（闪拍为私人素材定位）
--- ============================================================
-UPDATE posts SET content_level = 'CLASSIFIED'
-WHERE visibility = 'PUBLIC' AND content_level = 'SNAPSHOT';
-
--- ============================================================
--- 系统角色：u1 徐霞客 = 系统管理员(ADMIN)，u3 李四 = 审核员(MODERATOR)
--- 其余用户保持默认 USER
--- ============================================================
-UPDATE users SET role = 'ADMIN'      WHERE id = 'u1';
-UPDATE users SET role = 'MODERATOR'  WHERE id = 'u3';
+-- 种子用户保持默认 USER 角色（管理员/审核员由后台手动指派）
