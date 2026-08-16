@@ -501,7 +501,7 @@ function UploadContent() {
 
     const payload: CreatePostPayload = {
       content: content.trim() || '',
-      visibility: activeTab === 'DIARY' ? 'PRIVATE' : visibility,
+      visibility,
       postType,
       contentLevel,
       mediaItems: mediaItems.length > 0 ? mediaItems : undefined,
@@ -510,8 +510,6 @@ function UploadContent() {
       location: location.trim() ? { lat: 0, lng: 0, name: location.trim() } : undefined,
       vrMetadata: {
         tab: activeTab,
-        ...(activeTab === 'DIARY' && (mood || weather) ? { mood: mood || undefined, weather: weather || undefined } : {}),
-        ...(activeTab === 'DIARY' && refSnapIds.length > 0 ? { sourceSnapIds: refSnapIds } : {}),
       },
     };
 
