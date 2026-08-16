@@ -8,177 +8,157 @@
   body {
     width: 1280px;
     font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
-    background: linear-gradient(160deg, #e9eef6 0%, #f4f7fb 55%, #fafbfd 100%);
-    padding: 26px 42px 30px;
-    position: relative;
+    background: linear-gradient(170deg, #eef2f9 0%, #f6f8fc 60%, #fbfcfe 100%);
+    padding: 24px 36px 28px;
   }
-  .header { text-align: center; margin-bottom: 26px; }
-  .header h1 { font-size: 28px; color: #0f2a5c; letter-spacing: 2px; }
+  .header { text-align: center; margin-bottom: 20px; }
+  .header h1 { font-size: 26px; color: #16294a; letter-spacing: 2px; }
   .header .tag {
-    display: inline-block; margin-top: 10px;
-    font-size: 14px; color: #1e3a8a; letter-spacing: 4px;
-    background: rgba(255,255,255,0.7); border: 1px solid #b9cff2;
+    display: inline-block; margin-top: 8px;
+    font-size: 13px; color: #40557d; letter-spacing: 4px;
+    background: rgba(255,255,255,0.7); border: 1px solid #c3d4ec;
     padding: 5px 22px; border-radius: 30px;
   }
 
-  #lines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
-
-  .stage {
-    position: relative; z-index: 1;
-    display: grid;
-    grid-template-columns: 1.05fr 2fr 1.05fr;
-    grid-template-rows: auto auto;
-    gap: 28px 34px;
-    align-items: center;
+  .layers { display: flex; flex-direction: column; gap: 10px; }
+  .layer {
+    display: flex; align-items: center;
+    border-radius: 12px; padding: 11px 18px;
+    color: #fff; box-shadow: 0 3px 10px rgba(20,40,90,0.16);
   }
-
-  .blk {
-    background: #ffffff;
-    border: 1.5px solid #d5e0f0;
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 4px 16px rgba(15,42,92,0.12);
+  .layer .num { font-size: 19px; font-weight: 700; margin-right: 14px; opacity: 0.92; }
+  .layer .name { font-size: 15.5px; font-weight: 700; min-width: 148px; letter-spacing: 1px; }
+  .layer .items { display: flex; flex-wrap: wrap; gap: 7px; flex: 1; }
+  .layer .it {
+    background: rgba(255,255,255,0.24);
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 15px; padding: 3px 11px;
+    font-size: 12.5px; letter-spacing: 0.3px;
   }
-  .blk-h {
-    color: #fff; font-size: 16px; font-weight: 700; letter-spacing: 2px;
-    text-align: center; padding: 10px 0;
-    background: #2563EB;
-  }
-  .blk-b { padding: 13px 16px; }
-  .item {
-    display: flex; align-items: baseline; gap: 8px;
-    font-size: 13.5px; color: #1f3a5c; padding: 5px 0;
-  }
-  .item .dot {
-    width: 7px; height: 7px; border-radius: 50%;
-    flex-shrink: 0; margin-right: 2px; background: #2563EB;
-  }
-  .item b { color: #10265a; font-weight: 600; min-width: 58px; }
-  .item .sub { color: #4a5a78; font-size: 12.5px; }
-
-  /* 用户（上） */
-  .user { grid-column: 1 / -1; grid-row: 1; justify-self: center; width: 340px; }
-  .user .blk-b { display: flex; justify-content: center; gap: 26px; }
-  .user .mini {
-    background: #e8effb; border: 1px solid #b9cff2; color: #1e3a8a;
-    font-size: 13px; padding: 7px 20px; border-radius: 20px; font-weight: 600;
-  }
-
-  /* 闪拍App（左） */
-  .app { grid-column: 1; grid-row: 2; }
-
-  /* 核心社区系统（中） */
-  .core { grid-column: 2; grid-row: 2; }
-  .core .blk-h { background: linear-gradient(135deg, #1E3A8A, #3B82F6); font-size: 18px; padding: 13px 0; }
-  .core .blk-b { padding: 14px 20px; }
-  .core .item { font-size: 14px; }
-  .core .item .dot { background: #1E3A8A; }
-  .core .item b { min-width: 68px; }
-
-  /* 云端（右） */
-  .cloud { grid-column: 3; grid-row: 2; }
+  .layer .it b { font-weight: 600; }
+  .layer .sub { opacity: 0.88; }
 
   .foot {
-    margin-top: 30px; position: relative; z-index: 1;
-    background: rgba(255,255,255,0.88); border: 1px solid #cddbf0; border-radius: 10px;
-    padding: 12px 18px; font-size: 14.5px; color: #1f3a5c; text-align: center; letter-spacing: 1px;
+    margin-top: 20px;
+    background: rgba(255,255,255,0.85); border: 1px solid #cddbf0; border-radius: 10px;
+    padding: 11px 18px; font-size: 14px; color: #25365a; text-align: center; letter-spacing: 1px;
   }
-  .foot b { color: #1E3A8A; }
+  .foot b { color: #1e3a8a; }
 </style>
 </head>
 <body>
-  <svg id="lines">
-    <defs>
-      <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-        <path d="M 0 0 L 10 5 L 0 10 z" fill="#60A5FA"/>
-      </marker>
-    </defs>
-  </svg>
-
   <div class="header">
     <h1>徐霞客 AI 游记与社区系统框架图</h1>
-    <div class="tag">记录 · 创作 · 社交 · AI 生成</div>
+    <div class="tag">记录 · 创作 · 社交 · AI 生成 · 分层架构</div>
   </div>
 
-  <div class="stage">
-    <div class="blk user">
-      <div class="blk-h">用户</div>
-      <div class="blk-b">
-        <span class="mini">网页端</span>
-        <span class="mini">手机端</span>
+  <div class="layers">
+    <div class="layer" style="background:linear-gradient(90deg,#1d4ed8,#3b82f6);">
+      <div class="num">①</div><div class="name">数据采集层</div>
+      <div class="items">
+        <span class="it"><b>AI 眼镜</b> · 拍照/录像/语音</span>
+        <span class="it"><b>闪拍 App</b> · 本地数据库/票据/媒体</span>
+        <span class="it"><b>元数据</b> <span class="sub">GPS·时间·天气·活动分类</span></span>
+        <span class="it"><b>语音转写</b> <span class="sub">阿里云 NLS</span></span>
       </div>
     </div>
 
-    <div class="blk app">
-      <div class="blk-h">闪拍 App</div>
-      <div class="blk-b">
-        <div class="item"><span class="dot"></span><b>采集</b><span class="sub">照片 / 视频 / 语音</span></div>
-        <div class="item"><span class="dot"></span><b>同步</b><span class="sub">素材上传到社区</span></div>
+    <div class="layer" style="background:linear-gradient(90deg,#0284c7,#38bdf8);">
+      <div class="num">②</div><div class="name">数据同步层</div>
+      <div class="items">
+        <span class="it"><b>账号登录</b> <span class="sub">密码·图形验证码</span></span>
+        <span class="it"><b>媒体上传</b> <span class="sub">图片/视频/音频</span></span>
+        <span class="it"><b>元数据同步</b> <span class="sub">幂等去重</span></span>
+        <span class="it"><b>SNAPSHOT 素材</b> <span class="sub">默认私密</span></span>
       </div>
     </div>
 
-    <div class="blk core">
-      <div class="blk-h">徐霞客社区系统</div>
-      <div class="blk-b">
-        <div class="item"><span class="dot"></span><b>采集同步</b><span class="sub">闪拍素材 · 元数据</span></div>
-        <div class="item"><span class="dot"></span><b>内容分层</b><span class="sub">素材 → 日记 → 游记</span></div>
-        <div class="item"><span class="dot"></span><b>AI 生成</b><span class="sub">AI 日记 / AI 游记</span></div>
-        <div class="item"><span class="dot"></span><b>社区社交</b><span class="sub">社群 · 消息 · 推荐 · 通知</span></div>
-        <div class="item"><span class="dot"></span><b>内容治理</b><span class="sub">审核 · 举报 · 软删除</span></div>
+    <div class="layer" style="background:linear-gradient(90deg,#4338ca,#6366f1);">
+      <div class="num">③</div><div class="name">内容分层层</div>
+      <div class="items">
+        <span class="it"><b>素材库</b> SNAPSHOT <span class="sub">相册浏览/多选/上传弹窗</span></span>
+        <span class="it"><b>日记</b> DIARY <span class="sub">手写/AI·草稿·私密·公开</span></span>
+        <span class="it"><b>游记</b> TRAVELOGUE <span class="sub">章节式编辑器·已发布/私密</span></span>
       </div>
     </div>
 
-    <div class="blk cloud">
-      <div class="blk-h">云端服务平台</div>
-      <div class="blk-b">
-        <div class="item"><span class="dot"></span><b>AI 生成</b><span class="sub">日记 / 游记内容</span></div>
-        <div class="item"><span class="dot"></span><b>数据同步</b><span class="sub">多端一致</span></div>
-        <div class="item"><span class="dot"></span><b>社区平台</b><span class="sub">内容沉淀与展示</span></div>
+    <div class="layer" style="background:linear-gradient(90deg,#7c3aed,#a78bfa);">
+      <div class="num">④</div><div class="name">AI 生成层</div>
+      <div class="items">
+        <span class="it"><b>AI 日记</b> <span class="sub">5 种风格·回忆反差</span></span>
+        <span class="it"><b>AI 游记</b> <span class="sub">章节式·自动配图·信息卡</span></span>
+        <span class="it"><b>模型引擎</b> <span class="sub">DeepSeek·失败回退模板</span></span>
+        <span class="it"><b>AI 原则</b> <span class="sub">默认私密·基于事实不虚构</span></span>
+      </div>
+    </div>
+
+    <div class="layer" style="background:linear-gradient(90deg,#0e7490,#22d3ee);">
+      <div class="num">⑤</div><div class="name">社区社交层</div>
+      <div class="items">
+        <span class="it"><b>社群</b> <span class="sub">动态·公告·角色·挑战</span></span>
+        <span class="it"><b>消息</b> <span class="sub">WebSocket·内容卡片·反应·语音·位置</span></span>
+        <span class="it"><b>推荐</b> <span class="sub">搭子匹配·推荐社群·理由展示</span></span>
+        <span class="it"><b>通知</b> <span class="sub">SSE 实时推送</span></span>
+      </div>
+    </div>
+
+    <div class="layer" style="background:linear-gradient(90deg,#0f766e,#2dd4bf);">
+      <div class="num">⑥</div><div class="name">AR 媒体层</div>
+      <div class="items">
+        <span class="it"><b>媒体上传</b> <span class="sub">视频/图片/音频·VR180/360/SPATIAL</span></span>
+        <span class="it"><b>沉浸浏览</b> <span class="sub">悬停播放·音频播放器·全屏</span></span>
+        <span class="it"><b>内容发现</b> <span class="sub">MediaType 筛选</span></span>
+      </div>
+    </div>
+
+    <div class="layer" style="background:linear-gradient(90deg,#b45309,#fbbf24);">
+      <div class="num">⑦</div><div class="name">治理与权限层</div>
+      <div class="items">
+        <span class="it"><b>内容审核</b> <span class="sub">敏感词·隐私检测·审核队列·举报</span></span>
+        <span class="it"><b>软删除</b> <span class="sub">deleted_at·可恢复·可审计</span></span>
+        <span class="it"><b>权限体系</b> <span class="sub">USER·MODERATOR·ADMIN</span></span>
+      </div>
+    </div>
+
+    <div class="layer" style="background:linear-gradient(90deg,#be185d,#f472b6);">
+      <div class="num">⑧</div><div class="name">前端应用层</div>
+      <div class="items">
+        <span class="it"><b>技术栈</b> <span class="sub">Next.js16·React19·Tailwind·Zustand</span></span>
+        <span class="it"><b>核心页面</b> <span class="sub">feed·discover·snap·diaries·journeys·communities·messages·admin</span></span>
+        <span class="it"><b>信息架构</b> <span class="sub">侧边栏 浏览/我的/个人</span></span>
+      </div>
+    </div>
+
+    <div class="layer" style="background:linear-gradient(90deg,#334155,#64748b);">
+      <div class="num">⑨</div><div class="name">后端服务层</div>
+      <div class="items">
+        <span class="it"><b>NestJS 11</b> <span class="sub">TypeScript·模块化</span></span>
+        <span class="it"><b>业务模块</b> <span class="sub">auth·users·posts·social·sync·upload·chat·notifications</span></span>
+        <span class="it"><b>实时能力</b> <span class="sub">WebSocket·SSE</span></span>
+        <span class="it"><b>安全</b> <span class="sub">JWT 双 Token</span></span>
+      </div>
+    </div>
+
+    <div class="layer" style="background:linear-gradient(90deg,#1e3a8a,#3b82f6);">
+      <div class="num">⑩</div><div class="name">数据与存储层</div>
+      <div class="items">
+        <span class="it"><b>MySQL 8</b> <span class="sub">26 迁移脚本 + 4 种子脚本</span></span>
+        <span class="it"><b>文件存储</b> <span class="sub">本地磁盘 uploads·可切 OSS/COS</span></span>
+      </div>
+    </div>
+
+    <div class="layer" style="background:linear-gradient(90deg,#1e293b,#475569);">
+      <div class="num">⑪</div><div class="name">部署运维层</div>
+      <div class="items">
+        <span class="it"><b>Docker Compose</b> <span class="sub">mysql/server/web/nginx·一键初始化</span></span>
+        <span class="it"><b>Nginx</b> <span class="sub">反向代理·静态资源·WebSocket·SSE</span></span>
+        <span class="it"><b>线上部署</b> <span class="sub">阿里云·xuxiake.com</span></span>
       </div>
     </div>
   </div>
 
   <div class="foot">
-    说明：以 <b>社区为核心入口</b>，联动闪拍 App 采集与云端 AI，实现 <b>"记录 → 创作 → 社交"</b> 内容闭环。
+    说明：以 <b>社区为核心入口</b>，从 AI 眼镜采集到社区发布层层递进，联动本地 AI 与云端，实现 <b>"记录 → 创作 → 社交"</b> 内容闭环。
   </div>
-
-<script>
-function draw() {
-  const svg = document.getElementById('lines');
-  const ns = 'http://www.w3.org/2000/svg';
-  svg.innerHTML = '';
-  svg.setAttribute('width', document.body.scrollWidth);
-  svg.setAttribute('height', document.body.scrollHeight);
-  const bodyRect = document.body.getBoundingClientRect();
-
-  function edge(from, to) {
-    const f = document.querySelector(from).getBoundingClientRect();
-    const t = document.querySelector(to).getBoundingClientRect();
-    return {
-      x1: (f.left + f.width / 2) - bodyRect.left,
-      y1: (f.top + f.height / 2) - bodyRect.top,
-      x2: (t.left + t.width / 2) - bodyRect.left,
-      y2: (t.top + t.height / 2) - bodyRect.top,
-    };
-  }
-  function link(a, b, both) {
-    const p = edge(a, b);
-    const x1 = p.x1, y1 = p.y1, x2 = p.x2, y2 = p.y2;
-    const d = Math.max(30, Math.abs(x2 - x1) * 0.5);
-    const path = document.createElementNS(ns, 'path');
-    path.setAttribute('d', 'M ' + x1 + ' ' + y1 + ' C ' + (x1 + d) + ' ' + y1 + ', ' + (x2 - d) + ' ' + y2 + ', ' + x2 + ' ' + y2);
-    path.setAttribute('stroke', '#60A5FA');
-    path.setAttribute('stroke-width', '2');
-    path.setAttribute('fill', 'none');
-    path.setAttribute('marker-end', 'url(#arrow)');
-    if (both) path.setAttribute('marker-start', 'url(#arrow)');
-    svg.appendChild(path);
-  }
-  link('.user', '.core', true);
-  link('.app', '.core', true);
-  link('.core', '.cloud', true);
-}
-window.addEventListener('load', function () { setTimeout(draw, 150); });
-</script>
 </body>
 </html>
