@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-16
+修改位置：server/src/modules/posts/posts.service.ts、server/src/modules/posts/posts.controller.ts、web/src/stores/post-store.ts、web/src/components/feed/feed-list.tsx、web/src/app/(main)/feed/page.tsx、web/src/app/(main)/upload/journey-creator/page.tsx
+修改原因：解决遗留的2个P2级问题——①feed首页「随记」混入公开日记（postType=NOTE 同时命中日记与随记，且 feed 页类型筛选tab 定义却未渲染，属隐藏bug）；②手写游记默认可见性(PUBLIC)与AI生成游记(PRIVATE)不一致
+修改内容：①后端 getPosts/getTrendingPosts/getHotPosts 三个查询分支新增 excludeContentLevel 参数（`(contentLevel IS NULL OR contentLevel != :excludeLevel)`，保留无层级的普通随记），controller 接收并透传；②前端 post-store PostFilters 增加 excludeContentLevel，feed-list 接收并传给 fetchPosts；③feed 页修复隐藏bug——渲染类型筛选tab（全部/第一视角/随记/游记/瞬间，原定义未渲染），「随记」tab 传 postType=NOTE + excludeContentLevel=DIARY，FeedList 按当前 tab 传参；④journey-creator 手写游记默认可见性从 PUBLIC 改为 PRIVATE，与AI游记统一（发布时再选公开）
+修改效果：feed首页显示类型筛选tab，「随记」不再混入公开日记（日记走日记广场）；手写游记默认存为私密、发布时选公开，与AI游记可见性一致。前后端TypeScript编译通过，feed接口(带excludeContentLevel)返回200，页面编译正常
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-16
 修改位置：web/src/app/(main)/upload/page.tsx（删除）、web/src/components/upload/topic-selector.tsx、community-selector.tsx、draft-list.tsx、publish-preview.tsx、image-cropper.tsx、video-thumbnail-selector.tsx、visibility-control.tsx（删除）
 修改原因：用户明确"分享见闻"功能永久移除、后续不再添加；该页面及仅其使用的上传组件已成为孤儿死代码
 修改内容：删除分享见闻页 upload/page.tsx 及 7 个孤儿上传组件（topic-selector/community-selector/draft-list/publish-preview/image-cropper/video-thumbnail-selector/visibility-control）；保留 /upload/journey-creator（写游记编辑器）、multi-image-uploader（被 /diaries/new 使用）、snap-upload-dialog（上传弹窗）；清除 .next 缓存后重建
