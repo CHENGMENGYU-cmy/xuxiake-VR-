@@ -43,11 +43,9 @@ const myItems = [
   { href: '/journeys', label: '我的游记', icon: BookOpen, color: 'text-primary' },
 ];
 
-// 创作
+// 创作（唯一发布入口，写日记/写游记从各内容页顶部进入）
 const createItems = [
   { href: '/upload', label: '分享见闻', icon: Upload },
-  { href: '/upload/journey-creator', label: '写游记', icon: Map, color: 'text-emerald-500' },
-  { href: '/journeys/generate', label: 'AI 写游记', icon: Sparkles, color: 'text-amber-500' },
 ];
 
 // 个人
