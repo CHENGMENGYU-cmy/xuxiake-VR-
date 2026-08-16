@@ -32,17 +32,17 @@ WHERE post_id IN (SELECT id FROM posts WHERE content_level = 'TRAVELOGUE');
 -- u2 张三 (VR摄影师, 北京) — 漓江光影
 -- ============================================================
 SET @userId = 'u2';
-SET @logId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
+SET @snapId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@logId, @userId, 'NOTE', 'SNAPSHOT', NULL,
+(@snapId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年8月4日，阳朔兴坪镇。凌晨4:30到达拍摄点，架设Insta360 X4。5:12日出开始，晨雾从江面升起，喀斯特山峰在金色光线中渐次显现。拍摄持续到19:30日落，共拍摄14组延时素材。天气晴朗，气温34°C，湿度偏高。同行：无。设备电量消耗3块电池。',
  NULL, '阳朔兴坪镇漓江边',
  '{"keywords":["漓江","延时摄影","日出","日落","喀斯特"],"weather":"晴","activity":"摄影","companion":"独自"}',
  'PRIVATE', 0, 0, 0, '2026-08-04 20:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@diaryId, @userId, 'NOTE', 'DIARY', @logId,
+(@diaryId, @userId, 'NOTE', 'DIARY', @snapId,
  '在漓江边站了15个小时，从漆黑等到漆黑。最美的其实是日出前那二十分钟——天空从深蓝变成浅紫，再变成橘红，整个过程安静得只听得见快门声和水流声。\n\n有时候觉得，摄影教会我的不是怎么拍好一张照片，而是怎么等待。很多东西急不来，光不会因为你着急就提前亮起来。\n\n今天拍了三千多张，最后可能只选十张。但这种"浪费"让我觉得奢侈而幸福。',
  '在漓江边等光的人', '阳朔兴坪镇',
  '{"keywords":["漓江","等待","摄影哲学","独处","光影"],"mood":"calm","weather":"sunny","insight":"摄影教会我的不是怎么拍好一张照片，而是怎么等待。","style":"诗意散文风","status":"public","aiGenerated":true}',
@@ -55,23 +55,23 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
  '{"keywords":["漓江","阳朔","延时摄影","日出","桂林山水","旅行摄影"],"sourceSnapIds":["__LOG_ID__"],"sourceDiaries":["__DIARY_ID__"],"prompt":"根据今天的拍摄日志和心情日记，写一篇漓江光影旅行游记，包含实用旅行提示","style":"诗意散文风","aiGenerated":true}',
  'PUBLIC', 0, 0, 0, '2026-08-04 22:00:00');
 
-UPDATE posts SET vr_metadata = REPLACE(REPLACE(vr_metadata, '"__LOG_ID__"', CONCAT('"', @logId, '"')), '"__DIARY_ID__"', CONCAT('"', @diaryId, '"')) WHERE id = @travelogueId;
+UPDATE posts SET vr_metadata = REPLACE(REPLACE(vr_metadata, '"__LOG_ID__"', CONCAT('"', @snapId, '"')), '"__DIARY_ID__"', CONCAT('"', @diaryId, '"')) WHERE id = @travelogueId;
 
 -- ============================================================
 -- u3 李四 (科技博主, 广东) — 西湖VR测评
 -- ============================================================
 SET @userId = 'u3';
-SET @logId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
+SET @snapId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@logId, @userId, 'NOTE', 'SNAPSHOT', NULL,
+(@snapId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年8月3日，杭州西湖断桥。测试新VR相机的空间视频拍摄能力。拍摄参数：4K/60fps，VR180模式，白平衡自动，ISO 100-800。拍摄对象：断桥、白堤、雷峰塔远景、湖面倒影、游客动态。设备温度正常，未出现过热警告。视频文件共28GB。下午在湖滨路咖啡馆对比了前三代设备的画质表现，暗部细节提升明显。',
  NULL, '杭州西湖断桥',
  '{"keywords":["VR相机","测评","西湖","空间视频","画质对比"],"weather":"多云转晴","activity":"设备测评","companion":"独自"}',
  'PRIVATE', 0, 0, 0, '2026-08-03 19:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@diaryId, @userId, 'NOTE', 'DIARY', @logId,
+(@diaryId, @userId, 'NOTE', 'DIARY', @snapId,
  '拿着新设备在西湖边走了一圈，突然想起六年前第一次来西湖——那时候拿的还是手机，拍了张糊掉的断桥。\n\n六年过去，设备从手机变成了VR相机，从平面变成了360度。但站在断桥上的那种感觉没变。科技一直在进步，但西湖还是那个西湖，断桥还是那个断桥。\n\n可能这就是科技的意义吧——不是替代真实的体验，而是让没来过的人，也能感受到那一刻的风和光。',
  '用最新的设备，拍最老的风景', '杭州西湖',
  '{"keywords":["西湖","科技","时间","断桥","VR"],"mood":"calm","weather":"cloudy","insight":"科技一直在进步，但西湖还是那个西湖。","style":"成长复盘风","status":"public","aiGenerated":true}',
@@ -84,23 +84,23 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
  '{"keywords":["VR测评","西湖","空间视频","摄影技巧","科技人文"],"sourceSnapIds":["__LOG_ID__"],"sourceDiaries":["__DIARY_ID__"],"prompt":"结合设备测评日志和个人感悟日记，写一篇西湖VR拍摄游记，包含设备体验和拍摄建议","style":"成长复盘风","aiGenerated":true}',
  'PUBLIC', 0, 0, 0, '2026-08-03 21:00:00');
 
-UPDATE posts SET vr_metadata = REPLACE(REPLACE(vr_metadata, '"__LOG_ID__"', CONCAT('"', @logId, '"')), '"__DIARY_ID__"', CONCAT('"', @diaryId, '"')) WHERE id = @travelogueId;
+UPDATE posts SET vr_metadata = REPLACE(REPLACE(vr_metadata, '"__LOG_ID__"', CONCAT('"', @snapId, '"')), '"__DIARY_ID__"', CONCAT('"', @diaryId, '"')) WHERE id = @travelogueId;
 
 -- ============================================================
 -- u4 王五 (环球旅行者, 四川) — 稻城亚丁
 -- ============================================================
 SET @userId = 'u4';
-SET @logId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
+SET @snapId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@logId, @userId, 'NOTE', 'SNAPSHOT', NULL,
+(@snapId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年8月2日，稻城亚丁景区。徒步路线：游客中心→冲古寺→洛绒牛场→牛奶海→五色海，全程18公里，海拔从3900米爬升到4700米。用时8.5小时。天气：上午晴，午后转多云，14:00开始下小雨。三神山（仙乃日、央迈勇、夏诺多吉）均有可见。牛奶海水色碧蓝，五色海因光线不足色彩不太明显。高反轻微，服用了红景天。',
  NULL, '稻城亚丁景区',
  '{"keywords":["稻城亚丁","徒步","高海拔","三神山","牛奶海"],"weather":"晴转小雨","activity":"高海拔徒步","companion":"独自"}',
  'PRIVATE', 0, 0, 0, '2026-08-02 21:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@diaryId, @userId, 'NOTE', 'DIARY', @logId,
+(@diaryId, @userId, 'NOTE', 'DIARY', @snapId,
  '在海拔4700米的五色海边，我突然理解了什么叫做"身体在地狱，眼睛在天堂"。\n\n走最后一段爬升的时候，每走十步就要停下来喘气。但一抬头，仙乃日雪山的山尖就在云层中若隐若现，像在说：快到了，再坚持一下。\n\n到了牛奶海的那一刻，我坐在石头上一句话都说不出来。那个蓝色——不是天蓝也不是海蓝，是只有在高原冰川融水里才能看到的碧蓝。我拿起VR相机，又放下。有些画面，镜头装不下。',
  '在4700米的高原上，我学会了呼吸', '稻城亚丁牛奶海',
  '{"keywords":["高海拔","牛奶海","坚持","震撼","自然之美"],"mood":"excited","weather":"rainy","insight":"有些画面，镜头装不下。","style":"温柔治愈风","status":"public","aiGenerated":true}',
@@ -117,17 +117,17 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
 -- u5 赵六 (户外教练, 云南) — 哈巴雪山登顶
 -- ============================================================
 SET @userId = 'u5';
-SET @logId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
+SET @snapId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@logId, @userId, 'NOTE', 'SNAPSHOT', NULL,
+(@snapId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年8月1日，哈巴雪山登顶日。凌晨3:00从大本营（4100m）出发，6:48登顶（5396m）。天气：晴朗无风，气温-8°C，能见度极佳。登顶用时3小时48分。同行客户3人，均成功登顶。使用了冰爪、冰镐、安全带等技术装备。雪线以上约500米，冰裂缝较往年偏少。拍摄了登顶360°全景VR。下撤用时2.5小时，15:00返回哈巴村。',
  NULL, '哈巴雪山',
  '{"keywords":["哈巴雪山","登顶","5396米","雪山攀登","向导"],"weather":"晴","activity":"雪山攀登","companion":"带客户3人"}',
  'PRIVATE', 0, 0, 0, '2026-08-01 18:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@diaryId, @userId, 'NOTE', 'DIARY', @logId,
+(@diaryId, @userId, 'NOTE', 'DIARY', @snapId,
  '这是我的第23次哈巴登顶，但这次不太一样。\n\n以前登顶都是一个人或者带老手，这次带的是三个第一次爬雪山的客户。看到他们站在5396米的那一刻，眼睛里的光芒比我第一次登顶的时候还要亮。\n\n有个客户在峰顶哭了。她说从来没有想过自己能站在这个高度。我递了杯热水给她，说："山一直都在，是你选择了来。"\n\n带人看世界——这可能比我自己看世界，更有意义。',
  '带他们站在5396米，比我自己登顶更骄傲', '哈巴雪山',
  '{"keywords":["登顶","客户","向导","成就感","雪山"],"mood":"excited","weather":"sunny","insight":"带人看世界，可能比我自己看世界，更有意义。","style":"成长复盘风","status":"public","aiGenerated":true}',
@@ -140,23 +140,23 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
  '{"keywords":["哈巴雪山","登顶攻略","雪山攀登","向导经验","5396米"],"sourceSnapIds":["__LOG_ID__"],"sourceDiaries":["__DIARY_ID__"],"prompt":"结合登顶技术日志和带队感悟日记，写一篇哈巴雪山深度攀登游记，包含攻略和人文感悟","style":"成长复盘风","aiGenerated":true}',
  'PUBLIC', 0, 0, 0, '2026-08-01 20:00:00');
 
-UPDATE posts SET vr_metadata = REPLACE(REPLACE(vr_metadata, '"__LOG_ID__"', CONCAT('"', @logId, '"')), '"__DIARY_ID__"', CONCAT('"', @diaryId, '"')) WHERE id = @travelogueId;
+UPDATE posts SET vr_metadata = REPLACE(REPLACE(vr_metadata, '"__LOG_ID__"', CONCAT('"', @snapId, '"')), '"__DIARY_ID__"', CONCAT('"', @diaryId, '"')) WHERE id = @travelogueId;
 
 -- ============================================================
 -- u6 孙七 (美食博主, 湖南) — 长沙美食探索
 -- ============================================================
 SET @userId = 'u6';
-SET @logId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
+SET @snapId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@logId, @userId, 'NOTE', 'SNAPSHOT', NULL,
+(@snapId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年7月31日，长沙。探店路线：火宫殿（早餐）→ 太平街（小吃）→ 坡子街（午餐）→ 文和友（晚餐）。打卡菜品：臭豆腐（黑色经典）、糖油粑粑、口味虾、剁椒鱼头、茶颜悦色（幽兰拿铁）。共拍摄美食VR近景素材47组。花费：交通15元+餐饮286元。口味评价：臭豆腐外酥里嫩8.5分，口味虾辣度适中但虾肉偏老7分，剁椒鱼头鲜辣平衡9分。',
  NULL, '长沙火宫殿/太平街/文和友',
  '{"keywords":["长沙","美食探店","臭豆腐","口味虾","湘菜"],"activity":"美食探店","companion":"独自","spend":301}',
  'PRIVATE', 0, 0, 0, '2026-07-31 22:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@diaryId, @userId, 'NOTE', 'DIARY', @logId,
+(@diaryId, @userId, 'NOTE', 'DIARY', @snapId,
  '今天在太平街吃臭豆腐的时候，旁边坐着一个老奶奶带着孙子。小朋友咬了一口被辣得直吐舌头，老奶奶笑着说："慢慢吃，辣味是要品的，不是要躲的。"\n\n突然觉得这句话很对。长沙的食物是"凶"的——辣椒、花椒、蒜，每一口都像在挑战你的味蕾。但正是这种"凶"，让人吃完之后全身发热，觉得活着真好。\n\n湘菜教我的事：生活要够味，辣一点没关系。',
  '长沙教会我：辣一点没关系', '长沙太平街',
  '{"keywords":["长沙美食","辣","人生哲学","湘菜","市井烟火"],"mood":"happy","weather":"sunny","insight":"生活要够味，辣一点没关系。","style":"轻松口语风","status":"public","aiGenerated":true}',
@@ -173,17 +173,17 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
 -- u7 周八 (建筑师, 上海) — 苏州园林
 -- ============================================================
 SET @userId = 'u7';
-SET @logId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
+SET @snapId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@logId, @userId, 'NOTE', 'SNAPSHOT', NULL,
+(@snapId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年7月30日，苏州拙政园+留园。考察目的：研究古典园林的空间叙事手法对VR空间设计的启发。拙政园：游览3小时，测绘主要观景点12处，重点记录"借景"手法——北寺塔的框景、远香堂的对景。留园：游览2小时，重点记录"步移景异"的动线设计——每走几步就有新的构图出现。拍摄VR360参考素材86组。天气：阴有小雨，反而增加了园林的意境。',
  NULL, '苏州拙政园/留园',
  '{"keywords":["苏州园林","拙政园","留园","空间设计","建筑考察"],"weather":"阴雨","activity":"建筑考察","companion":"独自"}',
  'PRIVATE', 0, 0, 0, '2026-07-30 19:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@diaryId, @userId, 'NOTE', 'DIARY', @logId,
+(@diaryId, @userId, 'NOTE', 'DIARY', @snapId,
  '在拙政园的远香堂坐了一个小时，看雨滴落在荷叶上，滚一圈又滑进池塘。\n\n做了十年建筑设计，第一次真正理解了"移步换景"不是设计手法，是一种世界观。造园的人相信，美不是一下子全部给你的，而是让你一步步发现。每扇窗是一个取景框，每个拐角是一个新的开始。\n\n这让我想到做VR空间设计——好的VR体验也不应该一下子把所有东西都给你，而应该让你在移动中发现。古典园林里，藏着最好的UX设计。',
  '拙政园教会我的事：美是让你一步步发现的', '苏州拙政园',
  '{"keywords":["园林","空间哲学","建筑","VR设计","借景"],"mood":"calm","weather":"rainy","insight":"古典园林里，藏着最好的UX设计。","style":"诗意散文风","status":"public","aiGenerated":true}',
@@ -196,23 +196,23 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
  '{"keywords":["苏州园林","建筑考察","VR空间设计","借景","沉浸式体验"],"sourceSnapIds":["__LOG_ID__"],"sourceDiaries":["__DIARY_ID__"],"prompt":"结合建筑考察日志和园林感悟日记，写一篇从VR设计师视角解读苏州园林的游记","style":"诗意散文风","aiGenerated":true}',
  'PUBLIC', 0, 0, 0, '2026-07-30 21:00:00');
 
-UPDATE posts SET vr_metadata = REPLACE(REPLACE(vr_metadata, '"__LOG_ID__"', CONCAT('"', @logId, '"')), '"__DIARY_ID__"', CONCAT('"', @diaryId, '"')) WHERE id = @travelogueId;
+UPDATE posts SET vr_metadata = REPLACE(REPLACE(vr_metadata, '"__LOG_ID__"', CONCAT('"', @snapId, '"')), '"__DIARY_ID__"', CONCAT('"', @diaryId, '"')) WHERE id = @travelogueId;
 
 -- ============================================================
 -- u8 吴九 (潜水教练, 海南) — 三亚蜈支洲岛
 -- ============================================================
 SET @userId = 'u8';
-SET @logId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
+SET @snapId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@logId, @userId, 'NOTE', 'SNAPSHOT', NULL,
+(@snapId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年7月29日，三亚蜈支洲岛。潜水日志：第一潜9:30，潜点"情人桥"，水深18米，水温27°C，能见度15米，潜水时间42分钟。第二潜11:45，潜点"珊瑚花园"，水深22米，水温26°C，能见度12米，潜水时间38分钟。观察到：鹿角珊瑚群、小丑鱼、海龟1只、鳐鱼2条。水下VR拍摄设备：防水壳+Insta360 X4，共拍摄水下VR素材32分钟。',
  NULL, '三亚蜈支洲岛',
  '{"keywords":["潜水","蜈支洲岛","珊瑚","水下摄影","VR"],"weather":"晴","water_temp":"27°C","visibility":"15米","activity":"潜水"}',
  'PRIVATE', 0, 0, 0, '2026-07-29 18:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@diaryId, @userId, 'NOTE', 'DIARY', @logId,
+(@diaryId, @userId, 'NOTE', 'DIARY', @snapId,
  '水下20米的世界是安静的。除了一呼一吸的气泡声，什么都没有。\n\n那只海龟从珊瑚礁后面游出来的时候，我们在水中对视了几秒。它的眼神很平静，像是在说："你又来了啊。"\n\n每次潜入海里，我都觉得陆地上的那些焦虑和烦恼变得很轻。不是消失了，而是——当你在一个比足球场还大的珊瑚礁面前，你会意识到自己多渺小，而世界多大。\n\n这是大海每次给我的礼物：放小自己，烦恼就小了。',
  '海龟看了我一眼，然后慢悠悠地游走了', '三亚蜈支洲岛',
  '{"keywords":["潜水","海龟","宁静","大海","渺小"],"mood":"calm","weather":"sunny","insight":"放小自己，烦恼就小了。","style":"温柔治愈风","status":"public","aiGenerated":true}',
@@ -225,23 +225,23 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
  '{"keywords":["潜水攻略","蜈支洲岛","水下VR","珊瑚礁","海龟"],"sourceSnapIds":["__LOG_ID__"],"sourceDiaries":["__DIARY_ID__"],"prompt":"结合潜水技术日志和海底感悟日记，写一篇蜈支洲岛潜水游记，包含潜水攻略和海洋保护意识","style":"温柔治愈风","aiGenerated":true}',
  'PUBLIC', 0, 0, 0, '2026-07-29 20:00:00');
 
-UPDATE posts SET vr_metadata = REPLACE(REPLACE(vr_metadata, '"__LOG_ID__"', CONCAT('"', @logId, '"')), '"__DIARY_ID__"', CONCAT('"', @diaryId, '"')) WHERE id = @travelogueId;
+UPDATE posts SET vr_metadata = REPLACE(REPLACE(vr_metadata, '"__LOG_ID__"', CONCAT('"', @snapId, '"')), '"__DIARY_ID__"', CONCAT('"', @diaryId, '"')) WHERE id = @travelogueId;
 
 -- ============================================================
 -- u9 郑十 (历史教师, 陕西) — 兵马俑
 -- ============================================================
 SET @userId = 'u9';
-SET @logId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
+SET @snapId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@logId, @userId, 'NOTE', 'SNAPSHOT', NULL,
+(@snapId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年7月28日，西安秦始皇兵马俑博物馆。参观路线：一号坑→三号坑→二号坑→文物陈列厅。一号坑：东西长230米，宽62米，约有6000个陶俑，已修复约1000余件。重点观察了兵俑的面部细节——每个俑的面部表情和发髻都不同，印证了"千人千面"的说法。拍摄VR近景素材重点：铠甲纹理、发髻结构、排列阵型。三号坑较小但有指挥车，二号坑有彩色陶俑遗迹。',
  NULL, '秦始皇兵马俑博物馆',
  '{"keywords":["兵马俑","秦朝","考古","千人千面","历史"],"activity":"历史考察","companion":"独自"}',
  'PRIVATE', 0, 0, 0, '2026-07-28 20:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@diaryId, @userId, 'NOTE', 'DIARY', @logId,
+(@diaryId, @userId, 'NOTE', 'DIARY', @snapId,
  '站在一号坑前，看着那排列整齐的陶俑军队，两千多年的时间好像一下子被抹掉了。\n\n我盯着其中一个兵俑的脸看了很久——他的眉毛微微上挑，嘴唇紧闭，表情严肃但年轻。两千多年前，有一个真实的工匠，用他的手捏出了这张脸。他不知道这张脸会在两千年后被无数人注视。\n\n他可能只是一个普通的工匠，但他的作品比他活得更久。这让我想到：我们做的每一件认真的事，也许都会在某个遥远的未来，被某个素未谋面的人看见。',
  '两千年前的工匠，比我们想象的更懂"永恒"', '秦始皇兵马俑博物馆',
  '{"keywords":["兵马俑","工匠","永恒","历史","传承"],"mood":"calm","weather":"cloudy","insight":"我们做的每一件认真的事，也许都会在某个遥远的未来被看见。","style":"诗意散文风","status":"public","aiGenerated":true}',
@@ -254,23 +254,23 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
  '{"keywords":["兵马俑","秦朝","工匠精神","历史旅行","西安"],"sourceSnapIds":["__LOG_ID__"],"sourceDiaries":["__DIARY_ID__"],"prompt":"结合历史考察日志和个人感悟日记，写一篇兵马俑深度游记，包含历史文化解读和游览建议","style":"诗意散文风","aiGenerated":true}',
  'PUBLIC', 0, 0, 0, '2026-07-28 22:00:00');
 
-UPDATE posts SET vr_metadata = REPLACE(REPLACE(vr_metadata, '"__LOG_ID__"', CONCAT('"', @logId, '"')), '"__DIARY_ID__"', CONCAT('"', @diaryId, '"')) WHERE id = @travelogueId;
+UPDATE posts SET vr_metadata = REPLACE(REPLACE(vr_metadata, '"__LOG_ID__"', CONCAT('"', @snapId, '"')), '"__DIARY_ID__"', CONCAT('"', @diaryId, '"')) WHERE id = @travelogueId;
 
 -- ============================================================
 -- u10 钱一 (滑雪爱好者, 黑龙江) — 亚布力滑雪
 -- ============================================================
 SET @userId = 'u10';
-SET @logId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
+SET @snapId = UUID(); SET @diaryId = UUID(); SET @travelogueId = UUID();
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@logId, @userId, 'NOTE', 'SNAPSHOT', NULL,
+(@snapId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年7月27日，亚布力滑雪场（夏季旱雪道）。训练内容：高级道技巧练习——大回转+小回转+急停。天气：晴，28°C。训练时间3小时。使用装备：Atomic Redster S9滑雪板+Atomic Hawx Ultra 130雪鞋。VR拍摄：头盔GoPro Max拍摄第一视角VR素材共45分钟，完整记录了高级道全程。滑行数据：最高时速72km/h，共完成12趟。',
  NULL, '亚布力滑雪场',
  '{"keywords":["滑雪","亚布力","高级道","训练","VR第一视角"],"weather":"晴","activity":"滑雪训练","speed":"72km/h","companion":"独自"}',
  'PRIVATE', 0, 0, 0, '2026-07-27 17:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
-(@diaryId, @userId, 'NOTE', 'DIARY', @logId,
+(@diaryId, @userId, 'NOTE', 'DIARY', @snapId,
  '今天在高级道冲下来的时候，速度到了72。风在耳边呼啸，整个世界只剩下我和雪道。\n\n有人说滑雪是"白色鸦片"——上瘾。但对我来说，上瘾的不是速度本身，是在高速中必须保持的那种"绝对的专注"。生活中很少有这样的时刻：你必须百分之百地活在当下，因为一秒钟的分神就可能摔出去。\n\n这种专注，让我从所有的压力和焦虑中解脱出来。在雪道上，我不需要想任何事——只需要感受风和重力，还有自己呼吸的节奏。',
  '时速72公里的自由：滑雪教我的绝对专注', '亚布力滑雪场',
  '{"keywords":["滑雪","速度","专注","自由","极限运动"],"mood":"excited","weather":"sunny","insight":"在雪道上，我不需要想任何事——只需要感受风和重力。","style":"轻松口语风","status":"public","aiGenerated":true}',
@@ -283,7 +283,7 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
  '{"keywords":["亚布力","滑雪攻略","旱雪","VR第一视角","极限运动"],"sourceSnapIds":["__LOG_ID__"],"sourceDiaries":["__DIARY_ID__"],"prompt":"结合滑雪训练日志和运动感悟日记，写一篇亚布力滑雪游记，包含夏季滑雪攻略和极限运动感悟","style":"轻松口语风","aiGenerated":true}',
  'PUBLIC', 0, 0, 0, '2026-07-27 19:00:00');
 
-UPDATE posts SET vr_metadata = REPLACE(REPLACE(vr_metadata, '"__LOG_ID__"', CONCAT('"', @logId, '"')), '"__DIARY_ID__"', CONCAT('"', @diaryId, '"')) WHERE id = @travelogueId;
+UPDATE posts SET vr_metadata = REPLACE(REPLACE(vr_metadata, '"__LOG_ID__"', CONCAT('"', @snapId, '"')), '"__DIARY_ID__"', CONCAT('"', @diaryId, '"')) WHERE id = @travelogueId;
 
 -- ============================================================
 -- Journey 结构化记录（为每篇游记创建 Journey + JourneyStop）
