@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-16
+修改位置：web/src/app/(main)/upload/page.tsx（删除）、web/src/components/upload/topic-selector.tsx、community-selector.tsx、draft-list.tsx、publish-preview.tsx、image-cropper.tsx、video-thumbnail-selector.tsx、visibility-control.tsx（删除）
+修改原因：用户明确"分享见闻"功能永久移除、后续不再添加；该页面及仅其使用的上传组件已成为孤儿死代码
+修改内容：删除分享见闻页 upload/page.tsx 及 7 个孤儿上传组件（topic-selector/community-selector/draft-list/publish-preview/image-cropper/video-thumbnail-selector/visibility-control）；保留 /upload/journey-creator（写游记编辑器）、multi-image-uploader（被 /diaries/new 使用）、snap-upload-dialog（上传弹窗）；清除 .next 缓存后重建
+修改效果：分享见闻相关代码完全清理，/upload 目录只剩写游记编辑器；/upload/journey-creator、/diaries/new、/snap 页面编译正常，TypeScript 编译通过（仅剩 e2e 预存错误）
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-16
 修改位置：web/src/components/layout/sidebar.tsx
 修改原因：用户反馈侧边栏"浏览/我的/个人"分组标题与上方分隔线的间距不一致
 修改内容："个人"分组容器从 `px-3 pb-3` 改为 `p-3`，与其他分组（浏览/我的/管理中心）统一，标题与分隔线间距一致
