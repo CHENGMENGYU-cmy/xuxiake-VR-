@@ -558,8 +558,8 @@ function UploadContent() {
         </div>
       </div>
 
-      {/* 创作引导卡片：日记 / 手写游记 / AI 游记 */}
-      {activeTab !== 'DIARY' && (
+      {/* 创作引导卡片：写日记 / 写游记 / AI 写游记 */}
+      {(
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <button
             onClick={() => router.push('/diaries/new')}
