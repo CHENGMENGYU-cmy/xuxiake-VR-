@@ -182,7 +182,7 @@ export function Sidebar() {
                             isActive && 'bg-primary/10 text-primary hover:bg-primary/10'
                           )}
                         >
-                          <Icon className={cn('h-5 w-5', item.color, isActive && 'text-primary')} />
+                          <Icon className={cn('h-5 w-5', isActive && 'text-primary')} />
                           <span>{item.label}</span>
                         </Button>
                       </Link>
