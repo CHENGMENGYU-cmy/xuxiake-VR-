@@ -136,7 +136,6 @@ export class PostsService {
     } else {
       qb.where('post.visibility = :vis', { vis: 'PUBLIC' });
     }
-    qb.andWhere('1 = 1');
 
     qb.andWhere('post.deletedAt IS NULL');
 
@@ -194,7 +193,6 @@ export class PostsService {
     } else {
       qb.where('post.visibility = :vis', { vis: 'PUBLIC' });
     }
-    qb.andWhere('1 = 1');
 
     qb.andWhere('post.deletedAt IS NULL');
 
