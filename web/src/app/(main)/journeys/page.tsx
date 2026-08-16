@@ -137,6 +137,12 @@ function JourneysContent() {
           <h1 className="text-xl font-bold">我的游记</h1>
         </div>
         <div className="flex items-center gap-2">
+          <Link href="/journeys/generate">
+            <Button size="sm" variant="outline" className="gap-1.5">
+              <Sparkles className="h-4 w-4 text-amber-500" />
+              AI 写游记
+            </Button>
+          </Link>
           <Link href="/upload/journey-creator">
             <Button size="sm" className="gap-1.5">
               <PenLine className="h-4 w-4" />
