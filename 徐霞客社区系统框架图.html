@@ -7,142 +7,158 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
-    background: linear-gradient(170deg, #eef2f9 0%, #f6f8fc 60%, #fbfcfe 100%);
+    background: linear-gradient(170deg, #eff6f1 0%, #f6faf7 60%, #fbfdfc 100%);
     padding: 24px 40px 28px;
-    min-width: 1360px;
+    min-width: 1000px;
   }
-  .header { text-align: center; margin-bottom: 18px; }
-  .header h1 { font-size: 26px; color: #16294a; letter-spacing: 2px; }
+  .header { text-align: center; margin-bottom: 16px; }
+  .header h1 { font-size: 25px; color: #0b3d2e; letter-spacing: 2px; }
   .header .tag {
     display: inline-block; margin-top: 8px;
-    font-size: 13px; color: #40557d; letter-spacing: 4px;
-    background: rgba(255,255,255,0.7); border: 1px solid #c3d4ec;
-    padding: 5px 22px; border-radius: 30px;
+    font-size: 12.5px; color: #2f6b52; letter-spacing: 3px;
+    background: rgba(255,255,255,0.75); border: 1px solid #b8e0cd;
+    padding: 5px 20px; border-radius: 30px;
   }
 
   #lines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
 
   .tree { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
   .wrap { display: flex; flex-direction: column; align-items: center; }
-  .row { display: flex; justify-content: center; align-items: flex-start; gap: 16px; padding-top: 30px; }
+  .row { display: flex; justify-content: center; align-items: flex-start; gap: 9px; padding-top: 20px; flex-wrap: wrap; }
+  .col { display: flex; flex-direction: column; align-items: center; gap: 14px; padding-top: 22px; }
 
   .node {
     white-space: nowrap;
-    padding: 8px 15px;
-    border-radius: 11px;
-    font-size: 13px;
-    border: 1.5px solid #c7d8ef;
+    padding: 7px 13px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    border: 1.5px solid #bce4d2;
     background: #fff;
-    color: #1f3a5c;
+    color: #14532d;
   }
+  .node b { font-weight: 700; }
+  .node i { font-style: normal; color: #5b7a6a; font-size: 11.5px; margin-left: 2px; }
   .lvl0 {
-    font-size: 19px; font-weight: 700; color: #fff; letter-spacing: 1px;
-    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
-    border: none; padding: 15px 30px; border-radius: 26px;
-    box-shadow: 0 6px 18px rgba(30,58,138,0.35);
+    font-size: 18px; font-weight: 700; color: #fff; letter-spacing: 1px;
+    background: linear-gradient(135deg, #065f46, #10b981);
+    border: none; padding: 13px 26px; border-radius: 24px;
+    box-shadow: 0 6px 18px rgba(6,95,70,0.35);
   }
-  .lvl1 { font-size: 15px; font-weight: 700; color: #fff; background: #2563eb; border: none; }
-  .lvl2 { font-size: 13.5px; font-weight: 600; background: #e9f0fb; border-color: #b6cdf0; }
-  .lvl3 { font-size: 12.5px; background: #ffffff; border-color: #cfddf1; color: #3a557f; }
+  .lvl1 { font-size: 14px; font-weight: 700; color: #fff; background: #059669; border: none; }
+  .lvl2 { font-size: 12.5px; background: #ecfdf5; border-color: #a7f3d0; color: #14532d; }
 
   .foot {
-    margin-top: 26px; position: relative; z-index: 1;
-    background: rgba(255,255,255,0.85); border: 1px solid #cddbf0; border-radius: 10px;
-    padding: 11px 18px; font-size: 14px; color: #25365a; text-align: center; letter-spacing: 1px;
+    margin-top: 24px; position: relative; z-index: 1;
+    background: rgba(255,255,255,0.88); border: 1px solid #bce4d2; border-radius: 10px;
+    padding: 10px 18px; font-size: 13.5px; color: #1c4a38; text-align: center; letter-spacing: 1px;
   }
-  .foot b { color: #1e3a8a; }
+  .foot b { color: #065f46; }
 </style>
 </head>
 <body>
-  <svg id="lines">
-    <defs>
-      <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-        <path d="M 0 0 L 10 5 L 0 10 z" fill="#8fb3e3"/>
-      </marker>
-    </defs>
-  </svg>
+  <svg id="lines"></svg>
 
   <div class="header">
     <h1>徐霞客 AI 游记与社区系统框架图</h1>
-    <div class="tag">第一级：系统主体 · 第二级：功能 · 第三级：主要内容</div>
+    <div class="tag">第一级：系统层次 · 第二级：功能模块 · 内容说明</div>
   </div>
 
   <div class="tree" id="tree"></div>
 
   <div class="foot">
-    说明：以 <b>社区为核心入口</b>，从 AI 眼镜采集到社区发布，联动本地 AI 与云端，实现 <b>"记录 → 创作 → 社交"</b> 内容闭环。
+    说明：系统从 <b>AI 眼镜数据采集</b> 到 <b>线上部署</b> 共十一层，层层递进，实现 <b>"记录 → 创作 → 社交"</b> 内容闭环。
   </div>
 
 <script>
 const TREE = {
   name: "徐霞客 AI 游记与社区系统",
   children: [
-    {
-      name: "用户",
-      children: [
-        { name: "交互方式", children: [
-          { name: "网页端" },
-          { name: "手机端" },
-        ] },
-      ],
-    },
-    {
-      name: "徐霞客社区系统",
-      children: [
-        { name: "采集同步", children: [
-          { name: "闪拍素材" }, { name: "媒体上传" }, { name: "元数据同步" },
-        ] },
-        { name: "内容分层", children: [
-          { name: "素材库" }, { name: "日记" }, { name: "游记" },
-        ] },
-        { name: "AI 生成", children: [
-          { name: "AI日记" }, { name: "AI游记" }, { name: "模型引擎" },
-        ] },
-        { name: "社区社交", children: [
-          { name: "社群" }, { name: "消息" }, { name: "推荐" }, { name: "通知" },
-        ] },
-        { name: "AR 媒体", children: [
-          { name: "媒体上传" }, { name: "沉浸浏览" }, { name: "内容发现" },
-        ] },
-        { name: "治理权限", children: [
-          { name: "内容审核" }, { name: "软删除" }, { name: "角色权限" },
-        ] },
-      ],
-    },
-    {
-      name: "闪拍 App",
-      children: [
-        { name: "数据采集", children: [
-          { name: "照片/视频/语音" }, { name: "同步到社区" },
-        ] },
-      ],
-    },
-    {
-      name: "云端服务平台",
-      children: [
-        { name: "内容生成", children: [ { name: "AI 生成日记/游记" } ] },
-        { name: "数据同步", children: [ { name: "多端数据一致" } ] },
-        { name: "社区平台", children: [ { name: "内容沉淀与展示" } ] },
-      ],
-    },
+    { name: "① 数据采集层", children: [
+      { name: "AI 眼镜", content: "拍照/录像/语音" },
+      { name: "闪拍 App", content: "本地库/票据/媒体" },
+      { name: "元数据", content: "GPS/时间/天气/分类" },
+      { name: "语音转写", content: "阿里云 NLS" },
+    ] },
+    { name: "② 数据同步层", children: [
+      { name: "账号登录", content: "密码/图形验证码" },
+      { name: "媒体上传", content: "图片/视频/音频" },
+      { name: "元数据同步", content: "幂等去重" },
+      { name: "同步产物", content: "SNAPSHOT 私密" },
+    ] },
+    { name: "③ 内容分层层", children: [
+      { name: "素材库", content: "相册/多选/上传" },
+      { name: "日记", content: "手写/AI/三态可见" },
+      { name: "游记", content: "章节式/发布控制" },
+    ] },
+    { name: "④ AI 生成层", children: [
+      { name: "AI 日记", content: "5 风格/回忆反差" },
+      { name: "AI 游记", content: "章节/配图/信息卡" },
+      { name: "模型引擎", content: "DeepSeek/回退" },
+      { name: "AI 原则", content: "私密/基于事实" },
+    ] },
+    { name: "⑤ 社区社交层", children: [
+      { name: "社群", content: "动态/公告/角色/挑战" },
+      { name: "消息", content: "实时/卡片/反应/语音" },
+      { name: "推荐", content: "搭子/推荐社群" },
+      { name: "通知", content: "SSE 实时推送" },
+    ] },
+    { name: "⑥ AR 媒体层", children: [
+      { name: "媒体上传", content: "视频/图片/音频/VR" },
+      { name: "沉浸浏览", content: "悬停/播放器/全屏" },
+      { name: "内容发现", content: "类型筛选" },
+    ] },
+    { name: "⑦ 治理与权限层", children: [
+      { name: "内容审核", content: "敏感词/队列/举报" },
+      { name: "软删除", content: "可恢复/可审计" },
+      { name: "权限体系", content: "USER/MOD/ADMIN" },
+    ] },
+    { name: "⑧ 前端应用层", children: [
+      { name: "技术栈", content: "Next16/React19/Tailwind" },
+      { name: "核心页面", content: "首页/发现/素材/日记/游记/社群/消息" },
+      { name: "信息架构", content: "侧边栏/移动导航" },
+    ] },
+    { name: "⑨ 后端服务层", children: [
+      { name: "NestJS 11", content: "TypeScript 模块化" },
+      { name: "业务模块", content: "auth/posts/social/sync/upload/chat" },
+      { name: "实时能力", content: "WebSocket/SSE" },
+      { name: "安全", content: "JWT 双 Token" },
+    ] },
+    { name: "⑩ 数据与存储层", children: [
+      { name: "MySQL 8", content: "26 迁移 + 4 种子" },
+      { name: "文件存储", content: "本地/可切 OSS" },
+    ] },
+    { name: "⑪ 部署运维层", children: [
+      { name: "Docker", content: "4 容器/一键初始化" },
+      { name: "Nginx", content: "代理/静态/WS/SSE" },
+      { name: "线上部署", content: "阿里云/xuxiake.com" },
+    ] },
   ],
 };
 
-function nodeEl(name, level) {
+function nodeEl(node, level) {
   const d = document.createElement('div');
-  d.className = 'node lvl' + Math.min(level, 3);
-  d.textContent = name;
+  d.className = 'node lvl' + Math.min(level, 2);
+  if (node.content) {
+    const b = document.createElement('b');
+    b.textContent = node.name;
+    const i = document.createElement('i');
+    i.textContent = ' · ' + node.content;
+    d.appendChild(b);
+    d.appendChild(i);
+  } else {
+    d.textContent = node.name;
+  }
   return d;
 }
 function render(node, parent, level) {
   const wrap = document.createElement('div');
   wrap.className = 'wrap';
-  wrap.appendChild(nodeEl(node.name, level));
+  wrap.appendChild(nodeEl(node, level));
   if (node.children && node.children.length) {
-    const row = document.createElement('div');
-    row.className = 'row';
-    node.children.forEach((c) => render(c, row, level + 1));
-    wrap.appendChild(row);
+    const box = document.createElement('div');
+    box.className = level % 2 === 0 ? 'col' : 'row';
+    node.children.forEach((c) => render(c, box, level + 1));
+    wrap.appendChild(box);
   }
   parent.appendChild(wrap);
 }
@@ -157,20 +173,20 @@ function drawLines() {
   svg.setAttribute('height', document.body.scrollHeight);
 
   document.querySelectorAll('.wrap').forEach((w) => {
-    const row = w.querySelector(':scope > .row');
-    if (!row) return;
+    const box = w.querySelector(':scope > .row, :scope > .col');
+    if (!box) return;
     const p = w.querySelector(':scope > .node');
     const pRect = p.getBoundingClientRect();
     const px = pRect.left + pRect.width / 2 - bodyRect.left;
     const py = pRect.bottom - bodyRect.top;
-    row.querySelectorAll(':scope > .wrap > .node').forEach((cn) => {
+    box.querySelectorAll(':scope > .wrap > .node').forEach((cn) => {
       const cRect = cn.getBoundingClientRect();
       const cx = cRect.left + cRect.width / 2 - bodyRect.left;
       const cy = cRect.top - bodyRect.top;
       const midY = (py + cy) / 2;
       const path = document.createElementNS(ns, 'path');
       path.setAttribute('d', 'M ' + px + ' ' + py + ' L ' + px + ' ' + midY + ' L ' + cx + ' ' + midY + ' L ' + cx + ' ' + cy);
-      path.setAttribute('stroke', '#8fb3e3');
+      path.setAttribute('stroke', '#34d399');
       path.setAttribute('stroke-width', '1.6');
       path.setAttribute('fill', 'none');
       svg.appendChild(path);
