@@ -22,6 +22,7 @@ export default function MainLayout({
         <RightPanel />
       </div>
       <MobileNav />
+      <SnapUploadDialog />
     </>
   );
 }
