@@ -24,7 +24,7 @@ export function MobileNav() {
     { href: '/feed', label: '首页', icon: Home },
     ...(user ? [
       { href: '/discover', label: '发现', icon: Compass },
-      { href: '/upload', label: '发布', icon: Upload },
+      { action: 'upload' as const, label: '上传', icon: Upload },
       { href: '/messages', label: '消息', icon: MessageCircle },
       { href: '/my', label: '我的', icon: User },
     ] : [
