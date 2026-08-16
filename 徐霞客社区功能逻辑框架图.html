@@ -8,116 +8,121 @@
   body {
     font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
     background: #f5f5f5;
-    padding: 32px 44px 36px;
+    padding: 36px 44px 34px;
   }
+  .page { max-width: 1260px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
 
-  .page { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+  h1 { font-size: 26px; color: #1e3a5f; font-weight: 800; letter-spacing: 3px; margin-bottom: 24px; text-align: center; }
 
-  h1 { font-size: 27px; color: #1e3a5f; font-weight: 800; letter-spacing: 3px; margin-bottom: 8px; text-align: center; }
-  .sub { font-size: 12.5px; color: #64748b; margin-bottom: 22px; letter-spacing: 2px; }
+  .down { font-size: 26px; color: #2563eb; font-weight: 700; line-height: 1; padding: 10px 0; }
 
-  .down { font-size: 26px; color: #2563eb; font-weight: 700; line-height: 1; padding: 8px 0; }
-
-  /* 层 */
-  .layer { width: 100%; border: 2px solid #1e3a5f; border-radius: 12px; background: #fff; overflow: hidden; }
-  .layer .lt { background: #1e3a5f; color: #fff; text-align: center; padding: 10px; font-size: 15px; font-weight: 800; letter-spacing: 3px; }
-  .layer .items { display: flex; justify-content: center; gap: 12px; padding: 13px 15px; flex-wrap: wrap; }
-  .item {
-    background: #f8fafc; border: 1px solid #dbe2ea; border-radius: 10px;
-    padding: 12px 15px; text-align: center; min-width: 120px; flex: 1;
+  /* 用户层 */
+  .user {
+    background: #fff; border: 2px solid #1e3a5f; border-radius: 40px;
+    padding: 10px 64px; font-size: 16px; font-weight: 800; color: #1e3a5f;
   }
-  .item .bt { font-size: 14px; font-weight: 800; color: #2563eb; margin-bottom: 5px; }
-  .item .bd { font-size: 11.5px; color: #475569; line-height: 1.75; }
-  .item .bd b { color: #1e3a5f; }
+  .user .s { font-size: 11.5px; font-weight: 600; color: #64748b; letter-spacing: 1px; }
 
-  /* 用户层特殊 */
-  .user-layer .items { padding: 16px; }
-  .user-item { font-size: 16px; font-weight: 800; color: #1e3a5f; text-align: center; padding: 6px 0; }
-  .user-item .s { display: block; font-size: 12px; font-weight: 600; color: #64748b; margin-top: 4px; }
+  /* 内容链条主线 */
+  .flow { display: flex; align-items: stretch; justify-content: center; }
+  .arr { display: flex; align-items: center; padding: 0 5px; color: #2563eb; font-size: 24px; font-weight: 700; }
 
-  .note {
-    align-self: flex-end; margin-top: 22px; max-width: 920px;
-    font-size: 12.5px; color: #64748b; line-height: 1.9; text-align: right;
+  .stage {
+    width: 198px; background: #fff; border: 1px solid #d0d7de; border-radius: 12px;
+    border-left: 5px solid #2563eb;
+    padding: 14px 16px 12px; display: flex; flex-direction: column; gap: 8px;
+    box-shadow: 0 3px 12px rgba(30,58,95,0.09);
   }
-  .note b { color: #1e3a5f; }
+  .stage .nm { font-size: 16px; font-weight: 800; color: #1e3a5f; }
+  .stage .nm .no { color: #2563eb; margin-right: 3px; }
+  .stage .en { font-size: 10px; color: #94a3b8; letter-spacing: 1.5px; margin-top: -4px; }
+  .stage .f { font-size: 12px; color: #475569; line-height: 1.8; flex: 1; }
+  .stage .f b { color: #1e3a5f; font-weight: 700; }
+  .stage .meta {
+    border-top: 1px dashed #e2e8f0; padding-top: 7px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 11px;
+  }
+  .meta .role { font-weight: 700; color: #2563eb; }
+  .meta .st { font-weight: 700; }
+  .st.ok      { color: #16a34a; }
+  .st.partial { color: #d97706; }
+
+  .foot {
+    margin-top: 22px; text-align: center; font-size: 12px; color: #64748b; line-height: 2;
+  }
+  .foot b { color: #1e3a5f; }
 </style>
 </head>
 <body>
   <div class="page">
 
     <h1>徐霞客社区功能逻辑框架图</h1>
-    <div class="sub">借鉴真实内容社区架构 · 内容生产 → 分发 → 互动 → 治理</div>
 
-    <!-- L1 用户 -->
-    <div class="layer user-layer">
-      <div class="lt">用户层</div>
-      <div class="items">
-        <div class="user-item">用户（创作者 · 消费者）<span class="s">浏览 · 创作 · 发布 · 互动</span></div>
-      </div>
-    </div>
+    <!-- 用户层 -->
+    <div class="user">用户<span class="s">（创作者 · 消费者）</span></div>
     <div class="down">↓</div>
 
-    <!-- L2 内容生产 -->
-    <div class="layer">
-      <div class="lt">内容生产层 · 三级内容链条</div>
-      <div class="items">
-        <div class="item"><div class="bt">闪拍采集</div><div class="bd">照片 / 视频 / 语音<br>GPS · 时间 · 天气</div></div>
-        <div class="item"><div class="bt">素材库</div><div class="bd">相册聚合 · 按天/地点/行程<br>多选 · 全局上传 · 同步</div></div>
-        <div class="item"><div class="bt">AI 生成</div><div class="bd">AI 日记（5 风格）<br>AI 游记（结构化章节）</div></div>
-        <div class="item"><div class="bt">日记 · 游记</div><div class="bd">手写 + AI · 三态可见<br>章节式 · 信息卡 · 发布</div></div>
-      </div>
-    </div>
-    <div class="down">↓</div>
+    <!-- 内容链条主线 -->
+    <div class="flow">
 
-    <!-- L3 内容分发 -->
-    <div class="layer">
-      <div class="lt">内容分发层</div>
-      <div class="items">
-        <div class="item"><div class="bt">Feed 首页</div><div class="bd">发现 / 关注双模式<br>类型筛选</div></div>
-        <div class="item"><div class="bt">发现</div><div class="bd">日记广场 · 话题<br>找搭子</div></div>
-        <div class="item"><div class="bt">搜索</div><div class="bd">全局搜索 · 类型筛选</div></div>
-        <div class="item"><div class="bt">AR 媒体</div><div class="bd">VR180/360 · 沉浸浏览</div></div>
+      <div class="stage">
+        <div class="nm"><span class="no">①</span>闪拍采集</div>
+        <div class="en">CAPTURE</div>
+        <div class="f"><b>采集</b> 照片 / 视频 / 语音<br><b>元数据</b> GPS · 时间 · 天气 · 行程</div>
+        <div class="meta"><span class="role">USER</span><span class="st ok">✓ 完成</span></div>
       </div>
-    </div>
-    <div class="down">↓</div>
 
-    <!-- L4 社交互动 -->
-    <div class="layer">
-      <div class="lt">社交互动层</div>
-      <div class="items">
-        <div class="item"><div class="bt">内容互动</div><div class="bd">点赞 · 评论 · 分享<br>关注 / 收藏</div></div>
-        <div class="item"><div class="bt">社群</div><div class="bd">动态 · 公告 · 挑战<br>空间页 · 角色</div></div>
-        <div class="item"><div class="bt">消息</div><div class="bd">WebSocket 实时<br>富媒体 · 语音 · 位置</div></div>
-        <div class="item"><div class="bt">推荐 · 通知</div><div class="bd">推荐搭子 · 推荐社群<br>SSE 实时推送</div></div>
-      </div>
-    </div>
-    <div class="down">↓</div>
+      <div class="arr">➜</div>
 
-    <!-- L5 治理与安全 -->
-    <div class="layer">
-      <div class="lt">治理与安全层</div>
-      <div class="items">
-        <div class="item"><div class="bt">内容审核</div><div class="bd">敏感词 · 审核队列<br>批量通过 / 驳回 · 下架</div></div>
-        <div class="item"><div class="bt">举报处理</div><div class="bd">举报列表 · 解决 / 驳回</div></div>
-        <div class="item"><div class="bt">软删除</div><div class="bd">逻辑删除 · 可恢复 · 可审计</div></div>
-        <div class="item"><div class="bt">权限体系</div><div class="bd">USER · MODERATOR · ADMIN<br>管理中心</div></div>
+      <div class="stage">
+        <div class="nm"><span class="no">②</span>素材库</div>
+        <div class="en">SNAPSHOT</div>
+        <div class="f"><b>浏览</b> 相册聚合 · 按天/地点/行程<br><b>操作</b> 多选 · 全局上传 · 幂等同步</div>
+        <div class="meta"><span class="role">USER</span><span class="st ok">✓ 完成</span></div>
       </div>
-    </div>
-    <div class="down">↓</div>
 
-    <!-- L6 支撑底座 -->
-    <div class="layer">
-      <div class="lt">支撑底座</div>
-      <div class="items">
-        <div class="item"><div class="bt">前端</div><div class="bd">Next.js 16 · React 19<br>Tailwind</div></div>
-        <div class="item"><div class="bt">后端</div><div class="bd">NestJS 11 模块化<br>REST · WebSocket · SSE</div></div>
-        <div class="item"><div class="bt">AI 能力</div><div class="bd">DeepSeek 内容生成<br>失败回退模板</div></div>
-        <div class="item"><div class="bt">数据与部署</div><div class="bd">MySQL 8 · 文件存储<br>Docker 一键 · 线上运行</div></div>
+      <div class="arr">➜</div>
+
+      <div class="stage">
+        <div class="nm"><span class="no">③</span>日记</div>
+        <div class="en">DIARY</div>
+        <div class="f"><b>创作</b> 手写 + AI写<br><b>可见</b> 草稿 / 私密 / 公开 · 广场</div>
+        <div class="meta"><span class="role">USER</span><span class="st ok">✓ 完成</span></div>
       </div>
+
+      <div class="arr">➜</div>
+
+      <div class="stage">
+        <div class="nm"><span class="no">④</span>游记</div>
+        <div class="en">TRAVELOGUE</div>
+        <div class="f"><b>创作</b> 章节式编辑器 · 信息卡<br><b>发布</b> 发布/撤回 · 地点精度控制</div>
+        <div class="meta"><span class="role">USER</span><span class="st ok">✓ 完成</span></div>
+      </div>
+
+      <div class="arr">➜</div>
+
+      <div class="stage">
+        <div class="nm"><span class="no">⑤</span>社区发布</div>
+        <div class="en">PUBLISH</div>
+        <div class="f"><b>展示</b> Feed 发现/关注 · 类型筛选<br><b>互动</b> 点赞 · 评论 · 分享 · 审核把关</div>
+        <div class="meta"><span class="role">USER/MOD/ADMIN</span><span class="st ok">✓ 完成</span></div>
+      </div>
+
+      <div class="arr">➜</div>
+
+      <div class="stage">
+        <div class="nm"><span class="no">⑥</span>社交互动</div>
+        <div class="en">SOCIAL</div>
+        <div class="f"><b>社群</b> 动态 / 公告 / 挑战<br><b>消息/推荐</b> 实时 · 搭子 · 通知</div>
+        <div class="meta"><span class="role">USER</span><span class="st partial">△ 部分</span></div>
+      </div>
+
     </div>
 
-    <div class="note">
-      架构逻辑：<b>用户 → 内容生产（三级链条）→ 内容分发 → 社交互动 → 治理安全 → 支撑底座</b>，借鉴小红书 / B站 / 微博等真实内容社区的"生产—分发—互动"闭环逻辑，实现 <b>"记录 → 创作 → 社交"</b> 完整闭环。
+    <div class="foot">
+      主线流转：<b>闪拍采集 → 素材库 → 日记 → 游记 → 社区发布 → 社交互动</b>　｜　辅助能力：AI 内容生成（日记/游记）· 治理与保障（审核/举报/软删除/权限）<br>
+      状态：<b>✓ 已完成</b> · <b>△ 部分完成</b>　｜　角色：USER 普通用户 · MODERATOR 审核员 · ADMIN 管理员
     </div>
 
   </div>
