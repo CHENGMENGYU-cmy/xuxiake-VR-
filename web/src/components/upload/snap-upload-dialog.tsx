@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 import {
   Loader2, Upload, X, Image as ImageIcon, Video as VideoIcon, Mic, Check,
 } from 'lucide-react';
-import { uploadImage, uploadVideo, uploadAudio } from '@/lib/media-api';
+import { uploadImage, uploadVideo, uploadAudio, getVideoMetadata, getAudioDuration } from '@/lib/media-api';
 import { createPost } from '@/lib/post-api';
 import { useUIStore } from '@/stores/ui-store';
 import { useSnapStore } from '@/stores/snap-store';
