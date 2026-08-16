@@ -13,6 +13,7 @@ export function MobileNav() {
   const pathname = usePathname();
   const { user } = useAuthStore();
   const totalUnread = useChatStore((s) => s.totalUnread);
+  const openUploadDialog = useUIStore((s) => s.openUploadDialog);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
