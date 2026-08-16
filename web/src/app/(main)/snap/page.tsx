@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { AuthGuard } from '@/components/auth-guard';
 import { useSnapStore } from '@/stores/snap-store';
+import { useUIStore } from '@/stores/ui-store';
 import { DiaryComposeDialog } from '@/components/diary/diary-compose-dialog';
 import apiClient from '@/lib/api-client';
 
