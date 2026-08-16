@@ -805,16 +805,16 @@ export function PostComposer() {
                             链接
                           </button>
                           <div className="my-1 h-px bg-border" />
-                          <Link
-                            href="/upload"
-                            className="flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-xs transition-colors hover:bg-accent"
-                            onClick={() => setShowMoreMenu(false)}
+                          <button
+                            type="button"
+                            onClick={() => { setShowMoreMenu(false); openUploadDialog(); }}
+                            className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-1.5 text-xs transition-colors hover:bg-accent"
                           >
                             <span className="flex h-6 w-6 items-center justify-center rounded-md bg-muted">
                               <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />
                             </span>
-                            更多内容
-                          </Link>
+                            上传素材
+                          </button>
                           {/* 小三角 */}
                           <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 h-3 w-3 rotate-45 border-l border-t bg-popover/95" />
                         </div>
