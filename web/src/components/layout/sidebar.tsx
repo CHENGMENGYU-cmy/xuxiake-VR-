@@ -174,10 +174,7 @@ export function Sidebar() {
                   <p className="px-2 text-xs font-medium uppercase text-muted-foreground">创作</p>
                   {createItems.map((item) => {
                     const Icon = item.icon;
-                    const isActive =
-                      (item.href === '/upload' && pathname === '/upload') ||
-                      (item.href === '/upload/journey-creator' && pathname.startsWith('/upload/journey-creator')) ||
-                      (item.href === '/journeys/generate' && pathname.startsWith('/journeys/generate'));
+                    const isActive = item.href === '/upload' && pathname === '/upload';
                     return (
                       <Link key={item.href} href={item.href}>
                         <Button
