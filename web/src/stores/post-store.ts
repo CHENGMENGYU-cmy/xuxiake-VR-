@@ -8,6 +8,7 @@ interface PostFilters {
   postType?: string;
   tagId?: string;
   followingOnly?: boolean;
+  excludeContentLevel?: string;
 }
 
 interface PostState {
