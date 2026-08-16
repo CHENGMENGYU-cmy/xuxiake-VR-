@@ -287,7 +287,7 @@ export class PostsController {
   ) {
     const userId = this.getUserId(auth);
     const snap = await this.postsService.getPostById(body.snapId, userId);
-    if (!snap || !['SNAPSHOT', 'LOG'].includes((snap as any).contentLevel)) {
+    if (!snap || !['SNAPSHOT'].includes((snap as any).contentLevel)) {
       throw new NotFoundException('素材记录不存在');
     }
 
