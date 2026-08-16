@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-16
+修改位置：server/sql/seed-log-diary-travelogue.sql、server/sql/migrate-content-level.sql、server/sql/migrate-content-hierarchy.sql
+修改原因：数据库清理收尾——seed 脚本 @logId/__LOG_ID__ 变量名残留 LOG 命名(实际存闪拍ID)、历史迁移脚本 content_level enum 仍含已废弃的 CLASSIFIED/LOG(会覆盖 schema 新 enum)
+修改内容：①seed-log-diary-travelogue.sql 将 @logId→@snapId、__LOG_ID__→__SNAP_ID__，清理条件移除 'LOG'(数据语义与3级链条对齐)；②migrate-content-level.sql 的 MODIFY enum 改为 SNAPSHOT/DIARY/TRAVELOGUE/ESSAY 并更新注释(避免在初始化时把 schema 新 enum 覆盖回含 CLASSIFIED/LOG 的旧值)；③migrate-content-hierarchy.sql(未挂载历史脚本)同步更新 enum 与注释
+修改效果：sql 脚本全链路不再有 LOG/CLASSIFIED 引用(仅历史备份 backup_seed_posts_2026-08-06.sql 保留原样作为回滚快照)；docker 初始化枚举定义与实体、schema 完全一致
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-16
 修改位置：docker-compose.yml、server/sql/schema.sql、seed.sql、seed-snap-diary.sql、seed-snap-u1.sql、cleanup-admin-data.sql、server/src/common/interfaces.ts、server/src/entities/post.entity.ts、server/src/modules/posts/posts.service.ts、posts.controller.ts、ai.service.ts、server/src/modules/users/users.controller.ts
 修改原因：数据库审计发现需处理的问题——docker 初始化链路缺失3个迁移(新环境建库即坏)、LOG/CLASSIFIED 在服务层残留(前端已清后端未清)、旧种子复现脏数据、SNAPSHOT 可见性不统一
 修改内容：①docker-compose.yml 挂载缺失的 migrate-travelogue-chapters/tips-highlights/soft-delete，移除旧种子 seed-content-classification.sql，种子脚本重编号(23-26)；②后端精简 ContentLevel 类型与 post.entity enum 为 SNAPSHOT/DIARY/TRAVELOGUE/ESSAY(移除 CLASSIFIED/LOG)，删除 GET /logs 路由与 getUserLogs 方法，移除 feed 三个查询分支的 LOG 排除与 users.controller 统计排除、ai.service 的 LOG 判断；③getUserSnaps 补 visibility:'PRIVATE' 过滤(素材库仅显示私有素材)；④seed.sql 移除废弃 CLASSIFIED update 与硬编码 ADMIN/MODERATOR 角色(种子用户保持 USER)；seed-snap-diary/seed-snap-u1 的 SNAPSHOT 可见性 PUBLIC→PRIVATE；⑤schema.sql post_type/content_level enum 与实体对齐；cleanup-admin-data.sql 修 notifications.recipient_id、journeys 按 post_id 联表删除
