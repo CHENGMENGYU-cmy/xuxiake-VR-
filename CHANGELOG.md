@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-16
+修改位置：docker-compose.yml、server/sql/schema.sql、seed.sql、seed-snap-diary.sql、seed-snap-u1.sql、cleanup-admin-data.sql、server/src/common/interfaces.ts、server/src/entities/post.entity.ts、server/src/modules/posts/posts.service.ts、posts.controller.ts、ai.service.ts、server/src/modules/users/users.controller.ts
+修改原因：数据库审计发现需处理的问题——docker 初始化链路缺失3个迁移(新环境建库即坏)、LOG/CLASSIFIED 在服务层残留(前端已清后端未清)、旧种子复现脏数据、SNAPSHOT 可见性不统一
+修改内容：①docker-compose.yml 挂载缺失的 migrate-travelogue-chapters/tips-highlights/soft-delete，移除旧种子 seed-content-classification.sql，种子脚本重编号(23-26)；②后端精简 ContentLevel 类型与 post.entity enum 为 SNAPSHOT/DIARY/TRAVELOGUE/ESSAY(移除 CLASSIFIED/LOG)，删除 GET /logs 路由与 getUserLogs 方法，移除 feed 三个查询分支的 LOG 排除与 users.controller 统计排除、ai.service 的 LOG 判断；③getUserSnaps 补 visibility:'PRIVATE' 过滤(素材库仅显示私有素材)；④seed.sql 移除废弃 CLASSIFIED update 与硬编码 ADMIN/MODERATOR 角色(种子用户保持 USER)；seed-snap-diary/seed-snap-u1 的 SNAPSHOT 可见性 PUBLIC→PRIVATE；⑤schema.sql post_type/content_level enum 与实体对齐；cleanup-admin-data.sql 修 notifications.recipient_id、journeys 按 post_id 联表删除
+修改效果：全新 docker 环境可正常初始化(缺迁移补齐、旧脏种子移除、seed 依赖保持)；LOG/CLASSIFIED 从类型/路由/查询彻底移除(ESSAY 散文层级保留)；素材可见性统一为 PRIVATE。后端编译通过，feed 接口200、/logs 已移除返回404
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-16
 修改位置：server/src/modules/posts/posts.service.ts、server/src/modules/posts/posts.controller.ts、web/src/stores/post-store.ts、web/src/components/feed/feed-list.tsx、web/src/app/(main)/feed/page.tsx、web/src/app/(main)/upload/journey-creator/page.tsx
 修改原因：解决遗留的2个P2级问题——①feed首页「随记」混入公开日记（postType=NOTE 同时命中日记与随记，且 feed 页类型筛选tab 定义却未渲染，属隐藏bug）；②手写游记默认可见性(PUBLIC)与AI生成游记(PRIVATE)不一致
 修改内容：①后端 getPosts/getTrendingPosts/getHotPosts 三个查询分支新增 excludeContentLevel 参数（`(contentLevel IS NULL OR contentLevel != :excludeLevel)`，保留无层级的普通随记），controller 接收并透传；②前端 post-store PostFilters 增加 excludeContentLevel，feed-list 接收并传给 fetchPosts；③feed 页修复隐藏bug——渲染类型筛选tab（全部/第一视角/随记/游记/瞬间，原定义未渲染），「随记」tab 传 postType=NOTE + excludeContentLevel=DIARY，FeedList 按当前 tab 传参；④journey-creator 手写游记默认可见性从 PUBLIC 改为 PRIVATE，与AI游记统一（发布时再选公开）
