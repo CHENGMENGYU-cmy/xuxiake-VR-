@@ -43,3 +43,8 @@ query
 
 # Large files
 CHANGELOG.md
+
+# Office/Word temp lock files
+~$*
+*.tmp
+*.docx~
