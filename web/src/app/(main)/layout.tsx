@@ -2,6 +2,7 @@ import { Navbar } from '@/components/layout/navbar';
 import { Sidebar } from '@/components/layout/sidebar';
 import { RightPanel } from '@/components/layout/right-panel';
 import { MobileNav } from '@/components/layout/mobile-nav';
+import { SnapUploadDialog } from '@/components/upload/snap-upload-dialog';
 
 export default function MainLayout({
   children,
