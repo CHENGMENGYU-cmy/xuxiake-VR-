@@ -59,7 +59,7 @@ function JourneyCreatorContent() {
   const [journeyTips, setJourneyTips] = useState('');
   const [coverUrl, setCoverUrl] = useState('');
   const [stops, setStops] = useState<EditorStop[]>([]);
-  const [visibility, setVisibility] = useState<'PUBLIC' | 'PRIVATE'>('PUBLIC');
+  const [visibility, setVisibility] = useState<'PUBLIC' | 'PRIVATE'>('PRIVATE');
   const [uploadingCover, setUploadingCover] = useState(false);
   const [uploadingStopMedia, setUploadingStopMedia] = useState<string | null>(null);
   const [pickerForStop, setPickerForStop] = useState<string | null>(null);
