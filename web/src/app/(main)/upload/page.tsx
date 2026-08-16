@@ -180,7 +180,6 @@ function UploadContent() {
       VIDEO: '第一视角',
       IMAGE: '瞬间捕获',
       AUDIO: '语音记录',
-      DIARY: '日记',
     };
     saveDraftToList({
       id: currentDraftId || `draft-${Date.now()}`,
