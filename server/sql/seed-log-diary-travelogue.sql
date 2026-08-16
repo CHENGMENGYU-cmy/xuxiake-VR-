@@ -23,7 +23,7 @@ DELETE j FROM journeys j
   WHERE p.author_id IN ('u2','u3','u4','u5','u6','u7','u8','u9','u10');
 DELETE FROM posts
 WHERE author_id IN ('u2','u3','u4','u5','u6','u7','u8','u9','u10')
-  AND content_level IN ('LOG','SNAPSHOT','DIARY','TRAVELOGUE');
+  AND content_level IN ('SNAPSHOT','DIARY','TRAVELOGUE');
 -- 清理本文件产生的游记话题关联
 DELETE FROM post_topics
 WHERE post_id IN (SELECT id FROM posts WHERE content_level = 'TRAVELOGUE');
