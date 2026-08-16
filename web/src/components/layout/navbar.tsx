@@ -169,12 +169,10 @@ export function Navbar() {
             </Button>
           </Link>
 
-          {/* 上传 */}
-          <Link href="/upload">
-            <Button variant="ghost" size="icon" className="hidden sm:inline-flex">
-              <Upload className="h-5 w-5" />
-            </Button>
-          </Link>
+          {/* 上传素材 */}
+          <Button variant="ghost" size="icon" className="hidden sm:inline-flex" onClick={openUploadDialog} aria-label="上传素材">
+            <Upload className="h-5 w-5" />
+          </Button>
 
           {/* 消息 - 仅登录后显示 */}
           {user && mounted && (
