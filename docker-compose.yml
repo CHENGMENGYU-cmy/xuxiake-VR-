@@ -27,11 +27,13 @@ services:
       - ./server/sql/migrate-vrmetadata-tab.sql:/docker-entrypoint-initdb.d/17-vrmetadata.sql
       - ./server/sql/migrate-content-level.sql:/docker-entrypoint-initdb.d/18-content-level.sql
       - ./server/sql/migrate-add-trip.sql:/docker-entrypoint-initdb.d/19-add-trip.sql
-      - ./server/sql/seed.sql:/docker-entrypoint-initdb.d/20-seed.sql
-      - ./server/sql/seed-notifications.sql:/docker-entrypoint-initdb.d/21-seed-notifications.sql
-      - ./server/sql/seed-content-classification.sql:/docker-entrypoint-initdb.d/22-seed-classification.sql
-      - ./server/sql/seed-community-experience.sql:/docker-entrypoint-initdb.d/23-seed-community.sql
-      - ./server/sql/seed-log-diary-travelogue.sql:/docker-entrypoint-initdb.d/24-seed-content.sql
+      - ./server/sql/migrate-travelogue-chapters.sql:/docker-entrypoint-initdb.d/20-travelogue-chapters.sql
+      - ./server/sql/migrate-journey-tips-highlights.sql:/docker-entrypoint-initdb.d/21-tips-highlights.sql
+      - ./server/sql/migrate-soft-delete.sql:/docker-entrypoint-initdb.d/22-soft-delete.sql
+      - ./server/sql/seed.sql:/docker-entrypoint-initdb.d/23-seed.sql
+      - ./server/sql/seed-notifications.sql:/docker-entrypoint-initdb.d/24-seed-notifications.sql
+      - ./server/sql/seed-community-experience.sql:/docker-entrypoint-initdb.d/25-seed-community.sql
+      - ./server/sql/seed-log-diary-travelogue.sql:/docker-entrypoint-initdb.d/26-seed-content.sql
     networks:
       - xuxiake-net
     healthcheck:
