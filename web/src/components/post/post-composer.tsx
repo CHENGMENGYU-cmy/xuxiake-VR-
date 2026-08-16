@@ -647,12 +647,13 @@ export function PostComposer() {
                   >
                     动态
                   </button>
-                  <Link
-                    href="/upload"
+                  <button
+                    type="button"
+                    onClick={openUploadDialog}
                     className="rounded-full px-2.5 py-0.5 text-[11px] font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                   >
-                    + 更多
-                  </Link>
+                    + 上传素材
+                  </button>
                 </div>
 
                 {/* 拖拽提示 */}
