@@ -168,62 +168,6 @@ function UploadContent() {
     clearLocalDraft();
   };
 
-  // 从素材库引用配图（通过 getPostDetail 拉素材封面；去重与上限在 setImages 内基于最新状态判断，避免重复加载）
-  const loadRefSnaps = async (ids: string[]) => {
-    const validIds = ids.filter(Boolean);
-    if (validIds.length === 0) return;
-
-    const results = await Promise.all(validIds.map(id => getPostDetail(id).catch(() => null)));
-    const refImages: UploadedImage[] = results
-      .filter(Boolean)
-      .map((post: any) => {
-        let url = post?.mediaItems?.[0]?.thumbnailUrl || post?.mediaItems?.[0]?.url || '';
-        if (!url) {
-          try {
-            const meta = typeof post?.vrMetadata === 'string' ? JSON.parse(post.vrMetadata) : (post?.vrMetadata || {});
-            url = meta.image || '';
-          } catch {}
-        }
-        return {
-          id: `snap-${post.id}`,
-          url: url || '',
-          width: 0,
-          height: 0,
-          originalName: (post?.content || '').slice(0, 20) || '素材',
-          size: 0,
-          isCover: false,
-          snapId: post.id,
-        };
-      })
-      .filter((img: UploadedImage) => img.url);
-
-    if (refImages.length === 0) {
-      toast.warning('未找到可用的素材图片');
-      return;
-    }
-    setImages(prev => {
-      const existing = new Set(prev.filter(i => i.snapId).map(i => i.snapId));
-      const fresh = refImages.filter(img => img.snapId && !existing.has(img.snapId)).slice(0, 9 - prev.length);
-      if (fresh.length === 0) return prev;
-      const merged = [...prev, ...fresh].slice(0, 9);
-      if (!merged.some(i => i.isCover)) {
-        merged[0].isCover = true;
-      }
-      return merged;
-    });
-  };
-
-  // 从创作引导带入的素材：挂载时加载为配图（ref 防 StrictMode 双调用导致重复加载）
-  const snapIdsParam = searchParams.get('snapIds') || '';
-  const refLoadedRef = useRef(false);
-  useEffect(() => {
-    if (activeTab === 'DIARY' && snapIdsParam && !refLoadedRef.current) {
-      refLoadedRef.current = true;
-      loadRefSnaps(snapIdsParam.split(','));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [snapIdsParam]);
-
   // 手动保存草稿到草稿箱
   const handleSaveDraft = () => {
     if (!content.trim() && !media && images.length === 0) return;
