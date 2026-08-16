@@ -9,8 +9,8 @@ const path = require('path');
 
   const browser = await chromium.launch();
   const page = await browser.newPage({
-    viewport: { width: 1500, height: 900 },
-    deviceScaleFactor: 2,
+    viewport: { width: 1320, height: 850 },
+    deviceScaleFactor: 1,
   });
   await page.goto(htmlPath);
   await page.waitForTimeout(700);
