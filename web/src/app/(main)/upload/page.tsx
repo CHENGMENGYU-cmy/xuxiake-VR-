@@ -1056,14 +1056,6 @@ function UploadContent() {
       {/* 隐藏的文件输入 */}
       <input ref={fileInputRef} type="file" accept={getAccept()} className="hidden"
         onChange={(e) => handleFileInput(e.target.files)} />
-
-      {/* 从素材库选择配图 */}
-      <SnapPickerDialog
-        open={pickerOpen}
-        onOpenChange={setPickerOpen}
-        max={9 - images.length}
-        onConfirm={(ids) => loadRefSnaps(ids)}
-      />
     </div>
   );
 }
