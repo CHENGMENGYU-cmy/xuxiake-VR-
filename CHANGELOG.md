@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-16
+修改位置：web/src/components/layout/sidebar.tsx
+修改原因：用户反馈侧边栏"浏览/我的/个人"分组标题与上方分隔线的间距不一致
+修改内容："个人"分组容器从 `px-3 pb-3` 改为 `p-3`，与其他分组（浏览/我的/管理中心）统一，标题与分隔线间距一致
+修改效果：三个分组标题与其上方分隔线的间距统一为 12px，侧边栏视觉对齐；页面编译正常
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-16
 修改位置：web/src/components/layout/sidebar.tsx、web/src/components/upload/snap-upload-dialog.tsx（新建）、web/src/stores/ui-store.ts、web/src/app/(main)/layout.tsx、web/src/app/(main)/snap/page.tsx、web/src/components/layout/navbar.tsx、web/src/components/layout/mobile-nav.tsx、web/src/components/post/post-composer.tsx
 修改原因：用户反馈"写作到发布"流转逻辑仍乱——"分享见闻"页有6个上传功能（3创作引导卡片+3内容类型tab），且与App采集、日记/游记创作重复；素材本从App同步进素材库，网页端再设"分享见闻"上传/发布属伪需求。确认后：取消"创作"分组与"分享见闻"独立页面，素材上传降级为素材库内全局工具，写作入口完全收敛到内容页
 修改内容：①sidebar.tsx 删除"创作"分组（含"分享见闻"入口），侧边栏变为 浏览/我的/个人 三组；②新建 snap-upload-dialog.tsx 全局"上传素材"弹窗（选择本地文件[图片可多张/视频/语音]→可选文字备注→逐条 uploadXxx 上传→createPost(visibility=PRIVATE, contentLevel=SNAPSHOT)→刷新素材库），ui-store 新增 uploadDialogOpen/openUploadDialog/closeUploadDialog，(main)/layout.tsx 挂载该弹窗；③素材库"上传素材"按钮、顶栏"上传"按钮、移动端底部"发布"→"上传"、feed发布框"+ 更多"/"更多内容" 均改为 openUploadDialog()，不再跳 /upload；④/upload 页保留为孤儿页（无任何导航入口，仅 /upload/journey-creator 子路径仍被游记编辑器使用）
