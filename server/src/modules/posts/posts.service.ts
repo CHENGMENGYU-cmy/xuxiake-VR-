@@ -883,7 +883,7 @@ export class PostsService {
     const post = await this.postRepo.findOne({ where: { id: postId, authorId: userId, deletedAt: IsNull() } });
     if (!post) throw new NotFoundException('内容不存在');
 
-    const validLevels = ['SNAPSHOT', 'CLASSIFIED', 'DIARY', 'ESSAY', 'LOG', 'TRAVELOGUE'];
+    const validLevels = ['SNAPSHOT', 'DIARY', 'TRAVELOGUE', 'ESSAY'];
     if (!validLevels.includes(dto.targetLevel)) throw new NotFoundException('无效的目标层级');
 
     const newPost = this.postRepo.create({
