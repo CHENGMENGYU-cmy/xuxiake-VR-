@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-16
+修改位置：web/src/components/layout/sidebar.tsx、web/src/components/upload/snap-upload-dialog.tsx（新建）、web/src/stores/ui-store.ts、web/src/app/(main)/layout.tsx、web/src/app/(main)/snap/page.tsx、web/src/components/layout/navbar.tsx、web/src/components/layout/mobile-nav.tsx、web/src/components/post/post-composer.tsx
+修改原因：用户反馈"写作到发布"流转逻辑仍乱——"分享见闻"页有6个上传功能（3创作引导卡片+3内容类型tab），且与App采集、日记/游记创作重复；素材本从App同步进素材库，网页端再设"分享见闻"上传/发布属伪需求。确认后：取消"创作"分组与"分享见闻"独立页面，素材上传降级为素材库内全局工具，写作入口完全收敛到内容页
+修改内容：①sidebar.tsx 删除"创作"分组（含"分享见闻"入口），侧边栏变为 浏览/我的/个人 三组；②新建 snap-upload-dialog.tsx 全局"上传素材"弹窗（选择本地文件[图片可多张/视频/语音]→可选文字备注→逐条 uploadXxx 上传→createPost(visibility=PRIVATE, contentLevel=SNAPSHOT)→刷新素材库），ui-store 新增 uploadDialogOpen/openUploadDialog/closeUploadDialog，(main)/layout.tsx 挂载该弹窗；③素材库"上传素材"按钮、顶栏"上传"按钮、移动端底部"发布"→"上传"、feed发布框"+ 更多"/"更多内容" 均改为 openUploadDialog()，不再跳 /upload；④/upload 页保留为孤儿页（无任何导航入口，仅 /upload/journey-creator 子路径仍被游记编辑器使用）
+修改效果：写作→发布流转清晰——素材(App同步/上传弹窗)→素材库(私有)；写日记(我的日记页：直接写/AI写)、写游记(我的游记页：手写/AI写)均从内容页进入，无重复入口；"分享见闻"6功能冗余页面取消。TypeScript编译通过（仅剩e2e预存错误），/snap /diaries /journeys 页面编译正常（dev server因OOM重启后验证）
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-16
 修改位置：web/src/app/(main)/upload/page.tsx、web/src/app/(main)/snap/page.tsx
 修改原因：发布-展示流程严重问题修复——①素材"公开/私有"语义矛盾（App同步闪拍私有，/upload发布素材却默认公开且同属SNAPSHOT混进素材库）；②写日记3入口3编辑器（/diaries/new、DiaryComposeDialog、/upload日记tab）体验不一致；③发布后跳转断裂（发布素材跳/feed不跳素材库）；④素材库无上传入口
 修改内容：①upload/page.tsx 彻底删除"日记"tab（UploadTab类型/tabContentTypes/initialTab/mood·weather状态/私密日记banner/心情/天气/配图/地点/话题渲染块/发布DIARY分支全部移除），清理SnapPickerDialog/loadRefSnaps/useSearchParams等死代码；②发布素材默认可见性改为PRIVATE（存入素材库），可见性选择处加提示"私密=存入素材库·公开=发布到社区"，发布按钮文案按可见性显示"存入素材库/发布内容"；③发布跳转修正：私密→/snap（提示"已存入素材库"）、公开→/feed（"已发布到社区"）、取消→/snap；④snap/page.tsx 素材库顶部增加"上传素材"按钮(/upload)，空状态增加"去上传素材"引导按钮
