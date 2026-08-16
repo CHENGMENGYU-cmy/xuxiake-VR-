@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuthStore } from '@/stores/auth-store';
 import { usePostStore } from '@/stores/post-store';
+import { useUIStore } from '@/stores/ui-store';
 import { uploadImage, getImageDimensions, uploadVideo, uploadAudio, getVideoMetadata, getAudioDuration, fetchLinkPreview } from '@/lib/media-api';
 import { CreatePostPayload, getHotTopics, searchTopics } from '@/lib/post-api';
 import type { Topic } from '@/types';
