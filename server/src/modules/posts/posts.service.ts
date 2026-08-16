@@ -981,10 +981,10 @@ export class PostsService {
 
   // ===== 素材查询 =====
 
-  /** 获取用户的闪拍记录列表 */
+  /** 获取用户的闪拍记录列表（仅私人素材） */
   async getUserSnaps(userId: string, limit = 500) {
     const snaps = await this.postRepo.find({
-      where: { authorId: userId, contentLevel: 'SNAPSHOT', deletedAt: IsNull() },
+      where: { authorId: userId, contentLevel: 'SNAPSHOT', visibility: 'PRIVATE', deletedAt: IsNull() },
       relations: { mediaItems: true },
       order: { createdAt: 'DESC' },
       take: limit,
