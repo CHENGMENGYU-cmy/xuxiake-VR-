@@ -993,16 +993,6 @@ export class PostsService {
     return snaps.map((p) => this.formatPost(p));
   }
 
-  /** 获取用户的日志列表（仅本人，私人素材） */
-  async getUserLogs(userId: string, limit = 50) {
-    const logs = await this.postRepo.find({
-      where: { authorId: userId, contentLevel: 'LOG', deletedAt: IsNull() },
-      relations: { mediaItems: true },
-      order: { createdAt: 'DESC' },
-      take: limit,
-    });
-    return logs.map((p) => this.formatPost(p));
-  }
 
   /** 获取用户的日记列表（本人可查看自己的私密日记，他人只能看公开的） */
   async getUserDiaries(userId: string, viewerId?: string) {
