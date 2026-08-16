@@ -483,16 +483,10 @@ function UploadContent() {
       });
     }
 
-    // 引用自素材库的配图 → 溯源素材 ID
-    const refSnapIds = images.filter(i => i.snapId).map(i => i.snapId as string);
-
     // 确定帖子类型和内容层级
     let postType: CreatePostPayload['postType'] = 'NOTE';
     let contentLevel: string | undefined;
-    if (activeTab === 'DIARY') {
-      postType = 'NOTE';
-      contentLevel = 'DIARY';
-    } else if (media?.type === 'VIDEO') {
+    if (media?.type === 'VIDEO') {
       postType = 'VR_MEDIA';
       contentLevel = 'SNAPSHOT';
     } else if (media?.type === 'AUDIO') {
