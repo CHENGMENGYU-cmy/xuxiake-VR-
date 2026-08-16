@@ -53,10 +53,10 @@ export class PostsService {
 
     // trending 和 hot 使用 offset 分页（排名动态变化），latest 使用 cursor 分页
     if (sort === 'trending') {
-      return this.getTrendingPosts(limit, page, postType, tagId, followingIds, currentUserId);
+      return this.getTrendingPosts(limit, page, postType, tagId, followingIds, currentUserId, excludeContentLevel);
     }
     if (sort === 'hot') {
-      return this.getHotPosts(limit, page, postType, tagId, followingIds, currentUserId);
+      return this.getHotPosts(limit, page, postType, tagId, followingIds, currentUserId, excludeContentLevel);
     }
 
     // 默认 latest：按时间倒序，cursor 分页
