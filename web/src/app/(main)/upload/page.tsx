@@ -73,7 +73,6 @@ export default function UploadPage() {
 
 function UploadContent() {
   const router = useRouter();
-  const { user } = useAuthStore();
   const { publishPost, isPublishing } = usePostStore();
 
   const [activeTab, setActiveTab] = useState<UploadTab>('VIDEO');
