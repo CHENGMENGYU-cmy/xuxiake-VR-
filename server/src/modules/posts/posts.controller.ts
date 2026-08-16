@@ -108,6 +108,7 @@ export class PostsController {
       userId,
       followingOnly: followingOnly === 'true',
       currentUserId: userId,
+      excludeContentLevel,
     });
     return { success: true, ...result };
   }
