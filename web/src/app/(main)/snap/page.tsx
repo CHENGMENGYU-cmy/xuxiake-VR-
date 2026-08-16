@@ -23,6 +23,7 @@ export default function SnapPage() {
 function SnapContent() {
   const router = useRouter();
   const { snaps, snapsLoading, fetchSnaps } = useSnapStore();
+  const openUploadDialog = useUIStore((s) => s.openUploadDialog);
   const [viewMode, setViewMode] = useState<ViewMode>('all');
   const [byLocation, setByLocation] = useState<Dimension[]>([]);
   const [byTime, setByTime] = useState<Dimension[]>([]);
