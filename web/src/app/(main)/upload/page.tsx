@@ -943,8 +943,8 @@ function UploadContent() {
             )}
           </div>
 
-          {/* 附加内容按钮 - 仅在非日记模式显示 */}
-          {activeTab !== 'DIARY' && (
+          {/* 附加内容按钮 */}
+          {(
             <div className="flex flex-wrap gap-3">
               <Button
                 variant={showLinkAddon ? 'default' : 'outline'}
