@@ -37,8 +37,8 @@ export class PostsService {
     private readonly notificationsService: NotificationsService,
   ) {}
 
-  async getPosts(options: { cursor?: string; limit?: number; sort?: string; page?: number; postType?: string; tagId?: string; userId?: string; followingOnly?: boolean; currentUserId?: string } = {}) {
-    const { cursor, limit = 10, sort = 'latest', page = 1, postType, tagId, userId, followingOnly, currentUserId } = options;
+  async getPosts(options: { cursor?: string; limit?: number; sort?: string; page?: number; postType?: string; tagId?: string; userId?: string; followingOnly?: boolean; currentUserId?: string; excludeContentLevel?: string } = {}) {
+    const { cursor, limit = 10, sort = 'latest', page = 1, postType, tagId, userId, followingOnly, currentUserId, excludeContentLevel } = options;
 
     // 关注动态模式：查询关注列表
     let followingIds: string[] | null = null;
