@@ -438,10 +438,7 @@ function UploadContent() {
     else if (activeTab === 'AUDIO') handleAudioSelect(files);
   };
 
-  // Publish — 日记Tab只需要文字内容，其他Tab需要媒体或内容
-  const canPublish = activeTab === 'DIARY'
-    ? (content.trim().length > 0 && !isPublishing)
-    : ((content.trim().length > 0 || media || images.length > 0 || linkData) && !isPublishing && !uploading);
+  const canPublish = (content.trim().length > 0 || media || images.length > 0 || linkData) && !isPublishing && !uploading;
 
   const handlePublish = async () => {
     if (!canPublish) return;
