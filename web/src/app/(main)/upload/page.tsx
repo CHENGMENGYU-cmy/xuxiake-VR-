@@ -518,11 +518,11 @@ function UploadContent() {
       clearLocalDraft();
       if (currentDraftId) { deleteDraftFromList(currentDraftId); setDraftRefreshKey(k => k + 1); }
       setCurrentDraftId(null);
-      if (activeTab === 'DIARY') {
-        toast.success('日记已保存');
-        router.push('/diaries');
+      if (visibility === 'PRIVATE') {
+        toast.success('已存入素材库');
+        router.push('/snap');
       } else {
-        toast.success('发布成功');
+        toast.success('已发布到社区');
         router.push('/feed');
       }
     } catch {
