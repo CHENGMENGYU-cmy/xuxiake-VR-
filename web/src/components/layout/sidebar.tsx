@@ -165,34 +165,6 @@ export function Sidebar() {
               </>
             )}
 
-            {/* 创作 — 仅普通用户显示 */}
-            {!isAdmin && (
-              <>
-                <div className="space-y-1 p-3">
-                  <p className="px-2 text-xs font-medium uppercase text-muted-foreground">创作</p>
-                  {createItems.map((item) => {
-                    const Icon = item.icon;
-                    const isActive = item.href === '/upload' && pathname === '/upload';
-                    return (
-                      <Link key={item.href} href={item.href}>
-                        <Button
-                          variant="ghost"
-                          className={cn(
-                            'w-full justify-start gap-3',
-                            isActive && 'bg-primary/10 text-primary hover:bg-primary/10'
-                          )}
-                        >
-                          <Icon className={cn('h-5 w-5', isActive && 'text-primary')} />
-                          <span>{item.label}</span>
-                        </Button>
-                      </Link>
-                    );
-                  })}
-                </div>
-                <Separator />
-              </>
-            )}
-
             {/* 管理中心 — 管理员/审核员核心区域 */}
             {isAdmin && (
               <div className="space-y-1 p-3">
