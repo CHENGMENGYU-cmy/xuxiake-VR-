@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>徐霞客 AI 游记与社区系统框架图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1460px;
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    background: linear-gradient(150deg, #d7e3f3 0%, #e7eef8 50%, #f3f7fb 100%);
+    padding: 26px 42px 30px;
+    position: relative;
+  }
+  .header { text-align: center; margin-bottom: 26px; }
+  .header h1 { font-size: 28px; color: #16294a; letter-spacing: 2px; }
+  .header .tag {
+    display: inline-block; margin-top: 10px;
+    font-size: 14px; color: #3b5c8f; letter-spacing: 4px;
+    background: rgba(255,255,255,0.6); border: 1px solid rgba(70,110,180,0.30);
+    padding: 5px 22px; border-radius: 30px;
+  }
+
+  #lines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+
+  .stage {
+    position: relative; z-index: 1;
+    display: grid;
+    grid-template-columns: 1.05fr 2fr 1.05fr;
+    grid-template-rows: auto auto;
+    gap: 28px 34px;
+    align-items: center;
+  }
+
+  .blk {
+    background: rgba(255,255,255,0.82);
+    border: 1.5px solid #c6d8ef;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 3px 12px rgba(30,60,110,0.10);
+  }
+  .blk-h {
+    color: #fff; font-size: 16px; font-weight: 700; letter-spacing: 2px;
+    text-align: center; padding: 10px 0;
+  }
+  .blk-b { padding: 13px 16px; }
+  .item {
+    display: flex; align-items: baseline; gap: 8px;
+    font-size: 13.5px; color: #26354e; padding: 5px 0;
+  }
+  .item .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    flex-shrink: 0; margin-right: 2px;
+  }
+  .item b { color: #1f3a5c; font-weight: 600; min-width: 58px; }
+  .item .sub { color: #5b6b88; font-size: 12.5px; }
+
+  /* 用户（上） */
+  .user { grid-column: 1 / -1; grid-row: 1; justify-self: center; width: 340px; }
+  .user .blk-h { background: #67a0d8; }
+  .user .blk-b { display: flex; justify-content: center; gap: 26px; }
+  .user .mini {
+    background: #eef4fc; border: 1px solid #cfddf1; color: #2a4370;
+    font-size: 13px; padding: 7px 20px; border-radius: 20px;
+  }
+
+  /* 闪拍App（左） */
+  .app { grid-column: 1; grid-row: 2; }
+  .app .blk-h { background: #5b8cc9; }
+  .app .item .dot { background: #5b8cc9; }
+
+  /* 核心社区系统（中） */
+  .core { grid-column: 2; grid-row: 2; }
+  .core .blk-h { background: linear-gradient(135deg, #2f5e9e, #4a7bbf); font-size: 18px; padding: 13px 0; }
+  .core .blk-b { padding: 14px 20px; }
+  .core .item { font-size: 14px; }
+  .core .item .dot { background: #2f5e9e; }
+  .core .item b { min-width: 68px; }
+
+  /* 云端（右） */
+  .cloud { grid-column: 3; grid-row: 2; }
+  .cloud .blk-h { background: #7aa3cf; }
+  .cloud .item .dot { background: #7aa3cf; }
+
+  .foot {
+    margin-top: 30px; position: relative; z-index: 1;
+    background: rgba(255,255,255,0.75); border: 1px solid #c9d9ee; border-radius: 10px;
+    padding: 12px 18px; font-size: 14.5px; color: #2c4269; text-align: center; letter-spacing: 1px;
+  }
+  .foot b { color: #2f5e9e; }
+</style>
+</head>
+<body>
+  <svg id="lines">
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#8fb0dc"/>
+      </marker>
+    </defs>
+  </svg>
+
+  <div class="header">
+    <h1>徐霞客 AI 游记与社区系统框架图</h1>
+    <div class="tag">记录 · 创作 · 社交 · AI 生成</div>
+  </div>
+
+  <div class="stage">
+    <div class="blk user">
+      <div class="blk-h">用户</div>
+      <div class="blk-b">
+        <span class="mini">网页端</span>
+        <span class="mini">手机端</span>
+      </div>
+    </div>
+
+    <div class="blk app">
+      <div class="blk-h">闪拍 App</div>
+      <div class="blk-b">
+        <div class="item"><span class="dot"></span><b>采集</b><span class="sub">照片 / 视频 / 语音</span></div>
+        <div class="item"><span class="dot"></span><b>同步</b><span class="sub">素材上传到社区</span></div>
+      </div>
+    </div>
+
+    <div class="blk core">
+      <div class="blk-h">徐霞客社区系统</div>
+      <div class="blk-b">
+        <div class="item"><span class="dot"></span><b>采集同步</b><span class="sub">闪拍素材 · 元数据</span></div>
+        <div class="item"><span class="dot"></span><b>内容分层</b><span class="sub">素材 → 日记 → 游记</span></div>
+        <div class="item"><span class="dot"></span><b>AI 生成</b><span class="sub">AI 日记 / AI 游记</span></div>
+        <div class="item"><span class="dot"></span><b>社区社交</b><span class="sub">社群 · 消息 · 推荐 · 通知</span></div>
+        <div class="item"><span class="dot"></span><b>内容治理</b><span class="sub">审核 · 举报 · 软删除</span></div>
+      </div>
+    </div>
+
+    <div class="blk cloud">
+      <div class="blk-h">云端服务平台</div>
+      <div class="blk-b">
+        <div class="item"><span class="dot"></span><b>AI 生成</b><span class="sub">日记 / 游记内容</span></div>
+        <div class="item"><span class="dot"></span><b>数据同步</b><span class="sub">多端一致</span></div>
+        <div class="item"><span class="dot"></span><b>社区平台</b><span class="sub">内容沉淀与展示</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    说明：以 <b>社区为核心入口</b>，联动闪拍 App 采集与云端 AI，实现 <b>"记录 → 创作 → 社交"</b> 内容闭环。
+  </div>
+
+<script>
+function draw() {
+  const svg = document.getElementById('lines');
+  const ns = 'http://www.w3.org/2000/svg';
+  svg.innerHTML = '';
+  const marker = document.createElementNS(ns, 'marker');
+  svg.appendChild(marker);
+  svg.setAttribute('width', document.body.scrollWidth);
+  svg.setAttribute('height', document.body.scrollHeight);
+  const bodyRect = document.body.getBoundingClientRect();
+
+  function edge(from, to) {
+    const f = document.querySelector(from).getBoundingClientRect();
+    const t = document.querySelector(to).getBoundingClientRect();
+    return {
+      x1: (f.left + f.width / 2) - bodyRect.left,
+      y1: (f.top + f.height / 2) - bodyRect.top,
+      x2: (t.left + t.width / 2) - bodyRect.left,
+      y2: (t.top + t.height / 2) - bodyRect.top,
+    };
+  }
+  function link(a, b, both) {
+    const p = edge(a, b);
+    const x1 = p.x1, y1 = p.y1, x2 = p.x2, y2 = p.y2;
+    const d = Math.max(30, Math.abs(x2 - x1) * 0.5);
+    const path = document.createElementNS(ns, 'path');
+    path.setAttribute('d', 'M ' + x1 + ' ' + y1 + ' C ' + (x1 + d) + ' ' + y1 + ', ' + (x2 - d) + ' ' + y2 + ', ' + x2 + ' ' + y2);
+    path.setAttribute('stroke', '#8fb0dc');
+    path.setAttribute('stroke-width', '2');
+    path.setAttribute('fill', 'none');
+    path.setAttribute('marker-end', 'url(#arrow)');
+    if (both) path.setAttribute('marker-start', 'url(#arrow)');
+    svg.appendChild(path);
+  }
+  // 用户 → 社区（交互）
+  link('.user', '.core', true);
+  // 闪拍App ↔ 社区（数据上传/回流）
+  link('.app', '.core', true);
+  // 社区 ↔ 云端（AI 生成/同步）
+  link('.core', '.cloud', true);
+}
+window.addEventListener('load', function () { setTimeout(draw, 150); });
+</script>
+</body>
+</html>
