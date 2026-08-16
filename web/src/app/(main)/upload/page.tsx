@@ -214,10 +214,8 @@ function UploadContent() {
     setLinkUrl('');
     setShowLinkAddon(false);
     setShowTranslationAddon(false);
-    setMood('');
-    setWeather('');
-    // 日记Tab默认私密，其他公开
-    setVisibility(tab === 'DIARY' ? 'PRIVATE' : 'PUBLIC');
+    // 素材默认存入素材库（私密），可切换为公开发布到社区
+    setVisibility('PRIVATE');
   };
 
   // Video upload
