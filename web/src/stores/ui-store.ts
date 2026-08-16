@@ -40,9 +40,12 @@ export const useUIStore = create<UIState>()(
       sidebarOpen: true,
       rightPanelOpen: true,
       appearance: defaultAppearance,
+      uploadDialogOpen: false,
       toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
       toggleRightPanel: () => set((state) => ({ rightPanelOpen: !state.rightPanelOpen })),
       setSidebarOpen: (open: boolean) => set({ sidebarOpen: open }),
+      openUploadDialog: () => set({ uploadDialogOpen: true }),
+      closeUploadDialog: () => set({ uploadDialogOpen: false }),
       updateAppearance: (settings) =>
         set((state) => ({
           appearance: { ...state.appearance, ...settings },
