@@ -352,7 +352,7 @@ function SnapContent() {
             <Button
               size="sm"
               className="mt-4"
-              onClick={() => router.push('/upload')}
+              onClick={openUploadDialog}
             >
               <Upload className="mr-1.5 h-3.5 w-3.5" />
               去上传素材
