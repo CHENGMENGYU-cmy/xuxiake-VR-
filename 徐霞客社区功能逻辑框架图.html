@@ -8,123 +8,140 @@
   body {
     font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
     background: #f5f5f5;
-    padding: 36px 44px 32px;
-    min-width: 1400px;
+    padding: 32px 44px 36px;
   }
 
-  .header { text-align: center; margin-bottom: 30px; }
-  .header h1 { font-size: 25px; color: #1e3a5f; letter-spacing: 2px; font-weight: 800; }
-  .header .tag {
-    display: inline-block; margin-top: 8px;
-    font-size: 12.5px; color: #475569; letter-spacing: 3px;
-    background: #fff; border: 1px solid #cbd5e1; padding: 5px 20px; border-radius: 30px;
+  .page { max-width: 1160px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+
+  h1 {
+    font-size: 27px; color: #1e3a5f; font-weight: 800;
+    letter-spacing: 3px; margin-bottom: 26px; text-align: center;
   }
 
-  /* ===== 内容主线流转 ===== */
-  .flow { display: flex; align-items: stretch; justify-content: center; }
-  .arr { display: flex; align-items: center; padding: 0 6px; color: #2563eb; font-size: 26px; font-weight: 700; }
+  /* 箭头 */
+  .down { font-size: 30px; color: #2563eb; font-weight: 700; line-height: 1; padding: 12px 0; }
+  .uprow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; width: 100%; padding: 10px 0 4px; }
+  .uprow .up { text-align: center; font-size: 26px; color: #2563eb; font-weight: 700; line-height: 1; }
 
-  .stage {
-    width: 216px; background: #fff; border: 1px solid #d0d7de; border-radius: 14px;
-    border-left: 6px solid #2563eb;
-    padding: 17px 18px 13px; display: flex; flex-direction: column; gap: 10px;
-    box-shadow: 0 4px 14px rgba(30,58,95,0.1);
+  /* 方框通用 */
+  .frame {
+    background: #fff; border: 2px solid #1e3a5f; border-radius: 12px;
+    padding: 16px 34px; text-align: center;
   }
-  .stage .head { display: flex; align-items: center; justify-content: space-between; }
-  .stage .nm { font-size: 18px; font-weight: 800; color: #1e3a5f; letter-spacing: 0.5px; }
-  .stage .nm .no { color: #2563eb; margin-right: 3px; }
-  .stage .flag { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 12px; background: #f0fdf4; color: #16a34a; white-space: nowrap; }
-  .stage .flag.partial { background: #fff7ed; color: #d97706; }
-  .stage .f { font-size: 13.5px; color: #3f4a55; line-height: 1.85; flex: 1; }
-  .stage .f b { color: #1e3a5f; font-weight: 700; }
-  .stage .meta {
-    border-top: 1px dashed #e6e9ef; padding-top: 7px;
-    display: flex; flex-wrap: wrap; gap: 3px; align-items: center;
-  }
-  .chip {
-    font-size: 9px; font-weight: 600; padding: 1px 7px; border-radius: 7px;
-    letter-spacing: 0.5px; white-space: nowrap; opacity: 0.85;
-  }
-  .chip.role       { background: #eef3ff; color: #3b5db0; }
-  .chip.role.mid   { background: #bcd3ff; color: #1e3a5f; }
-  .chip.role.dark  { background: #d7dfee; color: #1e3a5f; }
-  .chip.cap        { background: #eef2ff; color: #4338ca; }
-  .chip.cap.guard  { background: #f1f5f9; color: #334155; }
+  .frame .t { font-size: 17px; font-weight: 800; color: #1e3a5f; letter-spacing: 1px; margin-bottom: 6px; }
+  .frame .s { font-size: 13px; color: #475569; line-height: 1.9; }
 
-  .foot {
-    margin-top: 20px; text-align: center;
-    font-size: 12px; color: #64748b; line-height: 2;
+  /* 第1层：用户 */
+  .user { border-radius: 40px; padding: 11px 76px; font-size: 17px; font-weight: 800; color: #1e3a5f; }
+
+  /* 第2层：交互方式 */
+  .interact { max-width: 640px; }
+
+  /* 第3层：核心系统 */
+  .core { width: 100%; border: 2px solid #1e3a5f; border-radius: 14px; background: #fff; overflow: hidden; }
+  .core .band {
+    background: #1e3a5f; color: #fff; text-align: center;
+    padding: 13px; font-size: 18px; font-weight: 800; letter-spacing: 3px;
   }
-  .foot b { color: #1e3a5f; }
-  .foot .lg { margin: 0 4px; font-weight: 700; }
-  .lg.ok      { color: #16a34a; }
-  .lg.partial { color: #d97706; }
-  .lg.todo    { color: #9ca3af; }
+  .core .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 14px; }
+  .core .box {
+    background: #f8fafc; border: 1px solid #dbe2ea; border-radius: 10px;
+    padding: 16px 13px; text-align: center;
+  }
+  .core .box .bt { font-size: 15px; font-weight: 800; color: #2563eb; margin-bottom: 8px; }
+  .core .box .bd { font-size: 12px; color: #475569; line-height: 1.8; }
+  .core .box .st { font-size: 11px; font-weight: 700; margin-top: 9px; }
+  .st.ok      { color: #16a34a; }
+  .st.partial { color: #d97706; }
+
+  /* 第4层：支撑层 */
+  .support { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; width: 100%; margin-top: 2px; }
+  .support .box {
+    background: #fff; border: 2px solid #1e3a5f; border-radius: 12px;
+    padding: 15px 13px; text-align: center;
+  }
+  .support .box .bt { font-size: 14px; font-weight: 800; color: #1e3a5f; margin-bottom: 7px; letter-spacing: 1px; }
+  .support .box .bd { font-size: 12px; color: #475569; line-height: 1.8; }
+
+  /* 系统说明 */
+  .note {
+    align-self: flex-end; margin-top: 22px; max-width: 860px;
+    font-size: 12.5px; color: #64748b; line-height: 1.9; text-align: right;
+  }
+  .note b { color: #1e3a5f; }
 </style>
 </head>
 <body>
+  <div class="page">
 
-  <div class="header">
     <h1>徐霞客社区功能逻辑框架图</h1>
-    <div class="tag">内容主线流转 · 角色与能力融合标注</div>
+
+    <!-- 第1层：用户 -->
+    <div class="frame user">旅行者 · 创作者（徐霞客）</div>
+    <div class="down">↓</div>
+
+    <!-- 第2层：交互方式 -->
+    <div class="frame interact">
+      <div class="t">交互方式</div>
+      <div class="s">闪拍App / AI 眼镜采集　·　语音记录（语音感悟）　·　Web 端浏览操作</div>
+    </div>
+    <div class="down">↓</div>
+
+    <!-- 第3层：核心系统 -->
+    <div class="core">
+      <div class="band">徐霞客社区系统</div>
+      <div class="grid">
+        <div class="box">
+          <div class="bt">内容生产</div>
+          <div class="bd">闪拍 → 素材 → 日记 → 游记<br>AI 生成（日记 5 风格 / 游记结构化）</div>
+          <div class="st ok">✓ 完成</div>
+        </div>
+        <div class="box">
+          <div class="bt">社区内容</div>
+          <div class="bd">Feed 首页 · 发现 · 搜索 · 话题<br>AR 媒体浏览（第一视角）</div>
+          <div class="st ok">✓ 完成</div>
+        </div>
+        <div class="box">
+          <div class="bt">社交互动</div>
+          <div class="bd">社群 · 消息 · 推荐搭子 · 通知<br>实时推送（WebSocket / SSE）</div>
+          <div class="st partial">△ 部分</div>
+        </div>
+        <div class="box">
+          <div class="bt">治理管理</div>
+          <div class="bd">内容审核 · 举报 · 软删除<br>权限体系（USER / MOD / ADMIN）</div>
+          <div class="st ok">✓ 完成</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 箭头向上指向核心系统 -->
+    <div class="uprow"><div class="up">↑</div><div class="up">↑</div><div class="up">↑</div><div class="up">↑</div></div>
+
+    <!-- 第4层：支撑层 -->
+    <div class="support">
+      <div class="box">
+        <div class="bt">硬件与终端</div>
+        <div class="bd">AI 眼镜 · 闪拍App<br>手机端采集同步</div>
+      </div>
+      <div class="box">
+        <div class="bt">后端服务</div>
+        <div class="bd">NestJS 11 业务模块<br>REST / WebSocket / SSE</div>
+      </div>
+      <div class="box">
+        <div class="bt">本地 AI 能力</div>
+        <div class="bd">AI 日记 / AI 游记生成<br>内容生成引擎</div>
+      </div>
+      <div class="box">
+        <div class="bt">云端服务平台</div>
+        <div class="bd">MySQL 8 · 文件存储<br>Docker 部署 · 线上运行</div>
+      </div>
+    </div>
+
+    <!-- 系统说明 -->
+    <div class="note">
+      系统说明：徐霞客社区以 <b>"闪拍采集 → 素材 → 日记 → 游记 → 社区互动"</b> 为内容主线，AI 生成贯穿内容环节，硬件采集与云端服务共同支撑，实现 <b>"记录 → 创作 → 社交"</b> 完整闭环。
+    </div>
+
   </div>
-
-  <!-- 内容主线流转 -->
-  <div class="flow">
-
-    <div class="stage">
-      <div class="head"><span class="nm"><span class="no">①</span>闪拍采集</span><span class="flag">✓ 完成</span></div>
-      <div class="f"><b>采集</b>：照片 / 视频 / 语音 / 文字<br><b>元数据</b>：GPS · 时间 · 天气 · 行程<br><b>来源</b>：闪拍App / AI 眼镜</div>
-      <div class="meta"><span class="chip role">USER</span></div>
-    </div>
-
-    <div class="arr">➜</div>
-
-    <div class="stage">
-      <div class="head"><span class="nm"><span class="no">②</span>素材库</span><span class="flag">✓ 完成</span></div>
-      <div class="f"><b>浏览</b>：相册聚合 · 按天/地点/行程<br><b>操作</b>：多选 · 全局上传<br><b>同步</b>：App 幂等（默认私密）</div>
-      <div class="meta"><span class="chip role">USER</span><span class="chip cap">✨ AI</span></div>
-    </div>
-
-    <div class="arr">➜</div>
-
-    <div class="stage">
-      <div class="head"><span class="nm"><span class="no">③</span>日记</span><span class="flag">✓ 完成</span></div>
-      <div class="f"><b>创作</b>：手写 + AI 写 统一入口<br><b>可见</b>：草稿 / 私密 / 公开<br><b>广场</b>：日记广场 · 升华游记</div>
-      <div class="meta"><span class="chip role">USER</span><span class="chip cap">✨ AI</span></div>
-    </div>
-
-    <div class="arr">➜</div>
-
-    <div class="stage">
-      <div class="head"><span class="nm"><span class="no">④</span>游记</span><span class="flag">✓ 完成</span></div>
-      <div class="f"><b>创作</b>：章节式图文编辑器<br><b>信息卡</b>：目的地 · 贴士 · 感悟<br><b>发布</b>：发布/撤回 · 地点精度</div>
-      <div class="meta"><span class="chip role">USER</span><span class="chip cap">✨ AI</span></div>
-    </div>
-
-    <div class="arr">➜</div>
-
-    <div class="stage">
-      <div class="head"><span class="nm"><span class="no">⑤</span>社区发布</span><span class="flag">✓ 完成</span></div>
-      <div class="f"><b>展示</b>：Feed 发现/关注 · 类型筛选<br><b>互动</b>：点赞 · 评论 · 分享<br><b>把关</b>：发布后审核</div>
-      <div class="meta"><span class="chip role">USER</span><span class="chip role mid">MODERATOR</span><span class="chip role dark">ADMIN</span><span class="chip cap guard">🛡 治理</span></div>
-    </div>
-
-    <div class="arr">➜</div>
-
-    <div class="stage">
-      <div class="head"><span class="nm"><span class="no">⑥</span>社交互动</span><span class="flag partial">△ 部分</span></div>
-      <div class="f"><b>社群</b>：动态 / 公告 / 挑战<br><b>消息</b>：实时 / 富媒体 / 语音<br><b>推荐/通知</b>：搭子 · SSE 推送</div>
-      <div class="meta"><span class="chip role">USER</span></div>
-    </div>
-
-  </div>
-
-  <div class="foot">
-    状态：<span class="lg ok">✓ 已完成</span> · <span class="lg partial">△ 部分完成</span> · <span class="lg todo">○ 规划中</span>
-    　｜　角色：USER 普通用户 · MODERATOR 审核员 · ADMIN 管理员
-    　｜　能力：<span class="lg ok">✨ AI 内容生成（贯穿 ②③④）</span> · <span class="lg ok">🛡 治理与保障（作用于 ⑤）</span>
-  </div>
-
 </body>
 </html>
