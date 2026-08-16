@@ -2,6 +2,13 @@
 ================================================================================
 
 修改时间：2026-08-16
+修改位置：2026年7-8月工作总结汇报.md（新增）、2026年7-8月工作总结汇报.docx（新增）
+修改原因：需按汇报要求整理 2026年7-8月工作总结（目标导向、结果标准，按"计划任务→完成→测试→问题→方案→需老师支持"闭环组织）
+修改内容：撰写《2026年7-8月工作总结汇报》——含目标导向（面向项目/行业/技术前沿/竞争四维度需求）+ 8 大模块成果（闪拍App接入、三级内容链条、AI生成、社区社交、AR媒体、治理权限、架构收敛、线上部署）+ 测试验证（Playwright 9 spec 等）+ 遗留问题 7 类 + 解决方案 + 需老师支持 6 项 + 下一步 4 周计划；用 md_to_docx.py 生成 Word 版
+修改效果：Word 版生成成功（44KB，表格/标题/列表样式齐全），可直接用于汇报会议分发；成果均有代码与线上（xuxiake.com HTTP 200）验证支撑
+--------------------------------------------------------------------------------
+
+修改时间：2026-08-16
 修改位置：server/sql/seed-log-diary-travelogue.sql、server/sql/migrate-content-level.sql、server/sql/migrate-content-hierarchy.sql
 修改原因：数据库清理收尾——seed 脚本 @logId/__LOG_ID__ 变量名残留 LOG 命名(实际存闪拍ID)、历史迁移脚本 content_level enum 仍含已废弃的 CLASSIFIED/LOG(会覆盖 schema 新 enum)
 修改内容：①seed-log-diary-travelogue.sql 将 @logId→@snapId、__LOG_ID__→__SNAP_ID__，清理条件移除 'LOG'(数据语义与3级链条对齐)；②migrate-content-level.sql 的 MODIFY enum 改为 SNAPSHOT/DIARY/TRAVELOGUE/ESSAY 并更新注释(避免在初始化时把 schema 新 enum 覆盖回含 CLASSIFIED/LOG 的旧值)；③migrate-content-hierarchy.sql(未挂载历史脚本)同步更新 enum 与注释
