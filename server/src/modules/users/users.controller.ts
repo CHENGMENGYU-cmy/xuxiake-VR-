@@ -390,7 +390,7 @@ export class UsersController {
       .take(take + 1);
 
     // 排除素材库专属层级（SNAPSHOT/LOG 是素材，不是发布内容，已在素材库展示）
-    qb.andWhere('post.contentLevel NOT IN (:...excludeLevels)', { excludeLevels: ['SNAPSHOT', 'LOG'] });
+    qb.andWhere('post.contentLevel NOT IN (:...excludeLevels)', { excludeLevels: ['SNAPSHOT'] });
 
     // 统计/列表口径：排除草稿（vrMetadata.status=draft 的未发布内容，不计入帖子数与作品列表）
     qb.andWhere("(post.vrMetadata IS NULL OR post.vrMetadata NOT LIKE '%\"status\":\"draft\"%')");
@@ -429,7 +429,7 @@ export class UsersController {
     // 查询总数（与列表查询保持一致的过滤条件）
     const countQb = this.postRepo.createQueryBuilder('post')
       .where('post.authorId = :userId', { userId: user.id })
-      .andWhere('post.contentLevel NOT IN (:...excludeLevels)', { excludeLevels: ['SNAPSHOT', 'LOG'] })
+      .andWhere('post.contentLevel NOT IN (:...excludeLevels)', { excludeLevels: ['SNAPSHOT'] })
       .andWhere("(post.vrMetadata IS NULL OR post.vrMetadata NOT LIKE '%\"status\":\"draft\"%')")
       .andWhere('post.deletedAt IS NULL');
     if (!isOwner) {
@@ -484,7 +484,7 @@ export class UsersController {
       .where('post.authorId = :userId', { userId: user.id })
       .andWhere('media.type IN (:...types)', { types: ['IMAGE', 'VIDEO'] })
       // 与「在路上」保持一致：排除素材库专属层级（SNAPSHOT/LOG）
-      .andWhere('post.contentLevel NOT IN (:...excludeLevels)', { excludeLevels: ['SNAPSHOT', 'LOG'] })
+      .andWhere('post.contentLevel NOT IN (:...excludeLevels)', { excludeLevels: ['SNAPSHOT'] })
       // 排序字段与游标字段必须一致，否则翻页会重复/遗漏
       .orderBy('media.createdAt', 'DESC')
       .take(take + 1);
@@ -568,7 +568,7 @@ export class UsersController {
       .leftJoinAndSelect('post.topics', 'topics')
       .where('like.userId = :userId', { userId: user.id })
       // 与「在路上」保持一致：排除素材库专属层级（SNAPSHOT/LOG）
-      .andWhere('post.contentLevel NOT IN (:...excludeLevels)', { excludeLevels: ['SNAPSHOT', 'LOG'] })
+      .andWhere('post.contentLevel NOT IN (:...excludeLevels)', { excludeLevels: ['SNAPSHOT'] })
       .orderBy('like.createdAt', 'DESC')
       .take(take + 1);
 
