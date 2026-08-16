@@ -1,6 +1,13 @@
 ﻿项目修改记录（最近30条）
 ================================================================================
 
+修改时间：2026-08-16
+修改位置：web/src/components/layout/sidebar.tsx、web/src/app/(main)/journeys/page.tsx
+修改原因：侧边栏"创作"分组与"我的"分组功能重叠——我的日记/游记在"我的"展示，写游记/AI写游记又出现在"创作"，同一批内容被拆到两处造成混乱；且各内容页内部本已有新建入口，侧边栏写游记/AI写游记属重复入口
+修改内容：①sidebar.tsx"创作"分组精简为单一入口"分享见闻"(/upload)，删除重复的"写游记"(/upload/journey-creator)与"AI写游记"(/journeys/generate)，高亮逻辑简化为pathname==='/upload'，清理未使用的Map/Sparkles图标导入；②journeys/page.tsx"我的游记"页顶部补充"AI写游记"按钮(/journeys/generate)，与手写"写游记"并列，保证删除侧边栏入口后写功能完整；③写功能入口收敛到内容页内部——写日记(我的日记页弹窗/素材库顶部)、写游记(我的游记页顶部)、AI写游记(我的游记页/分享见闻引导卡片/素材库多选"生成游记")，均不丢失
+修改效果：侧边栏信息架构清晰化为"我的=内容资产 + 创作=唯一发布入口"，写功能从对应内容页直达，消除重复入口与割裂感，TypeScript编译通过（仅剩e2e预存错误）
+--------------------------------------------------------------------------------
+
 修改时间：2026-08-14
 修改位置：web/types/index.ts、web/lib/snap-api.ts、web/stores/snap-store.ts、web/app/(main)/snap/page.tsx、web/components/diary/snap-picker.tsx、web/components/post/post-card.tsx、web/app/(main)/journeys/[id]/page.tsx、web/app/(main)/my/page.tsx、web/components/layout/sidebar.tsx、web/app/(main)/classified/page.tsx、内容生成逻辑链条.md
 修改原因：彻底贯彻3级内容链条（闪拍→日记→游记），全面清理前端残留的LOG层代码和引用
