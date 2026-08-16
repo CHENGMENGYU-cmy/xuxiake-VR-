@@ -7,6 +7,7 @@ import { Home, Compass, Upload, MessageCircle, User, LogIn } from 'lucide-react'
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/stores/auth-store';
 import { useChatStore } from '@/stores/chat-store';
+import { useUIStore } from '@/stores/ui-store';
 
 export function MobileNav() {
   const pathname = usePathname();
