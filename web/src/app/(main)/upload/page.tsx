@@ -967,8 +967,8 @@ function UploadContent() {
             </div>
           )}
 
-          {/* 设置区域 - 仅在非日记模式显示 */}
-          {activeTab !== 'DIARY' && (
+          {/* 设置区域 */}
+          {(
             <>
               <Separator />
 
@@ -988,6 +988,7 @@ function UploadContent() {
                       <option value="FOLLOWERS">👥 关注可见</option>
                       <option value="PRIVATE">🔒 仅自己</option>
                     </select>
+                    <p className="text-[11px] text-muted-foreground">私密=存入素材库 · 公开=发布到社区</p>
                   </div>
 
                   <div className="space-y-1.5">
