@@ -8,66 +8,128 @@
   body {
     font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
     background: linear-gradient(180deg, #f7fbf8 0%, #eef6f1 100%);
-    padding: 34px 40px;
-    min-width: 1000px;
+    padding: 32px 40px 28px;
+    min-width: 1080px;
   }
 
-  .header { text-align: center; margin-bottom: 30px; }
+  .header { text-align: center; margin-bottom: 26px; }
   .header h1 { font-size: 24px; color: #0b3d2e; letter-spacing: 2px; font-weight: 800; }
+  .header .tag {
+    display: inline-block; margin-top: 7px;
+    font-size: 12px; color: #2f6b52; letter-spacing: 2px;
+    background: #fff; border: 1px solid #cfe6da; padding: 4px 18px; border-radius: 30px;
+  }
 
-  .chain { display: flex; align-items: center; justify-content: center; }
-  .arrow { padding: 0 6px; color: #10b981; font-size: 22px; font-weight: 700; }
+  .chain { display: flex; align-items: stretch; justify-content: center; }
+  .arrow { display: flex; align-items: center; padding: 0 5px; color: #10b981; font-size: 21px; font-weight: 700; }
 
   .stage {
-    min-width: 120px;
-    background: #fff; border: 1.5px solid #cfe6da; border-radius: 10px;
-    padding: 10px 16px 8px; text-align: center;
-    box-shadow: 0 2px 8px rgba(6,95,70,0.06);
+    width: 165px;
+    background: #fff; border: 1.5px solid #cfe6da; border-radius: 12px;
+    padding: 12px 14px 10px;
+    display: flex; flex-direction: column; gap: 8px;
+    box-shadow: 0 3px 10px rgba(6,95,70,0.07);
+    border-left: 4px solid #10b981;
   }
-  .stage .name { font-size: 14.5px; font-weight: 700; color: #0b3d2e; letter-spacing: 0.5px; }
-  .stage .name .no { color: #10b981; margin-right: 2px; }
-  .stage .meta { margin-top: 4px; font-size: 10.5px; color: #8aa898; }
+  .stage .name { font-size: 14px; font-weight: 700; color: #0b3d2e; }
+  .stage .name .no { color: #10b981; margin-right: 3px; }
+  .stage .en { font-size: 10px; color: #8aa898; letter-spacing: 1.5px; font-weight: 600; }
+  .stage .f { font-size: 11.5px; color: #4b6b5c; line-height: 1.65; }
+  .stage .f b { color: #0d9488; font-weight: 600; }
+  .stage .meta {
+    border-top: 1px dashed #dcefe5; padding-top: 6px; margin-top: auto;
+    display: flex; justify-content: space-between; font-size: 10.5px;
+  }
   .meta .role { color: #0d9488; font-weight: 600; }
   .meta .st { font-weight: 600; }
   .st.done { color: #059669; }
   .st.partial { color: #d97706; }
 
   .subnote {
-    margin: 26px auto 0; text-align: center;
-    font-size: 12.5px; color: #3f5c50; letter-spacing: 0.5px; line-height: 1.8;
+    margin: 20px auto 0; max-width: 1060px;
+    padding: 9px 18px; border-radius: 10px;
+    font-size: 12px; color: #3f5c50; text-align: center; line-height: 1.7;
   }
   .subnote b { color: #065f46; }
-  .subnote .sep { color: #c9ddD0; margin: 0 8px; }
+  .subnote .sep { color: #b9d8c8; margin: 0 10px; }
+  .gov { background: #f0fbf5; border: 1px solid #d0eade; }
+  .ai  { background: #f4faf7; border: 1px solid #d8ece1; }
 
   .foot { margin-top: 14px; text-align: center; font-size: 11.5px; color: #8aa898; }
+  .foot b { color: #065f46; }
 </style>
 </head>
 <body>
 
   <div class="header">
     <h1>徐霞客社区功能逻辑框架图</h1>
+    <div class="tag">内容链条为主线 · 角色与完成度标注</div>
   </div>
 
+  <!-- 内容链条主线 -->
   <div class="chain">
-    <div class="stage"><div class="name"><span class="no">①</span>闪拍采集</div><div class="meta"><span class="role">USER</span> · <span class="st done">✅</span></div></div>
+
+    <div class="stage">
+      <div class="name"><span class="no">①</span>闪拍采集<span class="en">CAPTURE</span></div>
+      <div class="f"><b>采集</b>：照片 / 视频 / 语音 / 文字<br><b>元数据</b>：GPS · 时间 · 天气 · 行程</div>
+      <div class="meta"><span class="role">USER</span><span class="st done">✅ 完成</span></div>
+    </div>
+
     <div class="arrow">➜</div>
-    <div class="stage"><div class="name"><span class="no">②</span>素材库</div><div class="meta"><span class="role">USER</span> · <span class="st done">✅</span></div></div>
+
+    <div class="stage">
+      <div class="name"><span class="no">②</span>素材库<span class="en">SNAPSHOT</span></div>
+      <div class="f"><b>浏览</b>：相册聚合 · 按天/地点/行程<br><b>操作</b>：多选 · 全局上传 · 幂等同步</div>
+      <div class="meta"><span class="role">USER</span><span class="st done">✅ 完成</span></div>
+    </div>
+
     <div class="arrow">➜</div>
-    <div class="stage"><div class="name"><span class="no">③</span>日记</div><div class="meta"><span class="role">USER</span> · <span class="st done">✅</span></div></div>
+
+    <div class="stage">
+      <div class="name"><span class="no">③</span>日记<span class="en">DIARY</span></div>
+      <div class="f"><b>创作</b>：手写 + AI写 统一入口<br><b>可见</b>：草稿 / 私密 / 公开 · 广场</div>
+      <div class="meta"><span class="role">USER</span><span class="st done">✅ 完成</span></div>
+    </div>
+
     <div class="arrow">➜</div>
-    <div class="stage"><div class="name"><span class="no">④</span>游记</div><div class="meta"><span class="role">USER</span> · <span class="st done">✅</span></div></div>
+
+    <div class="stage">
+      <div class="name"><span class="no">④</span>游记<span class="en">TRAVELOGUE</span></div>
+      <div class="f"><b>创作</b>：章节式编辑器 · 信息卡<br><b>发布</b>：发布/撤回 · 地点精度控制</div>
+      <div class="meta"><span class="role">USER</span><span class="st done">✅ 完成</span></div>
+    </div>
+
     <div class="arrow">➜</div>
-    <div class="stage"><div class="name"><span class="no">⑤</span>社区发布</div><div class="meta"><span class="role">U/M/A</span> · <span class="st done">✅</span></div></div>
+
+    <div class="stage">
+      <div class="name"><span class="no">⑤</span>社区发布<span class="en">PUBLISH</span></div>
+      <div class="f"><b>展示</b>：Feed 发现/关注 · 类型筛选<br><b>互动</b>：点赞 · 评论 · 分享 · 审核把关</div>
+      <div class="meta"><span class="role">U/M/A</span><span class="st done">✅ 完成</span></div>
+    </div>
+
     <div class="arrow">➜</div>
-    <div class="stage"><div class="name"><span class="no">⑥</span>社交互动</div><div class="meta"><span class="role">USER</span> · <span class="st partial">⚠️</span></div></div>
+
+    <div class="stage">
+      <div class="name"><span class="no">⑥</span>社交互动<span class="en">SOCIAL</span></div>
+      <div class="f"><b>社群</b>：动态 / 公告 / 挑战<br><b>消息/推荐</b>：实时 · 搭子 · 通知</div>
+      <div class="meta"><span class="role">USER</span><span class="st partial">⚠️ 部分</span></div>
+    </div>
+
   </div>
 
-  <div class="subnote">
-    <b>治理与保障</b>（内容审核 · 举报 · 软删除 · 权限）<span class="sep">|</span>
-    <b>AI 内容生成</b>（AI 日记 · AI 游记）
+  <!-- 治理与保障 -->
+  <div class="subnote gov">
+    <b>🛡 治理与保障（横切）</b><span class="sep">|</span>内容审核（敏感词 / 队列 / 举报 / 下架）· 软删除 · 权限体系（USER / MODERATOR / ADMIN）<span class="sep">|</span><b>✅ 已完成</b>
   </div>
 
-  <div class="foot">✅ 已完成　⚠️ 部分完成　｜　角色：USER / MODERATOR / ADMIN</div>
+  <!-- AI 生成 -->
+  <div class="subnote ai">
+    <b>✨ AI 内容生成（贯穿 ②③④）</b><span class="sep">|</span>AI 日记（5 风格 / 批量）· AI 游记（DeepSeek 结构化 / 自动配图）· 真实素材不虚构<span class="sep">|</span><b>✅ 已完成</b>
+  </div>
+
+  <div class="foot">
+    主线：<b>"闪拍采集 → 素材→日记→游记 → 社区发布 → 社交互动"</b>
+  </div>
 
 </body>
 </html>
