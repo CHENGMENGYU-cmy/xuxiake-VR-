@@ -603,8 +603,8 @@ function UploadContent() {
       {/* 草稿列表 */}
       <DraftList onSelectDraft={handleSelectDraft} refreshKey={draftRefreshKey} />
 
-      {/* 内容类型选择卡片（日记编辑时隐藏，仅多媒体分享展示） */}
-      {activeTab !== 'DIARY' && (
+      {/* 内容类型选择卡片 */}
+      {(
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
           {tabs.map((tab) => {
             const Icon = tab.icon;
