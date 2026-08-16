@@ -77,14 +77,18 @@ export function SnapUploadDialog() {
   const uploadMedia = async (item: PendingFile) => {
     if (item.kind === 'VIDEO') {
       const res = await uploadVideo(item.file);
-      return { type: 'VIDEO' as const, url: res.url, duration: res.duration || 0 };
+      let duration = 0;
+      try { duration = (await getVideoMetadata(res.url)).duration; } catch {}
+      return { type: 'VIDEO' as const, url: res.url, duration };
     }
     if (item.kind === 'AUDIO') {
       const res = await uploadAudio(item.file);
-      return { type: 'AUDIO' as const, url: res.url, duration: res.duration || 0 };
+      let duration = 0;
+      try { duration = await getAudioDuration(res.url); } catch {}
+      return { type: 'AUDIO' as const, url: res.url, duration };
     }
     const res = await uploadImage(item.file);
-    return { type: 'IMAGE' as const, url: res.url, width: res.width || 0, height: res.height || 0 };
+    return { type: 'IMAGE' as const, url: res.url, width: res.width, height: res.height };
   };
 
   const handleUpload = async () => {
