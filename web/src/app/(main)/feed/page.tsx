@@ -61,10 +61,33 @@ export default function FeedPage() {
         </button>
       </div>
 
+      {/* 内容类型筛选 */}
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
+        {filterTabs.map((tab) => {
+          const Icon = tab.icon;
+          const isActive = activeFilter === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveFilter(tab.id)}
+              className={cn(
+                'flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium transition-colors',
+                isActive ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-muted/80'
+              )}
+            >
+              <Icon className="h-3.5 w-3.5" />
+              {tab.label}
+            </button>
+          );
+        })}
+      </div>
+
       {/* 内容流 */}
       <FeedList
-        key={feedMode}
+        key={`${feedMode}-${activeFilter}`}
         followingOnly={feedMode === 'following'}
+        postType={currentFilter?.postType}
+        excludeContentLevel={currentFilter?.excludeContentLevel}
       />
     </div>
   );
