@@ -345,8 +345,16 @@ function SnapContent() {
               {selectedFilter ? '该分类下暂无记录' : '暂无闪拍素材'}
             </p>
             <p className="mt-1 text-xs text-muted-foreground/60">
-              使用闪拍 App 记录生活中的瞬间，记录将自动同步到这里
+              使用闪拍 App 记录生活中的瞬间，记录将自动同步到这里；也可手动上传素材
             </p>
+            <Button
+              size="sm"
+              className="mt-4"
+              onClick={() => router.push('/upload')}
+            >
+              <Upload className="mr-1.5 h-3.5 w-3.5" />
+              去上传素材
+            </Button>
           </CardContent>
         </Card>
       ) : isCollectionOpen ? (
