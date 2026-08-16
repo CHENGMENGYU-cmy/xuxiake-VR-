@@ -188,13 +188,6 @@ export class PostsController {
     return { success: true, data };
   }
 
-  @Get('logs')
-  async getUserLogs(@Headers('authorization') auth: string) {
-    const userId = this.getUserId(auth);
-    const data = await this.postsService.getUserLogs(userId);
-    return { success: true, data };
-  }
-
   @Get('diaries')
   async getUserDiaries(
     @Headers('authorization') auth: string,
