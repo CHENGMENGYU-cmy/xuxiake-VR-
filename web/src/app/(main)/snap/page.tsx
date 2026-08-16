@@ -303,7 +303,7 @@ function SnapContent() {
             size="sm"
             variant="outline"
             className="gap-1.5"
-            onClick={() => router.push('/upload')}
+            onClick={openUploadDialog}
           >
             <Upload className="h-3.5 w-3.5" />
             上传素材
