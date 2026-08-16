@@ -20,48 +20,40 @@
     background: #fff; border: 1px solid #cbd5e1; padding: 5px 20px; border-radius: 30px;
   }
 
-  /* ===== 内容主线流转（主体）===== */
+  /* ===== 内容主线流转 ===== */
   .flow { display: flex; align-items: stretch; justify-content: center; }
   .arr { display: flex; align-items: center; padding: 0 5px; color: #2563eb; font-size: 22px; font-weight: 700; }
 
   .stage {
-    width: 186px; background: #fff; border: 1px solid #d0d7de; border-radius: 12px;
+    width: 190px; background: #fff; border: 1px solid #d0d7de; border-radius: 12px;
     border-left: 5px solid #2563eb;
     padding: 13px 15px 11px; display: flex; flex-direction: column; gap: 8px;
     box-shadow: 0 3px 12px rgba(30,58,95,0.09);
-    position: relative;
   }
   .stage .head { display: flex; align-items: center; justify-content: space-between; }
-  .stage .nm { font-size: 15px; font-weight: 800; color: #1e3a5f; letter-spacing: 0.5px; }
+  .stage .nm { font-size: 15px; font-weight: 800; color: #1e3a5f; }
   .stage .nm .no { color: #2563eb; margin-right: 2px; }
-  .stage .flag { font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 10px; background: #f0fdf4; color: #16a34a; }
+  .stage .flag { font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 10px; background: #f0fdf4; color: #16a34a; white-space: nowrap; }
   .stage .flag.partial { background: #fff7ed; color: #d97706; }
   .stage .f { font-size: 11.5px; color: #475569; line-height: 1.7; flex: 1; }
   .stage .f b { color: #1e3a5f; font-weight: 700; }
-  .stage .roles {
+  .stage .meta {
     border-top: 1px dashed #e2e8f0; padding-top: 8px;
     display: flex; flex-wrap: wrap; gap: 4px; align-items: center;
   }
-  .role-chip {
+  .chip {
     font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 8px;
-    background: #eff6ff; color: #1d4ed8; letter-spacing: 0.5px;
+    letter-spacing: 0.5px; white-space: nowrap;
   }
-  .role-chip.dark { background: #1e3a5f; color: #fff; }
-  .role-chip.mid { background: #2563eb; color: #fff; }
-
-  /* ===== 治理 / AI 横条 ===== */
-  .subnote {
-    margin: 18px auto 0; max-width: 1160px;
-    padding: 10px 20px; border-radius: 10px;
-    font-size: 12.5px; color: #475569; text-align: center; line-height: 1.8;
-    background: #fff; border: 1px solid #e2e8f0;
-  }
-  .subnote b { color: #1e3a5f; }
-  .subnote .sep { color: #cbd5e1; margin: 0 10px; }
+  .chip.role       { background: #eff6ff; color: #1d4ed8; }
+  .chip.role.mid   { background: #2563eb; color: #fff; }
+  .chip.role.dark  { background: #1e3a5f; color: #fff; }
+  .chip.cap        { background: #eef2ff; color: #4338ca; }
+  .chip.cap.guard  { background: #f1f5f9; color: #334155; }
 
   .foot {
-    margin-top: 16px; text-align: center;
-    font-size: 12px; color: #64748b; line-height: 1.9;
+    margin-top: 20px; text-align: center;
+    font-size: 12px; color: #64748b; line-height: 2;
   }
   .foot b { color: #1e3a5f; }
   .foot .lg { margin: 0 4px; font-weight: 700; }
@@ -74,16 +66,16 @@
 
   <div class="header">
     <h1>徐霞客社区功能逻辑框架图</h1>
-    <div class="tag">内容主线流转 · 角色标注</div>
+    <div class="tag">内容主线流转 · 角色与能力融合标注</div>
   </div>
 
-  <!-- 内容主线流转（主体） -->
+  <!-- 内容主线流转 -->
   <div class="flow">
 
     <div class="stage">
       <div class="head"><span class="nm"><span class="no">①</span>闪拍采集</span><span class="flag">✓ 完成</span></div>
       <div class="f"><b>采集</b>：照片 / 视频 / 语音 / 文字<br><b>元数据</b>：GPS · 时间 · 天气 · 行程<br><b>来源</b>：闪拍App / AI 眼镜</div>
-      <div class="roles"><span class="role-chip">USER</span></div>
+      <div class="meta"><span class="chip role">USER</span></div>
     </div>
 
     <div class="arr">➜</div>
@@ -91,7 +83,7 @@
     <div class="stage">
       <div class="head"><span class="nm"><span class="no">②</span>素材库</span><span class="flag">✓ 完成</span></div>
       <div class="f"><b>浏览</b>：相册聚合 · 按天/地点/行程<br><b>操作</b>：多选 · 全局上传<br><b>同步</b>：App 幂等（默认私密）</div>
-      <div class="roles"><span class="role-chip">USER</span></div>
+      <div class="meta"><span class="chip role">USER</span><span class="chip cap">✨ AI</span></div>
     </div>
 
     <div class="arr">➜</div>
@@ -99,7 +91,7 @@
     <div class="stage">
       <div class="head"><span class="nm"><span class="no">③</span>日记</span><span class="flag">✓ 完成</span></div>
       <div class="f"><b>创作</b>：手写 + AI 写 统一入口<br><b>可见</b>：草稿 / 私密 / 公开<br><b>广场</b>：日记广场 · 升华游记</div>
-      <div class="roles"><span class="role-chip">USER</span></div>
+      <div class="meta"><span class="chip role">USER</span><span class="chip cap">✨ AI</span></div>
     </div>
 
     <div class="arr">➜</div>
@@ -107,7 +99,7 @@
     <div class="stage">
       <div class="head"><span class="nm"><span class="no">④</span>游记</span><span class="flag">✓ 完成</span></div>
       <div class="f"><b>创作</b>：章节式图文编辑器<br><b>信息卡</b>：目的地 · 贴士 · 感悟<br><b>发布</b>：发布/撤回 · 地点精度</div>
-      <div class="roles"><span class="role-chip">USER</span></div>
+      <div class="meta"><span class="chip role">USER</span><span class="chip cap">✨ AI</span></div>
     </div>
 
     <div class="arr">➜</div>
@@ -115,7 +107,7 @@
     <div class="stage">
       <div class="head"><span class="nm"><span class="no">⑤</span>社区发布</span><span class="flag">✓ 完成</span></div>
       <div class="f"><b>展示</b>：Feed 发现/关注 · 类型筛选<br><b>互动</b>：点赞 · 评论 · 分享<br><b>把关</b>：发布后审核</div>
-      <div class="roles"><span class="role-chip">USER</span><span class="role-chip mid">MODERATOR</span><span class="role-chip dark">ADMIN</span></div>
+      <div class="meta"><span class="chip role">USER</span><span class="chip role mid">MODERATOR</span><span class="chip role dark">ADMIN</span><span class="chip cap guard">🛡 治理</span></div>
     </div>
 
     <div class="arr">➜</div>
@@ -123,23 +115,15 @@
     <div class="stage">
       <div class="head"><span class="nm"><span class="no">⑥</span>社交互动</span><span class="flag partial">△ 部分</span></div>
       <div class="f"><b>社群</b>：动态 / 公告 / 挑战<br><b>消息</b>：实时 / 富媒体 / 语音<br><b>推荐/通知</b>：搭子 · SSE 推送</div>
-      <div class="roles"><span class="role-chip">USER</span></div>
+      <div class="meta"><span class="chip role">USER</span></div>
     </div>
 
   </div>
 
-  <!-- 治理与保障 -->
-  <div class="subnote">
-    <b>🛡 治理与保障（横切）</b><span class="sep">|</span>内容审核（敏感词 / 审核队列 / 举报 / 下架）· 软删除 · 权限体系（USER / MODERATOR / ADMIN）<span class="sep">|</span><b>✓ 已完成</b>
-  </div>
-
-  <!-- AI 生成 -->
-  <div class="subnote">
-    <b>✨ AI 内容生成（贯穿 ②③④）</b><span class="sep">|</span>AI 日记（5 风格 / 批量）· AI 游记（DeepSeek 结构化 / 自动配图）· 真实素材不虚构<span class="sep">|</span><b>✓ 已完成</b>
-  </div>
-
   <div class="foot">
-    状态：<span class="lg ok">✓ 已完成</span> · <span class="lg partial">△ 部分完成</span> · <span class="lg todo">○ 规划中</span>　｜　角色：USER 普通用户 · MODERATOR 审核员 · ADMIN 管理员
+    状态：<span class="lg ok">✓ 已完成</span> · <span class="lg partial">△ 部分完成</span> · <span class="lg todo">○ 规划中</span>
+    　｜　角色：USER 普通用户 · MODERATOR 审核员 · ADMIN 管理员
+    　｜　能力：<span class="lg ok">✨ AI 内容生成（贯穿 ②③④）</span> · <span class="lg ok">🛡 治理与保障（作用于 ⑤）</span>
   </div>
 
 </body>
