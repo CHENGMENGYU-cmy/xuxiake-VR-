@@ -88,6 +88,9 @@ export class PostsService {
     if (tagId) {
       qb.innerJoin('post.tags', 'filterTag', 'filterTag.id = :tagId', { tagId });
     }
+    if (excludeContentLevel) {
+      qb.andWhere('(post.contentLevel IS NULL OR post.contentLevel != :excludeLevel)', { excludeLevel: excludeContentLevel });
+    }
 
     if (cursor) {
       const cursorPost = await this.postRepo.findOne({ where: { id: cursor, deletedAt: IsNull() } });
