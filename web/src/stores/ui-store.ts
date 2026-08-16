@@ -18,9 +18,12 @@ interface UIState {
   sidebarOpen: boolean;
   rightPanelOpen: boolean;
   appearance: AppearanceSettings;
+  uploadDialogOpen: boolean;
   toggleSidebar: () => void;
   toggleRightPanel: () => void;
   setSidebarOpen: (open: boolean) => void;
+  openUploadDialog: () => void;
+  closeUploadDialog: () => void;
   updateAppearance: (settings: Partial<AppearanceSettings>) => void;
 }
 
