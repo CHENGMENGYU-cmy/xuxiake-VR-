@@ -297,6 +297,15 @@ function SnapContent() {
             <PenLine className="h-3.5 w-3.5" />
             写日记
           </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            className="gap-1.5"
+            onClick={() => router.push('/upload')}
+          >
+            <Upload className="h-3.5 w-3.5" />
+            上传素材
+          </Button>
         </div>
       </div>
 
