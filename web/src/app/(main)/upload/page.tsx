@@ -78,15 +78,12 @@ function UploadContent() {
   const { user } = useAuthStore();
   const { publishPost, isPublishing } = usePostStore();
 
-  // 根据 URL 参数决定初始 Tab
-  const initialTab: UploadTab = searchParams.get('level') === 'DIARY' ? 'DIARY' : 'VIDEO';
-  const [activeTab, setActiveTab] = useState<UploadTab>(initialTab);
+  const [activeTab, setActiveTab] = useState<UploadTab>('VIDEO');
   const [content, setContent] = useState('');
   const [location, setLocation] = useState('');
-  const [visibility, setVisibility] = useState<Visibility>('PUBLIC');
+  const [visibility, setVisibility] = useState<Visibility>('PRIVATE');
   const [media, setMedia] = useState<UploadedMedia | null>(null);
   const [images, setImages] = useState<UploadedImage[]>([]);
-  const [pickerOpen, setPickerOpen] = useState(false);
   const [selectedTopics, setSelectedTopics] = useState<Topic[]>([]);
   const [selectedCommunity, setSelectedCommunity] = useState<Community | null>(null);
   const [uploading, setUploading] = useState(false);
