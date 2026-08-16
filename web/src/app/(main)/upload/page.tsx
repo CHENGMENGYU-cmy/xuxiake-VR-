@@ -28,13 +28,12 @@ import { translateText, detectLanguage } from '@/lib/translation-api';
 import { getPostDetail } from '@/lib/snap-api';
 import { SnapPickerDialog } from '@/components/diary/snap-picker';
 
-type UploadTab = 'VIDEO' | 'IMAGE' | 'AUDIO' | 'DIARY';
+type UploadTab = 'VIDEO' | 'IMAGE' | 'AUDIO';
 
 const tabContentTypes: Record<UploadTab, string | undefined> = {
   VIDEO: 'VR_MEDIA',
   IMAGE: 'VR_MEDIA',
   AUDIO: 'VR_MEDIA',
-  DIARY: 'NOTE',
 };
 
 const tabs: { key: UploadTab; label: string; icon: React.ElementType; color: string }[] = [
