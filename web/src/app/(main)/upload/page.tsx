@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Upload, Video, Image, Mic, Link2, Languages, FileUp, MapPin, X, Loader2, Play, Volume2, Send, ArrowLeftRight, PenLine, BookOpen, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
