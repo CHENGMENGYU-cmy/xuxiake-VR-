@@ -101,9 +101,6 @@ function UploadContent() {
   const [translatedText, setTranslatedText] = useState('');
   const [translating, setTranslating] = useState(false);
 
-  // 日记元数据状态
-  const [mood, setMood] = useState<MoodType | ''>('');
-  const [weather, setWeather] = useState<WeatherType | ''>('');
   const [draftRefreshKey, setDraftRefreshKey] = useState(0);
   const [currentDraftId, setCurrentDraftId] = useState<string | null>(null);
   const lastSavedContentRef = useRef<string>('');
