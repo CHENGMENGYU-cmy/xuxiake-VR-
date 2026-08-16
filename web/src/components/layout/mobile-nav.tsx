@@ -63,6 +63,19 @@ export function MobileNav() {
       <div className="flex h-14 items-center justify-around">
         {navItems.map((item) => {
           const Icon = item.icon;
+          if ('action' in item) {
+            return (
+              <button
+                key={item.action}
+                type="button"
+                onClick={openUploadDialog}
+                className="relative flex flex-col items-center justify-center gap-0.5 text-muted-foreground"
+              >
+                <Icon className="h-5 w-5" />
+                <span className="text-[10px]">{item.label}</span>
+              </button>
+            );
+          }
           const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
           return (
             <Link
