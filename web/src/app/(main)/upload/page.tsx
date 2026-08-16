@@ -822,67 +822,6 @@ function UploadContent() {
               </>
             )}
 
-            {/* DIARY - 附加功能 */}
-            {activeTab === 'DIARY' && (
-              <>
-                <div className="space-y-3">
-                  <label className="text-sm font-medium flex items-center gap-2">
-                    <span className="flex h-5 w-5 items-center justify-center rounded bg-indigo-100 dark:bg-indigo-900">
-                      <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">4</span>
-                    </span>
-                    配图（可选）
-                  </label>
-                  <MultiImageUploader
-                    images={images}
-                    onImagesChange={setImages}
-                    maxImages={9}
-                  />
-                  <div className="flex items-center gap-2">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="gap-1.5"
-                      onClick={() => setPickerOpen(true)}
-                      disabled={images.length >= 9}
-                    >
-                      <Image className="h-3.5 w-3.5" />
-                      从素材库选择
-                    </Button>
-                    <span className="text-[10px] text-muted-foreground">使用已拍摄的素材作为配图</span>
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <label className="text-sm font-medium flex items-center gap-2">
-                    <span className="flex h-5 w-5 items-center justify-center rounded bg-indigo-100 dark:bg-indigo-900">
-                      <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">5</span>
-                    </span>
-                    地点（可选）
-                  </label>
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                    <Input type="text" placeholder="记录你在哪里..." className="pl-10" value={location} onChange={(e) => setLocation(e.target.value)} />
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <label className="text-sm font-medium flex items-center gap-2">
-                    <span className="flex h-5 w-5 items-center justify-center rounded bg-indigo-100 dark:bg-indigo-900">
-                      <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">6</span>
-                    </span>
-                    话题标签（可选）
-                  </label>
-                  <TopicSelector
-                    selectedTopics={selectedTopics}
-                    onTopicsChange={setSelectedTopics}
-                    maxTopics={5}
-                    content={content}
-                  />
-                </div>
-              </>
-            )}
-
             {/* LINK 附加 */}
             {showLinkAddon && (
               <div className="space-y-4 rounded-xl border-2 border-muted bg-muted/30 p-4">
