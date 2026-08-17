@@ -1,23 +1,35 @@
 # -*- coding: utf-8 -*-
-import subprocess
+import os, subprocess
 
 def run(cmd):
     return subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', errors='replace').stdout
 
-print('=== git log --all for 框架图 html files ===')
-print(run(['git', 'log', '--all', '--oneline', '--', '*框架图*']))
+# Search disk (walk top-level dirs except node_modules/.git)
+hits_disk = []
+for root, dirs, files in os.walk('.'):
+    dirs[:] = [d for d in dirs if d not in ('node_modules', '.git', '.next', 'dist', 'out')]
+    for f in files:
+        if '框架图' in f:
+            hits_disk.append(os.path.join(root, f))
 
-print('=== files in HEAD containing 框架图 ===')
+print('=== 磁盘上含"框架图"的文件 ===')
+for h in sorted(hits_disk):
+    print('  ', repr(h))
+
+print()
+print('=== git 跟踪的所有文件（全仓） ===')
 out = run(['git', 'ls-files'])
-for line in out.splitlines():
+allfiles = out.splitlines()
+print('  总数:', len(allfiles))
+for line in allfiles:
     if '框架图' in line:
-        print('  TRACKED:', repr(line))
+        print('  TRACKED 框架图:', repr(line))
 
-print('=== recent commits touching 功能框架图 ===')
-print(run(['git', 'log', '--oneline', '-6', '--', '*功能框架图*']))
+print()
+print('=== git status --short ===')
+print('  ', repr(run(['git', 'status', '--short'])))
 
-print('=== recent commits touching 逻辑框架图 ===')
-print(run(['git', 'log', '--oneline', '-6', '--', '*逻辑框架图*']))
-
-print('=== CHANGELOG.md current content ===')
-print(run(['git', 'show', 'HEAD:CHANGELOG.md'])[:1500])
+print()
+print('=== HEAD CHANGELOG.md 是否存在 ===')
+print('  exists in HEAD:', bool(run(['git', 'cat-file', '-e', 'HEAD:CHANGELOG.md']).strip()) or subprocess.run(['git', 'cat-file', '-e', 'HEAD:CHANGELOG.md'], capture_output=True).returncode == 0)
+print('  disk exists:', os.path.exists('CHANGELOG.md'))
