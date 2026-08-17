@@ -62,9 +62,9 @@ def main():
             S(f'<line x1="{bx:.1f}" y1="{by:.1f}" x2="{cxx:.1f}" y2="{cyy:.1f}" stroke="{color}" stroke-width="2" opacity="0.55"/>')
 
     # 中心节点
-    S(f'<rect x="{CX - cw / 2:.1f}" y="{CY - ch / 2:.1f}" width="{cw:.1f}" height="{ch:.1f}" rx="22" fill="#1F2937"/>')
+    S(f'<rect x="{CX - cw / 2:.1f}" y="{CY - center_h / 2:.1f}" width="{cw:.1f}" height="{center_h:.1f}" rx="22" fill="#1F2937"/>')
     S(f'<text x="{CX}" y="{CY}" fill="#FFFFFF" font-size="{cs}" font-weight="bold" text-anchor="middle" dominant-baseline="central">{ct}</text>')
-    boxes.append(("中心", CX - cw / 2, CY - ch / 2, CX + cw / 2, CY + ch / 2))
+    boxes.append(("中心", CX - cw / 2, CY - center_h / 2, CX + cw / 2, CY + center_h / 2))
 
     # 分支节点 + 子节点
     for i, (title, children) in enumerate(branches):
