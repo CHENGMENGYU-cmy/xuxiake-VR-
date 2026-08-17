@@ -1,71 +1,71 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1700" height="1100" viewBox="0 0 1700 1100" font-family="Microsoft YaHei, PingFang SC, sans-serif">
-<rect width="1700" height="1100" fill="#FFFFFF"/>
-<line x1="850.0" y1="560.0" x2="850.0" y2="220.0" stroke="#EF5350" stroke-width="3"/>
-<line x1="850.0" y1="220.0" x2="800.0" y2="116.0" stroke="#EF5350" stroke-width="2" opacity="0.55"/>
-<line x1="850.0" y1="220.0" x2="850.0" y2="116.0" stroke="#EF5350" stroke-width="2" opacity="0.55"/>
-<line x1="850.0" y1="220.0" x2="900.0" y2="116.0" stroke="#EF5350" stroke-width="2" opacity="0.55"/>
-<line x1="850.0" y1="560.0" x2="1115.8" y2="348.0" stroke="#FF9800" stroke-width="3"/>
-<line x1="1115.8" y1="348.0" x2="1181.5" y2="263.6" stroke="#FF9800" stroke-width="2" opacity="0.55"/>
-<line x1="1115.8" y1="348.0" x2="1212.7" y2="302.7" stroke="#FF9800" stroke-width="2" opacity="0.55"/>
-<line x1="850.0" y1="560.0" x2="1181.5" y2="635.7" stroke="#E6A817" stroke-width="3"/>
-<line x1="1181.5" y1="635.7" x2="1288.4" y2="634.4" stroke="#E6A817" stroke-width="2" opacity="0.55"/>
-<line x1="1181.5" y1="635.7" x2="1277.3" y2="683.2" stroke="#E6A817" stroke-width="2" opacity="0.55"/>
-<line x1="850.0" y1="560.0" x2="997.5" y2="866.3" stroke="#66BB6A" stroke-width="3"/>
-<line x1="997.5" y1="866.3" x2="1065.2" y2="949.2" stroke="#66BB6A" stroke-width="2" opacity="0.55"/>
-<line x1="997.5" y1="866.3" x2="1020.1" y2="970.9" stroke="#66BB6A" stroke-width="2" opacity="0.55"/>
-<line x1="850.0" y1="560.0" x2="702.5" y2="866.3" stroke="#26A69A" stroke-width="3"/>
-<line x1="702.5" y1="866.3" x2="679.9" y2="970.9" stroke="#26A69A" stroke-width="2" opacity="0.55"/>
-<line x1="702.5" y1="866.3" x2="634.8" y2="949.2" stroke="#26A69A" stroke-width="2" opacity="0.55"/>
-<line x1="850.0" y1="560.0" x2="518.5" y2="635.7" stroke="#42A5F5" stroke-width="3"/>
-<line x1="518.5" y1="635.7" x2="422.7" y2="683.2" stroke="#42A5F5" stroke-width="2" opacity="0.55"/>
-<line x1="518.5" y1="635.7" x2="411.6" y2="634.4" stroke="#42A5F5" stroke-width="2" opacity="0.55"/>
-<line x1="850.0" y1="560.0" x2="584.2" y2="348.0" stroke="#AB47BC" stroke-width="3"/>
-<line x1="584.2" y1="348.0" x2="487.3" y2="302.7" stroke="#AB47BC" stroke-width="2" opacity="0.55"/>
-<line x1="584.2" y1="348.0" x2="518.5" y2="263.6" stroke="#AB47BC" stroke-width="2" opacity="0.55"/>
-<rect x="668.0" y="523.0" width="364.0" height="74.0" rx="22" fill="#1F2937"/>
-<text x="850" y="560" fill="#FFFFFF" font-size="30" font-weight="bold" text-anchor="middle" dominant-baseline="central">徐霞客社区系统框架图</text>
-<rect x="783.0" y="194.0" width="134.0" height="52.0" rx="15" fill="#EF5350"/>
-<text x="850.0" y="220.0" fill="#FFFFFF" font-size="22" font-weight="bold" text-anchor="middle" dominant-baseline="central">三种角色</text>
-<rect x="725.8" y="95.0" width="148.4" height="42.0" rx="12" fill="#EF5350" fill-opacity="0.12" stroke="#EF5350" stroke-opacity="0.5" stroke-width="1.5"/>
-<text x="800.0" y="116.0" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">普通用户 USER</text>
-<rect x="760.6" y="95.0" width="178.8" height="42.0" rx="12" fill="#EF5350" fill-opacity="0.12" stroke="#EF5350" stroke-opacity="0.5" stroke-width="1.5"/>
-<text x="850.0" y="116.0" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">审核员 MODERATOR</text>
-<rect x="829.2" y="95.0" width="141.7" height="42.0" rx="12" fill="#EF5350" fill-opacity="0.12" stroke="#EF5350" stroke-opacity="0.5" stroke-width="1.5"/>
-<text x="900.0" y="116.0" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">管理员 ADMIN</text>
-<rect x="1049.8" y="322.0" width="132.0" height="52.0" rx="15" fill="#FF9800"/>
-<text x="1115.8227040391303" y="348.0134673680306" fill="#FFFFFF" font-size="22" font-weight="bold" text-anchor="middle" dominant-baseline="central">① 采集</text>
-<rect x="1116.6" y="242.6" width="129.8" height="42.0" rx="12" fill="#FF9800" fill-opacity="0.12" stroke="#FF9800" stroke-opacity="0.5" stroke-width="1.5"/>
-<text x="1181.545933169337" y="263.6247409130215" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">闪拍App拍摄</text>
-<rect x="1136.4" y="281.7" width="152.6" height="42.0" rx="12" fill="#FF9800" fill-opacity="0.12" stroke="#FF9800" stroke-opacity="0.5" stroke-width="1.5"/>
-<text x="1212.7204232622737" y="302.71631503642305" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">照片/视频/语音</text>
-<rect x="1115.5" y="609.7" width="132.0" height="52.0" rx="15" fill="#E6A817"/>
-<text x="1181.47549014182" y="635.6571175451469" fill="#FFFFFF" font-size="22" font-weight="bold" text-anchor="middle" dominant-baseline="central">② 素材</text>
-<rect x="1203.7" y="613.4" width="169.5" height="42.0" rx="12" fill="#E6A817" fill-opacity="0.12" stroke="#E6A817" stroke-opacity="0.5" stroke-width="1.5"/>
-<text x="1288.4310163576374" y="634.426096872058" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">SNAPSHOT 素材库</text>
-<rect x="1202.3" y="662.2" width="150.0" height="42.0" rx="12" fill="#E6A817" fill-opacity="0.12" stroke="#E6A817" stroke-opacity="0.5" stroke-width="1.5"/>
-<text x="1277.3049696598218" y="683.1724924811492" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">相册式聚合浏览</text>
-<rect x="922.4" y="840.3" width="150.3" height="52.0" rx="15" fill="#66BB6A"/>
-<text x="997.5204712999698" y="866.3294150868225" fill="#FFFFFF" font-size="22" font-weight="bold" text-anchor="middle" dominant-baseline="central">③ AI生成</text>
-<rect x="975.0" y="928.2" width="180.4" height="42.0" rx="12" fill="#66BB6A" fill-opacity="0.12" stroke="#66BB6A" stroke-opacity="0.5" stroke-width="1.5"/>
-<text x="1065.1686018657563" y="949.183083870735" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">AI日记 · 5种风格</text>
-<rect x="918.6" y="949.9" width="203.1" height="42.0" rx="12" fill="#66BB6A" fill-opacity="0.12" stroke="#66BB6A" stroke-opacity="0.5" stroke-width="1.5"/>
-<text x="1020.1201584706353" y="970.877270826613" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">AI游记 · 结构化章节</text>
-<rect x="636.5" y="840.3" width="132.0" height="52.0" rx="15" fill="#26A69A"/>
-<text x="702.4795287000302" y="866.3294150868226" fill="#FFFFFF" font-size="22" font-weight="bold" text-anchor="middle" dominant-baseline="central">④ 发布</text>
-<rect x="612.9" y="949.9" width="134.0" height="42.0" rx="12" fill="#26A69A" fill-opacity="0.12" stroke="#26A69A" stroke-opacity="0.5" stroke-width="1.5"/>
-<text x="679.8798415293646" y="970.8772708266132" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">三级内容链条</text>
-<rect x="558.6" y="928.2" width="152.6" height="42.0" rx="12" fill="#26A69A" fill-opacity="0.12" stroke="#26A69A" stroke-opacity="0.5" stroke-width="1.5"/>
-<text x="634.8313981342436" y="949.1830838707352" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">草稿/私密/公开</text>
-<rect x="452.5" y="609.7" width="132.0" height="52.0" rx="15" fill="#42A5F5"/>
-<text x="518.52450985818" y="635.6571175451468" fill="#FFFFFF" font-size="22" font-weight="bold" text-anchor="middle" dominant-baseline="central">⑤ 互动</text>
-<rect x="315.7" y="662.2" width="214.0" height="42.0" rx="12" fill="#42A5F5" fill-opacity="0.12" stroke="#42A5F5" stroke-opacity="0.5" stroke-width="1.5"/>
-<text x="422.6950303401781" y="683.1724924811491" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">社群·消息·推荐·通知</text>
-<rect x="318.3" y="613.4" width="186.5" height="42.0" rx="12" fill="#42A5F5" fill-opacity="0.12" stroke="#42A5F5" stroke-opacity="0.5" stroke-width="1.5"/>
-<text x="411.5689836423624" y="634.4260968720579" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">USER + MODERATOR</text>
-<rect x="518.2" y="322.0" width="132.0" height="52.0" rx="15" fill="#AB47BC"/>
-<text x="584.1772959608699" y="348.01346736803066" fill="#FFFFFF" font-size="22" font-weight="bold" text-anchor="middle" dominant-baseline="central">⑥ 治理</text>
-<rect x="396.3" y="281.7" width="182.0" height="42.0" rx="12" fill="#AB47BC" fill-opacity="0.12" stroke="#AB47BC" stroke-opacity="0.5" stroke-width="1.5"/>
-<text x="487.27957673772636" y="302.71631503642317" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">审核·举报·软删除</text>
-<rect x="406.7" y="242.6" width="223.6" height="42.0" rx="12" fill="#AB47BC" fill-opacity="0.12" stroke="#AB47BC" stroke-opacity="0.5" stroke-width="1.5"/>
-<text x="518.454066830663" y="263.62474091302164" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">USER+MODERATOR+ADMIN</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1900" height="1250" viewBox="0 0 1900 1250" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+<rect width="1900" height="1250" fill="#FFFFFF"/>
+<line x1="950.0" y1="625.0" x2="950.0" y2="325.0" stroke="#EF5350" stroke-width="3"/>
+<line x1="950.0" y1="325.0" x2="775.8" y2="175.0" stroke="#EF5350" stroke-width="2" opacity="0.55"/>
+<line x1="950.0" y1="325.0" x2="953.4" y2="175.0" stroke="#EF5350" stroke-width="2" opacity="0.55"/>
+<line x1="950.0" y1="325.0" x2="1127.6" y2="175.0" stroke="#EF5350" stroke-width="2" opacity="0.55"/>
+<line x1="950.0" y1="625.0" x2="1184.5" y2="438.0" stroke="#FF9800" stroke-width="3"/>
+<line x1="1184.5" y1="438.0" x2="1245.7" y2="274.1" stroke="#FF9800" stroke-width="2" opacity="0.55"/>
+<line x1="1184.5" y1="438.0" x2="1346.7" y2="400.7" stroke="#FF9800" stroke-width="2" opacity="0.55"/>
+<line x1="950.0" y1="625.0" x2="1242.5" y2="691.8" stroke="#E6A817" stroke-width="3"/>
+<line x1="1242.5" y1="691.8" x2="1403.4" y2="660.8" stroke="#E6A817" stroke-width="2" opacity="0.55"/>
+<line x1="1242.5" y1="691.8" x2="1369.3" y2="810.1" stroke="#E6A817" stroke-width="2" opacity="0.55"/>
+<line x1="950.0" y1="625.0" x2="1080.2" y2="895.3" stroke="#66BB6A" stroke-width="3"/>
+<line x1="1080.2" y1="895.3" x2="1220.3" y2="994.3" stroke="#66BB6A" stroke-width="2" opacity="0.55"/>
+<line x1="1080.2" y1="895.3" x2="1066.0" y2="1068.6" stroke="#66BB6A" stroke-width="2" opacity="0.55"/>
+<line x1="950.0" y1="625.0" x2="819.8" y2="895.3" stroke="#26A69A" stroke-width="3"/>
+<line x1="819.8" y1="895.3" x2="835.8" y2="1069.5" stroke="#26A69A" stroke-width="2" opacity="0.55"/>
+<line x1="819.8" y1="895.3" x2="688.1" y2="998.3" stroke="#26A69A" stroke-width="2" opacity="0.55"/>
+<line x1="950.0" y1="625.0" x2="657.5" y2="691.8" stroke="#42A5F5" stroke-width="3"/>
+<line x1="657.5" y1="691.8" x2="529.1" y2="803.1" stroke="#42A5F5" stroke-width="2" opacity="0.55"/>
+<line x1="657.5" y1="691.8" x2="491.3" y2="637.4" stroke="#42A5F5" stroke-width="2" opacity="0.55"/>
+<line x1="950.0" y1="625.0" x2="715.5" y2="438.0" stroke="#AB47BC" stroke-width="3"/>
+<line x1="715.5" y1="438.0" x2="557.0" y2="396.0" stroke="#AB47BC" stroke-width="2" opacity="0.55"/>
+<line x1="715.5" y1="438.0" x2="654.3" y2="274.1" stroke="#AB47BC" stroke-width="2" opacity="0.55"/>
+<rect x="768.0" y="588.0" width="364.0" height="74.0" rx="22" fill="#1F2937"/>
+<text x="950" y="625" fill="#FFFFFF" font-size="30" font-weight="bold" text-anchor="middle" dominant-baseline="central">徐霞客社区系统框架图</text>
+<rect x="883.0" y="299.0" width="134.0" height="52.0" rx="15" fill="#EF5350"/>
+<text x="950.0" y="325.0" fill="#FFFFFF" font-size="22" font-weight="bold" text-anchor="middle" dominant-baseline="central">三种角色</text>
+<rect x="701.6" y="154.0" width="148.4" height="42.0" rx="12" fill="#EF5350" fill-opacity="0.12" stroke="#EF5350" stroke-opacity="0.5" stroke-width="1.5"/>
+<text x="775.76" y="175.0" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">普通用户 USER</text>
+<rect x="864.0" y="154.0" width="178.8" height="42.0" rx="12" fill="#EF5350" fill-opacity="0.12" stroke="#EF5350" stroke-opacity="0.5" stroke-width="1.5"/>
+<text x="953.36" y="175.0" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">审核员 MODERATOR</text>
+<rect x="1056.8" y="154.0" width="141.7" height="42.0" rx="12" fill="#EF5350" fill-opacity="0.12" stroke="#EF5350" stroke-opacity="0.5" stroke-width="1.5"/>
+<text x="1127.6" y="175.0" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">管理员 ADMIN</text>
+<rect x="1118.5" y="412.0" width="132.0" height="52.0" rx="15" fill="#FF9800"/>
+<text x="1184.549444740409" y="437.95305944238" fill="#FFFFFF" font-size="22" font-weight="bold" text-anchor="middle" dominant-baseline="central">① 采集</text>
+<rect x="1180.8" y="253.1" width="129.8" height="42.0" rx="12" fill="#FF9800" fill-opacity="0.12" stroke="#FF9800" stroke-opacity="0.5" stroke-width="1.5"/>
+<text x="1245.7100849433275" y="274.06475574144724" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">闪拍App拍摄</text>
+<rect x="1263.7" y="379.7" width="166.0" height="42.0" rx="12" fill="#FF9800" fill-opacity="0.12" stroke="#FF9800" stroke-opacity="0.5" stroke-width="1.5"/>
+<text x="1346.6655536602934" y="400.6589093826707" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">照片·视频·语音</text>
+<rect x="1176.5" y="665.8" width="132.0" height="52.0" rx="15" fill="#E6A817"/>
+<text x="1242.478373654547" y="691.7562801868944" fill="#FFFFFF" font-size="22" font-weight="bold" text-anchor="middle" dominant-baseline="central">② 素材</text>
+<rect x="1323.3" y="639.8" width="160.2" height="42.0" rx="12" fill="#E6A817" fill-opacity="0.12" stroke="#E6A817" stroke-opacity="0.5" stroke-width="1.5"/>
+<text x="1403.4039421229375" y="660.7891780763413" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">SNAPSHOT素材库</text>
+<rect x="1310.3" y="789.1" width="118.0" height="42.0" rx="12" fill="#E6A817" fill-opacity="0.12" stroke="#E6A817" stroke-opacity="0.5" stroke-width="1.5"/>
+<text x="1369.3315367155467" y="810.070139989622" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">相册式聚合</text>
+<rect x="1005.0" y="869.3" width="150.3" height="52.0" rx="15" fill="#66BB6A"/>
+<text x="1080.1651217352676" y="895.2906603707257" fill="#FFFFFF" font-size="22" font-weight="bold" text-anchor="middle" dominant-baseline="central">③ AI生成</text>
+<rect x="1139.4" y="973.3" width="161.8" height="42.0" rx="12" fill="#66BB6A" fill-opacity="0.12" stroke="#66BB6A" stroke-opacity="0.5" stroke-width="1.5"/>
+<text x="1220.2803699218148" y="994.3021527623785" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">AI日记·5种风格</text>
+<rect x="989.8" y="1047.6" width="152.6" height="42.0" rx="12" fill="#66BB6A" fill-opacity="0.12" stroke="#66BB6A" stroke-opacity="0.5" stroke-width="1.5"/>
+<text x="1066.0344997369205" y="1068.5830488993045" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">AI游记·章节式</text>
+<rect x="753.8" y="869.3" width="132.0" height="52.0" rx="15" fill="#26A69A"/>
+<text x="819.8348782647327" y="895.2906603707257" fill="#FFFFFF" font-size="22" font-weight="bold" text-anchor="middle" dominant-baseline="central">④ 发布</text>
+<rect x="768.8" y="1048.5" width="134.0" height="42.0" rx="12" fill="#26A69A" fill-opacity="0.12" stroke="#26A69A" stroke-opacity="0.5" stroke-width="1.5"/>
+<text x="835.8395155083167" y="1069.4855270766689" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">三级内容链条</text>
+<rect x="605.1" y="977.3" width="166.0" height="42.0" rx="12" fill="#26A69A" fill-opacity="0.12" stroke="#26A69A" stroke-opacity="0.5" stroke-width="1.5"/>
+<text x="688.08062117232" y="998.3285938613893" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">草稿·私密·公开</text>
+<rect x="591.5" y="665.8" width="132.0" height="52.0" rx="15" fill="#42A5F5"/>
+<text x="657.5216263454529" y="691.7562801868942" fill="#FFFFFF" font-size="22" font-weight="bold" text-anchor="middle" dominant-baseline="central">⑤ 互动</text>
+<rect x="446.1" y="782.1" width="166.0" height="42.0" rx="12" fill="#42A5F5" fill-opacity="0.12" stroke="#42A5F5" stroke-opacity="0.5" stroke-width="1.5"/>
+<text x="529.066312559968" y="803.0506590219127" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">社群·消息·推荐</text>
+<rect x="418.3" y="616.4" width="145.8" height="42.0" rx="12" fill="#42A5F5" fill-opacity="0.12" stroke="#42A5F5" stroke-opacity="0.5" stroke-width="1.5"/>
+<text x="491.2555554621111" y="637.3909081839771" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">通知·SSE推送</text>
+<rect x="649.5" y="412.0" width="132.0" height="52.0" rx="15" fill="#AB47BC"/>
+<text x="715.450555259591" y="437.95305944238" fill="#FFFFFF" font-size="22" font-weight="bold" text-anchor="middle" dominant-baseline="central">⑥ 治理</text>
+<rect x="474.0" y="375.0" width="166.0" height="42.0" rx="12" fill="#AB47BC" fill-opacity="0.12" stroke="#AB47BC" stroke-opacity="0.5" stroke-width="1.5"/>
+<text x="557.0255059667102" y="396.03046700645996" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">审核·举报·删除</text>
+<rect x="595.3" y="253.1" width="118.0" height="42.0" rx="12" fill="#AB47BC" fill-opacity="0.12" stroke="#AB47BC" stroke-opacity="0.5" stroke-width="1.5"/>
+<text x="654.2899150566726" y="274.0647557414473" fill="#374151" font-size="16" text-anchor="middle" dominant-baseline="central">三角色权限</text>
 </svg>
