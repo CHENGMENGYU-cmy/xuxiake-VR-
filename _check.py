@@ -1,18 +1,23 @@
 # -*- coding: utf-8 -*-
-import os, subprocess
+import subprocess
 
-print('=== all files in root (sorted) ===')
-for f in sorted(os.listdir('.')):
-    print('  ', repr(f))
+def run(cmd):
+    return subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', errors='replace').stdout
 
-print()
-print('=== git ls-files root level ===')
-out = subprocess.run(['git', 'ls-files'], capture_output=True, text=True, encoding='utf-8', errors='replace').stdout
+print('=== git log --all for 框架图 html files ===')
+print(run(['git', 'log', '--all', '--oneline', '--', '*框架图*']))
+
+print('=== files in HEAD containing 框架图 ===')
+out = run(['git', 'ls-files'])
 for line in out.splitlines():
-    if '/' not in line:
-        print('  ', repr(line))
+    if '框架图' in line:
+        print('  TRACKED:', repr(line))
 
-print()
-print('=== git status ===')
-out = subprocess.run(['git', 'status', '--short'], capture_output=True, text=True, encoding='utf-8', errors='replace').stdout
-print('  status:', repr(out))
+print('=== recent commits touching 功能框架图 ===')
+print(run(['git', 'log', '--oneline', '-6', '--', '*功能框架图*']))
+
+print('=== recent commits touching 逻辑框架图 ===')
+print(run(['git', 'log', '--oneline', '-6', '--', '*逻辑框架图*']))
+
+print('=== CHANGELOG.md current content ===')
+print(run(['git', 'show', 'HEAD:CHANGELOG.md'])[:1500])
