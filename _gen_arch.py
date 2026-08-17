@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-"""生成徐霞客社区系统架构图（白色亮色三层 + 治理横切层）SVG"""
+"""生成徐霞客社区系统架构图（白色亮色三层 + 治理横切层 + 大字体）SVG"""
 
-W, H = 1600, 890
+W, H = 1600, 900
 
 # 配色（白色背景 + 亮色）
 BG = "#FFFFFF"
@@ -56,28 +56,28 @@ def main():
     S(f'<marker id="arrowA" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="{LINE_ACCENT}"/></marker>')
     S('</defs>')
 
-    user_cx, user_cy, user_r = 800, 55, 32
-    beam1_y = 100
-    inter_cy = 138
-    inter_h = 44
-    inter_w = 200
-    inter_xs = [350, 800, 1250]
+    user_cx, user_cy, user_r = 800, 56, 33
+    beam1_y = 102
+    inter_cy = 142
+    inter_h = 48
+    inter_w = 210
+    inter_xs = [340, 800, 1260]
     inter_top = inter_cy - inter_h / 2
     inter_bottom = inter_cy + inter_h / 2
 
-    frame_x, frame_y, frame_w, frame_h = 70, 190, 1460, 460
+    frame_x, frame_y, frame_w, frame_h = 70, 192, 1460, 470
     frame_bottom = frame_y + frame_h
 
     block_w = 320
-    block_h = 260
-    block_y = 248
+    block_h = 268
+    block_y = 250
     block_xs = [100, 450, 800, 1150]
 
-    gov_x, gov_w, gov_y, gov_h = 100, 1370, 528, 72
+    gov_x, gov_w, gov_y, gov_h = 100, 1370, 538, 76
 
-    beam2_y = 700
-    base_y = 720
-    base_h = 64
+    beam2_y = 706
+    base_y = 726
+    base_h = 66
     base_xs = [100, 570, 1040]
     base_w = 430
 
@@ -95,18 +95,18 @@ def main():
 
     # ---- 第一层：用户圆 ----
     S(f'<circle cx="{user_cx}" cy="{user_cy}" r="{user_r}" fill="{USER}"/>')
-    S(f'<text x="{user_cx}" y="{user_cy}" fill="#FFFFFF" font-size="18" font-weight="bold" text-anchor="middle" dominant-baseline="central">用户</text>')
+    S(f'<text x="{user_cx}" y="{user_cy}" fill="#FFFFFF" font-size="20" font-weight="bold" text-anchor="middle" dominant-baseline="central">用户</text>')
 
     # ---- 第一层：三交互模块 ----
     for i, (title, sub) in enumerate(interactions):
         x = inter_xs[i]
-        S(f'<rect x="{x - inter_w / 2}" y="{inter_cy - inter_h / 2}" width="{inter_w}" height="{inter_h}" rx="22" fill="{INTER_BG}" stroke="{INTER_STROKE}" stroke-width="1.5"/>')
-        S(f'<text x="{x}" y="{inter_cy - 9}" fill="{TEXT_DARK}" font-size="17" font-weight="bold" text-anchor="middle" dominant-baseline="central">{title}</text>')
-        S(f'<text x="{x}" y="{inter_cy + 12}" fill="{TEXT_DIM}" font-size="12.5" text-anchor="middle" dominant-baseline="central">{sub}</text>')
+        S(f'<rect x="{x - inter_w / 2}" y="{inter_cy - inter_h / 2}" width="{inter_w}" height="{inter_h}" rx="24" fill="{INTER_BG}" stroke="{INTER_STROKE}" stroke-width="1.5"/>')
+        S(f'<text x="{x}" y="{inter_cy - 10}" fill="{TEXT_DARK}" font-size="18" font-weight="bold" text-anchor="middle" dominant-baseline="central">{title}</text>')
+        S(f'<text x="{x}" y="{inter_cy + 13}" fill="{TEXT_DIM}" font-size="13.5" text-anchor="middle" dominant-baseline="central">{sub}</text>')
 
     # ---- 第二层：大框 ----
     S(f'<rect x="{frame_x}" y="{frame_y}" width="{frame_w}" height="{frame_h}" rx="22" fill="{FRAME_BG}" stroke="{FRAME_STROKE}" stroke-width="2"/>')
-    S(f'<text x="{user_cx}" y="{frame_y + 30}" fill="{TEXT_DARK}" font-size="24" font-weight="bold" text-anchor="middle" dominant-baseline="central">徐霞客社区系统</text>')
+    S(f'<text x="{user_cx}" y="{frame_y + 31}" fill="{TEXT_DARK}" font-size="26" font-weight="bold" text-anchor="middle" dominant-baseline="central">徐霞客社区系统</text>')
 
     # ---- 第二层：四区块 ----
     for i, (title, items) in enumerate(blocks):
@@ -115,26 +115,26 @@ def main():
         accent = BLOCK_ACCENTS[i]
         S(f'<rect x="{x}" y="{block_y}" width="{block_w}" height="{block_h}" rx="13" fill="{bg}"/>')
         S(f'<rect x="{x}" y="{block_y}" width="{block_w}" height="4" rx="2" fill="{accent}"/>')
-        S(f'<text x="{x + block_w / 2}" y="{block_y + 30}" fill="{accent}" font-size="18" font-weight="bold" text-anchor="middle" dominant-baseline="central">{title}</text>')
+        S(f'<text x="{x + block_w / 2}" y="{block_y + 32}" fill="{accent}" font-size="20" font-weight="bold" text-anchor="middle" dominant-baseline="central">{title}</text>')
         for j, item in enumerate(items):
-            iy = block_y + 62 + j * 42
-            S(f'<circle cx="{x + 24}" cy="{iy}" r="3.5" fill="{accent}"/>')
-            S(f'<text x="{x + 38}" y="{iy}" fill="{TEXT_SUB}" font-size="15" text-anchor="start" dominant-baseline="central">{item}</text>')
+            iy = block_y + 66 + j * 44
+            S(f'<circle cx="{x + 24}" cy="{iy}" r="4" fill="{accent}"/>')
+            S(f'<text x="{x + 38}" y="{iy}" fill="{TEXT_SUB}" font-size="16" text-anchor="start" dominant-baseline="central">{item}</text>')
 
     # ---- 第二层：治理横切条 ----
     S(f'<rect x="{gov_x}" y="{gov_y}" width="{gov_w}" height="{gov_h}" rx="12" fill="{GOV_BG}" stroke="{GOV_ACCENT}" stroke-width="1.5"/>')
-    S(f'<text x="{gov_x + gov_w / 2}" y="{gov_y + 27}" fill="{GOV_ACCENT}" font-size="17" font-weight="bold" text-anchor="middle" dominant-baseline="central">{gov_title}</text>')
-    S(f'<text x="{gov_x + gov_w / 2}" y="{gov_y + 52}" fill="{TEXT_DIM}" font-size="14" text-anchor="middle" dominant-baseline="central">{gov_sub}</text>')
+    S(f'<text x="{gov_x + gov_w / 2}" y="{gov_y + 28}" fill="{GOV_ACCENT}" font-size="18" font-weight="bold" text-anchor="middle" dominant-baseline="central">{gov_title}</text>')
+    S(f'<text x="{gov_x + gov_w / 2}" y="{gov_y + 54}" fill="{TEXT_DIM}" font-size="15" text-anchor="middle" dominant-baseline="central">{gov_sub}</text>')
 
     # ---- 第三层：底座 ----
     for i, (title, sub) in enumerate(bases):
         x = base_xs[i]
         S(f'<rect x="{x}" y="{base_y}" width="{base_w}" height="{base_h}" rx="12" fill="{BASE_BG}" stroke="{BASE_STROKE}" stroke-width="1.5"/>')
-        S(f'<text x="{x + base_w / 2}" y="{base_y + 24}" fill="{TEXT_DARK}" font-size="17" font-weight="bold" text-anchor="middle" dominant-baseline="central">{title}</text>')
-        S(f'<text x="{x + base_w / 2}" y="{base_y + 46}" fill="{TEXT_DIM}" font-size="13.5" text-anchor="middle" dominant-baseline="central">{sub}</text>')
+        S(f'<text x="{x + base_w / 2}" y="{base_y + 25}" fill="{TEXT_DARK}" font-size="18" font-weight="bold" text-anchor="middle" dominant-baseline="central">{title}</text>')
+        S(f'<text x="{x + base_w / 2}" y="{base_y + 48}" fill="{TEXT_DIM}" font-size="14" text-anchor="middle" dominant-baseline="central">{sub}</text>')
 
     # ---- 底部说明 ----
-    S(f'<text x="{W / 2}" y="850" fill="{TEXT_DIM}" font-size="14.5" text-anchor="middle">说明：系统以 AI 眼镜采集为入口，经素材库与 AI 生成沉淀为日记/游记，联动社区社交与内容治理，实现「采集→生成→发布→互动」完整闭环。</text>')
+    S(f'<text x="{W / 2}" y="856" fill="{TEXT_DIM}" font-size="15" text-anchor="middle">说明：系统以 AI 眼镜采集为入口，经素材库与 AI 生成沉淀为日记/游记，联动社区社交与内容治理，实现「采集→生成→发布→互动」完整闭环。</text>')
 
     S('</svg>')
     with open("徐霞客社区系统架构图.svg", "w", encoding="utf-8") as f:
