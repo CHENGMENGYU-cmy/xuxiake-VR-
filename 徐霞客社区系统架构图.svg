@@ -1,91 +1,90 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" font-family="Microsoft YaHei, PingFang SC, sans-serif">
-<rect width="1600" height="900" fill="#0F172A"/>
+<rect width="1600" height="900" fill="#FFFFFF"/>
 <defs>
-<marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#38BDF8"/></marker>
-<marker id="arrowA" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2DD4BF"/></marker>
+<marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3B82F6"/></marker>
+<marker id="arrowA" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#14B8A6"/></marker>
 </defs>
-<line x1="800" y1="92" x2="800" y2="108" stroke="#38BDF8" stroke-width="2"/>
-<line x1="350" y1="108" x2="1250" y2="108" stroke="#38BDF8" stroke-width="2"/>
-<line x1="350" y1="108" x2="350" y2="129.0" stroke="#38BDF8" stroke-width="2"/>
-<line x1="800" y1="108" x2="800" y2="129.0" stroke="#38BDF8" stroke-width="2"/>
-<line x1="1250" y1="108" x2="1250" y2="129.0" stroke="#38BDF8" stroke-width="2"/>
-<line x1="350" y1="175.0" x2="350" y2="206" stroke="#38BDF8" stroke-width="2" marker-end="url(#arrow)"/>
-<line x1="800" y1="175.0" x2="800" y2="206" stroke="#38BDF8" stroke-width="2" marker-end="url(#arrow)"/>
-<line x1="1250" y1="175.0" x2="1250" y2="206" stroke="#38BDF8" stroke-width="2" marker-end="url(#arrow)"/>
-<line x1="800" y1="630" x2="800" y2="692" stroke="#2DD4BF" stroke-width="2" stroke-dasharray="6,5"/>
-<line x1="100" y1="692" x2="1150" y2="692" stroke="#2DD4BF" stroke-width="2" stroke-dasharray="6,5"/>
-<line x1="100" y1="692" x2="100" y2="708" stroke="#2DD4BF" stroke-width="2" stroke-dasharray="6,5" marker-end="url(#arrowA)"/>
-<line x1="450" y1="692" x2="450" y2="708" stroke="#2DD4BF" stroke-width="2" stroke-dasharray="6,5" marker-end="url(#arrowA)"/>
-<line x1="800" y1="692" x2="800" y2="708" stroke="#2DD4BF" stroke-width="2" stroke-dasharray="6,5" marker-end="url(#arrowA)"/>
-<line x1="1150" y1="692" x2="1150" y2="708" stroke="#2DD4BF" stroke-width="2" stroke-dasharray="6,5" marker-end="url(#arrowA)"/>
-<circle cx="800" cy="58" r="34" fill="#38BDF8"/>
-<text x="800" y="58" fill="#F8FAFC" font-size="19" font-weight="bold" text-anchor="middle" dominant-baseline="central">用户</text>
-<rect x="250.0" y="129.0" width="200" height="46" rx="23" fill="#1E293B" stroke="#38BDF8" stroke-width="1.5"/>
-<text x="350" y="143" fill="#F8FAFC" font-size="17" font-weight="bold" text-anchor="middle" dominant-baseline="central">闪拍App</text>
-<text x="350" y="165" fill="#94A3B8" font-size="12.5" text-anchor="middle" dominant-baseline="central">AI眼镜采集</text>
-<rect x="700.0" y="129.0" width="200" height="46" rx="23" fill="#1E293B" stroke="#38BDF8" stroke-width="1.5"/>
-<text x="800" y="143" fill="#F8FAFC" font-size="17" font-weight="bold" text-anchor="middle" dominant-baseline="central">Web社区端</text>
-<text x="800" y="165" fill="#94A3B8" font-size="12.5" text-anchor="middle" dominant-baseline="central">浏览/发布/互动</text>
-<rect x="1150.0" y="129.0" width="200" height="46" rx="23" fill="#1E293B" stroke="#38BDF8" stroke-width="1.5"/>
-<text x="1250" y="143" fill="#F8FAFC" font-size="17" font-weight="bold" text-anchor="middle" dominant-baseline="central">管理后台</text>
-<text x="1250" y="165" fill="#94A3B8" font-size="12.5" text-anchor="middle" dominant-baseline="central">审核/治理</text>
-<rect x="70" y="210" width="1460" height="420" rx="22" fill="#16213A" stroke="#38BDF8" stroke-width="2"/>
-<text x="800" y="242" fill="#F8FAFC" font-size="24" font-weight="bold" text-anchor="middle" dominant-baseline="central">徐霞客社区系统</text>
-<rect x="100" y="270" width="320" height="310" rx="13" fill="#1B2740"/>
-<rect x="100" y="270" width="320" height="4" rx="2" fill="#2DD4BF"/>
-<text x="260.0" y="304" fill="#2DD4BF" font-size="18" font-weight="bold" text-anchor="middle" dominant-baseline="central">内容采集与素材</text>
-<circle cx="124" cy="340" r="3.5" fill="#2DD4BF"/>
-<text x="138" y="340" fill="#CBD5E1" font-size="15" text-anchor="start" dominant-baseline="central">照片/视频/语音采集</text>
-<circle cx="124" cy="392" r="3.5" fill="#2DD4BF"/>
-<text x="138" y="392" fill="#CBD5E1" font-size="15" text-anchor="start" dominant-baseline="central">时间/地点/天气标注</text>
-<circle cx="124" cy="444" r="3.5" fill="#2DD4BF"/>
-<text x="138" y="444" fill="#CBD5E1" font-size="15" text-anchor="start" dominant-baseline="central">SNAPSHOT素材库</text>
-<circle cx="124" cy="496" r="3.5" fill="#2DD4BF"/>
-<text x="138" y="496" fill="#CBD5E1" font-size="15" text-anchor="start" dominant-baseline="central">相册式聚合浏览</text>
-<rect x="450" y="270" width="320" height="310" rx="13" fill="#202C46"/>
-<rect x="450" y="270" width="320" height="4" rx="2" fill="#2DD4BF"/>
-<text x="610.0" y="304" fill="#2DD4BF" font-size="18" font-weight="bold" text-anchor="middle" dominant-baseline="central">AI内容生成</text>
-<circle cx="474" cy="340" r="3.5" fill="#2DD4BF"/>
-<text x="488" y="340" fill="#CBD5E1" font-size="15" text-anchor="start" dominant-baseline="central">AI日记 · 5种风格</text>
-<circle cx="474" cy="392" r="3.5" fill="#2DD4BF"/>
-<text x="488" y="392" fill="#CBD5E1" font-size="15" text-anchor="start" dominant-baseline="central">AI游记 · 结构化章节</text>
-<circle cx="474" cy="444" r="3.5" fill="#2DD4BF"/>
-<text x="488" y="444" fill="#CBD5E1" font-size="15" text-anchor="start" dominant-baseline="central">真实素材不虚构</text>
-<circle cx="474" cy="496" r="3.5" fill="#2DD4BF"/>
-<text x="488" y="496" fill="#CBD5E1" font-size="15" text-anchor="start" dominant-baseline="central">失败回退本地模板</text>
-<rect x="800" y="270" width="320" height="310" rx="13" fill="#25324C"/>
-<rect x="800" y="270" width="320" height="4" rx="2" fill="#2DD4BF"/>
-<text x="960.0" y="304" fill="#2DD4BF" font-size="18" font-weight="bold" text-anchor="middle" dominant-baseline="central">内容发布与分层</text>
-<circle cx="824" cy="340" r="3.5" fill="#2DD4BF"/>
-<text x="838" y="340" fill="#CBD5E1" font-size="15" text-anchor="start" dominant-baseline="central">三级链条：闪拍→日记→游记</text>
-<circle cx="824" cy="392" r="3.5" fill="#2DD4BF"/>
-<text x="838" y="392" fill="#CBD5E1" font-size="15" text-anchor="start" dominant-baseline="central">草稿 / 私密 / 公开</text>
-<circle cx="824" cy="444" r="3.5" fill="#2DD4BF"/>
-<text x="838" y="444" fill="#CBD5E1" font-size="15" text-anchor="start" dominant-baseline="central">章节式图文编辑器</text>
-<circle cx="824" cy="496" r="3.5" fill="#2DD4BF"/>
-<text x="838" y="496" fill="#CBD5E1" font-size="15" text-anchor="start" dominant-baseline="central">携程旅拍风详情</text>
-<rect x="1150" y="270" width="320" height="310" rx="13" fill="#2A3752"/>
-<rect x="1150" y="270" width="320" height="4" rx="2" fill="#2DD4BF"/>
-<text x="1310.0" y="304" fill="#2DD4BF" font-size="18" font-weight="bold" text-anchor="middle" dominant-baseline="central">社区社交互动</text>
-<circle cx="1174" cy="340" r="3.5" fill="#2DD4BF"/>
-<text x="1188" y="340" fill="#CBD5E1" font-size="15" text-anchor="start" dominant-baseline="central">社群：动态/挑战/角色</text>
-<circle cx="1174" cy="392" r="3.5" fill="#2DD4BF"/>
-<text x="1188" y="392" fill="#CBD5E1" font-size="15" text-anchor="start" dominant-baseline="central">消息：WebSocket实时</text>
-<circle cx="1174" cy="444" r="3.5" fill="#2DD4BF"/>
-<text x="1188" y="444" fill="#CBD5E1" font-size="15" text-anchor="start" dominant-baseline="central">推荐：搭子/社群</text>
-<circle cx="1174" cy="496" r="3.5" fill="#2DD4BF"/>
-<text x="1188" y="496" fill="#CBD5E1" font-size="15" text-anchor="start" dominant-baseline="central">通知：SSE推送</text>
-<rect x="100" y="712" width="320" height="68" rx="12" fill="#1E293B" stroke="#2DD4BF" stroke-width="1.5"/>
-<text x="260.0" y="738" fill="#F8FAFC" font-size="17" font-weight="bold" text-anchor="middle" dominant-baseline="central">前端层</text>
-<text x="260.0" y="762" fill="#94A3B8" font-size="13.5" text-anchor="middle" dominant-baseline="central">Next.js + React</text>
-<rect x="450" y="712" width="320" height="68" rx="12" fill="#1E293B" stroke="#2DD4BF" stroke-width="1.5"/>
-<text x="610.0" y="738" fill="#F8FAFC" font-size="17" font-weight="bold" text-anchor="middle" dominant-baseline="central">后端层</text>
-<text x="610.0" y="762" fill="#94A3B8" font-size="13.5" text-anchor="middle" dominant-baseline="central">NestJS · API/WS/SSE</text>
-<rect x="800" y="712" width="320" height="68" rx="12" fill="#1E293B" stroke="#2DD4BF" stroke-width="1.5"/>
-<text x="960.0" y="738" fill="#F8FAFC" font-size="17" font-weight="bold" text-anchor="middle" dominant-baseline="central">数据层</text>
-<text x="960.0" y="762" fill="#94A3B8" font-size="13.5" text-anchor="middle" dominant-baseline="central">MySQL 8 + 对象存储</text>
-<rect x="1150" y="712" width="320" height="68" rx="12" fill="#1E293B" stroke="#2DD4BF" stroke-width="1.5"/>
-<text x="1310.0" y="738" fill="#F8FAFC" font-size="17" font-weight="bold" text-anchor="middle" dominant-baseline="central">AI与部署</text>
-<text x="1310.0" y="762" fill="#94A3B8" font-size="13.5" text-anchor="middle" dominant-baseline="central">DeepSeek + Docker · xuxiake.com</text>
-<text x="800.0" y="850" fill="#94A3B8" font-size="14.5" text-anchor="middle">说明：系统以 AI 眼镜采集为入口，经素材库与 AI 生成沉淀为日记/游记，联动社区社交与内容治理，实现「采集→生成→发布→互动」完整闭环。</text>
+<line x1="800" y1="89" x2="800" y2="102" stroke="#3B82F6" stroke-width="2"/>
+<line x1="340" y1="102" x2="1260" y2="102" stroke="#3B82F6" stroke-width="2"/>
+<line x1="340" y1="102" x2="340" y2="118.0" stroke="#3B82F6" stroke-width="2"/>
+<line x1="800" y1="102" x2="800" y2="118.0" stroke="#3B82F6" stroke-width="2"/>
+<line x1="1260" y1="102" x2="1260" y2="118.0" stroke="#3B82F6" stroke-width="2"/>
+<line x1="340" y1="166.0" x2="340" y2="188" stroke="#3B82F6" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="800" y1="166.0" x2="800" y2="188" stroke="#3B82F6" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="1260" y1="166.0" x2="1260" y2="188" stroke="#3B82F6" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="800" y1="662" x2="800" y2="706" stroke="#14B8A6" stroke-width="2" stroke-dasharray="6,5"/>
+<line x1="100" y1="706" x2="1470" y2="706" stroke="#14B8A6" stroke-width="2" stroke-dasharray="6,5"/>
+<line x1="315.0" y1="706" x2="315.0" y2="722" stroke="#14B8A6" stroke-width="2" stroke-dasharray="6,5" marker-end="url(#arrowA)"/>
+<line x1="785.0" y1="706" x2="785.0" y2="722" stroke="#14B8A6" stroke-width="2" stroke-dasharray="6,5" marker-end="url(#arrowA)"/>
+<line x1="1255.0" y1="706" x2="1255.0" y2="722" stroke="#14B8A6" stroke-width="2" stroke-dasharray="6,5" marker-end="url(#arrowA)"/>
+<circle cx="800" cy="56" r="33" fill="#3B82F6"/>
+<text x="800" y="56" fill="#FFFFFF" font-size="20" font-weight="bold" text-anchor="middle" dominant-baseline="central">用户</text>
+<rect x="235.0" y="118.0" width="210" height="48" rx="24" fill="#FFFFFF" stroke="#3B82F6" stroke-width="1.5"/>
+<text x="340" y="132" fill="#1F2937" font-size="18" font-weight="bold" text-anchor="middle" dominant-baseline="central">闪拍App</text>
+<text x="340" y="155" fill="#64748B" font-size="13.5" text-anchor="middle" dominant-baseline="central">AI眼镜采集</text>
+<rect x="695.0" y="118.0" width="210" height="48" rx="24" fill="#FFFFFF" stroke="#3B82F6" stroke-width="1.5"/>
+<text x="800" y="132" fill="#1F2937" font-size="18" font-weight="bold" text-anchor="middle" dominant-baseline="central">Web社区端</text>
+<text x="800" y="155" fill="#64748B" font-size="13.5" text-anchor="middle" dominant-baseline="central">浏览/发布/互动</text>
+<rect x="1155.0" y="118.0" width="210" height="48" rx="24" fill="#FFFFFF" stroke="#3B82F6" stroke-width="1.5"/>
+<text x="1260" y="132" fill="#1F2937" font-size="18" font-weight="bold" text-anchor="middle" dominant-baseline="central">管理后台</text>
+<text x="1260" y="155" fill="#64748B" font-size="13.5" text-anchor="middle" dominant-baseline="central">审核/治理</text>
+<rect x="70" y="192" width="1460" height="470" rx="22" fill="#F8FAFC" stroke="#3B82F6" stroke-width="2"/>
+<text x="800" y="223" fill="#1F2937" font-size="26" font-weight="bold" text-anchor="middle" dominant-baseline="central">徐霞客社区系统</text>
+<rect x="100" y="250" width="320" height="268" rx="13" fill="#EFF6FF"/>
+<rect x="100" y="250" width="320" height="4" rx="2" fill="#3B82F6"/>
+<text x="260.0" y="282" fill="#3B82F6" font-size="20" font-weight="bold" text-anchor="middle" dominant-baseline="central">内容采集与素材</text>
+<circle cx="124" cy="316" r="4" fill="#3B82F6"/>
+<text x="138" y="316" fill="#334155" font-size="16" text-anchor="start" dominant-baseline="central">照片/视频/语音采集</text>
+<circle cx="124" cy="360" r="4" fill="#3B82F6"/>
+<text x="138" y="360" fill="#334155" font-size="16" text-anchor="start" dominant-baseline="central">时间/地点/天气标注</text>
+<circle cx="124" cy="404" r="4" fill="#3B82F6"/>
+<text x="138" y="404" fill="#334155" font-size="16" text-anchor="start" dominant-baseline="central">SNAPSHOT素材库</text>
+<circle cx="124" cy="448" r="4" fill="#3B82F6"/>
+<text x="138" y="448" fill="#334155" font-size="16" text-anchor="start" dominant-baseline="central">相册式聚合浏览</text>
+<rect x="450" y="250" width="320" height="268" rx="13" fill="#F0FDFA"/>
+<rect x="450" y="250" width="320" height="4" rx="2" fill="#14B8A6"/>
+<text x="610.0" y="282" fill="#14B8A6" font-size="20" font-weight="bold" text-anchor="middle" dominant-baseline="central">AI内容生成</text>
+<circle cx="474" cy="316" r="4" fill="#14B8A6"/>
+<text x="488" y="316" fill="#334155" font-size="16" text-anchor="start" dominant-baseline="central">AI日记 · 5种风格</text>
+<circle cx="474" cy="360" r="4" fill="#14B8A6"/>
+<text x="488" y="360" fill="#334155" font-size="16" text-anchor="start" dominant-baseline="central">AI游记 · 结构化章节</text>
+<circle cx="474" cy="404" r="4" fill="#14B8A6"/>
+<text x="488" y="404" fill="#334155" font-size="16" text-anchor="start" dominant-baseline="central">真实素材不虚构</text>
+<circle cx="474" cy="448" r="4" fill="#14B8A6"/>
+<text x="488" y="448" fill="#334155" font-size="16" text-anchor="start" dominant-baseline="central">失败回退本地模板</text>
+<rect x="800" y="250" width="320" height="268" rx="13" fill="#F5F3FF"/>
+<rect x="800" y="250" width="320" height="4" rx="2" fill="#8B5CF6"/>
+<text x="960.0" y="282" fill="#8B5CF6" font-size="20" font-weight="bold" text-anchor="middle" dominant-baseline="central">内容发布与分层</text>
+<circle cx="824" cy="316" r="4" fill="#8B5CF6"/>
+<text x="838" y="316" fill="#334155" font-size="16" text-anchor="start" dominant-baseline="central">三级链条：闪拍→日记→游记</text>
+<circle cx="824" cy="360" r="4" fill="#8B5CF6"/>
+<text x="838" y="360" fill="#334155" font-size="16" text-anchor="start" dominant-baseline="central">草稿 / 私密 / 公开</text>
+<circle cx="824" cy="404" r="4" fill="#8B5CF6"/>
+<text x="838" y="404" fill="#334155" font-size="16" text-anchor="start" dominant-baseline="central">章节式图文编辑器</text>
+<circle cx="824" cy="448" r="4" fill="#8B5CF6"/>
+<text x="838" y="448" fill="#334155" font-size="16" text-anchor="start" dominant-baseline="central">携程旅拍风详情</text>
+<rect x="1150" y="250" width="320" height="268" rx="13" fill="#ECFDF5"/>
+<rect x="1150" y="250" width="320" height="4" rx="2" fill="#22C55E"/>
+<text x="1310.0" y="282" fill="#22C55E" font-size="20" font-weight="bold" text-anchor="middle" dominant-baseline="central">社区社交互动</text>
+<circle cx="1174" cy="316" r="4" fill="#22C55E"/>
+<text x="1188" y="316" fill="#334155" font-size="16" text-anchor="start" dominant-baseline="central">社群：动态/挑战/角色</text>
+<circle cx="1174" cy="360" r="4" fill="#22C55E"/>
+<text x="1188" y="360" fill="#334155" font-size="16" text-anchor="start" dominant-baseline="central">消息：WebSocket实时</text>
+<circle cx="1174" cy="404" r="4" fill="#22C55E"/>
+<text x="1188" y="404" fill="#334155" font-size="16" text-anchor="start" dominant-baseline="central">推荐：搭子/社群</text>
+<circle cx="1174" cy="448" r="4" fill="#22C55E"/>
+<text x="1188" y="448" fill="#334155" font-size="16" text-anchor="start" dominant-baseline="central">通知：SSE推送</text>
+<rect x="100" y="538" width="1370" height="76" rx="12" fill="#FFF7ED" stroke="#F59E0B" stroke-width="1.5"/>
+<text x="785.0" y="566" fill="#F59E0B" font-size="18" font-weight="bold" text-anchor="middle" dominant-baseline="central">内容治理与权限</text>
+<text x="785.0" y="592" fill="#64748B" font-size="15" text-anchor="middle" dominant-baseline="central">内容审核 · 举报处理 · 软删除 · 三角色权限（USER / MODERATOR / ADMIN）</text>
+<rect x="100" y="726" width="430" height="66" rx="12" fill="#F8FAFC" stroke="#14B8A6" stroke-width="1.5"/>
+<text x="315.0" y="751" fill="#1F2937" font-size="18" font-weight="bold" text-anchor="middle" dominant-baseline="central">应用层</text>
+<text x="315.0" y="774" fill="#64748B" font-size="14" text-anchor="middle" dominant-baseline="central">Next.js + React · NestJS</text>
+<rect x="570" y="726" width="430" height="66" rx="12" fill="#F8FAFC" stroke="#14B8A6" stroke-width="1.5"/>
+<text x="785.0" y="751" fill="#1F2937" font-size="18" font-weight="bold" text-anchor="middle" dominant-baseline="central">数据与AI</text>
+<text x="785.0" y="774" fill="#64748B" font-size="14" text-anchor="middle" dominant-baseline="central">MySQL 8 · DeepSeek</text>
+<rect x="1040" y="726" width="430" height="66" rx="12" fill="#F8FAFC" stroke="#14B8A6" stroke-width="1.5"/>
+<text x="1255.0" y="751" fill="#1F2937" font-size="18" font-weight="bold" text-anchor="middle" dominant-baseline="central">部署运维</text>
+<text x="1255.0" y="774" fill="#64748B" font-size="14" text-anchor="middle" dominant-baseline="central">Docker Compose · xuxiake.com</text>
+<text x="800.0" y="856" fill="#64748B" font-size="15" text-anchor="middle">说明：系统以 AI 眼镜采集为入口，经素材库与 AI 生成沉淀为日记/游记，联动社区社交与内容治理，实现「采集→生成→发布→互动」完整闭环。</text>
 </svg>
