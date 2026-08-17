@@ -38,6 +38,7 @@ def main():
     ct = "徐霞客社区系统框架图"
     cs = 30
     cw = tw(ct, cs) + 64
+    print("DEBUG cw:", repr(cw), type(cw).__name__, "tw=", repr(tw(ct, cs)))
     ch = 74
     n = len(branches)
 
