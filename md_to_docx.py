@@ -1,7 +1,7 @@
 """通用 Markdown → Word (.docx) 转换脚本，支持标题/表格/列表/引用/代码块/分隔线。
 
 用法: python md_to_docx.py <input.md> [output.docx]
-样式参照项目 generate_docx.py（微软雅黑、Light Grid 表格、居中标题等）。
+样式参照项目 generate_docx.py（微软雅黑、黑白 Table Grid 表格、居中标题等）。
 """
 import re
 import sys
