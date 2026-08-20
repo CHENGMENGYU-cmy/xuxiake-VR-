@@ -51,15 +51,26 @@ def add_inline(paragraph, text, size=10.5, base_bold=False):
             set_run_font(run, size=size, bold=base_bold)
 
 
+def set_cell_bg(cell, fill):
+    """设置单元格底色（黑白表格用浅灰表头）。"""
+    tcPr = cell._tc.get_or_add_tcPr()
+    shd = OxmlElement('w:shd')
+    shd.set(qn('w:val'), 'clear')
+    shd.set(qn('w:color'), 'auto')
+    shd.set(qn('w:fill'), fill)
+    tcPr.append(shd)
+
+
 def add_styled_table(doc, headers, rows):
     table = doc.add_table(rows=1 + len(rows), cols=len(headers))
-    table.style = 'Light Grid Accent 1'
+    table.style = 'Table Grid'  # 黑白表格：黑色细边框，无彩色
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
     table.autofit = True
 
     for i, h in enumerate(headers):
         cell = table.rows[0].cells[i]
         cell.text = ''
+        set_cell_bg(cell, 'D9D9D9')  # 表头浅灰底（黑白）
         p = cell.paragraphs[0]
         p.alignment = WD_ALIGN_PARAGRAPH.CENTER
         add_inline(p, h, size=10, base_bold=True)
