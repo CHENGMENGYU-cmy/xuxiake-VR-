@@ -98,6 +98,13 @@ export async function kickCommunityMember(communityId: string, targetUserId: str
   await apiClient.post(`/social/communities/${communityId}/kick/${targetUserId}`);
 }
 
+export async function recordCommunityInteraction(
+  communityId: string,
+  actionType: 'VIEW' | 'LIKE' | 'COMMENT' | 'SHARE' | 'JOIN',
+): Promise<void> {
+  await apiClient.post(`/social/communities/${communityId}/interact`, { actionType });
+}
+
 export async function listCommunities(params?: {
   page?: number;
   limit?: number;
