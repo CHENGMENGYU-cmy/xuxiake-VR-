@@ -664,6 +664,13 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
               className="hidden"
               onChange={handleImageUpload}
             />
+            <input
+              ref={docInputRef}
+              type="file"
+              accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,.rar,.7z"
+              className="hidden"
+              onChange={handleFileUpload}
+            />
             <Button
               variant="ghost"
               size="icon"
@@ -676,6 +683,15 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
               ) : (
                 <ImagePlus className="h-4 w-4 text-muted-foreground" />
               )}
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 shrink-0"
+              onClick={() => docInputRef.current?.click()}
+              disabled={uploading || myStatus === 'REQUEST'}
+            >
+              <Paperclip className="h-4 w-4 text-muted-foreground" />
             </Button>
             <Button
               variant="ghost"
