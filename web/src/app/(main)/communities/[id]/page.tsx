@@ -21,7 +21,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { useAuthStore } from '@/stores/auth-store';
 import {
-  getCommunity, joinCommunity, leaveCommunity,
+  getCommunity, joinCommunity, leaveCommunity, kickCommunityMember,
   getCommunityAnnouncements, getCommunityRoles, getCommunityPosts,
   createCommunityAnnouncement, deleteCommunityAnnouncement,
 } from '@/lib/social-api';
