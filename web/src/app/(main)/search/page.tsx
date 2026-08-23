@@ -257,13 +257,51 @@ export default function SearchPage() {
               <div className="py-12 text-center text-muted-foreground">没有找到相关话题</div>
             )}
           </TabsContent>
+
+          <TabsContent value="communities" className="mt-4">
+            {communities.length > 0 ? (
+              <div className="rounded-lg border bg-card">
+                {communities.map((c, i) => (
+                  <div key={c.id}>
+                    {i > 0 && <Separator />}
+                    <Link
+                      href={`/communities/${c.id}`}
+                      className="flex items-center gap-3 p-3 hover:bg-muted/50"
+                    >
+                      <Avatar className="h-10 w-10">
+                        <AvatarImage src={c.avatarUrl || undefined} alt={c.name} />
+                        <AvatarFallback>{c.name[0]}</AvatarFallback>
+                      </Avatar>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-semibold">{c.name}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {c.memberCount} 成员{c.locationName ? ` · ${c.locationName}` : ''}
+                        </p>
+                        {c.description && (
+                          <p className="mt-0.5 text-xs text-muted-foreground line-clamp-1">{c.description}</p>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {c.isMember && <Badge variant="secondary" className="text-xs">已加入</Badge>}
+                        <Badge variant="outline" className="text-xs">
+                          {c.isPublic ? '公开' : '私密'}
+                        </Badge>
+                      </div>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="py-12 text-center text-muted-foreground">没有找到相关社群</div>
+            )}
+          </TabsContent>
         </Tabs>
       )}
 
       {!searched && (
         <div className="py-16 text-center">
           <Search className="mx-auto h-12 w-12 text-muted-foreground/50" />
-          <p className="mt-4 text-muted-foreground">输入关键词搜索用户、内容和话题</p>
+          <p className="mt-4 text-muted-foreground">输入关键词搜索用户、内容、话题和社群</p>
         </div>
       )}
     </div>
