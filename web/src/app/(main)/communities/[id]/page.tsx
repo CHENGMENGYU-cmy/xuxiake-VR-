@@ -759,24 +759,28 @@ function CommunityMembersTab({ community, roles, currentUser, onMemberKicked }: 
   );
 }
 
-function MemberItem({ user, badge }: { user: any; badge?: string }) {
+function MemberItem({ user, badge, canKick, onKick }: { user: any; badge?: string; canKick?: boolean; onKick?: () => void }) {
   return (
-    <Link
-      href={`/profile/${user.username}`}
-      className="flex items-center gap-3 rounded-lg p-2 hover:bg-accent"
-    >
-      <Avatar className="h-9 w-9">
-        <AvatarImage src={user.avatarUrl || undefined} alt={user.displayName} />
-        <AvatarFallback>{user.displayName?.[0]}</AvatarFallback>
-      </Avatar>
-      <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2">
-          <p className="truncate text-sm font-medium">{user.displayName}</p>
-          {badge && <Badge variant="secondary" className="text-xs">{badge}</Badge>}
+    <div className="flex items-center gap-3 rounded-lg p-2 hover:bg-accent">
+      <Link href={`/profile/${user.username}`} className="flex min-w-0 flex-1 items-center gap-3">
+        <Avatar className="h-9 w-9">
+          <AvatarImage src={user.avatarUrl || undefined} alt={user.displayName} />
+          <AvatarFallback>{user.displayName?.[0]}</AvatarFallback>
+        </Avatar>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-2">
+            <p className="truncate text-sm font-medium">{user.displayName}</p>
+            {badge && <Badge variant="secondary" className="text-xs">{badge}</Badge>}
+          </div>
+          <p className="truncate text-xs text-muted-foreground">@{user.username}</p>
         </div>
-        <p className="truncate text-xs text-muted-foreground">@{user.username}</p>
-      </div>
-    </Link>
+      </Link>
+      {canKick && (
+        <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive" onClick={onKick}>
+          <UserX className="h-4 w-4" />
+        </Button>
+      )}
+    </div>
   );
 }
 
