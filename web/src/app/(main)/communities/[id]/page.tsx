@@ -495,6 +495,8 @@ function CommunityChallengesTab({ communityId, isModerator }: { communityId: str
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [leaderboard, setLeaderboard] = useState<any[]>([]);
   const [joining, setJoining] = useState<string | null>(null);
+  const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     import('@/lib/social-api').then(({ getCommunityChallenges }) => {
@@ -503,7 +505,7 @@ function CommunityChallengesTab({ communityId, isModerator }: { communityId: str
         .catch(() => {})
         .finally(() => setLoading(false));
     });
-  }, [communityId]);
+  }, [communityId, refreshKey]);
 
   const handleExpand = async (challengeId: string) => {
     if (expandedId === challengeId) {
