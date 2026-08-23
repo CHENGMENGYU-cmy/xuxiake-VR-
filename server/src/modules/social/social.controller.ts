@@ -730,7 +730,6 @@ export class SocialController {
     }
 
     // 6. 行为信号：用户与社区的交互历史（浏览/点赞/评论/分享/加入）
-    const candidateIds = candidates.map((c) => c.id);
     const behaviorScoreMap = new Map<string, number>();
     if (candidateIds.length > 0) {
       const interactions = await this.interactionRepo
