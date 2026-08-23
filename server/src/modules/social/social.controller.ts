@@ -1,6 +1,6 @@
 import {
   Controller, Get, Post, Put, Delete, Param, Body, Headers, Query,
-  UnauthorizedException, NotFoundException, BadRequestException, ForbiddenException,
+  UnauthorizedException, NotFoundException, BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In, Not, Like as TypeOrmLike } from 'typeorm';
