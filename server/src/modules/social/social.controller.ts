@@ -729,7 +729,42 @@ export class SocialController {
       });
     }
 
-    // 6. 创建者信息
+    // 6. 行为信号：用户与社区的交互历史（浏览/点赞/评论/分享/加入）
+    const candidateIds = candidates.map((c) => c.id);
+    const behaviorScoreMap = new Map<string, number>();
+    if (candidateIds.length > 0) {
+      const interactions = await this.interactionRepo
+        .createQueryBuilder('uci')
+        .select('uci.community_id', 'communityId')
+        .addSelect('SUM(uci.weight)', 'totalWeight')
+        .where('uci.user_id = :userId', { userId })
+        .andWhere('uci.community_id IN (:...candidateIds)', { candidateIds })
+        .groupBy('uci.community_id')
+        .getRawMany();
+      interactions.forEach((r) => {
+        behaviorScoreMap.set(r.communityId, parseFloat(r.totalWeight));
+      });
+    }
+
+    // 7. 正反馈信号：用户对社区的 CLICK/INTERESTED 记录
+    const positiveFeedbackMap = new Map<string, number>();
+    if (candidateIds.length > 0) {
+      const positiveFeedbacks = await this.feedbackRepo
+        .createQueryBuilder('rf')
+        .select('rf.target_id', 'targetId')
+        .addSelect('COUNT(*)', 'cnt')
+        .where('rf.user_id = :userId', { userId })
+        .andWhere('rf.target_type = :type', { type: 'COMMUNITY' })
+        .andWhere('rf.type IN (:...types)', { types: ['CLICK', 'INTERESTED'] })
+        .andWhere('rf.target_id IN (:...candidateIds)', { candidateIds })
+        .groupBy('rf.target_id')
+        .getRawMany();
+      positiveFeedbacks.forEach((r) => {
+        positiveFeedbackMap.set(r.targetId, parseInt(r.cnt));
+      });
+    }
+
+    // 8. 创建者信息
     const creatorIds = [...new Set(candidates.map((c) => c.creatorId))];
     const creators = await this.userRepo.findBy({ id: In(creatorIds) });
     const creatorMap = new Map(creators.map((u) => [u.id, u]));
