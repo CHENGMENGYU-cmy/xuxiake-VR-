@@ -551,12 +551,27 @@ function CommunityChallengesTab({ communityId, isModerator }: { communityId: str
 
   if (challenges.length === 0) {
     return (
-      <Card>
-        <CardContent className="py-12 text-center text-sm text-muted-foreground">
-          <Trophy className="mx-auto mb-2 h-8 w-8 text-muted-foreground/50" />
-          暂无挑战活动
-        </CardContent>
-      </Card>
+      <>
+        <Card>
+          <CardContent className="py-12 text-center text-sm text-muted-foreground">
+            <Trophy className="mx-auto mb-2 h-8 w-8 text-muted-foreground/50" />
+            暂无挑战活动
+            {isModerator && (
+              <div className="mt-4">
+                <Button size="sm" onClick={() => setShowCreateDialog(true)}>
+                  <Trophy className="mr-2 h-4 w-4" /> 创建挑战
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+        <CreateChallengeDialog
+          communityId={communityId}
+          open={showCreateDialog}
+          onClose={() => setShowCreateDialog(false)}
+          onCreated={() => setRefreshKey((k) => k + 1)}
+        />
+      </>
     );
   }
 
@@ -566,6 +581,13 @@ function CommunityChallengesTab({ communityId, isModerator }: { communityId: str
 
   return (
     <div className="space-y-4">
+      {isModerator && (
+        <div className="flex justify-end">
+          <Button size="sm" onClick={() => setShowCreateDialog(true)}>
+            <Trophy className="mr-2 h-4 w-4" /> 创建挑战
+          </Button>
+        </div>
+      )}
       {challenges.map((c) => (
         <Card key={c.id}>
           <CardContent className="pt-6">
