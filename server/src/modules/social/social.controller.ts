@@ -1054,44 +1054,7 @@ export class SocialController {
     const userId = this.getUserId(auth);
     if (!userId) throw new UnauthorizedException('请先登录');
 
-    const community = await this.communityRepo.findOne({ where: { id: communityId } });
-    if (!community) throw new NotFoundException('社群不存在');
-
-    // 不能踢出创建者
-    if (community.creatorId === targetUserId) {
-      throw new BadRequestException('不能踢出社群创建者');
-    }
-
-    // 不能踢出自己
-    if (targetUserId === userId) {
-      throw new BadRequestException('不能踢出自己，请使用退出功能');
-    }
-
-    // 验证操作者权限：创建者或管理员
-    if (community.creatorId !== userId) {
-      const role = await this.roleRepo.findOne({
-        where: { communityId, userId, role: 'ADMIN' },
-      });
-      if (!role) throw new ForbiddenException('仅创建者或管理员可以踢出成员');
-    }
-
-    // 删除目标用户的参与者记录
-    const result = await this.partRepo.delete({
-      conversationId: community.conversationId,
-      userId: targetUserId,
-    });
-
-    if (result.affected && result.affected > 0) {
-      // 更新成员数量
-      community.memberCount = Math.max(0, community.memberCount - 1);
-      await this.communityRepo.save(community);
-
-      // 移除目标用户的角色（如果有）
-      await this.roleRepo.delete({ communityId, userId: targetUserId });
-    } else {
-      throw new NotFoundException('该用户不是社群成员');
-    }
-
+    await this.socialService.kickMember(communityId, userId, targetUserId);
     return { success: true, message: '已将成员移出社群' };
   }
 
