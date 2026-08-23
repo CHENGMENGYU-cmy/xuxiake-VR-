@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   Users, MessageCircle, Loader2, LogOut, Settings,
-  Trophy, ImageIcon, MapPin, Globe, Lock,
+  Trophy, ImageIcon, MapPin, Globe, Lock, UserX,
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
