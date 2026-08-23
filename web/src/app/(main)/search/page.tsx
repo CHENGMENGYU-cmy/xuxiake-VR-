@@ -22,6 +22,7 @@ export default function SearchPage() {
   const [inputValue, setInputValue] = useState(query);
   const [searched, setSearched] = useState(!!query);
   const [topics, setTopics] = useState<Topic[]>([]);
+  const [communities, setCommunities] = useState<Community[]>([]);
 
   // 首次加载时，如果 store 中有 query 则自动搜索
   useEffect(() => {
@@ -34,9 +35,11 @@ export default function SearchPage() {
   useEffect(() => {
     if (!searched || !inputValue.trim()) {
       setTopics([]);
+      setCommunities([]);
       return;
     }
     searchTopics(inputValue).then(setTopics).catch(() => {});
+    searchCommunities(inputValue).then((res) => setCommunities(res.data || [])).catch(() => {});
   }, [searched, inputValue]);
 
   const handleSearch = (e: React.FormEvent) => {
