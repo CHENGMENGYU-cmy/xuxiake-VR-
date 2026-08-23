@@ -94,6 +94,10 @@ export async function leaveCommunity(id: string): Promise<void> {
   await apiClient.post(`/social/communities/${id}/leave`);
 }
 
+export async function kickCommunityMember(communityId: string, targetUserId: string): Promise<void> {
+  await apiClient.post(`/social/communities/${communityId}/kick/${targetUserId}`);
+}
+
 export async function listCommunities(params?: {
   page?: number;
   limit?: number;
