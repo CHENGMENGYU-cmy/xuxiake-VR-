@@ -26,6 +26,7 @@ import {
   createCommunityAnnouncement, deleteCommunityAnnouncement,
 } from '@/lib/social-api';
 import { CommunityPostComposer } from '@/components/community/community-post-composer';
+import { CreateChallengeDialog } from '@/components/community/create-challenge-dialog';
 import { toast } from 'sonner';
 import type { Community, CommunityAnnouncement, CommunityRole } from '@/types';
 
