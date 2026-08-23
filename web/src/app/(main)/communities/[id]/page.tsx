@@ -231,7 +231,7 @@ export default function CommunitySpacePage() {
 
           {/* 成员 Tab */}
           <TabsContent value="members" className="mt-4">
-            <CommunityMembersTab community={community} roles={roles} />
+            <CommunityMembersTab community={community} roles={roles} currentUser={user} onMemberKicked={fetchCommunity} />
           </TabsContent>
 
           {/* 关于 Tab */}
