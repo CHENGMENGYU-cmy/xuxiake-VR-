@@ -822,6 +822,21 @@ export class SocialController {
         matchReasons.push({ type: 'ACTIVITY', text: `近7天有${recentPosts}条新动态` });
       }
 
+      // 5. 行为信号（20分）—— 基于用户与社群的交互历史和正反馈
+      const behaviorWeight = behaviorScoreMap.get(c.id) || 0;
+      const positiveFeedbackCount = positiveFeedbackMap.get(c.id) || 0;
+      if (behaviorWeight > 0 || positiveFeedbackCount > 0) {
+        // 交互权重分（最高15分）：weight 30 → 15分
+        const interactionScore = Math.min(behaviorWeight / 30 * 15, 15);
+        // 正反馈分（最高5分）：每次点击/感兴趣 +1.5分
+        const feedbackScore = Math.min(positiveFeedbackCount * 1.5, 5);
+        const totalBehaviorScore = interactionScore + feedbackScore;
+        matchScore += totalBehaviorScore;
+        if (totalBehaviorScore > 5) {
+          matchReasons.push({ type: 'BEHAVIOR', text: '基于你的浏览和互动记录推荐' });
+        }
+      }
+
       return {
         id: c.id,
         name: c.name,
