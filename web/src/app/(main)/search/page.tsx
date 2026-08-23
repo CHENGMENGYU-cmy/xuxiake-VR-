@@ -162,7 +162,34 @@ export default function SearchPage() {
               </div>
             )}
 
-            {filteredUsers.length === 0 && filteredPosts.length === 0 && topics.length === 0 && (
+            {communities.length > 0 && (
+              <div>
+                <h3 className="mb-2 text-sm font-semibold text-muted-foreground">社群</h3>
+                <div className="rounded-lg border bg-card">
+                  {communities.slice(0, 4).map((c, i) => (
+                    <div key={c.id}>
+                      {i > 0 && <Separator />}
+                      <Link
+                        href={`/communities/${c.id}`}
+                        className="flex items-center gap-3 p-3 hover:bg-muted/50"
+                      >
+                        <Avatar className="h-10 w-10">
+                          <AvatarImage src={c.avatarUrl || undefined} alt={c.name} />
+                          <AvatarFallback>{c.name[0]}</AvatarFallback>
+                        </Avatar>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-semibold">{c.name}</p>
+                          <p className="text-xs text-muted-foreground">{c.memberCount} 成员</p>
+                        </div>
+                        {c.isMember && <Badge variant="secondary" className="text-xs">已加入</Badge>}
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {filteredUsers.length === 0 && filteredPosts.length === 0 && topics.length === 0 && communities.length === 0 && (
               <div className="py-12 text-center text-muted-foreground">
                 没有找到 &quot;{inputValue}&quot; 相关的结果
               </div>
