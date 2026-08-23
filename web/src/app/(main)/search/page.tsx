@@ -73,7 +73,7 @@ export default function SearchPage() {
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             type="search"
-            placeholder="搜索用户、内容、话题..."
+            placeholder="搜索用户、内容、话题、社群..."
             className="pl-10"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
