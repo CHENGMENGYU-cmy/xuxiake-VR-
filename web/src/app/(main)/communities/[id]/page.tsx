@@ -662,15 +662,34 @@ function CommunityChallengesTab({ communityId, isModerator }: { communityId: str
 
 // ==================== 成员 Tab ====================
 
-function CommunityMembersTab({ community, roles }: { community: Community; roles: CommunityRole[] }) {
+function CommunityMembersTab({ community, roles, currentUser, onMemberKicked }: {
+  community: Community; roles: CommunityRole[]; currentUser: any; onMemberKicked: () => void;
+}) {
   const adminIds = new Set(roles.filter((r) => r.role === 'ADMIN').map((r) => r.userId));
   const moderatorIds = new Set(roles.filter((r) => r.role === 'MODERATOR').map((r) => r.userId));
+
+  // 当前用户是否可以踢人（创建者或管理员）
+  const canKick = currentUser && (
+    community.creator?.id === currentUser.id ||
+    adminIds.has(currentUser.id)
+  );
 
   const admins = community.members?.filter((m) => adminIds.has(m.id) || m.id === community.creator?.id) || [];
   const moderators = community.members?.filter((m) => moderatorIds.has(m.id) && !adminIds.has(m.id)) || [];
   const regularMembers = community.members?.filter(
     (m) => !adminIds.has(m.id) && !moderatorIds.has(m.id) && m.id !== community.creator?.id,
   ) || [];
+
+  const handleKick = async (userId: string, displayName: string) => {
+    if (!confirm(`确定要将 ${displayName} 移出社群吗？`)) return;
+    try {
+      await kickCommunityMember(community.id, userId);
+      toast.success('已将成员移出社群');
+      onMemberKicked();
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || '操作失败');
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -690,7 +709,13 @@ function CommunityMembersTab({ community, roles }: { community: Community; roles
           <h3 className="mb-3 text-sm font-medium text-muted-foreground">管理员 ({admins.length})</h3>
           <div className="space-y-2">
             {admins.map((m) => (
-              <MemberItem key={m.id} user={m} badge="管理员" />
+              <MemberItem
+                key={m.id}
+                user={m}
+                badge="管理员"
+                canKick={canKick && m.id !== community.creator?.id && m.id !== currentUser?.id}
+                onKick={() => handleKick(m.id, m.displayName)}
+              />
             ))}
           </div>
         </div>
@@ -702,7 +727,13 @@ function CommunityMembersTab({ community, roles }: { community: Community; roles
           <h3 className="mb-3 text-sm font-medium text-muted-foreground">版主 ({moderators.length})</h3>
           <div className="space-y-2">
             {moderators.map((m) => (
-              <MemberItem key={m.id} user={m} badge="版主" />
+              <MemberItem
+                key={m.id}
+                user={m}
+                badge="版主"
+                canKick={canKick && m.id !== currentUser?.id}
+                onKick={() => handleKick(m.id, m.displayName)}
+              />
             ))}
           </div>
         </div>
@@ -714,7 +745,12 @@ function CommunityMembersTab({ community, roles }: { community: Community; roles
           <h3 className="mb-3 text-sm font-medium text-muted-foreground">成员 ({regularMembers.length})</h3>
           <div className="space-y-2">
             {regularMembers.map((m) => (
-              <MemberItem key={m.id} user={m} />
+              <MemberItem
+                key={m.id}
+                user={m}
+                canKick={canKick && m.id !== currentUser?.id}
+                onKick={() => handleKick(m.id, m.displayName)}
+              />
             ))}
           </div>
         </div>
