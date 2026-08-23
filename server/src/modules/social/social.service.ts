@@ -103,6 +103,40 @@ export class SocialService {
     await this.communityRepo.save(community);
   }
 
+  // ==================== 踢出成员 ====================
+
+  async kickMember(communityId: string, operatorId: string, targetUserId: string): Promise<void> {
+    const { community, isAdmin, isCreator } = await this.checkCommunityPermission(communityId, operatorId);
+    if (!isAdmin) throw new ForbiddenException('仅创建者或管理员可以踢出成员');
+
+    // 不能踢出创建者
+    if (community.creatorId === targetUserId) {
+      throw new BadRequestException('不能踢出社群创建者');
+    }
+
+    // 不能踢出自己
+    if (targetUserId === operatorId) {
+      throw new BadRequestException('不能踢出自己，请使用退出功能');
+    }
+
+    // 删除目标用户的参与者记录
+    const result = await this.partRepo.delete({
+      conversationId: community.conversationId,
+      userId: targetUserId,
+    });
+
+    if (result.affected && result.affected > 0) {
+      // 更新成员数量
+      community.memberCount = Math.max(0, community.memberCount - 1);
+      await this.communityRepo.save(community);
+
+      // 移除目标用户的角色（如果有）
+      await this.roleRepo.delete({ communityId, userId: targetUserId });
+    } else {
+      throw new NotFoundException('该用户不是社群成员');
+    }
+  }
+
   // ==================== 社群搜索 ====================
 
   async searchCommunities(keyword: string, userId?: string, page = 1, limit = 20): Promise<{
