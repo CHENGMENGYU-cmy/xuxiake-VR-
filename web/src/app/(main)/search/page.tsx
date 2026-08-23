@@ -2,18 +2,20 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, Users, FileText, Hash } from 'lucide-react';
+import { Search, Users, FileText, Hash, UsersRound } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
+import { Card, CardContent } from '@/components/ui/card';
 import { PostCard } from '@/components/post/post-card';
 import { mockUsers, mockPosts } from '@/lib/mock-data';
 import { useSearchStore } from '@/stores/search-store';
 import { searchTopics } from '@/lib/post-api';
-import type { Topic } from '@/types';
+import { searchCommunities } from '@/lib/social-api';
+import type { Topic, Community } from '@/types';
 
 export default function SearchPage() {
   const { query, setQuery } = useSearchStore();
