@@ -907,6 +907,35 @@ export class SocialController {
     return { success: true };
   }
 
+  /** 记录社群交互行为（用于推荐信号采集） */
+  @Post('communities/:id/interact')
+  async recordCommunityInteraction(
+    @Headers('authorization') auth: string,
+    @Param('id') communityId: string,
+    @Body() body: { actionType: 'VIEW' | 'LIKE' | 'COMMENT' | 'SHARE' | 'JOIN' },
+  ) {
+    const userId = this.getUserId(auth);
+    if (!userId) return { success: true };
+
+    const { actionType } = body;
+    if (!actionType) throw new BadRequestException('actionType 不能为空');
+
+    // 权重：VIEW=1, LIKE=3, COMMENT=5, SHARE=4, JOIN=10
+    const weightMap: Record<string, number> = { VIEW: 1, LIKE: 3, COMMENT: 5, SHARE: 4, JOIN: 10 };
+    const weight = weightMap[actionType] || 1;
+
+    const interaction = this.interactionRepo.create({
+      id: uuidv4(),
+      userId,
+      communityId,
+      actionType,
+      weight,
+    });
+    await this.interactionRepo.save(interaction);
+
+    return { success: true };
+  }
+
   // ==================== 社群相关 ====================
 
   @Post('communities')
