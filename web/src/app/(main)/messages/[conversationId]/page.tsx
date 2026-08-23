@@ -276,6 +276,31 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
     }
   };
 
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !socketRef.current) return;
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await apiClient.post('/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      const mediaUrl = res.data?.data?.url;
+      if (mediaUrl) {
+        socketRef.current.emit('chat:message:send', {
+          conversationId,
+          mediaUrl,
+          mediaType: 'FILE',
+          content: file.name,
+        });
+      }
+    } catch { /* ignore */ } finally {
+      setUploading(false);
+      if (docInputRef.current) docInputRef.current.value = '';
+    }
+  };
+
   // 语音录制完成
   const handleVoiceRecorded = async (blob: Blob) => {
     if (!socketRef.current) return;
