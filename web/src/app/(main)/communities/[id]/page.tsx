@@ -650,6 +650,12 @@ function CommunityChallengesTab({ communityId, isModerator }: { communityId: str
           </CardContent>
         </Card>
       ))}
+      <CreateChallengeDialog
+        communityId={communityId}
+        open={showCreateDialog}
+        onClose={() => setShowCreateDialog(false)}
+        onCreated={() => setRefreshKey((k) => k + 1)}
+      />
     </div>
   );
 }
