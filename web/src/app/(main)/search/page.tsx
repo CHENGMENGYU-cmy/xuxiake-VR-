@@ -102,6 +102,10 @@ export default function SearchPage() {
               <Hash className="mr-1 h-3.5 w-3.5" />
               话题 ({topics.length})
             </TabsTrigger>
+            <TabsTrigger value="communities" className="data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary">
+              <UsersRound className="mr-1 h-3.5 w-3.5" />
+              社群 ({communities.length})
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="all" className="mt-4 space-y-4">
