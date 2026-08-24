@@ -104,24 +104,18 @@ test.describe('关键交互响应式', () => {
     await page.goto('/feed');
     await page.waitForTimeout(2000);
 
-    // 手机端侧边栏可能遮挡，先尝试关闭
-    const hamburger = page.locator('button:has(svg):near(button:has-text("搜索"))').first();
-    await hamburger.click().catch(() => {});
-    await page.waitForTimeout(500);
-
-    // PostComposer 初始为收起状态
+    // PostComposer 初始为收起状态，使用 force: true 避免侧边栏遮挡
     const composerPlaceholder = page.getByText('分享你的旅行故事...').first();
     const isPlaceholderVisible = await composerPlaceholder.isVisible().catch(() => false);
     if (isPlaceholderVisible) {
-      // 使用 force: true 避免侧边栏遮挡
       await composerPlaceholder.click({ force: true });
       await page.waitForTimeout(500);
     }
 
-    // 展开后 textarea 应存在
+    // 展开后 textarea 应存在，或占位符可见
     const editor = page.locator('textarea').first();
-    const isVisible = await editor.isVisible().catch(() => false);
-    expect(isVisible || isPlaceholderVisible).toBeTruthy();
+    const isEditorVisible = await editor.isVisible().catch(() => false);
+    expect(isEditorVisible || isPlaceholderVisible).toBeTruthy();
     await context.close();
   });
 });
