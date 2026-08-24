@@ -77,6 +77,7 @@ import { JwtModule } from '@nestjs/jwt';
     UploadController,
     UsersController,
     SocialController,
+    PlaceholderController,
   ],
   providers: [SocialService, StorageService, AiClientService],
 })
