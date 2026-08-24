@@ -61,9 +61,9 @@ test.describe('素材库多选日记流转', () => {
     // 6. 素材墙展示缩略图
     await expect(page.getByText(/从 \d+ 张素材智能生成一篇日记/)).toBeVisible();
 
-    // 7. 等待 AI 生成草稿完成（编辑器正文出现）
+    // 7. 等待 AI 生成草稿完成（编辑器正文出现，AI 调用可能需要较长时间）
     const contentArea = page.locator('textarea').first();
-    await expect(contentArea).toBeVisible({ timeout: 60000 });
+    await expect(contentArea).toBeVisible({ timeout: 120000 });
     await page.waitForTimeout(1000);
     const bodyText = await contentArea.inputValue();
     console.log('AI 生成正文长度:', bodyText.length);
