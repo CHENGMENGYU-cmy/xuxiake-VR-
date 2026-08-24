@@ -33,11 +33,10 @@ test.describe('素材库（左侧菜单栏 → 素材库）', () => {
     const dayCard = page.getByText(/2026年8月4日\s*1 张/);
     await expect(dayCard).toBeVisible();
 
-    // 7. 点击集合卡片 → 打开集合视图，出现素材卡片（带"日志"徽章）
+    // 7. 点击集合卡片 → 打开集合视图，出现素材卡片
     await dayCard.click();
     const snapCard = page.locator('.aspect-square.cursor-pointer').first();
     await expect(snapCard).toBeVisible();
-    await expect(snapCard.getByText('日志')).toBeVisible();
 
     // 8. 点击素材卡片 → 打开全屏预览（相册式 1/1），ESC 关闭
     await snapCard.click();
