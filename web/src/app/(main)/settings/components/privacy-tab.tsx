@@ -1,10 +1,14 @@
 'use client';
 
-import { Eye, Globe, MessageCircle, Shield, Lock, ChevronRight, Check, EyeOff, Loader2, AlertCircle } from 'lucide-react';
+import { Eye, Globe, MessageCircle, Shield, Lock, ChevronRight, Check, EyeOff, Loader2, AlertCircle, Download, UserX } from 'lucide-react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
+import { useAuthStore } from '@/stores/auth-store';
+import apiClient from '@/lib/api-client';
+import { toast } from 'sonner';
 
 const PRIVACY_OPTIONS = {
   profileVisibility: [
