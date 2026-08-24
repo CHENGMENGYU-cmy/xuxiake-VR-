@@ -177,34 +177,64 @@ function SettingsContent() {
         </TabsContent>
 
         <TabsContent value="members" className="space-y-3 mt-4">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Users className="h-4 w-4" />
-            <span>管理员: {roles.filter(r => r.role === 'ADMIN').length} 人 | 版主: {roles.filter(r => r.role === 'MODERATOR').length} 人</span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Users className="h-4 w-4" />
+              <span>管理员: {roles.filter(r => r.role === 'ADMIN').length} 人 | 版主: {roles.filter(r => r.role === 'MODERATOR').length} 人</span>
+            </div>
           </div>
-          {roles.length === 0 ? (
-            <p className="py-8 text-center text-muted-foreground">暂无角色分配</p>
-          ) : (
-            roles.map((r) => (
-              <div key={r.id} className="flex items-center justify-between rounded-lg border p-3">
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-9 w-9">
-                    <AvatarImage src={r.user?.avatarUrl ?? undefined} />
-                    <AvatarFallback>{r.user?.displayName?.[0]}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-sm font-medium">{r.user?.displayName}</p>
-                    <Badge variant={r.role === 'ADMIN' ? 'default' : 'secondary'} className="text-xs">
-                      {r.role === 'ADMIN' ? '管理员' : '版主'}
-                    </Badge>
+
+          {/* 成员列表（含角色切换） */}
+          {community?.members && community.members.length > 0 ? (
+            community.members
+              .filter((m) => m.id !== community.creator?.id)
+              .map((member) => {
+                const memberRole = roles.find((r) => r.userId === member.id);
+                return (
+                  <div key={member.id} className="flex items-center justify-between rounded-lg border p-3">
+                    <div className="flex items-center gap-3">
+                      <Avatar className="h-9 w-9">
+                        <AvatarImage src={member.avatarUrl ?? undefined} />
+                        <AvatarFallback>{member.displayName?.[0]}</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="text-sm font-medium">{member.displayName}</p>
+                        <p className="text-xs text-muted-foreground">@{member.username}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <select
+                        className="text-xs border rounded px-2 py-1"
+                        value={memberRole?.role || 'MEMBER'}
+                        onChange={async (e) => {
+                          const newRole = e.target.value;
+                          try {
+                            if (newRole === 'MEMBER') {
+                              if (memberRole) {
+                                await removeCommunityRole(communityId, member.id);
+                                setRoles((prev) => prev.filter((r) => r.userId !== member.id));
+                                toast.success('已移除角色');
+                              }
+                            } else {
+                              await assignCommunityRole(communityId, member.id, newRole as 'ADMIN' | 'MODERATOR');
+                              // 刷新角色列表
+                              const r = await getCommunityRoles(communityId);
+                              setRoles(r);
+                              toast.success(`已分配${newRole === 'ADMIN' ? '管理员' : '版主'}角色`);
+                            }
+                          } catch { toast.error('操作失败'); }
+                        }}
+                      >
+                        <option value="MEMBER">普通成员</option>
+                        <option value="MODERATOR">版主</option>
+                        <option value="ADMIN">管理员</option>
+                      </select>
+                    </div>
                   </div>
-                </div>
-                {r.role !== 'ADMIN' && (
-                  <Button variant="ghost" size="sm" className="text-red-500" onClick={() => handleRemoveRole(r.userId)}>
-                    <X className="mr-1 h-4 w-4" /> 移除
-                  </Button>
-                )}
-              </div>
-            ))
+                );
+              })
+          ) : (
+            <p className="py-8 text-center text-muted-foreground">暂无成员可管理</p>
           )}
         </TabsContent>
       </Tabs>
