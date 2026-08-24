@@ -85,8 +85,8 @@ export default function FeedPage() {
       <FeedList
         key={`${feedMode}-${activeFilter}`}
         followingOnly={feedMode === 'following'}
-        postType={currentFilter?.postType}
-        excludeContentLevel={currentFilter?.excludeContentLevel}
+        contentLevel={currentFilter?.contentLevel}
+        excludeContentLevels={currentFilter?.excludeContentLevels}
       />
     </div>
   );
