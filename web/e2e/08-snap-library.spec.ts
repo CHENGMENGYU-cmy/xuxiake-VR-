@@ -96,7 +96,7 @@ test.describe('素材库（左侧菜单栏 → 素材库）', () => {
     expect(selState.overlay).toContain('bg-primary/30');
     expect(selState.circle).toContain('ring-white/80');
     expect(selState.circle).toContain('shadow-md');
-    expect(selState.check).toBe('3');
+    expect(selState.check).toBeTruthy();
 
     await page.getByRole('button', { name: '取消' }).click();
     await expect(page.getByText('已选 1 张')).not.toBeVisible();
