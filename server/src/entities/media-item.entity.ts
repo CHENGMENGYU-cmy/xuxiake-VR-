@@ -54,6 +54,9 @@ export class MediaItem {
   @Column({ name: 'sort_order', type: 'int', default: 0 })
   sortOrder: number;
 
+  @Column({ name: 'text_note', type: 'text', nullable: true })
+  textNote: string | null;
+
   @Column({ name: 'created_at', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
