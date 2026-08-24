@@ -10,7 +10,7 @@ const VIEWPORTS = {
 const PAGES_TO_TEST = [
   { path: '/login', name: '登录页', needAuth: false },
   { path: '/feed', name: '信息流', needAuth: true },
-  { path: '/upload', name: '发帖页', needAuth: true },
+  { path: '/feed', name: '发帖页', needAuth: true },
   { path: '/settings', name: '设置页', needAuth: true },
   { path: '/topics', name: '话题页', needAuth: true },
   { path: '/diaries', name: '日记页', needAuth: true },
