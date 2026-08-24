@@ -9,6 +9,8 @@ interface PostFilters {
   tagId?: string;
   followingOnly?: boolean;
   excludeContentLevel?: string;
+  contentLevel?: string;
+  excludeContentLevels?: string[];
 }
 
 interface PostState {
