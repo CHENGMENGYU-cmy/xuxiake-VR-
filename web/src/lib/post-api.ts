@@ -67,8 +67,16 @@ export async function getPosts(params?: {
   postType?: string;
   tagId?: string;
   followingOnly?: boolean;
+  excludeContentLevel?: string;
+  contentLevel?: string;
+  excludeContentLevels?: string[];
 }): Promise<{ posts: Post[]; nextCursor: string | null; hasMore: boolean; page?: number }> {
-  const { data } = await apiClient.get('/posts', { params });
+  // 将 excludeContentLevels 数组转为逗号分隔字符串
+  const queryParams: any = { ...params };
+  if (params?.excludeContentLevels) {
+    queryParams.excludeContentLevels = params.excludeContentLevels.join(',');
+  }
+  const { data } = await apiClient.get('/posts', { params: queryParams });
   return {
     posts: data.data ?? [],
     nextCursor: data.nextCursor ?? null,
