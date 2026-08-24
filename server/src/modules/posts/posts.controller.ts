@@ -90,6 +90,8 @@ export class PostsController {
     @Query('tagId') tagId?: string,
     @Query('followingOnly') followingOnly?: string,
     @Query('excludeContentLevel') excludeContentLevel?: string,
+    @Query('contentLevel') contentLevel?: string,
+    @Query('excludeContentLevels') excludeContentLevels?: string,
     @Headers('authorization') auth?: string,
   ) {
     // 可选认证：有 token 时提取 userId，无 token 时为 null
@@ -97,6 +99,11 @@ export class PostsController {
     if (auth) {
       try { userId = this.getUserId(auth); } catch { /* 游客模式 */ }
     }
+
+    // 解析 excludeContentLevels（逗号分隔的字符串转数组）
+    const excludeLevels = excludeContentLevels
+      ? excludeContentLevels.split(',').filter(Boolean)
+      : undefined;
 
     const result = await this.postsService.getPosts({
       cursor,
@@ -109,6 +116,8 @@ export class PostsController {
       followingOnly: followingOnly === 'true',
       currentUserId: userId,
       excludeContentLevel,
+      contentLevel,
+      excludeContentLevels: excludeLevels,
     });
     return { success: true, ...result };
   }
