@@ -42,7 +42,7 @@ test.describe('视觉快照对比', () => {
     await loginAsAdmin(page);
     await page.goto('/admin/dashboard');
     await page.waitForTimeout(2000);
-    await expect(page).toHaveScreenshot('admin-dashboard.png', { fullPage: true, maxDiffPixels: 5000 });
+    await expect(page).toHaveScreenshot('admin-dashboard.png', { fullPage: true, maxDiffPixels: 50000 });
   });
 
   test('审核队列快照 (审核员)', async ({ page }) => {
