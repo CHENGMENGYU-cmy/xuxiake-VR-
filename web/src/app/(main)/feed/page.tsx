@@ -2,20 +2,19 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Home, FileText, Video, Compass, MessageSquare, Sparkles, Users } from 'lucide-react';
+import { Home, FileText, Video, Compass, BookOpen, Sparkles, Users } from 'lucide-react';
 import { FeedList } from '@/components/feed/feed-list';
 import { useAuthStore } from '@/stores/auth-store';
 import { cn } from '@/lib/utils';
-import type { PostType } from '@/types';
 
-type FilterTab = { id: string; label: string; icon: typeof FileText; postType?: PostType; excludeContentLevel?: string };
+type FilterTab = { id: string; label: string; icon: typeof FileText; contentLevel?: string; excludeContentLevels?: string[] };
 
 const filterTabs: FilterTab[] = [
   { id: 'all', label: '全部', icon: Home },
-  { id: 'VR_MEDIA', label: '第一视角', icon: Video, postType: 'VR_MEDIA' },
-  { id: 'NOTE', label: '随记', icon: FileText, postType: 'NOTE', excludeContentLevel: 'DIARY' },
-  { id: 'JOURNEY', label: '游记', icon: Compass, postType: 'JOURNEY' },
-  { id: 'MOMENT', label: '瞬间', icon: MessageSquare, postType: 'MOMENT' },
+  { id: 'diary', label: '日记', icon: FileText, contentLevel: 'DIARY' },
+  { id: 'travelogue', label: '游记', icon: Compass, contentLevel: 'TRAVELOGUE' },
+  { id: 'essay', label: '随笔', icon: BookOpen, contentLevel: 'ESSAY' },
+  { id: 'vr', label: 'VR内容', icon: Video, excludeContentLevels: ['SNAPSHOT', 'DIARY', 'TRAVELOGUE', 'ESSAY'] },
 ];
 
 export default function FeedPage() {
