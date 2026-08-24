@@ -90,6 +90,12 @@ export class PostsService {
     if (excludeContentLevel) {
       qb.andWhere('(post.contentLevel IS NULL OR post.contentLevel != :excludeLevel)', { excludeLevel: excludeContentLevel });
     }
+    if (contentLevel) {
+      qb.andWhere('post.contentLevel = :contentLevel', { contentLevel });
+    }
+    if (excludeContentLevels && excludeContentLevels.length > 0) {
+      qb.andWhere('post.contentLevel NOT IN (:...excludeLevels)', { excludeLevels: excludeContentLevels });
+    }
 
     if (cursor) {
       const cursorPost = await this.postRepo.findOne({ where: { id: cursor, deletedAt: IsNull() } });
