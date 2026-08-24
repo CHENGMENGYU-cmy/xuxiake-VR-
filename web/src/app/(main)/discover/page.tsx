@@ -380,18 +380,45 @@ function TopicsTab() {
  * 找搭子 Tab（复用已有组件）
  * ========================================================= */
 function SocialTab() {
+  const [searchKeyword, setSearchKeyword] = useState('');
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchKeyword.trim()) {
+      // 跳转到全局搜索页并带上社群搜索关键词
+      window.location.href = `/search?q=${encodeURIComponent(searchKeyword.trim())}&tab=communities`;
+    }
+  };
+
   return (
-    <Tabs defaultValue="companions" className="w-full">
-      <TabsList className="grid w-full grid-cols-4">
-        <TabsTrigger value="companions">找搭子</TabsTrigger>
-        <TabsTrigger value="users">推荐用户</TabsTrigger>
-        <TabsTrigger value="communities">推荐社群</TabsTrigger>
-        <TabsTrigger value="my-communities">我的社群</TabsTrigger>
-      </TabsList>
-      <TabsContent value="companions"><CompanionsTab /></TabsContent>
-      <TabsContent value="users"><RecommendedUsers /></TabsContent>
-      <TabsContent value="communities"><RecommendedCommunities /></TabsContent>
-      <TabsContent value="my-communities"><MyCommunities /></TabsContent>
-    </Tabs>
+    <div className="space-y-4">
+      {/* 社群搜索入口 */}
+      <form onSubmit={handleSearch} className="flex gap-2">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder="搜索社群..."
+            className="pl-10"
+            value={searchKeyword}
+            onChange={(e) => setSearchKeyword(e.target.value)}
+          />
+        </div>
+        <Button type="submit" size="sm">搜索</Button>
+      </form>
+
+      <Tabs defaultValue="companions" className="w-full">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="companions">找搭子</TabsTrigger>
+          <TabsTrigger value="users">推荐用户</TabsTrigger>
+          <TabsTrigger value="communities">推荐社群</TabsTrigger>
+          <TabsTrigger value="my-communities">我的社群</TabsTrigger>
+        </TabsList>
+        <TabsContent value="companions"><CompanionsTab /></TabsContent>
+        <TabsContent value="users"><RecommendedUsers /></TabsContent>
+        <TabsContent value="communities"><RecommendedCommunities /></TabsContent>
+        <TabsContent value="my-communities"><MyCommunities /></TabsContent>
+      </Tabs>
+    </div>
   );
 }
