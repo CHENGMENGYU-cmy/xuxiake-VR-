@@ -101,11 +101,11 @@ test.describe('关键交互响应式', () => {
     const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
     const page = await context.newPage();
     await loginAsUser(page);
-    await page.goto('/upload');
+    await page.goto('/feed');
     await page.waitForTimeout(2000);
 
-    // 编辑器区域应存在
-    const editor = page.locator('textarea, [contenteditable], [class*="editor"]').first();
+    // PostComposer 编辑器区域应存在
+    const editor = page.locator('textarea, [contenteditable], [class*="composer"]').first();
     const isVisible = await editor.isVisible().catch(() => false);
     expect(isVisible).toBeTruthy();
     await context.close();
