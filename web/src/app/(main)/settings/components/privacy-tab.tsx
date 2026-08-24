@@ -269,6 +269,9 @@ export function PrivacyTab({
         </CardContent>
       </Card>
 
+      {/* 数据导出与账号注销 */}
+      <DataManagementSection />
+
       {/* 修改密码对话框 */}
       <Dialog open={showPasswordDialog} onOpenChange={(open) => {
         if (!open) onResetPasswordDialog();
