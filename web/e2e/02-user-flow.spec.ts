@@ -21,24 +21,21 @@ test.describe('普通用户功能', () => {
   });
 
   test('打开发帖页面', async ({ page }) => {
-    await page.goto('/upload');
-    await expect(page.locator('textarea, [contenteditable], input[name*="title"], [class*="editor"]').first()).toBeVisible({ timeout: 10000 });
+    await page.goto('/feed');
+    // PostComposer 嵌入在 feed 页面中
+    await page.waitForTimeout(2000);
+    await expect(page.locator('textarea, [contenteditable], [class*="composer"]').first()).toBeVisible({ timeout: 10000 });
   });
 
   test('发帖并发布', async ({ page }) => {
-    await page.goto('/upload');
-    // 等待编辑器加载
+    await page.goto('/feed');
     await page.waitForTimeout(2000);
 
-    // 查找文本输入区域并输入内容
+    // 查找 PostComposer 中的文本输入区域
     const textArea = page.locator('textarea, [contenteditable="true"]').first();
     if (await textArea.isVisible()) {
       const testContent = 'E2E 测试帖子内容 ' + Date.now();
-      if (await textArea.getAttribute('contenteditable')) {
-        await textArea.fill(testContent);
-      } else {
-        await textArea.fill(testContent);
-      }
+      await textArea.fill(testContent);
       await page.waitForTimeout(500);
 
       // 尝试点击发布按钮
@@ -46,7 +43,6 @@ test.describe('普通用户功能', () => {
       if (await publishBtn.isVisible()) {
         await publishBtn.click();
         await page.waitForTimeout(3000);
-        // 发布后应跳转到 feed 或帖子详情页
         expect(page.url()).not.toContain('/login');
       }
     }
