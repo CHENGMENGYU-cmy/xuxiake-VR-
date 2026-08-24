@@ -237,7 +237,7 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
 (@snapId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年7月28日，西安秦始皇兵马俑博物馆。参观路线：一号坑→三号坑→二号坑→文物陈列厅。一号坑：东西长230米，宽62米，约有6000个陶俑，已修复约1000余件。重点观察了兵俑的面部细节——每个俑的面部表情和发髻都不同，印证了"千人千面"的说法。拍摄VR近景素材重点：铠甲纹理、发髻结构、排列阵型。三号坑较小但有指挥车，二号坑有彩色陶俑遗迹。',
  NULL, '秦始皇兵马俑博物馆',
- '{"keywords":["兵马俑","秦朝","考古","千人千面","历史"],"activity":"历史考察","companion":"独自"}',
+ '{"keywords":["兵马俑","秦朝","考古","千人千面","历史"],"activity":"历史考察","companion":"独自","image":"/api/placeholder/秦始皇兵马俑博物馆?type=landscape"}',
  'PRIVATE', 0, 0, 0, '2026-07-28 20:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
