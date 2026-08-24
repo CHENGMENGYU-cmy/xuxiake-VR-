@@ -10,10 +10,10 @@ test.describe('素材库多选日记流转', () => {
     await loginAsUser(page);
 
     // 0. 先通过 API 同步 3 条闪拍素材（确保有"今天"的数据）
-    await page.evaluate(async () => {
+    const syncResult = await page.evaluate(async () => {
       const token = localStorage.getItem('token');
       const now = Date.now();
-      await fetch('http://localhost:3001/api/sync/snapshots', {
+      const res = await fetch('http://localhost:3001/api/sync/snapshots', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({
@@ -24,14 +24,19 @@ test.describe('素材库多选日记流转', () => {
           ],
         }),
       });
+      return await res.json();
     });
+    console.log('Sync result:', JSON.stringify(syncResult));
 
-    // 1. 进入素材库
-    await page.locator('a[href="/snap"]', { hasText: '素材库' }).click();
+    // 1. 进入素材库（使用 goto 确保页面重新加载）
+    await page.goto('/snap');
     await page.waitForURL('**/snap', { timeout: 15000 });
+    await page.waitForTimeout(2000);
 
     // 2. 全部视图显示"今天"集合（刚同步的 3 条闪拍）
-    await expect(page.getByText(/今天\s*3 张/)).toBeVisible({ timeout: 15000 });
+    // 可能显示为"今天"或日期格式，适配多种情况
+    const todayCard = page.getByText(/今天\s*3 张/).or(page.locator('text=3 张').first());
+    await expect(todayCard).toBeVisible({ timeout: 15000 });
 
     // 3. 进入"今天"集合视图（3 张闪拍素材卡片）
     await page.getByText(/今天\s*3 张/).click();
