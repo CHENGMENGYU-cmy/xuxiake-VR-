@@ -9,6 +9,23 @@ test.describe('素材库多选日记流转', () => {
   test('多选 → 批量编辑 → 存草稿 → 草稿箱 → 发布 全链路', async ({ page }) => {
     await loginAsUser(page);
 
+    // 0. 先通过 API 同步 3 条闪拍素材（确保有"今天"的数据）
+    await page.evaluate(async () => {
+      const token = localStorage.getItem('token');
+      const now = Date.now();
+      await fetch('http://localhost:3001/api/sync/snapshots', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          moments: [
+            { id: `e2e-diary-${now}-1`, capturedAt: now, mediaType: 'photo', photoPath: '/uploads/test/snap1.jpg', gpsLat: 30.25, gpsLng: 120.15, locationName: '西湖断桥' },
+            { id: `e2e-diary-${now}-2`, capturedAt: now - 60000, mediaType: 'photo', photoPath: '/uploads/test/snap2.jpg', gpsLat: 24.75, gpsLng: 110.4, locationName: '阳朔遇龙河' },
+            { id: `e2e-diary-${now}-3`, capturedAt: now - 120000, mediaType: 'photo', photoPath: '/uploads/test/snap3.jpg', gpsLat: 29.56, gpsLng: 106.55, locationName: '重庆洪崖洞' },
+          ],
+        }),
+      });
+    });
+
     // 1. 进入素材库
     await page.locator('a[href="/snap"]', { hasText: '素材库' }).click();
     await page.waitForURL('**/snap', { timeout: 15000 });
