@@ -123,7 +123,7 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
 (@snapId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年8月1日，哈巴雪山登顶日。凌晨3:00从大本营（4100m）出发，6:48登顶（5396m）。天气：晴朗无风，气温-8°C，能见度极佳。登顶用时3小时48分。同行客户3人，均成功登顶。使用了冰爪、冰镐、安全带等技术装备。雪线以上约500米，冰裂缝较往年偏少。拍摄了登顶360°全景VR。下撤用时2.5小时，15:00返回哈巴村。',
  NULL, '哈巴雪山',
- '{"keywords":["哈巴雪山","登顶","5396米","雪山攀登","向导"],"weather":"晴","activity":"雪山攀登","companion":"带客户3人"}',
+ '{"keywords":["哈巴雪山","登顶","5396米","雪山攀登","向导"],"weather":"晴","activity":"雪山攀登","companion":"带客户3人","image":"/api/placeholder/哈巴雪山?type=landscape"}',
  'PRIVATE', 0, 0, 0, '2026-08-01 18:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
