@@ -135,6 +135,7 @@ export class SyncService {
         mediaItems.push(this.mediaRepo.create({
           id: uuidv4(), postId: post.id, type: 'IMAGE',
           url: m.photoPath, thumbnailUrl: m.thumbnailPath || null, sortOrder: sort++,
+          textNote: m.textNote || null,
         }));
       }
       if (m.videoPath) {
@@ -143,12 +144,14 @@ export class SyncService {
           url: m.videoPath, thumbnailUrl: m.thumbnailPath || null,
           duration: m.durationMs ? Math.round(m.durationMs / 1000) : null,
           sortOrder: sort++,
+          textNote: m.textNote || null,
         }));
       }
       if (reflection?.audioPath) {
         mediaItems.push(this.mediaRepo.create({
           id: uuidv4(), postId: post.id, type: 'AUDIO',
           url: reflection.audioPath, sortOrder: sort++,
+          textNote: m.textNote || null,
         }));
       }
       if (mediaItems.length > 0) await this.mediaRepo.save(mediaItems);
