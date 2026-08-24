@@ -104,11 +104,17 @@ test.describe('关键交互响应式', () => {
     await page.goto('/feed');
     await page.waitForTimeout(2000);
 
-    // PostComposer 初始为收起状态，点击展开
+    // 手机端侧边栏可能遮挡，先尝试关闭
+    const hamburger = page.locator('button:has(svg):near(button:has-text("搜索"))').first();
+    await hamburger.click().catch(() => {});
+    await page.waitForTimeout(500);
+
+    // PostComposer 初始为收起状态
     const composerPlaceholder = page.getByText('分享你的旅行故事...').first();
     const isPlaceholderVisible = await composerPlaceholder.isVisible().catch(() => false);
     if (isPlaceholderVisible) {
-      await composerPlaceholder.click();
+      // 使用 force: true 避免侧边栏遮挡
+      await composerPlaceholder.click({ force: true });
       await page.waitForTimeout(500);
     }
 
