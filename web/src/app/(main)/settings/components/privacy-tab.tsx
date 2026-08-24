@@ -522,7 +522,7 @@ function DataManagementSection() {
             </div>
           </div>
           <DialogFooter>
-            <DialogClose render={<Button variant="outline" />}>取消</Button>
+            <Button variant="outline" onClick={() => setShowDeactivateDialog(false)}>取消</Button>
             <Button
               variant="destructive"
               onClick={handleDeactivate}

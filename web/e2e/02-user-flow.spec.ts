@@ -22,28 +22,34 @@ test.describe('普通用户功能', () => {
 
   test('打开发帖页面', async ({ page }) => {
     await page.goto('/feed');
-    // PostComposer 嵌入在 feed 页面中
     await page.waitForTimeout(2000);
-    await expect(page.locator('textarea, [contenteditable], [class*="composer"]').first()).toBeVisible({ timeout: 10000 });
+    // PostComposer 嵌入在 feed 页面中，初始为收起状态（占位符文字）
+    const composerPlaceholder = page.getByText('分享你的旅行故事...').first();
+    await expect(composerPlaceholder).toBeVisible({ timeout: 10000 });
   });
 
   test('发帖并发布', async ({ page }) => {
     await page.goto('/feed');
     await page.waitForTimeout(2000);
 
-    // 查找 PostComposer 中的文本输入区域
-    const textArea = page.locator('textarea, [contenteditable="true"]').first();
-    if (await textArea.isVisible()) {
-      const testContent = 'E2E 测试帖子内容 ' + Date.now();
-      await textArea.fill(testContent);
+    // 点击 PostComposer 占位符展开编辑器
+    const composerPlaceholder = page.getByText('分享你的旅行故事...').first();
+    if (await composerPlaceholder.isVisible()) {
+      await composerPlaceholder.click();
       await page.waitForTimeout(500);
 
-      // 尝试点击发布按钮
-      const publishBtn = page.locator('button:has-text("发布"), button:has-text("发表"), button[type="submit"]').first();
-      if (await publishBtn.isVisible()) {
-        await publishBtn.click();
-        await page.waitForTimeout(3000);
-        expect(page.url()).not.toContain('/login');
+      const textArea = page.locator('textarea').first();
+      if (await textArea.isVisible()) {
+        const testContent = 'E2E 测试帖子内容 ' + Date.now();
+        await textArea.fill(testContent);
+        await page.waitForTimeout(500);
+
+        const publishBtn = page.locator('button:has-text("发布"), button:has-text("发表")').first();
+        if (await publishBtn.isVisible()) {
+          await publishBtn.click();
+          await page.waitForTimeout(3000);
+          expect(page.url()).not.toContain('/login');
+        }
       }
     }
   });
