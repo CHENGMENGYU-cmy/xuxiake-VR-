@@ -36,11 +36,12 @@ export class PlaceholderController {
   @Header('Content-Type', 'image/svg+xml')
   @Header('Cache-Control', 'public, max-age=86400')
   async getPlaceholder(
-    @Param('seed') seed: string,
-    @Query('type') type: string = 'avatar',
-    @Query('text') text?: string,
     @Res() res: Response,
+    @Param('seed') seed: string,
+    @Query('type') type?: string,
+    @Query('text') text?: string,
   ) {
+    type = type || 'avatar';
     const { from, to } = this.pickPalette(seed);
     const label = text || seed.charAt(0).toUpperCase();
     // 展示用的文字：优先用传入 text，否则取 seed 前 4 个字符
