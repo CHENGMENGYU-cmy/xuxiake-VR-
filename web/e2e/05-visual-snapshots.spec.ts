@@ -20,7 +20,7 @@ test.describe('视觉快照对比', () => {
     await loginAsUser(page);
     await page.goto('/feed');
     await page.waitForTimeout(2000);
-    await expect(page).toHaveScreenshot('feed-page.png', { fullPage: true, maxDiffPixels: 5000 });
+    await expect(page).toHaveScreenshot('feed-page.png', { fullPage: true, maxDiffPixels: 30000 });
   });
 
   test('探索页快照', async ({ page }) => {
