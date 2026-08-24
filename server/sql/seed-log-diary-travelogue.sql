@@ -38,7 +38,7 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
 (@snapId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年8月4日，阳朔兴坪镇。凌晨4:30到达拍摄点，架设Insta360 X4。5:12日出开始，晨雾从江面升起，喀斯特山峰在金色光线中渐次显现。拍摄持续到19:30日落，共拍摄14组延时素材。天气晴朗，气温34°C，湿度偏高。同行：无。设备电量消耗3块电池。',
  NULL, '阳朔兴坪镇漓江边',
- '{"keywords":["漓江","延时摄影","日出","日落","喀斯特"],"weather":"晴","activity":"摄影","companion":"独自"}',
+ '{"keywords":["漓江","延时摄影","日出","日落","喀斯特"],"weather":"晴","activity":"摄影","companion":"独自","image":"/api/placeholder/阳朔兴坪镇漓江边?type=landscape"}',
  'PRIVATE', 0, 0, 0, '2026-08-04 20:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
