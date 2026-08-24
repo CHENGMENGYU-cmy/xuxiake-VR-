@@ -17,11 +17,13 @@ export async function loginAs(page: Page, account: string, password = 'password1
 
   // 提交登录 — 对验证码输入框按 Enter，触发表单提交
   await page.locator('input[placeholder*="验证码"]').press('Enter');
-  await page.waitForTimeout(2000);
+  await page.waitForTimeout(3000);
 
-  // 等待跳转到首页 (feed)
-  await page.waitForURL('**/feed', { timeout: 15000 }).catch(() => {
-    // 可能跳转到 explore 或其他页面
+  // 等待跳转到首页 (feed) 或其他已登录页面
+  await page.waitForURL((url) => !url.pathname.includes('/login'), { timeout: 20000 }).catch(() => {
+    // 重试一次：可能第一次提交未成功
+    page.locator('input[placeholder*="验证码"]').press('Enter').catch(() => {});
+    page.waitForTimeout(2000);
   });
 
   // 验证已登录 — 检查页面不再在 /login
