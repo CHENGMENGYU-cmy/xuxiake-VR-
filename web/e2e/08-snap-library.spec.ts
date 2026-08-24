@@ -19,7 +19,7 @@ test.describe('素材库（左侧菜单栏 → 素材库）', () => {
 
     // 3. 页面标题与副标题
     await expect(page.getByRole('heading', { name: '素材库' })).toBeVisible();
-    await expect(page.getByText('你的闪拍和日志素材')).toBeVisible();
+    await expect(page.getByText('你的闪拍素材')).toBeVisible();
 
     // 4. 分类 Tab：全部 / 按地点 / 按时间 / 按行程
     for (const tab of ['全部', '按地点', '按时间', '按行程']) {
