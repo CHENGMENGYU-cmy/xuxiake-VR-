@@ -597,6 +597,114 @@ export class UsersController {
     };
   }
 
+  // ===== 数据导出 =====
+  @Get('export-data')
+  async exportUserData(
+    @Headers('authorization') auth: string,
+    @Res() res: Response,
+  ) {
+    const userId = this.getUserId(auth);
+    if (!userId) throw new UnauthorizedException('请先登录');
+
+    const user = await this.userRepo.findOne({ where: { id: userId } });
+    if (!user) throw new NotFoundException('用户不存在');
+
+    // 收集用户数据
+    const [posts, media, likes, followers, following] = await Promise.all([
+      this.postRepo.find({
+        where: { authorId: userId },
+        order: { createdAt: 'DESC' },
+        relations: { mediaItems: true, tags: true, topics: true },
+      }),
+      this.mediaRepo
+        .createQueryBuilder('media')
+        .leftJoinAndSelect('media.post', 'post')
+        .where('post.authorId = :userId', { userId })
+        .getMany(),
+      this.likeRepo.find({ where: { userId } }),
+      this.followRepo.count({ where: { followingId: userId } }),
+      this.followRepo.count({ where: { followerId: userId } }),
+    ]);
+
+    const { passwordHash, ...userDto } = user;
+
+    const exportData = {
+      exportDate: new Date().toISOString(),
+      user: userDto,
+      statistics: {
+        postCount: posts.length,
+        mediaCount: media.length,
+        likeCount: likes.length,
+        followersCount: followers,
+        followingCount: following,
+      },
+      posts: posts.map((p) => ({
+        id: p.id,
+        type: p.postType,
+        content: p.content,
+        visibility: p.visibility,
+        locationName: p.locationName,
+        likeCount: p.likeCount,
+        commentCount: p.commentCount,
+        createdAt: p.createdAt,
+        mediaItems: p.mediaItems?.map((m) => ({
+          type: m.type,
+          url: m.url,
+          textNote: m.textNote,
+        })) || [],
+        tags: p.tags?.map((t) => t.name) || [],
+        topics: p.topics?.map((t) => t.name) || [],
+      })),
+      likes: likes.map((l) => ({
+        postId: l.postId,
+        likedAt: l.createdAt,
+      })),
+    };
+
+    const filename = `xuxiake-data-${user.username}-${new Date().toISOString().split('T')[0]}.json`;
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.json(exportData);
+  }
+
+  // ===== 账号注销 =====
+  @Post('deactivate')
+  async deactivateAccount(
+    @Headers('authorization') auth: string,
+    @Body() body: { confirmText?: string; reason?: string },
+  ) {
+    const userId = this.getUserId(auth);
+    if (!userId) throw new UnauthorizedException('请先登录');
+
+    // 二次确认
+    if (body.confirmText !== '确认注销') {
+      throw new BadRequestException('请输入"确认注销"以完成验证');
+    }
+
+    const user = await this.userRepo.findOne({ where: { id: userId } });
+    if (!user) throw new NotFoundException('用户不存在');
+
+    // 软删除：设置状态为 DEACTIVATED + 记录注销时间
+    user.status = 'DEACTIVATED' as any;
+    user.updatedAt = new Date();
+    // 在 bio 中记录注销信息（冷静期30天内可恢复）
+    user.bio = `[账号已注销] 注销时间: ${new Date().toISOString().split('T')[0]}${body.reason ? ` 原因: ${body.reason}` : ''}`;
+    await this.userRepo.save(user);
+
+    // 将用户的所有帖子设为私密（软删除关联内容）
+    await this.postRepo
+      .createQueryBuilder()
+      .update(PostEntity)
+      .set({ visibility: 'PRIVATE' as any })
+      .where('authorId = :userId', { userId })
+      .execute();
+
+    return {
+      success: true,
+      message: '账号已注销。30天冷静期内可联系管理员恢复账号。',
+    };
+  }
+
   private formatPost(post: PostEntity, isLiked = false) {
     const { passwordHash, ...author } = post.author || ({} as any);
     return {
