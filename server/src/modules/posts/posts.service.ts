@@ -162,6 +162,12 @@ export class PostsService {
     if (excludeContentLevel) {
       qb.andWhere('(post.contentLevel IS NULL OR post.contentLevel != :excludeLevel)', { excludeLevel: excludeContentLevel });
     }
+    if (contentLevel) {
+      qb.andWhere('post.contentLevel = :contentLevel', { contentLevel });
+    }
+    if (excludeContentLevels && excludeContentLevels.length > 0) {
+      qb.andWhere('post.contentLevel NOT IN (:...excludeLevels)', { excludeLevels: excludeContentLevels });
+    }
 
     const [posts, total] = await qb.getManyAndCount();
     const hasMore = posts.length > limit;
@@ -182,7 +188,7 @@ export class PostsService {
     };
   }
 
-  private async getHotPosts(limit: number, page: number, postType?: string, tagId?: string, followingIds?: string[] | null, currentUserId?: string, excludeContentLevel?: string) {
+  private async getHotPosts(limit: number, page: number, postType?: string, tagId?: string, followingIds?: string[] | null, currentUserId?: string, excludeContentLevel?: string, contentLevel?: string, excludeContentLevels?: string[]) {
     // 精选推荐：高互动量帖子（点赞 + 评论）
     const offset = (page - 1) * limit;
 
