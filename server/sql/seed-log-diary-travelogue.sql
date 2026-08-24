@@ -152,7 +152,7 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
 (@snapId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年7月31日，长沙。探店路线：火宫殿（早餐）→ 太平街（小吃）→ 坡子街（午餐）→ 文和友（晚餐）。打卡菜品：臭豆腐（黑色经典）、糖油粑粑、口味虾、剁椒鱼头、茶颜悦色（幽兰拿铁）。共拍摄美食VR近景素材47组。花费：交通15元+餐饮286元。口味评价：臭豆腐外酥里嫩8.5分，口味虾辣度适中但虾肉偏老7分，剁椒鱼头鲜辣平衡9分。',
  NULL, '长沙火宫殿/太平街/文和友',
- '{"keywords":["长沙","美食探店","臭豆腐","口味虾","湘菜"],"activity":"美食探店","companion":"独自","spend":301}',
+ '{"keywords":["长沙","美食探店","臭豆腐","口味虾","湘菜"],"activity":"美食探店","companion":"独自","spend":301,"image":"/api/placeholder/长沙火宫殿-太平街-文和友?type=landscape"}',
  'PRIVATE', 0, 0, 0, '2026-07-31 22:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
