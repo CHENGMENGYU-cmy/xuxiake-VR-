@@ -18,6 +18,8 @@ const nextConfig: NextConfig = {
     return [
       // 上传的媒体/缩略图由后端服务，本地 dev 需要代理到后端
       { source: '/uploads/:path*', destination: `${API_ORIGIN}/uploads/:path*` },
+      // 本地动态占位图同样由后端生成，代理到后端
+      { source: '/api/placeholder/:path*', destination: `${API_ORIGIN}/api/placeholder/:path*` },
     ];
   },
 };

@@ -127,9 +127,9 @@ INSERT INTO posts (id, author_id, content, location_lat, location_lng, location_
 -- ============================================================
 -- 黄山帖子(p1): VR360视频 + 2张图片
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, duration, width, height, vr_format, sort_order) VALUES
-('m1', 'p1', 'VIDEO', 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_5MB.mp4', 'https://picsum.photos/seed/huangshan1/800/450', 120, 1920, 1080, 'VR360', 0),
-('m2', 'p1', 'IMAGE', 'https://picsum.photos/seed/huangshan2/800/600', 'https://picsum.photos/seed/huangshan2/400/300', NULL, 800, 600, NULL, 1),
-('m3', 'p1', 'IMAGE', 'https://picsum.photos/seed/huangshan3/800/600', 'https://picsum.photos/seed/huangshan3/400/300', NULL, 800, 600, NULL, 2);
+('m1', 'p1', 'VIDEO', 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_5MB.mp4', '/api/placeholder/huangshan1?type=landscape', 120, 1920, 1080, 'VR360', 0),
+('m2', 'p1', 'IMAGE', '/api/placeholder/huangshan2?type=landscape', '/api/placeholder/huangshan2?type=landscape', NULL, 800, 600, NULL, 1),
+('m3', 'p1', 'IMAGE', '/api/placeholder/huangshan3?type=landscape', '/api/placeholder/huangshan3?type=landscape', NULL, 800, 600, NULL, 2);
 
 -- 故宫帖子(p2): 音频 + 翻译
 INSERT INTO media_items (id, post_id, type, url, sort_order) VALUES
@@ -139,124 +139,124 @@ INSERT INTO media_items (id, post_id, type, language, translated_text, sort_orde
 
 -- 西湖帖子(p3): VR180视频 + 链接
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, duration, width, height, vr_format, sort_order) VALUES
-('m6', 'p3', 'VIDEO', 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_2MB.mp4', 'https://picsum.photos/seed/westlake/800/450', 90, 1920, 1080, 'VR180', 0);
+('m6', 'p3', 'VIDEO', 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_2MB.mp4', '/api/placeholder/westlake?type=landscape', 90, 1920, 1080, 'VR180', 0);
 INSERT INTO media_items (id, post_id, type, link_url, link_title, link_description, link_favicon, sort_order) VALUES
 ('m7', 'p3', 'LINK', 'https://baike.baidu.com/item/西湖', '西湖 - 百度百科', '西湖，位于浙江省杭州市西面，是中国大陆首批国家重点风景名胜区之一', 'https://baidu.com/favicon.ico', 1);
 
 -- 张家界帖子(p4): 3张VR360图片
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, width, height, vr_format, sort_order) VALUES
-('m8',  'p4', 'IMAGE', 'https://picsum.photos/seed/zhangjiajie1/800/600', 'https://picsum.photos/seed/zhangjiajie1/400/300', 800, 600, 'VR360', 0),
-('m9',  'p4', 'IMAGE', 'https://picsum.photos/seed/zhangjiajie2/800/600', 'https://picsum.photos/seed/zhangjiajie2/400/300', 800, 600, 'VR360', 1),
-('m10', 'p4', 'IMAGE', 'https://picsum.photos/seed/zhangjiajie3/800/600', 'https://picsum.photos/seed/zhangjiajie3/400/300', 800, 600, 'VR360', 2);
+('m8',  'p4', 'IMAGE', '/api/placeholder/zhangjiajie1?type=landscape', '/api/placeholder/zhangjiajie1?type=landscape', 800, 600, 'VR360', 0),
+('m9',  'p4', 'IMAGE', '/api/placeholder/zhangjiajie2?type=landscape', '/api/placeholder/zhangjiajie2?type=landscape', 800, 600, 'VR360', 1),
+('m10', 'p4', 'IMAGE', '/api/placeholder/zhangjiajie3?type=landscape', '/api/placeholder/zhangjiajie3?type=landscape', 800, 600, 'VR360', 2);
 
 -- 桂林帖子(p5): 空间视频 + 英文翻译
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, duration, width, height, vr_format, sort_order) VALUES
-('m11', 'p5', 'VIDEO', 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_5MB.mp4', 'https://picsum.photos/seed/guilin/800/450', 150, 3840, 2160, 'SPATIAL', 0);
+('m11', 'p5', 'VIDEO', 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_5MB.mp4', '/api/placeholder/guilin?type=landscape', 150, 3840, 2160, 'SPATIAL', 0);
 INSERT INTO media_items (id, post_id, type, language, translated_text, sort_order) VALUES
 ('m12', 'p5', 'TRANSLATION', 'en', 'Guilin landscape is the best under heaven. The Li River winds through the karst mountains, creating a breathtaking natural scenery.', 1);
 
 -- 长城帖子(p6): 图片 + 链接
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, width, height, sort_order) VALUES
-('m13', 'p6', 'IMAGE', 'https://picsum.photos/seed/greatwall/800/600', 'https://picsum.photos/seed/greatwall/400/300', 800, 600, 0);
+('m13', 'p6', 'IMAGE', '/api/placeholder/greatwall?type=landscape', '/api/placeholder/greatwall?type=landscape', 800, 600, 0);
 INSERT INTO media_items (id, post_id, type, link_url, link_title, link_description, link_favicon, sort_order) VALUES
 ('m14', 'p6', 'LINK', 'https://baike.baidu.com/item/长城', '长城 - 世界文化遗产', '长城是中国古代的军事防御工程，是世界文化遗产，也是世界新七大奇迹之一', 'https://baidu.com/favicon.ico', 1);
 
 -- 哈巴雪山帖子(p7): VR360视频
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, duration, width, height, vr_format, sort_order) VALUES
-('m15', 'p7', 'VIDEO', 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_5MB.mp4', 'https://picsum.photos/seed/habashan/800/450', 300, 3840, 2160, 'VR360', 0);
+('m15', 'p7', 'VIDEO', 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_5MB.mp4', '/api/placeholder/habashan?type=landscape', 300, 3840, 2160, 'VR360', 0);
 
 -- 虎跳峡帖子(p8): 2张图片
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, width, height, vr_format, sort_order) VALUES
-('m16', 'p8', 'IMAGE', 'https://picsum.photos/seed/hutiaoxia1/800/600', 'https://picsum.photos/seed/hutiaoxia1/400/300', 800, 600, 'VR180', 0),
-('m17', 'p8', 'IMAGE', 'https://picsum.photos/seed/hutiaoxia2/800/600', 'https://picsum.photos/seed/hutiaoxia2/400/300', 800, 600, 'VR180', 1);
+('m16', 'p8', 'IMAGE', '/api/placeholder/hutiaoxia1?type=landscape', '/api/placeholder/hutiaoxia1?type=landscape', 800, 600, 'VR180', 0),
+('m17', 'p8', 'IMAGE', '/api/placeholder/hutiaoxia2?type=landscape', '/api/placeholder/hutiaoxia2?type=landscape', 800, 600, 'VR180', 1);
 
 -- 长沙美食帖子(p9): 3张图片
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, width, height, sort_order) VALUES
-('m18', 'p9', 'IMAGE', 'https://picsum.photos/seed/changsha1/800/600', 'https://picsum.photos/seed/changsha1/400/300', 800, 600, 0),
-('m19', 'p9', 'IMAGE', 'https://picsum.photos/seed/changsha2/800/600', 'https://picsum.photos/seed/changsha2/400/300', 800, 600, 1),
-('m20', 'p9', 'IMAGE', 'https://picsum.photos/seed/changsha3/800/600', 'https://picsum.photos/seed/changsha3/400/300', 800, 600, 2);
+('m18', 'p9', 'IMAGE', '/api/placeholder/changsha1?type=landscape', '/api/placeholder/changsha1?type=landscape', 800, 600, 0),
+('m19', 'p9', 'IMAGE', '/api/placeholder/changsha2?type=landscape', '/api/placeholder/changsha2?type=landscape', 800, 600, 1),
+('m20', 'p9', 'IMAGE', '/api/placeholder/changsha3?type=landscape', '/api/placeholder/changsha3?type=landscape', 800, 600, 2);
 
 -- 苏州园林帖子(p10): VR360图片 + 链接
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, width, height, vr_format, sort_order) VALUES
-('m21', 'p10', 'IMAGE', 'https://picsum.photos/seed/suzhou1/800/600', 'https://picsum.photos/seed/suzhou1/400/300', 800, 600, 'VR360', 0);
+('m21', 'p10', 'IMAGE', '/api/placeholder/suzhou1?type=landscape', '/api/placeholder/suzhou1?type=landscape', 800, 600, 'VR360', 0);
 INSERT INTO media_items (id, post_id, type, link_url, link_title, link_description, link_favicon, sort_order) VALUES
 ('m22', 'p10', 'LINK', 'https://baike.baidu.com/item/拙政园', '拙政园 - 中国四大名园', '拙政园位于苏州市，是江南古典园林的代表作品', 'https://baidu.com/favicon.ico', 1);
 
 -- 九寨沟帖子(p11): VR360视频 + 2张图片
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, duration, width, height, vr_format, sort_order) VALUES
-('m23', 'p11', 'VIDEO', 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_5MB.mp4', 'https://picsum.photos/seed/jiuzhaigou/800/450', 180, 3840, 2160, 'VR360', 0);
+('m23', 'p11', 'VIDEO', 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_5MB.mp4', '/api/placeholder/jiuzhaigou?type=landscape', 180, 3840, 2160, 'VR360', 0);
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, width, height, sort_order) VALUES
-('m24', 'p11', 'IMAGE', 'https://picsum.photos/seed/jiuzhaigou2/800/600', 'https://picsum.photos/seed/jiuzhaigou2/400/300', 800, 600, 1),
-('m25', 'p11', 'IMAGE', 'https://picsum.photos/seed/jiuzhaigou3/800/600', 'https://picsum.photos/seed/jiuzhaigou3/400/300', 800, 600, 2);
+('m24', 'p11', 'IMAGE', '/api/placeholder/jiuzhaigou2?type=landscape', '/api/placeholder/jiuzhaigou2?type=landscape', 800, 600, 1),
+('m25', 'p11', 'IMAGE', '/api/placeholder/jiuzhaigou3?type=landscape', '/api/placeholder/jiuzhaigou3?type=landscape', 800, 600, 2);
 
 -- 布达拉宫帖子(p12): VR360视频 + 翻译
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, duration, width, height, vr_format, sort_order) VALUES
-('m26', 'p12', 'VIDEO', 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_5MB.mp4', 'https://picsum.photos/seed/potala/800/450', 240, 3840, 2160, 'VR360', 0);
+('m26', 'p12', 'VIDEO', 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_5MB.mp4', '/api/placeholder/potala?type=landscape', 240, 3840, 2160, 'VR360', 0);
 INSERT INTO media_items (id, post_id, type, language, translated_text, sort_order) VALUES
 ('m27', 'p12', 'TRANSLATION', 'en', 'The Potala Palace in Lhasa, Tibet, is a UNESCO World Heritage Site and was the winter palace of the Dalai Lamas.', 1);
 
 -- 敦煌帖子(p13): 3张图片
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, width, height, vr_format, sort_order) VALUES
-('m28', 'p13', 'IMAGE', 'https://picsum.photos/seed/dunhuang1/800/600', 'https://picsum.photos/seed/dunhuang1/400/300', 800, 600, 'VR360', 0),
-('m29', 'p13', 'IMAGE', 'https://picsum.photos/seed/dunhuang2/800/600', 'https://picsum.photos/seed/dunhuang2/400/300', 800, 600, 'VR360', 1),
-('m30', 'p13', 'IMAGE', 'https://picsum.photos/seed/dunhuang3/800/600', 'https://picsum.photos/seed/dunhuang3/400/300', 800, 600, 'VR360', 2);
+('m28', 'p13', 'IMAGE', '/api/placeholder/dunhuang1?type=landscape', '/api/placeholder/dunhuang1?type=landscape', 800, 600, 'VR360', 0),
+('m29', 'p13', 'IMAGE', '/api/placeholder/dunhuang2?type=landscape', '/api/placeholder/dunhuang2?type=landscape', 800, 600, 'VR360', 1),
+('m30', 'p13', 'IMAGE', '/api/placeholder/dunhuang3?type=landscape', '/api/placeholder/dunhuang3?type=landscape', 800, 600, 'VR360', 2);
 
 -- 鼓浪屿帖子(p14): 图片
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, width, height, sort_order) VALUES
-('m31', 'p14', 'IMAGE', 'https://picsum.photos/seed/gulangyu/800/600', 'https://picsum.photos/seed/gulangyu/400/300', 800, 600, 0);
+('m31', 'p14', 'IMAGE', '/api/placeholder/gulangyu?type=landscape', '/api/placeholder/gulangyu?type=landscape', 800, 600, 0);
 
 -- VR评测帖子(p15): 视频
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, duration, width, height, sort_order) VALUES
-('m32', 'p15', 'VIDEO', 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_5MB.mp4', 'https://picsum.photos/seed/vrreview/800/450', 600, 1920, 1080, 0);
+('m32', 'p15', 'VIDEO', 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_5MB.mp4', '/api/placeholder/vrreview?type=landscape', 600, 1920, 1080, 0);
 
 -- 乌镇帖子(p16): VR180视频 + 图片
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, duration, width, height, vr_format, sort_order) VALUES
-('m33', 'p16', 'VIDEO', 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_2MB.mp4', 'https://picsum.photos/seed/wuzhen/800/450', 120, 1920, 1080, 'VR180', 0);
+('m33', 'p16', 'VIDEO', 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_2MB.mp4', '/api/placeholder/wuzhen?type=landscape', 120, 1920, 1080, 'VR180', 0);
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, width, height, sort_order) VALUES
-('m34', 'p16', 'IMAGE', 'https://picsum.photos/seed/wuzhen2/800/600', 'https://picsum.photos/seed/wuzhen2/400/300', 800, 600, 1);
+('m34', 'p16', 'IMAGE', '/api/placeholder/wuzhen2?type=landscape', '/api/placeholder/wuzhen2?type=landscape', 800, 600, 1);
 
 -- 稻城亚丁帖子(p17): VR360视频 + 2张图片
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, duration, width, height, vr_format, sort_order) VALUES
-('m35', 'p17', 'VIDEO', 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_5MB.mp4', 'https://picsum.photos/seed/daocheng/800/450', 200, 3840, 2160, 'VR360', 0);
+('m35', 'p17', 'VIDEO', 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_5MB.mp4', '/api/placeholder/daocheng?type=landscape', 200, 3840, 2160, 'VR360', 0);
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, width, height, sort_order) VALUES
-('m36', 'p17', 'IMAGE', 'https://picsum.photos/seed/daocheng2/800/600', 'https://picsum.photos/seed/daocheng2/400/300', 800, 600, 1),
-('m37', 'p17', 'IMAGE', 'https://picsum.photos/seed/daocheng3/800/600', 'https://picsum.photos/seed/daocheng3/400/300', 800, 600, 2);
+('m36', 'p17', 'IMAGE', '/api/placeholder/daocheng2?type=landscape', '/api/placeholder/daocheng2?type=landscape', 800, 600, 1),
+('m37', 'p17', 'IMAGE', '/api/placeholder/daocheng3?type=landscape', '/api/placeholder/daocheng3?type=landscape', 800, 600, 2);
 
 -- 成都美食帖子(p18): 2张图片
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, width, height, sort_order) VALUES
-('m38', 'p18', 'IMAGE', 'https://picsum.photos/seed/chengdu1/800/600', 'https://picsum.photos/seed/chengdu1/400/300', 800, 600, 0),
-('m39', 'p18', 'IMAGE', 'https://picsum.photos/seed/chengdu2/800/600', 'https://picsum.photos/seed/chengdu2/400/300', 800, 600, 1);
+('m38', 'p18', 'IMAGE', '/api/placeholder/chengdu1?type=landscape', '/api/placeholder/chengdu1?type=landscape', 800, 600, 0),
+('m39', 'p18', 'IMAGE', '/api/placeholder/chengdu2?type=landscape', '/api/placeholder/chengdu2?type=landscape', 800, 600, 1);
 
 -- 雨崩村帖子(p19): VR360视频
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, duration, width, height, vr_format, sort_order) VALUES
-('m40', 'p19', 'VIDEO', 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_5MB.mp4', 'https://picsum.photos/seed/yubeng/800/450', 280, 3840, 2160, 'VR360', 0);
+('m40', 'p19', 'VIDEO', 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_5MB.mp4', '/api/placeholder/yubeng?type=landscape', 280, 3840, 2160, 'VR360', 0);
 
 -- 西安美食帖子(p20): 3张图片
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, width, height, sort_order) VALUES
-('m41', 'p20', 'IMAGE', 'https://picsum.photos/seed/xian1/800/600', 'https://picsum.photos/seed/xian1/400/300', 800, 600, 0),
-('m42', 'p20', 'IMAGE', 'https://picsum.photos/seed/xian2/800/600', 'https://picsum.photos/seed/xian2/400/300', 800, 600, 1),
-('m43', 'p20', 'IMAGE', 'https://picsum.photos/seed/xian3/800/600', 'https://picsum.photos/seed/xian3/400/300', 800, 600, 2);
+('m41', 'p20', 'IMAGE', '/api/placeholder/xian1?type=landscape', '/api/placeholder/xian1?type=landscape', 800, 600, 0),
+('m42', 'p20', 'IMAGE', '/api/placeholder/xian2?type=landscape', '/api/placeholder/xian2?type=landscape', 800, 600, 1),
+('m43', 'p20', 'IMAGE', '/api/placeholder/xian3?type=landscape', '/api/placeholder/xian3?type=landscape', 800, 600, 2);
 
 -- 大兴机场帖子(p21): VR360图片
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, width, height, vr_format, sort_order) VALUES
-('m44', 'p21', 'IMAGE', 'https://picsum.photos/seed/daxing/800/600', 'https://picsum.photos/seed/daxing/400/300', 800, 600, 'VR360', 0);
+('m44', 'p21', 'IMAGE', '/api/placeholder/daxing?type=landscape', '/api/placeholder/daxing?type=landscape', 800, 600, 'VR360', 0);
 
 -- 三亚潜水帖子(p22): 水下视频 + 2张图片
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, duration, width, height, vr_format, sort_order) VALUES
-('m45', 'p22', 'VIDEO', 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_5MB.mp4', 'https://picsum.photos/seed/sanya/800/450', 180, 3840, 2160, 'VR360', 0);
+('m45', 'p22', 'VIDEO', 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_5MB.mp4', '/api/placeholder/sanya?type=landscape', 180, 3840, 2160, 'VR360', 0);
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, width, height, sort_order) VALUES
-('m46', 'p22', 'IMAGE', 'https://picsum.photos/seed/sanya2/800/600', 'https://picsum.photos/seed/sanya2/400/300', 800, 600, 1),
-('m47', 'p22', 'IMAGE', 'https://picsum.photos/seed/sanya3/800/600', 'https://picsum.photos/seed/sanya3/400/300', 800, 600, 2);
+('m46', 'p22', 'IMAGE', '/api/placeholder/sanya2?type=landscape', '/api/placeholder/sanya2?type=landscape', 800, 600, 1),
+('m47', 'p22', 'IMAGE', '/api/placeholder/sanya3?type=landscape', '/api/placeholder/sanya3?type=landscape', 800, 600, 2);
 
 -- 兵马俑帖子(p23): VR360图片 + 链接
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, width, height, vr_format, sort_order) VALUES
-('m48', 'p23', 'IMAGE', 'https://picsum.photos/seed/bingmayong/800/600', 'https://picsum.photos/seed/bingmayong/400/300', 800, 600, 'VR360', 0);
+('m48', 'p23', 'IMAGE', '/api/placeholder/bingmayong?type=landscape', '/api/placeholder/bingmayong?type=landscape', 800, 600, 'VR360', 0);
 INSERT INTO media_items (id, post_id, type, link_url, link_title, link_description, link_favicon, sort_order) VALUES
 ('m49', 'p23', 'LINK', 'https://baike.baidu.com/item/秦始皇兵马俑', '秦始皇兵马俑 - 世界文化遗产', '兵马俑是第一批全国重点文物保护单位、第一批中国世界遗产', 'https://baidu.com/favicon.ico', 1);
 
 -- 滑雪帖子(p24): VR360视频
 INSERT INTO media_items (id, post_id, type, url, thumbnail_url, duration, width, height, vr_format, sort_order) VALUES
-('m50', 'p24', 'VIDEO', 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_5MB.mp4', 'https://picsum.photos/seed/skiing/800/450', 150, 3840, 2160, 'VR360', 0);
+('m50', 'p24', 'VIDEO', 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_5MB.mp4', '/api/placeholder/skiing?type=landscape', 150, 3840, 2160, 'VR360', 0);
 
 -- ============================================================
 -- 评论
@@ -639,9 +639,9 @@ INSERT INTO user_interests (id, user_id, tag_id) VALUES
 -- 社群
 -- ============================================================
 INSERT INTO communities (id, conversation_id, name, description, avatar_url, cover_url, rules, category, location_name, creator_id, member_count, is_public) VALUES
-('com1', 'conv3', 'VR旅行社区', '用VR镜头丈量世界，分享第一视角的旅行见闻、拍摄技巧与设备测评。', '/api/placeholder/community-vr-travel', 'https://picsum.photos/seed/com-vr-cover/1600/600', '1. 作品请标注拍摄设备与地点\n2. 友善交流，互相尊重\n3. 每周五为 VR 作品分享日', 'TRAVEL', '北京', 'u1', 6, 1),
-('com2', 'conv6', '户外探险社区', '一起征服山河湖海：徒步、登山、露营、潜水，安全第一。', '/api/placeholder/community-outdoor', 'https://picsum.photos/seed/com-outdoor-cover/1600/600', '1. 户外安全第一，禁止单独冒险\n2. 出行前检查装备清单\n3. 尊重自然，不留垃圾', 'OUTDOOR', '云南', 'u5', 5, 1),
-('com3', 'conv8', '美食社区', '用味蕾丈量世界，记录每一次探店打卡与美食之旅。', '/api/placeholder/community-food', 'https://picsum.photos/seed/com-food-cover/1600/600', '1. 发帖请附店名+地址+人均消费\n2. 每帖推荐至少 2 道菜\n3. 必须为亲身探店经历', 'FOOD', '长沙', 'u6', 5, 1);
+('com1', 'conv3', 'VR旅行社区', '用VR镜头丈量世界，分享第一视角的旅行见闻、拍摄技巧与设备测评。', '/api/placeholder/community-vr-travel', '/api/placeholder/com-vr-cover?type=landscape', '1. 作品请标注拍摄设备与地点\n2. 友善交流，互相尊重\n3. 每周五为 VR 作品分享日', 'TRAVEL', '北京', 'u1', 6, 1),
+('com2', 'conv6', '户外探险社区', '一起征服山河湖海：徒步、登山、露营、潜水，安全第一。', '/api/placeholder/community-outdoor', '/api/placeholder/com-outdoor-cover?type=landscape', '1. 户外安全第一，禁止单独冒险\n2. 出行前检查装备清单\n3. 尊重自然，不留垃圾', 'OUTDOOR', '云南', 'u5', 5, 1),
+('com3', 'conv8', '美食社区', '用味蕾丈量世界，记录每一次探店打卡与美食之旅。', '/api/placeholder/community-food', '/api/placeholder/com-food-cover?type=landscape', '1. 发帖请附店名+地址+人均消费\n2. 每帖推荐至少 2 道菜\n3. 必须为亲身探店经历', 'FOOD', '长沙', 'u6', 5, 1);
 
 INSERT INTO community_tags (id, community_id, tag_id) VALUES
 ('ct1', 'com1', 'tag-009'),

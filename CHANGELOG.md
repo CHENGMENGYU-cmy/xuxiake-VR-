@@ -2,6 +2,17 @@
 
 > 记录项目重要变更，最多保留最近 30 条。
 
+## 第15条（2026-08-24）
+
+- **位置**：新增 `server/src/modules/placeholder/placeholder.controller.ts`（动态SVG占位图端点）；修改 `server/src/app.module.ts`、`web/next.config.ts`；新增 `server/sql/migrate-local-placeholder-urls.sql`；新增 `server/scripts/localize-image-urls.js`；修改 `server/sql/seed.sql`、`server/sql/seed-log-diary-travelogue.sql`
+- **原因**：环境无法访问外部图片服务（dicebear.com/unsplash.com/picsum.photos 均 ERR_CONNECTION_CLOSED），导致头像、素材库图片、帖子图片、社群封面全部加载失败
+- **内容**：
+  1. **动态占位图端点** `GET /api/placeholder/:seed`：按 seed 哈希确定性生成 SVG（8组渐变配色），支持 `?type=landscape`（山峦剪影风景图）和 `?type=avatar`（圆角渐变+首字）；改占位图风格只需改该控制器一处
+  2. **数据库URL本地化**：迁移脚本将所有外部 URL 替换为本地占位端点——用户头像→`/api/placeholder/{username}`、社群头像/封面→`/api/placeholder/community-{seed}`、SNAPSHOT素材图→`/api/placeholder/{地点}?type=landscape`、media_items 的 picsum 图片/缩略图→占位图、test-videos 视频→占位
+  3. **前端代理**：next.config.ts 新增 `/api/placeholder/:path*` 转发到后端，浏览器加载本地占位图
+  4. **可维护性**：`server/scripts/localize-image-urls.js` 可重复执行，未来新增种子数据后再次运行即可统一替换；seed.sql 和 seed-log-diary-travelogue.sql 已更新为本地URL（重新播种离线可用）
+- **效果**：全部图片不再依赖外部网络，头像/素材库/帖子/社群封面正常显示本地动态占位图；真实上传图片后只需替换数据库字段即可覆盖占位图
+
 ## 第14条（2026-08-24）
 
 - **位置**：修改 `web/src/app/(main)/feed/page.tsx`、`web/src/components/feed/feed-list.tsx`、`web/src/stores/post-store.ts`、`web/src/lib/post-api.ts`；修改 `server/src/modules/posts/posts.controller.ts`、`server/src/modules/posts/posts.service.ts`；新增 `server/sql/migrate-snapshot-images.sql`；修改 `server/src/entities/media-item.entity.ts`、`server/src/modules/sync/sync.service.ts`；新增 `server/sql/migrate-text-note.sql`；修改 `server/src/modules/users/users.controller.ts`；修改 `web/src/app/(main)/settings/components/privacy-tab.tsx`；修改 `web/src/app/(main)/communities/[id]/settings/page.tsx`、`web/src/app/(main)/discover/page.tsx`；修改多个 `web/e2e/*.spec.ts` 测试文件

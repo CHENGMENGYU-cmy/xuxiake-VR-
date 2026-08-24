@@ -29,3 +29,18 @@ SET vr_metadata = JSON_SET(
 )
 WHERE content_level = 'SNAPSHOT'
   AND vr_metadata LIKE '%unsplash%';
+
+-- 5. media_items 图片/缩略图：https://picsum.photos/seed/{seed}/{w}/{h} → /api/placeholder/{seed}?type=landscape
+UPDATE media_items
+SET url = CONCAT('/api/placeholder/', SUBSTRING_INDEX(SUBSTRING_INDEX(url, '/seed/', -1), '/', 1), '?type=landscape')
+WHERE url LIKE 'https://picsum.photos/seed/%';
+
+UPDATE media_items
+SET thumbnail_url = CONCAT('/api/placeholder/', SUBSTRING_INDEX(SUBSTRING_INDEX(thumbnail_url, '/seed/', -1), '/', 1), '?type=landscape')
+WHERE thumbnail_url LIKE 'https://picsum.photos/seed/%';
+
+-- 6. 测试视频源不可用，替换为占位
+UPDATE media_items
+SET url = '/api/placeholder/video-placeholder?type=landscape',
+    thumbnail_url = '/api/placeholder/video-placeholder?type=landscape'
+WHERE url LIKE 'https://test-videos.co.uk/%';
