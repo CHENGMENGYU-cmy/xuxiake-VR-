@@ -11,6 +11,7 @@ import { FeedController } from './modules/feed/feed.controller.js';
 import { UploadController } from './modules/upload/upload.controller.js';
 import { UsersController } from './modules/users/users.controller.js';
 import { SocialController } from './modules/social/social.controller.js';
+import { PlaceholderController } from './modules/placeholder/placeholder.controller.js';
 import { SocialService } from './modules/social/social.service.js';
 import { StorageService } from './common/storage.service.js';
 import { AiClientService } from './common/ai-client.service.js';
