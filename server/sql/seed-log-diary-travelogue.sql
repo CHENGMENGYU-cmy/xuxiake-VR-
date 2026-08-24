@@ -67,7 +67,7 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
 (@snapId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年8月3日，杭州西湖断桥。测试新VR相机的空间视频拍摄能力。拍摄参数：4K/60fps，VR180模式，白平衡自动，ISO 100-800。拍摄对象：断桥、白堤、雷峰塔远景、湖面倒影、游客动态。设备温度正常，未出现过热警告。视频文件共28GB。下午在湖滨路咖啡馆对比了前三代设备的画质表现，暗部细节提升明显。',
  NULL, '杭州西湖断桥',
- '{"keywords":["VR相机","测评","西湖","空间视频","画质对比"],"weather":"多云转晴","activity":"设备测评","companion":"独自"}',
+ '{"keywords":["VR相机","测评","西湖","空间视频","画质对比"],"weather":"多云转晴","activity":"设备测评","companion":"独自","image":"/api/placeholder/杭州西湖断桥?type=landscape"}',
  'PRIVATE', 0, 0, 0, '2026-08-03 19:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
