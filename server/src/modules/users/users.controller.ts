@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Put, Delete, Param, Query, Headers, Body } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Query, Headers, Body, Res } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In } from 'typeorm';
-import { NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { NotFoundException, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import type { Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from '../../entities/user.entity.js';
 import { UserFollow } from '../../entities/user-follow.entity.js';
