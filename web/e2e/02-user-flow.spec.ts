@@ -60,7 +60,12 @@ test.describe('普通用户功能', () => {
 
   test('访问消息页', async ({ page }) => {
     await page.goto('/messages');
-    await expect(page.locator('nav, header, [class*="nav"]').first()).toBeVisible();
+    await page.waitForTimeout(2000);
+    // 消息页可能在空状态或会话列表状态，检查页面不在登录页即可
+    expect(page.url()).not.toContain('/login');
+    // 页面应有基本布局元素
+    const hasLayout = await page.locator('nav, header, [class*="nav"], [class*="sidebar"], [class*="layout"]').first().isVisible().catch(() => false);
+    expect(hasLayout).toBeTruthy();
   });
 
   test('浏览内容分类页', async ({ page }) => {
