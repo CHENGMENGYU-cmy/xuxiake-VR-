@@ -179,7 +179,7 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
 (@snapId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年7月30日，苏州拙政园+留园。考察目的：研究古典园林的空间叙事手法对VR空间设计的启发。拙政园：游览3小时，测绘主要观景点12处，重点记录"借景"手法——北寺塔的框景、远香堂的对景。留园：游览2小时，重点记录"步移景异"的动线设计——每走几步就有新的构图出现。拍摄VR360参考素材86组。天气：阴有小雨，反而增加了园林的意境。',
  NULL, '苏州拙政园/留园',
- '{"keywords":["苏州园林","拙政园","留园","空间设计","建筑考察"],"weather":"阴雨","activity":"建筑考察","companion":"独自"}',
+ '{"keywords":["苏州园林","拙政园","留园","空间设计","建筑考察"],"weather":"阴雨","activity":"建筑考察","companion":"独自","image":"/api/placeholder/苏州拙政园-留园?type=landscape"}',
  'PRIVATE', 0, 0, 0, '2026-07-30 19:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
