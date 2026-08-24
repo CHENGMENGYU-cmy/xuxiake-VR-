@@ -266,7 +266,7 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
 (@snapId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年7月27日，亚布力滑雪场（夏季旱雪道）。训练内容：高级道技巧练习——大回转+小回转+急停。天气：晴，28°C。训练时间3小时。使用装备：Atomic Redster S9滑雪板+Atomic Hawx Ultra 130雪鞋。VR拍摄：头盔GoPro Max拍摄第一视角VR素材共45分钟，完整记录了高级道全程。滑行数据：最高时速72km/h，共完成12趟。',
  NULL, '亚布力滑雪场',
- '{"keywords":["滑雪","亚布力","高级道","训练","VR第一视角"],"weather":"晴","activity":"滑雪训练","speed":"72km/h","companion":"独自"}',
+ '{"keywords":["滑雪","亚布力","高级道","训练","VR第一视角"],"weather":"晴","activity":"滑雪训练","speed":"72km/h","companion":"独自","image":"/api/placeholder/亚布力滑雪场?type=landscape"}',
  'PRIVATE', 0, 0, 0, '2026-07-27 17:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
