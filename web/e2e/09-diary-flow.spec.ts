@@ -7,6 +7,7 @@ import { loginAsUser } from './auth.helper';
  */
 test.describe('素材库多选日记流转', () => {
   test('多选 → 批量编辑 → 存草稿 → 草稿箱 → 发布 全链路', async ({ page }) => {
+    test.setTimeout(180000); // AI 生成需要较长时间
     await loginAsUser(page);
 
     // 0. 先通过 API 同步 3 条闪拍素材（确保有"今天"的数据）
