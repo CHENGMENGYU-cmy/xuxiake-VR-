@@ -410,3 +410,133 @@ export function PrivacyTab({
     </div>
   );
 }
+
+function DataManagementSection() {
+  const { logout } = useAuthStore();
+  const [exporting, setExporting] = useState(false);
+  const [showDeactivateDialog, setShowDeactivateDialog] = useState(false);
+  const [confirmText, setConfirmText] = useState('');
+  const [reason, setReason] = useState('');
+  const [deactivating, setDeactivating] = useState(false);
+
+  const handleExportData = async () => {
+    setExporting(true);
+    try {
+      const res = await apiClient.get('/users/export-data', { responseType: 'blob' });
+      const blob = new Blob([res.data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `xuxiake-data-${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast.success('数据导出成功');
+    } catch {
+      toast.error('导出失败，请稍后重试');
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  const handleDeactivate = async () => {
+    if (confirmText !== '确认注销') {
+      toast.error('请输入"确认注销"');
+      return;
+    }
+    setDeactivating(true);
+    try {
+      await apiClient.post('/users/deactivate', { confirmText, reason: reason || undefined });
+      toast.success('账号已注销。30天冷静期内可联系管理员恢复。');
+      setShowDeactivateDialog(false);
+      logout();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || '注销失败');
+    } finally {
+      setDeactivating(false);
+    }
+  };
+
+  return (
+    <>
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <Download className="h-5 w-5 text-blue-500" />
+            数据管理
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div className="flex items-center justify-between rounded-lg border border-border p-3">
+            <div className="text-left">
+              <p className="text-sm font-medium">导出我的数据</p>
+              <p className="text-xs text-muted-foreground">下载你的帖子、日记、游记等个人数据（JSON格式）</p>
+            </div>
+            <Button variant="outline" size="sm" onClick={handleExportData} disabled={exporting} className="gap-1">
+              {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+              导出
+            </Button>
+          </div>
+          <div className="flex items-center justify-between rounded-lg border border-destructive/30 p-3">
+            <div className="text-left">
+              <p className="text-sm font-medium text-destructive">注销账号</p>
+              <p className="text-xs text-muted-foreground">永久注销账号，30天冷静期内可恢复</p>
+            </div>
+            <Button variant="destructive" size="sm" onClick={() => setShowDeactivateDialog(true)} className="gap-1">
+              <UserX className="h-4 w-4" />
+              注销
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Dialog open={showDeactivateDialog} onOpenChange={setShowDeactivateDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-destructive">
+              <AlertCircle className="h-5 w-5" />
+              注销账号
+            </DialogTitle>
+            <DialogDescription>
+              此操作将注销你的账号并隐藏所有内容。30天冷静期内可联系管理员恢复。
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
+              注销后你的个人资料和帖子将对其他用户不可见。请谨慎操作。
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">注销原因（可选）</label>
+              <Input
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+                placeholder="请告诉我们注销原因..."
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">确认注销</label>
+              <Input
+                value={confirmText}
+                onChange={(e) => setConfirmText(e.target.value)}
+                placeholder='请输入"确认注销"'
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <DialogClose render={<Button variant="outline" />}>取消</Button>
+            <Button
+              variant="destructive"
+              onClick={handleDeactivate}
+              disabled={deactivating || confirmText !== '确认注销'}
+            >
+              {deactivating ? (
+                <><Loader2 className="mr-2 h-4 w-4 animate-spin" />处理中...</>
+              ) : (
+                '确认注销'
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
