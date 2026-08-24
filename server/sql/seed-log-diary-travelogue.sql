@@ -96,7 +96,7 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
 (@snapId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年8月2日，稻城亚丁景区。徒步路线：游客中心→冲古寺→洛绒牛场→牛奶海→五色海，全程18公里，海拔从3900米爬升到4700米。用时8.5小时。天气：上午晴，午后转多云，14:00开始下小雨。三神山（仙乃日、央迈勇、夏诺多吉）均有可见。牛奶海水色碧蓝，五色海因光线不足色彩不太明显。高反轻微，服用了红景天。',
  NULL, '稻城亚丁景区',
- '{"keywords":["稻城亚丁","徒步","高海拔","三神山","牛奶海"],"weather":"晴转小雨","activity":"高海拔徒步","companion":"独自"}',
+ '{"keywords":["稻城亚丁","徒步","高海拔","三神山","牛奶海"],"weather":"晴转小雨","activity":"高海拔徒步","companion":"独自","image":"/api/placeholder/稻城亚丁景区?type=landscape"}',
  'PRIVATE', 0, 0, 0, '2026-08-02 21:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
