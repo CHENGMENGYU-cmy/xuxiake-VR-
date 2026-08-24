@@ -17,15 +17,17 @@ interface FeedListProps {
   tagId?: string;
   followingOnly?: boolean;
   excludeContentLevel?: string;
+  contentLevel?: string;
+  excludeContentLevels?: string[];
 }
 
-export function FeedList({ showComposer = true, sort = 'latest', postType, tagId, followingOnly, excludeContentLevel }: FeedListProps) {
+export function FeedList({ showComposer = true, sort = 'latest', postType, tagId, followingOnly, excludeContentLevel, contentLevel, excludeContentLevels }: FeedListProps) {
   const { posts = [], isLoading, isLoadingMore, hasMore, fetchPosts, loadMore } = usePostStore();
 
   // sort 或 filter 变化时重新获取数据
   useEffect(() => {
-    fetchPosts(sort, { postType, tagId, followingOnly, excludeContentLevel });
-  }, [sort, postType, tagId, followingOnly, excludeContentLevel, fetchPosts]);
+    fetchPosts(sort, { postType, tagId, followingOnly, excludeContentLevel, contentLevel, excludeContentLevels });
+  }, [sort, postType, tagId, followingOnly, excludeContentLevel, contentLevel, excludeContentLevels, fetchPosts]);
 
   // 从详情页返回时恢复滚动位置
   useEffect(() => {
