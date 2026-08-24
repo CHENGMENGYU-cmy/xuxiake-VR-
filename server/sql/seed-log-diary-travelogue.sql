@@ -208,7 +208,7 @@ INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, cont
 (@snapId, @userId, 'NOTE', 'SNAPSHOT', NULL,
  '2026年7月29日，三亚蜈支洲岛。潜水日志：第一潜9:30，潜点"情人桥"，水深18米，水温27°C，能见度15米，潜水时间42分钟。第二潜11:45，潜点"珊瑚花园"，水深22米，水温26°C，能见度12米，潜水时间38分钟。观察到：鹿角珊瑚群、小丑鱼、海龟1只、鳐鱼2条。水下VR拍摄设备：防水壳+Insta360 X4，共拍摄水下VR素材32分钟。',
  NULL, '三亚蜈支洲岛',
- '{"keywords":["潜水","蜈支洲岛","珊瑚","水下摄影","VR"],"weather":"晴","water_temp":"27°C","visibility":"15米","activity":"潜水"}',
+ '{"keywords":["潜水","蜈支洲岛","珊瑚","水下摄影","VR"],"weather":"晴","water_temp":"27°C","visibility":"15米","activity":"潜水","image":"/api/placeholder/三亚蜈支洲岛?type=landscape"}',
  'PRIVATE', 0, 0, 0, '2026-07-29 18:00:00');
 
 INSERT INTO posts (id, author_id, post_type, content_level, parent_post_id, content, title, location_name, vr_metadata, visibility, like_count, comment_count, view_count, created_at) VALUES
