@@ -350,8 +350,19 @@ export function PostCard({ post, onLikeChange, onDelete }: PostCardProps) {
       )}
 
       {/* 媒体内容 */}
-      {post.mediaItems.length > 0 && (
+      {post.mediaItems.length > 0 ? (
         <MediaViewer items={post.mediaItems} />
+      ) : (
+        // 没有mediaItems时，fallback到vrMetadata.image
+        post.vrMetadata?.image && (
+          <div className="px-4 pb-3">
+            <img
+              src={post.vrMetadata.image}
+              alt="内容图片"
+              className="w-full h-auto rounded-lg object-cover"
+            />
+          </div>
+        )
       )}
 
       {/* 互动数据行 */}
