@@ -38,11 +38,17 @@ function AvatarImage({ className, src, ...props }: AvatarPrimitive.Image.Props) 
   }, []);
 
   // 当 src 有值时，预加载图片以检测实际可用性
+  // 但对 SVG（特别是动态占位图）跳过检测，因为 next/image 对 SVG 支持有限
   React.useEffect(() => {
     if (!src) return;
+    const srcStr = typeof src === 'string' ? src : '';
+    // 跳过 SVG 和占位图的预加载检测
+    if (srcStr.endsWith('.svg') || srcStr.includes('/api/placeholder/')) {
+      return;
+    }
     const img = new window.Image();
     img.onerror = handleError;
-    img.src = typeof src === 'string' ? src : '';
+    img.src = srcStr;
     // 如果图片已缓存但无效（naturalWidth === 0），也需要触发 fallback
     if (img.complete && img.naturalWidth === 0) {
       handleError();
