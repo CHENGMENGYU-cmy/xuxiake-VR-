@@ -32,13 +32,13 @@ function AvatarImage({ className, src, alt, ...props }: AvatarPrimitive.Image.Pr
     setHasError(false);
   }, [src]);
 
-  // 如果 src 不存在或加载失败，不渲染 img（让 fallback 显示）
+  // 如果 src 不存在或加载失败，不渲染（让 fallback 显示）
   if (!src || hasError) {
     return null;
   }
 
   return (
-    <img
+    <AvatarPrimitive.Image
       data-slot="avatar-image"
       src={typeof src === 'string' ? src : ''}
       alt={typeof alt === 'string' ? alt : ''}
@@ -47,6 +47,7 @@ function AvatarImage({ className, src, alt, ...props }: AvatarPrimitive.Image.Pr
         className
       )}
       onError={() => setHasError(true)}
+      {...props}
     />
   );
 }

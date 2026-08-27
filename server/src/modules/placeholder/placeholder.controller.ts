@@ -1,5 +1,8 @@
 import { Controller, Get, Param, Query, Res, Header } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import type { Response } from 'express';
+import { Post } from '../../entities/post.entity.js';
 
 /**
  * 动态占位图端点：根据 seed 确定性生成 SVG 渐变图。
@@ -8,6 +11,9 @@ import type { Response } from 'express';
  */
 @Controller('api/placeholder')
 export class PlaceholderController {
+  constructor(
+    @InjectRepository(Post) private readonly postRepo: Repository<Post>,
+  ) {}
   // 预置渐变色板（按 seed 哈希取一组，保证同一 seed 颜色稳定）
   private readonly PALETTES = [
     { from: '#f97316', to: '#f43f5e' }, // 橙红
@@ -43,9 +49,30 @@ export class PlaceholderController {
   ) {
     type = type || 'avatar';
     const { from, to } = this.pickPalette(seed);
-    const label = text || seed.charAt(0).toUpperCase();
-    // 展示用的文字：优先用传入 text，否则取 seed 前 4 个字符
-    const displayText = text ? text.slice(0, 8) : seed.slice(0, 8);
+
+    let label = text || seed.charAt(0).toUpperCase();
+    let displayText = text ? text.slice(0, 8) : seed.slice(0, 8);
+
+    // 如果是 snap-{postId} 格式，查询数据库获取地点名称
+    if (seed.startsWith('snap-')) {
+      const postId = seed.substring(5); // 去掉 'snap-' 前缀
+      try {
+        const post = await this.postRepo.findOne({
+          where: { id: postId },
+          select: { id: true, locationName: true, content: true },
+        });
+        if (post?.locationName) {
+          label = post.locationName;
+          displayText = post.locationName;
+        } else if (post?.content) {
+          // 如果没有地点名称，使用内容的前 8 个字符
+          label = post.content.slice(0, 8);
+          displayText = post.content.slice(0, 8);
+        }
+      } catch (e) {
+        // 查询失败时使用默认值
+      }
+    }
 
     let svg: string;
     if (type === 'landscape') {
