@@ -25,48 +25,30 @@ function Avatar({
   )
 }
 
-function AvatarImage({ className, src, ...props }: AvatarPrimitive.Image.Props) {
-  const [imgSrc, setImgSrc] = React.useState(src);
+function AvatarImage({ className, src, alt, ...props }: AvatarPrimitive.Image.Props) {
+  const [hasError, setHasError] = React.useState(false);
 
   React.useEffect(() => {
-    setImgSrc(src);
+    setHasError(false);
   }, [src]);
 
-  // 当图片加载失败时，清除 src 以触发 fallback 显示
-  const handleError = React.useCallback(() => {
-    setImgSrc(undefined);
-  }, []);
-
-  // 当 src 有值时，预加载图片以检测实际可用性
-  // 但对 SVG（特别是动态占位图）跳过检测，因为 next/image 对 SVG 支持有限
-  React.useEffect(() => {
-    if (!src) return;
-    const srcStr = typeof src === 'string' ? src : '';
-    // 跳过 SVG 和占位图的预加载检测
-    if (srcStr.endsWith('.svg') || srcStr.includes('/api/placeholder/')) {
-      return;
-    }
-    const img = new window.Image();
-    img.onerror = handleError;
-    img.src = srcStr;
-    // 如果图片已缓存但无效（naturalWidth === 0），也需要触发 fallback
-    if (img.complete && img.naturalWidth === 0) {
-      handleError();
-    }
-    return () => { img.onerror = null; };
-  }, [src, handleError]);
+  // 如果 src 不存在或加载失败，不渲染 img（让 fallback 显示）
+  if (!src || hasError) {
+    return null;
+  }
 
   return (
-    <AvatarPrimitive.Image
+    <img
       data-slot="avatar-image"
-      src={imgSrc}
+      src={typeof src === 'string' ? src : ''}
+      alt={typeof alt === 'string' ? alt : ''}
       className={cn(
         "aspect-square size-full rounded-full object-cover",
         className
       )}
-      {...props}
+      onError={() => setHasError(true)}
     />
-  )
+  );
 }
 
 function AvatarFallback({
