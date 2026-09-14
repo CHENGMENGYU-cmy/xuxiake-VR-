@@ -103,14 +103,15 @@ function SettingsContent() {
     } catch { toast.error('操作失败'); }
   };
 
-  const isAdmin = community && user && community.creator?.id === user.id;
+  const isCreator = !!(community && user && community.creator?.id === user.id);
+  const isAdmin = isCreator || !!community?.isAdmin;
 
   if (loading) {
     return <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin" /></div>;
   }
 
   if (!isAdmin) {
-    return <div className="py-16 text-center text-muted-foreground">仅社群创建者可管理设置</div>;
+    return <div className="py-16 text-center text-muted-foreground">仅社群创建者或管理员可管理设置</div>;
   }
 
   return (
@@ -165,9 +166,9 @@ function SettingsContent() {
             </div>
             <Separator />
             <div className="flex justify-between">
-              <Button variant="destructive" size="sm" onClick={handleDissolve} className="gap-1">
+              {isCreator && <Button variant="destructive" size="sm" onClick={handleDissolve} className="gap-1">
                 <Trash2 className="h-4 w-4" /> 解散社群
-              </Button>
+              </Button>}
               <Button onClick={handleSave} disabled={saving || !name.trim()} className="gap-1">
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                 保存设置
@@ -177,6 +178,7 @@ function SettingsContent() {
         </TabsContent>
 
         <TabsContent value="members" className="space-y-3 mt-4">
+          {!isCreator && <p className="text-sm text-muted-foreground">角色由创建者分配；移除成员请前往社群成员页面。</p>}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Users className="h-4 w-4" />
@@ -204,6 +206,8 @@ function SettingsContent() {
                     </div>
                     <div className="flex items-center gap-2">
                       <select
+                        aria-label={`${member.displayName}的社群角色`}
+                        disabled={!isCreator}
                         className="text-xs border rounded px-2 py-1"
                         value={memberRole?.role || 'MEMBER'}
                         onChange={async (e) => {

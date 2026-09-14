@@ -17,7 +17,7 @@ test.describe('权限边界测试', () => {
     }
     // 最终 URL 不应在 admin 页面，或者在 admin 页面但显示了空/拒绝内容
     const isRedirected = !page.url().includes('/admin/dashboard');
-    const hasNoAccess = await page.getByText('无权', '没有权限').isVisible().catch(() => false);
+    const hasNoAccess = await page.getByText(/无权|没有权限/).first().isVisible().catch(() => false);
     expect(isRedirected || hasNoAccess).toBeTruthy();
   });
 
@@ -27,7 +27,7 @@ test.describe('权限边界测试', () => {
       await page.waitForURL((url) => !url.pathname.includes('/admin/users'), { timeout: 8000 });
     } catch {}
     const isRedirected = !page.url().includes('/admin/users');
-    const hasNoAccess = await page.getByText('无权', '没有权限').isVisible().catch(() => false);
+    const hasNoAccess = await page.getByText(/无权|没有权限/).first().isVisible().catch(() => false);
     expect(isRedirected || hasNoAccess).toBeTruthy();
   });
 
@@ -37,7 +37,7 @@ test.describe('权限边界测试', () => {
       await page.waitForURL((url) => !url.pathname.includes('/admin/reviews'), { timeout: 8000 });
     } catch {}
     const isRedirected = !page.url().includes('/admin/reviews');
-    const hasNoAccess = await page.getByText('无权', '没有权限').isVisible().catch(() => false);
+    const hasNoAccess = await page.getByText(/无权|没有权限/).first().isVisible().catch(() => false);
     expect(isRedirected || hasNoAccess).toBeTruthy();
   });
 
@@ -47,7 +47,7 @@ test.describe('权限边界测试', () => {
       await page.waitForURL((url) => !url.pathname.includes('/admin/reports'), { timeout: 8000 });
     } catch {}
     const isRedirected = !page.url().includes('/admin/reports');
-    const hasNoAccess = await page.getByText('无权', '没有权限').isVisible().catch(() => false);
+    const hasNoAccess = await page.getByText(/无权|没有权限/).first().isVisible().catch(() => false);
     expect(isRedirected || hasNoAccess).toBeTruthy();
   });
 });

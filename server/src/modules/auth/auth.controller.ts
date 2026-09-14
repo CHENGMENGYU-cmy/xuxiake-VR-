@@ -66,8 +66,7 @@ export class AuthController {
   @Get('me')
   async me(@Headers('authorization') auth: string) {
     const token = auth?.replace('Bearer ', '');
-    const userId = this.authService.validateAccessToken(token || '');
-    if (!userId) throw new UnauthorizedException('未登录或 token 已过期');
+    const userId = await this.authService.requireActiveAccessToken(token || '', '未登录或 token 已过期');
     const user = await this.authService.getProfile(userId);
     if (!user) throw new UnauthorizedException('用户不存在');
     return { success: true, data: user };

@@ -34,8 +34,8 @@ export class CaptchaService {
   }
 
   validate(key: string, answer: string): boolean {
-    // E2E 测试绕过：开发环境下接受固定验证码
-    if (answer === 'TEST1234') return true;
+    const allowTestCaptcha = process.env.NODE_ENV !== 'production' && process.env.ALLOW_TEST_CAPTCHA !== 'false';
+    if (allowTestCaptcha && answer === 'TEST1234') return true;
     const entry = this.store.get(key);
     if (!entry) return false;
     // 验证后立即删除，防止重复使用

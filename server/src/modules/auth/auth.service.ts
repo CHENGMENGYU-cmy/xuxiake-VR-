@@ -6,6 +6,7 @@ import * as bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from '../../entities/user.entity.js';
 import { LoginDto, LoginSmsDto, RegisterDto, RegisterPhoneDto, ChangePasswordDto, TokenPair } from '../../common/interfaces.js';
+import { getTokenSubject } from '../../common/auth-token.js';
 import { CaptchaService } from './captcha.service.js';
 import { SmsService } from './sms.service.js';
 
@@ -26,11 +27,19 @@ export class AuthService {
     return first + rest;
   }
 
+  private assertActiveUser(user: User) {
+    if (user.status === 'BANNED') {
+      throw new UnauthorizedException('您的账号已被封禁，请联系管理员');
+    }
+    if (user.status === 'DEACTIVATED') {
+      throw new UnauthorizedException('账号已注销。冷静期内可联系管理员恢复账号。');
+    }
+  }
+
   private generateTokens(userId: string): TokenPair {
-    const payload = { sub: userId };
     return {
-      accessToken: this.jwtService.sign(payload),
-      refreshToken: this.jwtService.sign(payload, { expiresIn: '7d' }),
+      accessToken: this.jwtService.sign({ sub: userId, tokenType: 'access' }),
+      refreshToken: this.jwtService.sign({ sub: userId, tokenType: 'refresh' }, { expiresIn: '7d' }),
     };
   }
 
@@ -59,10 +68,7 @@ export class AuthService {
       throw new UnauthorizedException('密码错误');
     }
 
-    // 检查用户是否被封禁
-    if (user.status === 'BANNED') {
-      throw new UnauthorizedException('您的账号已被封禁，请联系管理员');
-    }
+    this.assertActiveUser(user);
 
     const tokens = this.generateTokens(user.id);
     const { passwordHash, ...userDto } = user;
@@ -134,10 +140,7 @@ export class AuthService {
       throw new UnauthorizedException('该手机号未注册');
     }
 
-    // 检查用户是否被封禁
-    if (user.status === 'BANNED') {
-      throw new UnauthorizedException('您的账号已被封禁，请联系管理员');
-    }
+    this.assertActiveUser(user);
 
     const tokens = this.generateTokens(user.id);
     const { passwordHash, ...userDto } = user;
@@ -212,7 +215,7 @@ export class AuthService {
   async getProfile(userId: string) {
     const user = await this.userRepo.findOne({ where: { id: userId } });
     if (!user) return null;
-    if (user.status === 'BANNED') throw new UnauthorizedException('您的账号已被封禁，如有疑问请联系管理员');
+    this.assertActiveUser(user);
     const { passwordHash, ...userDto } = user;
     return {
       ...userDto,
@@ -234,6 +237,7 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException('用户不存在');
     }
+    this.assertActiveUser(user);
 
     if (!user.passwordHash) {
       throw new BadRequestException('该账号未设置密码');
@@ -258,20 +262,26 @@ export class AuthService {
   }
 
   async refreshToken(refreshToken: string): Promise<TokenPair> {
-    try {
-      const payload = this.jwtService.verify(refreshToken);
-      return this.generateTokens(payload.sub);
-    } catch {
+    const userId = getTokenSubject(this.jwtService, refreshToken, 'refresh');
+    if (!userId) {
       throw new UnauthorizedException('无效的 refresh token');
     }
+    const user = await this.userRepo.findOne({ where: { id: userId } });
+    if (!user) throw new UnauthorizedException('用户不存在');
+    this.assertActiveUser(user);
+    return this.generateTokens(user.id);
   }
 
   validateAccessToken(token: string): string | null {
-    try {
-      const payload = this.jwtService.verify(token);
-      return payload.sub;
-    } catch {
-      return null;
-    }
+    return getTokenSubject(this.jwtService, token, 'access');
+  }
+
+  async requireActiveAccessToken(token: string, message = '请先登录'): Promise<string> {
+    const userId = this.validateAccessToken(token);
+    if (!userId) throw new UnauthorizedException(message);
+    const user = await this.userRepo.findOne({ where: { id: userId } });
+    if (!user) throw new UnauthorizedException('用户不存在');
+    this.assertActiveUser(user);
+    return user.id;
   }
 }

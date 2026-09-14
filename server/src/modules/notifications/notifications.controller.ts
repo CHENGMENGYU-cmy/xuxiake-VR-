@@ -7,6 +7,7 @@ import { Repository, In } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Notification } from '../../entities/notification.entity.js';
 import { User } from '../../entities/user.entity.js';
+import { getTokenSubject } from '../../common/auth-token.js';
 
 const notificationSubjects = new Map<string, Subject<any>>();
 
@@ -21,11 +22,11 @@ export class NotificationsController {
   private getUserId(auth?: string): string {
     const token = auth?.replace('Bearer ', '') || null;
     if (!token) throw new UnauthorizedException('请先登录');
-    try {
-      return this.jwtService.verify(token).sub;
-    } catch {
+    const userId = getTokenSubject(this.jwtService, token, 'access');
+    if (!userId) {
       throw new UnauthorizedException('Token 已过期或无效');
     }
+    return userId;
   }
 
   @Get('notifications')
@@ -78,10 +79,8 @@ export class NotificationsController {
 
   @Sse('sse/notifications')
   sseNotifications(@Query('token') token: string): Observable<MessageEvent> {
-    let userId: string;
-    try {
-      userId = this.jwtService.verify(token || '').sub;
-    } catch {
+    const userId = getTokenSubject(this.jwtService, token || '', 'access');
+    if (!userId) {
       throw new UnauthorizedException('无效 token');
     }
 

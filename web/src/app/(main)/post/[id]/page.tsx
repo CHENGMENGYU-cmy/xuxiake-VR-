@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { PostCard } from '@/components/post/post-card';
@@ -32,6 +32,7 @@ function PostDetailContent({ postId }: { postId: string }) {
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
   const [commentCount, setCommentCount] = useState(0);
+  const commentsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!postId) return;
@@ -68,12 +69,25 @@ function PostDetailContent({ postId }: { postId: string }) {
   return (
     <div className="mx-auto max-w-2xl space-y-4">
       <BackButton />
-      <PostCard post={post} />
-      <CommentSection
-        postId={postId}
-        initialCount={commentCount}
-        onCountChange={(delta) => setCommentCount((prev) => prev + delta)}
+      <PostCard
+        post={post}
+        contentMode="full"
+        showInlineComments={false}
+        commentCountOverride={commentCount}
+        onCommentClick={() => {
+          commentsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          window.setTimeout(() => {
+            commentsRef.current?.querySelector('textarea')?.focus();
+          }, 250);
+        }}
       />
+      <div ref={commentsRef} id="comments">
+        <CommentSection
+          postId={postId}
+          initialCount={commentCount}
+          onCountChange={(delta) => setCommentCount((prev) => prev + delta)}
+        />
+      </div>
     </div>
   );
 }

@@ -123,6 +123,11 @@ export async function getUserCommunities(): Promise<Community[]> {
   return data.data;
 }
 
+export async function searchUsers(keyword: string, limit = 20): Promise<User[]> {
+  const { data } = await apiClient.get('/users/search', { params: { q: keyword, limit } });
+  return data.data ?? [];
+}
+
 // ==================== 关注 ====================
 
 export async function followUser(userId: string): Promise<void> {

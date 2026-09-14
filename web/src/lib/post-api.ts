@@ -166,6 +166,11 @@ export async function searchTopics(keyword: string): Promise<Topic[]> {
   return data.data ?? [];
 }
 
+export async function searchPosts(keyword: string, limit = 20): Promise<Post[]> {
+  const { data } = await apiClient.get('/posts/search', { params: { q: keyword, limit } });
+  return data.data ?? [];
+}
+
 export async function getTopicById(id: string): Promise<Topic> {
   const { data } = await apiClient.get(`/posts/topics/${id}`);
   return data.data;

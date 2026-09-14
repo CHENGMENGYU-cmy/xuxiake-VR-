@@ -8,7 +8,7 @@ test.describe('组件状态覆盖', () => {
       await page.goto('/feed');
       await page.waitForTimeout(3000);
       // 页面应有内容，不应白屏
-      const bodyText = await page.textContent('body').catch(() => '');
+      const bodyText = await page.locator('body').innerText();
       expect(bodyText.length).toBeGreaterThan(100);
     });
 
@@ -27,7 +27,7 @@ test.describe('组件状态覆盖', () => {
 
       await page.goto('/admin/dashboard');
       await page.waitForTimeout(3000);
-      const bodyText = await page.textContent('body').catch(() => '');
+      const bodyText = await page.locator('body').innerText();
       expect(bodyText.length).toBeGreaterThan(100);
     });
   });
@@ -40,7 +40,7 @@ test.describe('组件状态覆盖', () => {
       // 检查是否有空状态提示或内容
       const hasContent = await page.locator('[class*="empty"], text=暂无, text=没有, [class*="notification"]').first().isVisible().catch(() => false);
       // 不强制断言 — 如果没有任何元素可能是加载失败
-      const bodyText = await page.textContent('body').catch(() => '');
+      const bodyText = await page.locator('body').innerText();
       expect(bodyText.length).toBeGreaterThan(50);
     });
 
@@ -50,7 +50,7 @@ test.describe('组件状态覆盖', () => {
       await page.waitForTimeout(2000);
       // 应有空会话提示或消息列表
       const hasContent = await page.locator('[class*="empty"], text=暂无, text=没有, [class*="conversation"], [class*="chat"]').first().isVisible().catch(() => false);
-      const bodyText = await page.textContent('body').catch(() => '');
+      const bodyText = await page.locator('body').innerText();
       expect(bodyText.length).toBeGreaterThan(30);
     });
 
@@ -58,7 +58,7 @@ test.describe('组件状态覆盖', () => {
       await loginAsUser(page);
       await page.goto('/search');
       await page.waitForTimeout(2000);
-      const bodyText = await page.textContent('body').catch(() => '');
+      const bodyText = await page.locator('body').innerText();
       expect(bodyText.length).toBeGreaterThan(30);
     });
   });
@@ -69,7 +69,7 @@ test.describe('组件状态覆盖', () => {
       await page.goto('/post/nonexistent-id-12345');
       await page.waitForTimeout(2000);
       // 应显示错误信息或重定向，不应白屏或崩溃
-      const bodyText = await page.textContent('body').catch(() => '');
+      const bodyText = await page.locator('body').innerText();
       expect(bodyText.length).toBeGreaterThan(10);
     });
 
@@ -77,7 +77,7 @@ test.describe('组件状态覆盖', () => {
       await page.goto('/profile/nonexistent_user_xyz');
       await page.waitForTimeout(2000);
       // 应显示错误信息
-      const bodyText = await page.textContent('body').catch(() => '');
+      const bodyText = await page.locator('body').innerText();
       expect(bodyText.length).toBeGreaterThan(10);
     });
 
@@ -102,7 +102,7 @@ test.describe('组件状态覆盖', () => {
       await page.locator('button[type="submit"]').click();
       await page.waitForTimeout(500);
       // 前端验证会显示错误文案（如"请输入邮箱或用户名""请输入密码""请输入验证码"）
-      const bodyText = await page.textContent('body').catch(() => '');
+      const bodyText = await page.locator('body').innerText();
       const hasValidation = bodyText.includes('请输入');
       expect(hasValidation).toBeTruthy();
     });
@@ -112,7 +112,7 @@ test.describe('组件状态覆盖', () => {
       await page.fill('input[placeholder*="邮箱"]', 'test@test.com');
       await page.locator('button[type="submit"]').click();
       await page.waitForTimeout(500);
-      const bodyText = await page.textContent('body').catch(() => '');
+      const bodyText = await page.locator('body').innerText();
       // 应该提示"请输入密码"或"请输入验证码"
       const hasValidation = bodyText.includes('请输入');
       expect(hasValidation).toBeTruthy();

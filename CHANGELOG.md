@@ -2,6 +2,27 @@
 
 > 记录项目重要变更，最多保留最近 30 条。
 
+## 第16条（2026-09-11）
+
+- **位置**：修改 `server/src/modules/social/social.controller.ts`、`server/package.json`、`server/test/jest-e2e.json`；新增 `server/src/modules/social/social-permissions.spec.ts`、`server/sql/cleanup-demo-data-2026-09-11.sql`、`server/sql/enrich-demo-community-data-2026-09-11.sql`；修改 `web/src/app/(main)/communities/[id]/page.tsx`、`web/src/app/(main)/communities/[id]/settings/page.tsx`、`web/src/components/post/post-card.tsx`、`web/src/types/index.ts`、`web/e2e/04-permissions.spec.ts`、`web/e2e/07-component-states.spec.ts`；新增 `web/src/app/(main)/communities/page.tsx`、`web/src/app/(main)/media/page.tsx`、`web/e2e/10-community-permissions.spec.ts`
+- **原因**：接手后先恢复可验证基线，并补齐社群创建者、管理员、版主、普通成员、访客在社群详情和设置页中的权限入口差异
+- **内容**：
+  1. **类型与测试基线修复**：修复前端 Playwright 用例中的文本定位参数错误、body 文本可能为 null、帖子卡片 vrMetadata 图片字段类型不明确等问题；后端 Jest 增加 Node 环境与 `.js` 相对导入映射，兼容现有 TypeScript/NodeNext 写法
+  2. **社群权限返回补齐**：社群详情接口在登录用户场景下返回 `isAdmin`、`isModerator`，前端类型同步补充 `isModerator`
+  3. **社群管理入口调整**：社群设置入口允许创建者和管理员访问；公告发布和挑战创建入口允许创建者、管理员、版主访问；角色分配和解散社群仍限制为创建者，成员移除沿用已有创建者/管理员权限
+  4. **权限回归测试**：新增后端权限矩阵测试，覆盖创建者、管理员、版主、普通成员、匿名用户；新增前端社区权限 E2E，覆盖创建者、管理员、版主、普通成员、访客的入口可见性和设置页边界
+  5. **本地演示数据清洗**：新增 `server/sql/cleanup-demo-data-2026-09-11.sql`，删除明显 E2E/测试帖子和空白闪拍；新增 `server/uploads/demo-covers/` 与 `server/uploads/demo-avatars/` 演示资产，将用户头像、社群头像/封面、帖子封面统一替换为本地演示资源；执行前已生成 `backup-xuxiake-before-data-cleanup-2026-09-11.sql` 数据库备份
+  6. **信息流展示优化**：`PostCard` 在没有媒体附件时优先展示 `vrMetadata.image` 作为卡片封面，并对长正文显示摘要和“查看全文”，让首页首屏更接近社区动态流
+  7. **跳转入口修复**：新增 `/communities` 社群列表页和 `/media` 媒体发现页，修复搜索建议、社群入口等路径跳转到 404 的问题；重新验证 `/diaries` 路由恢复正常
+  8. **社区演示数据增强**：新增 `server/sql/enrich-demo-community-data-2026-09-11.sql`，为公开帖子补充 `media_items`，把 14 条帖子关联到 3 个社群，并补充点赞与评论，使首页、社群详情、素材库都有可演示的互动数据；执行前已生成 `backup-xuxiake-before-enrich-demo-data-2026-09-11.sql` 数据库备份
+  9. **模型接力入口**：新增 `AI_HANDOFF.md`，作为切换不同大模型时的快速接手文档，记录当前状态、最近完成、下一步建议、关键文件和不要重复做的事项，避免新模型重复全量扫描项目
+  10. **帖子详情互动优化**：`PostCard` 新增详情模式，帖子详情页显示全文、不再展示“查看全文”截断；详情页评论按钮滚动并聚焦完整评论区；评论新增/删除后同步更新详情页帖子卡片和评论区计数
+  11. **社群挑战真实感增强**：挑战页按开始/结束日期实时推导状态，不再完全依赖数据库中的静态 `status`；挑战按进行中、即将开始、已结束排序；演示数据脚本同步刷新挑战日期与标题，使 2026-09-11 演示时显示 9 月进行中挑战和国庆即将开始挑战
+  12. **素材库视频/音频补全**：`/media` 页面复用 `MediaCard` 展示不同媒体类型；数据增强脚本新增 6 条视频演示素材和 6 条音频演示素材；新增本地演示音频 `server/uploads/demo-audio/travel-note.wav`；帖子详情视频播放器增加封面降级提示，避免演示视频无真实流时出现坏播放器
+  13. **社群运营感增强**：社群详情接口返回 `stats` 和成员 `communityStats`；成员页展示成员发帖、获赞、评论和最近活跃时间；关于页展示社群动态、累计获赞、累计评论、近60天活跃成员和近60天动态；公告页显示“X 天前发布”并保留作者信息
+  14. **控制台报错清理**：用户公开帖子接口在浏览器残留过期 token 时按游客读取公开内容，避免 `/api/users/sunqi/posts` 返回 401；视频播放器识别演示占位视频 `/uploads/demo-videos/preview-unavailable.mp4`，直接显示封面降级说明，不再发起缺失 mp4 请求
+- **效果**：后端 8 项 Jest 测试通过，后端 TypeScript 检查通过，前端 TypeScript 检查通过；旧权限/组件状态 E2E 14 项通过，新增社群权限 E2E 5 项通过；本地数据库清洗后剩余 28 条帖子，测试帖 0 条，帖子占位封面 0 条，外部头像/社群图片 0 条，全部帖子使用本地演示封面；增强后共有 30 条公开演示媒体素材（18 图片、6 视频、6 音频）、14 条社群帖子、98 条演示点赞、26 条演示评论；登录后 `/feed`、`/communities/com1`、`/media?type=IMAGE`、`/media?type=VIDEO`、`/media?type=AUDIO` 均有内容，`/diaries`、`/communities`、`/media?type=IMAGE` 均可访问；帖子详情页验证通过：显示全文，评论按钮聚焦评论输入框，评论新增/删除后计数同步恢复；社群挑战页验证通过：进行中挑战排在即将开始挑战前，并显示剩余天数和开始倒计时；视频演示素材详情页显示封面降级提示；社群公告、成员、关于页验证通过：公告显示相对发布时间，成员展示贡献数据，关于页显示运营统计且无破图；`/api/users/sunqi/posts?limit=1` 携带过期 token 仍返回 200，普通打开 `/profile/sunqi` 和 `/feed` 未再捕捉到用户帖子 401 或演示视频 mp4 404
+
 ## 第15条（2026-08-24）
 
 - **位置**：新增 `server/src/modules/placeholder/placeholder.controller.ts`（动态SVG占位图端点）；修改 `server/src/app.module.ts`、`web/next.config.ts`；新增 `server/sql/migrate-local-placeholder-urls.sql`；新增 `server/scripts/localize-image-urls.js`；修改 `server/sql/seed.sql`、`server/sql/seed-log-diary-travelogue.sql`

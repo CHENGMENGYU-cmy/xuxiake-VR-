@@ -11,16 +11,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardContent } from '@/components/ui/card';
 import { PostCard } from '@/components/post/post-card';
-import { mockUsers, mockPosts } from '@/lib/mock-data';
 import { useSearchStore } from '@/stores/search-store';
-import { searchTopics } from '@/lib/post-api';
-import { searchCommunities } from '@/lib/social-api';
-import type { Topic, Community } from '@/types';
+import { searchPosts, searchTopics } from '@/lib/post-api';
+import { searchCommunities, searchUsers } from '@/lib/social-api';
+import type { Topic, Community, User, Post } from '@/types';
 
 export default function SearchPage() {
   const { query, setQuery } = useSearchStore();
   const [inputValue, setInputValue] = useState(query);
   const [searched, setSearched] = useState(!!query);
+  const [users, setUsers] = useState<User[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [topics, setTopics] = useState<Topic[]>([]);
   const [communities, setCommunities] = useState<Community[]>([]);
 
@@ -34,12 +35,29 @@ export default function SearchPage() {
 
   useEffect(() => {
     if (!searched || !inputValue.trim()) {
+      setUsers([]);
+      setPosts([]);
       setTopics([]);
       setCommunities([]);
       return;
     }
-    searchTopics(inputValue).then(setTopics).catch(() => {});
-    searchCommunities(inputValue).then((res) => setCommunities(res.data || [])).catch(() => {});
+    let active = true;
+    const keyword = inputValue.trim();
+    Promise.allSettled([
+      searchUsers(keyword),
+      searchPosts(keyword),
+      searchTopics(keyword),
+      searchCommunities(keyword),
+    ]).then(([userResult, postResult, topicResult, communityResult]) => {
+      if (!active) return;
+      setUsers(userResult.status === 'fulfilled' ? userResult.value : []);
+      setPosts(postResult.status === 'fulfilled' ? postResult.value : []);
+      setTopics(topicResult.status === 'fulfilled' ? topicResult.value : []);
+      setCommunities(communityResult.status === 'fulfilled' ? communityResult.value.data || [] : []);
+    });
+    return () => {
+      active = false;
+    };
   }, [searched, inputValue]);
 
   const handleSearch = (e: React.FormEvent) => {
@@ -49,21 +67,6 @@ export default function SearchPage() {
       setSearched(true);
     }
   };
-
-  const filteredUsers = searched
-    ? mockUsers.filter(
-        (u) =>
-          u.displayName.includes(inputValue) ||
-          u.username.includes(inputValue) ||
-          u.bio?.includes(inputValue)
-      )
-    : [];
-
-  const filteredPosts = searched
-    ? mockPosts.filter((p) =>
-        p.content?.includes(inputValue) || p.author.displayName.includes(inputValue)
-      )
-    : [];
 
   return (
     <div className="space-y-4">
@@ -92,11 +95,11 @@ export default function SearchPage() {
             </TabsTrigger>
             <TabsTrigger value="users" className="data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary">
               <Users className="mr-1 h-3.5 w-3.5" />
-              用户 ({filteredUsers.length})
+              用户 ({users.length})
             </TabsTrigger>
             <TabsTrigger value="posts" className="data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary">
               <FileText className="mr-1 h-3.5 w-3.5" />
-              内容 ({filteredPosts.length})
+              内容 ({posts.length})
             </TabsTrigger>
             <TabsTrigger value="topics" className="data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary">
               <Hash className="mr-1 h-3.5 w-3.5" />
@@ -125,11 +128,11 @@ export default function SearchPage() {
               </div>
             )}
 
-            {filteredUsers.length > 0 && (
+            {users.length > 0 && (
               <div>
                 <h3 className="mb-2 text-sm font-semibold text-muted-foreground">用户</h3>
                 <div className="rounded-lg border bg-card">
-                  {filteredUsers.map((user, i) => (
+                  {users.map((user, i) => (
                     <div key={user.id}>
                       {i > 0 && <Separator />}
                       <Link
@@ -151,11 +154,11 @@ export default function SearchPage() {
               </div>
             )}
 
-            {filteredPosts.length > 0 && (
+            {posts.length > 0 && (
               <div>
                 <h3 className="mb-2 text-sm font-semibold text-muted-foreground">内容</h3>
                 <div className="space-y-4">
-                  {filteredPosts.map((post) => (
+                  {posts.map((post) => (
                     <PostCard key={post.id} post={post} />
                   ))}
                 </div>
@@ -189,7 +192,7 @@ export default function SearchPage() {
               </div>
             )}
 
-            {filteredUsers.length === 0 && filteredPosts.length === 0 && topics.length === 0 && communities.length === 0 && (
+            {users.length === 0 && posts.length === 0 && topics.length === 0 && communities.length === 0 && (
               <div className="py-12 text-center text-muted-foreground">
                 没有找到 &quot;{inputValue}&quot; 相关的结果
               </div>
@@ -197,9 +200,9 @@ export default function SearchPage() {
           </TabsContent>
 
           <TabsContent value="users" className="mt-4">
-            {filteredUsers.length > 0 ? (
+            {users.length > 0 ? (
               <div className="rounded-lg border bg-card">
-                {filteredUsers.map((user, i) => (
+                {users.map((user, i) => (
                   <div key={user.id}>
                     {i > 0 && <Separator />}
                     <Link
@@ -225,9 +228,9 @@ export default function SearchPage() {
           </TabsContent>
 
           <TabsContent value="posts" className="mt-4">
-            {filteredPosts.length > 0 ? (
+            {posts.length > 0 ? (
               <div className="space-y-4">
-                {filteredPosts.map((post) => (
+                {posts.map((post) => (
                   <PostCard key={post.id} post={post} />
                 ))}
               </div>

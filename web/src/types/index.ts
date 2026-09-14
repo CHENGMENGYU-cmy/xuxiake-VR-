@@ -17,9 +17,15 @@ export interface User {
     version: string;
   };
   role?: 'USER' | 'MODERATOR' | 'ADMIN';
-  status?: 'ACTIVE' | 'BANNED';
+  status?: 'ACTIVE' | 'BANNED' | 'DEACTIVATED';
   createdAt: string;
   interests?: InterestTag[];
+  communityStats?: {
+    postCount: number;
+    likeCount: number;
+    commentCount: number;
+    latestPostAt?: string | null;
+  };
 }
 
 // ===== 媒体类型 =====
@@ -281,9 +287,17 @@ export interface Community {
   };
   tags?: InterestTag[];
   members?: User[];
+  stats?: {
+    postCount: number;
+    likeCount: number;
+    commentCount: number;
+    recentPostCount: number;
+    activeMemberCount: number;
+  };
   isMember?: boolean;
   isCreator?: boolean;
   isAdmin?: boolean;
+  isModerator?: boolean;
   createdAt: string;
 }
 

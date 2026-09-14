@@ -13,10 +13,15 @@ interface MediaViewerProps {
   items: MediaItem[];
 }
 
+function isUnavailableDemoVideo(url?: string | null) {
+  return !!url && url.includes('/uploads/demo-videos/preview-unavailable.mp4');
+}
+
 export function MediaViewer({ items }: MediaViewerProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [hoveredVideo, setHoveredVideo] = useState<string | null>(null);
+  const [videoErrors, setVideoErrors] = useState<Set<string>>(new Set());
   const videoRefs = useRef<Map<string, HTMLVideoElement>>(new Map());
 
   const handleVideoHover = useCallback((id: string, hovering: boolean) => {
@@ -52,24 +57,47 @@ export function MediaViewer({ items }: MediaViewerProps) {
         <div
           key={video.id}
           className="group relative bg-black"
-          onMouseEnter={() => video.id && handleVideoHover(video.id, true)}
-          onMouseLeave={() => video.id && handleVideoHover(video.id, false)}
+          onMouseEnter={() => video.id && !isUnavailableDemoVideo(video.url) && handleVideoHover(video.id, true)}
+          onMouseLeave={() => video.id && !isUnavailableDemoVideo(video.url) && handleVideoHover(video.id, false)}
         >
-          <video
-            ref={(el) => { if (el && video.id) videoRefs.current.set(video.id, el); }}
-            src={video.url}
-            poster={video.thumbnailUrl ?? undefined}
-            controls={hoveredVideo === video.id}
-            muted
-            loop
-            className="w-full"
-            style={{ maxHeight: '500px' }}
-            preload="metadata"
-          >
-            您的浏览器不支持视频播放
-          </video>
+          {video.id && (videoErrors.has(video.id) || isUnavailableDemoVideo(video.url)) && video.thumbnailUrl ? (
+            <div className="relative max-h-[500px] min-h-64 overflow-hidden bg-muted">
+              <Image
+                src={video.thumbnailUrl}
+                alt=""
+                width={video.width || 1200}
+                height={video.height || 675}
+                className="h-full max-h-[500px] w-full object-cover opacity-90"
+                unoptimized
+              />
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/35 text-white">
+                <div className="rounded-full bg-white/90 p-3 shadow-lg">
+                  <Play className="h-6 w-6 fill-current text-foreground" />
+                </div>
+                <p className="mt-3 text-sm">视频演示素材</p>
+                <p className="mt-1 text-xs text-white/80">当前仅展示封面，真实上传后可播放视频</p>
+              </div>
+            </div>
+          ) : (
+            <video
+              ref={(el) => { if (el && video.id) videoRefs.current.set(video.id, el); }}
+              src={video.url}
+              poster={video.thumbnailUrl ?? undefined}
+              controls={hoveredVideo === video.id}
+              muted
+              loop
+              className="w-full"
+              style={{ maxHeight: '500px' }}
+              preload="metadata"
+              onError={() => {
+                if (video.id) setVideoErrors((prev) => new Set(prev).add(video.id));
+              }}
+            >
+              您的浏览器不支持视频播放
+            </video>
+          )}
           {/* 悬停前的播放按钮覆盖层 */}
-          {hoveredVideo !== video.id && (
+          {(!video.id || (!videoErrors.has(video.id) && !isUnavailableDemoVideo(video.url))) && hoveredVideo !== video.id && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity group-hover:bg-black/10">
               <div className="rounded-full bg-white/90 p-3 shadow-lg transition-transform group-hover:scale-110">
                 <Play className="h-6 w-6 text-foreground fill-current" />

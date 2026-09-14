@@ -12,6 +12,7 @@ import { User } from '../../entities/user.entity.js';
 import { UserFollow } from '../../entities/user-follow.entity.js';
 import { MessageReaction } from '../../entities/message-reaction.entity.js';
 import { LocationShare } from '../../entities/location-share.entity.js';
+import { getTokenSubject } from '../../common/auth-token.js';
 
 @Controller('api/conversations')
 export class ConversationsController {
@@ -29,11 +30,11 @@ export class ConversationsController {
   private getUserId(auth?: string): string {
     const token = auth?.replace('Bearer ', '') || null;
     if (!token) throw new UnauthorizedException('请先登录');
-    try {
-      return this.jwtService.verify(token).sub;
-    } catch {
+    const userId = getTokenSubject(this.jwtService, token, 'access');
+    if (!userId) {
       throw new UnauthorizedException('Token 已过期或无效');
     }
+    return userId;
   }
 
   // ==================== 会话列表 ====================

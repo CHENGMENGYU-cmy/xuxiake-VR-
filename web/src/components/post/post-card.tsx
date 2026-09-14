@@ -72,13 +72,27 @@ const tabLabelConfig: Record<string, { label: string; icon: React.ReactNode; col
   AUDIO: { label: '语音记录', icon: <Volume2 className="h-3 w-3" />, color: 'bg-pink-500/10 text-pink-500' },
 };
 
+const CONTENT_PREVIEW_LIMIT = 520;
+
 interface PostCardProps {
   post: Post;
   onLikeChange?: (isLiked: boolean, likeCount: number) => void;
   onDelete?: () => void;
+  contentMode?: 'preview' | 'full';
+  showInlineComments?: boolean;
+  commentCountOverride?: number;
+  onCommentClick?: () => void;
 }
 
-export function PostCard({ post, onLikeChange, onDelete }: PostCardProps) {
+export function PostCard({
+  post,
+  onLikeChange,
+  onDelete,
+  contentMode = 'preview',
+  showInlineComments = true,
+  commentCountOverride,
+  onCommentClick,
+}: PostCardProps) {
   const { user: currentUser } = useAuthStore();
   const removePost = usePostStore((s) => s.removePost);
   const { requireAuth, showPrompt, setShowPrompt, action } = useRequireAuth();
@@ -86,7 +100,7 @@ export function PostCard({ post, onLikeChange, onDelete }: PostCardProps) {
   const [likeCount, setLikeCount] = useState(post.likeCount);
   const [showShare, setShowShare] = useState(false);
   const [showComments, setShowComments] = useState(false);
-  const [commentCount, setCommentCount] = useState(post.commentCount);
+  const [commentCount, setCommentCount] = useState(commentCountOverride ?? post.commentCount);
   const [showEdit, setShowEdit] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showReport, setShowReport] = useState(false);
@@ -96,6 +110,15 @@ export function PostCard({ post, onLikeChange, onDelete }: PostCardProps) {
   const isAdmin = !!(currentUser?.role && currentUser.role !== 'USER');
 
   const isOwner = currentUser?.id === post.author.id;
+  const fallbackImage = typeof post.vrMetadata?.image === 'string'
+    ? post.vrMetadata.image
+    : undefined;
+  const contentText = post.content ?? '';
+  const shouldPreviewContent = contentMode === 'preview';
+  const isLongContent = shouldPreviewContent && contentText.length > CONTENT_PREVIEW_LIMIT;
+  const displayContent = isLongContent
+    ? `${contentText.slice(0, CONTENT_PREVIEW_LIMIT).trimEnd()}...`
+    : contentText;
 
   // 浏览量计数：帖子卡片进入视口时计数一次
   const cardRef = useRef<HTMLDivElement>(null);
@@ -127,6 +150,10 @@ export function PostCard({ post, onLikeChange, onDelete }: PostCardProps) {
 
   const likeAnimRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [likeAnimation, setLikeAnimation] = useState(false);
+
+  useEffect(() => {
+    setCommentCount(commentCountOverride ?? post.commentCount);
+  }, [commentCountOverride, post.commentCount]);
 
   const handleLike = async () => {
     if (!requireAuth('点赞')) return;
@@ -302,12 +329,38 @@ export function PostCard({ post, onLikeChange, onDelete }: PostCardProps) {
         </DropdownMenu>
       </div>
 
+      {/* 媒体内容 */}
+      {post.mediaItems.length > 0 ? (
+        <MediaViewer items={post.mediaItems} />
+      ) : (
+        // 没有 mediaItems 时，fallback 到 vrMetadata.image 作为信息流封面
+        fallbackImage && (
+          <div className="px-4 pb-3">
+            <div className="overflow-hidden rounded-xl border bg-muted">
+              <img
+                src={fallbackImage}
+                alt="内容封面"
+                className="h-64 w-full object-cover sm:h-80"
+              />
+            </div>
+          </div>
+        )
+      )}
+
       {/* 文字内容 */}
-      {post.content && (
+      {displayContent && (
         <div className="px-4 pb-3">
           <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground">
-            {post.content}
+            {displayContent}
           </p>
+          {isLongContent && (
+            <Link
+              href={`/post/${post.id}`}
+              className="mt-2 inline-flex text-sm font-medium text-primary hover:underline"
+            >
+              查看全文
+            </Link>
+          )}
         </div>
       )}
 
@@ -349,22 +402,6 @@ export function PostCard({ post, onLikeChange, onDelete }: PostCardProps) {
         </div>
       )}
 
-      {/* 媒体内容 */}
-      {post.mediaItems.length > 0 ? (
-        <MediaViewer items={post.mediaItems} />
-      ) : (
-        // 没有mediaItems时，fallback到vrMetadata.image
-        post.vrMetadata?.image && (
-          <div className="px-4 pb-3">
-            <img
-              src={post.vrMetadata.image}
-              alt="内容图片"
-              className="w-full h-auto rounded-lg object-cover"
-            />
-          </div>
-        )
-      )}
-
       {/* 互动数据行 */}
       <div className="flex items-center justify-between px-4 py-2 text-xs text-muted-foreground">
         <div className="flex items-center gap-1">
@@ -397,6 +434,10 @@ export function PostCard({ post, onLikeChange, onDelete }: PostCardProps) {
             showComments && 'text-primary'
           )}
           onClick={() => {
+            if (onCommentClick) {
+              onCommentClick();
+              return;
+            }
             if (!showComments && !requireAuth('评论')) return;
             setShowComments(!showComments);
           }}
@@ -421,7 +462,7 @@ export function PostCard({ post, onLikeChange, onDelete }: PostCardProps) {
       </div>
 
       {/* 内联评论区 */}
-      {showComments && (
+      {showInlineComments && showComments && (
         <InlineComment
           postId={post.id}
           commentCount={commentCount}

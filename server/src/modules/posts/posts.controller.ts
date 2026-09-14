@@ -122,6 +122,24 @@ export class PostsController {
     return { success: true, ...result };
   }
 
+  @Get('search')
+  async searchPosts(
+    @Query('q') keyword?: string,
+    @Query('limit') limit?: string,
+    @Headers('authorization') auth?: string,
+  ) {
+    const q = keyword?.trim();
+    if (!q) return { success: true, data: [] };
+
+    let userId: string | undefined;
+    if (auth) {
+      try { userId = this.getUserId(auth); } catch {}
+    }
+
+    const posts = await this.postsService.searchPosts(q, limit ? parseInt(limit) : 20, userId);
+    return { success: true, data: posts };
+  }
+
   // ===== 内容层级（必须在 :id 之前） =====
   @Get('hierarchy')
   async getContentHierarchy(

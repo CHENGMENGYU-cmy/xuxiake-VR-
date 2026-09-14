@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   Users, MessageCircle, Loader2, LogOut, Settings,
-  Trophy, ImageIcon, MapPin, Globe, Lock, UserX,
+  Trophy, ImageIcon, MapPin, Globe, Lock, UserX, Heart, FileText, Activity,
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -29,6 +29,33 @@ import { CommunityPostComposer } from '@/components/community/community-post-com
 import { CreateChallengeDialog } from '@/components/community/create-challenge-dialog';
 import { toast } from 'sonner';
 import type { Community, CommunityAnnouncement, CommunityRole } from '@/types';
+
+function formatCommunityDate(dateStr?: string | null): string {
+  if (!dateStr) return '暂无动态';
+  const date = new Date(dateStr);
+  if (Number.isNaN(date.getTime())) return '暂无动态';
+  const diffDays = Math.floor((Date.now() - date.getTime()) / 86400000);
+  if (diffDays <= 0) return '今天活跃';
+  if (diffDays === 1) return '昨天活跃';
+  if (diffDays < 30) return `${diffDays} 天前活跃`;
+  return date.toLocaleDateString('zh-CN');
+}
+
+function formatAnnouncementTime(dateStr: string): string {
+  const date = new Date(dateStr);
+  const diffDays = Math.floor((Date.now() - date.getTime()) / 86400000);
+  if (diffDays <= 0) return '今天发布';
+  if (diffDays === 1) return '昨天发布';
+  if (diffDays < 365) return `${diffDays} 天前发布`;
+  return date.toLocaleDateString('zh-CN');
+}
+
+function formatCountLabel(count?: number): string {
+  const value = count ?? 0;
+  if (value >= 10000) return `${(value / 10000).toFixed(1)}万`;
+  return String(value);
+}
+
 
 export default function CommunitySpacePage() {
   const params = useParams();
@@ -163,7 +190,7 @@ export default function CommunitySpacePage() {
                       <LogOut className="mr-2 h-4 w-4" /> 退出
                     </Button>
                   )}
-                  {community.isCreator && (
+                  {(community.isCreator || community.isAdmin) && (
                     <Link href={`/communities/${communityId}/settings`}>
                       <Button variant="outline" size="icon"><Settings className="h-4 w-4" /></Button>
                     </Link>
@@ -220,13 +247,13 @@ export default function CommunitySpacePage() {
               announcements={announcements}
               pinnedAnnouncements={pinnedAnnouncements}
               normalAnnouncements={normalAnnouncements}
-              isModerator={!!community.isCreator}
+              isModerator={!!(community.isCreator || community.isAdmin || community.isModerator)}
             />
           </TabsContent>
 
           {/* 挑战 Tab */}
           <TabsContent value="challenges" className="mt-4">
-            <CommunityChallengesTab communityId={communityId} isModerator={!!community.isCreator} />
+            <CommunityChallengesTab communityId={communityId} isModerator={!!(community.isCreator || community.isAdmin || community.isModerator)} />
           </TabsContent>
 
           {/* 成员 Tab */}
@@ -412,9 +439,19 @@ function CommunityAnnouncementsTab({
               </CardHeader>
               <CardContent>
                 <p className="whitespace-pre-wrap text-sm">{a.content}</p>
-                <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
-                  {a.author && <span>{a.author.displayName}</span>}
-                  <span>{new Date(a.createdAt).toLocaleDateString('zh-CN')}</span>
+                <div className="mt-4 flex items-center justify-between gap-3 border-t pt-3 text-xs text-muted-foreground">
+                  <div className="flex items-center gap-2">
+                    {a.author && (
+                      <>
+                        <Avatar className="h-5 w-5">
+                          <AvatarImage src={a.author.avatarUrl || undefined} alt={a.author.displayName} />
+                          <AvatarFallback className="text-[10px]">{a.author.displayName?.[0]}</AvatarFallback>
+                        </Avatar>
+                        <span>{a.author.displayName}</span>
+                      </>
+                    )}
+                  </div>
+                  <span>{formatAnnouncementTime(a.createdAt)}</span>
                 </div>
               </CardContent>
             </Card>
@@ -433,9 +470,19 @@ function CommunityAnnouncementsTab({
               </CardHeader>
               <CardContent>
                 <p className="whitespace-pre-wrap text-sm">{a.content}</p>
-                <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
-                  {a.author && <span>{a.author.displayName}</span>}
-                  <span>{new Date(a.createdAt).toLocaleDateString('zh-CN')}</span>
+                <div className="mt-4 flex items-center justify-between gap-3 border-t pt-3 text-xs text-muted-foreground">
+                  <div className="flex items-center gap-2">
+                    {a.author && (
+                      <>
+                        <Avatar className="h-5 w-5">
+                          <AvatarImage src={a.author.avatarUrl || undefined} alt={a.author.displayName} />
+                          <AvatarFallback className="text-[10px]">{a.author.displayName?.[0]}</AvatarFallback>
+                        </Avatar>
+                        <span>{a.author.displayName}</span>
+                      </>
+                    )}
+                  </div>
+                  <span>{formatAnnouncementTime(a.createdAt)}</span>
                 </div>
               </CardContent>
             </Card>
@@ -578,6 +625,39 @@ function CommunityChallengesTab({ communityId, isModerator }: { communityId: str
   const statusLabel: Record<string, string> = { UPCOMING: '即将开始', ACTIVE: '进行中', ENDED: '已结束' };
   const statusColor: Record<string, string> = { UPCOMING: 'bg-blue-500', ACTIVE: 'bg-green-500', ENDED: 'bg-gray-400' };
   const typeLabel: Record<string, string> = { PHOTO: '拍照', CHECKIN: '打卡', DISTANCE: '距离' };
+  const getChallengeStatus = (challenge: any): 'UPCOMING' | 'ACTIVE' | 'ENDED' => {
+    const now = Date.now();
+    const start = new Date(challenge.startDate).getTime();
+    const end = new Date(challenge.endDate).getTime();
+    if (Number.isFinite(start) && now < start) return 'UPCOMING';
+    if (Number.isFinite(end) && now > end) return 'ENDED';
+    return 'ACTIVE';
+  };
+  const getChallengeHint = (challenge: any, status: 'UPCOMING' | 'ACTIVE' | 'ENDED') => {
+    const now = Date.now();
+    const start = new Date(challenge.startDate).getTime();
+    const end = new Date(challenge.endDate).getTime();
+    const dayMs = 24 * 60 * 60 * 1000;
+    if (status === 'UPCOMING' && Number.isFinite(start)) {
+      return `${Math.max(1, Math.ceil((start - now) / dayMs))} 天后开始`;
+    }
+    if (status === 'ACTIVE' && Number.isFinite(end)) {
+      return `剩余 ${Math.max(1, Math.ceil((end - now) / dayMs))} 天`;
+    }
+    return '活动已结束';
+  };
+  const sortedChallenges = [...challenges].sort((a, b) => {
+    const statusOrder = { ACTIVE: 0, UPCOMING: 1, ENDED: 2 };
+    const aStatus = getChallengeStatus(a);
+    const bStatus = getChallengeStatus(b);
+    if (statusOrder[aStatus] !== statusOrder[bStatus]) {
+      return statusOrder[aStatus] - statusOrder[bStatus];
+    }
+    if (aStatus === 'ACTIVE') {
+      return new Date(a.endDate).getTime() - new Date(b.endDate).getTime();
+    }
+    return new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
+  });
 
   return (
     <div className="space-y-4">
@@ -588,31 +668,35 @@ function CommunityChallengesTab({ communityId, isModerator }: { communityId: str
           </Button>
         </div>
       )}
-      {challenges.map((c) => (
+      {sortedChallenges.map((c) => {
+        const status = getChallengeStatus(c);
+        const isFull = c.maxParticipants > 0 && c.participantCount >= c.maxParticipants;
+        return (
         <Card key={c.id}>
           <CardContent className="pt-6">
             <div className="flex items-start justify-between">
               <div className="flex-1 cursor-pointer" onClick={() => handleExpand(c.id)}>
-                <div className="flex items-center gap-2">
-                  <span className={`h-2 w-2 rounded-full ${statusColor[c.status]}`} />
-                  <span className="text-xs text-muted-foreground">{statusLabel[c.status]}</span>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className={`h-2 w-2 rounded-full ${statusColor[status]}`} />
+                  <span className="text-xs text-muted-foreground">{statusLabel[status]}</span>
                   <Badge variant="outline" className="text-xs">{typeLabel[c.type] || c.type}</Badge>
+                  <span className="text-xs text-muted-foreground">{getChallengeHint(c, status)}</span>
                 </div>
                 <h3 className="mt-1 font-medium">{c.title}</h3>
                 {c.description && <p className="mt-1 text-sm text-muted-foreground">{c.description}</p>}
-                <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
+                <div className="mt-2 flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
                   <span>{new Date(c.startDate).toLocaleDateString('zh-CN')} - {new Date(c.endDate).toLocaleDateString('zh-CN')}</span>
                   <span>{c.participantCount} 人参与</span>
                   {c.maxParticipants > 0 && <span>上限 {c.maxParticipants} 人</span>}
                 </div>
               </div>
-              {c.status === 'ACTIVE' && (
+              {status === 'ACTIVE' && (
                 <Button
                   size="sm"
                   onClick={() => handleJoin(c.id)}
-                  disabled={joining === c.id}
+                  disabled={joining === c.id || isFull}
                 >
-                  {joining === c.id ? <Loader2 className="h-4 w-4 animate-spin" /> : '参与'}
+                  {joining === c.id ? <Loader2 className="h-4 w-4 animate-spin" /> : isFull ? '已满' : '参与'}
                 </Button>
               )}
             </div>
@@ -649,7 +733,8 @@ function CommunityChallengesTab({ communityId, isModerator }: { communityId: str
             )}
           </CardContent>
         </Card>
-      ))}
+        );
+      })}
       <CreateChallengeDialog
         communityId={communityId}
         open={showCreateDialog}
@@ -760,19 +845,25 @@ function CommunityMembersTab({ community, roles, currentUser, onMemberKicked }: 
 }
 
 function MemberItem({ user, badge, canKick, onKick }: { user: any; badge?: string; canKick?: boolean; onKick?: () => void }) {
+  const stats = user.communityStats || { postCount: 0, likeCount: 0, commentCount: 0, latestPostAt: null };
   return (
-    <div className="flex items-center gap-3 rounded-lg p-2 hover:bg-accent">
+    <div className="flex items-center gap-3 rounded-lg border bg-card/60 p-3 hover:bg-accent/60">
       <Link href={`/profile/${user.username}`} className="flex min-w-0 flex-1 items-center gap-3">
-        <Avatar className="h-9 w-9">
+        <Avatar className="h-10 w-10">
           <AvatarImage src={user.avatarUrl || undefined} alt={user.displayName} />
           <AvatarFallback>{user.displayName?.[0]}</AvatarFallback>
         </Avatar>
         <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <p className="truncate text-sm font-medium">{user.displayName}</p>
             {badge && <Badge variant="secondary" className="text-xs">{badge}</Badge>}
           </div>
-          <p className="truncate text-xs text-muted-foreground">@{user.username}</p>
+          <p className="truncate text-xs text-muted-foreground">@{user.username} · {formatCommunityDate(stats.latestPostAt)}</p>
+          <div className="mt-1 flex flex-wrap gap-3 text-[11px] text-muted-foreground">
+            <span className="inline-flex items-center gap-1"><FileText className="h-3 w-3" />{formatCountLabel(stats.postCount)} 篇</span>
+            <span className="inline-flex items-center gap-1"><Heart className="h-3 w-3" />{formatCountLabel(stats.likeCount)} 赞</span>
+            <span className="inline-flex items-center gap-1"><MessageCircle className="h-3 w-3" />{formatCountLabel(stats.commentCount)} 评</span>
+          </div>
         </div>
       </Link>
       {canKick && (
@@ -809,12 +900,23 @@ function CommunityAboutTab({ community, roles }: { community: Community; roles: 
         </Card>
       )}
 
+      {/* 运营数据 */}
+      {community.stats && (
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <CommunityStatCard icon={<FileText className="h-4 w-4" />} label="社群动态" value={community.stats.postCount} suffix="篇" />
+          <CommunityStatCard icon={<Heart className="h-4 w-4" />} label="累计获赞" value={community.stats.likeCount} suffix="次" />
+          <CommunityStatCard icon={<MessageCircle className="h-4 w-4" />} label="累计评论" value={community.stats.commentCount} suffix="条" />
+          <CommunityStatCard icon={<Activity className="h-4 w-4" />} label="近60天活跃成员" value={community.stats.activeMemberCount} suffix="人" />
+        </div>
+      )}
+
       {/* 社群信息 */}
       <Card>
         <CardHeader><CardTitle className="text-base">社群信息</CardTitle></CardHeader>
         <CardContent className="space-y-3 text-sm">
           <InfoRow label="类型" value={community.isPublic ? '公开社群' : '私密社群'} />
           <InfoRow label="成员数" value={`${community.memberCount} / ${community.maxMembers}`} />
+          {community.stats && <InfoRow label="近60天动态" value={`${community.stats.recentPostCount} 篇`} />}
           {community.category && <InfoRow label="分类" value={community.category} />}
           {community.locationName && <InfoRow label="位置" value={community.locationName} />}
           {community.creator && <InfoRow label="创建者" value={community.creator.displayName} />}
@@ -836,6 +938,21 @@ function CommunityAboutTab({ community, roles }: { community: Community; roles: 
         </Card>
       )}
     </div>
+  );
+}
+
+
+function CommunityStatCard({ icon, label, value, suffix }: { icon: React.ReactNode; label: string; value: number; suffix: string }) {
+  return (
+    <Card>
+      <CardContent className="flex items-center gap-3 p-4">
+        <div className="rounded-full bg-primary/10 p-2 text-primary">{icon}</div>
+        <div>
+          <p className="text-xs text-muted-foreground">{label}</p>
+          <p className="text-lg font-semibold">{formatCountLabel(value)} <span className="text-xs font-normal text-muted-foreground">{suffix}</span></p>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 

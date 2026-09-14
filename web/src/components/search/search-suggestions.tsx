@@ -5,8 +5,9 @@ import { useRouter } from 'next/navigation';
 import { Search, Clock, X, Users, FileText, Video, Image, Music } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
-import { mockUsers, mockPosts } from '@/lib/mock-data';
-import { cn } from '@/lib/utils';
+import { searchPosts } from '@/lib/post-api';
+import { searchUsers } from '@/lib/social-api';
+import type { Post, User } from '@/types';
 
 interface SearchSuggestionsProps {
   query: string;
@@ -37,6 +38,8 @@ function removeFromSearchHistory(query: string) {
 export function SearchSuggestions({ query, onSelect, onClose }: SearchSuggestionsProps) {
   const router = useRouter();
   const [history, setHistory] = useState<string[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -53,19 +56,26 @@ export function SearchSuggestions({ query, onSelect, onClose }: SearchSuggestion
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [onClose]);
 
-  const filteredUsers = query.trim()
-    ? mockUsers.filter(
-        (u) =>
-          u.displayName.toLowerCase().includes(query.toLowerCase()) ||
-          u.username.toLowerCase().includes(query.toLowerCase())
-      ).slice(0, 3)
-    : [];
+  useEffect(() => {
+    const keyword = query.trim();
+    if (!keyword) {
+      setUsers([]);
+      setPosts([]);
+      return;
+    }
 
-  const filteredPosts = query.trim()
-    ? mockPosts.filter((p) => p.content?.toLowerCase().includes(query.toLowerCase())).slice(0, 3)
-    : [];
+    let active = true;
+    Promise.allSettled([searchUsers(keyword, 3), searchPosts(keyword, 3)]).then(([userResult, postResult]) => {
+      if (!active) return;
+      setUsers(userResult.status === 'fulfilled' ? userResult.value : []);
+      setPosts(postResult.status === 'fulfilled' ? postResult.value : []);
+    });
+    return () => {
+      active = false;
+    };
+  }, [query]);
 
-  const hasResults = filteredUsers.length > 0 || filteredPosts.length > 0;
+  const hasResults = users.length > 0 || posts.length > 0;
   const showHistory = !query.trim() && history.length > 0;
 
   const handleSelect = (value: string) => {
@@ -146,13 +156,13 @@ export function SearchSuggestions({ query, onSelect, onClose }: SearchSuggestion
       {query.trim() && hasResults && (
         <div>
           {/* 用户建议 */}
-          {filteredUsers.length > 0 && (
+          {users.length > 0 && (
             <div>
               <div className="flex items-center gap-1 px-2 py-1">
                 <Users className="h-3 w-3 text-muted-foreground" />
                 <span className="text-xs font-medium text-muted-foreground">用户</span>
               </div>
-              {filteredUsers.map((user) => (
+              {users.map((user) => (
                 <div
                   key={user.id}
                   className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 hover:bg-muted"
@@ -175,22 +185,26 @@ export function SearchSuggestions({ query, onSelect, onClose }: SearchSuggestion
             </div>
           )}
 
-          {filteredUsers.length > 0 && filteredPosts.length > 0 && (
+          {users.length > 0 && posts.length > 0 && (
             <Separator className="my-1" />
           )}
 
           {/* 内容建议 */}
-          {filteredPosts.length > 0 && (
+          {posts.length > 0 && (
             <div>
               <div className="flex items-center gap-1 px-2 py-1">
                 <FileText className="h-3 w-3 text-muted-foreground" />
                 <span className="text-xs font-medium text-muted-foreground">内容</span>
               </div>
-              {filteredPosts.map((post) => (
+              {posts.map((post) => (
                 <div
                   key={post.id}
                   className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 hover:bg-muted"
-                  onClick={() => handleSelect(post.content?.slice(0, 30) || '')}
+                  onClick={() => {
+                    addToSearchHistory(query.trim());
+                    router.push(`/post/${post.id}`);
+                    onClose();
+                  }}
                 >
                   <Search className="h-4 w-4 text-muted-foreground" />
                   <span className="flex-1 truncate text-sm">{post.content}</span>

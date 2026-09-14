@@ -18,6 +18,7 @@ import { Post as PostEntity } from '../../entities/post.entity.js';
 import { MediaItem } from '../../entities/media-item.entity.js';
 import { RecommendationFeedback } from '../../entities/recommendation-feedback.entity.js';
 import { UserCommunityInteraction } from '../../entities/user-community-interaction.entity.js';
+import { getTokenSubject } from '../../common/auth-token.js';
 import { SocialService } from './social.service.js';
 
 @Controller('api/social')
@@ -42,11 +43,7 @@ export class SocialController {
   private getUserId(auth?: string): string | null {
     const token = auth?.replace('Bearer ', '') || null;
     if (!token) return null;
-    try {
-      return this.jwtService.verify(token).sub;
-    } catch {
-      return null;
-    }
+    return getTokenSubject(this.jwtService, token, 'access');
   }
 
   // ==================== 兴趣标签相关 ====================
@@ -1181,10 +1178,54 @@ export class SocialController {
     const members = memberIds.length > 0
       ? await this.userRepo.findBy({ id: In(memberIds) })
       : [];
+    const contributionRows = await this.postRepo.createQueryBuilder('post')
+      .select('post.authorId', 'userId')
+      .addSelect('COUNT(post.id)', 'postCount')
+      .addSelect('COALESCE(SUM(post.likeCount), 0)', 'likeCount')
+      .addSelect('COALESCE(SUM(post.commentCount), 0)', 'commentCount')
+      .addSelect('MAX(post.createdAt)', 'latestPostAt')
+      .where('post.communityId = :communityId', { communityId })
+      .andWhere('post.deletedAt IS NULL')
+      .groupBy('post.authorId')
+      .getRawMany<{
+        userId: string;
+        postCount: string;
+        likeCount: string;
+        commentCount: string;
+        latestPostAt: Date | null;
+      }>();
+    const memberStats = new Map(contributionRows.map((row) => [
+      row.userId,
+      {
+        postCount: Number(row.postCount) || 0,
+        likeCount: Number(row.likeCount) || 0,
+        commentCount: Number(row.commentCount) || 0,
+        latestPostAt: row.latestPostAt,
+      },
+    ]));
+    const totals = contributionRows.reduce((acc, row) => {
+      acc.postCount += Number(row.postCount) || 0;
+      acc.likeCount += Number(row.likeCount) || 0;
+      acc.commentCount += Number(row.commentCount) || 0;
+      return acc;
+    }, { postCount: 0, likeCount: 0, commentCount: 0 });
+    const recentWindowStart = new Date(Date.now() - 60 * 24 * 60 * 60 * 1000);
+    const recentPostCount = await this.postRepo.createQueryBuilder('post')
+      .where('post.communityId = :communityId', { communityId })
+      .andWhere('post.deletedAt IS NULL')
+      .andWhere('post.createdAt >= :recentWindowStart', { recentWindowStart })
+      .getCount();
+    const activeMemberCount = contributionRows.filter((row) => {
+      const latest = row.latestPostAt ? new Date(row.latestPostAt) : null;
+      return latest && latest >= recentWindowStart;
+    }).length;
 
     // 检查当前用户是否是成员
     const isMember = userId ? memberIds.includes(userId) : false;
     const isCreator = userId ? community.creatorId === userId : false;
+    const permissions = userId
+      ? await this.socialService.checkCommunityPermission(communityId, userId)
+      : { isAdmin: false, isModerator: false };
 
     return {
       success: true,
@@ -1207,10 +1248,27 @@ export class SocialController {
         tags: communityTags.map((ct) => ct.tag),
         members: members.map((m) => {
           const { passwordHash, ...memberDto } = m;
-          return memberDto;
+          return {
+            ...memberDto,
+            communityStats: memberStats.get(m.id) || {
+              postCount: 0,
+              likeCount: 0,
+              commentCount: 0,
+              latestPostAt: null,
+            },
+          };
         }),
+        stats: {
+          postCount: totals.postCount,
+          likeCount: totals.likeCount,
+          commentCount: totals.commentCount,
+          recentPostCount,
+          activeMemberCount,
+        },
         isMember,
         isCreator,
+        isAdmin: permissions.isAdmin,
+        isModerator: permissions.isModerator,
         createdAt: community.createdAt,
       },
     };

@@ -15,6 +15,7 @@ import { extname, join } from 'path';
 import { existsSync, mkdirSync, readFileSync } from 'fs';
 import sharp from 'sharp';
 import { StorageService } from '../../common/storage.service.js';
+import { getTokenSubject } from '../../common/auth-token.js';
 
 const UPLOAD_DIR = join(process.cwd(), 'uploads');
 if (!existsSync(UPLOAD_DIR)) mkdirSync(UPLOAD_DIR, { recursive: true });
@@ -39,11 +40,11 @@ export class UploadController {
   private getUserId(auth?: string): string {
     const token = auth?.replace('Bearer ', '') || null;
     if (!token) throw new UnauthorizedException('请先登录');
-    try {
-      return this.jwtService.verify(token).sub;
-    } catch {
+    const userId = getTokenSubject(this.jwtService, token, 'access');
+    if (!userId) {
       throw new UnauthorizedException('Token 已过期或无效');
     }
+    return userId;
   }
 
   /** 生成图片缩略图（唯一文件名，避免多图互相覆盖） */

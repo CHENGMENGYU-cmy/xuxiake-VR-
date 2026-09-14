@@ -11,6 +11,7 @@ import { MediaItem } from '../../entities/media-item.entity.js';
 import { Like } from '../../entities/like.entity.js';
 import { JwtService } from '@nestjs/jwt';
 import { NotificationsService } from '../notifications/notifications.service.js';
+import { AuthService } from '../auth/auth.service.js';
 
 @Controller('api/users')
 export class UsersController {
@@ -22,21 +23,18 @@ export class UsersController {
     @InjectRepository(Like) private readonly likeRepo: Repository<Like>,
     private readonly jwtService: JwtService,
     private readonly notificationsService: NotificationsService,
+    private readonly authService: AuthService,
   ) {}
 
   private getUserId(auth?: string): string | null {
     const token = auth?.replace('Bearer ', '') || null;
     if (!token) return null;
-    try {
-      return this.jwtService.verify(token).sub;
-    } catch {
-      return null;
-    }
+    return this.authService.validateAccessToken(token);
   }
 
   @Get('profile')
   async getProfile(@Headers('authorization') auth: string) {
-    const userId = this.getUserId(auth);
+    const userId = await this.authService.requireActiveAccessToken(auth?.replace('Bearer ', '') || '');
     if (!userId) throw new UnauthorizedException('请先登录');
 
     const user = await this.userRepo.findOne({ where: { id: userId } });
@@ -61,7 +59,7 @@ export class UsersController {
     @Headers('authorization') auth: string,
     @Query('limit') limit?: string,
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.authService.requireActiveAccessToken(auth?.replace('Bearer ', '') || '');
     if (!userId) throw new UnauthorizedException('请先登录');
     const admin = await this.userRepo.findOne({ where: { id: userId } });
     if (!admin || admin.role !== 'ADMIN') throw new UnauthorizedException('需要管理员权限');
@@ -85,7 +83,7 @@ export class UsersController {
     @Param('id') targetId: string,
     @Body() body: { role: 'USER' | 'MODERATOR' | 'ADMIN' },
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.authService.requireActiveAccessToken(auth?.replace('Bearer ', '') || '');
     if (!userId) throw new UnauthorizedException('请先登录');
     const admin = await this.userRepo.findOne({ where: { id: userId } });
     if (!admin || admin.role !== 'ADMIN') throw new UnauthorizedException('需要管理员权限');
@@ -104,7 +102,7 @@ export class UsersController {
     @Headers('authorization') auth: string,
     @Param('id') targetId: string,
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.authService.requireActiveAccessToken(auth?.replace('Bearer ', '') || '');
     if (!userId) throw new UnauthorizedException('请先登录');
     const admin = await this.userRepo.findOne({ where: { id: userId } });
     if (!admin || admin.role !== 'ADMIN') throw new UnauthorizedException('需要管理员权限');
@@ -123,7 +121,7 @@ export class UsersController {
     @Headers('authorization') auth: string,
     @Param('id') targetId: string,
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.authService.requireActiveAccessToken(auth?.replace('Bearer ', '') || '');
     if (!userId) throw new UnauthorizedException('请先登录');
     const admin = await this.userRepo.findOne({ where: { id: userId } });
     if (!admin || admin.role !== 'ADMIN') throw new UnauthorizedException('需要管理员权限');
@@ -161,6 +159,40 @@ export class UsersController {
         return {
           ...uDto,
           isFollowing: followingIds.includes(u.id),
+          vrDeviceInfo: u.vrDeviceModel
+            ? { model: u.vrDeviceModel, version: u.vrDeviceVersion || '' }
+            : null,
+        };
+      }),
+    };
+  }
+
+  @Get('search')
+  async searchUsers(
+    @Query('q') keyword?: string,
+    @Query('limit') limit?: string,
+  ) {
+    const q = keyword?.trim();
+    if (!q) return { success: true, data: [] };
+
+    const take = Math.min(Math.max(limit ? parseInt(limit) : 20, 1), 50);
+    const users = await this.userRepo
+      .createQueryBuilder('user')
+      .where('user.status = :status', { status: 'ACTIVE' })
+      .andWhere(
+        '(user.displayName LIKE :kw OR user.username LIKE :kw OR user.bio LIKE :kw OR user.region LIKE :kw)',
+        { kw: `%${q}%` },
+      )
+      .orderBy('user.createdAt', 'DESC')
+      .take(take)
+      .getMany();
+
+    return {
+      success: true,
+      data: users.map((u) => {
+        const { passwordHash, ...uDto } = u;
+        return {
+          ...uDto,
           vrDeviceInfo: u.vrDeviceModel
             ? { model: u.vrDeviceModel, version: u.vrDeviceVersion || '' }
             : null,
@@ -296,7 +328,7 @@ export class UsersController {
     @Headers('authorization') auth: string,
     @Body() body: { displayName?: string; bio?: string; website?: string; avatarUrl?: string; gender?: string; birthday?: string; region?: string; occupation?: string },
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.authService.requireActiveAccessToken(auth?.replace('Bearer ', '') || '');
     if (!userId) throw new UnauthorizedException('请先登录');
 
     const user = await this.userRepo.findOne({ where: { id: userId } });
@@ -328,7 +360,7 @@ export class UsersController {
 
   @Post(':id/follow')
   async followUser(@Headers('authorization') auth: string, @Param('id') targetId: string) {
-    const userId = this.getUserId(auth);
+    const userId = await this.authService.requireActiveAccessToken(auth?.replace('Bearer ', '') || '');
     if (!userId) throw new UnauthorizedException('请先登录');
     if (userId === targetId) throw new NotFoundException('不能关注自己');
 
@@ -352,7 +384,7 @@ export class UsersController {
 
   @Delete(':id/follow')
   async unfollowUser(@Headers('authorization') auth: string, @Param('id') targetId: string) {
-    const userId = this.getUserId(auth);
+    const userId = await this.authService.requireActiveAccessToken(auth?.replace('Bearer ', '') || '');
     if (!userId) throw new UnauthorizedException('请先登录');
 
     await this.followRepo.delete({ followerId: userId, followingId: targetId });
@@ -372,11 +404,9 @@ export class UsersController {
     const user = await this.userRepo.findOne({ where: { username } });
     if (!user) throw new NotFoundException('用户不存在');
 
-    // 携带了 Authorization 但 token 无效（过期/篡改）时抛 401，触发前端自动刷新
+    // 个人主页帖子是公开资料。若浏览器里残留了过期 token，这里按游客处理，
+    // 避免公开主页因为旧登录态返回 401。
     const currentUserId = this.getUserId(auth || '');
-    if (auth && !currentUserId) {
-      throw new UnauthorizedException('登录已过期，请重新登录');
-    }
     const isOwner = currentUserId === user.id;
     const take = limit ? parseInt(limit) : 20;
 
@@ -681,23 +711,30 @@ export class UsersController {
       throw new BadRequestException('请输入"确认注销"以完成验证');
     }
 
-    const user = await this.userRepo.findOne({ where: { id: userId } });
-    if (!user) throw new NotFoundException('用户不存在');
+    const now = new Date();
+    const restoreDeadline = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
 
-    // 软删除：设置状态为 DEACTIVATED + 记录注销时间
-    user.status = 'DEACTIVATED' as any;
-    user.updatedAt = new Date();
-    // 在 bio 中记录注销信息（冷静期30天内可恢复）
-    user.bio = `[账号已注销] 注销时间: ${new Date().toISOString().split('T')[0]}${body.reason ? ` 原因: ${body.reason}` : ''}`;
-    await this.userRepo.save(user);
+    await this.userRepo.manager.transaction(async (manager) => {
+      const user = await manager.findOne(User, { where: { id: userId } });
+      if (!user) throw new NotFoundException('用户不存在');
+      if (user.status === 'DEACTIVATED') {
+        throw new BadRequestException('账号已注销');
+      }
 
-    // 将用户的所有帖子设为私密（软删除关联内容）
-    await this.postRepo
-      .createQueryBuilder()
-      .update(PostEntity)
-      .set({ visibility: 'PRIVATE' as any })
-      .where('authorId = :userId', { userId })
-      .execute();
+      user.status = 'DEACTIVATED';
+      user.deactivatedAt = now;
+      user.deactivationReason = body.reason?.trim() || null;
+      user.deactivationRestoreDeadline = restoreDeadline;
+      user.updatedAt = now;
+      await manager.save(User, user);
+
+      await manager
+        .createQueryBuilder()
+        .update(PostEntity)
+        .set({ visibility: 'PRIVATE' as any })
+        .where('authorId = :userId', { userId })
+        .execute();
+    });
 
     return {
       success: true,

@@ -7,6 +7,8 @@ import { Message } from './message.entity.js';
 import { InterestTag } from './interest-tag.entity.js';
 import { UserInterest } from './user-interest.entity.js';
 
+export type UserStatus = 'ACTIVE' | 'BANNED' | 'DEACTIVATED';
+
 @Entity('users')
 export class User {
   @PrimaryColumn({ type: 'varchar', length: 36 })
@@ -66,8 +68,17 @@ export class User {
   @Column({ type: 'enum', enum: ['USER', 'MODERATOR', 'ADMIN'], default: 'USER' })
   role: 'USER' | 'MODERATOR' | 'ADMIN';
 
-  @Column({ type: 'enum', enum: ['ACTIVE', 'BANNED'], default: 'ACTIVE' })
-  status: 'ACTIVE' | 'BANNED';
+  @Column({ type: 'enum', enum: ['ACTIVE', 'BANNED', 'DEACTIVATED'], default: 'ACTIVE' })
+  status: UserStatus;
+
+  @Column({ name: 'deactivated_at', type: 'timestamp', nullable: true })
+  deactivatedAt: Date | null;
+
+  @Column({ name: 'deactivation_reason', type: 'text', nullable: true })
+  deactivationReason: string | null;
+
+  @Column({ name: 'deactivation_restore_deadline', type: 'timestamp', nullable: true })
+  deactivationRestoreDeadline: Date | null;
 
   @OneToMany(() => Post, (post) => post.author)
   posts: Post[];

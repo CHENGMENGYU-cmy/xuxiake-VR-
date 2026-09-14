@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In, IsNull } from 'typeorm';
+import { Brackets, Repository, In, IsNull } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { Post } from '../../entities/post.entity.js';
 import { MediaItem } from '../../entities/media-item.entity.js';
@@ -956,6 +956,50 @@ export class PostsService {
       .orderBy('topic.postCount', 'DESC')
       .take(20)
       .getMany();
+  }
+
+  async searchPosts(keyword: string, limit = 20, currentUserId?: string) {
+    const q = keyword.trim();
+    if (!q) return [];
+
+    const qb = this.postRepo
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.author', 'author')
+      .leftJoinAndSelect('post.mediaItems', 'mediaItems')
+      .leftJoinAndSelect('post.tags', 'tags')
+      .leftJoinAndSelect('post.topics', 'topics')
+      .where('post.deletedAt IS NULL')
+      .andWhere('author.status = :activeStatus', { activeStatus: 'ACTIVE' })
+      .andWhere(
+        new Brackets((where) => {
+          where.where('post.content LIKE :kw', { kw: `%${q}%` })
+            .orWhere('post.locationName LIKE :kw', { kw: `%${q}%` })
+            .orWhere('author.displayName LIKE :kw', { kw: `%${q}%` })
+            .orWhere('author.username LIKE :kw', { kw: `%${q}%` });
+        }),
+      )
+      .orderBy('post.createdAt', 'DESC')
+      .take(Math.min(Math.max(limit, 1), 50));
+
+    if (currentUserId) {
+      qb.andWhere('(post.visibility = :publicVis OR post.authorId = :currentUserId)', {
+        publicVis: 'PUBLIC',
+        currentUserId,
+      });
+    } else {
+      qb.andWhere('post.visibility = :publicVis', { publicVis: 'PUBLIC' });
+    }
+
+    const posts = await qb.getMany();
+    let likedIds = new Set<string>();
+    if (currentUserId && posts.length > 0) {
+      const likes = await this.likeRepo.find({
+        where: { userId: currentUserId, postId: In(posts.map((p) => p.id)) },
+      });
+      likedIds = new Set(likes.map((l) => l.postId));
+    }
+
+    return posts.map((post) => this.formatPost(post, likedIds.has(post.id)));
   }
 
   async getTopicById(id: string) {
