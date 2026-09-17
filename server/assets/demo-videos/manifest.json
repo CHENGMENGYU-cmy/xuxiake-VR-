@@ -1,0 +1,14 @@
+{
+  "name": "demo-videos",
+  "description": "演示用视频素材。运行时目录 server/uploads/ 被 .gitignore 忽略，因此把可交付的视频资产放在这里，新环境用 restore-demo-videos.mjs 恢复到 server/uploads/demo-videos/。",
+  "note": "这 6 条视频素材共用同一条演示视频（按目的地各自展示封面），引用方见 media_items 中 type='VIDEO' 的记录。",
+  "fileCount": 1,
+  "files": [
+    {
+      "fileName": "travel-demo.mp4",
+      "url": "/uploads/demo-videos/travel-demo.mp4",
+      "size": 2990149,
+      "sha256": "58517bf6814f250846ad93527626cda9cb7656d585f2c916fa71e9698b062e27"
+    }
+  ]
+}
