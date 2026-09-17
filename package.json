@@ -11,7 +11,9 @@
     "build:web": "cd web && npm run build",
     "start:server": "cd server && node dist/main.js",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:web\" \"node scripts/open-browser.js\"",
-    "start": "concurrently \"npm run start:server\" \"npm run dev:web\""
+    "start": "concurrently \"npm run start:server\" \"npm run dev:web\"",
+    "check:real-covers": "node server/scripts/restore-real-covers.mjs --check",
+    "restore:real-covers": "node server/scripts/restore-real-covers.mjs --copy"
   },
   "devDependencies": {
     "concurrently": "^9.0.0",

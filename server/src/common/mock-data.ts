@@ -18,7 +18,7 @@ export const mockUsers: IUser[] = [
     displayName: '徐霞客',
     passwordHash: 'hashed_password_123',
     bio: '带着VR眼镜看世界 🌍 记录每一段旅程',
-    avatarUrl: 'https://api.dicebear.com/9.x/avataaars/svg?seed=xuxiake',
+    avatarUrl: '/api/placeholder/xuxiake',
     vrDeviceInfo: { model: 'Apple Vision Pro', version: '2.0' },
     website: 'https://xuxiake.com',
     createdAt: '2025-01-15T08:00:00Z',
@@ -30,7 +30,7 @@ export const mockUsers: IUser[] = [
     displayName: '张三',
     passwordHash: 'hashed_password_456',
     bio: 'VR摄影师 | 旅行爱好者',
-    avatarUrl: 'https://api.dicebear.com/9.x/avataaars/svg?seed=zhangshan',
+    avatarUrl: '/api/placeholder/zhangshan',
     createdAt: '2025-02-20T10:30:00Z',
   },
   {
@@ -40,7 +40,7 @@ export const mockUsers: IUser[] = [
     displayName: '李四',
     passwordHash: 'hashed_password_789',
     bio: '科技评测 | VR内容创作者',
-    avatarUrl: 'https://api.dicebear.com/9.x/avataaars/svg?seed=lisi',
+    avatarUrl: '/api/placeholder/lisi',
     createdAt: '2025-03-10T14:00:00Z',
   },
   {
@@ -50,7 +50,7 @@ export const mockUsers: IUser[] = [
     displayName: '王五',
     passwordHash: 'hashed_password_012',
     bio: '环球旅行者 🌏 用VR记录世界',
-    avatarUrl: 'https://api.dicebear.com/9.x/avataaars/svg?seed=wangwu',
+    avatarUrl: '/api/placeholder/wangwu',
     createdAt: '2025-04-05T09:15:00Z',
   },
 ];

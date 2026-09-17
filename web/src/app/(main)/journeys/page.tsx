@@ -112,19 +112,20 @@ function JourneysContent() {
   };
 
   const handleToggleVisibility = async (postId: string, makePrivate: boolean) => {
+    if (!makePrivate) {
+      router.push(`/journeys/${postId}`);
+      return;
+    }
+
     try {
-      const newVis = makePrivate ? 'PRIVATE' : 'PUBLIC';
-      await publishPost(postId, undefined, newVis as any);
+      const updated = await publishPost(postId, undefined, 'PRIVATE');
 
-      // 更新 allPosts
-      setAllPosts(prev => prev.map(p => p.id === postId ? { ...p, visibility: newVis } : p));
+      setAllPosts(prev => prev.map(p => p.id === postId ? { ...p, ...updated } : p));
 
-      // 如果可见性变更后不再匹配当前标签，从当前列表移除；否则更新
       setPosts(prev => {
-        const shouldStay =
-          activeTab === 'private' ? newVis === 'PRIVATE' : newVis !== 'PRIVATE';
+        const shouldStay = activeTab === 'private';
         if (!shouldStay) return prev.filter(p => p.id !== postId);
-        return prev.map(p => p.id === postId ? { ...p, visibility: newVis } : p);
+        return prev.map(p => p.id === postId ? { ...p, ...updated } : p);
       });
     } catch {}
   };
@@ -246,7 +247,7 @@ function JourneysContent() {
                           </Button>
                           {post.visibility === 'PRIVATE' ? (
                             <Button variant="ghost" size="sm" onClick={() => handleToggleVisibility(post.id, false)} className="gap-1.5 text-green-600">
-                              <Share2 className="h-3.5 w-3.5" />公开发布
+                              <Share2 className="h-3.5 w-3.5" />发布到社区
                             </Button>
                           ) : (
                             <Button variant="ghost" size="sm" onClick={() => handleToggleVisibility(post.id, true)} className="gap-1.5 text-amber-600">

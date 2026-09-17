@@ -4,7 +4,7 @@
 -- ============================================================
 
 ALTER TABLE posts
-  ADD COLUMN content_level ENUM('SNAPSHOT','DIARY','TRAVELOGUE','ESSAY') NOT NULL DEFAULT 'SNAPSHOT' COMMENT '内容层级' AFTER post_type,
+  ADD COLUMN content_level ENUM('SNAPSHOT','POST','CLASSIFIED','DIARY','TRAVELOGUE','ESSAY') NOT NULL DEFAULT 'POST' COMMENT '内容层级' AFTER post_type,
   ADD COLUMN parent_post_id VARCHAR(36) NULL COMMENT '上级内容ID，用于内容层级关联' AFTER content_level,
   ADD INDEX idx_posts_content_level (content_level),
   ADD INDEX idx_posts_parent (parent_post_id),

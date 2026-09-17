@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Brackets, Repository, In, IsNull } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
@@ -37,8 +37,8 @@ export class PostsService {
     private readonly notificationsService: NotificationsService,
   ) {}
 
-  async getPosts(options: { cursor?: string; limit?: number; sort?: string; page?: number; postType?: string; tagId?: string; userId?: string; followingOnly?: boolean; currentUserId?: string; excludeContentLevel?: string; contentLevel?: string; excludeContentLevels?: string[] } = {}) {
-    const { cursor, limit = 10, sort = 'latest', page = 1, postType, tagId, userId, followingOnly, currentUserId, excludeContentLevel, contentLevel, excludeContentLevels } = options;
+  async getPosts(options: { cursor?: string; limit?: number; sort?: string; page?: number; postType?: string; postTypes?: string[]; tagId?: string; userId?: string; followingOnly?: boolean; currentUserId?: string; excludeContentLevel?: string; contentLevel?: string; excludeContentLevels?: string[] } = {}) {
+    const { cursor, limit = 10, sort = 'latest', page = 1, postType, postTypes, tagId, userId, followingOnly, currentUserId, excludeContentLevel, contentLevel, excludeContentLevels } = options;
 
     // 关注动态模式：查询关注列表
     let followingIds: string[] | null = null;
@@ -53,10 +53,10 @@ export class PostsService {
 
     // trending 和 hot 使用 offset 分页（排名动态变化），latest 使用 cursor 分页
     if (sort === 'trending') {
-      return this.getTrendingPosts(limit, page, postType, tagId, followingIds, currentUserId, excludeContentLevel, contentLevel, excludeContentLevels);
+      return this.getTrendingPosts(limit, page, postType, postTypes, tagId, followingIds, currentUserId, excludeContentLevel, contentLevel, excludeContentLevels);
     }
     if (sort === 'hot') {
-      return this.getHotPosts(limit, page, postType, tagId, followingIds, currentUserId, excludeContentLevel, contentLevel, excludeContentLevels);
+      return this.getHotPosts(limit, page, postType, postTypes, tagId, followingIds, currentUserId, excludeContentLevel, contentLevel, excludeContentLevels);
     }
 
     // 默认 latest：按时间倒序，cursor 分页
@@ -81,8 +81,11 @@ export class PostsService {
     // 软删内容不展示
     qb.andWhere('post.deletedAt IS NULL');
 
-    if (postType) {
-      qb.andWhere('post.postType = :postType', { postType });
+    const typeList = postTypes?.length ? postTypes : (postType ? postType.split(',').filter(Boolean) : []);
+    if (typeList.length > 1) {
+      qb.andWhere('post.postType IN (:...postTypes)', { postTypes: typeList });
+    } else if (typeList.length === 1) {
+      qb.andWhere('post.postType = :postType', { postType: typeList[0] });
     }
     if (tagId) {
       qb.innerJoin('post.tags', 'filterTag', 'filterTag.id = :tagId', { tagId });
@@ -91,7 +94,12 @@ export class PostsService {
       qb.andWhere('(post.contentLevel IS NULL OR post.contentLevel != :excludeLevel)', { excludeLevel: excludeContentLevel });
     }
     if (contentLevel) {
-      qb.andWhere('post.contentLevel = :contentLevel', { contentLevel });
+      const levels = contentLevel.split(',').filter(Boolean);
+      if (levels.length > 1) {
+        qb.andWhere('post.contentLevel IN (:...contentLevels)', { contentLevels: levels });
+      } else if (levels.length === 1) {
+        qb.andWhere('post.contentLevel = :contentLevel', { contentLevel: levels[0] });
+      }
     }
     if (excludeContentLevels && excludeContentLevels.length > 0) {
       qb.andWhere('post.contentLevel NOT IN (:...excludeLevels)', { excludeLevels: excludeContentLevels });
@@ -124,7 +132,7 @@ export class PostsService {
     };
   }
 
-  private async getTrendingPosts(limit: number, page: number, postType?: string, tagId?: string, followingIds?: string[] | null, currentUserId?: string, excludeContentLevel?: string, contentLevel?: string, excludeContentLevels?: string[]) {
+  private async getTrendingPosts(limit: number, page: number, postType?: string, postTypes?: string[], tagId?: string, followingIds?: string[] | null, currentUserId?: string, excludeContentLevel?: string, contentLevel?: string, excludeContentLevels?: string[]) {
     // 热门内容：加权热度分 + 时间衰减
     // score = (likeCount*3 + commentCount*2 + viewCount*0.1) * timeDecay
     const offset = (page - 1) * limit;
@@ -153,8 +161,11 @@ export class PostsService {
       .skip(offset)
       .take(limit + 1);
 
-    if (postType) {
-      qb.andWhere('post.postType = :postType', { postType });
+    const typeList = postTypes?.length ? postTypes : (postType ? postType.split(',').filter(Boolean) : []);
+    if (typeList.length > 1) {
+      qb.andWhere('post.postType IN (:...postTypes)', { postTypes: typeList });
+    } else if (typeList.length === 1) {
+      qb.andWhere('post.postType = :postType', { postType: typeList[0] });
     }
     if (tagId) {
       qb.innerJoin('post.tags', 'filterTag', 'filterTag.id = :tagId', { tagId });
@@ -163,7 +174,12 @@ export class PostsService {
       qb.andWhere('(post.contentLevel IS NULL OR post.contentLevel != :excludeLevel)', { excludeLevel: excludeContentLevel });
     }
     if (contentLevel) {
-      qb.andWhere('post.contentLevel = :contentLevel', { contentLevel });
+      const levels = contentLevel.split(',').filter(Boolean);
+      if (levels.length > 1) {
+        qb.andWhere('post.contentLevel IN (:...contentLevels)', { contentLevels: levels });
+      } else if (levels.length === 1) {
+        qb.andWhere('post.contentLevel = :contentLevel', { contentLevel: levels[0] });
+      }
     }
     if (excludeContentLevels && excludeContentLevels.length > 0) {
       qb.andWhere('post.contentLevel NOT IN (:...excludeLevels)', { excludeLevels: excludeContentLevels });
@@ -188,7 +204,7 @@ export class PostsService {
     };
   }
 
-  private async getHotPosts(limit: number, page: number, postType?: string, tagId?: string, followingIds?: string[] | null, currentUserId?: string, excludeContentLevel?: string, contentLevel?: string, excludeContentLevels?: string[]) {
+  private async getHotPosts(limit: number, page: number, postType?: string, postTypes?: string[], tagId?: string, followingIds?: string[] | null, currentUserId?: string, excludeContentLevel?: string, contentLevel?: string, excludeContentLevels?: string[]) {
     // 精选推荐：高互动量帖子（点赞 + 评论）
     const offset = (page - 1) * limit;
 
@@ -214,8 +230,11 @@ export class PostsService {
       .skip(offset)
       .take(limit + 1);
 
-    if (postType) {
-      qb.andWhere('post.postType = :postType', { postType });
+    const typeList = postTypes?.length ? postTypes : (postType ? postType.split(',').filter(Boolean) : []);
+    if (typeList.length > 1) {
+      qb.andWhere('post.postType IN (:...postTypes)', { postTypes: typeList });
+    } else if (typeList.length === 1) {
+      qb.andWhere('post.postType = :postType', { postType: typeList[0] });
     }
     if (tagId) {
       qb.innerJoin('post.tags', 'filterTag', 'filterTag.id = :tagId', { tagId });
@@ -224,7 +243,12 @@ export class PostsService {
       qb.andWhere('(post.contentLevel IS NULL OR post.contentLevel != :excludeLevel)', { excludeLevel: excludeContentLevel });
     }
     if (contentLevel) {
-      qb.andWhere('post.contentLevel = :contentLevel', { contentLevel });
+      const levels = contentLevel.split(',').filter(Boolean);
+      if (levels.length > 1) {
+        qb.andWhere('post.contentLevel IN (:...contentLevels)', { contentLevels: levels });
+      } else if (levels.length === 1) {
+        qb.andWhere('post.contentLevel = :contentLevel', { contentLevel: levels[0] });
+      }
     }
     if (excludeContentLevels && excludeContentLevels.length > 0) {
       qb.andWhere('post.contentLevel NOT IN (:...excludeLevels)', { excludeLevels: excludeContentLevels });
@@ -297,7 +321,7 @@ export class PostsService {
       authorId: userId,
       communityId: dto.communityId || null,
       postType: dto.postType || 'NOTE',
-      contentLevel: dto.contentLevel || 'SNAPSHOT',
+      contentLevel: dto.contentLevel || 'POST',
       parentPostId: dto.parentPostId || null,
       content: dto.content || null,
       locationLat: dto.location?.lat || null,
@@ -855,7 +879,7 @@ export class PostsService {
   }
 
   // ===== 发布/撤回 =====
-  async publishPost(userId: string, postId: string, dto?: { locationPrecision?: 'hidden' | 'city' | 'exact'; visibility?: 'PUBLIC' | 'FOLLOWERS' | 'PRIVATE' }) {
+  async publishPost(userId: string, postId: string, dto?: { locationPrecision?: 'hidden' | 'city' | 'exact'; visibility?: 'PUBLIC' | 'FOLLOWERS' | 'PRIVATE'; communityId?: string | null }) {
     const post = await this.postRepo.findOne({
       where: { id: postId, deletedAt: IsNull() },
       relations: { author: true, mediaItems: true, tags: true, topics: true },
@@ -876,7 +900,21 @@ export class PostsService {
       post.locationLng = null;
     }
 
-    post.visibility = dto?.visibility || 'PUBLIC';
+    const nextVisibility = dto?.visibility || 'PUBLIC';
+    const nextCommunityId = dto && Object.prototype.hasOwnProperty.call(dto, 'communityId')
+      ? (dto.communityId || null)
+      : post.communityId;
+
+    if (nextVisibility === 'PUBLIC' && ['DIARY', 'TRAVELOGUE', 'ESSAY'].includes(post.contentLevel) && !nextCommunityId) {
+      throw new BadRequestException('请选择社区后再发布');
+    }
+
+    post.visibility = nextVisibility;
+    if (nextVisibility === 'PRIVATE') {
+      post.communityId = null;
+    } else {
+      post.communityId = nextCommunityId;
+    }
     post.updatedAt = new Date();
     await this.postRepo.save(post);
     return this.formatPost(post);
@@ -891,6 +929,7 @@ export class PostsService {
     if (post.authorId !== userId) throw new NotFoundException('无权撤回此内容');
 
     post.visibility = 'PRIVATE';
+    post.communityId = null;
     post.updatedAt = new Date();
     await this.postRepo.save(post);
     return this.formatPost(post);
@@ -900,7 +939,7 @@ export class PostsService {
     const post = await this.postRepo.findOne({ where: { id: postId, authorId: userId, deletedAt: IsNull() } });
     if (!post) throw new NotFoundException('内容不存在');
 
-    const validLevels = ['SNAPSHOT', 'DIARY', 'TRAVELOGUE', 'ESSAY'];
+    const validLevels = ['SNAPSHOT', 'POST', 'CLASSIFIED', 'DIARY', 'TRAVELOGUE', 'ESSAY'];
     if (!validLevels.includes(dto.targetLevel)) throw new NotFoundException('无效的目标层级');
 
     const newPost = this.postRepo.create({
@@ -1165,10 +1204,14 @@ export class PostsService {
     mood?: string;
     weather?: string;
   }) {
-    // 状态映射：public→PUBLIC, draft/private→PRIVATE
-    const visibility = dto.status === 'public'
+    // 状态映射：日记正式公开必须走发布到社区流程；保存阶段只允许草稿/私密/关注可见
+    const requestedVisibility = dto.status === 'public'
       ? 'PUBLIC'
       : (dto.visibility || 'PRIVATE');
+    if (requestedVisibility === 'PUBLIC') {
+      throw new BadRequestException('请先保存日记，再在详情页选择社区发布');
+    }
+    const visibility = requestedVisibility;
 
     const vrMetadata: Record<string, unknown> = {
       insight: dto.insight || '',

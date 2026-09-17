@@ -228,14 +228,14 @@ function JourneyCreatorContent() {
       } else {
         const payload: CreatePostPayload = {
           content: assembleContent(),
-          visibility,
+          visibility: 'PRIVATE',
           postType: 'JOURNEY',
           contentLevel: 'TRAVELOGUE',
           vrMetadata: { tab: 'JOURNEY' },
           journey: journeyPayload,
         };
         const post = await publishPost(payload);
-        toast.success('旅程发布成功');
+        toast.success(visibility === 'PUBLIC' ? '游记已保存，请选择社区发布' : '游记已保存');
         router.push(`/journeys/${post.id}`);
       }
     } catch {
@@ -399,14 +399,14 @@ function JourneyCreatorContent() {
               onChange={(e) => setVisibility(e.target.value as 'PUBLIC' | 'PRIVATE')}
               className="h-9 rounded-lg border border-border bg-background px-2 text-sm"
             >
-              <option value="PUBLIC">🌐 公开发布</option>
+              <option value="PUBLIC">🌐 保存后去发布</option>
               <option value="PRIVATE">🔒 仅自己可见</option>
             </select>
             <div className="flex gap-3">
               <Button variant="outline" size="lg" onClick={() => router.push('/journeys')}>取消</Button>
               <Button size="lg" className="gap-2" disabled={!canPublish} onClick={handlePublish}>
                 {isPublishing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-                {isPublishing ? '发布中...' : editId ? '保存修改' : '发布游记'}
+                {isPublishing ? '保存中...' : editId ? '保存修改' : visibility === 'PUBLIC' ? '保存并去发布' : '保存游记'}
               </Button>
             </div>
           </div>

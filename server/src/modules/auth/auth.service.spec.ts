@@ -40,6 +40,36 @@ describe('AuthService token contract', () => {
   });
 });
 
+describe('AuthService default avatar', () => {
+  it('uses the local placeholder endpoint for newly registered users', async () => {
+    const userRepo = {
+      findOne: jest.fn().mockResolvedValue(null),
+      create: jest.fn((input) => input),
+      save: jest.fn((input) => Promise.resolve(input)),
+    };
+    const service = new AuthService(
+      userRepo as any,
+      new JwtService({ secret: 'test-secret', signOptions: { expiresIn: '15m' } }),
+      {} as any,
+      {} as any,
+    );
+
+    const result = await service.register({
+      email: 'avatar@example.com',
+      username: 'new_user',
+      password: 'Password123',
+      displayName: 'New User',
+    });
+
+    expect(result.user.avatarUrl).toBe('/api/placeholder/new_user');
+    expect(userRepo.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        avatarUrl: '/api/placeholder/new_user',
+      }),
+    );
+  });
+});
+
 describe('CaptchaService test-code gate', () => {
   const originalNodeEnv = process.env.NODE_ENV;
   const originalAllowTestCaptcha = process.env.ALLOW_TEST_CAPTCHA;

@@ -1587,12 +1587,23 @@ export class SocialController {
     @Param('id') communityId: string,
     @Query('page') page?: string,
     @Query('limit') limit?: string,
+    @Query('contentLevel') contentLevel?: string,
+    @Query('postType') postType?: string,
+    @Query('postTypes') postTypes?: string,
+    @Query('excludeContentLevels') excludeContentLevels?: string,
   ) {
     const userId = this.getUserId(auth);
     const pageNum = parseInt(page || '1');
     const limitNum = parseInt(limit || '20');
+    const postTypeList = postTypes ? postTypes.split(',').filter(Boolean) : undefined;
+    const excludeLevelList = excludeContentLevels ? excludeContentLevels.split(',').filter(Boolean) : undefined;
 
-    return this.socialService.getCommunityPosts(communityId, userId || undefined, pageNum, limitNum);
+    return this.socialService.getCommunityPosts(communityId, userId || undefined, pageNum, limitNum, {
+      contentLevel,
+      postType,
+      postTypes: postTypeList,
+      excludeContentLevels: excludeLevelList,
+    });
   }
 
   // ==================== 挑战参与 ====================

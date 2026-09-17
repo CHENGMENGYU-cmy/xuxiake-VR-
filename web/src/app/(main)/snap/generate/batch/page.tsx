@@ -184,23 +184,25 @@ function BatchContent() {
     if (!content.trim()) { toast.error('日记内容不能为空'); return; }
     setSaving(true);
     try {
-      await saveDiary({
+      const saveStatus = status === 'public' ? 'private' : status;
+      const result = await saveDiary({
         diaryId: postId,
         title,
         content,
         insight,
         style,
         tags,
-        status,
+        status: saveStatus,
       });
+      const savedId = result?.id || postId;
       if (status === 'draft') {
         toast.success('草稿已保存');
       } else if (status === 'private') {
         toast.success('已保存为私密日记');
         router.push('/diaries');
       } else {
-        toast.success('已发布到日记广场');
-        router.push('/snap/square');
+        toast.success('日记已保存，请选择社区发布');
+        router.push(savedId ? `/diaries/${savedId}` : '/diaries');
       }
     } catch {
       toast.error('保存失败，请重试');
@@ -437,7 +439,7 @@ function BatchContent() {
                 className="h-9 gap-1.5 bg-gradient-to-r from-teal-500 to-emerald-500 px-5 text-xs font-medium shadow-md shadow-teal-500/25 hover:from-teal-600 hover:to-emerald-600"
               >
                 {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Globe className="h-3.5 w-3.5" />}
-                发布
+                去发布
               </Button>
             </div>
           </div>

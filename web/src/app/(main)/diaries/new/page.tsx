@@ -257,6 +257,7 @@ function DiaryEditor() {
     setSaving(true);
     try {
       const coverImg = images.find((img) => img.isCover)?.url || images[0]?.url || undefined;
+      const saveStatus = status === 'public' ? 'private' : status;
       const result = await saveDiary({
         diaryId: editId || undefined,
         snapId: snapIds[0] || undefined,
@@ -265,7 +266,7 @@ function DiaryEditor() {
         insight: insight.trim() || undefined,
         mood: mood || undefined,
         weather: weather || undefined,
-        status,
+        status: saveStatus,
         image: coverImg,
       });
       const savedId = result?.id || editId;
@@ -280,7 +281,7 @@ function DiaryEditor() {
         toast.success('已保存为私密日记');
         router.push('/diaries');
       } else {
-        toast.success('已发布到日记广场');
+        toast.success('日记已保存，请选择社区发布');
         if (savedId) {
           router.push(`/diaries/${savedId}`);
         } else {

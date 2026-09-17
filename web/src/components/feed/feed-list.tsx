@@ -14,6 +14,7 @@ interface FeedListProps {
   showComposer?: boolean;
   sort?: PostSortType;
   postType?: string;
+  postTypes?: string[];
   tagId?: string;
   followingOnly?: boolean;
   excludeContentLevel?: string;
@@ -21,13 +22,13 @@ interface FeedListProps {
   excludeContentLevels?: string[];
 }
 
-export function FeedList({ showComposer = true, sort = 'latest', postType, tagId, followingOnly, excludeContentLevel, contentLevel, excludeContentLevels }: FeedListProps) {
+export function FeedList({ showComposer = false, sort = 'latest', postType, postTypes, tagId, followingOnly, excludeContentLevel, contentLevel, excludeContentLevels }: FeedListProps) {
   const { posts = [], isLoading, isLoadingMore, hasMore, fetchPosts, loadMore } = usePostStore();
 
   // sort 或 filter 变化时重新获取数据
   useEffect(() => {
-    fetchPosts(sort, { postType, tagId, followingOnly, excludeContentLevel, contentLevel, excludeContentLevels });
-  }, [sort, postType, tagId, followingOnly, excludeContentLevel, contentLevel, excludeContentLevels, fetchPosts]);
+    fetchPosts(sort, { postType, postTypes, tagId, followingOnly, excludeContentLevel, contentLevel, excludeContentLevels });
+  }, [sort, postType, postTypes, tagId, followingOnly, excludeContentLevel, contentLevel, excludeContentLevels, fetchPosts]);
 
   // 从详情页返回时恢复滚动位置
   useEffect(() => {
@@ -42,8 +43,8 @@ export function FeedList({ showComposer = true, sort = 'latest', postType, tagId
   }, [isLoading]);
 
   const handleRefresh = useCallback(() => {
-    fetchPosts(sort);
-  }, [fetchPosts, sort]);
+    fetchPosts(sort, { postType, postTypes, tagId, followingOnly, excludeContentLevel, contentLevel, excludeContentLevels });
+  }, [fetchPosts, sort, postType, postTypes, tagId, followingOnly, excludeContentLevel, contentLevel, excludeContentLevels]);
 
   return (
     <div className="space-y-4">

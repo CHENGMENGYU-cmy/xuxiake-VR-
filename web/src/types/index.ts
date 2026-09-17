@@ -58,11 +58,12 @@ export interface MediaItem {
 export type PostType = 'NOTE' | 'VR_MEDIA' | 'JOURNEY' | 'MOMENT';
 
 // 内容层级：闪拍 → 日记 → 游记（3级链条）
-export type ContentLevel = 'SNAPSHOT' | 'CLASSIFIED' | 'DIARY' | 'ESSAY' | 'TRAVELOGUE';
+export type ContentLevel = 'SNAPSHOT' | 'POST' | 'CLASSIFIED' | 'DIARY' | 'ESSAY' | 'TRAVELOGUE';
 
 export const ContentLevelLabel: Record<ContentLevel, string> = {
   SNAPSHOT: '瞬间捕获',
-  CLASSIFIED: '内容分类',
+  POST: '随笔',
+  CLASSIFIED: '随笔',
   DIARY: '日记',
   ESSAY: '游记',
   TRAVELOGUE: '游记',
@@ -171,6 +172,7 @@ export interface Post {
   content: string | null;
   mediaItems: MediaItem[];
   author: User;
+  communityId?: string | null;
   postType: PostType;
   contentLevel: ContentLevel;
   parentPostId?: string | null;

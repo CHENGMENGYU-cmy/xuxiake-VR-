@@ -148,7 +148,7 @@ export interface TokenPair {
   refreshToken: string;
 }
 
-export type ContentLevel = 'SNAPSHOT' | 'DIARY' | 'TRAVELOGUE' | 'ESSAY';
+export type ContentLevel = 'SNAPSHOT' | 'POST' | 'CLASSIFIED' | 'DIARY' | 'TRAVELOGUE' | 'ESSAY';
 
 export interface CreatePostDto {
   content?: string;

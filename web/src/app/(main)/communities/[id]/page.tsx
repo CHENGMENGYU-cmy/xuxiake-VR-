@@ -6,6 +6,7 @@ import Link from 'next/link';
 import {
   Users, MessageCircle, Loader2, LogOut, Settings,
   Trophy, ImageIcon, MapPin, Globe, Lock, UserX, Heart, FileText, Activity,
+  Home, BookOpen,
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -25,10 +26,18 @@ import {
   getCommunityAnnouncements, getCommunityRoles, getCommunityPosts,
   createCommunityAnnouncement, deleteCommunityAnnouncement,
 } from '@/lib/social-api';
-import { CommunityPostComposer } from '@/components/community/community-post-composer';
+import { PostCard } from '@/components/post/post-card';
 import { CreateChallengeDialog } from '@/components/community/create-challenge-dialog';
 import { toast } from 'sonner';
-import type { Community, CommunityAnnouncement, CommunityRole } from '@/types';
+import { PUBLIC_POST_CATEGORIES, getPublicPostCategory, type PublicPostCategoryId } from '@/lib/post-category';
+import type { Community, CommunityAnnouncement, CommunityRole, Post } from '@/types';
+
+
+const postCategoryIcons: Record<PublicPostCategoryId, React.ReactNode> = {
+  all: <Home className="h-3.5 w-3.5" />,
+  diary: <FileText className="h-3.5 w-3.5" />,
+  travelogue: <BookOpen className="h-3.5 w-3.5" />,
+};
 
 function formatCommunityDate(dateStr?: string | null): string {
   if (!dateStr) return '暂无动态';
@@ -224,7 +233,7 @@ export default function CommunitySpacePage() {
       <div className="mx-auto max-w-4xl px-4 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList variant="line" className="w-full justify-start border-b">
-            <TabsTrigger value="posts">动态</TabsTrigger>
+            <TabsTrigger value="posts">内容</TabsTrigger>
             <TabsTrigger value="announcements">
               公告{announcements.length > 0 && <span className="ml-1 text-xs text-muted-foreground">({announcements.length})</span>}
             </TabsTrigger>
@@ -235,9 +244,9 @@ export default function CommunitySpacePage() {
             <TabsTrigger value="about">关于</TabsTrigger>
           </TabsList>
 
-          {/* 动态 Tab */}
+          {/* 内容 Tab */}
           <TabsContent value="posts" className="mt-4">
-            <CommunityPostsTab communityId={communityId} isMember={!!community.isMember} />
+            <CommunityPostsTab communityId={communityId} />
           </TabsContent>
 
           {/* 公告 Tab */}
@@ -271,80 +280,70 @@ export default function CommunitySpacePage() {
   );
 }
 
-// ==================== 动态 Tab ====================
+// ==================== 内容 Tab ====================
 
-function CommunityPostsTab({ communityId, isMember }: { communityId: string; isMember: boolean }) {
-  const [posts, setPosts] = useState<any[]>([]);
+function CommunityPostsTab({ communityId }: { communityId: string }) {
+  const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
-  const [refreshKey, setRefreshKey] = useState(0);
+  const [activeCategory, setActiveCategory] = useState<PublicPostCategoryId>('all');
 
   useEffect(() => {
-    getCommunityPosts(communityId, 1, 20)
-      .then((res) => setPosts(res.data || []))
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, [communityId, refreshKey]);
-
-  const handlePostCreated = () => {
-    setRefreshKey((k) => k + 1);
-  };
-
-  if (loading) {
-    return (
-      <div className="space-y-4">
-        {[1, 2, 3].map((i) => (
-          <Card key={i}><CardContent className="pt-6"><Skeleton className="h-24" /></CardContent></Card>
-        ))}
-      </div>
-    );
-  }
+    let cancelled = false;
+    setLoading(true);
+    const category = getPublicPostCategory(activeCategory);
+    getCommunityPosts(communityId, 1, 20, category.query)
+      .then((res) => {
+        if (!cancelled) setPosts(res.data || []);
+      })
+      .catch(() => {
+        if (!cancelled) setPosts([]);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => { cancelled = true; };
+  }, [communityId, activeCategory]);
 
   return (
     <div className="space-y-4">
-      {/* 发帖组件 */}
-      {isMember && (
-        <CommunityPostComposer communityId={communityId} onPostCreated={handlePostCreated} />
-      )}
+      <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-none">
+        {PUBLIC_POST_CATEGORIES.map((category) => (
+          <Button
+            key={category.id}
+            variant={activeCategory === category.id ? 'default' : 'outline'}
+            size="sm"
+            className="flex-shrink-0 gap-1 rounded-full text-xs"
+            onClick={() => setActiveCategory(category.id)}
+          >
+            {postCategoryIcons[category.id]}
+            {category.label}
+          </Button>
+        ))}
+      </div>
 
-      {posts.length === 0 ? (
+      {loading ? (
+        <div className="space-y-4">
+          {[1, 2, 3].map((i) => (
+            <Card key={i}><CardContent className="pt-6"><Skeleton className="h-24" /></CardContent></Card>
+          ))}
+        </div>
+      ) : posts.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center text-sm text-muted-foreground">
-            暂无动态，快来发布第一条吧
+            暂无公开日记或游记，发布后会显示在这里
           </CardContent>
         </Card>
       ) : (
-        posts.map((post) => (
-          <Card key={post.id}>
-            <CardContent className="pt-6">
-              <div className="flex items-center gap-3">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src={post.author?.avatarUrl || undefined} />
-                  <AvatarFallback>{post.author?.displayName?.[0]}</AvatarFallback>
-                </Avatar>
-                <div>
-                  <p className="text-sm font-medium">{post.author?.displayName}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {new Date(post.createdAt).toLocaleString('zh-CN')}
-                  </p>
-                </div>
-              </div>
-              {post.content && <p className="mt-3 text-sm">{post.content}</p>}
-              {post.locationName && (
-                <p className="mt-2 flex items-center gap-1 text-xs text-muted-foreground">
-                  <MapPin className="h-3 w-3" /> {post.locationName}
-                </p>
-              )}
-              <div className="mt-3 flex gap-4 text-xs text-muted-foreground">
-                <span>{post.likeCount || 0} 赞</span>
-                <span>{post.commentCount || 0} 评论</span>
-              </div>
-            </CardContent>
-          </Card>
-        ))
+        <div className="space-y-4">
+          {posts.map((post) => (
+            <PostCard key={post.id} post={post} />
+          ))}
+        </div>
       )}
     </div>
   );
 }
+
 
 // ==================== 公告 Tab ====================
 

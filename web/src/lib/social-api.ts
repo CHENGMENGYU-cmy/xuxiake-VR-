@@ -272,13 +272,24 @@ export async function createCommunityChallenge(communityId: string, params: {
 
 // ==================== 社群动态 ====================
 
-export async function getCommunityPosts(communityId: string, page = 1, limit = 20): Promise<{
+export async function getCommunityPosts(communityId: string, page = 1, limit = 20, filters?: {
+  contentLevel?: string;
+  postType?: string;
+  postTypes?: string[];
+  excludeContentLevels?: string[];
+}): Promise<{
   data: any[];
   total: number;
   page: number;
 }> {
+  const params: Record<string, any> = { page, limit };
+  if (filters?.contentLevel) params.contentLevel = filters.contentLevel;
+  if (filters?.postType) params.postType = filters.postType;
+  if (filters?.postTypes?.length) params.postTypes = filters.postTypes.join(',');
+  if (filters?.excludeContentLevels?.length) params.excludeContentLevels = filters.excludeContentLevels.join(',');
+
   const { data } = await apiClient.get(`/social/communities/${communityId}/posts`, {
-    params: { page, limit },
+    params,
   });
   return data;
 }

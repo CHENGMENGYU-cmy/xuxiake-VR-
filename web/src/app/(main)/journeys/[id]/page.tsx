@@ -8,9 +8,10 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { getPostById, deletePost, publishPost, unpublishPost } from '@/lib/post-api';
+import { listCommunities } from '@/lib/social-api';
 import { useAuthStore } from '@/stores/auth-store';
 import { AuthGuard } from '@/components/auth-guard';
-import type { Post } from '@/types';
+import type { Community, Post } from '@/types';
 
 export default function JourneyDetailPage() {
   return (
@@ -32,6 +33,9 @@ function JourneyDetailContent() {
   const [publishing, setPublishing] = useState(false);
   const [showPublishDialog, setShowPublishDialog] = useState(false);
   const [locationPrecision, setLocationPrecision] = useState<'hidden' | 'city' | 'exact'>('city');
+  const [communities, setCommunities] = useState<Community[]>([]);
+  const [communitiesLoading, setCommunitiesLoading] = useState(false);
+  const [selectedCommunityId, setSelectedCommunityId] = useState('');
   const [showAiSource, setShowAiSource] = useState(false);
 
   useEffect(() => {
@@ -41,6 +45,19 @@ function JourneyDetailContent() {
       setLoading(false);
     }).catch(() => setLoading(false));
   }, [postId]);
+
+  useEffect(() => {
+    if (!showPublishDialog) return;
+    setCommunitiesLoading(true);
+    listCommunities({ page: 1, limit: 30 })
+      .then((res) => {
+        const items = res.data || [];
+        setCommunities(items);
+        setSelectedCommunityId(post?.communityId || items[0]?.id || '');
+      })
+      .catch(() => setCommunities([]))
+      .finally(() => setCommunitiesLoading(false));
+  }, [showPublishDialog, post?.communityId]);
 
   // 权限检查
   if (post && user && post.author?.id !== user.id && post.visibility === 'PRIVATE') {
@@ -65,9 +82,10 @@ function JourneyDetailContent() {
   };
 
   const handlePublish = async () => {
+    if (!selectedCommunityId) return;
     setPublishing(true);
     try {
-      const updated = await publishPost(postId, locationPrecision);
+      const updated = await publishPost(postId, locationPrecision, 'PUBLIC', selectedCommunityId);
       setPost(updated);
       setShowPublishDialog(false);
       toast.success('游记已发布到社区');
@@ -184,9 +202,37 @@ function JourneyDetailContent() {
           <div className="w-full max-w-md rounded-lg bg-card p-6 shadow-lg">
             <h3 className="mb-4 text-lg font-semibold">发布到社区</h3>
             <p className="mb-4 text-sm text-muted-foreground">
-              发布后，所有人可以在社区中看到这篇游记。请选择地点显示精度：
+              发布后，所有人可以在社区中看到这篇游记。请先选择社区，再选择地点显示精度。
             </p>
             <div className="mb-4 space-y-2">
+              <p className="text-xs font-medium text-muted-foreground">选择社区</p>
+              {communitiesLoading ? (
+                <div className="rounded-lg border p-3 text-sm text-muted-foreground">正在加载社区...</div>
+              ) : communities.length === 0 ? (
+                <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-700 dark:border-amber-900 dark:bg-amber-950/30 dark:text-amber-300">
+                  暂无可选择的社区，请先创建或加入社区。
+                </div>
+              ) : (
+                communities.map((community) => (
+                  <button
+                    key={community.id}
+                    type="button"
+                    onClick={() => setSelectedCommunityId(community.id)}
+                    className={`flex w-full items-center justify-between rounded-lg border p-3 text-left transition-colors ${
+                      selectedCommunityId === community.id ? 'border-primary bg-primary/5' : 'hover:bg-accent'
+                    }`}
+                  >
+                    <span>
+                      <span className="block text-sm font-medium">{community.name}</span>
+                      {community.description && <span className="line-clamp-1 text-xs text-muted-foreground">{community.description}</span>}
+                    </span>
+                    {selectedCommunityId === community.id && <Globe className="h-4 w-4 text-primary" />}
+                  </button>
+                ))
+              )}
+            </div>
+            <div className="mb-4 space-y-2">
+              <p className="text-xs font-medium text-muted-foreground">地点显示精度</p>
               {[
                 { value: 'hidden' as const, label: '隐藏地点', desc: '不显示任何地点信息', icon: EyeOff },
                 { value: 'city' as const, label: '仅城市', desc: '只显示城市名称', icon: MapPinned },
@@ -211,7 +257,7 @@ function JourneyDetailContent() {
               <Button variant="outline" size="sm" onClick={() => setShowPublishDialog(false)} disabled={publishing}>
                 取消
               </Button>
-              <Button size="sm" onClick={handlePublish} disabled={publishing}>
+              <Button size="sm" onClick={handlePublish} disabled={publishing || communitiesLoading || !selectedCommunityId}>
                 {publishing ? <Loader2 className="mr-1 h-4 w-4 animate-spin" /> : <Globe className="mr-1 h-4 w-4" />}
                 确认发布
               </Button>

@@ -148,16 +148,21 @@ function DiariesContent() {
   };
 
   const handlePublish = async (postId: string, visibility: Visibility) => {
+    if (visibility === 'PUBLIC') {
+      router.push(`/diaries/${postId}`);
+      toast.info('请在详情页选择社区后发布');
+      return;
+    }
+
     try {
-      await publishPost(postId, undefined, visibility);
-      // 更新本地状态
+      const updated = await publishPost(postId, undefined, visibility);
       setPosts(prev => prev.map(p =>
-        p.id === postId ? { ...p, visibility } : p
+        p.id === postId ? { ...p, ...updated } : p
       ));
-      toast.success(visibility === 'PRIVATE' ? '已转为私密' : visibility === 'PUBLIC' ? '已转为公开' : '已设为关注可见');
+      toast.success(visibility === 'PRIVATE' ? '已转为私密' : '已设为关注可见');
     } catch (error) {
       console.error('发布失败:', error);
-      toast.error('发布失败，请重试');
+      toast.error('切换可见性失败，请重试');
     }
   };
 
@@ -466,7 +471,7 @@ function DiariesContent() {
                           )}
                           {!draft && post.visibility !== 'PUBLIC' && (
                             <Button variant="ghost" size="sm" className="h-7 text-xs gap-1 text-green-600" onClick={() => handlePublish(post.id, 'PUBLIC')}>
-                              <Share2 className="h-3 w-3" />公开
+                              <Share2 className="h-3 w-3" />发布到社区
                             </Button>
                           )}
                           {!draft && post.visibility !== 'PRIVATE' && (

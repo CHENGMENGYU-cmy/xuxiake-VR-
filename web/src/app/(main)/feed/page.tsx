@@ -1,26 +1,23 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Home, FileText, Video, Compass, BookOpen, Sparkles, Users } from 'lucide-react';
+import { Home, FileText, Compass, Sparkles, Users } from 'lucide-react';
 import { FeedList } from '@/components/feed/feed-list';
 import { useAuthStore } from '@/stores/auth-store';
 import { cn } from '@/lib/utils';
+import { PUBLIC_POST_CATEGORIES, getPublicPostCategory, type PublicPostCategoryId } from '@/lib/post-category';
 
-type FilterTab = { id: string; label: string; icon: typeof FileText; contentLevel?: string; excludeContentLevels?: string[] };
-
-const filterTabs: FilterTab[] = [
-  { id: 'all', label: '全部', icon: Home },
-  { id: 'diary', label: '日记', icon: FileText, contentLevel: 'DIARY' },
-  { id: 'travelogue', label: '游记', icon: Compass, contentLevel: 'TRAVELOGUE' },
-  { id: 'essay', label: '随笔', icon: BookOpen, contentLevel: 'ESSAY' },
-  { id: 'vr', label: 'VR内容', icon: Video, excludeContentLevels: ['SNAPSHOT', 'DIARY', 'TRAVELOGUE', 'ESSAY'] },
-];
+const filterIcons: Record<PublicPostCategoryId, typeof FileText> = {
+  all: Home,
+  diary: FileText,
+  travelogue: Compass,
+};
 
 export default function FeedPage() {
   const router = useRouter();
   const { user, isAuthenticated } = useAuthStore();
-  const [activeFilter, setActiveFilter] = useState('all');
+  const [activeFilter, setActiveFilter] = useState<PublicPostCategoryId>('all');
   const [feedMode, setFeedMode] = useState<'discover' | 'following'>('discover');
 
   // 管理员/审核员重定向到管理仪表板
@@ -30,7 +27,7 @@ export default function FeedPage() {
     }
   }, [isAuthenticated, user, router]);
 
-  const currentFilter = filterTabs.find((t) => t.id === activeFilter);
+  const currentFilter = getPublicPostCategory(activeFilter);
 
   return (
     <div className="space-y-4">
@@ -62,8 +59,8 @@ export default function FeedPage() {
 
       {/* 内容类型筛选 */}
       <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
-        {filterTabs.map((tab) => {
-          const Icon = tab.icon;
+        {PUBLIC_POST_CATEGORIES.map((tab) => {
+          const Icon = filterIcons[tab.id];
           const isActive = activeFilter === tab.id;
           return (
             <button
@@ -84,9 +81,12 @@ export default function FeedPage() {
       {/* 内容流 */}
       <FeedList
         key={`${feedMode}-${activeFilter}`}
+        showComposer={false}
         followingOnly={feedMode === 'following'}
-        contentLevel={currentFilter?.contentLevel}
-        excludeContentLevels={currentFilter?.excludeContentLevels}
+        contentLevel={currentFilter.query.contentLevel}
+        postType={currentFilter.query.postType}
+        postTypes={currentFilter.query.postTypes}
+        excludeContentLevels={currentFilter.query.excludeContentLevels}
       />
     </div>
   );

@@ -20,6 +20,10 @@ export class AuthService {
     private readonly smsService: SmsService,
   ) {}
 
+  private getDefaultAvatarUrl(username: string): string {
+    return `/api/placeholder/${encodeURIComponent(username)}`;
+  }
+
   private generateXxkNumber(): string {
     // 生成11位随机数字，第一位不为0
     const first = Math.floor(Math.random() * 9) + 1;
@@ -112,7 +116,7 @@ export class AuthService {
       displayName: dto.displayName || dto.username,
       xxkNumber,
       passwordHash,
-      avatarUrl: `https://api.dicebear.com/9.x/avataaars/svg?seed=${dto.username}`,
+      avatarUrl: this.getDefaultAvatarUrl(dto.username),
     });
     await this.userRepo.save(user);
 
@@ -197,7 +201,7 @@ export class AuthService {
       displayName: dto.username,
       xxkNumber,
       passwordHash,
-      avatarUrl: `https://api.dicebear.com/9.x/avataaars/svg?seed=${dto.username}`,
+      avatarUrl: this.getDefaultAvatarUrl(dto.username),
     });
     await this.userRepo.save(user);
 

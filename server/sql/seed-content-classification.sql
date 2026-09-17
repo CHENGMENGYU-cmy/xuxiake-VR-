@@ -122,9 +122,9 @@ INSERT INTO post_topics (id, post_id, topic_id) VALUES
 UPDATE topics SET post_count = (SELECT COUNT(*) FROM post_topics WHERE topic_id = topics.id);
 
 -- ============================================================
--- 内容层级统一：分类帖子显式标记为 CLASSIFIED（内容分类）
+-- 内容层级统一：分类帖子显式标记为 POST（随笔/普通公开帖子）
 -- ============================================================
-UPDATE posts SET content_level = 'CLASSIFIED'
+UPDATE posts SET content_level = 'POST'
 WHERE id LIKE 'post-seed-%' AND content_level = 'SNAPSHOT';
 
 -- ============================================================

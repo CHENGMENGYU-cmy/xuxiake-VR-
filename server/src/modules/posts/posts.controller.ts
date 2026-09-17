@@ -87,6 +87,7 @@ export class PostsController {
     @Query('sort') sort?: string,
     @Query('page') page?: string,
     @Query('postType') postType?: string,
+    @Query('postTypes') postTypes?: string,
     @Query('tagId') tagId?: string,
     @Query('followingOnly') followingOnly?: string,
     @Query('excludeContentLevel') excludeContentLevel?: string,
@@ -104,6 +105,9 @@ export class PostsController {
     const excludeLevels = excludeContentLevels
       ? excludeContentLevels.split(',').filter(Boolean)
       : undefined;
+    const postTypeList = postTypes
+      ? postTypes.split(',').filter(Boolean)
+      : undefined;
 
     const result = await this.postsService.getPosts({
       cursor,
@@ -111,6 +115,7 @@ export class PostsController {
       sort: sort || 'latest',
       page: page ? parseInt(page) : 1,
       postType,
+      postTypes: postTypeList,
       tagId,
       userId,
       followingOnly: followingOnly === 'true',
@@ -460,7 +465,7 @@ export class PostsController {
   async publishPost(
     @Headers('authorization') auth: string,
     @Param('id') id: string,
-    @Body() dto: { locationPrecision?: 'hidden' | 'city' | 'exact' },
+    @Body() dto: { locationPrecision?: 'hidden' | 'city' | 'exact'; visibility?: 'PUBLIC' | 'FOLLOWERS' | 'PRIVATE'; communityId?: string | null },
   ) {
     const userId = this.getUserId(auth);
     const post = await this.postsService.publishPost(userId, id, dto);

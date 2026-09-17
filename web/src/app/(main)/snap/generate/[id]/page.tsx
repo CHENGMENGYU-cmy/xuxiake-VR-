@@ -114,6 +114,7 @@ function GenerateContent({ snapId }: { snapId: string }) {
     if (!generatedDiary) return;
     setSaving(true);
     try {
+      const saveStatus = status === 'public' ? 'private' : status;
       const result = await saveDiary({
         snapId,
         title: generatedDiary.title,
@@ -121,7 +122,7 @@ function GenerateContent({ snapId }: { snapId: string }) {
         insight: generatedDiary.insight,
         style: generatedDiary.style,
         tags: generatedDiary.tags,
-        status,
+        status: saveStatus,
         image: snapImage || undefined,
       });
       const savedId = result?.id;
@@ -133,7 +134,7 @@ function GenerateContent({ snapId }: { snapId: string }) {
         toast.success('已保存为私密日记');
         router.push('/diaries');
       } else {
-        toast.success('已发布到日记广场');
+        toast.success('日记已保存，请选择社区发布');
         router.push(savedId ? `/diaries/${savedId}` : '/diaries');
       }
     } catch (err: any) {
@@ -437,7 +438,7 @@ function GenerateContent({ snapId }: { snapId: string }) {
                 className="h-9 gap-1.5 bg-gradient-to-r from-teal-500 to-emerald-500 px-5 text-xs font-medium shadow-md shadow-teal-500/25 hover:from-teal-600 hover:to-emerald-600"
               >
                 {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Globe className="h-3.5 w-3.5" />}
-                发布
+                去发布
               </Button>
             </div>
           </div>

@@ -9,9 +9,10 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { getPostById, updatePost, deletePost, publishPost } from '@/lib/post-api';
+import { listCommunities } from '@/lib/social-api';
 import { useAuthStore } from '@/stores/auth-store';
 import { AuthGuard } from '@/components/auth-guard';
-import type { Post, MoodType, WeatherType } from '@/types';
+import type { Community, Post, MoodType, WeatherType } from '@/types';
 import { MoodEmoji, WeatherEmoji, MoodLabel, WeatherLabel } from '@/types';
 
 export default function DiaryDetailPage() {
@@ -35,6 +36,10 @@ function DiaryDetailContent() {
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [changing, setChanging] = useState(false);
+  const [showPublishDialog, setShowPublishDialog] = useState(false);
+  const [communities, setCommunities] = useState<Community[]>([]);
+  const [communitiesLoading, setCommunitiesLoading] = useState(false);
+  const [selectedCommunityId, setSelectedCommunityId] = useState('');
 
   useEffect(() => {
     if (!postId) return;
@@ -44,6 +49,19 @@ function DiaryDetailContent() {
       setLoading(false);
     }).catch(() => setLoading(false));
   }, [postId]);
+
+  useEffect(() => {
+    if (!showPublishDialog) return;
+    setCommunitiesLoading(true);
+    listCommunities({ page: 1, limit: 30 })
+      .then((res) => {
+        const items = res.data || [];
+        setCommunities(items);
+        setSelectedCommunityId(post?.communityId || items[0]?.id || '');
+      })
+      .catch(() => setCommunities([]))
+      .finally(() => setCommunitiesLoading(false));
+  }, [showPublishDialog, post?.communityId]);
 
   // 权限检查：私密日记只能查看自己的，公开日记所有人可查看
   if (post && user && post.author?.id !== user.id && post.visibility === 'PRIVATE') {
@@ -87,13 +105,32 @@ function DiaryDetailContent() {
 
   const changeVisibility = async (visibility: 'PRIVATE' | 'PUBLIC' | 'FOLLOWERS') => {
     if (!post || changing) return;
+    if (visibility === 'PUBLIC') {
+      setShowPublishDialog(true);
+      return;
+    }
     setChanging(true);
     try {
-      await publishPost(post.id, undefined, visibility);
-      setPost({ ...post, visibility });
-      toast.success(visibility === 'PRIVATE' ? '已转为私密' : visibility === 'PUBLIC' ? '已转为公开' : '已设为关注可见');
+      const updated = await publishPost(post.id, undefined, visibility);
+      setPost(updated);
+      toast.success(visibility === 'PRIVATE' ? '已转为私密' : '已设为关注可见');
     } catch {
       toast.error('切换可见性失败，请重试');
+    } finally {
+      setChanging(false);
+    }
+  };
+
+  const handlePublishToCommunity = async () => {
+    if (!post || changing || !selectedCommunityId) return;
+    setChanging(true);
+    try {
+      const updated = await publishPost(post.id, undefined, 'PUBLIC', selectedCommunityId);
+      setPost(updated);
+      setShowPublishDialog(false);
+      toast.success('日记已发布到社区');
+    } catch {
+      toast.error('发布失败，请重试');
     } finally {
       setChanging(false);
     }
@@ -298,6 +335,54 @@ function DiaryDetailContent() {
           )}
         </div>
       </div>
+
+
+      {/* 发布到社区对话框 */}
+      {showPublishDialog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+          <div className="w-full max-w-md rounded-lg bg-card p-6 shadow-lg">
+            <h3 className="mb-2 text-lg font-semibold">发布到社区</h3>
+            <p className="mb-4 text-sm text-muted-foreground">
+              请选择这篇日记要进入的社区。发布后，它会出现在首页、该社区主页和你的个人主页。
+            </p>
+            <div className="mb-4 space-y-2">
+              {communitiesLoading ? (
+                <div className="rounded-lg border p-3 text-sm text-muted-foreground">正在加载社区...</div>
+              ) : communities.length === 0 ? (
+                <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-700 dark:border-amber-900 dark:bg-amber-950/30 dark:text-amber-300">
+                  暂无可选择的社区，请先创建或加入社区。
+                </div>
+              ) : (
+                communities.map((community) => (
+                  <button
+                    key={community.id}
+                    type="button"
+                    onClick={() => setSelectedCommunityId(community.id)}
+                    className={`flex w-full items-center justify-between rounded-lg border p-3 text-left transition-colors ${
+                      selectedCommunityId === community.id ? 'border-primary bg-primary/5' : 'hover:bg-accent'
+                    }`}
+                  >
+                    <span>
+                      <span className="block text-sm font-medium">{community.name}</span>
+                      {community.description && <span className="line-clamp-1 text-xs text-muted-foreground">{community.description}</span>}
+                    </span>
+                    {selectedCommunityId === community.id && <Globe className="h-4 w-4 text-primary" />}
+                  </button>
+                ))
+              )}
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" size="sm" onClick={() => setShowPublishDialog(false)} disabled={changing}>
+                取消
+              </Button>
+              <Button size="sm" onClick={handlePublishToCommunity} disabled={changing || communitiesLoading || !selectedCommunityId}>
+                {changing ? <Loader2 className="mr-1 h-4 w-4 animate-spin" /> : <Globe className="mr-1 h-4 w-4" />}
+                确认发布
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 所有者操作区：草稿引导继续写；已发布则切换可见性 + 升华为游记 */}
       {isOwner && (

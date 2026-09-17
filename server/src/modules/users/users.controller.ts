@@ -396,7 +396,9 @@ export class UsersController {
   async getUserPosts(
     @Param('username') username: string,
     @Query('type') postType?: string,
+    @Query('postTypes') postTypes?: string,
     @Query('contentLevel') contentLevel?: string,
+    @Query('excludeContentLevels') excludeContentLevels?: string,
     @Query('cursor') cursor?: string,
     @Query('limit') limit?: string,
     @Headers('authorization') auth?: string,
@@ -421,7 +423,7 @@ export class UsersController {
       .take(take + 1);
 
     // 排除素材库专属层级（SNAPSHOT/LOG 是素材，不是发布内容，已在素材库展示）
-    qb.andWhere('post.contentLevel NOT IN (:...excludeLevels)', { excludeLevels: ['SNAPSHOT'] });
+    qb.andWhere("NOT (post.contentLevel = 'SNAPSHOT' AND post.postType = 'NOTE' AND post.visibility = 'PRIVATE')");
 
     // 统计/列表口径：排除草稿（vrMetadata.status=draft 的未发布内容，不计入帖子数与作品列表）
     qb.andWhere("(post.vrMetadata IS NULL OR post.vrMetadata NOT LIKE '%\"status\":\"draft\"%')");
@@ -434,15 +436,23 @@ export class UsersController {
       qb.andWhere('post.visibility = :vis', { vis: 'PUBLIC' });
     }
 
-    if (postType) {
-      qb.andWhere('post.postType = :postType', { postType });
+    const typeList = postTypes ? postTypes.split(',').filter(Boolean) : (postType ? postType.split(',').filter(Boolean) : []);
+    if (typeList.length > 1) {
+      qb.andWhere('post.postType IN (:...postTypes)', { postTypes: typeList });
+    } else if (typeList.length === 1) {
+      qb.andWhere('post.postType = :postType', { postType: typeList[0] });
     }
 
     if (contentLevel) {
-      // 支持逗号分隔多值（如 TRAVELOGUE,ESSAY 同属游记）
       const levels = contentLevel.split(',').filter(Boolean);
       if (levels.length) {
         qb.andWhere('post.contentLevel IN (:...levels)', { levels });
+      }
+    }
+    if (excludeContentLevels) {
+      const excludedLevels = excludeContentLevels.split(',').filter(Boolean);
+      if (excludedLevels.length) {
+        qb.andWhere('post.contentLevel NOT IN (:...excludedLevels)', { excludedLevels });
       }
     }
 
@@ -460,16 +470,27 @@ export class UsersController {
     // 查询总数（与列表查询保持一致的过滤条件）
     const countQb = this.postRepo.createQueryBuilder('post')
       .where('post.authorId = :userId', { userId: user.id })
-      .andWhere('post.contentLevel NOT IN (:...excludeLevels)', { excludeLevels: ['SNAPSHOT'] })
+      .andWhere("NOT (post.contentLevel = 'SNAPSHOT' AND post.postType = 'NOTE' AND post.visibility = 'PRIVATE')")
       .andWhere("(post.vrMetadata IS NULL OR post.vrMetadata NOT LIKE '%\"status\":\"draft\"%')")
       .andWhere('post.deletedAt IS NULL');
     if (!isOwner) {
       countQb.andWhere('post.visibility = :vis', { vis: 'PUBLIC' });
     }
+    if (typeList.length > 1) {
+      countQb.andWhere('post.postType IN (:...postTypes)', { postTypes: typeList });
+    } else if (typeList.length === 1) {
+      countQb.andWhere('post.postType = :postType', { postType: typeList[0] });
+    }
     if (contentLevel) {
       const levels = contentLevel.split(',').filter(Boolean);
       if (levels.length) {
         countQb.andWhere('post.contentLevel IN (:...levels)', { levels });
+      }
+    }
+    if (excludeContentLevels) {
+      const excludedLevels = excludeContentLevels.split(',').filter(Boolean);
+      if (excludedLevels.length) {
+        countQb.andWhere('post.contentLevel NOT IN (:...excludedLevels)', { excludedLevels });
       }
     }
     const total = await countQb.getCount();

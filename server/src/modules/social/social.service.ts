@@ -367,44 +367,80 @@ export class SocialService {
 
   // ==================== 社群动态 ====================
 
-  async getCommunityPosts(communityId: string, userId?: string, page = 1, limit = 20): Promise<{
+  private parseCsvList(value?: string): string[] {
+    return value ? value.split(',').map((item) => item.trim()).filter(Boolean) : [];
+  }
+
+  private applyPostTypeFilter(qb: any, postType?: string, postTypes?: string[]) {
+    const types = postTypes?.length ? postTypes : this.parseCsvList(postType);
+    if (types.length > 1) {
+      qb.andWhere('post.postType IN (:...postTypes)', { postTypes: types });
+    } else if (types.length === 1) {
+      qb.andWhere('post.postType = :postType', { postType: types[0] });
+    }
+  }
+
+  private applyContentLevelFilter(qb: any, contentLevel?: string) {
+    const levels = this.parseCsvList(contentLevel);
+    if (levels.length > 1) {
+      qb.andWhere('post.contentLevel IN (:...contentLevels)', { contentLevels: levels });
+    } else if (levels.length === 1) {
+      qb.andWhere('post.contentLevel = :contentLevel', { contentLevel: levels[0] });
+    }
+  }
+
+  async getCommunityPosts(communityId: string, userId?: string, page = 1, limit = 20, filters: {
+    contentLevel?: string;
+    postType?: string;
+    postTypes?: string[];
+    excludeContentLevels?: string[];
+  } = {}): Promise<{
     data: any[];
     total: number;
     page: number;
   }> {
     const skip = (page - 1) * limit;
 
-    const [posts, total] = await this.postRepo.findAndCount({
-      where: { communityId },
-      order: { createdAt: 'DESC' },
-      skip,
-      take: limit,
-    });
+    const qb = this.postRepo
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.author', 'author')
+      .leftJoinAndSelect('post.mediaItems', 'mediaItems')
+      .leftJoinAndSelect('post.tags', 'tags')
+      .leftJoinAndSelect('post.topics', 'topics')
+      .where('post.communityId = :communityId', { communityId })
+      .andWhere('post.deletedAt IS NULL')
+      .orderBy('post.createdAt', 'DESC')
+      .skip(skip)
+      .take(limit);
 
-    // 获取作者信息
-    const authorIds = [...new Set(posts.map((p) => p.authorId))];
-    const authors = authorIds.length > 0
-      ? await this.userRepo.findBy({ id: In(authorIds) })
-      : [];
-    const authorMap = new Map(authors.map((u) => [u.id, u]));
+    if (userId) {
+      qb.andWhere('(post.visibility = :publicVisibility OR post.authorId = :userId)', {
+        publicVisibility: 'PUBLIC',
+        userId,
+      });
+    } else {
+      qb.andWhere('post.visibility = :publicVisibility', { publicVisibility: 'PUBLIC' });
+    }
+
+    this.applyPostTypeFilter(qb, filters.postType, filters.postTypes);
+    this.applyContentLevelFilter(qb, filters.contentLevel);
+    if (filters.excludeContentLevels?.length) {
+      qb.andWhere('post.contentLevel NOT IN (:...excludeContentLevels)', { excludeContentLevels: filters.excludeContentLevels });
+    }
+
+    const [posts, total] = await qb.getManyAndCount();
 
     return {
-      data: posts.map((p) => {
-        const author = authorMap.get(p.authorId);
-        const { ...postDto } = p;
-        return {
-          ...postDto,
-          author: author
-            ? { id: author.id, username: author.username, displayName: author.displayName, avatarUrl: author.avatarUrl }
-            : null,
-        };
-      }),
+      data: posts.map((p) => ({
+        ...p,
+        author: p.author
+          ? { id: p.author.id, username: p.author.username, displayName: p.author.displayName, avatarUrl: p.author.avatarUrl }
+          : null,
+      })),
       total,
       page,
     };
   }
-
-  // ==================== 挑战参与 ====================
 
   async joinChallenge(challengeId: string, userId: string, body?: { note?: string; postId?: string }): Promise<CommunityChallengeEntry> {
     const challenge = await this.challengeRepo.findOne({ where: { id: challengeId } });

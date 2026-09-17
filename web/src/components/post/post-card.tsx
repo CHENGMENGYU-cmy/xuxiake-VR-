@@ -52,6 +52,8 @@ const mediaTypeIcons: Record<string, React.ReactNode> = {
 // 内容层级标签（优先）
 const contentLevelConfig: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
   DIARY:      { label: '日记', icon: <PenLine className="h-3 w-3" />, color: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400' },
+  POST:       { label: '随笔', icon: <FileText className="h-3 w-3" />, color: 'bg-primary/10 text-primary' },
+  CLASSIFIED: { label: '随笔', icon: <FileText className="h-3 w-3" />, color: 'bg-primary/10 text-primary' },
   TRAVELOGUE: { label: '游记', icon: <BookOpen className="h-3 w-3" />, color: 'bg-amber-500/10 text-amber-600 dark:text-amber-400' },
   ESSAY:      { label: '游记', icon: <BookOpen className="h-3 w-3" />, color: 'bg-amber-500/10 text-amber-600 dark:text-amber-400' },
   SNAPSHOT:   { label: '闪拍', icon: <Image className="h-3 w-3" />, color: 'bg-orange-500/10 text-orange-600 dark:text-orange-400' },
@@ -59,7 +61,7 @@ const contentLevelConfig: Record<string, { label: string; icon: React.ReactNode;
 
 // 帖子类型标签（兜底）
 const postTypeConfig: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
-  NOTE:     { label: '笔记', icon: <FileText className="h-3 w-3" />, color: 'bg-primary/10 text-primary' },
+  NOTE:     { label: '随笔', icon: <FileText className="h-3 w-3" />, color: 'bg-primary/10 text-primary' },
   VR_MEDIA: { label: '第一视角', icon: <Play className="h-3 w-3" />, color: 'bg-violet-500/10 text-violet-500' },
   JOURNEY:  { label: '游记', icon: <Compass className="h-3 w-3" />, color: 'bg-amber-500/10 text-amber-500' },
   MOMENT:   { label: '动态', icon: <MessageSquare className="h-3 w-3" />, color: 'bg-pink-500/10 text-pink-500' },
@@ -230,10 +232,14 @@ export function PostCard({
             {(() => {
               // 优先 contentLevel（日志/日记/游记），再 tab VR 标签，最后 postType 兜底
               const tab = post.vrMetadata?.tab as string;
+              const contentLevelConfigForPost = post.contentLevel === 'SNAPSHOT'
+                ? undefined
+                : contentLevelConfig[post.contentLevel];
               const config =
-                contentLevelConfig[post.contentLevel] ||
+                contentLevelConfigForPost ||
                 (tab ? tabLabelConfig[tab] : undefined) ||
-                postTypeConfig[post.postType];
+                postTypeConfig[post.postType] ||
+                contentLevelConfig[post.contentLevel];
               if (!config) return null;
               return (
                 <span className={`inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${config.color}`}>

@@ -30,6 +30,7 @@ export function CommunityPostComposer({ communityId, onPostCreated }: CommunityP
       await createPost({
         content: content.trim(),
         communityId,
+        postType: 'MOMENT',
         location: locationName ? { lat: 0, lng: 0, name: locationName } : undefined,
       });
       setContent('');

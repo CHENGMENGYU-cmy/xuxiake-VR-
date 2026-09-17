@@ -1,0 +1,195 @@
+{
+  "generatedAt": "2026-09-16T04:21:38.813Z",
+  "source": "server/uploads/real-covers copied into versionable asset bundle",
+  "restoreTarget": "server/uploads/real-covers",
+  "fileCount": 17,
+  "files": [
+    {
+      "slug": "lijiang",
+      "title": "Lijiang",
+      "fileName": "lijiang.jpg",
+      "appPath": "/uploads/real-covers/lijiang.jpg",
+      "sourcePage": "https://en.wikipedia.org/wiki/Lijiang",
+      "sourceImage": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/12/Black_Dragon_%E9%BB%91%E9%BE%99%E6%BD%AD_%285496141333%29.jpg/960px-Black_Dragon_%E9%BB%91%E9%BE%99%E6%BD%AD_%285496141333%29.jpg",
+      "description": "Prefecture-level city in Yunnan, People's Republic of China",
+      "bytes": 273576,
+      "sha256": "0c9e05754c10c71617043cfc7993b3ba847f1b98489cb068c4920ad3e70e1440"
+    },
+    {
+      "slug": "westlake",
+      "title": "West Lake",
+      "fileName": "westlake.jpg",
+      "appPath": "/uploads/real-covers/westlake.jpg",
+      "sourcePage": "https://en.wikipedia.org/wiki/West_Lake",
+      "sourceImage": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/West_Lake%2C_Hangzhou_2025.jpg/960px-West_Lake%2C_Hangzhou_2025.jpg",
+      "description": "Lake in Hangzhou, China",
+      "bytes": 214880,
+      "sha256": "6a3a604d9f7401537aac29faa1a65c45a05b82f6d5f98514f77bc9a502d5ae14"
+    },
+    {
+      "slug": "daocheng",
+      "title": "Daocheng County",
+      "fileName": "daocheng.jpg",
+      "appPath": "/uploads/real-covers/daocheng.jpg",
+      "sourcePage": "https://en.wikipedia.org/wiki/Daocheng_County",
+      "sourceImage": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/%E7%A8%BB%E5%9F%8E%E7%99%BD%E5%A1%94_-_White_Pagoda_in_Daocheng_County_-_2012.10_-_panoramio.jpg/960px-%E7%A8%BB%E5%9F%8E%E7%99%BD%E5%A1%94_-_White_Pagoda_in_Daocheng_County_-_2012.10_-_panoramio.jpg",
+      "description": "County in Sichuan, China",
+      "bytes": 149434,
+      "sha256": "31472ae4814e2555b30f1be55145eaf622a5c8d4186aa4ca9d722767a1d6d826"
+    },
+    {
+      "slug": "haba",
+      "title": "Haba Snow Mountain",
+      "fileName": "haba.jpg",
+      "appPath": "/uploads/real-covers/haba.jpg",
+      "sourcePage": "https://en.wikipedia.org/wiki/Haba_Snow_Mountain",
+      "sourceImage": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/The_Snow_Slope_of_Haba_Mountain.JPG/960px-The_Snow_Slope_of_Haba_Mountain.JPG",
+      "description": "Mountain in Yunnan, China",
+      "bytes": 286618,
+      "sha256": "22b30b9f05d9288175b0325afc17b8d4877700d1a78a1e81d738346348834674"
+    },
+    {
+      "slug": "changsha",
+      "title": "Changsha",
+      "fileName": "changsha.jpg",
+      "appPath": "/uploads/real-covers/changsha.jpg",
+      "sourcePage": "https://en.wikipedia.org/wiki/Changsha",
+      "sourceImage": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cc/%E7%88%B1%E6%99%9A%E4%BA%AD%EF%BC%88%E7%A7%8B-%E4%BE%A7%E9%9D%A2%EF%BC%89.jpg/960px-%E7%88%B1%E6%99%9A%E4%BA%AD%EF%BC%88%E7%A7%8B-%E4%BE%A7%E9%9D%A2%EF%BC%89.jpg",
+      "description": "Capital of Hunan, Central China",
+      "bytes": 358823,
+      "sha256": "5014351a05da2c998e2a9414c1f2a842f32492c68acad2fa0d63e8757dd2206b"
+    },
+    {
+      "slug": "suzhou",
+      "title": "Classical Gardens of Suzhou",
+      "fileName": "suzhou.jpg",
+      "appPath": "/uploads/real-covers/suzhou.jpg",
+      "sourcePage": "https://en.wikipedia.org/wiki/Classical_Gardens_of_Suzhou",
+      "sourceImage": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ce/20240203_Lingering_Garden_09.jpg/960px-20240203_Lingering_Garden_09.jpg",
+      "description": "Chinese Classical garden in Jiangsu province",
+      "bytes": 358764,
+      "sha256": "18986ad04332fb1558c485da7c418ccba4a8de731157934121f65216b59bbf32"
+    },
+    {
+      "slug": "sanya",
+      "title": "Sanya",
+      "fileName": "sanya.jpg",
+      "appPath": "/uploads/real-covers/sanya.jpg",
+      "sourcePage": "https://en.wikipedia.org/wiki/Sanya",
+      "sourceImage": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/be/SuperStar_Aquarius_at_Phoenix_Island%2C_Sanya_Bay_-_01.jpg/960px-SuperStar_Aquarius_at_Phoenix_Island%2C_Sanya_Bay_-_01.jpg",
+      "description": "City on Hainan Island, China",
+      "bytes": 201115,
+      "sha256": "15d791dc37d9c7c13fc1ad70c720b58de52e57b0632c6d2f3f0de417e60f135d"
+    },
+    {
+      "slug": "terracotta",
+      "title": "Terracotta Army",
+      "fileName": "terracotta.jpg",
+      "appPath": "/uploads/real-covers/terracotta.jpg",
+      "sourcePage": "https://en.wikipedia.org/wiki/Terracotta_Army",
+      "sourceImage": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/88/51714-Terracota-Army.jpg/960px-51714-Terracota-Army.jpg",
+      "description": "Collection of ancient Chinese military statues",
+      "bytes": 251185,
+      "sha256": "75cde8625b9df286b00783df50219e9e411a59bf29c08ff3310c6002dea2be7d"
+    },
+    {
+      "slug": "yabuli",
+      "title": "Yabuli Ski Resort",
+      "fileName": "yabuli.jpg",
+      "appPath": "/uploads/real-covers/yabuli.jpg",
+      "sourcePage": "https://en.wikipedia.org/wiki/Yabuli_Ski_Resort",
+      "sourceImage": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1e/Sun_Mountain_Yabuli.jpg/960px-Sun_Mountain_Yabuli.jpg",
+      "description": "Ski resort in China",
+      "bytes": 288914,
+      "sha256": "c7c7af92c9c461884180dec69157760fcb0ff40f505203e9f3ec46de0d75fc1c"
+    },
+    {
+      "slug": "huangshan",
+      "title": "Huangshan",
+      "fileName": "huangshan.jpg",
+      "appPath": "/uploads/real-covers/huangshan.jpg",
+      "sourcePage": "https://en.wikipedia.org/wiki/Huangshan",
+      "sourceImage": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/Huangshan_pic_4.jpg/960px-Huangshan_pic_4.jpg",
+      "description": "Mountain range in southern Anhui, China",
+      "bytes": 235539,
+      "sha256": "6531984bb50ff3df1afcebd2ddec0082b3b88a56e11a6f7deb1b2f95b28d73f1"
+    },
+    {
+      "slug": "zhangjiajie",
+      "title": "Zhangjiajie National Forest Park",
+      "fileName": "zhangjiajie.jpg",
+      "appPath": "/uploads/real-covers/zhangjiajie.jpg",
+      "sourcePage": "https://en.wikipedia.org/wiki/Zhangjiajie_National_Forest_Park",
+      "sourceImage": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/77/1_tianzishan_wulingyuan_zhangjiajie_2012.jpg/960px-1_tianzishan_wulingyuan_zhangjiajie_2012.jpg",
+      "description": "National forest in Hunan, China",
+      "bytes": 220832,
+      "sha256": "544087cf4a38104e6dbb0f15a1b68fb3ea4493ba73dddd96aa393415e763d858"
+    },
+    {
+      "slug": "jiuzhaigou",
+      "title": "Jiuzhaigou",
+      "fileName": "jiuzhaigou.jpg",
+      "appPath": "/uploads/real-covers/jiuzhaigou.jpg",
+      "sourcePage": "https://en.wikipedia.org/wiki/Jiuzhaigou",
+      "sourceImage": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/28/1_jiuzhaigou_valley_wu_hua_hai_2011b.jpg/960px-1_jiuzhaigou_valley_wu_hua_hai_2011b.jpg",
+      "description": "Nature reserve and national park in Sichuan, China",
+      "bytes": 372553,
+      "sha256": "750f75666ffd8d0be2791ac7fa2dd36c05de819860e70a257949d807c667f37d"
+    },
+    {
+      "slug": "potala",
+      "title": "Potala Palace",
+      "fileName": "potala.jpg",
+      "appPath": "/uploads/real-covers/potala.jpg",
+      "sourcePage": "https://en.wikipedia.org/wiki/Potala_Palace",
+      "sourceImage": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b6/Potala_Palace_HQ.jpg/960px-Potala_Palace_HQ.jpg",
+      "description": "Fortress in Lhasa, Tibet",
+      "bytes": 284534,
+      "sha256": "3b897cca02e3668e6b1179a77d5daea3a51ad4d2d61d54c1492e9b8fdbd30a16"
+    },
+    {
+      "slug": "dunhuang",
+      "title": "Mogao Caves",
+      "fileName": "dunhuang.jpg",
+      "appPath": "/uploads/real-covers/dunhuang.jpg",
+      "sourcePage": "https://en.wikipedia.org/wiki/Mogao_Caves",
+      "sourceImage": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Mogao_Caves_%2854376969262%29.jpg/960px-Mogao_Caves_%2854376969262%29.jpg",
+      "description": "Caves near Dunhuang City, Gansu, China",
+      "bytes": 253409,
+      "sha256": "1d958d1cbe01f57d72320efdb825ae655127f06927ac2e697b892d2aa698f65b"
+    },
+    {
+      "slug": "forbidden-city",
+      "title": "Forbidden City",
+      "fileName": "forbidden-city.jpg",
+      "appPath": "/uploads/real-covers/forbidden-city.jpg",
+      "sourcePage": "https://en.wikipedia.org/wiki/Forbidden_City",
+      "sourceImage": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ef/The_Forbidden_City_-_View_from_Coal_Hill.jpg/960px-The_Forbidden_City_-_View_from_Coal_Hill.jpg",
+      "description": "Imperial palace complex in Beijing, China",
+      "bytes": 125803,
+      "sha256": "251e23ff6102e1fc949f197f43bb6347121b185a3971ffbeea15a7fb32ec084b"
+    },
+    {
+      "slug": "greatwall",
+      "title": "Great Wall of China",
+      "fileName": "greatwall.jpg",
+      "appPath": "/uploads/real-covers/greatwall.jpg",
+      "sourcePage": "https://en.wikipedia.org/wiki/Great_Wall_of_China",
+      "sourceImage": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/23/The_Great_Wall_of_China_at_Jinshanling-edit.jpg/960px-The_Great_Wall_of_China_at_Jinshanling-edit.jpg",
+      "description": "Series of fortifications in northern China",
+      "bytes": 273412,
+      "sha256": "9a59e1900105e7d38b780fb32bec29dd775b436b222569d33b06efacd0db6b4d"
+    },
+    {
+      "slug": "gulangyu",
+      "title": "Gulangyu",
+      "fileName": "gulangyu.jpg",
+      "appPath": "/uploads/real-covers/gulangyu.jpg",
+      "sourcePage": "https://en.wikipedia.org/wiki/Gulangyu",
+      "sourceImage": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/df/2018%E5%B9%B4%E7%9A%84%E9%BC%93%E6%B5%AA%E5%B1%BF.jpg/960px-2018%E5%B9%B4%E7%9A%84%E9%BC%93%E6%B5%AA%E5%B1%BF.jpg",
+      "description": "UNESCO World Heritage Site in Fujian, China",
+      "bytes": 242790,
+      "sha256": "6df4dc52cb9ed5ce1253a26459cfcc1a7188d69dd616406cca1e67894525d34c"
+    }
+  ]
+}

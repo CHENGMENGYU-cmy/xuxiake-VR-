@@ -65,6 +65,7 @@ export async function getPosts(params?: {
   cursor?: string;
   sort?: PostSortType;
   postType?: string;
+  postTypes?: string[];
   tagId?: string;
   followingOnly?: boolean;
   excludeContentLevel?: string;
@@ -75,6 +76,9 @@ export async function getPosts(params?: {
   const queryParams: any = { ...params };
   if (params?.excludeContentLevels) {
     queryParams.excludeContentLevels = params.excludeContentLevels.join(',');
+  }
+  if (params?.postTypes) {
+    queryParams.postTypes = params.postTypes.join(',');
   }
   const { data } = await apiClient.get('/posts', { params: queryParams });
   return {
@@ -214,8 +218,13 @@ export async function getContentHierarchy(params?: {
   };
 }
 
-export async function publishPost(postId: string, locationPrecision?: 'hidden' | 'city' | 'exact', visibility?: 'PUBLIC' | 'FOLLOWERS' | 'PRIVATE'): Promise<Post> {
-  const { data } = await apiClient.post(`/posts/${postId}/publish`, { locationPrecision, visibility });
+export async function publishPost(
+  postId: string,
+  locationPrecision?: 'hidden' | 'city' | 'exact',
+  visibility?: 'PUBLIC' | 'FOLLOWERS' | 'PRIVATE',
+  communityId?: string | null,
+): Promise<Post> {
+  const { data } = await apiClient.post(`/posts/${postId}/publish`, { locationPrecision, visibility, communityId });
   return data.data;
 }
 
