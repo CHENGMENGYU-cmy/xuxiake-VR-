@@ -915,6 +915,7 @@ export class PostsService {
     } else {
       post.communityId = nextCommunityId;
     }
+    post.vrMetadata = this.syncPublishStatus(post.vrMetadata, nextVisibility);
     post.updatedAt = new Date();
     await this.postRepo.save(post);
     return this.formatPost(post);
