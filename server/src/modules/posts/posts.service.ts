@@ -931,9 +931,37 @@ export class PostsService {
 
     post.visibility = 'PRIVATE';
     post.communityId = null;
+    post.vrMetadata = this.syncPublishStatus(post.vrMetadata, 'PRIVATE');
     post.updatedAt = new Date();
     await this.postRepo.save(post);
     return this.formatPost(post);
+  }
+
+  /**
+   * 同步 vrMetadata.status，使其与可见性保持一致。
+   *
+   * 草稿态（status='draft'）本身是日记编辑流程的合法状态，但内容被发布后必须提升出去：
+   * 个人主页按 status='draft' 过滤（users.controller.ts getUserPosts），
+   * 日记详情页也据此显示「这是一篇未发布的草稿」。发布时若不清除该标记，
+   * 同一篇内容会出现「首页可见、个人主页不可见，且仍提示为草稿」的矛盾状态。
+   */
+  private syncPublishStatus(vrMetadata: string | null, visibility: 'PUBLIC' | 'FOLLOWERS' | 'PRIVATE'): string | null {
+    let meta: Record<string, any>;
+    if (vrMetadata) {
+      try {
+        const parsed = JSON.parse(vrMetadata);
+        // 历史数据里存在非对象或非 JSON 的 vrMetadata，保持原样，避免改写坏数据
+        if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return vrMetadata;
+        meta = parsed;
+      } catch {
+        return vrMetadata;
+      }
+    } else {
+      meta = {};
+    }
+
+    meta.status = visibility === 'PUBLIC' ? 'public' : visibility === 'FOLLOWERS' ? 'followers' : 'private';
+    return JSON.stringify(meta);
   }
 
   async promoteContent(userId: string, postId: string, dto: { targetLevel: string; content?: string; title?: string }) {
