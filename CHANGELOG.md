@@ -2,6 +2,15 @@
 
 > 记录项目重要变更，最多保留最近 30 条。
 
+## 第17条（2026-09-18）
+
+- 首版认证入口：短信、微信、支付宝及手机注册标记未开放；后端模拟短信默认关闭，生产环境禁止开启。
+- 帖子接口统一检查有效账号状态，封禁/注销账号不能使用旧令牌继续执行帖子写操作；新增短信和帖子权限测试。
+- 新增 `scripts/verify-release-flow.mjs`，使用专用内容进行双账号发布、三页面显示、搜索互动、撤回与清理验收。
+- 移除构建时 Google 字体依赖，改用系统字体；生产构建固定为已验证的 Webpack；根目录生产启动不再启动前端开发服务。
+- 验证：后端5套件21项通过；双账号48个检查点通过；前后端类型检查和生产构建通过。生产页面启动通过，正式域名登录尚待CORS配置后验收。
+- 完整边界和下一步见 `docs/首发推进验收记录-2026-09-18.md`。
+
 ## 第16条（2026-09-11）
 
 - **位置**：修改 `server/src/modules/social/social.controller.ts`、`server/package.json`、`server/test/jest-e2e.json`；新增 `server/src/modules/social/social-permissions.spec.ts`、`server/sql/cleanup-demo-data-2026-09-11.sql`、`server/sql/enrich-demo-community-data-2026-09-11.sql`；修改 `web/src/app/(main)/communities/[id]/page.tsx`、`web/src/app/(main)/communities/[id]/settings/page.tsx`、`web/src/components/post/post-card.tsx`、`web/src/types/index.ts`、`web/e2e/04-permissions.spec.ts`、`web/e2e/07-component-states.spec.ts`；新增 `web/src/app/(main)/communities/page.tsx`、`web/src/app/(main)/media/page.tsx`、`web/e2e/10-community-permissions.spec.ts`

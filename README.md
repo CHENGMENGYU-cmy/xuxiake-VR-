@@ -102,12 +102,18 @@ npm run dev
 
 ## 🧪 测试账号
 
-| 邮箱 | 密码 |
+以下仅为本地演示种子账号；真实部署必须使用独立账号和密码，不应保留公开演示凭据。
+
+| 用户名 | 本地演示密码 |
 |------|------|
-| xuxiake@example.com | 任意密码 |
-| zhangshan@example.com | 任意密码 |
-| lisi@example.com | 任意密码 |
-| wangwu@example.com | 任意密码 |
+| xuxiake | password123 |
+| zhangshan | password123 |
+| lisi | password123 |
+| wangwu | password123 |
+
+首版支持邮箱注册、邮箱或用户名加密码登录。短信、微信和支付宝入口标记为“暂未开放”。短信接口默认返回未开放；只有非生产环境且显式设置 `ALLOW_DEV_SMS=true` 才可模拟发送，不代表真实短信接通。`TEST1234` 仅用于允许测试验证码的非生产环境。
+
+2026-09-18 首发验收与剩余任务见 [首发推进验收记录](docs/首发推进验收记录-2026-09-18.md)。
 
 ---
 

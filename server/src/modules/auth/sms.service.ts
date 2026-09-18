@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, ServiceUnavailableException } from '@nestjs/common';
 
 interface SmsCodeEntry {
   code: string;
@@ -8,6 +8,13 @@ interface SmsCodeEntry {
 
 @Injectable()
 export class SmsService {
+  private requireAvailable() {
+    // 模拟短信仅用于显式开启的开发环境，不能在生产环境冒充真实发送。
+    if (process.env.NODE_ENV === 'production' || process.env.ALLOW_DEV_SMS !== 'true') {
+      throw new ServiceUnavailableException('短信登录和注册暂未开放，请使用邮箱注册或账号密码登录');
+    }
+  }
+
   // 内存存储验证码，生产环境建议使用Redis
   private codeStore = new Map<string, SmsCodeEntry>();
 
@@ -24,6 +31,7 @@ export class SmsService {
 
   // 发送短信验证码
   async sendCode(phone: string): Promise<void> {
+    this.requireAvailable();
     // 检查是否频繁发送（60秒内不能重复发送）
     const existing = this.codeStore.get(phone);
     if (existing && existing.expiresAt > Date.now() + (this.CODE_EXPIRE_MS - 60000)) {
@@ -53,6 +61,7 @@ export class SmsService {
 
   // 验证验证码
   verify(phone: string, code: string): boolean {
+    this.requireAvailable();
     const entry = this.codeStore.get(phone);
 
     if (!entry) {

@@ -10,8 +10,9 @@
     "build:server": "cd server && npm run build",
     "build:web": "cd web && npm run build",
     "start:server": "cd server && node dist/main.js",
+    "start:web": "cd web && npm run start",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:web\" \"node scripts/open-browser.js\"",
-    "start": "concurrently \"npm run start:server\" \"npm run dev:web\"",
+    "start": "concurrently \"npm run start:server\" \"npm run start:web\"",
     "check:real-covers": "node server/scripts/restore-real-covers.mjs --check",
     "restore:real-covers": "node server/scripts/restore-real-covers.mjs --copy"
   },

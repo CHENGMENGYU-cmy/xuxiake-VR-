@@ -161,10 +161,10 @@ export default function RegisterPage() {
             variant={registerMethod === 'phone' ? 'default' : 'outline'}
             size="sm"
             className="flex-1"
-            onClick={() => { setRegisterMethod('phone'); setValidationErrors({}); }}
+            disabled
           >
             <Smartphone className="mr-1.5 h-3.5 w-3.5" />
-            手机号注册
+            手机号（暂未开放）
           </Button>
         </div>
 

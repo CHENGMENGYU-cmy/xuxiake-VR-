@@ -27,11 +27,9 @@ export class PostsController {
     @InjectRepository(AudioPlaylist) private readonly playlistRepo: Repository<AudioPlaylist>,
   ) {}
 
-  private getUserId(auth: string): string {
+  private async getUserId(auth: string): Promise<string> {
     const token = auth?.replace('Bearer ', '');
-    const userId = this.authService.validateAccessToken(token || '');
-    if (!userId) throw new UnauthorizedException('请先登录');
-    return userId;
+    return this.authService.requireActiveAccessToken(token || '', '请先登录');
   }
 
   @Get('tags')
@@ -98,7 +96,7 @@ export class PostsController {
     // 可选认证：有 token 时提取 userId，无 token 时为 null
     let userId: string | undefined;
     if (auth) {
-      try { userId = this.getUserId(auth); } catch { /* 游客模式 */ }
+      try { userId = await this.getUserId(auth); } catch { /* 游客模式 */ }
     }
 
     // 解析 excludeContentLevels（逗号分隔的字符串转数组）
@@ -138,7 +136,7 @@ export class PostsController {
 
     let userId: string | undefined;
     if (auth) {
-      try { userId = this.getUserId(auth); } catch {}
+      try { userId = await this.getUserId(auth); } catch {}
     }
 
     const posts = await this.postsService.searchPosts(q, limit ? parseInt(limit) : 20, userId);
@@ -161,7 +159,7 @@ export class PostsController {
     // 可选认证：有 token 时可查看私密内容
     let currentUserId: string | undefined;
     if (auth) {
-      try { currentUserId = this.getUserId(auth); } catch {}
+      try { currentUserId = await this.getUserId(auth); } catch {}
     }
     const result = await this.postsService.getContentHierarchy({
       level, userId, cursor,
@@ -177,7 +175,7 @@ export class PostsController {
 
   @Get('classified/dimensions')
   async getClassifiedDimensions(@Headers('authorization') auth: string) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const dimensions = await this.postsService.getClassifiedDimensions(userId);
     return { success: true, data: dimensions };
   }
@@ -190,7 +188,7 @@ export class PostsController {
     @Query('mine') mine?: string,
   ) {
     let userId: string | undefined;
-    try { userId = this.getUserId(auth); } catch {}
+    try { userId = await this.getUserId(auth); } catch {}
     const result = await this.postsService.getCollections({
       userId,
       onlyMine: mine === '1',
@@ -215,7 +213,7 @@ export class PostsController {
 
   @Get('snaps')
   async getUserSnaps(@Headers('authorization') auth: string) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const data = await this.postsService.getUserSnaps(userId);
     return { success: true, data };
   }
@@ -225,7 +223,7 @@ export class PostsController {
     @Headers('authorization') auth: string,
     @Query('userId') queryUserId?: string,
   ) {
-    const viewerId = this.getUserId(auth);
+    const viewerId = await this.getUserId(auth);
     const data = await this.postsService.getUserDiaries(queryUserId || viewerId, viewerId);
     return { success: true, data };
   }
@@ -235,14 +233,14 @@ export class PostsController {
     @Headers('authorization') auth: string,
     @Query('userId') queryUserId?: string,
   ) {
-    const viewerId = this.getUserId(auth);
+    const viewerId = await this.getUserId(auth);
     const data = await this.postsService.getUserTravelogues(queryUserId || viewerId, viewerId);
     return { success: true, data };
   }
 
   @Get('trips')
   async getUserTrips(@Headers('authorization') auth: string) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const data = await this.postsService.getUserTrips(userId);
     return { success: true, data };
   }
@@ -279,7 +277,7 @@ export class PostsController {
       weather?: string;
     },
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const data = await this.postsService.saveDiary(userId, dto);
     return { success: true, data };
   }
@@ -290,7 +288,7 @@ export class PostsController {
     @Headers('authorization') auth: string,
     @Body() body: { snapIds: string[]; style?: string; tone?: string; length?: string },
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     if (!body.snapIds?.length) throw new NotFoundException('请选择要生成日记的闪拍');
     const jobId = await this.aiService.generateMultiDiary(userId, {
       snapIds: body.snapIds,
@@ -307,7 +305,7 @@ export class PostsController {
     @Headers('authorization') auth: string,
     @Param('snapId') snapId: string,
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const draft = await this.postsService.getDiaryDraft(userId, snapId);
     return { success: true, data: draft };
   }
@@ -317,7 +315,7 @@ export class PostsController {
     @Headers('authorization') auth: string,
     @Body() body: { snapId: string; style?: string; includeMemory?: boolean },
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const snap = await this.postsService.getPostById(body.snapId, userId);
     if (!snap || !['SNAPSHOT'].includes((snap as any).contentLevel)) {
       throw new NotFoundException('素材记录不存在');
@@ -368,7 +366,7 @@ export class PostsController {
   async getPost(@Param('id') id: string, @Headers('authorization') auth?: string) {
     let userId: string | undefined;
     if (auth) {
-      try { userId = this.getUserId(auth); } catch { /* 游客模式 */ }
+      try { userId = await this.getUserId(auth); } catch { /* 游客模式 */ }
     }
     const post = await this.postsService.getPostById(id, userId);
     return { success: true, data: post };
@@ -382,35 +380,35 @@ export class PostsController {
 
   @Post()
   async createPost(@Headers('authorization') auth: string, @Body() dto: CreatePostDto) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const post = await this.postsService.createPost(userId, dto);
     return { success: true, data: post };
   }
 
   @Delete(':id')
   async deletePost(@Headers('authorization') auth: string, @Param('id') id: string) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const result = await this.postsService.deletePost(userId, id);
     return { success: true, ...result };
   }
 
   @Put(':id')
   async updatePost(@Headers('authorization') auth: string, @Param('id') id: string, @Body() dto: { content: string }) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const post = await this.postsService.updatePost(userId, id, dto);
     return { success: true, data: post };
   }
 
   @Post(':id/like')
   async likePost(@Headers('authorization') auth: string, @Param('id') id: string) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const post = await this.postsService.likePost(userId, id);
     return { success: true, data: post };
   }
 
   @Delete(':id/like')
   async unlikePost(@Headers('authorization') auth: string, @Param('id') id: string) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const post = await this.postsService.unlikePost(userId, id);
     return { success: true, data: post };
   }
@@ -434,7 +432,7 @@ export class PostsController {
     @Param('id') id: string,
     @Body() dto: CreateCommentDto,
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const comment = await this.postsService.createComment(userId, id, dto);
     return { success: true, data: comment };
   }
@@ -444,7 +442,7 @@ export class PostsController {
     @Headers('authorization') auth: string,
     @Param('commentId') commentId: string,
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const result = await this.postsService.deleteComment(userId, commentId);
     return { success: true, ...result };
   }
@@ -455,7 +453,7 @@ export class PostsController {
     @Param('id') id: string,
     @Body() dto: { targetLevel: string; content?: string; title?: string },
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const post = await this.postsService.promoteContent(userId, id, dto);
     return { success: true, data: post };
   }
@@ -467,7 +465,7 @@ export class PostsController {
     @Param('id') id: string,
     @Body() dto: { locationPrecision?: 'hidden' | 'city' | 'exact'; visibility?: 'PUBLIC' | 'FOLLOWERS' | 'PRIVATE'; communityId?: string | null },
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const post = await this.postsService.publishPost(userId, id, dto);
     return { success: true, data: post };
   }
@@ -477,7 +475,7 @@ export class PostsController {
     @Headers('authorization') auth: string,
     @Param('id') id: string,
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const post = await this.postsService.unpublishPost(userId, id);
     return { success: true, data: post };
   }
@@ -488,7 +486,7 @@ export class PostsController {
     @Headers('authorization') auth: string,
     @Body() dto: { name: string; description?: string; isPublic?: boolean },
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const collection = await this.postsService.createCollection(userId, dto);
     return { success: true, data: collection };
   }
@@ -505,7 +503,7 @@ export class PostsController {
     @Param('id') id: string,
     @Body() dto: { name?: string; description?: string; isPublic?: boolean },
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const collection = await this.postsService.updateCollection(userId, id, dto);
     return { success: true, data: collection };
   }
@@ -515,7 +513,7 @@ export class PostsController {
     @Headers('authorization') auth: string,
     @Param('id') id: string,
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     await this.postsService.deleteCollection(userId, id);
     return { success: true, message: '收藏夹已删除' };
   }
@@ -527,7 +525,7 @@ export class PostsController {
     @Query('page') page?: string,
   ) {
     let userId: string | undefined;
-    try { userId = this.getUserId(auth); } catch {}
+    try { userId = await this.getUserId(auth); } catch {}
     const result = await this.postsService.getCollectionPosts(id, userId, page ? parseInt(page) : 1);
     return { success: true, ...result };
   }
@@ -538,7 +536,7 @@ export class PostsController {
     @Param('id') id: string,
     @Param('postId') postId: string,
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const result = await this.postsService.addPostToCollection(userId, id, postId);
     return { success: true, ...result };
   }
@@ -549,7 +547,7 @@ export class PostsController {
     @Param('id') id: string,
     @Param('postId') postId: string,
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const result = await this.postsService.removePostFromCollection(userId, id, postId);
     return { success: true, ...result };
   }
@@ -602,7 +600,7 @@ export class PostsController {
   // ===== 内容审核 =====
 
   private async checkAdmin(auth: string) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const user = await this.userRepo.findOne({ where: { id: userId } });
     if (!user || (user.role !== 'ADMIN' && user.role !== 'MODERATOR')) {
       throw new UnauthorizedException('需要管理员或审核员权限');
@@ -654,7 +652,7 @@ export class PostsController {
     @Param('id') postId: string,
     @Body() dto: { reason: string; detail?: string },
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const report = await this.reviewService.createReport(userId, postId, dto.reason, dto.detail);
     return { success: true, data: report };
   }
@@ -666,7 +664,7 @@ export class PostsController {
     @Query('limit') limit?: string,
     @Query('status') status?: string,
   ) {
-    this.getUserId(auth);
+    await this.getUserId(auth);
     const result = await this.reviewService.getReports(
       page ? parseInt(page) : 1,
       limit ? parseInt(limit) : 20,
@@ -681,7 +679,7 @@ export class PostsController {
     @Param('reportId') reportId: string,
     @Body() dto: { action: 'RESOLVED' | 'DISMISSED'; resolution?: string },
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const report = await this.reviewService.resolveReport(reportId, userId, dto.action, dto.resolution);
     return { success: true, data: report };
   }
@@ -711,7 +709,7 @@ export class PostsController {
     @Param('id') postId: string,
     @Body() body: { content: string; timeOffset: number; color?: string },
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const comment = this.vcRepo.create({
       id: uuidv4(), postId, userId, content: body.content,
       timeOffset: body.timeOffset, color: body.color || null,
@@ -728,7 +726,7 @@ export class PostsController {
     @Headers('authorization') auth: string,
     @Body() body: { title: string; description?: string; coverUrl?: string; isPublic?: boolean },
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const playlist = this.playlistRepo.create({
       id: uuidv4(), userId, title: body.title,
       description: body.description || null, coverUrl: body.coverUrl || null,
@@ -744,7 +742,7 @@ export class PostsController {
     @Param('id') playlistId: string,
     @Param('postId') postId: string,
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const playlist = await this.playlistRepo.findOne({ where: { id: playlistId } });
     if (!playlist || playlist.userId !== userId) throw new UnauthorizedException('无权操作');
     playlist.trackCount += 1;
@@ -759,7 +757,7 @@ export class PostsController {
     @Headers('authorization') auth: string,
     @Body() body: { seedPostIds: string[]; style: string; tone: string; length: string },
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const jobId = await this.aiService.generateEssay(userId, body.seedPostIds, body.style, body.tone, body.length);
     return { success: true, data: { jobId } };
   }
@@ -778,7 +776,7 @@ export class PostsController {
     @Headers('authorization') auth: string,
     @Body() body: { snapIds?: string[]; logIds?: string[]; diaryIds: string[]; prompt?: string; style?: string; tone?: string; length?: string },
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     const jobId = await this.aiService.generateTravelogue(userId, {
       snapIds: body.snapIds || body.logIds || [],
       logIds: [],
@@ -796,7 +794,7 @@ export class PostsController {
     @Headers('authorization') auth: string,
     @Body() body: { tripId: string; prompt?: string; style?: string; tone?: string; length?: string },
   ) {
-    const userId = this.getUserId(auth);
+    const userId = await this.getUserId(auth);
     if (!body.tripId) throw new NotFoundException('缺少行程ID');
     const snapshotIds = await this.postsService.getTripSnapshotIds(userId, body.tripId);
     if (snapshotIds.length === 0) throw new NotFoundException('该行程没有可生成的素材');
