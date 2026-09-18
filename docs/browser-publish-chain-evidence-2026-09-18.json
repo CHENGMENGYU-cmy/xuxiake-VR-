@@ -1,0 +1,144 @@
+{
+  "sourceEvidence": "docs/core-chain-evidence-2026-09-18.json",
+  "run": "chain_1789734890210",
+  "startedAt": "2026-09-18T12:42:30.905Z",
+  "checks": [
+    {
+      "label": "专用测试账号可通过网页登录",
+      "pass": true,
+      "detail": {
+        "username": "chain_1789734890210"
+      }
+    },
+    {
+      "label": "DIARY 发布前对另一账号隐藏",
+      "pass": true,
+      "detail": {
+        "id": "3d784b70-9ef2-4f9f-b135-11af6aa02fac"
+      }
+    },
+    {
+      "label": "DIARY 详情页可打开",
+      "pass": true,
+      "detail": {
+        "id": "3d784b70-9ef2-4f9f-b135-11af6aa02fac",
+        "title": "chain_1789734890210 编辑后日记"
+      }
+    },
+    {
+      "label": "DIARY 浏览器选择社区并发布",
+      "pass": true,
+      "detail": {
+        "id": "3d784b70-9ef2-4f9f-b135-11af6aa02fac",
+        "community": "com1"
+      }
+    },
+    {
+      "label": "DIARY 发布后进入公开列表",
+      "pass": true,
+      "detail": [
+        {
+          "path": "/posts?limit=100",
+          "found": true
+        },
+        {
+          "path": "/social/communities/com1/posts?limit=100",
+          "found": true
+        },
+        {
+          "path": "/users/chain_1789734890210/posts?limit=100",
+          "found": true
+        }
+      ]
+    },
+    {
+      "label": "DIARY 页面展示 /feed",
+      "pass": false,
+      "detail": {
+        "title": "chain_1789734890210 编辑后日记"
+      }
+    },
+    {
+      "label": "DIARY 页面展示 /communities/com1",
+      "pass": false,
+      "detail": {
+        "title": "chain_1789734890210 编辑后日记"
+      }
+    },
+    {
+      "label": "DIARY 页面展示 /profile/chain_1789734890210",
+      "pass": false,
+      "detail": {
+        "title": "chain_1789734890210 编辑后日记"
+      }
+    },
+    {
+      "label": "DIARY 第二账号点赞评论生效",
+      "pass": true,
+      "detail": {
+        "likeCount": 1,
+        "commentId": "d527ef4e-d52d-445f-bf1c-7357cc0d58c9"
+      }
+    }
+  ],
+  "bugs": [
+    {
+      "label": "DIARY 页面展示 /feed",
+      "pass": false,
+      "detail": {
+        "title": "chain_1789734890210 编辑后日记"
+      }
+    },
+    {
+      "label": "DIARY 页面展示 /communities/com1",
+      "pass": false,
+      "detail": {
+        "title": "chain_1789734890210 编辑后日记"
+      }
+    },
+    {
+      "label": "DIARY 页面展示 /profile/chain_1789734890210",
+      "pass": false,
+      "detail": {
+        "title": "chain_1789734890210 编辑后日记"
+      }
+    }
+  ],
+  "pages": [
+    {
+      "postId": "3d784b70-9ef2-4f9f-b135-11af6aa02fac",
+      "kind": "DIARY",
+      "path": "/feed",
+      "title": "chain_1789734890210 编辑后日记",
+      "visible": false
+    },
+    {
+      "postId": "3d784b70-9ef2-4f9f-b135-11af6aa02fac",
+      "kind": "DIARY",
+      "path": "/communities/com1",
+      "title": "chain_1789734890210 编辑后日记",
+      "visible": false
+    },
+    {
+      "postId": "3d784b70-9ef2-4f9f-b135-11af6aa02fac",
+      "kind": "DIARY",
+      "path": "/profile/chain_1789734890210",
+      "title": "chain_1789734890210 编辑后日记",
+      "visible": false
+    }
+  ],
+  "accounts": {
+    "author": {
+      "id": "44482c4e-41f7-4087-a841-dafa533b56ca",
+      "username": "chain_1789734890210"
+    },
+    "reader": {
+      "id": "9627f392-b8ff-4a2e-a3a5-423f08c748b7",
+      "username": "chain_1789734890210_reader"
+    }
+  },
+  "community": {
+    "id": "com1",
+    "name": "VR旅行社区"
+  }
+}
