@@ -12,7 +12,11 @@
   3. **修复跨目录引用**：把 `docs/xxx.md` 这类相对仓库根的写法，按文档所在层级改为相对自身的路径（同目录写文件名、跨分类写 `../分类目录/`、根目录文件写 `../../`），共 69 条引用
   4. **修正含括号文件名的链接**：`徐霞客社区建设目前情况(8-16).docx` 的 Markdown 链接改为百分号编码 `%288-16%29`，避免解析器在第一个 `)` 处截断
   5. **新增 `docs/README.md`**：分类索引、每份文档用途、建议阅读顺序、新增文档归档规则、命名约定与引用路径约定
-- **效果**：根目录文档从 14 个降到 2 个（`README.md`、`CHANGELOG.md`），28 个文档全部纳入 `docs/` 五个分类并有索引可查；文档移动经 git 识别为 rename（相似度 R069–R100），文件历史未丢失；69 条 Markdown 链接与路径引用逐一校验通过。已验证移动不影响 `.claude/` 自动提交脚本、`md_to_docx.py` 等文档生成脚本和 `server/`、`web/` 代码
+  6. **数据库备份移出版本控制**：4 份 `backup-xuxiake-before-*.sql` 移入 `backups/` 后执行 `git rm --cached`，本地文件保留；`.gitignore` 新增 `backups/`。这些备份含 users 表邮箱与密码哈希，且项目《首发修复基线》本身写明这类属"本机备份和临时产物，不直接纳入首发代码版本"
+  7. **运行日志归档**：6 个 `*.log` 移入 `logs/`，`.gitignore` 新增 `logs/`（`*.log` 与 `hs_err_pid*.log` 规则原已存在）
+  8. **生成脚本归位并修正输出路径**：`md_to_docx.py`、`generate_docx.py`、`_gen_mindmap.py` 移入 `scripts/`；后两者原本把产物写到仓库根目录（一个用相对路径、一个用硬编码绝对路径），已改为基于脚本自身位置输出到 `docs/assets/` 与 `docs/20-汇报材料/`，重跑不会再污染根目录
+  9. **删除误操作残留**：根目录 `query`（7 字节，内容为字符串 `mysql`）已删除
+- **效果**：根目录非代码文件从 30 个降到 6 个（`README.md`、`CHANGELOG.md`、`package.json`、`nginx.conf`、`start-server.bat`、`.gitignore`），其中 `nginx.conf` 因被 `scripts/deploy_with_config.py` 与 `scripts/upload_and_deploy.py` 引用而刻意保留在根目录；28 个文档纳入 `docs/` 分类并有索引可查；仓库不再包含含密码哈希的数据库备份。文件移动经 git 识别为 rename（文档类 R069–R100），历史未丢失；69 条 Markdown 链接与路径引用逐一校验通过。已重跑 `_gen_mindmap.py` 验证输出到 `docs/assets/` 且根目录无新增文件；确认移动与改动不影响 `.claude/` 自动提交脚本和 `server/`、`web/` 代码
 
 ## 第17条（2026-09-18）
 
