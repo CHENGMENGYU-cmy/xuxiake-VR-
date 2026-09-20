@@ -33,6 +33,11 @@ backups/
 # Uploads
 server/uploads/
 
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
 # TypeScript
 *.tsbuildinfo
 
