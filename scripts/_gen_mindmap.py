@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """生成 Xmind 树形结构彩虹思维导图 SVG（宽松版）"""
 import math
+import os
 
 W, H = 2000, 580
 CX = 1000
