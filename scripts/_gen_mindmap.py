@@ -98,8 +98,7 @@ def main():
                 found = True
     if not found:
         report.append("  (无)")
-    with open("_layout_report.txt", "w", encoding="utf-8") as f:
-        f.write("\n".join(report))
+    print("\n".join(report))
     print("done")
 
 
