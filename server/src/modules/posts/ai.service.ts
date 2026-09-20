@@ -132,7 +132,7 @@ export class AiService {
 
       const material = this.extractMaterial(snaps, diaries);
       const seeds = [...snaps, ...diaries];
-      const days = this.groupByDay(seeds);
+      const days = this.groupByDay(snaps.length > 0 ? snaps : diaries);
       if (days.length === 0) throw new Error('没有可用的游记素材');
       job.progress = 30;
 
@@ -181,13 +181,19 @@ export class AiService {
       // 复制素材媒体到 post.mediaItems（列表/卡片兜底展示）
       const allSeeds = seeds.filter(p => p.mediaItems?.length);
       if (allSeeds.length > 0) {
+        const seenMedia = new Set<string>();
         const allMedia = allSeeds.flatMap((s, si) =>
           (s.mediaItems || []).map((m, mi) => ({
             id: uuidv4(), postId: post.id, type: m.type, url: m.url,
             thumbnailUrl: m.thumbnailUrl, duration: m.duration,
             vrFormat: m.vrFormat, sortOrder: si * 10 + mi,
-          }))
-        );
+          })).filter((m) => {
+            const key = `${m.type}:${m.url || ''}`;
+            if (seenMedia.has(key)) return false;
+            seenMedia.add(key);
+            return true;
+          })
+        ).map((m, i) => ({ ...m, sortOrder: i * 10 }));
         await this.mediaRepo.save(allMedia);
       }
 
@@ -610,6 +616,7 @@ Day 2 贴士：<当天实用建议>
   /** 素材按创建日期分天 */
   private groupByDay(posts: Post[]): DayGroup[] {
     const map = new Map<string, DayGroup>();
+    const seenMedia = new Set<string>();
     const sorted = [...posts].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
     for (const p of sorted) {
       const d = new Date(p.createdAt);
@@ -618,7 +625,12 @@ Day 2 贴士：<当天实用建议>
       const day = map.get(key)!;
       if (!day.locationName && p.locationName) day.locationName = p.locationName;
       for (const m of p.mediaItems || []) {
-        if (m.type === 'IMAGE') day.media.push({ url: m.url || '', thumbnailUrl: m.thumbnailUrl });
+        if (m.type === 'IMAGE') {
+          const key = m.url || '';
+          if (seenMedia.has(key)) continue;
+          seenMedia.add(key);
+          day.media.push({ url: key, thumbnailUrl: m.thumbnailUrl });
+        }
       }
     }
     return [...map.values()];

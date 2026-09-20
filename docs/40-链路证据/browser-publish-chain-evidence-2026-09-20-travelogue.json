@@ -1,0 +1,201 @@
+{
+  "sourceEvidence": "docs/core-chain-evidence-2026-09-18.json",
+  "run": "chain_1789734890210",
+  "startedAt": "2026-09-20T00:43:33.734Z",
+  "checks": [
+    {
+      "label": "专用测试账号可通过网页登录",
+      "pass": true,
+      "detail": {
+        "username": "chain_1789734890210"
+      }
+    },
+    {
+      "label": "TRAVELOGUE 发布前对另一账号隐藏",
+      "pass": true,
+      "detail": {
+        "id": "cedbfd69-746c-432b-ac8b-a3cb88db510b"
+      }
+    },
+    {
+      "label": "TRAVELOGUE 详情页可打开",
+      "pass": true,
+      "detail": {
+        "id": "cedbfd69-746c-432b-ac8b-a3cb88db510b",
+        "title": "九月杭州，停在原地的旅行"
+      }
+    },
+    {
+      "label": "TRAVELOGUE 浏览器选择社区并发布",
+      "pass": true,
+      "detail": {
+        "id": "cedbfd69-746c-432b-ac8b-a3cb88db510b",
+        "community": "com1"
+      }
+    },
+    {
+      "label": "TRAVELOGUE 发布后进入公开列表",
+      "pass": true,
+      "detail": [
+        {
+          "path": "/posts?limit=100",
+          "found": true
+        },
+        {
+          "path": "/social/communities/com1/posts?limit=100",
+          "found": true
+        },
+        {
+          "path": "/users/chain_1789734890210/posts?limit=100",
+          "found": true
+        }
+      ]
+    },
+    {
+      "label": "TRAVELOGUE 页面展示 /feed",
+      "pass": false,
+      "detail": {
+        "title": "九月杭州，停在原地的旅行",
+        "titleVisible": false,
+        "journeyTitleVisible": false,
+        "contentVisible": false
+      }
+    },
+    {
+      "label": "TRAVELOGUE 页面展示 /communities/com1",
+      "pass": false,
+      "detail": {
+        "title": "九月杭州，停在原地的旅行",
+        "titleVisible": false,
+        "journeyTitleVisible": false,
+        "contentVisible": false
+      }
+    },
+    {
+      "label": "TRAVELOGUE 页面展示 /profile/chain_1789734890210",
+      "pass": false,
+      "detail": {
+        "title": "九月杭州，停在原地的旅行",
+        "titleVisible": false,
+        "journeyTitleVisible": false,
+        "contentVisible": false
+      }
+    },
+    {
+      "label": "TRAVELOGUE 第二账号点赞评论生效",
+      "pass": true,
+      "detail": {
+        "likeCount": 1,
+        "commentId": "b36ed51b-a167-4b1b-bde2-3f2f64b6f465"
+      }
+    },
+    {
+      "label": "TRAVELOGUE 撤回后公开列表与详情隐藏",
+      "pass": true,
+      "detail": {
+        "hiddenRows": [
+          {
+            "path": "/posts?limit=100",
+            "found": false
+          },
+          {
+            "path": "/social/communities/com1/posts?limit=100",
+            "found": false
+          },
+          {
+            "path": "/users/chain_1789734890210/posts?limit=100",
+            "found": false
+          }
+        ],
+        "readerDetailStatus": 404
+      }
+    },
+    {
+      "label": "浏览器运行时无页面错误",
+      "pass": true,
+      "detail": {
+        "pageErrors": []
+      }
+    }
+  ],
+  "bugs": [
+    {
+      "label": "TRAVELOGUE 页面展示 /feed",
+      "pass": false,
+      "detail": {
+        "title": "九月杭州，停在原地的旅行",
+        "titleVisible": false,
+        "journeyTitleVisible": false,
+        "contentVisible": false
+      }
+    },
+    {
+      "label": "TRAVELOGUE 页面展示 /communities/com1",
+      "pass": false,
+      "detail": {
+        "title": "九月杭州，停在原地的旅行",
+        "titleVisible": false,
+        "journeyTitleVisible": false,
+        "contentVisible": false
+      }
+    },
+    {
+      "label": "TRAVELOGUE 页面展示 /profile/chain_1789734890210",
+      "pass": false,
+      "detail": {
+        "title": "九月杭州，停在原地的旅行",
+        "titleVisible": false,
+        "journeyTitleVisible": false,
+        "contentVisible": false
+      }
+    }
+  ],
+  "pages": [
+    {
+      "postId": "cedbfd69-746c-432b-ac8b-a3cb88db510b",
+      "kind": "TRAVELOGUE",
+      "path": "/feed",
+      "title": "九月杭州，停在原地的旅行",
+      "titleVisible": false,
+      "journeyTitleVisible": false,
+      "contentVisible": false,
+      "visible": false
+    },
+    {
+      "postId": "cedbfd69-746c-432b-ac8b-a3cb88db510b",
+      "kind": "TRAVELOGUE",
+      "path": "/communities/com1",
+      "title": "九月杭州，停在原地的旅行",
+      "titleVisible": false,
+      "journeyTitleVisible": false,
+      "contentVisible": false,
+      "visible": false
+    },
+    {
+      "postId": "cedbfd69-746c-432b-ac8b-a3cb88db510b",
+      "kind": "TRAVELOGUE",
+      "path": "/profile/chain_1789734890210",
+      "title": "九月杭州，停在原地的旅行",
+      "titleVisible": false,
+      "journeyTitleVisible": false,
+      "contentVisible": false,
+      "visible": false
+    }
+  ],
+  "requestedKind": "TRAVELOGUE",
+  "accounts": {
+    "author": {
+      "id": "44482c4e-41f7-4087-a841-dafa533b56ca",
+      "username": "chain_1789734890210"
+    },
+    "reader": {
+      "id": "9627f392-b8ff-4a2e-a3a5-423f08c748b7",
+      "username": "chain_1789734890210_reader"
+    }
+  },
+  "community": {
+    "id": "com1",
+    "name": "VR旅行社区"
+  },
+  "finishedAt": "2026-09-20T00:43:40.329Z"
+}

@@ -105,8 +105,10 @@ export class SyncService {
       if (m.scene) vrMetadata.scene = m.scene;
       if (m.keywords?.length) vrMetadata.keywords = m.keywords;
       if (m.textNote) vrMetadata.hasTextNote = true;
-      // 标记纯文字闪拍（无照片无视频）
-      if (!m.photoPath && !m.videoPath) vrMetadata.mediaType = 'TEXT';
+      // 标记无图片/视频的素材类型，避免纯音频被当作文字素材。
+      if (!m.photoPath && !m.videoPath) {
+        vrMetadata.mediaType = reflection?.audioPath || m.mediaType === 'AUDIO' ? 'AUDIO' : 'TEXT';
+      }
 
       const post = this.postRepo.create({
         id: uuidv4(),
@@ -157,6 +159,7 @@ export class SyncService {
       if (mediaItems.length > 0) await this.mediaRepo.save(mediaItems);
 
       result.imported++;
+      if (originalId) originals.set(originalId, post.id);
     }
 
     return result;

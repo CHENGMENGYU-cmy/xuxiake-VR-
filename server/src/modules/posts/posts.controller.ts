@@ -763,9 +763,14 @@ export class PostsController {
   }
 
   @Get('ai/jobs/:jobId')
-  async getJobStatus(@Param('jobId') jobId: string): Promise<{ success: boolean; data: GenerationJob | null }> {
+  async getJobStatus(
+    @Headers('authorization') auth: string,
+    @Param('jobId') jobId: string,
+  ): Promise<{ success: boolean; data: GenerationJob | null }> {
+    const userId = await this.getUserId(auth);
     const job = this.aiService.getJobStatus(jobId);
     if (!job) throw new NotFoundException('任务不存在');
+    if (job.userId !== userId) throw new NotFoundException('任务不存在');
     return { success: true, data: job };
   }
 
@@ -811,9 +816,14 @@ export class PostsController {
   }
 
   @Get('travelogue/job/:jobId')
-  async getTravelogueJobStatus(@Param('jobId') jobId: string): Promise<{ success: boolean; data: GenerationJob | null }> {
+  async getTravelogueJobStatus(
+    @Headers('authorization') auth: string,
+    @Param('jobId') jobId: string,
+  ): Promise<{ success: boolean; data: GenerationJob | null }> {
+    const userId = await this.getUserId(auth);
     const job = this.aiService.getJobStatus(jobId);
     if (!job) throw new NotFoundException('任务不存在');
+    if (job.userId !== userId) throw new NotFoundException('任务不存在');
     return { success: true, data: job };
   }
 }

@@ -3,7 +3,7 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises';
 const base='http://localhost:3001/api';
 const run=`chain_${Date.now()}`;
 const evidence={run,startedAt:new Date().toISOString(),checks:[],bugs:[],posts:[],jobs:[]};
-const out='docs/core-chain-evidence-2026-09-18.json';
+const out=process.argv.find(a=>a.startsWith('--out='))?.slice('--out='.length)||'docs/core-chain-evidence-2026-09-18.json';
 async function save(){await writeFile(out,JSON.stringify(evidence,null,2));}
 async function note(label,pass,detail){evidence.checks.push({label,pass,detail});console.log(`${pass?'PASS':'BUG'} ${label}`);if(!pass)evidence.bugs.push({label,detail});await save();}
 async function req(path,token,body,method=body===undefined?'GET':'POST'){
@@ -56,6 +56,7 @@ if(aiDiary.postId){
  const start=await ok('/posts/travelogue/generate',token,{snapIds:[txt.id,img.id],diaryIds:[diary.id],prompt:'仅整理所选素材和日记，按9月17日、9月18日顺序，不编造乘船、登山或其他城市经历。',style:'纪实',tone:'客观',length:'简短'});
  const job=await poll('/posts/travelogue/job',token,start.jobId);evidence.travelogueJob=job;await note('真实配置下游记生成任务完成',job.status==='DONE',job);
  if(job.postId){evidence.posts.push({id:job.postId,kind:'AI_TRAVELOGUE'});const travel=await ok('/posts/'+job.postId,token);evidence.travelogue=travel;
+ const stopDates=travel.journey?.stops?.map(s=>s.dayDate)||[];await note('游记章节只来自所选素材日期',stopDates.length===2&&stopDates.includes('2026-09-17')&&stopDates.includes('2026-09-18'),{stopDates,stopCount:travel.journey?.stopCount});
  const urls=travel.mediaItems.map(m=>m.url);await note('素材与衍生日记一起生成时媒体不重复',new Set(urls).size===urls.length,{urls});
  const anon=await req('/posts/travelogue/job/'+start.jobId);await note('未登录不能读取私密游记任务',anon.status>=400,{status:anon.status,exposesResult:!!anon.data?.result});
  }

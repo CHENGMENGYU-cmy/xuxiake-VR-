@@ -1241,6 +1241,20 @@ export class PostsService {
       throw new BadRequestException('请先保存日记，再在详情页选择社区发布');
     }
     const visibility = requestedVisibility;
+    const sourceSnap = dto.snapId
+      ? await this.postRepo.findOne({
+        where: {
+          id: dto.snapId,
+          authorId: userId,
+          contentLevel: 'SNAPSHOT',
+          deletedAt: IsNull(),
+        },
+        relations: { mediaItems: true },
+      })
+      : null;
+    if (dto.snapId && !sourceSnap) {
+      throw new NotFoundException('素材记录不存在');
+    }
 
     const vrMetadata: Record<string, unknown> = {
       insight: dto.insight || '',
@@ -1248,6 +1262,9 @@ export class PostsService {
       generatorTags: dto.tags || [],
       status: dto.status || 'private',
     };
+    if (dto.snapId) {
+      vrMetadata.sourceSnapIds = [dto.snapId];
+    }
 
     // mood/weather 仅显式提供时写入（undefined 则保留编辑时的旧值）
     if (dto.mood !== undefined) vrMetadata.mood = dto.mood;
@@ -1302,11 +1319,8 @@ export class PostsService {
     await this.postRepo.save(post);
 
     // 仅首次创建时复制闪拍媒体和位置
-    if (!isUpdate && dto.snapId) {
-      const snap = await this.postRepo.findOne({
-        where: { id: dto.snapId },
-        relations: { mediaItems: true },
-      });
+    if (!isUpdate && sourceSnap) {
+      const snap = sourceSnap;
       if (snap) {
         post.locationLat = snap.locationLat;
         post.locationLng = snap.locationLng;

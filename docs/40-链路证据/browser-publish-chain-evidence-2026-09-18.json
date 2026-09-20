@@ -1,7 +1,7 @@
 {
   "sourceEvidence": "docs/core-chain-evidence-2026-09-18.json",
   "run": "chain_1789734890210",
-  "startedAt": "2026-09-18T12:42:30.905Z",
+  "startedAt": "2026-09-20T00:42:52.015Z",
   "checks": [
     {
       "label": "专用测试账号可通过网页登录",
@@ -55,29 +55,30 @@
       "label": "DIARY 页面展示 /feed",
       "pass": false,
       "detail": {
-        "title": "chain_1789734890210 编辑后日记"
+        "title": "chain_1789734890210 编辑后日记",
+        "titleVisible": false,
+        "journeyTitleVisible": false,
+        "contentVisible": false
       }
     },
     {
       "label": "DIARY 页面展示 /communities/com1",
       "pass": false,
       "detail": {
-        "title": "chain_1789734890210 编辑后日记"
+        "title": "chain_1789734890210 编辑后日记",
+        "titleVisible": false,
+        "journeyTitleVisible": false,
+        "contentVisible": false
       }
     },
     {
       "label": "DIARY 页面展示 /profile/chain_1789734890210",
       "pass": false,
       "detail": {
-        "title": "chain_1789734890210 编辑后日记"
-      }
-    },
-    {
-      "label": "DIARY 第二账号点赞评论生效",
-      "pass": true,
-      "detail": {
-        "likeCount": 1,
-        "commentId": "d527ef4e-d52d-445f-bf1c-7357cc0d58c9"
+        "title": "chain_1789734890210 编辑后日记",
+        "titleVisible": false,
+        "journeyTitleVisible": false,
+        "contentVisible": false
       }
     }
   ],
@@ -86,21 +87,30 @@
       "label": "DIARY 页面展示 /feed",
       "pass": false,
       "detail": {
-        "title": "chain_1789734890210 编辑后日记"
+        "title": "chain_1789734890210 编辑后日记",
+        "titleVisible": false,
+        "journeyTitleVisible": false,
+        "contentVisible": false
       }
     },
     {
       "label": "DIARY 页面展示 /communities/com1",
       "pass": false,
       "detail": {
-        "title": "chain_1789734890210 编辑后日记"
+        "title": "chain_1789734890210 编辑后日记",
+        "titleVisible": false,
+        "journeyTitleVisible": false,
+        "contentVisible": false
       }
     },
     {
       "label": "DIARY 页面展示 /profile/chain_1789734890210",
       "pass": false,
       "detail": {
-        "title": "chain_1789734890210 编辑后日记"
+        "title": "chain_1789734890210 编辑后日记",
+        "titleVisible": false,
+        "journeyTitleVisible": false,
+        "contentVisible": false
       }
     }
   ],
@@ -110,6 +120,9 @@
       "kind": "DIARY",
       "path": "/feed",
       "title": "chain_1789734890210 编辑后日记",
+      "titleVisible": false,
+      "journeyTitleVisible": false,
+      "contentVisible": false,
       "visible": false
     },
     {
@@ -117,6 +130,9 @@
       "kind": "DIARY",
       "path": "/communities/com1",
       "title": "chain_1789734890210 编辑后日记",
+      "titleVisible": false,
+      "journeyTitleVisible": false,
+      "contentVisible": false,
       "visible": false
     },
     {
@@ -124,9 +140,13 @@
       "kind": "DIARY",
       "path": "/profile/chain_1789734890210",
       "title": "chain_1789734890210 编辑后日记",
+      "titleVisible": false,
+      "journeyTitleVisible": false,
+      "contentVisible": false,
       "visible": false
     }
   ],
+  "requestedKind": "DIARY",
   "accounts": {
     "author": {
       "id": "44482c4e-41f7-4087-a841-dafa533b56ca",

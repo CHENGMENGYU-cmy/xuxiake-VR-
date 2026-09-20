@@ -1,0 +1,613 @@
+{
+  "run": "chain_1789865572536",
+  "startedAt": "2026-09-20T00:52:52.536Z",
+  "checks": [
+    {
+      "label": "图片与纯文字同步、默认私密",
+      "pass": true,
+      "detail": [
+        {
+          "id": "dce42dbd-87de-4fcb-9109-f53f320485a4",
+          "visibility": "PRIVATE",
+          "content": "验收事实B：9月18日下午在杭州阅读，喝了一杯白开水，没有登山，也没有去其他城市。",
+          "createdAt": "2026-09-18T06:30:00.000Z"
+        },
+        {
+          "id": "f464ecf3-f597-480e-be83-a17278d9905e",
+          "visibility": "PRIVATE",
+          "content": "验收事实A：9月17日上午在杭州西湖散步，只在岸边停留，没有乘船。",
+          "createdAt": "2026-09-17T01:15:00.000Z"
+        }
+      ]
+    },
+    {
+      "label": "重复整批同步不会重复建帖",
+      "pass": true,
+      "detail": {
+        "imported": 0,
+        "skipped": 2
+      }
+    },
+    {
+      "label": "同一批中的重复素材ID应去重",
+      "pass": true,
+      "detail": {
+        "imported": 1,
+        "skipped": 1
+      }
+    },
+    {
+      "label": "修改备注后再次同步是否更新",
+      "pass": false,
+      "detail": {
+        "actual": "验收事实A：9月17日上午在杭州西湖散步，只在岸边停留，没有乘船。",
+        "expectedSuffix": "补充：在湖边停留十分钟。",
+        "policy": "若产品约定同步后不可更新，则应明示"
+      }
+    },
+    {
+      "label": "纯音频素材类型应与音频一致",
+      "pass": true,
+      "detail": {
+        "metadata": {
+          "originalId": "chain_1789865572536_audio",
+          "source": "GLASSES_BUTTON",
+          "activityCategoryId": "unclassified",
+          "categorySource": "NONE",
+          "categoryLocked": false,
+          "mediaType": "AUDIO"
+        },
+        "mediaTypes": [
+          "AUDIO"
+        ]
+      }
+    },
+    {
+      "label": "另一账号不能读取私密素材详情",
+      "pass": true,
+      "detail": {
+        "status": 404
+      }
+    },
+    {
+      "label": "另一账号不能借保存日记复制私密素材",
+      "pass": true,
+      "detail": {
+        "status": 404
+      }
+    },
+    {
+      "label": "真实配置下日记生成任务完成",
+      "pass": true,
+      "detail": {
+        "id": "ffc963a2-a850-4bac-b327-da0f6d4be4bb",
+        "userId": "5415b03f-5324-46e6-80bd-6241f3d303db",
+        "status": "DONE",
+        "progress": 100,
+        "createdAt": "2026-09-20T00:52:53.066Z",
+        "jobType": "MULTI_DIARY",
+        "result": "# 西湖边，一杯白开水的下午\n\n翻开这两天的闪拍记录，发现它们像一组小小的对照——一天在湖边，一天在室内；一天走动，一天静坐。中间隔着的，不过是一个夜晚。\n\n九月十七日，上午。我在西湖边散步。\n\n没有乘船，只在岸边停留。这个细节如今想来，倒像是某种刻意的选择。湖面上的画舫来来往往，载着游人驶向湖心，而我站在岸上，看水波把倒影揉碎又拼好。岸边有风，不烈，刚好够把柳枝吹得轻轻摆动。我没走远，就在那一带慢慢踱着，看水，看山，看偶尔掠过的水鸟。走得累了，便在石凳上坐一会儿。什么都没想，又好像什么都想了一遍。有时候，停在岸边比驶向湖心更需要耐心——你要忍得住“来都来了”的念头，也要信得过“只在这里也很好”的踏实。\n\n九月十八日，下午。我在杭州的住处读一本书，手边一杯白开水。窗外应该是有光的，只是我记不太清了。白开水没有味道，可那天喝起来，竟觉得格外妥帖。没有登山，也没有去其他城市——这行字写下来，像一句多余的澄清，却又像某种安心的确认。书翻到某一页，我不急着往下读，就让目光停在字里行间，像昨天在湖边停下脚步一样。原来安静也是可以练习的，昨天在岸边练了一次，今天在书页间又练了一次。\n\n两天之间，西湖的水从眼前退到了记忆里，而白开水的温度从舌尖漫到了心底。我不觉得可惜。旅行未必总要装满行程，有时候，“只在岸边”和“只喝一杯白开水”，本身就是全部的抵达。那些没有做的事，没有去的地方，反而让做过的事显得更清晰、更值得。\n\n杭州的九月，就这么被我收进了两页薄薄的闪拍里。一页有湖风，一页有书页翻动的轻响。我合上日记，像是把这两天的安静又温了一遍。\n\n---\n*本文由 AI 辅助生成，素材来源于个人闪拍。*",
+        "postId": "df702e23-607b-476c-9900-e92d3d1d3ddc"
+      }
+    },
+    {
+      "label": "未登录不能读取私密日记任务结果",
+      "pass": true,
+      "detail": {
+        "status": 401,
+        "exposesResult": false
+      }
+    },
+    {
+      "label": "AI日记保留两个来源ID",
+      "pass": true,
+      "detail": {
+        "sourceSnapIds": [
+          "dce42dbd-87de-4fcb-9109-f53f320485a4",
+          "f464ecf3-f597-480e-be83-a17278d9905e"
+        ],
+        "style": "纪实",
+        "tone": "客观",
+        "keywords": [],
+        "aiGenerated": true,
+        "status": "draft"
+      }
+    },
+    {
+      "label": "编辑日记后正文与来源关联保留",
+      "pass": true,
+      "detail": {
+        "id": "df702e23-607b-476c-9900-e92d3d1d3ddc",
+        "metadata": {
+          "sourceSnapIds": [
+            "dce42dbd-87de-4fcb-9109-f53f320485a4",
+            "f464ecf3-f597-480e-be83-a17278d9905e"
+          ],
+          "style": "",
+          "tone": "客观",
+          "keywords": [],
+          "aiGenerated": true,
+          "status": "private",
+          "insight": "",
+          "generatorTags": []
+        }
+      }
+    },
+    {
+      "label": "真实配置下游记生成任务完成",
+      "pass": true,
+      "detail": {
+        "id": "b5466481-e11c-4fc8-9ed3-9b5a0bbcb943",
+        "userId": "5415b03f-5324-46e6-80bd-6241f3d303db",
+        "status": "DONE",
+        "progress": 100,
+        "createdAt": "2026-09-20T00:52:57.210Z",
+        "result": "# 岸边与室内，西湖的两日慢时光\n\n> 不乘船，不登山，只在西湖岸边散步，在室内读一本书，喝一杯白开水，这样也很好。\n\n目的地：杭州·西湖 · 出行方式：未知 · 人均：未知 · 主题：慢旅行、静心、城市漫步\n\n## Day 1｜杭州，西湖（2026-09-17）\n\n九月十七日，上午。我在西湖边散步。没有乘船，只在岸边停留——这个细节如今想来，倒像是某种刻意的选择。湖面上的画舫来来往往，载着游人驶向湖心，而我站在岸上，看水波把倒影揉碎又拼好。岸边有风，不烈，刚好够把柳枝吹得轻轻摆动。我没走远，就在那一带慢慢踱着，看水，看山，看偶尔掠过的水鸟。走得累了，便在石凳上坐一会儿。什么都没想，又好像什么都想了一遍。有时候，停在岸边比驶向湖心更需要耐心——你要忍得住“来都来了”的念头，也要信得过“只在这里也很好”。\n\n**推荐亮点**：西湖岸边漫步，石凳小坐看水波与远山\n\n**实用贴士**：岸边风轻，适合慢走，不必赶路；想坐就坐，不必觉得浪费时间\n\n## Day 2｜杭州（2026-09-18）\n\n九月十八日，下午。我在杭州，读书，喝了一杯白开水。没有登山，也没有去其他城市。前一天在湖边走动，这一天在室内静坐，中间隔着的，不过是一个夜晚。翻开闪拍记录，发现它们像一组小小的对照——一天在湖边，一天在室内；一天走动，一天静坐。白开水没有味道，却最解渴；读书没有声响，却最安心。旅行不一定要奔赴什么，停下来，翻几页书，喝一口水，也是好好度过了一个下午。\n\n**推荐亮点**：找一处安静的角落读书，喝一杯温热的白开水\n\n**实用贴士**：前一天走累了，第二天安排室内静休是不错的选择；不必因为“没去景点”而愧疚\n\n## Day 3｜杭州（2026-09-20）\n\n\n\n## 旅行贴士\n\n西湖岸边适合慢走，不必强求乘船或走完全程；行程松一些，留出静坐和发呆的时间；随身带一本书，累了就找个地方坐下来读；白开水是最好的旅伴，简单却让人安心；两天安排一动一静，身体和心都能得到休息。\n\n## 写在最后\n\n这两天的记录，像是生活递给我的一杯白开水——平淡，却刚好解渴。西湖不必乘船也能看，杭州不必登山也算来过。走得动就走，走不动就坐；看得进风景就看，看不进就翻书。旅行从来不是任务清单，允许自己只做一点点，也是对自己的温柔。\n\n---\n*本文由 AI 辅助生成，素材来源于个人日志和日记。*",
+        "postId": "49046c05-ee85-4e01-b0e2-0d900900abf2"
+      }
+    },
+    {
+      "label": "素材与衍生日记一起生成时媒体不重复",
+      "pass": true,
+      "detail": {
+        "urls": [
+          "/uploads/images/7555f403-bcaf-4918-96d7-956e70fa5f1e.jpg"
+        ]
+      }
+    },
+    {
+      "label": "未登录不能读取私密游记任务",
+      "pass": true,
+      "detail": {
+        "status": 401,
+        "exposesResult": false
+      }
+    }
+  ],
+  "bugs": [
+    {
+      "label": "修改备注后再次同步是否更新",
+      "detail": {
+        "actual": "验收事实A：9月17日上午在杭州西湖散步，只在岸边停留，没有乘船。",
+        "expectedSuffix": "补充：在湖边停留十分钟。",
+        "policy": "若产品约定同步后不可更新，则应明示"
+      }
+    }
+  ],
+  "posts": [
+    {
+      "id": "dce42dbd-87de-4fcb-9109-f53f320485a4",
+      "kind": "SNAPSHOT"
+    },
+    {
+      "id": "f464ecf3-f597-480e-be83-a17278d9905e",
+      "kind": "SNAPSHOT"
+    },
+    {
+      "id": "df702e23-607b-476c-9900-e92d3d1d3ddc",
+      "kind": "AI_DIARY"
+    },
+    {
+      "id": "49046c05-ee85-4e01-b0e2-0d900900abf2",
+      "kind": "AI_TRAVELOGUE"
+    }
+  ],
+  "jobs": [
+    {
+      "path": "/posts/ai/jobs",
+      "jobId": "ffc963a2-a850-4bac-b327-da0f6d4be4bb"
+    },
+    {
+      "path": "/posts/travelogue/job",
+      "jobId": "b5466481-e11c-4fc8-9ed3-9b5a0bbcb943"
+    }
+  ],
+  "accounts": [
+    {
+      "id": "5415b03f-5324-46e6-80bd-6241f3d303db",
+      "username": "chain_1789865572536"
+    },
+    {
+      "id": "d6e4b230-ea1e-462c-af37-584e2b885fe9",
+      "username": "chain_1789865572536_reader"
+    }
+  ],
+  "upload": {
+    "url": "/uploads/images/7555f403-bcaf-4918-96d7-956e70fa5f1e.jpg",
+    "width": 1280,
+    "height": 720,
+    "thumbnailUrl": "/uploads/thumbnails/eea4b1eb-04d5-40cd-934f-715320118a97_thumb.jpg",
+    "originalName": "chain-westlake.jpg",
+    "size": 214880
+  },
+  "sources": [
+    {
+      "id": "dce42dbd-87de-4fcb-9109-f53f320485a4",
+      "authorId": "5415b03f-5324-46e6-80bd-6241f3d303db",
+      "communityId": null,
+      "postType": "NOTE",
+      "contentLevel": "SNAPSHOT",
+      "parentPostId": null,
+      "tripId": "chain_1789865572536_trip",
+      "tripTitle": "杭州两日验收",
+      "title": null,
+      "content": "验收事实B：9月18日下午在杭州阅读，喝了一杯白开水，没有登山，也没有去其他城市。",
+      "locationLat": null,
+      "locationLng": null,
+      "locationName": "杭州",
+      "vrMetadata": {
+        "originalId": "chain_1789865572536_text",
+        "source": "GLASSES_BUTTON",
+        "activityCategoryId": "unclassified",
+        "categorySource": "NONE",
+        "categoryLocked": false,
+        "hasTextNote": true,
+        "mediaType": "TEXT"
+      },
+      "visibility": "PRIVATE",
+      "likeCount": 0,
+      "commentCount": 0,
+      "viewCount": 0,
+      "createdAt": "2026-09-18T06:30:00.000Z",
+      "updatedAt": null,
+      "deletedAt": null,
+      "author": {
+        "vrDeviceInfo": null
+      },
+      "mediaItems": [],
+      "tags": [],
+      "topics": [],
+      "location": null,
+      "isLiked": false
+    },
+    {
+      "id": "f464ecf3-f597-480e-be83-a17278d9905e",
+      "authorId": "5415b03f-5324-46e6-80bd-6241f3d303db",
+      "communityId": null,
+      "postType": "NOTE",
+      "contentLevel": "SNAPSHOT",
+      "parentPostId": null,
+      "tripId": "chain_1789865572536_trip",
+      "tripTitle": "杭州两日验收",
+      "title": null,
+      "content": "验收事实A：9月17日上午在杭州西湖散步，只在岸边停留，没有乘船。",
+      "locationLat": "30.2500000",
+      "locationLng": "120.1400000",
+      "locationName": "杭州，西湖",
+      "vrMetadata": {
+        "originalId": "chain_1789865572536_image",
+        "source": "GLASSES_BUTTON",
+        "activityCategoryId": "unclassified",
+        "categorySource": "NONE",
+        "categoryLocked": false,
+        "weather": "晴",
+        "hasTextNote": true
+      },
+      "visibility": "PRIVATE",
+      "likeCount": 0,
+      "commentCount": 0,
+      "viewCount": 0,
+      "createdAt": "2026-09-17T01:15:00.000Z",
+      "updatedAt": null,
+      "deletedAt": null,
+      "author": {
+        "vrDeviceInfo": null
+      },
+      "mediaItems": [
+        {
+          "id": "b1371fc8-1130-40ce-b75b-fff701622964",
+          "postId": "f464ecf3-f597-480e-be83-a17278d9905e",
+          "type": "IMAGE",
+          "url": "/uploads/images/7555f403-bcaf-4918-96d7-956e70fa5f1e.jpg",
+          "thumbnailUrl": "/uploads/thumbnails/eea4b1eb-04d5-40cd-934f-715320118a97_thumb.jpg",
+          "hlsUrl": null,
+          "duration": null,
+          "width": null,
+          "height": null,
+          "vrFormat": null,
+          "language": null,
+          "translatedText": null,
+          "linkUrl": null,
+          "linkTitle": null,
+          "linkDescription": null,
+          "linkFavicon": null,
+          "sortOrder": 0,
+          "textNote": "验收事实A：9月17日上午在杭州西湖散步，只在岸边停留，没有乘船。",
+          "createdAt": "2026-09-20T00:52:52.000Z"
+        }
+      ],
+      "tags": [],
+      "topics": [],
+      "location": {
+        "lat": 30.25,
+        "lng": 120.14,
+        "name": "杭州，西湖"
+      },
+      "isLiked": false
+    }
+  ],
+  "aiDiaryJob": {
+    "id": "ffc963a2-a850-4bac-b327-da0f6d4be4bb",
+    "userId": "5415b03f-5324-46e6-80bd-6241f3d303db",
+    "status": "DONE",
+    "progress": 100,
+    "createdAt": "2026-09-20T00:52:53.066Z",
+    "jobType": "MULTI_DIARY",
+    "result": "# 西湖边，一杯白开水的下午\n\n翻开这两天的闪拍记录，发现它们像一组小小的对照——一天在湖边，一天在室内；一天走动，一天静坐。中间隔着的，不过是一个夜晚。\n\n九月十七日，上午。我在西湖边散步。\n\n没有乘船，只在岸边停留。这个细节如今想来，倒像是某种刻意的选择。湖面上的画舫来来往往，载着游人驶向湖心，而我站在岸上，看水波把倒影揉碎又拼好。岸边有风，不烈，刚好够把柳枝吹得轻轻摆动。我没走远，就在那一带慢慢踱着，看水，看山，看偶尔掠过的水鸟。走得累了，便在石凳上坐一会儿。什么都没想，又好像什么都想了一遍。有时候，停在岸边比驶向湖心更需要耐心——你要忍得住“来都来了”的念头，也要信得过“只在这里也很好”的踏实。\n\n九月十八日，下午。我在杭州的住处读一本书，手边一杯白开水。窗外应该是有光的，只是我记不太清了。白开水没有味道，可那天喝起来，竟觉得格外妥帖。没有登山，也没有去其他城市——这行字写下来，像一句多余的澄清，却又像某种安心的确认。书翻到某一页，我不急着往下读，就让目光停在字里行间，像昨天在湖边停下脚步一样。原来安静也是可以练习的，昨天在岸边练了一次，今天在书页间又练了一次。\n\n两天之间，西湖的水从眼前退到了记忆里，而白开水的温度从舌尖漫到了心底。我不觉得可惜。旅行未必总要装满行程，有时候，“只在岸边”和“只喝一杯白开水”，本身就是全部的抵达。那些没有做的事，没有去的地方，反而让做过的事显得更清晰、更值得。\n\n杭州的九月，就这么被我收进了两页薄薄的闪拍里。一页有湖风，一页有书页翻动的轻响。我合上日记，像是把这两天的安静又温了一遍。\n\n---\n*本文由 AI 辅助生成，素材来源于个人闪拍。*",
+    "postId": "df702e23-607b-476c-9900-e92d3d1d3ddc"
+  },
+  "aiDiary": {
+    "id": "df702e23-607b-476c-9900-e92d3d1d3ddc",
+    "authorId": "5415b03f-5324-46e6-80bd-6241f3d303db",
+    "communityId": null,
+    "postType": "NOTE",
+    "contentLevel": "DIARY",
+    "parentPostId": "dce42dbd-87de-4fcb-9109-f53f320485a4",
+    "tripId": null,
+    "tripTitle": null,
+    "title": "西湖边，一杯白开水的下午",
+    "content": "# 西湖边，一杯白开水的下午\n\n翻开这两天的闪拍记录，发现它们像一组小小的对照——一天在湖边，一天在室内；一天走动，一天静坐。中间隔着的，不过是一个夜晚。\n\n九月十七日，上午。我在西湖边散步。\n\n没有乘船，只在岸边停留。这个细节如今想来，倒像是某种刻意的选择。湖面上的画舫来来往往，载着游人驶向湖心，而我站在岸上，看水波把倒影揉碎又拼好。岸边有风，不烈，刚好够把柳枝吹得轻轻摆动。我没走远，就在那一带慢慢踱着，看水，看山，看偶尔掠过的水鸟。走得累了，便在石凳上坐一会儿。什么都没想，又好像什么都想了一遍。有时候，停在岸边比驶向湖心更需要耐心——你要忍得住“来都来了”的念头，也要信得过“只在这里也很好”的踏实。\n\n九月十八日，下午。我在杭州的住处读一本书，手边一杯白开水。窗外应该是有光的，只是我记不太清了。白开水没有味道，可那天喝起来，竟觉得格外妥帖。没有登山，也没有去其他城市——这行字写下来，像一句多余的澄清，却又像某种安心的确认。书翻到某一页，我不急着往下读，就让目光停在字里行间，像昨天在湖边停下脚步一样。原来安静也是可以练习的，昨天在岸边练了一次，今天在书页间又练了一次。\n\n两天之间，西湖的水从眼前退到了记忆里，而白开水的温度从舌尖漫到了心底。我不觉得可惜。旅行未必总要装满行程，有时候，“只在岸边”和“只喝一杯白开水”，本身就是全部的抵达。那些没有做的事，没有去的地方，反而让做过的事显得更清晰、更值得。\n\n杭州的九月，就这么被我收进了两页薄薄的闪拍里。一页有湖风，一页有书页翻动的轻响。我合上日记，像是把这两天的安静又温了一遍。\n\n---\n*本文由 AI 辅助生成，素材来源于个人闪拍。*",
+    "locationLat": null,
+    "locationLng": null,
+    "locationName": "杭州",
+    "vrMetadata": {
+      "sourceSnapIds": [
+        "dce42dbd-87de-4fcb-9109-f53f320485a4",
+        "f464ecf3-f597-480e-be83-a17278d9905e"
+      ],
+      "style": "纪实",
+      "tone": "客观",
+      "keywords": [],
+      "aiGenerated": true,
+      "status": "draft"
+    },
+    "visibility": "PRIVATE",
+    "likeCount": 0,
+    "commentCount": 0,
+    "viewCount": 1,
+    "createdAt": "2026-09-20T00:52:56.000Z",
+    "updatedAt": null,
+    "deletedAt": null,
+    "author": {
+      "id": "5415b03f-5324-46e6-80bd-6241f3d303db",
+      "email": "chain_1789865572536@example.com",
+      "username": "chain_1789865572536",
+      "phone": null,
+      "displayName": "chain_1789865572536",
+      "xxkNumber": "53613324944",
+      "bio": null,
+      "avatarUrl": "/api/placeholder/chain_1789865572536",
+      "website": null,
+      "gender": "PRIVATE",
+      "birthday": null,
+      "region": null,
+      "occupation": null,
+      "vrDeviceModel": null,
+      "vrDeviceVersion": null,
+      "createdAt": "2026-09-20T00:52:52.000Z",
+      "updatedAt": null,
+      "role": "USER",
+      "status": "ACTIVE",
+      "deactivatedAt": null,
+      "deactivationReason": null,
+      "deactivationRestoreDeadline": null,
+      "vrDeviceInfo": null
+    },
+    "mediaItems": [
+      {
+        "id": "aed70748-115f-4991-8d7d-e7906f35f411",
+        "postId": "df702e23-607b-476c-9900-e92d3d1d3ddc",
+        "type": "IMAGE",
+        "url": "/uploads/images/7555f403-bcaf-4918-96d7-956e70fa5f1e.jpg",
+        "thumbnailUrl": "/uploads/thumbnails/eea4b1eb-04d5-40cd-934f-715320118a97_thumb.jpg",
+        "hlsUrl": null,
+        "duration": null,
+        "width": null,
+        "height": null,
+        "vrFormat": null,
+        "language": null,
+        "translatedText": null,
+        "linkUrl": null,
+        "linkTitle": null,
+        "linkDescription": null,
+        "linkFavicon": null,
+        "sortOrder": 10,
+        "textNote": null,
+        "createdAt": "2026-09-20T00:52:56.000Z"
+      }
+    ],
+    "tags": [],
+    "topics": [],
+    "location": null,
+    "isLiked": false,
+    "journey": null
+  },
+  "travelogueJob": {
+    "id": "b5466481-e11c-4fc8-9ed3-9b5a0bbcb943",
+    "userId": "5415b03f-5324-46e6-80bd-6241f3d303db",
+    "status": "DONE",
+    "progress": 100,
+    "createdAt": "2026-09-20T00:52:57.210Z",
+    "result": "# 岸边与室内，西湖的两日慢时光\n\n> 不乘船，不登山，只在西湖岸边散步，在室内读一本书，喝一杯白开水，这样也很好。\n\n目的地：杭州·西湖 · 出行方式：未知 · 人均：未知 · 主题：慢旅行、静心、城市漫步\n\n## Day 1｜杭州，西湖（2026-09-17）\n\n九月十七日，上午。我在西湖边散步。没有乘船，只在岸边停留——这个细节如今想来，倒像是某种刻意的选择。湖面上的画舫来来往往，载着游人驶向湖心，而我站在岸上，看水波把倒影揉碎又拼好。岸边有风，不烈，刚好够把柳枝吹得轻轻摆动。我没走远，就在那一带慢慢踱着，看水，看山，看偶尔掠过的水鸟。走得累了，便在石凳上坐一会儿。什么都没想，又好像什么都想了一遍。有时候，停在岸边比驶向湖心更需要耐心——你要忍得住“来都来了”的念头，也要信得过“只在这里也很好”。\n\n**推荐亮点**：西湖岸边漫步，石凳小坐看水波与远山\n\n**实用贴士**：岸边风轻，适合慢走，不必赶路；想坐就坐，不必觉得浪费时间\n\n## Day 2｜杭州（2026-09-18）\n\n九月十八日，下午。我在杭州，读书，喝了一杯白开水。没有登山，也没有去其他城市。前一天在湖边走动，这一天在室内静坐，中间隔着的，不过是一个夜晚。翻开闪拍记录，发现它们像一组小小的对照——一天在湖边，一天在室内；一天走动，一天静坐。白开水没有味道，却最解渴；读书没有声响，却最安心。旅行不一定要奔赴什么，停下来，翻几页书，喝一口水，也是好好度过了一个下午。\n\n**推荐亮点**：找一处安静的角落读书，喝一杯温热的白开水\n\n**实用贴士**：前一天走累了，第二天安排室内静休是不错的选择；不必因为“没去景点”而愧疚\n\n## Day 3｜杭州（2026-09-20）\n\n\n\n## 旅行贴士\n\n西湖岸边适合慢走，不必强求乘船或走完全程；行程松一些，留出静坐和发呆的时间；随身带一本书，累了就找个地方坐下来读；白开水是最好的旅伴，简单却让人安心；两天安排一动一静，身体和心都能得到休息。\n\n## 写在最后\n\n这两天的记录，像是生活递给我的一杯白开水——平淡，却刚好解渴。西湖不必乘船也能看，杭州不必登山也算来过。走得动就走，走不动就坐；看得进风景就看，看不进就翻书。旅行从来不是任务清单，允许自己只做一点点，也是对自己的温柔。\n\n---\n*本文由 AI 辅助生成，素材来源于个人日志和日记。*",
+    "postId": "49046c05-ee85-4e01-b0e2-0d900900abf2"
+  },
+  "travelogue": {
+    "id": "49046c05-ee85-4e01-b0e2-0d900900abf2",
+    "authorId": "5415b03f-5324-46e6-80bd-6241f3d303db",
+    "communityId": null,
+    "postType": "JOURNEY",
+    "contentLevel": "TRAVELOGUE",
+    "parentPostId": "df702e23-607b-476c-9900-e92d3d1d3ddc",
+    "tripId": null,
+    "tripTitle": null,
+    "title": "岸边与室内，西湖的两日慢时光",
+    "content": "# 岸边与室内，西湖的两日慢时光\n\n> 不乘船，不登山，只在西湖岸边散步，在室内读一本书，喝一杯白开水，这样也很好。\n\n目的地：杭州·西湖 · 出行方式：未知 · 人均：未知 · 主题：慢旅行、静心、城市漫步\n\n## Day 1｜杭州，西湖（2026-09-17）\n\n九月十七日，上午。我在西湖边散步。没有乘船，只在岸边停留——这个细节如今想来，倒像是某种刻意的选择。湖面上的画舫来来往往，载着游人驶向湖心，而我站在岸上，看水波把倒影揉碎又拼好。岸边有风，不烈，刚好够把柳枝吹得轻轻摆动。我没走远，就在那一带慢慢踱着，看水，看山，看偶尔掠过的水鸟。走得累了，便在石凳上坐一会儿。什么都没想，又好像什么都想了一遍。有时候，停在岸边比驶向湖心更需要耐心——你要忍得住“来都来了”的念头，也要信得过“只在这里也很好”。\n\n**推荐亮点**：西湖岸边漫步，石凳小坐看水波与远山\n\n**实用贴士**：岸边风轻，适合慢走，不必赶路；想坐就坐，不必觉得浪费时间\n\n## Day 2｜杭州（2026-09-18）\n\n九月十八日，下午。我在杭州，读书，喝了一杯白开水。没有登山，也没有去其他城市。前一天在湖边走动，这一天在室内静坐，中间隔着的，不过是一个夜晚。翻开闪拍记录，发现它们像一组小小的对照——一天在湖边，一天在室内；一天走动，一天静坐。白开水没有味道，却最解渴；读书没有声响，却最安心。旅行不一定要奔赴什么，停下来，翻几页书，喝一口水，也是好好度过了一个下午。\n\n**推荐亮点**：找一处安静的角落读书，喝一杯温热的白开水\n\n**实用贴士**：前一天走累了，第二天安排室内静休是不错的选择；不必因为“没去景点”而愧疚\n\n## Day 3｜杭州（2026-09-20）\n\n\n\n## 旅行贴士\n\n西湖岸边适合慢走，不必强求乘船或走完全程；行程松一些，留出静坐和发呆的时间；随身带一本书，累了就找个地方坐下来读；白开水是最好的旅伴，简单却让人安心；两天安排一动一静，身体和心都能得到休息。\n\n## 写在最后\n\n这两天的记录，像是生活递给我的一杯白开水——平淡，却刚好解渴。西湖不必乘船也能看，杭州不必登山也算来过。走得动就走，走不动就坐；看得进风景就看，看不进就翻书。旅行从来不是任务清单，允许自己只做一点点，也是对自己的温柔。\n\n---\n*本文由 AI 辅助生成，素材来源于个人日志和日记。*",
+    "locationLat": null,
+    "locationLng": null,
+    "locationName": "杭州·西湖",
+    "vrMetadata": {
+      "sourceSnapIds": [
+        "dce42dbd-87de-4fcb-9109-f53f320485a4",
+        "f464ecf3-f597-480e-be83-a17278d9905e"
+      ],
+      "sourceDiaryIds": [
+        "df702e23-607b-476c-9900-e92d3d1d3ddc"
+      ],
+      "prompt": "仅整理所选素材和日记，按9月17日、9月18日顺序，不编造乘船、登山或其他城市经历。",
+      "style": "纪实",
+      "tone": "客观",
+      "keywords": [],
+      "aiGenerated": true
+    },
+    "visibility": "PRIVATE",
+    "likeCount": 0,
+    "commentCount": 0,
+    "viewCount": 1,
+    "createdAt": "2026-09-20T00:53:00.000Z",
+    "updatedAt": null,
+    "deletedAt": null,
+    "author": {
+      "id": "5415b03f-5324-46e6-80bd-6241f3d303db",
+      "email": "chain_1789865572536@example.com",
+      "username": "chain_1789865572536",
+      "phone": null,
+      "displayName": "chain_1789865572536",
+      "xxkNumber": "53613324944",
+      "bio": null,
+      "avatarUrl": "/api/placeholder/chain_1789865572536",
+      "website": null,
+      "gender": "PRIVATE",
+      "birthday": null,
+      "region": null,
+      "occupation": null,
+      "vrDeviceModel": null,
+      "vrDeviceVersion": null,
+      "createdAt": "2026-09-20T00:52:52.000Z",
+      "updatedAt": null,
+      "role": "USER",
+      "status": "ACTIVE",
+      "deactivatedAt": null,
+      "deactivationReason": null,
+      "deactivationRestoreDeadline": null,
+      "vrDeviceInfo": null
+    },
+    "mediaItems": [
+      {
+        "id": "4b599145-4449-4ea0-a222-d0337676bb9d",
+        "postId": "49046c05-ee85-4e01-b0e2-0d900900abf2",
+        "type": "IMAGE",
+        "url": "/uploads/images/7555f403-bcaf-4918-96d7-956e70fa5f1e.jpg",
+        "thumbnailUrl": "/uploads/thumbnails/eea4b1eb-04d5-40cd-934f-715320118a97_thumb.jpg",
+        "hlsUrl": null,
+        "duration": null,
+        "width": null,
+        "height": null,
+        "vrFormat": null,
+        "language": null,
+        "translatedText": null,
+        "linkUrl": null,
+        "linkTitle": null,
+        "linkDescription": null,
+        "linkFavicon": null,
+        "sortOrder": 0,
+        "textNote": null,
+        "createdAt": "2026-09-20T00:53:00.000Z"
+      }
+    ],
+    "tags": [],
+    "topics": [],
+    "location": null,
+    "isLiked": false,
+    "journey": {
+      "id": 35,
+      "postId": "49046c05-ee85-4e01-b0e2-0d900900abf2",
+      "title": "岸边与室内，西湖的两日慢时光",
+      "startDate": "2026-09-17",
+      "endDate": "2026-09-20",
+      "destination": "杭州·西湖",
+      "coverUrl": "/uploads/images/7555f403-bcaf-4918-96d7-956e70fa5f1e.jpg",
+      "summary": "不乘船，不登山，只在西湖岸边散步，在室内读一本书，喝一杯白开水，这样也很好。",
+      "transport": "未知",
+      "budget": "未知",
+      "theme": "慢旅行、静心、城市漫步",
+      "insight": "这两天的记录，像是生活递给我的一杯白开水——平淡，却刚好解渴。西湖不必乘船也能看，杭州不必登山也算来过。走得动就走，走不动就坐；看得进风景就看，看不进就翻书。旅行从来不是任务清单，允许自己只做一点点，也是对自己的温柔。",
+      "tips": "西湖岸边适合慢走，不必强求乘船或走完全程；行程松一些，留出静坐和发呆的时间；随身带一本书，累了就找个地方坐下来读；白开水是最好的旅伴，简单却让人安心；两天安排一动一静，身体和心都能得到休息。",
+      "stopCount": 3,
+      "stops": [
+        {
+          "id": 69,
+          "journeyId": 35,
+          "dayNumber": 1,
+          "dayDate": "2026-09-17",
+          "locationName": "杭州，西湖",
+          "locationLat": null,
+          "locationLng": null,
+          "description": "九月十七日，上午。我在西湖边散步。没有乘船，只在岸边停留——这个细节如今想来，倒像是某种刻意的选择。湖面上的画舫来来往往，载着游人驶向湖心，而我站在岸上，看水波把倒影揉碎又拼好。岸边有风，不烈，刚好够把柳枝吹得轻轻摆动。我没走远，就在那一带慢慢踱着，看水，看山，看偶尔掠过的水鸟。走得累了，便在石凳上坐一会儿。什么都没想，又好像什么都想了一遍。有时候，停在岸边比驶向湖心更需要耐心——你要忍得住“来都来了”的念头，也要信得过“只在这里也很好”。",
+          "highlights": "西湖岸边漫步，石凳小坐看水波与远山",
+          "tips": "岸边风轻，适合慢走，不必赶路；想坐就坐，不必觉得浪费时间",
+          "mediaUrl": null,
+          "sortOrder": 0,
+          "mediaItems": [
+            {
+              "id": 24,
+              "stopId": 69,
+              "url": "/uploads/images/7555f403-bcaf-4918-96d7-956e70fa5f1e.jpg",
+              "thumbnailUrl": "/uploads/thumbnails/eea4b1eb-04d5-40cd-934f-715320118a97_thumb.jpg",
+              "sortOrder": 0,
+              "createdAt": "2026-09-20T00:53:00.000Z"
+            }
+          ]
+        },
+        {
+          "id": 70,
+          "journeyId": 35,
+          "dayNumber": 2,
+          "dayDate": "2026-09-18",
+          "locationName": "杭州",
+          "locationLat": null,
+          "locationLng": null,
+          "description": "九月十八日，下午。我在杭州，读书，喝了一杯白开水。没有登山，也没有去其他城市。前一天在湖边走动，这一天在室内静坐，中间隔着的，不过是一个夜晚。翻开闪拍记录，发现它们像一组小小的对照——一天在湖边，一天在室内；一天走动，一天静坐。白开水没有味道，却最解渴；读书没有声响，却最安心。旅行不一定要奔赴什么，停下来，翻几页书，喝一口水，也是好好度过了一个下午。",
+          "highlights": "找一处安静的角落读书，喝一杯温热的白开水",
+          "tips": "前一天走累了，第二天安排室内静休是不错的选择；不必因为“没去景点”而愧疚",
+          "mediaUrl": null,
+          "sortOrder": 1,
+          "mediaItems": []
+        },
+        {
+          "id": 71,
+          "journeyId": 35,
+          "dayNumber": 3,
+          "dayDate": "2026-09-20",
+          "locationName": "杭州",
+          "locationLat": null,
+          "locationLng": null,
+          "description": null,
+          "highlights": null,
+          "tips": null,
+          "mediaUrl": null,
+          "sortOrder": 2,
+          "mediaItems": []
+        }
+      ]
+    }
+  },
+  "allAuthorPosts": [
+    {
+      "id": "2115fbeb-b562-4cca-b01e-b9e147e99e82",
+      "originalId": "chain_1789865572536_audio"
+    },
+    {
+      "id": "13c74225-b1e4-4400-b6ce-181f4a9ab47c",
+      "originalId": "chain_1789865572536_duplicate"
+    },
+    {
+      "id": "dce42dbd-87de-4fcb-9109-f53f320485a4",
+      "originalId": "chain_1789865572536_text"
+    },
+    {
+      "id": "f464ecf3-f597-480e-be83-a17278d9905e",
+      "originalId": "chain_1789865572536_image"
+    }
+  ],
+  "finishedAt": "2026-09-20T00:53:01.283Z"
+}

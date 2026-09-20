@@ -1,0 +1,145 @@
+{
+  "startedAt": "2026-09-20T01:31:31.798Z",
+  "checks": [
+    {
+      "name": "App同步素材进入素材库",
+      "pass": true,
+      "detail": {
+        "id": "75641e51-c39a-4eaf-9535-18d84fec4664",
+        "visibility": "PRIVATE",
+        "contentLevel": "SNAPSHOT",
+        "mediaCount": 1,
+        "vrMetadata": {
+          "originalId": "b3ff5ab3-f59b-3380-9ed3-5540c40ae218",
+          "source": "LEGACY_FILE",
+          "activityCategoryId": "unclassified",
+          "categorySource": "NONE",
+          "categoryLocked": false,
+          "hasDiary": true,
+          "diaryId": "08aad5af-0c07-44d5-94b9-837361e9b3cc"
+        }
+      }
+    },
+    {
+      "name": "App同步素材默认私密",
+      "pass": true,
+      "detail": {
+        "id": "75641e51-c39a-4eaf-9535-18d84fec4664",
+        "visibility": "PRIVATE",
+        "contentLevel": "SNAPSHOT",
+        "mediaCount": 1,
+        "vrMetadata": {
+          "originalId": "b3ff5ab3-f59b-3380-9ed3-5540c40ae218",
+          "source": "LEGACY_FILE",
+          "activityCategoryId": "unclassified",
+          "categorySource": "NONE",
+          "categoryLocked": false,
+          "hasDiary": true,
+          "diaryId": "08aad5af-0c07-44d5-94b9-837361e9b3cc"
+        }
+      }
+    },
+    {
+      "name": "App素材可保存为日记",
+      "pass": true,
+      "detail": {
+        "id": "e2eeaa13-c61a-4e9a-b574-f43a8585784a",
+        "contentLevel": "DIARY",
+        "visibility": "PRIVATE",
+        "sourceSnapIds": [
+          "75641e51-c39a-4eaf-9535-18d84fec4664"
+        ]
+      }
+    },
+    {
+      "name": "日记保留App素材来源",
+      "pass": true,
+      "detail": {
+        "id": "e2eeaa13-c61a-4e9a-b574-f43a8585784a",
+        "contentLevel": "DIARY",
+        "visibility": "PRIVATE",
+        "sourceSnapIds": [
+          "75641e51-c39a-4eaf-9535-18d84fec4664"
+        ]
+      }
+    },
+    {
+      "name": "App素材与日记可生成游记",
+      "pass": true,
+      "detail": {
+        "id": "1c80d6b1-5423-4b0c-b2cf-decf373e1b6a",
+        "userId": "2e9aa4de-a208-4782-a4c6-22f88e5171fe",
+        "status": "DONE",
+        "progress": 100,
+        "createdAt": "2026-09-20T01:31:31.971Z",
+        "result": "# 一条素材的旅程：App 同步链路测试日记\n\n> 这不是一篇真正的游记，而是一条由 App 同步素材保存出来的链路测试日记。\n\n目的地：未知 · 出行方式：未知 · 人均：未知 · 主题：链路测试\n\n## Day 1（2026-09-20）\n\n2026 年 9 月 20 日，这条记录没有留下确切的地点，也没有天气、交通或同行的人。它只是安静地躺在那里，作为一条由 App 同步素材保存出来的链路测试日记，用来验证素材到日记之间的关系是否通畅。我试着把它当作一次微小的出行来看待——也许并没有走出多远，甚至可能只是坐在原地，把一条素材从一端送到另一端。可正是在这样看似空白的行程里，我忽然觉得，记录本身也是一种抵达：当文字被保存下来，当素材与日记之间建立起一条可追溯的线，那些模糊的、未被命名的时刻，就悄悄有了被记住的可能。它不壮观，不热闹，却像清晨窗台上的一小片光，温和地提醒我，哪怕只是一次测试，也值得被认真地写下来。\n\n**推荐亮点**：暂无\n\n**实用贴士**：若素材信息不足，可先保留原始记录，不必强行补全地点与经历；测试类日记也建议标注清楚用途，便于日后区分。\n\n## 旅行贴士\n\n信息不足时，用模糊表达代替编造，保持记录的真实性；测试类素材建议单独归档，避免与正式游记混淆；若后续补充地点、天气或同行人，可再回来更新日记；同步链路验证成功后，可保留一条样例作为参照；写作时优先尊重原始素材，不额外虚构人物与事件。\n\n## 写在最后\n\n这条链路测试日记没有带来远方的风景，却让我对“记录”多了一点温柔的信任。不是每一次出发都有明确的目的地，也不是每一篇游记都必须写满山川湖海。有时候，一条素材被顺利同步、一段文字被妥善保存，就已经完成了它小小的旅程。愿我们都能珍惜这些看似无用的记录，因为它们同样构成了我们与时间相处的方式。\n\n---\n*本文由 AI 辅助生成，素材来源于个人日志和日记。*",
+        "postId": "a1afe8b2-222b-47fe-9baa-16dc419e2f40"
+      }
+    },
+    {
+      "name": "游记保留App素材与日记来源",
+      "pass": true,
+      "detail": {
+        "id": "a1afe8b2-222b-47fe-9baa-16dc419e2f40",
+        "contentLevel": "TRAVELOGUE",
+        "visibility": "PRIVATE",
+        "sourceSnapIds": [
+          "75641e51-c39a-4eaf-9535-18d84fec4664"
+        ],
+        "sourceDiaryIds": [
+          "e2eeaa13-c61a-4e9a-b574-f43a8585784a"
+        ],
+        "mediaCount": 1
+      }
+    }
+  ],
+  "snapsCount": 1,
+  "appSnap": {
+    "id": "75641e51-c39a-4eaf-9535-18d84fec4664",
+    "visibility": "PRIVATE",
+    "contentLevel": "SNAPSHOT",
+    "mediaCount": 1,
+    "vrMetadata": {
+      "originalId": "b3ff5ab3-f59b-3380-9ed3-5540c40ae218",
+      "source": "LEGACY_FILE",
+      "activityCategoryId": "unclassified",
+      "categorySource": "NONE",
+      "categoryLocked": false,
+      "hasDiary": true,
+      "diaryId": "08aad5af-0c07-44d5-94b9-837361e9b3cc"
+    }
+  },
+  "diary": {
+    "id": "e2eeaa13-c61a-4e9a-b574-f43a8585784a",
+    "contentLevel": "DIARY",
+    "visibility": "PRIVATE",
+    "sourceSnapIds": [
+      "75641e51-c39a-4eaf-9535-18d84fec4664"
+    ]
+  },
+  "travelogueStart": {
+    "jobId": "1c80d6b1-5423-4b0c-b2cf-decf373e1b6a"
+  },
+  "travelogueJob": {
+    "id": "1c80d6b1-5423-4b0c-b2cf-decf373e1b6a",
+    "userId": "2e9aa4de-a208-4782-a4c6-22f88e5171fe",
+    "status": "DONE",
+    "progress": 100,
+    "createdAt": "2026-09-20T01:31:31.971Z",
+    "result": "# 一条素材的旅程：App 同步链路测试日记\n\n> 这不是一篇真正的游记，而是一条由 App 同步素材保存出来的链路测试日记。\n\n目的地：未知 · 出行方式：未知 · 人均：未知 · 主题：链路测试\n\n## Day 1（2026-09-20）\n\n2026 年 9 月 20 日，这条记录没有留下确切的地点，也没有天气、交通或同行的人。它只是安静地躺在那里，作为一条由 App 同步素材保存出来的链路测试日记，用来验证素材到日记之间的关系是否通畅。我试着把它当作一次微小的出行来看待——也许并没有走出多远，甚至可能只是坐在原地，把一条素材从一端送到另一端。可正是在这样看似空白的行程里，我忽然觉得，记录本身也是一种抵达：当文字被保存下来，当素材与日记之间建立起一条可追溯的线，那些模糊的、未被命名的时刻，就悄悄有了被记住的可能。它不壮观，不热闹，却像清晨窗台上的一小片光，温和地提醒我，哪怕只是一次测试，也值得被认真地写下来。\n\n**推荐亮点**：暂无\n\n**实用贴士**：若素材信息不足，可先保留原始记录，不必强行补全地点与经历；测试类日记也建议标注清楚用途，便于日后区分。\n\n## 旅行贴士\n\n信息不足时，用模糊表达代替编造，保持记录的真实性；测试类素材建议单独归档，避免与正式游记混淆；若后续补充地点、天气或同行人，可再回来更新日记；同步链路验证成功后，可保留一条样例作为参照；写作时优先尊重原始素材，不额外虚构人物与事件。\n\n## 写在最后\n\n这条链路测试日记没有带来远方的风景，却让我对“记录”多了一点温柔的信任。不是每一次出发都有明确的目的地，也不是每一篇游记都必须写满山川湖海。有时候，一条素材被顺利同步、一段文字被妥善保存，就已经完成了它小小的旅程。愿我们都能珍惜这些看似无用的记录，因为它们同样构成了我们与时间相处的方式。\n\n---\n*本文由 AI 辅助生成，素材来源于个人日志和日记。*",
+    "postId": "a1afe8b2-222b-47fe-9baa-16dc419e2f40"
+  },
+  "travelogue": {
+    "id": "a1afe8b2-222b-47fe-9baa-16dc419e2f40",
+    "contentLevel": "TRAVELOGUE",
+    "visibility": "PRIVATE",
+    "sourceSnapIds": [
+      "75641e51-c39a-4eaf-9535-18d84fec4664"
+    ],
+    "sourceDiaryIds": [
+      "e2eeaa13-c61a-4e9a-b574-f43a8585784a"
+    ],
+    "mediaCount": 1
+  },
+  "finishedAt": "2026-09-20T01:31:38.066Z"
+}

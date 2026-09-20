@@ -7,7 +7,8 @@ const api = 'http://localhost:3001/api';
 const web = 'http://localhost:3000';
 const password = 'ChainCheck_2026!';
 const evidencePath = 'docs/core-chain-evidence-2026-09-18.json';
-const outPath = 'docs/browser-publish-chain-evidence-2026-09-18.json';
+const requestedKind = (process.argv[2] || '').toUpperCase();
+const outPath = `docs/browser-publish-chain-evidence-2026-09-20-${(requestedKind || 'all').toLowerCase()}.json`;
 
 const source = JSON.parse(await readFile(evidencePath, 'utf8'));
 const authorName = source.accounts?.[0]?.username;
@@ -22,6 +23,7 @@ const report = {
   checks: [],
   bugs: [],
   pages: [],
+  requestedKind: requestedKind || 'ALL',
 };
 
 async function save() {
@@ -34,7 +36,6 @@ async function check(label, pass, detail = {}) {
   report.checks.push(row);
   if (!pass) report.bugs.push(row);
   console.log(`${pass ? 'PASS' : 'BUG'} ${label}`);
-  await save();
 }
 
 async function request(path, token, body, method = body === undefined ? 'GET' : 'POST', allowed = []) {
@@ -94,7 +95,11 @@ async function publicVisible(postId, token, username, communityId) {
 
 async function getPostTitle(postId, token) {
   const post = (await request(`/posts/${postId}`, token)).data;
-  return post.title || post.journey?.title || post.content?.slice(0, 30) || postId;
+  return {
+    title: post.title || post.journey?.title || post.content?.slice(0, 30) || postId,
+    contentSnippet: post.content?.slice(0, 60) || '',
+    journeyTitle: post.journey?.title || '',
+  };
 }
 
 if (!authorName || !readerName || !diaryId || !travelogueId) {
@@ -112,7 +117,6 @@ try {
     reader: { id: reader.user.id, username: reader.user.username },
   };
   report.community = { id: community.id, name: community.name };
-  await save();
 
   browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({ baseURL: web, viewport: { width: 1440, height: 1000 } });
@@ -130,19 +134,21 @@ try {
   await page.waitForURL('**/feed');
   await check('专用测试账号可通过网页登录', true, { username: authorName });
 
-  const targets = [
+  let targets = [
     { id: diaryId, kind: 'DIARY', path: `/diaries/${diaryId}`, publishButton: '公开', retractButton: '私密' },
     { id: travelogueId, kind: 'TRAVELOGUE', path: `/journeys/${travelogueId}`, publishButton: '发布', retractButton: '撤回' },
   ];
+  if (requestedKind) targets = targets.filter((target) => target.kind === requestedKind);
+  if (targets.length === 0) throw new Error(`No target matched ${requestedKind}`);
 
   for (const target of targets) {
-    const title = await getPostTitle(target.id, author.token);
+    const display = await getPostTitle(target.id, author.token);
     await request(`/posts/${target.id}/unpublish`, author.token, {}, 'POST', [200, 400, 404]);
     await check(`${target.kind} 发布前对另一账号隐藏`, (await request(`/posts/${target.id}`, reader.token, undefined, 'GET', [403, 404])).status >= 400, { id: target.id });
 
     await page.goto(target.path);
-    await expect(page.getByText(title, { exact: false }).first()).toBeVisible();
-    await check(`${target.kind} 详情页可打开`, true, { id: target.id, title });
+    await expect(page.getByText(display.title, { exact: false }).first()).toBeVisible();
+    await check(`${target.kind} 详情页可打开`, true, { id: target.id, title: display.title });
 
     await page.getByRole('button', { name: target.publishButton, exact: true }).click();
     await expect(page.getByText('发布到社区', { exact: true })).toBeVisible();
@@ -157,9 +163,30 @@ try {
 
     for (const path of ['/feed', `/communities/${community.id}`, `/profile/${authorName}`]) {
       await page.goto(path);
-      const visible = await page.getByText(title, { exact: false }).first().isVisible().catch(() => false);
-      report.pages.push({ postId: target.id, kind: target.kind, path, title, visible });
-      await check(`${target.kind} 页面展示 ${path}`, visible, { title });
+      const titleVisible = await page.getByText(display.title, { exact: false }).first().isVisible().catch(() => false);
+      const journeyTitleVisible = display.journeyTitle
+        ? await page.getByText(display.journeyTitle, { exact: false }).first().isVisible().catch(() => false)
+        : false;
+      const contentVisible = display.contentSnippet
+        ? await page.getByText(display.contentSnippet.slice(0, 30), { exact: false }).first().isVisible().catch(() => false)
+        : false;
+      const visible = titleVisible || journeyTitleVisible || contentVisible;
+      report.pages.push({
+        postId: target.id,
+        kind: target.kind,
+        path,
+        title: display.title,
+        titleVisible,
+        journeyTitleVisible,
+        contentVisible,
+        visible,
+      });
+      await check(`${target.kind} 页面展示 ${path}`, visible, {
+        title: display.title,
+        titleVisible,
+        journeyTitleVisible,
+        contentVisible,
+      });
     }
 
     await request(`/posts/${target.id}/like`, reader.token, {});
