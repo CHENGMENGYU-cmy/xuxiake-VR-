@@ -79,7 +79,8 @@ def main():
             boxes.append((child, x - cw / 2, cy - child_h / 2, x + cw / 2, cy + child_h / 2))
 
     S('</svg>')
-    with open("徐霞客社区系统框架图.svg", "w", encoding="utf-8") as f:
+    _out = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'docs', 'assets', '徐霞客社区系统框架图.svg')
+    with open(_out, "w", encoding="utf-8") as f:
         f.write("\n".join(lines))
 
     report = ["== 越界 =="]
