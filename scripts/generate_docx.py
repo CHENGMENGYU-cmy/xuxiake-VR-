@@ -1,6 +1,7 @@
 """
 将徐霞客社区研究计划与研究方案 V2.0 转换为格式化的 Word 文档
 """
+import os
 import re
 from docx import Document
 from docx.shared import Pt, Inches, RGBColor, Cm
