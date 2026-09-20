@@ -14,7 +14,7 @@
   5. **新增 `docs/README.md`**：分类索引、每份文档用途、建议阅读顺序、新增文档归档规则、命名约定与引用路径约定
   6. **数据库备份移出版本控制**：4 份 `backup-xuxiake-before-*.sql` 移入 `backups/` 后执行 `git rm --cached`，本地文件保留；`.gitignore` 新增 `backups/`。这些备份含 users 表邮箱与密码哈希，且项目《首发修复基线》本身写明这类属"本机备份和临时产物，不直接纳入首发代码版本"
   7. **运行日志归档**：6 个 `*.log` 移入 `logs/`，`.gitignore` 新增 `logs/`（`*.log` 与 `hs_err_pid*.log` 规则原已存在）
-  8. **生成脚本归位并修正输出路径**：`md_to_docx.py`、`generate_docx.py`、`_gen_mindmap.py` 移入 `scripts/`；后两者原本把产物写到仓库根目录（一个用相对路径、一个用硬编码绝对路径），已改为基于脚本自身位置输出到 `docs/assets/` 与 `docs/20-汇报材料/`，重跑不会再污染根目录
+  8. **生成脚本归位并修正输出路径**：`md_to_docx.py`、`generate_docx.py`、`_gen_mindmap.py` 移入 `scripts/`；后两者原本把产物写到仓库根目录（一个用相对路径、一个用硬编码绝对路径），已改为基于脚本自身位置输出到 `docs/assets/` 与 `docs/20-汇报材料/`；`_gen_mindmap.py` 的越界/重叠诊断报告原本会写成根目录 `_layout_report.txt`，改为直接打印到控制台。重跑脚本已验证根目录不再产生任何文件
   9. **删除误操作残留**：根目录 `query`（7 字节，内容为字符串 `mysql`）已删除
 - **效果**：根目录非代码文件从 30 个降到 6 个（`README.md`、`CHANGELOG.md`、`package.json`、`nginx.conf`、`start-server.bat`、`.gitignore`），其中 `nginx.conf` 因被 `scripts/deploy_with_config.py` 与 `scripts/upload_and_deploy.py` 引用而刻意保留在根目录；28 个文档纳入 `docs/` 分类并有索引可查；仓库不再包含含密码哈希的数据库备份。文件移动经 git 识别为 rename（文档类 R069–R100），历史未丢失；69 条 Markdown 链接与路径引用逐一校验通过。已重跑 `_gen_mindmap.py` 验证输出到 `docs/assets/` 且根目录无新增文件；确认移动与改动不影响 `.claude/` 自动提交脚本和 `server/`、`web/` 代码
 
