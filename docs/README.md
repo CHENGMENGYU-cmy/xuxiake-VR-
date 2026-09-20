@@ -83,6 +83,23 @@
 
 ---
 
+### assets/ — 架构图与演示素材
+
+文档配图与截图，供上述文档引用。不参与分类编号，因为存的是图片而非文档正文。
+
+| 文件 | 说明 |
+|---|---|
+| [徐霞客社区系统架构图.svg](assets/徐霞客社区系统架构图.svg) | 系统架构图（矢量，可无损缩放） |
+| [徐霞客社区系统架构图.png](assets/徐霞客社区系统架构图.png) | 系统架构图（位图） |
+| [徐霞客社区系统框架图.svg](assets/徐霞客社区系统框架图.svg) | 系统框架思维导图，由 `scripts/_gen_mindmap.py` 生成 |
+| run-demo-feed / home / login .png | 演示环境页面截图（信息流、首页、登录） |
+| 微信图片_20260816121214_8_9.png | 汇报用图 |
+| [current-community-images-contact-sheet.jpg](assets/current-community-images-contact-sheet.jpg) | 社区图片资产对照表 |
+
+`_gen_mindmap.py` 已改为输出到本目录，重跑脚本不会再往根目录丢文件。
+
+---
+
 ## 新增文档放哪里
 
 | 文档类型 | 放入 |
